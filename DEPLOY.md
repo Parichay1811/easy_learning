@@ -279,6 +279,86 @@ Both should return `301` with `Location: https://www.learnigo.eu/`.
 
 ---
 
+## Deploying the AI Voice Assistant (optional)
+
+The Home page embeds a separate app, **`client/src/learnigo-ai-assistant`** ("Learnigo live teacher"), in an iframe. It is its own standalone Node server (its own git history and remote, `github.com/SutirthaBoss/learnigo-ai-assistant`) — not part of the React build — so it needs its own clone, its own PM2 process and its own Nginx server block, on its own subdomain.
+
+**Before you start:** this app runs a small local LLM plus speech recognition/synthesis models (`node-llama-cpp`, `onnxruntime-node`, `@huggingface/transformers`). `npm install` needs real disk space for native binaries, and the first start downloads **~1.2 GB** of models into `~/.cache/learnigo-teacher`. Confirm the VPS has a few GB free (`df -h`) before installing — a nearly-full volume fails installs with `ENOSPC` partway through.
+
+### 1. Get a subdomain pointed at the VPS
+
+Add a DNS **A record** for `assistant.learnigo.eu` → the VPS IP (`31.97.224.109`), the same way `www`/bare `learnigo.eu` already point there.
+
+### 2. Clone and install
+
+```bash
+cd /var/www/easy_learning/client/src
+rm -rf learnigo-ai-assistant   # only if a stale/empty copy is already there
+git clone https://github.com/SutirthaBoss/learnigo-ai-assistant.git
+cd learnigo-ai-assistant
+npm install
+```
+
+> `git pull` at the repo root does **not** update this folder — it's a separate repository, dropped in rather than added as a submodule. Pull/clone it independently, here or wherever it's hosted.
+
+### 3. Start it with PM2
+
+```bash
+pm2 start server.mjs --name learnigo-ai-assistant --cwd /var/www/easy_learning/client/src/learnigo-ai-assistant
+pm2 save
+```
+
+Check it's actually listening before moving on — the first run downloads its models, which takes a while:
+
+```bash
+pm2 logs learnigo-ai-assistant --lines 30
+curl http://127.0.0.1:4173/   # should return the app's HTML once ready
+```
+
+### 4. Add an Nginx server block
+
+```bash
+nano /etc/nginx/sites-available/learnigo-ai-assistant
+```
+
+```nginx
+server {
+    listen 80;
+    server_name assistant.learnigo.eu;
+
+    location / {
+        proxy_pass         http://127.0.0.1:4173;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection 'upgrade';
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+> A dedicated subdomain (not a `/path` under `www.learnigo.eu`) is required: the app's HTML references its own assets as root-absolute paths (`/app.js`, `/style.css`, …), which only resolve correctly when it owns the whole origin. Its same-site check (`lib/router.mjs`'s `sameSite`) compares the browser's `Origin` against the forwarded `Host` header, so it works here as long as `proxy_set_header Host $host;` stays in place — same as the `/api/` block above.
+
+```bash
+ln -s /etc/nginx/sites-available/learnigo-ai-assistant /etc/nginx/sites-enabled/
+nginx -t
+systemctl reload nginx
+certbot --nginx -d assistant.learnigo.eu
+```
+
+### 5. Point the client at it
+
+In `/var/www/easy_learning/client/.env`:
+
+```env
+VITE_AI_ASSISTANT_URL=https://assistant.learnigo.eu
+```
+
+Then rebuild the client (`npm run build`) so the iframe's `src` picks it up.
+
+---
+
 ## Updating After a Code Push
 
 Run this every time you push new commits:
@@ -307,6 +387,8 @@ cd ../server && npm install && pm2 restart easy-learn
 | Client env file | `/var/www/easy_learning/client/.env` |
 | PM2 logs | `pm2 logs easy-learn` |
 | Nginx error log | `/var/log/nginx/error.log` |
+| AI voice assistant | `localhost:4173` (PM2 process: `learnigo-ai-assistant`), public at `assistant.learnigo.eu` |
+| AI assistant Nginx config | `/etc/nginx/sites-available/learnigo-ai-assistant` |
 
 ---
 
@@ -320,3 +402,5 @@ cd ../server && npm install && pm2 restart easy-learn
 | Google sign-in fails | Add `www.learnigo.eu` to Firebase Console → Authentication → Authorized Domains |
 | MongoDB connection refused | Add the VPS IP (`31.97.224.109`) to MongoDB Atlas → Network Access → IP Allowlist |
 | `npm run build` fails | Confirm `client/.env` has `VITE_FIREBASE_API_KEY` set |
+| AI assistant widget shows a blank panel | `pm2 logs learnigo-ai-assistant` — likely still downloading models on first start, or `VITE_AI_ASSISTANT_URL` doesn't match the Nginx `server_name` |
+| AI assistant install fails with `ENOSPC` | The native speech/LLM dependencies need real disk space — `df -h` and free space before retrying `npm install` |
