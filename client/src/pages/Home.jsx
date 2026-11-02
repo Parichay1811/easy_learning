@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Hero from "../components/Hero/Hero";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
+import AIAssistantWidget from "../components/AIAssistantWidget/AIAssistantWidget";
 import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
@@ -34,6 +35,7 @@ const Home = () => {
       >
         <Hero />
       </FramerMotion.motion.div>
+      <AIAssistantWidget />
     </>
   );
 };
