@@ -13,6 +13,7 @@ import { AdminAuthProvider } from "./context/AdminAuthContext";
 import SplashPage from "./components/SplashPage/SplashPage";
 import Background3D from "./components/Background3D/Background3D";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
 import RoleSelect from "./pages/RoleSelect";
 import Home from "./pages/Home";
 import SubjectPage from "./pages/SubjectPage";
@@ -123,6 +124,7 @@ function AppLayout() {
       <div style={{ paddingTop: hideNavbar ? "0" : "80px", flex: 1, display: "flex", flexDirection: "column" }}>
         <AnimatedRoutes />
       </div>
+      {!hideNavbar && <Footer />}
     </>
   );
 }
