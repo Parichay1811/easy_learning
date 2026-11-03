@@ -11,8 +11,9 @@ import styles from "./AIAssistantWidget.module.css";
 // The standalone "Learnigo live teacher" voice assistant runs as its own
 // server (client/src/learnigo-ai-assistant) — not part of this React build.
 // Local dev talks to it on its default port; production points this at the
-// assistant's own subdomain (see DEPLOY.md).
-const ASSISTANT_URL = import.meta.env.VITE_AI_ASSISTANT_URL || "http://localhost:4173";
+// assistant's own subdomain (see DEPLOY.md). Until that env var is set for a
+// given build, the widget stays hidden rather than linking to a dead/local URL.
+const ASSISTANT_URL = import.meta.env.VITE_AI_ASSISTANT_URL;
 
 // The AI voice assistant trigger. At 430px and up it floats bottom-right over
 // the page; below that it sits inline in the navbar next to the hamburger,
@@ -49,6 +50,8 @@ const AIAssistantWidget = () => {
 
   const handleOpen = () => { playSlide(); setOpen(true); };
   const handleClose = () => { playSlide(); setOpen(false); };
+
+  if (!ASSISTANT_URL) return null;
 
   const trigger = (
     <button
