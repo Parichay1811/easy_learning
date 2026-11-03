@@ -6,12 +6,12 @@ import logo from "/logo.png";
 import { playSlide } from "../../utils/sounds";
 import {
   FaHome, FaInfoCircle, FaEnvelope, FaSignOutAlt,
-  FaHandPaper, FaLayerGroup, FaGamepad, FaGlobe,
-  FaShieldAlt, FaFileContract,
+  FaHandPaper, FaLayerGroup, FaGamepad,
 } from "react-icons/fa";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { useAuth } from "../../context/AuthContext";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import AIAssistantWidget from "../AIAssistantWidget/AIAssistantWidget";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -51,11 +51,6 @@ const Navbar = () => {
               {t("navbar.about", { defaultValue: "About Us" })}
             </NavLink>
 
-            <NavLink to="/learning-support-by-country" className={pillClass("navAbout")} onClick={close}>
-              <span className={styles.navIconWrap}><FaGlobe className={styles.navIcon} /></span>
-              Learning Support
-            </NavLink>
-
             <NavLink to="/games" className={pillClass("navGames")} onClick={close}>
               <span className={styles.navIconWrap}><FaGamepad className={styles.navIcon} /></span>
               {t("navbar.games", { defaultValue: "Games" })}
@@ -64,16 +59,6 @@ const Navbar = () => {
             <NavLink to="/contact-us" className={pillClass("navContact")} onClick={close}>
               <span className={styles.navIconWrap}><FaEnvelope className={styles.navIcon} /></span>
               {t("navbar.contact", { defaultValue: "Contact Us" })}
-            </NavLink>
-
-            <NavLink to="/policy" className={pillClass("navAbout")} onClick={close}>
-              <span className={styles.navIconWrap}><FaShieldAlt className={styles.navIcon} /></span>
-              {t("navbar.policy", { defaultValue: "Policy" })}
-            </NavLink>
-
-            <NavLink to="/terms-and-conditions" className={pillClass("navAbout")} onClick={close}>
-              <span className={styles.navIconWrap}><FaFileContract className={styles.navIcon} /></span>
-              {t("navbar.terms", { defaultValue: "T & C" })}
             </NavLink>
 
             {user && (
@@ -103,15 +88,19 @@ const Navbar = () => {
           </div>
         </div>
 
-        <button
-          className={`${styles.hamburger} ${mobileOpen ? styles.hamburgerOpen : ""}`}
-          onClick={() => setMobileOpen((prev) => !prev)}
-          aria-label="Toggle menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div className={styles.actions}>
+          <AIAssistantWidget />
+
+          <button
+            className={`${styles.hamburger} ${mobileOpen ? styles.hamburgerOpen : ""}`}
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
     </nav>
   );

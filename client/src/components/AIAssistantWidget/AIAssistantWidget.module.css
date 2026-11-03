@@ -23,8 +23,47 @@
 .fab:hover { transform: scale(1.08); }
 .fab:active { transform: scale(0.96); }
 
-@media (max-width: 720px) {
-  .fab { right: 16px; bottom: 92px; width: 56px; height: 56px; }
+.fabLabel {
+  display: none;
+}
+
+.fabIcon {
+  display: none;
+}
+
+/* Below 430px the fixed circle would overlap page content, so it drops out
+   of the fixed overlay and sits inline in the navbar as a compact pill. */
+@media (max-width: 429px) {
+  .fab {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    flex-shrink: 0;
+    width: auto;
+    height: 40px;
+    padding: 5px 14px 5px 6px;
+    border-radius: 999px;
+    gap: 6px;
+    box-shadow:
+      0 0 14px rgba(108, 99, 255, 0.5),
+      0 0 28px rgba(67, 192, 160, 0.25);
+  }
+  .fabIcon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    color: #43c0a0;
+    flex-shrink: 0;
+  }
+  .fabLabel {
+    display: inline-flex;
+    align-items: center;
+    color: #f1f1f6;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
 }
 
 .backdrop {
