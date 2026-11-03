@@ -361,7 +361,16 @@ Then rebuild the client (`npm run build`) so the iframe's `src` picks it up.
 
 ## Updating After a Code Push
 
-Run this every time you push new commits:
+Run the redeploy script every time you push new commits:
+
+```bash
+cd /var/www/easy_learning
+./redeploy.sh
+```
+
+It pulls `main`, reinstalls server and client dependencies, rebuilds the client, restarts the API under PM2, and (if present) updates and restarts the AI voice assistant too. It refuses to run if tracked files have uncommitted local changes, so it never overwrites server-side edits.
+
+Equivalent manual steps, if you need to do it by hand:
 
 ```bash
 cd /var/www/easy_learning
@@ -389,6 +398,7 @@ cd ../server && npm install && pm2 restart easy-learn
 | Nginx error log | `/var/log/nginx/error.log` |
 | AI voice assistant | `localhost:4173` (PM2 process: `learnigo-ai-assistant`), public at `assistant.learnigo.eu` |
 | AI assistant Nginx config | `/etc/nginx/sites-available/learnigo-ai-assistant` |
+| Redeploy script | `/var/www/easy_learning/redeploy.sh` |
 
 ---
 
