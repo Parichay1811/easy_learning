@@ -7,6 +7,7 @@
 #   2. Installs server deps
 #   3. Installs client deps and rebuilds the React app
 #   4. Restarts the Express API under PM2
+#   5. If the AI voice assistant folder is present, reinstalls and restarts it too
 #
 # It refuses to run if there are uncommitted local changes to tracked files,
 # so it never silently clobbers something edited directly on the server.
@@ -43,6 +44,18 @@ if pm2 describe easy-learn > /dev/null 2>&1; then
     pm2 restart easy-learn
 else
     (cd server && pm2 start server.js --name easy-learn)
+fi
+
+if [ -d "$SCRIPT_DIR/learnigo-ai-assistant" ]; then
+    log "AI assistant found — reinstalling and restarting"
+    (cd learnigo-ai-assistant && npm install)
+    if pm2 describe learnigo-ai-assistant > /dev/null 2>&1; then
+        pm2 restart learnigo-ai-assistant
+    else
+        pm2 start server.mjs --name learnigo-ai-assistant --cwd "$SCRIPT_DIR/learnigo-ai-assistant"
+    fi
+else
+    log "AI assistant folder not found — skipping (optional component, see DEPLOY.md)"
 fi
 
 pm2 save
