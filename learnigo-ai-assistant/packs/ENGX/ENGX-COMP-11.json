@@ -1,0 +1,510 @@
+{
+  "id": "ENGX-COMP-11",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a phone call hands over between masts",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "mobile mast",
+    "handover",
+    "cell tower",
+    "cellular network",
+    "dropped call"
+  ],
+  "examples": [
+    "How does my phone call keep going on a train?",
+    "What is a mobile phone mast?",
+    "Why do calls drop?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "phone",
+          "label": "Your phone",
+          "icon": "phone",
+          "x": 0.15,
+          "y": 0.75,
+          "ask": "What is handover?"
+        },
+        {
+          "id": "mastA",
+          "label": "Mast A",
+          "icon": "antenna",
+          "x": 0.28,
+          "y": 0.3,
+          "ask": "What is a mobile phone mast?"
+        },
+        {
+          "id": "mastB",
+          "label": "Mast B",
+          "icon": "antenna",
+          "x": 0.62,
+          "y": 0.3,
+          "ask": "Why are cells smaller in cities?"
+        },
+        {
+          "id": "core",
+          "label": "Network core",
+          "icon": "computer",
+          "x": 0.45,
+          "y": 0.72,
+          "ask": "What decides when to hand over?"
+        },
+        {
+          "id": "friend",
+          "label": "Friend's phone",
+          "icon": "phone",
+          "x": 0.88,
+          "y": 0.72
+        }
+      ],
+      "links": [
+        {
+          "from": "phone",
+          "to": "mastA",
+          "kind": "data",
+          "label": "radio"
+        },
+        {
+          "from": "phone",
+          "to": "mastB",
+          "kind": "signal",
+          "label": "measures"
+        },
+        {
+          "from": "mastA",
+          "to": "core",
+          "kind": "data",
+          "label": "fibre"
+        },
+        {
+          "from": "mastB",
+          "to": "core",
+          "kind": "data",
+          "label": "fibre"
+        },
+        {
+          "from": "core",
+          "to": "friend",
+          "kind": "data"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A mobile network splits the land into areas called cells, each served by a mast. Your phone talks to the nearest mast by radio, and the mast passes your call on through cables to the network core.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a phone call hands over between masts"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.15,
+              "y": 0.75,
+              "ask": "What is handover?"
+            },
+            {
+              "id": "mastA",
+              "label": "Mast A",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.3,
+              "ask": "What is a mobile phone mast?"
+            },
+            {
+              "id": "mastB",
+              "label": "Mast B",
+              "icon": "antenna",
+              "x": 0.62,
+              "y": 0.3,
+              "ask": "Why are cells smaller in cities?"
+            },
+            {
+              "id": "core",
+              "label": "Network core",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.72,
+              "ask": "What decides when to hand over?"
+            },
+            {
+              "id": "friend",
+              "label": "Friend's phone",
+              "icon": "phone",
+              "x": 0.88,
+              "y": 0.72
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "mastA",
+              "kind": "data",
+              "label": "radio"
+            },
+            {
+              "from": "phone",
+              "to": "mastB",
+              "kind": "signal",
+              "label": "measures"
+            },
+            {
+              "from": "mastA",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "mastB",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "core",
+              "to": "friend",
+              "kind": "data"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "While you move, your phone keeps measuring how strongly it hears the neighbouring masts and reports this to the network.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.15,
+              "y": 0.75,
+              "ask": "What is handover?"
+            },
+            {
+              "id": "mastA",
+              "label": "Mast A",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.3,
+              "ask": "What is a mobile phone mast?"
+            },
+            {
+              "id": "mastB",
+              "label": "Mast B",
+              "icon": "antenna",
+              "x": 0.62,
+              "y": 0.3,
+              "ask": "Why are cells smaller in cities?"
+            },
+            {
+              "id": "core",
+              "label": "Network core",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.72,
+              "ask": "What decides when to hand over?"
+            },
+            {
+              "id": "friend",
+              "label": "Friend's phone",
+              "icon": "phone",
+              "x": 0.88,
+              "y": 0.72
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "mastA",
+              "kind": "data",
+              "label": "radio"
+            },
+            {
+              "from": "phone",
+              "to": "mastB",
+              "kind": "signal",
+              "label": "measures"
+            },
+            {
+              "from": "mastA",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "mastB",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "core",
+              "to": "friend",
+              "kind": "data"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "When mast B becomes clearly stronger, the network core sets up the call through mast B and tells your phone to switch. It happens in a fraction of a second, so the call carries on. This is called handover.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.15,
+              "y": 0.75,
+              "ask": "What is handover?"
+            },
+            {
+              "id": "mastA",
+              "label": "Mast A",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.3,
+              "ask": "What is a mobile phone mast?"
+            },
+            {
+              "id": "mastB",
+              "label": "Mast B",
+              "icon": "antenna",
+              "x": 0.62,
+              "y": 0.3,
+              "ask": "Why are cells smaller in cities?"
+            },
+            {
+              "id": "core",
+              "label": "Network core",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.72,
+              "ask": "What decides when to hand over?"
+            },
+            {
+              "id": "friend",
+              "label": "Friend's phone",
+              "icon": "phone",
+              "x": 0.88,
+              "y": 0.72
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "mastA",
+              "kind": "data",
+              "label": "radio"
+            },
+            {
+              "from": "phone",
+              "to": "mastB",
+              "kind": "signal",
+              "label": "measures"
+            },
+            {
+              "from": "mastA",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "mastB",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "core",
+              "to": "friend",
+              "kind": "data"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Neighbouring cells use different channels or codes so they do not jam each other. In cities, cells are small and masts close together, because each mast can only share its capacity among so many phones.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.15,
+              "y": 0.75,
+              "ask": "What is handover?"
+            },
+            {
+              "id": "mastA",
+              "label": "Mast A",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.3,
+              "ask": "What is a mobile phone mast?"
+            },
+            {
+              "id": "mastB",
+              "label": "Mast B",
+              "icon": "antenna",
+              "x": 0.62,
+              "y": 0.3,
+              "ask": "Why are cells smaller in cities?"
+            },
+            {
+              "id": "core",
+              "label": "Network core",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.72,
+              "ask": "What decides when to hand over?"
+            },
+            {
+              "id": "friend",
+              "label": "Friend's phone",
+              "icon": "phone",
+              "x": 0.88,
+              "y": 0.72
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "mastA",
+              "kind": "data",
+              "label": "radio"
+            },
+            {
+              "from": "phone",
+              "to": "mastB",
+              "kind": "signal",
+              "label": "measures"
+            },
+            {
+              "from": "mastA",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "mastB",
+              "to": "core",
+              "kind": "data",
+              "label": "fibre"
+            },
+            {
+              "from": "core",
+              "to": "friend",
+              "kind": "data"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a mobile phone mast?",
+      "a": "A mast, or base station, holds antennas that send and receive radio signals from phones in its cell. It is linked by fibre or microwave radio to the operator's network, which connects calls and data onwards.",
+      "asks": [
+        "What is a cell tower?"
+      ]
+    },
+    {
+      "q": "What is handover?",
+      "a": "Handover is when your call or data session is switched from one mast to another as you move, without cutting off. The network prepares the new mast first, then tells your phone to jump across.",
+      "asks": [
+        "How does my call keep going when I travel?"
+      ]
+    },
+    {
+      "q": "What decides when to hand over?",
+      "a": "Your phone measures the signal from nearby masts and reports back. The network compares them, and when a neighbour is clearly stronger, or the current mast is too busy, it orders the handover.",
+      "asks": [
+        "Who decides which mast my phone uses?"
+      ]
+    },
+    {
+      "q": "Why do calls drop?",
+      "a": "A call can drop if your phone moves somewhere no mast covers well, like a tunnel, or if the new mast is too busy to take it, or if the signal fades too fast for handover to finish.",
+      "asks": [
+        "Why does my call cut out on the train?"
+      ]
+    },
+    {
+      "q": "Why are cells smaller in cities?",
+      "a": "Each mast has a limited amount of radio capacity to share. In crowded cities there are many more phones, so operators use lots of small cells close together, each serving fewer people.",
+      "asks": [
+        "Why are there so many masts in towns?"
+      ]
+    }
+  ],
+  "facts": [
+    "Mobile networks are called cellular because the area they cover is divided into cells, each served by a base station.",
+    "In 4G networks a handover usually interrupts data for only a few tens of milliseconds."
+  ],
+  "quiz": [
+    {
+      "say": "You are on a train during a call and leave mast A's area. What keeps the call going?",
+      "show": "The call continues because of…",
+      "options": [
+        {
+          "show": "Handover to the next mast",
+          "say": "Handover to the next mast"
+        },
+        {
+          "show": "Your phone storing the call",
+          "say": "Your phone storing the call"
+        },
+        {
+          "show": "A satellite taking over",
+          "say": "A satellite taking over"
+        }
+      ],
+      "answer": 0,
+      "why": "The network switches the call to the stronger neighbouring mast, called handover.",
+      "wrong": {
+        "1": "Phones cannot store a live call; it must stay connected to a mast.",
+        "2": "Ordinary mobile calls go through ground masts, not satellites."
+      }
+    }
+  ]
+}

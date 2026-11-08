@@ -1,0 +1,333 @@
+{
+  "id": "BME-STAT-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Method of joints: solving a roof truss one pin at a time",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "method of joints",
+    "truss",
+    "tension member",
+    "compression member",
+    "pin joint"
+  ],
+  "examples": [
+    "How does the method of joints work?",
+    "How do I know if a truss member is in tension or compression?",
+    "Solve a simple triangular truss"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "house",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Apex load 20 kN",
+          "dir": "down",
+          "size": 4,
+          "ask": "How do I find the support reactions of a truss?"
+        },
+        {
+          "label": "Supports 2 × 10 kN",
+          "dir": "up",
+          "size": 4,
+          "ask": "How do I find the support reactions of a truss?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Look at the roof of a warehouse or a railway shed: a pattern of triangles called a truss. Each bar only pulls or pushes along its length. Ours is a simple triangle, 4 metres wide and 2 metres high, with a 20 kilonewton load on top. By symmetry each support pushes up 10 kilonewtons.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Method of joints: solving a roof truss one pin at a time"
+        },
+        {
+          "name": "x-forces",
+          "object": "house",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Apex load 20 kN",
+              "dir": "down",
+              "size": 4,
+              "ask": "How do I find the support reactions of a truss?"
+            },
+            {
+              "label": "Supports 2 × 10 kN",
+              "dir": "up",
+              "size": 4,
+              "ask": "How do I find the support reactions of a truss?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Truss: span 4 m, height 2 m, so the rafters slope at 45°"
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a truss bridge. Look at the triangles between the top chord and the bottom chord. Every joint is a pin, and that is what lets you solve it joint by joint. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Method of joints: solving a roof truss one pin at a time"
+        },
+        {
+          "op": "image",
+          "render": "bridge-truss"
+        }
+      ]
+    },
+    {
+      "say": "The method of joints says: every pin is in equilibrium, so treat each pin as a particle. Start at a joint with only two unknown bars. Here is the left support joint, cut free. See the 10 kilonewton reaction pushing up? Which bar can balance it?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "bridge",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Reaction 10 kN",
+              "dir": "up",
+              "size": 2,
+              "ask": "How does the method of joints work?"
+            },
+            {
+              "label": "Rafter 14.1 kN",
+              "dir": 225,
+              "size": 3,
+              "ask": "How do I know if a truss member is in tension or compression?"
+            },
+            {
+              "label": "Tie 10 kN",
+              "dir": "right",
+              "size": 2,
+              "ask": "How do I know if a truss member is in tension or compression?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "At each joint: ΣFx = 0 and ΣFy = 0"
+        }
+      ]
+    },
+    {
+      "say": "Only the sloping rafter, because the tie is flat. Its upward part must be minus 10 kilonewtons, so F times sin 45 equals minus 10, giving 14.1 kilonewtons. The minus sign means it pushes into the joint: compression. Look at the arrow pointing down-left. Is the rafter being squashed or stretched?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "bridge",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Reaction 10 kN",
+              "dir": "up",
+              "size": 2,
+              "ask": "How does the method of joints work?"
+            },
+            {
+              "label": "Rafter 14.1 kN",
+              "dir": 225,
+              "size": 3,
+              "ask": "How do I know if a truss member is in tension or compression?"
+            },
+            {
+              "label": "Tie 10 kN",
+              "dir": "right",
+              "size": 2,
+              "ask": "How do I know if a truss member is in tension or compression?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "F_rafter sin 45° = −10 kN, so F = −14.1 kN"
+        }
+      ]
+    },
+    {
+      "say": "Squashed! Now sideways: the rafter pushes left with 14.1 times cos 45, which is 10 kilonewtons. So the flat tie must pull right with 10 kilonewtons. A pull means tension: the tie is being stretched. See the arrow to the right? What job does the tie do for the roof?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "bridge",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Reaction 10 kN",
+              "dir": "up",
+              "size": 2,
+              "ask": "How does the method of joints work?"
+            },
+            {
+              "label": "Rafter 14.1 kN",
+              "dir": 225,
+              "size": 3,
+              "ask": "How do I know if a truss member is in tension or compression?"
+            },
+            {
+              "label": "Tie 10 kN",
+              "dir": "right",
+              "size": 2,
+              "ask": "How do I know if a truss member is in tension or compression?"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "F_tie = 14.1 × cos 45° = 10 kN tension"
+        }
+      ]
+    },
+    {
+      "say": "It stops the rafters splaying apart, like a string across a bow. Well done! Exam tip: assume every unknown bar is in tension; a negative answer then simply means compression. Challenge: move to the apex joint and check that both rafters carry 14.1 kilonewtons.",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "house",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Apex load 20 kN",
+              "dir": "down",
+              "size": 4,
+              "ask": "How do I find the support reactions of a truss?"
+            },
+            {
+              "label": "Supports 2 × 10 kN",
+              "dir": "up",
+              "size": 4,
+              "ask": "How do I find the support reactions of a truss?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Tip: assume tension; a minus sign means compression"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I find the support reactions of a truss?",
+      "a": "Treat the whole truss as one rigid body and use moments and force sums. For a symmetric truss with a central load, each support takes half.",
+      "asks": [
+        "truss reactions first step"
+      ]
+    },
+    {
+      "q": "How does the method of joints work?",
+      "a": "Each pin joint is in equilibrium, so you write the sum of x forces and the sum of y forces equal to zero there. Start at a joint with at most two unknown bars and work across the truss.",
+      "asks": [
+        "method of joints steps"
+      ]
+    },
+    {
+      "q": "How do I know if a truss member is in tension or compression?",
+      "a": "Assume every member pulls away from the joint, which is tension. If the answer comes out negative, the member is actually pushing into the joint, which is compression.",
+      "asks": [
+        "tension or compression in truss",
+        "sign convention truss"
+      ]
+    },
+    {
+      "q": "Why are trusses made of triangles?",
+      "a": "A triangle cannot change shape unless a bar changes length, so it is rigid. A square made of pinned bars would fold flat.",
+      "asks": [
+        "why triangles are strong"
+      ]
+    },
+    {
+      "q": "What is a zero-force member?",
+      "a": "A bar that carries no force under a given load. At a joint with two bars in line and a third at an angle, with no load, the third bar carries zero force.",
+      "asks": [
+        "zero force members truss"
+      ]
+    }
+  ],
+  "facts": [
+    "In an ideal pin-jointed truss loaded only at the joints, every member carries pure axial tension or compression.",
+    "A simple plane truss satisfies m = 2j − 3, where m is the number of members and j the number of joints."
+  ],
+  "quiz": [
+    {
+      "say": "At a joint, a 45 degree member must provide 20 kilonewtons of upward force. What is the force in the member?",
+      "show": "A 45° member must give 20 kN upwards at a joint. Member force?",
+      "options": [
+        {
+          "show": "28.3 kN",
+          "say": "28.3 kilonewtons"
+        },
+        {
+          "show": "14.1 kN",
+          "say": "14.1 kilonewtons"
+        },
+        {
+          "show": "20 kN",
+          "say": "20 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "F sin 45° = 20, so F = 20 / 0.707 = 28.3 kN.",
+      "wrong": {
+        "1": "That multiplies by sin 45° instead of dividing.",
+        "2": "Only part of a sloping force acts upwards, so it must be bigger than 20 kN."
+      }
+    },
+    {
+      "say": "Using the tension-positive convention, a member force comes out as minus 8 kilonewtons. What does that mean?",
+      "show": "Tension-positive convention gives a member force of −8 kN. Meaning?",
+      "options": [
+        {
+          "show": "8 kN in compression",
+          "say": "8 kN in compression"
+        },
+        {
+          "show": "8 kN in tension",
+          "say": "8 kN in tension"
+        },
+        {
+          "show": "The calculation is wrong",
+          "say": "The calculation is wrong"
+        }
+      ],
+      "answer": 0,
+      "why": "A negative answer means the bar pushes rather than pulls, so it is in compression.",
+      "wrong": {
+        "1": "Tension would come out positive under this convention.",
+        "2": "Negative answers are normal; they tell you the direction."
+      }
+    }
+  ]
+}

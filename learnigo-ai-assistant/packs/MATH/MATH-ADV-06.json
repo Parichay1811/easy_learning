@@ -1,0 +1,243 @@
+{
+  "id": "MATH-ADV-06",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Matrix transformations",
+  "area": "Mathematics",
+  "group": "MATH-ADV — Advanced & Further Topics",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "matrix",
+    "transformation",
+    "rotation",
+    "reflection",
+    "enlargement",
+    "determinant"
+  ],
+  "examples": [
+    "When do I use a rotation matrix instead of a reflection matrix?",
+    "How does the determinant tell me about the size change?",
+    "Can I combine a rotation and a scaling into one matrix?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we look at using matrices for transformations. We can use matrices to show rotations, reflections, and enlargements. These matrices transform points on a grid.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Matrix transformations"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Matrices show transformations",
+            "Rotations, reflections, enlargements",
+            "Transform points on a grid"
+          ],
+          "at": "matrices"
+        },
+        {
+          "op": "text",
+          "text": "Transformation Matrices",
+          "at": "matrices"
+        }
+      ]
+    },
+    {
+      "say": "A rotation matrix changes the angle of a point around the origin. For a rotation of angle theta, the matrix is a specific form. We use this matrix to find the new coordinates.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Rotation Matrix: [cos θ, -sin θ; sin θ, cos θ]",
+          "at": "rotation"
+        }
+      ]
+    },
+    {
+      "say": "A reflection matrix flips a point across an axis. For reflection across the x-axis, the matrix is simple. It keeps the x-coordinate the same but changes the sign of y.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Reflection (x-axis): [1, 0; 0, -1]",
+          "at": "reflection"
+        }
+      ]
+    },
+    {
+      "say": "An enlargement matrix scales the point by a factor k. This means both the x and y coordinates are multiplied by k. The matrix is straightforward to write down.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Enlargement Matrix: [k, 0; 0, k]",
+          "at": "enlargement"
+        }
+      ]
+    },
+    {
+      "say": "The determinant of the transformation matrix tells us the area factor. If the determinant is five, the area gets five times bigger. It measures how much the area scales.",
+      "draw": [
+        {
+          "op": "bullets",
+          "items": [
+            "Determinant = Area Factor",
+            "Measures area scaling",
+            "Example: Determinant of five"
+          ],
+          "at": "determinant"
+        },
+        {
+          "op": "text",
+          "text": "Determinant = Area Factor",
+          "at": "determinant"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a reflection and a rotation?",
+      "a": "A reflection flips the object across a line, like a mirror image. A rotation spins the object around a fixed point.",
+      "asks": [
+        "How is a reflection different from a rotation?",
+        "Can you show me a reflection versus a turn?"
+      ]
+    },
+    {
+      "q": "Does the determinant always tell me the size change?",
+      "a": "Yes, for linear transformations, the absolute value of the determinant is the area scaling factor. It tells you how much the area stretches or shrinks.",
+      "asks": [
+        "What does the determinant mean for area?",
+        "Is the determinant always positive?"
+      ]
+    },
+    {
+      "q": "What happens to the determinant if I use a pure translation?",
+      "a": "A pure translation, which just slides the object, has a determinant of one. It changes position but not the shape or area.",
+      "asks": [
+        "Does sliding an object change the determinant?",
+        "What is the area factor of a slide?"
+      ]
+    },
+    {
+      "q": "If the determinant is negative, what does that mean?",
+      "a": "A negative determinant means the transformation has caused an opposite orientation. This often happens with reflections.",
+      "asks": [
+        "Why is the determinant negative sometimes?",
+        "What does a negative determinant imply?"
+      ]
+    },
+    {
+      "q": "Can I find the transformation just by looking at the points?",
+      "a": "You can find the transformation by comparing the original coordinates to the new ones. You look for a pattern of scaling or flipping.",
+      "asks": [
+        "How can I figure out the matrix from points?",
+        "Is there a visual way to find the matrix?"
+      ]
+    }
+  ],
+  "facts": [
+    "The rotation matrix for angle theta is [cos θ, -sin θ; sin θ, cos θ].",
+    "The determinant of a scaling matrix [k, 0; 0, k] is k squared.",
+    "A reflection across the y-axis uses the matrix [ -1, 0; 0, 1 ].",
+    "The determinant represents the factor by which area is multiplied."
+  ],
+  "quiz": [
+    {
+      "say": "A point (2, 1) is transformed by the matrix [1, 0; 0, -1]. What are the new coordinates?",
+      "show": "Matrix: [1, 0; 0, -1]",
+      "options": [
+        {
+          "show": "(-2, 1)",
+          "say": "(-2, 1)"
+        },
+        {
+          "show": "(2, 1)",
+          "say": "(2, 1)"
+        },
+        {
+          "show": "(2, -1)",
+          "say": "(2, -1)"
+        },
+        {
+          "show": "(1, 2)",
+          "say": "(1, 2)"
+        }
+      ],
+      "answer": 2,
+      "why": "Multiplying (2, 1) by the matrix gives (21 + 10, 20 + 1(-1)), which is (2, -1). This is a reflection across the x-axis.",
+      "wrong": {
+        "0": "This incorrectly reflects across the y-axis instead of the x-axis.",
+        "1": "This suggests the transformation did nothing, ignoring the reflection effect.",
+        "3": "This incorrectly swaps the coordinates, which is not what the matrix describes."
+      }
+    },
+    {
+      "say": "If a transformation matrix has a determinant of negative four, what does this tell you about the area change?",
+      "show": "Determinant = Area Factor",
+      "options": [
+        {
+          "show": "The area is scaled by negative four.",
+          "say": "The area is scaled by negative four."
+        },
+        {
+          "show": "The area is halved.",
+          "say": "The area is halved."
+        },
+        {
+          "show": "The area is unchanged.",
+          "say": "The area is unchanged."
+        },
+        {
+          "show": "The area is scaled by a factor of four.",
+          "say": "The area is scaled by a factor of four."
+        }
+      ],
+      "answer": 3,
+      "why": "The determinant tells you the area factor, and we use the absolute value for the size. So, the area scales by four.",
+      "wrong": {
+        "0": "Area is a positive measure, so the determinant's sign is ignored for size.",
+        "1": "This confuses the determinant value with a specific fractional change.",
+        "2": "A determinant of negative four clearly indicates a change in area."
+      }
+    },
+    {
+      "say": "Which matrix represents an enlargement by a factor of three?",
+      "show": "Enlargement by k=3",
+      "options": [
+        {
+          "show": "[1, 3; 3, 1]",
+          "say": "[1, 3; 3, 1]"
+        },
+        {
+          "show": "[3, 0; 0, 3]",
+          "say": "[3, 0; 0, 3]"
+        },
+        {
+          "show": "[3, 3; 3, 3]",
+          "say": "[3, 3; 3, 3]"
+        },
+        {
+          "show": "[3, 0; 0, 1]",
+          "say": "[3, 0; 0, 1]"
+        }
+      ],
+      "answer": 1,
+      "why": "An enlargement by k means both coordinates are multiplied by k, giving the matrix [k, 0; 0, k].",
+      "wrong": {
+        "0": "This matrix represents a shear or rotation, not a uniform enlargement.",
+        "2": "This matrix incorrectly mixes scaling with addition.",
+        "3": "This only scales the x-coordinate and leaves the y-coordinate unchanged."
+      }
+    }
+  ]
+}

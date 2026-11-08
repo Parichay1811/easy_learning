@@ -1,0 +1,491 @@
+{
+  "id": "BCE-HYD-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Groundwater and wells: aquifers, drawdown and the cone of depression",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-HYD — Hydraulics and water resources",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "aquifer",
+    "confined aquifer",
+    "cone of depression",
+    "drawdown",
+    "Thiem equation",
+    "land subsidence"
+  ],
+  "examples": [
+    "What is an aquifer?",
+    "How do you calculate the yield of a well?",
+    "What is a cone of depression?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-layers",
+      "layers": [
+        {
+          "label": "Unsaturated zone",
+          "size": 1,
+          "note": "Pores hold both air and water",
+          "color": "#d7ccc8"
+        },
+        {
+          "label": "Water table",
+          "size": 0.25,
+          "note": "Top of the saturated zone",
+          "color": "#3498db",
+          "ask": "What is a cone of depression?"
+        },
+        {
+          "label": "Unconfined aquifer",
+          "size": 1.6,
+          "note": "Sand and gravel, K = 10 m/day",
+          "color": "#e0c48c",
+          "ask": "What is the difference between confined and unconfined aquifers?"
+        },
+        {
+          "label": "Clay aquitard",
+          "size": 0.6,
+          "note": "Barely lets water through",
+          "color": "#8d6e63"
+        },
+        {
+          "label": "Confined aquifer",
+          "size": 1.2,
+          "note": "Water held under pressure",
+          "color": "#b7950b",
+          "ask": "What is the difference between confined and unconfined aquifers?"
+        }
+      ],
+      "flow": {
+        "label": "Rain recharge",
+        "from": 0,
+        "to": 2
+      }
+    }
+  ],
+  "explain": [
+    {
+      "say": "About half the world's drinking water comes from underground, and India pumps more groundwater than any other country. It lives not in underground lakes but in the pores of sand, gravel and cracked rock, called aquifers. On the board, a slice through the ground from the surface down.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Groundwater and wells: aquifers, drawdown and the cone of depression"
+        },
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Unsaturated zone",
+              "size": 1,
+              "note": "Pores hold both air and water",
+              "color": "#d7ccc8"
+            },
+            {
+              "label": "Water table",
+              "size": 0.25,
+              "note": "Top of the saturated zone",
+              "color": "#3498db",
+              "ask": "What is a cone of depression?"
+            },
+            {
+              "label": "Unconfined aquifer",
+              "size": 1.6,
+              "note": "Sand and gravel, K = 10 m/day",
+              "color": "#e0c48c",
+              "ask": "What is the difference between confined and unconfined aquifers?"
+            },
+            {
+              "label": "Clay aquitard",
+              "size": 0.6,
+              "note": "Barely lets water through",
+              "color": "#8d6e63"
+            },
+            {
+              "label": "Confined aquifer",
+              "size": 1.2,
+              "note": "Water held under pressure",
+              "color": "#b7950b",
+              "ask": "What is the difference between confined and unconfined aquifers?"
+            }
+          ],
+          "flow": {
+            "label": "Rain recharge",
+            "from": 0,
+            "to": 2
+          }
+        }
+      ]
+    },
+    {
+      "say": "The top aquifer is unconfined: its upper surface is the water table, free to rise and fall. Below a clay layer, which barely lets water through, sits a confined aquifer, held under pressure. Drill into it and water can rise up the borehole by itself, sometimes gushing out: an artesian well. Which aquifer refills faster after rain?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Unsaturated zone",
+              "size": 1,
+              "note": "Pores hold both air and water",
+              "color": "#d7ccc8"
+            },
+            {
+              "label": "Water table",
+              "size": 0.25,
+              "note": "Top of the saturated zone",
+              "color": "#3498db",
+              "ask": "What is a cone of depression?"
+            },
+            {
+              "label": "Unconfined aquifer",
+              "size": 1.6,
+              "note": "Sand and gravel, K = 10 m/day",
+              "color": "#e0c48c",
+              "ask": "What is the difference between confined and unconfined aquifers?"
+            },
+            {
+              "label": "Clay aquitard",
+              "size": 0.6,
+              "note": "Barely lets water through",
+              "color": "#8d6e63"
+            },
+            {
+              "label": "Confined aquifer",
+              "size": 1.2,
+              "note": "Water held under pressure",
+              "color": "#b7950b",
+              "ask": "What is the difference between confined and unconfined aquifers?"
+            }
+          ],
+          "flow": {
+            "label": "Rain recharge",
+            "from": 0,
+            "to": 2
+          },
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The unconfined one, since rain soaks straight in. Now switch on a pump. The water table dips into a funnel around the well, the cone of depression. See the curve: steep near the well, flattening out a hundred metres away, where the pumping barely shows. The dip at the well, here five metres, is called the drawdown.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Distance from well (m)",
+            "max": 100
+          },
+          "y": {
+            "label": "Water table height (m)",
+            "min": 14,
+            "max": 21
+          },
+          "curves": [
+            {
+              "label": "Pumped water table",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0.15,
+                  15
+                ],
+                [
+                  1,
+                  16.62
+                ],
+                [
+                  5,
+                  17.87
+                ],
+                [
+                  10,
+                  18.39
+                ],
+                [
+                  20,
+                  18.89
+                ],
+                [
+                  40,
+                  19.37
+                ],
+                [
+                  60,
+                  19.65
+                ],
+                [
+                  80,
+                  19.85
+                ],
+                [
+                  100,
+                  20
+                ]
+              ],
+              "ask": "What is a cone of depression?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Near well: 16.6 m",
+              "ask": "How do you calculate the yield of a well?"
+            },
+            {
+              "x": 100,
+              "label": "Edge: 20 m"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Drawdown at the well: 20 − 15 = 5 m"
+        }
+      ]
+    },
+    {
+      "say": "How much can the well give? For an unconfined aquifer, the Thiem equation uses the permeability and the water heights at two distances. With K of ten metres per day, twenty metres of water a hundred metres away and fifteen at the well, the well yields about eight hundred and forty six cubic metres a day.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Distance from well (m)",
+            "max": 100
+          },
+          "y": {
+            "label": "Water table height (m)",
+            "min": 14,
+            "max": 21
+          },
+          "curves": [
+            {
+              "label": "Pumped water table",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0.15,
+                  15
+                ],
+                [
+                  1,
+                  16.62
+                ],
+                [
+                  5,
+                  17.87
+                ],
+                [
+                  10,
+                  18.39
+                ],
+                [
+                  20,
+                  18.89
+                ],
+                [
+                  40,
+                  19.37
+                ],
+                [
+                  60,
+                  19.65
+                ],
+                [
+                  80,
+                  19.85
+                ],
+                [
+                  100,
+                  20
+                ]
+              ],
+              "ask": "What is a cone of depression?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Near well: 16.6 m",
+              "ask": "How do you calculate the yield of a well?"
+            },
+            {
+              "x": 100,
+              "label": "Edge: 20 m"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Q = πK(h₂² − h₁²) / ln(r₂/r₁)"
+        },
+        {
+          "op": "note",
+          "text": "= π × 10 × (400 − 225) / ln(100/0.15) ≈ 846 m³/day"
+        }
+      ]
+    },
+    {
+      "say": "Pump too much and the cones spread and the water table falls year after year. In Mexico City and Jakarta, over-pumping has made the ground itself sink, in places by tens of centimetres a year, as clay layers compact: the same consolidation you met in soil mechanics. Wonderful! Challenge: why do wells near the sea sometimes turn salty?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Unsaturated zone",
+              "size": 1,
+              "note": "Pores hold both air and water",
+              "color": "#d7ccc8"
+            },
+            {
+              "label": "Water table",
+              "size": 0.25,
+              "note": "Top of the saturated zone",
+              "color": "#3498db",
+              "ask": "What is a cone of depression?"
+            },
+            {
+              "label": "Unconfined aquifer",
+              "size": 1.6,
+              "note": "Sand and gravel, K = 10 m/day",
+              "color": "#e0c48c",
+              "ask": "What is the difference between confined and unconfined aquifers?"
+            },
+            {
+              "label": "Clay aquitard",
+              "size": 0.6,
+              "note": "Barely lets water through",
+              "color": "#8d6e63"
+            },
+            {
+              "label": "Confined aquifer",
+              "size": 1.2,
+              "note": "Water held under pressure",
+              "color": "#b7950b",
+              "ask": "What is the difference between confined and unconfined aquifers?"
+            }
+          ],
+          "flow": {
+            "label": "Rain recharge",
+            "from": 0,
+            "to": 2
+          },
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an aquifer?",
+      "a": "An aquifer is a layer of soil or rock, such as sand, gravel or fractured limestone, that holds water in its pores and lets it flow easily enough to supply wells.",
+      "asks": [
+        "Define aquifer",
+        "Where is groundwater stored?"
+      ]
+    },
+    {
+      "q": "What is the difference between confined and unconfined aquifers?",
+      "a": "An unconfined aquifer has the water table as its upper surface and is recharged directly from above. A confined aquifer is sealed above by a low-permeability layer such as clay, so its water is under pressure.",
+      "asks": [
+        "Confined vs unconfined aquifer",
+        "What is an artesian well?"
+      ]
+    },
+    {
+      "q": "What is a cone of depression?",
+      "a": "It is the funnel-shaped lowering of the water table around a pumping well. It is steepest near the well and fades with distance.",
+      "asks": [
+        "What is drawdown?"
+      ]
+    },
+    {
+      "q": "How do you calculate the yield of a well?",
+      "a": "For steady pumping from an unconfined aquifer, use the Thiem equation: Q equals pi K times (h2 squared minus h1 squared), over the natural log of r2 over r1. Our example gives about 846 cubic metres per day.",
+      "asks": [
+        "Thiem equation",
+        "Well discharge formula"
+      ]
+    },
+    {
+      "q": "Why does over-pumping groundwater make the ground sink?",
+      "a": "Lowering the water table reduces pore water pressure, so effective stress rises and clay layers consolidate. The ground surface subsides, as in Mexico City and Jakarta.",
+      "asks": [
+        "What is land subsidence?"
+      ]
+    }
+  ],
+  "facts": [
+    "Groundwater supplies roughly half of the world's drinking water.",
+    "India is the world's largest user of groundwater.",
+    "Parts of Jakarta have sunk by up to about 25 centimetres a year, largely due to groundwater extraction."
+  ],
+  "quiz": [
+    {
+      "say": "Using the Thiem equation with K of 5 metres per day, h2 of 20 metres, h1 of 18 metres and a log ratio of 6, what is the well yield?",
+      "show": "Thiem: K = 5 m/day, h₂ = 20 m, h₁ = 18 m, ln(r₂/r₁) = 6. Yield Q = πK(h₂² − h₁²)/ln(r₂/r₁)?",
+      "options": [
+        {
+          "show": "About 199 m³/day",
+          "say": "about 199 cubic metres per day"
+        },
+        {
+          "show": "About 63 m³/day",
+          "say": "about 63 cubic metres per day"
+        },
+        {
+          "show": "About 1194 m³/day",
+          "say": "about 1194 cubic metres per day"
+        }
+      ],
+      "answer": 0,
+      "why": "π × 5 × (400 − 324) / 6 = π × 5 × 76 / 6 ≈ 199 cubic metres per day.",
+      "wrong": {
+        "1": "That leaves out the π.",
+        "2": "That forgets to divide by the log term, 6."
+      }
+    },
+    {
+      "say": "An artesian well flows on its own because…",
+      "show": "An artesian well flows on its own because…",
+      "options": [
+        {
+          "show": "The confined aquifer is under pressure",
+          "say": "The confined aquifer is under pressure"
+        },
+        {
+          "show": "A pump is hidden underground",
+          "say": "A pump is hidden underground"
+        },
+        {
+          "show": "The soil above is very permeable",
+          "say": "The soil above is very permeable"
+        }
+      ],
+      "answer": 0,
+      "why": "Water in a confined aquifer is pressurised, so it rises up a borehole without pumping.",
+      "wrong": {
+        "1": "No pump is needed; that is the point of artesian flow.",
+        "2": "It is the impermeable layer above that traps the pressure."
+      }
+    }
+  ]
+}

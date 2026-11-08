@@ -1,0 +1,855 @@
+{
+  "id": "BME-DYN-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Damping ratio: underdamped, critically damped and overdamped vibration",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-DYN — Dynamics and vibration",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "damping ratio",
+    "critical damping",
+    "underdamped",
+    "overdamped",
+    "shock absorber"
+  ],
+  "examples": [
+    "What is critical damping?",
+    "What is the difference between underdamped and overdamped?",
+    "How do I calculate the damping ratio?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "body",
+          "kind": "weight",
+          "x": 0.5,
+          "y": 0.2,
+          "label": "Car body",
+          "ask": "How much damping does a car have?"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.35,
+          "y": 0.55,
+          "label": "Coil spring"
+        },
+        {
+          "id": "damper",
+          "kind": "piston",
+          "x": 0.65,
+          "y": 0.55,
+          "label": "Shock absorber",
+          "ask": "What does a shock absorber do?"
+        },
+        {
+          "id": "wheel",
+          "kind": "wheel",
+          "x": 0.5,
+          "y": 0.85,
+          "label": "Wheel"
+        }
+      ],
+      "links": [
+        {
+          "from": "body",
+          "to": "spring",
+          "kind": "force"
+        },
+        {
+          "from": "body",
+          "to": "damper",
+          "kind": "force"
+        },
+        {
+          "from": "spring",
+          "to": "wheel",
+          "kind": "force"
+        },
+        {
+          "from": "damper",
+          "to": "wheel",
+          "kind": "force"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A car without shock absorbers would bounce for ages after every bump. The shock absorber is a damper: oil forced through small holes turns the motion into heat. How much damping is right? Look at the car corner: a spring to carry the weight and a damper beside it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Damping ratio: underdamped, critically damped and overdamped vibration"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "body",
+              "kind": "weight",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Car body",
+              "ask": "How much damping does a car have?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.35,
+              "y": 0.55,
+              "label": "Coil spring"
+            },
+            {
+              "id": "damper",
+              "kind": "piston",
+              "x": 0.65,
+              "y": 0.55,
+              "label": "Shock absorber",
+              "ask": "What does a shock absorber do?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.85,
+              "label": "Wheel"
+            }
+          ],
+          "links": [
+            {
+              "from": "body",
+              "to": "spring",
+              "kind": "force"
+            },
+            {
+              "from": "body",
+              "to": "damper",
+              "kind": "force"
+            },
+            {
+              "from": "spring",
+              "to": "wheel",
+              "kind": "force"
+            },
+            {
+              "from": "damper",
+              "to": "wheel",
+              "kind": "force"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Same system as before: m = 2 kg, k = 800 N/m, ωn = 20 rad/s"
+        }
+      ]
+    },
+    {
+      "say": "We measure damping with the damping ratio, zeta: the actual damping divided by the critical amount. With little damping, zeta equals 0.1, the mass still swings back and forth, but each swing is smaller. This is underdamped. See the shrinking waves? How many swings before it nearly stops?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Position (mm)",
+            "min": -10,
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Underdamped ζ = 0.1",
+              "type": "damped",
+              "a": 10,
+              "k": 3.17,
+              "tau": 0.5,
+              "ask": "What does underdamped mean?"
+            },
+            {
+              "label": "Critical ζ = 1",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0.07,
+                  6.15
+                ],
+                [
+                  0.13,
+                  2.55
+                ],
+                [
+                  0.2,
+                  0.92
+                ],
+                [
+                  0.27,
+                  0.31
+                ],
+                [
+                  0.33,
+                  0.1
+                ],
+                [
+                  0.4,
+                  0.03
+                ],
+                [
+                  0.47,
+                  0.01
+                ],
+                [
+                  0.53,
+                  0
+                ],
+                [
+                  0.6,
+                  0
+                ],
+                [
+                  0.67,
+                  0
+                ],
+                [
+                  0.73,
+                  0
+                ],
+                [
+                  0.8,
+                  0
+                ],
+                [
+                  0.87,
+                  0
+                ],
+                [
+                  0.93,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is critical damping?"
+            },
+            {
+              "label": "Overdamped ζ = 2",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0.07,
+                  7.53
+                ],
+                [
+                  0.13,
+                  5.27
+                ],
+                [
+                  0.2,
+                  3.69
+                ],
+                [
+                  0.27,
+                  2.58
+                ],
+                [
+                  0.33,
+                  1.81
+                ],
+                [
+                  0.4,
+                  1.26
+                ],
+                [
+                  0.47,
+                  0.88
+                ],
+                [
+                  0.53,
+                  0.62
+                ],
+                [
+                  0.6,
+                  0.43
+                ],
+                [
+                  0.67,
+                  0.3
+                ],
+                [
+                  0.73,
+                  0.21
+                ],
+                [
+                  0.8,
+                  0.15
+                ],
+                [
+                  0.87,
+                  0.1
+                ],
+                [
+                  0.93,
+                  0.07
+                ],
+                [
+                  1,
+                  0.05
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does overdamped mean?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ζ = c / c_c, where c_c = 2√(km) = 80 N·s/m"
+        }
+      ]
+    },
+    {
+      "say": "About three or four. Now raise the damping to exactly the critical value, zeta equals 1. The mass glides back to rest without any overshoot, in the shortest possible time. For our system, that needs a damper of 80 newton seconds per metre. See the smooth critical curve? Is that ideal for every machine?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Position (mm)",
+            "min": -10,
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Underdamped ζ = 0.1",
+              "type": "damped",
+              "a": 10,
+              "k": 3.17,
+              "tau": 0.5,
+              "ask": "What does underdamped mean?"
+            },
+            {
+              "label": "Critical ζ = 1",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0.07,
+                  6.15
+                ],
+                [
+                  0.13,
+                  2.55
+                ],
+                [
+                  0.2,
+                  0.92
+                ],
+                [
+                  0.27,
+                  0.31
+                ],
+                [
+                  0.33,
+                  0.1
+                ],
+                [
+                  0.4,
+                  0.03
+                ],
+                [
+                  0.47,
+                  0.01
+                ],
+                [
+                  0.53,
+                  0
+                ],
+                [
+                  0.6,
+                  0
+                ],
+                [
+                  0.67,
+                  0
+                ],
+                [
+                  0.73,
+                  0
+                ],
+                [
+                  0.8,
+                  0
+                ],
+                [
+                  0.87,
+                  0
+                ],
+                [
+                  0.93,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is critical damping?"
+            },
+            {
+              "label": "Overdamped ζ = 2",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0.07,
+                  7.53
+                ],
+                [
+                  0.13,
+                  5.27
+                ],
+                [
+                  0.2,
+                  3.69
+                ],
+                [
+                  0.27,
+                  2.58
+                ],
+                [
+                  0.33,
+                  1.81
+                ],
+                [
+                  0.4,
+                  1.26
+                ],
+                [
+                  0.47,
+                  0.88
+                ],
+                [
+                  0.53,
+                  0.62
+                ],
+                [
+                  0.6,
+                  0.43
+                ],
+                [
+                  0.67,
+                  0.3
+                ],
+                [
+                  0.73,
+                  0.21
+                ],
+                [
+                  0.8,
+                  0.15
+                ],
+                [
+                  0.87,
+                  0.1
+                ],
+                [
+                  0.93,
+                  0.07
+                ],
+                [
+                  1,
+                  0.05
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does overdamped mean?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "c_c = 2√(800 × 2) = 80 N·s/m"
+        }
+      ]
+    },
+    {
+      "say": "Not always, as you will see. With even more damping, zeta equals 2, the mass creeps back slowly, as if moving through honey. That is overdamped. It never overshoots, but it is sluggish. See how the third curve lags behind the critical one? Which would you choose for a door closer?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Position (mm)",
+            "min": -10,
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Underdamped ζ = 0.1",
+              "type": "damped",
+              "a": 10,
+              "k": 3.17,
+              "tau": 0.5,
+              "ask": "What does underdamped mean?"
+            },
+            {
+              "label": "Critical ζ = 1",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0.07,
+                  6.15
+                ],
+                [
+                  0.13,
+                  2.55
+                ],
+                [
+                  0.2,
+                  0.92
+                ],
+                [
+                  0.27,
+                  0.31
+                ],
+                [
+                  0.33,
+                  0.1
+                ],
+                [
+                  0.4,
+                  0.03
+                ],
+                [
+                  0.47,
+                  0.01
+                ],
+                [
+                  0.53,
+                  0
+                ],
+                [
+                  0.6,
+                  0
+                ],
+                [
+                  0.67,
+                  0
+                ],
+                [
+                  0.73,
+                  0
+                ],
+                [
+                  0.8,
+                  0
+                ],
+                [
+                  0.87,
+                  0
+                ],
+                [
+                  0.93,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is critical damping?"
+            },
+            {
+              "label": "Overdamped ζ = 2",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  10
+                ],
+                [
+                  0.07,
+                  7.53
+                ],
+                [
+                  0.13,
+                  5.27
+                ],
+                [
+                  0.2,
+                  3.69
+                ],
+                [
+                  0.27,
+                  2.58
+                ],
+                [
+                  0.33,
+                  1.81
+                ],
+                [
+                  0.4,
+                  1.26
+                ],
+                [
+                  0.47,
+                  0.88
+                ],
+                [
+                  0.53,
+                  0.62
+                ],
+                [
+                  0.6,
+                  0.43
+                ],
+                [
+                  0.67,
+                  0.3
+                ],
+                [
+                  0.73,
+                  0.21
+                ],
+                [
+                  0.8,
+                  0.15
+                ],
+                [
+                  0.87,
+                  0.1
+                ],
+                [
+                  0.93,
+                  0.07
+                ],
+                [
+                  1,
+                  0.05
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does overdamped mean?"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Overdamped: no overshoot, but a slow return"
+        }
+      ]
+    },
+    {
+      "say": "Near critical, so the door shuts quickly without slamming. Superb! Real link: car suspensions are usually underdamped, with zeta around 0.2 to 0.4, for comfort and grip, while measuring needles are often set near 0.7. Exam tip: the decaying swings of an underdamped system let you measure zeta from a test. Challenge: what damper gives zeta equals 0.5 here?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "body",
+              "kind": "weight",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Car body",
+              "ask": "How much damping does a car have?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.35,
+              "y": 0.55,
+              "label": "Coil spring"
+            },
+            {
+              "id": "damper",
+              "kind": "piston",
+              "x": 0.65,
+              "y": 0.55,
+              "label": "Shock absorber",
+              "ask": "What does a shock absorber do?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.85,
+              "label": "Wheel"
+            }
+          ],
+          "links": [
+            {
+              "from": "body",
+              "to": "spring",
+              "kind": "force"
+            },
+            {
+              "from": "body",
+              "to": "damper",
+              "kind": "force"
+            },
+            {
+              "from": "spring",
+              "to": "wheel",
+              "kind": "force"
+            },
+            {
+              "from": "damper",
+              "to": "wheel",
+              "kind": "force"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Cars: ζ ≈ 0.2–0.4; door closers: near 1"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does a shock absorber do?",
+      "a": "It is a damper: a piston pushes oil through small holes, which turns the energy of the bouncing into heat so the vibration dies away.",
+      "asks": [
+        "how does a damper work"
+      ]
+    },
+    {
+      "q": "What does underdamped mean?",
+      "a": "The damping ratio is less than one. The system oscillates with swings that shrink steadily, at a frequency slightly below the natural frequency.",
+      "asks": [
+        "underdamped response"
+      ]
+    },
+    {
+      "q": "What is critical damping?",
+      "a": "It is the smallest damping that stops oscillation completely. The system returns to rest as fast as possible without overshooting. Its value is 2 times the square root of k times m.",
+      "asks": [
+        "critical damping coefficient formula",
+        "how do I calculate the damping ratio"
+      ]
+    },
+    {
+      "q": "What does overdamped mean?",
+      "a": "The damping ratio is more than one. The system returns slowly, without overshoot, and takes longer than with critical damping.",
+      "asks": [
+        "overdamped response",
+        "difference between underdamped and overdamped"
+      ]
+    },
+    {
+      "q": "How much damping does a car have?",
+      "a": "Passenger cars are typically underdamped with a damping ratio of roughly 0.2 to 0.4, balancing comfort with keeping the tyres pressed on the road.",
+      "asks": [
+        "car suspension damping ratio"
+      ]
+    }
+  ],
+  "facts": [
+    "The critical damping coefficient of a spring-mass system is 2 times the square root of k times m.",
+    "A critically damped system returns to equilibrium in the shortest time without overshooting."
+  ],
+  "quiz": [
+    {
+      "say": "A machine of mass 10 kilograms sits on springs of total stiffness 4000 newtons per metre. What damping coefficient makes it critically damped?",
+      "show": "m = 10 kg, k = 4000 N/m. Critical damping coefficient?",
+      "options": [
+        {
+          "show": "400 N·s/m",
+          "say": "400 newton seconds per metre"
+        },
+        {
+          "show": "200 N·s/m",
+          "say": "200 newton seconds per metre"
+        },
+        {
+          "show": "40 000 N·s/m",
+          "say": "40 thousand newton seconds per metre"
+        }
+      ],
+      "answer": 0,
+      "why": "c_c = 2√(km) = 2√40 000 = 2 × 200 = 400 N·s/m.",
+      "wrong": {
+        "1": "That forgets the factor of 2.",
+        "2": "That is k times m without the square root."
+      }
+    },
+    {
+      "say": "A system with damping ratio 0.05 is disturbed. What does it do?",
+      "show": "A system with ζ = 0.05 is disturbed. It…",
+      "options": [
+        {
+          "show": "Oscillates many times with slowly shrinking swings",
+          "say": "Oscillates many times with slowly shrinking swings"
+        },
+        {
+          "show": "Returns without overshoot as fast as possible",
+          "say": "Returns without overshoot as fast as possible"
+        },
+        {
+          "show": "Creeps back slowly without overshoot",
+          "say": "Creeps back slowly without overshoot"
+        }
+      ],
+      "answer": 0,
+      "why": "A damping ratio well below one means light underdamping: many decaying oscillations.",
+      "wrong": {
+        "1": "That describes critical damping, zeta equals 1.",
+        "2": "That describes overdamping, zeta greater than 1."
+      }
+    }
+  ]
+}

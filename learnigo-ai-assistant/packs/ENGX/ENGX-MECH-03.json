@@ -1,0 +1,549 @@
+{
+  "id": "ENGX-MECH-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a worm gear works",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "worm gear",
+    "worm wheel",
+    "screw gear",
+    "self-locking",
+    "right-angle drive"
+  ],
+  "examples": [
+    "Why does a worm gear slow things down so much?",
+    "Why can a worm wheel not turn the worm back?",
+    "Where are worm gears used?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Motor",
+          "motion": "spin"
+        },
+        {
+          "id": "worm",
+          "kind": "axle",
+          "x": 0.42,
+          "y": 0.3,
+          "size": 1,
+          "label": "Worm (a screw)",
+          "motion": "spin",
+          "ask": "What is the worm in a worm gear?"
+        },
+        {
+          "id": "wheel",
+          "kind": "gear",
+          "x": 0.45,
+          "y": 0.68,
+          "size": 1.3,
+          "label": "Worm wheel, 40 teeth",
+          "motion": "spin",
+          "ask": "Why does a worm gear slow things down so much?"
+        },
+        {
+          "id": "drum",
+          "kind": "wheel",
+          "x": 0.8,
+          "y": 0.68,
+          "size": 0.9,
+          "label": "Output drum",
+          "motion": "spin"
+        },
+        {
+          "id": "load",
+          "kind": "weight",
+          "x": 0.86,
+          "y": 0.3,
+          "size": 0.6,
+          "label": "Load",
+          "motion": "slide"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "worm",
+          "kind": "energy",
+          "label": "fast spin"
+        },
+        {
+          "from": "worm",
+          "to": "wheel",
+          "kind": "force",
+          "label": "thread pushes teeth"
+        },
+        {
+          "from": "wheel",
+          "to": "drum",
+          "kind": "energy",
+          "label": "slow, strong"
+        },
+        {
+          "from": "drum",
+          "to": "load",
+          "kind": "force",
+          "label": "lifts"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A worm gear is a screw, called the worm, meshing with a toothed wheel at a right angle. As the worm spins, its spiral thread pushes the wheel round.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a worm gear works"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "worm",
+              "kind": "axle",
+              "x": 0.42,
+              "y": 0.3,
+              "size": 1,
+              "label": "Worm (a screw)",
+              "motion": "spin",
+              "ask": "What is the worm in a worm gear?"
+            },
+            {
+              "id": "wheel",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Worm wheel, 40 teeth",
+              "motion": "spin",
+              "ask": "Why does a worm gear slow things down so much?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.8,
+              "y": 0.68,
+              "size": 0.9,
+              "label": "Output drum",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.86,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Load",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "worm",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "worm",
+              "to": "wheel",
+              "kind": "force",
+              "label": "thread pushes teeth"
+            },
+            {
+              "from": "wheel",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "load",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Each full turn of a single-thread worm moves the wheel on by just one tooth. So a 40-tooth wheel needs 40 turns of the worm to go round once: a 40 to 1 reduction in one small step.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "worm",
+              "kind": "axle",
+              "x": 0.42,
+              "y": 0.3,
+              "size": 1,
+              "label": "Worm (a screw)",
+              "motion": "spin",
+              "ask": "What is the worm in a worm gear?"
+            },
+            {
+              "id": "wheel",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Worm wheel, 40 teeth",
+              "motion": "spin",
+              "ask": "Why does a worm gear slow things down so much?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.8,
+              "y": 0.68,
+              "size": 0.9,
+              "label": "Output drum",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.86,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Load",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "worm",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "worm",
+              "to": "wheel",
+              "kind": "force",
+              "label": "thread pushes teeth"
+            },
+            {
+              "from": "wheel",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "load",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "That big slow-down means a big gain in turning force, so a small motor can turn a heavy load. It also turns the motion through a right angle.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "worm",
+              "kind": "axle",
+              "x": 0.42,
+              "y": 0.3,
+              "size": 1,
+              "label": "Worm (a screw)",
+              "motion": "spin",
+              "ask": "What is the worm in a worm gear?"
+            },
+            {
+              "id": "wheel",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Worm wheel, 40 teeth",
+              "motion": "spin",
+              "ask": "Why does a worm gear slow things down so much?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.8,
+              "y": 0.68,
+              "size": 0.9,
+              "label": "Output drum",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.86,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Load",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "worm",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "worm",
+              "to": "wheel",
+              "kind": "force",
+              "label": "thread pushes teeth"
+            },
+            {
+              "from": "wheel",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "load",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Best of all, the wheel usually cannot turn the worm backwards, because friction on the steep thread locks it. So a lifted load stays put when the motor stops, which is why worm gears are used in lifts, winches and guitar tuning pegs.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "worm",
+              "kind": "axle",
+              "x": 0.42,
+              "y": 0.3,
+              "size": 1,
+              "label": "Worm (a screw)",
+              "motion": "spin",
+              "ask": "What is the worm in a worm gear?"
+            },
+            {
+              "id": "wheel",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Worm wheel, 40 teeth",
+              "motion": "spin",
+              "ask": "Why does a worm gear slow things down so much?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.8,
+              "y": 0.68,
+              "size": 0.9,
+              "label": "Output drum",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.86,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Load",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "worm",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "worm",
+              "to": "wheel",
+              "kind": "force",
+              "label": "thread pushes teeth"
+            },
+            {
+              "from": "wheel",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "load",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the worm in a worm gear?",
+      "a": "The worm is a shaft with a spiral thread, like a screw. When it spins, the thread slides along the teeth of the worm wheel and pushes them round.",
+      "asks": [
+        "Why is it called a worm?"
+      ]
+    },
+    {
+      "q": "Why does a worm gear slow things down so much?",
+      "a": "A single-thread worm moves the wheel on by only one tooth per turn. So the gear ratio equals the number of teeth on the wheel, such as 40 to 1, far more than two ordinary gears give.",
+      "asks": [
+        "What is the gear ratio of a worm gear?"
+      ]
+    },
+    {
+      "q": "Why can the wheel not turn the worm back?",
+      "a": "Pushing on the wheel presses its teeth against the shallow thread of the worm, and friction is too big for the thread to slide. So most worm gears lock, which keeps loads from slipping back.",
+      "asks": [
+        "What is a self-locking gear?",
+        "Why do worm gears not run backwards?"
+      ]
+    },
+    {
+      "q": "Where are worm gears used?",
+      "a": "Worm gears are used where you need a big slow-down or a gear that holds its position: guitar tuning pegs, winches, lifts, gates and speedometers.",
+      "asks": [
+        "What uses a worm gear?"
+      ]
+    },
+    {
+      "q": "Are worm gears efficient?",
+      "a": "Less than ordinary gears. The thread slides against the teeth instead of rolling, so more energy turns into heat. That same friction is what makes them self-locking.",
+      "asks": [
+        "Do worm gears waste energy?"
+      ]
+    }
+  ],
+  "facts": [
+    "A single-thread worm moves its wheel on by one tooth per turn.",
+    "Guitar tuning pegs use small worm gears so strings stay in tune under tension."
+  ],
+  "quiz": [
+    {
+      "say": "A single-thread worm turns a 50-tooth worm wheel. How many worm turns make one wheel turn?",
+      "show": "A single-thread worm turns a 50-tooth worm wheel. How many worm turns make one wheel turn?",
+      "options": [
+        {
+          "show": "1",
+          "say": "1"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        },
+        {
+          "show": "50",
+          "say": "50"
+        }
+      ],
+      "answer": 2,
+      "why": "Each worm turn moves the wheel one tooth, so 50 teeth need 50 turns.",
+      "wrong": {
+        "0": "That would be no slow-down at all.",
+        "1": "A worm does not divide the teeth by ten; it moves one tooth per turn."
+      }
+    },
+    {
+      "say": "Why is a worm gear good for a winch?",
+      "show": "Why is a worm gear good for a winch?",
+      "options": [
+        {
+          "show": "It spins the drum very fast",
+          "say": "It spins the drum very fast"
+        },
+        {
+          "show": "It stops the load running back down",
+          "say": "It stops the load running back down"
+        },
+        {
+          "show": "It uses no friction",
+          "say": "It uses no friction"
+        }
+      ],
+      "answer": 1,
+      "why": "The wheel cannot easily drive the worm backwards, so the load stays where it is when you stop.",
+      "wrong": {
+        "0": "A worm gear slows the drum down a lot.",
+        "2": "It has lots of friction, and that friction is what locks it."
+      }
+    }
+  ]
+}

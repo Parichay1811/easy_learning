@@ -1,0 +1,228 @@
+{
+  "id": "MATH-DISC-05",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Recursion & financial recurrence",
+  "area": "Mathematics",
+  "group": "MATH-DISC — Discrete Mathematics & Networks",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "recursion",
+    "financial recurrence",
+    "loan model",
+    "sequence",
+    "recurrence relation"
+  ],
+  "examples": [
+    "How do I find the balance after five payments?",
+    "Can you show another example of a loan calculation?",
+    "What is the difference between this and simple interest?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we look at recurrence relations in finance. We will see how they model loan repayments. This helps us find future values step by step.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Recursion & financial recurrence"
+        },
+        {
+          "op": "flow",
+          "items": [
+            "Start with initial amount",
+            "Calculate next value using formula",
+            "Repeat to find future value"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "u<0xE2><0x82><0x99>₊₁ = R u<0xE2><0x82><0x99> + d"
+        }
+      ]
+    },
+    {
+      "say": "The general form is u sub n plus one equals R times u sub n plus d. Here u sub n is the current amount. R is the rate factor. And d is the constant addition or subtraction.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "u<0xE2><0x82><0x99>₊₁ = R u<0xE2><0x82><0x99> + d"
+        }
+      ]
+    },
+    {
+      "say": "Consider a simple loan model. Suppose you have an initial amount u sub 0. Each month, the balance increases by a fixed fee. For example, u sub n plus one equals u sub n plus 50. Here R is one and d is fifty.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "u<0xE2><0x82><0x99>₊₁ = u<0xE2><0x82><0x99> + 50"
+        }
+      ]
+    },
+    {
+      "say": "Let us use a more complex loan example. Suppose you start with one hundred pounds. Each month, the balance increases by ten percent and you pay back twenty pounds. This gives u sub n plus one equals one point one times u sub n minus twenty.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start with £100",
+            "Month 1: 1.1 un - 20",
+            "Month 2: 1.1 un - 20",
+            "Continue calculation"
+          ],
+          "at": "start"
+        },
+        {
+          "op": "text",
+          "text": "u<0xE2><0x82><0x99>₊₁ = 1.1 u<0xE2><0x82><0x99> - 20"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does u sub n represent in these formulas?",
+      "a": "u sub n represents the value or balance at a specific time step, like the end of month n. It is the value you are calculating for that point in time.",
+      "asks": [
+        "What is the value at step n?",
+        "What does the subscript n mean?"
+      ]
+    },
+    {
+      "q": "Is R always greater than one in loan models?",
+      "a": "No, R can be less than one if the amount is decreasing over time. However, in standard loan growth, R is often one plus the interest rate.",
+      "asks": [
+        "Must R be bigger than one?",
+        "Can R be smaller than one?"
+      ]
+    },
+    {
+      "q": "What does the constant d represent?",
+      "a": "The constant d represents any fixed amount added or subtracted at each step. This could be a fixed payment or a fixed fee.",
+      "asks": [
+        "What is the role of d?",
+        "What does d stand for?"
+      ]
+    },
+    {
+      "q": "If I know u sub 0, can I find u sub 5?",
+      "a": "Yes, you find it by applying the recurrence relation repeatedly. You calculate u sub 1 using u sub 0, then u sub 2 using u sub 1, and so on.",
+      "asks": [
+        "How many steps do I need to calculate?",
+        "Do I need to calculate every step?"
+      ]
+    },
+    {
+      "q": "Does this model account for compounding interest?",
+      "a": "Yes, the factor R accounts for compounding interest. If R is one point one, it means the interest was compounded at ten percent.",
+      "asks": [
+        "Is interest compounding included?",
+        "How is the interest rate handled?"
+      ]
+    }
+  ],
+  "facts": [
+    "A recurrence relation defines a sequence based on previous terms.",
+    "The general form is u sub n plus one equals R u sub n plus d.",
+    "u sub 0 is always the initial value or starting balance.",
+    "R is the rate factor, often one plus the interest rate."
+  ],
+  "quiz": [
+    {
+      "say": "If u sub 0 equals ten, and u sub n plus one equals u sub n plus five, what is u sub 2?",
+      "show": "u<0xE2><0x82><0x99>₊₁ = u<0xE2><0x82><0x99> + 5",
+      "options": [
+        {
+          "show": "fifteen",
+          "say": "fifteen"
+        },
+        {
+          "show": "ten",
+          "say": "ten"
+        },
+        {
+          "show": "twenty-five",
+          "say": "twenty-five"
+        },
+        {
+          "show": "twenty",
+          "say": "twenty"
+        }
+      ],
+      "answer": 3,
+      "why": "You find u sub 1 by adding five to ten, which is fifteen. Then you find u sub 2 by adding five to fifteen, which equals twenty.",
+      "wrong": {
+        "0": "This is the value of u sub 1, not u sub 2.",
+        "1": "This is the initial value, u sub 0, and you must take another step.",
+        "2": "This incorrectly adds five to the result of the first step twice."
+      }
+    },
+    {
+      "say": "A balance starts at fifty. Each month, it increases by twenty percent and a fixed fee of five is paid. What is the relation?",
+      "show": "u<0xE2><0x82><0x99>₊₁ = 1.2 u<0xE2><0x82><0x99> - 5",
+      "options": [
+        {
+          "show": "u<0xE2><0x82><0x99>₊₁ = 1.2 u<0xE2><0x82><0x99> + 5",
+          "say": "u<0xE2><0x82><0x99>₊₁ = 1.2 u<0xE2><0x82><0x99> + 5"
+        },
+        {
+          "show": "u<0xE2><0x82><0x99>₊₁ = 1.2 u<0xE2><0x82><0x99>",
+          "say": "u<0xE2><0x82><0x99>₊₁ = 1.2 u<0xE2><0x82><0x99>"
+        },
+        {
+          "show": "u<0xE2><0x82><0x99>₊₁ = u<0xE2><0x82><0x99> + 0.2 u<0xE2><0x82><0x99> - 5",
+          "say": "u<0xE2><0x82><0x99>₊₁ = u<0xE2><0x82><0x99> + 0.2 u<0xE2><0x82><0x99> - 5"
+        },
+        {
+          "show": "u<0xE2><0x82><0x99>₊₁ = 1.2 u<0xE2><0x82><0x99> - 5",
+          "say": "u<0xE2><0x82><0x99>₊₁ = 1.2 u<0xE2><0x82><0x99> - 5"
+        }
+      ],
+      "answer": 3,
+      "why": "The twenty percent increase means multiplying by one point two. The fixed fee of five is subtracted, giving the relation.",
+      "wrong": {
+        "0": "This incorrectly adds the fixed fee instead of subtracting it.",
+        "1": "This forgets to include the fixed fee payment of five.",
+        "2": "This is mathematically correct but overly complex for the required form."
+      }
+    },
+    {
+      "say": "Starting at one hundred, if u sub n plus one equals u sub n plus thirty, what is u sub 3?",
+      "show": "u<0xE2><0x82><0x99>₊₁ = u<0xE2><0x82><0x99> + 30",
+      "options": [
+        {
+          "show": "one hundred thirty",
+          "say": "one hundred thirty"
+        },
+        {
+          "show": "one hundred sixty minus thirty",
+          "say": "one hundred sixty minus thirty"
+        },
+        {
+          "show": "three hundred",
+          "say": "three hundred"
+        },
+        {
+          "show": "one hundred sixty",
+          "say": "one hundred sixty"
+        }
+      ],
+      "answer": 3,
+      "why": "u sub 1 is one hundred thirty. u sub 2 is one hundred sixty. u sub 3 is one hundred ninety.",
+      "wrong": {
+        "0": "This only calculates the first step, u sub 1.",
+        "1": "This incorrectly subtracts the amount for the third step.",
+        "2": "This incorrectly multiplies the constant addition by three."
+      }
+    }
+  ]
+}

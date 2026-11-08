@@ -1,0 +1,272 @@
+{
+  "id": "PRO-DATA-06",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "SQL for analysts",
+  "area": "Study Skills, University & Professional",
+  "group": "PRO — Professional & Job Skills",
+  "levels": [
+    "PRO"
+  ],
+  "keywords": [
+    "sql",
+    "group by",
+    "join",
+    "aggregates",
+    "database query"
+  ],
+  "examples": [
+    "How do I combine data from two different tables in SQL?",
+    "What is the difference between GROUP BY and WHERE?",
+    "Can you show me an example of using COUNT with GROUP BY?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning three powerful SQL concepts. These are grouping data, using aggregate functions, and joining tables.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "SQL for analysts"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "GROUP BY: Grouping rows",
+            "Aggregates: Calculations on groups",
+            "JOIN: Combining tables"
+          ],
+          "at": "grouping"
+        },
+        {
+          "op": "text",
+          "text": "SQL: GROUP BY, Aggregates, JOIN"
+        }
+      ]
+    },
+    {
+      "say": "The GROUP BY clause groups rows that have the same values in specified columns. Think of it like sorting data into piles.",
+      "draw": [
+        {
+          "op": "table",
+          "items": [
+            "Department | Salary",
+            "Sales | 50000",
+            "Sales | 60000",
+            "IT | 70000",
+            "IT | 70000"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "GROUP BY: Grouping identical values",
+          "at": "group"
+        }
+      ]
+    },
+    {
+      "say": "We use aggregate functions like COUNT, SUM, and AVG to calculate metrics for each group. For example, we can find the average salary per department.",
+      "draw": [
+        {
+          "op": "parts",
+          "center": "Aggregate Functions",
+          "items": [
+            "COUNT: Counts number of records",
+            "SUM: Totals numerical values",
+            "AVG: Calculates the mean value"
+          ],
+          "at": "count"
+        },
+        {
+          "op": "text",
+          "text": "Aggregates: COUNT(), SUM(), AVG()",
+          "at": "count"
+        }
+      ]
+    },
+    {
+      "say": "The JOIN clause combines rows from two or more tables based on a related column. We use this when data is split across separate tables.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "JOIN: Combining related tables",
+          "at": "join"
+        }
+      ]
+    },
+    {
+      "say": "Consider finding the total sales amount for each region. You must join the Sales table and the Region table, then use SUM with GROUP BY.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "SELECT Region, SUM(Sales)",
+            "FROM Sales JOIN Region ON RegionID",
+            "GROUP BY Region"
+          ],
+          "at": "region"
+        },
+        {
+          "op": "text",
+          "text": "SELECT Region, SUM(Sales) FROM Sales JOIN Region ON ... GROUP BY Region",
+          "at": "region"
+        }
+      ]
+    },
+    {
+      "say": "In the real world, you might analyze customer orders. You need to join the Customers table and the Orders table to see total spending per customer.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Customer Spending Analysis",
+          "at": "customer"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "When should I use GROUP BY?",
+      "a": "Use GROUP BY when you want to perform a calculation for distinct categories. For instance, you want the average salary for each department.",
+      "asks": [
+        "Do I need GROUP BY with SUM?",
+        "How do I calculate totals per group?"
+      ]
+    },
+    {
+      "q": "What is the difference between WHERE and HAVING?",
+      "a": "WHERE filters individual rows before grouping happens. HAVING filters the results after the groups have been calculated.",
+      "asks": [
+        "When do I use HAVING instead of WHERE?",
+        "Which clause filters the groups?"
+      ]
+    },
+    {
+      "q": "What type of JOIN should I use most often?",
+      "a": "The INNER JOIN is very common because it only returns records that have matching values in both tables. Always check the relationship keys first.",
+      "asks": [
+        "What if I only want matching records?",
+        "Which join keeps only shared data?"
+      ]
+    },
+    {
+      "q": "Can I use aggregate functions without GROUP BY?",
+      "a": "Yes, you can use them without GROUP BY. In that case, the function calculates one single value for the entire dataset.",
+      "asks": [
+        "What happens if I omit GROUP BY?",
+        "Does it calculate one total number?"
+      ]
+    },
+    {
+      "q": "What if I need data from both tables, even if there is no match?",
+      "a": "You should use a LEFT JOIN. This keeps all records from the table listed on the left side of the join.",
+      "asks": [
+        "How do I keep all records from Table A?",
+        "What join includes unmatched rows?"
+      ]
+    }
+  ],
+  "facts": [
+    "The aggregate functions include COUNT, SUM, AVG, MIN, and MAX.",
+    "The GROUP BY clause must contain all non-aggregated columns in the SELECT statement.",
+    "An INNER JOIN only returns rows where the join condition is met in both tables.",
+    "HAVING filters groups, while WHERE filters individual rows."
+  ],
+  "quiz": [
+    {
+      "say": "To find the total number of employees in each department, which clause must you use?",
+      "show": "SELECT Dept, COUNT() FROM Employees GROUP BY Dept",
+      "options": [
+        {
+          "show": "GROUP BY Dept",
+          "say": "GROUP BY Dept"
+        },
+        {
+          "show": "WHERE Dept IS NOT NULL",
+          "say": "WHERE Dept IS NOT NULL"
+        },
+        {
+          "show": "JOIN Dept ON Dept",
+          "say": "JOIN Dept ON Dept"
+        },
+        {
+          "show": "HAVING Dept",
+          "say": "HAVING Dept"
+        }
+      ],
+      "answer": 0,
+      "why": "You must group the results by department to count employees within each specific department.",
+      "wrong": {
+        "1": "WHERE filters rows before grouping, but it does not create the necessary departmental piles for counting.",
+        "2": "Joining is for combining data from separate tables, not for grouping data within one table.",
+        "3": "HAVING is used to filter the results of the aggregate function, not to define the grouping itself."
+      }
+    },
+    {
+      "say": "If you want the average salary only for departments with more than five employees, which clause should you use?",
+      "show": "HAVING COUNT() > 5",
+      "options": [
+        {
+          "show": "WHERE COUNT() > 5",
+          "say": "WHERE COUNT() > 5"
+        },
+        {
+          "show": "GROUP BY COUNT() > 5",
+          "say": "GROUP BY COUNT() > 5"
+        },
+        {
+          "show": "SELECT ... WHERE COUNT() > 5",
+          "say": "SELECT ... WHERE COUNT() > 5"
+        },
+        {
+          "show": "HAVING COUNT() > 5",
+          "say": "HAVING COUNT() > 5"
+        }
+      ],
+      "answer": 3,
+      "why": "HAVING is specifically designed to filter groups based on the result of an aggregate function like COUNT.",
+      "wrong": {
+        "0": "WHERE cannot use aggregate functions like COUNT; it operates on individual rows before grouping.",
+        "1": "GROUP BY defines the grouping criteria, it cannot contain a filtering condition like this.",
+        "2": "The WHERE clause executes before the grouping and aggregation takes place."
+      }
+    },
+    {
+      "say": "To list the names of employees and the name of the department they belong to, you should use which type of join?",
+      "show": "INNER JOIN Employees ON DeptID = Departments.ID",
+      "options": [
+        {
+          "show": "LEFT JOIN",
+          "say": "LEFT JOIN"
+        },
+        {
+          "show": "RIGHT JOIN",
+          "say": "RIGHT JOIN"
+        },
+        {
+          "show": "CROSS JOIN",
+          "say": "CROSS JOIN"
+        },
+        {
+          "show": "INNER JOIN",
+          "say": "INNER JOIN"
+        }
+      ],
+      "answer": 3,
+      "why": "An INNER JOIN ensures that only employees who have a matching department record are included in the final result set.",
+      "wrong": {
+        "0": "A LEFT JOIN would keep all employees, even if their department ID did not exist in the Departments table.",
+        "1": "A RIGHT JOIN would keep all departments, even if they had no employees assigned to them.",
+        "2": "A CROSS JOIN creates every possible combination, which is usually too many records for this task."
+      }
+    }
+  ]
+}

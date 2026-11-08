@@ -1,0 +1,657 @@
+{
+  "id": "ENGX-CIVL-25",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a tunnel boring machine digs",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "tunnel boring machine",
+    "TBM",
+    "cutterhead",
+    "tunnel lining segments",
+    "thrust rams"
+  ],
+  "examples": [
+    "How does a tunnel boring machine work?",
+    "What happens to the soil a TBM digs?",
+    "How does a TBM move forward?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "cut",
+          "kind": "gear",
+          "x": 0.1,
+          "y": 0.48,
+          "size": 1.5,
+          "label": "Cutterhead",
+          "motion": "spin",
+          "ask": "What is the cutterhead?"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.3,
+          "y": 0.22,
+          "label": "Drive motors",
+          "motion": "spin"
+        },
+        {
+          "id": "rams",
+          "kind": "piston",
+          "x": 0.5,
+          "y": 0.48,
+          "size": 1.2,
+          "label": "Thrust rams",
+          "motion": "slide",
+          "ask": "How does a TBM move forward?"
+        },
+        {
+          "id": "rings",
+          "kind": "box",
+          "x": 0.74,
+          "y": 0.24,
+          "label": "Lining rings",
+          "ask": "What are tunnel lining rings?"
+        },
+        {
+          "id": "erect",
+          "kind": "lever",
+          "x": 0.74,
+          "y": 0.58,
+          "label": "Segment erector",
+          "motion": "swing"
+        },
+        {
+          "id": "belt",
+          "kind": "belt",
+          "x": 0.42,
+          "y": 0.84,
+          "size": 1.2,
+          "label": "Conveyor",
+          "motion": "flow",
+          "ask": "What happens to the soil a TBM digs?"
+        },
+        {
+          "id": "out",
+          "kind": "box",
+          "x": 0.9,
+          "y": 0.86,
+          "size": 0.8,
+          "label": "Spoil to surface"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "cut",
+          "kind": "energy",
+          "label": "turns"
+        },
+        {
+          "from": "rams",
+          "to": "cut",
+          "kind": "force",
+          "label": "push"
+        },
+        {
+          "from": "rings",
+          "to": "rams",
+          "kind": "force",
+          "label": "push off"
+        },
+        {
+          "from": "erect",
+          "to": "rings",
+          "kind": "force",
+          "label": "builds"
+        },
+        {
+          "from": "cut",
+          "to": "belt",
+          "kind": "fluid",
+          "label": "spoil"
+        },
+        {
+          "from": "belt",
+          "to": "out",
+          "kind": "fluid"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A tunnel boring machine, or TBM, is a giant moving factory that digs a round tunnel and lines it as it goes. At the front, a huge rotating cutterhead grinds into the rock or soil.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a tunnel boring machine digs"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cut",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Cutterhead",
+              "motion": "spin",
+              "ask": "What is the cutterhead?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.22,
+              "label": "Drive motors",
+              "motion": "spin"
+            },
+            {
+              "id": "rams",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.2,
+              "label": "Thrust rams",
+              "motion": "slide",
+              "ask": "How does a TBM move forward?"
+            },
+            {
+              "id": "rings",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.24,
+              "label": "Lining rings",
+              "ask": "What are tunnel lining rings?"
+            },
+            {
+              "id": "erect",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.58,
+              "label": "Segment erector",
+              "motion": "swing"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1.2,
+              "label": "Conveyor",
+              "motion": "flow",
+              "ask": "What happens to the soil a TBM digs?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Spoil to surface"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "cut",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "rams",
+              "to": "cut",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "rings",
+              "to": "rams",
+              "kind": "force",
+              "label": "push off"
+            },
+            {
+              "from": "erect",
+              "to": "rings",
+              "kind": "force",
+              "label": "builds"
+            },
+            {
+              "from": "cut",
+              "to": "belt",
+              "kind": "fluid",
+              "label": "spoil"
+            },
+            {
+              "from": "belt",
+              "to": "out",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "To press the cutterhead forward, hydraulic thrust rams push back against the last ring of tunnel lining, like a swimmer pushing off a wall. Each push moves the machine forward by about the width of one ring.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cut",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Cutterhead",
+              "motion": "spin",
+              "ask": "What is the cutterhead?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.22,
+              "label": "Drive motors",
+              "motion": "spin"
+            },
+            {
+              "id": "rams",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.2,
+              "label": "Thrust rams",
+              "motion": "slide",
+              "ask": "How does a TBM move forward?"
+            },
+            {
+              "id": "rings",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.24,
+              "label": "Lining rings",
+              "ask": "What are tunnel lining rings?"
+            },
+            {
+              "id": "erect",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.58,
+              "label": "Segment erector",
+              "motion": "swing"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1.2,
+              "label": "Conveyor",
+              "motion": "flow",
+              "ask": "What happens to the soil a TBM digs?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Spoil to surface"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "cut",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "rams",
+              "to": "cut",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "rings",
+              "to": "rams",
+              "kind": "force",
+              "label": "push off"
+            },
+            {
+              "from": "erect",
+              "to": "rings",
+              "kind": "force",
+              "label": "builds"
+            },
+            {
+              "from": "cut",
+              "to": "belt",
+              "kind": "fluid",
+              "label": "spoil"
+            },
+            {
+              "from": "belt",
+              "to": "out",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The broken rock or soil passes through openings in the cutterhead and is carried back by screw conveyors and belts, then out of the tunnel by train, conveyor or slurry pipe.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cut",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Cutterhead",
+              "motion": "spin",
+              "ask": "What is the cutterhead?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.22,
+              "label": "Drive motors",
+              "motion": "spin"
+            },
+            {
+              "id": "rams",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.2,
+              "label": "Thrust rams",
+              "motion": "slide",
+              "ask": "How does a TBM move forward?"
+            },
+            {
+              "id": "rings",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.24,
+              "label": "Lining rings",
+              "ask": "What are tunnel lining rings?"
+            },
+            {
+              "id": "erect",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.58,
+              "label": "Segment erector",
+              "motion": "swing"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1.2,
+              "label": "Conveyor",
+              "motion": "flow",
+              "ask": "What happens to the soil a TBM digs?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Spoil to surface"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "cut",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "rams",
+              "to": "cut",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "rings",
+              "to": "rams",
+              "kind": "force",
+              "label": "push off"
+            },
+            {
+              "from": "erect",
+              "to": "rings",
+              "kind": "force",
+              "label": "builds"
+            },
+            {
+              "from": "cut",
+              "to": "belt",
+              "kind": "fluid",
+              "label": "spoil"
+            },
+            {
+              "from": "belt",
+              "to": "out",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "Behind the cutterhead, a robotic arm called the segment erector bolts curved concrete pieces into a complete ring. The new ring holds up the ground, and the rams push off it for the next stroke.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cut",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Cutterhead",
+              "motion": "spin",
+              "ask": "What is the cutterhead?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.22,
+              "label": "Drive motors",
+              "motion": "spin"
+            },
+            {
+              "id": "rams",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.2,
+              "label": "Thrust rams",
+              "motion": "slide",
+              "ask": "How does a TBM move forward?"
+            },
+            {
+              "id": "rings",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.24,
+              "label": "Lining rings",
+              "ask": "What are tunnel lining rings?"
+            },
+            {
+              "id": "erect",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.58,
+              "label": "Segment erector",
+              "motion": "swing"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1.2,
+              "label": "Conveyor",
+              "motion": "flow",
+              "ask": "What happens to the soil a TBM digs?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Spoil to surface"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "cut",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "rams",
+              "to": "cut",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "rings",
+              "to": "rams",
+              "kind": "force",
+              "label": "push off"
+            },
+            {
+              "from": "erect",
+              "to": "rings",
+              "kind": "force",
+              "label": "builds"
+            },
+            {
+              "from": "cut",
+              "to": "belt",
+              "kind": "fluid",
+              "label": "spoil"
+            },
+            {
+              "from": "belt",
+              "to": "out",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a tunnel boring machine work?",
+      "a": "A rotating cutterhead grinds away rock or soil at the front, thrust rams push it forward, conveyors carry the spoil away, and a robot arm lines the tunnel with concrete rings behind it.",
+      "asks": [
+        "What is a TBM?",
+        "How do tunnel machines dig?"
+      ]
+    },
+    {
+      "q": "What is the cutterhead?",
+      "a": "The cutterhead is the giant spinning wheel at the front, fitted with steel disc cutters for rock or scraping teeth for soil. As it turns and is pushed forward, it breaks the ground into small pieces.",
+      "asks": [
+        "What does the front of a TBM do?"
+      ]
+    },
+    {
+      "q": "How does a TBM move forward?",
+      "a": "Hydraulic rams around the machine push against the last concrete ring that was built. As they extend, the whole machine moves forward; then they pull back and a new ring is built.",
+      "asks": [
+        "What pushes a tunnel boring machine?"
+      ]
+    },
+    {
+      "q": "What are tunnel lining rings?",
+      "a": "They are rings made of curved precast concrete pieces called segments, bolted together right behind the cutterhead. They support the ground and keep water out.",
+      "asks": [
+        "How is the tunnel wall made?",
+        "What are tunnel segments?"
+      ]
+    },
+    {
+      "q": "What happens to the soil a TBM digs?",
+      "a": "It passes through the cutterhead into a chamber, then screw conveyors and belts, or slurry pipes, carry it back through the tunnel and up to the surface.",
+      "asks": [
+        "Where does the dirt go when tunnelling?"
+      ]
+    }
+  ],
+  "facts": [
+    "Large tunnel boring machines can exceed 15 metres in diameter; Bertha, which dug Seattle's SR 99 tunnel, was about 17.5 metres across.",
+    "A tunnel boring machine lines the tunnel with rings of precast concrete segments as it advances."
+  ],
+  "quiz": [
+    {
+      "say": "What do the thrust rams of a tunnel boring machine push against?",
+      "show": "TBM thrust rams push against…",
+      "options": [
+        {
+          "show": "The last ring of tunnel lining",
+          "say": "The last ring of tunnel lining"
+        },
+        {
+          "show": "The ground surface above",
+          "say": "The ground surface above"
+        },
+        {
+          "show": "The cutterhead's own teeth",
+          "say": "The cutterhead's own teeth"
+        }
+      ],
+      "answer": 0,
+      "why": "The newly built concrete ring is fixed in the ground, so the rams push off it to drive the machine forward.",
+      "wrong": {
+        "1": "The machine is deep underground, far from the surface.",
+        "2": "The rams push the cutterhead forward; they need something fixed behind them to push off."
+      }
+    }
+  ]
+}

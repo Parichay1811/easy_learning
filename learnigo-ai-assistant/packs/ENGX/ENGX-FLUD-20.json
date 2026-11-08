@@ -1,0 +1,526 @@
+{
+  "id": "ENGX-FLUD-20",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a pressure washer blasts dirt away",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "pressure washer",
+    "jet wash",
+    "high-pressure pump",
+    "unloader valve",
+    "wand nozzle"
+  ],
+  "examples": [
+    "How does a pressure washer work?",
+    "How much pressure does a pressure washer make?",
+    "Why does the pump not burst when I let go of the trigger?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "inlet",
+          "kind": "pipe",
+          "x": 0.1,
+          "y": 0.72,
+          "size": 0.8,
+          "label": "Garden hose in",
+          "motion": "flow"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.32,
+          "y": 0.28,
+          "size": 1,
+          "label": "Motor",
+          "motion": "spin"
+        },
+        {
+          "id": "pump",
+          "kind": "piston",
+          "x": 0.36,
+          "y": 0.7,
+          "size": 1.1,
+          "label": "Piston pump",
+          "motion": "slide",
+          "ask": "How does a pressure washer work?"
+        },
+        {
+          "id": "unloader",
+          "kind": "valve",
+          "x": 0.6,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Unloader valve",
+          "motion": "none",
+          "ask": "Why does the pump not burst when I let go of the trigger?"
+        },
+        {
+          "id": "hose",
+          "kind": "pipe",
+          "x": 0.75,
+          "y": 0.78,
+          "size": 0.9,
+          "label": "High-pressure hose",
+          "motion": "flow"
+        },
+        {
+          "id": "nozzle",
+          "kind": "valve",
+          "x": 0.9,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Trigger and nozzle",
+          "motion": "none",
+          "ask": "What does the nozzle do on a pressure washer?"
+        }
+      ],
+      "links": [
+        {
+          "from": "inlet",
+          "to": "pump",
+          "kind": "fluid",
+          "label": "low pressure"
+        },
+        {
+          "from": "motor",
+          "to": "pump",
+          "kind": "energy",
+          "label": "drives pistons"
+        },
+        {
+          "from": "pump",
+          "to": "unloader",
+          "kind": "fluid",
+          "label": "high pressure"
+        },
+        {
+          "from": "unloader",
+          "to": "hose",
+          "kind": "fluid"
+        },
+        {
+          "from": "hose",
+          "to": "nozzle",
+          "kind": "fluid",
+          "label": "about 130 bar"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A pressure washer takes ordinary water from a garden hose and makes it leave the nozzle so fast that it blasts dirt off stone and cars.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a pressure washer blasts dirt away"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "inlet",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Garden hose in",
+              "motion": "flow"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.32,
+              "y": 0.28,
+              "size": 1,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.36,
+              "y": 0.7,
+              "size": 1.1,
+              "label": "Piston pump",
+              "motion": "slide",
+              "ask": "How does a pressure washer work?"
+            },
+            {
+              "id": "unloader",
+              "kind": "valve",
+              "x": 0.6,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Unloader valve",
+              "motion": "none",
+              "ask": "Why does the pump not burst when I let go of the trigger?"
+            },
+            {
+              "id": "hose",
+              "kind": "pipe",
+              "x": 0.75,
+              "y": 0.78,
+              "size": 0.9,
+              "label": "High-pressure hose",
+              "motion": "flow"
+            },
+            {
+              "id": "nozzle",
+              "kind": "valve",
+              "x": 0.9,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Trigger and nozzle",
+              "motion": "none",
+              "ask": "What does the nozzle do on a pressure washer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "inlet",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "low pressure"
+            },
+            {
+              "from": "motor",
+              "to": "pump",
+              "kind": "energy",
+              "label": "drives pistons"
+            },
+            {
+              "from": "pump",
+              "to": "unloader",
+              "kind": "fluid",
+              "label": "high pressure"
+            },
+            {
+              "from": "unloader",
+              "to": "hose",
+              "kind": "fluid"
+            },
+            {
+              "from": "hose",
+              "to": "nozzle",
+              "kind": "fluid",
+              "label": "about 130 bar"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "A motor drives small pistons back and forth in a pump. Each one draws in water and then squeezes it hard, raising the pressure to around 100 to 150 bar.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "inlet",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Garden hose in",
+              "motion": "flow"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.32,
+              "y": 0.28,
+              "size": 1,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.36,
+              "y": 0.7,
+              "size": 1.1,
+              "label": "Piston pump",
+              "motion": "slide",
+              "ask": "How does a pressure washer work?"
+            },
+            {
+              "id": "unloader",
+              "kind": "valve",
+              "x": 0.6,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Unloader valve",
+              "motion": "none",
+              "ask": "Why does the pump not burst when I let go of the trigger?"
+            },
+            {
+              "id": "hose",
+              "kind": "pipe",
+              "x": 0.75,
+              "y": 0.78,
+              "size": 0.9,
+              "label": "High-pressure hose",
+              "motion": "flow"
+            },
+            {
+              "id": "nozzle",
+              "kind": "valve",
+              "x": 0.9,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Trigger and nozzle",
+              "motion": "none",
+              "ask": "What does the nozzle do on a pressure washer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "inlet",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "low pressure"
+            },
+            {
+              "from": "motor",
+              "to": "pump",
+              "kind": "energy",
+              "label": "drives pistons"
+            },
+            {
+              "from": "pump",
+              "to": "unloader",
+              "kind": "fluid",
+              "label": "high pressure"
+            },
+            {
+              "from": "unloader",
+              "to": "hose",
+              "kind": "fluid"
+            },
+            {
+              "from": "hose",
+              "to": "nozzle",
+              "kind": "fluid",
+              "label": "about 130 bar"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The high-pressure water rushes down a strong hose to a tiny nozzle, which turns the pressure into a jet moving at well over 100 kilometres an hour.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "inlet",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Garden hose in",
+              "motion": "flow"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.32,
+              "y": 0.28,
+              "size": 1,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.36,
+              "y": 0.7,
+              "size": 1.1,
+              "label": "Piston pump",
+              "motion": "slide",
+              "ask": "How does a pressure washer work?"
+            },
+            {
+              "id": "unloader",
+              "kind": "valve",
+              "x": 0.6,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Unloader valve",
+              "motion": "none",
+              "ask": "Why does the pump not burst when I let go of the trigger?"
+            },
+            {
+              "id": "hose",
+              "kind": "pipe",
+              "x": 0.75,
+              "y": 0.78,
+              "size": 0.9,
+              "label": "High-pressure hose",
+              "motion": "flow"
+            },
+            {
+              "id": "nozzle",
+              "kind": "valve",
+              "x": 0.9,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Trigger and nozzle",
+              "motion": "none",
+              "ask": "What does the nozzle do on a pressure washer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "inlet",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "low pressure"
+            },
+            {
+              "from": "motor",
+              "to": "pump",
+              "kind": "energy",
+              "label": "drives pistons"
+            },
+            {
+              "from": "pump",
+              "to": "unloader",
+              "kind": "fluid",
+              "label": "high pressure"
+            },
+            {
+              "from": "unloader",
+              "to": "hose",
+              "kind": "fluid"
+            },
+            {
+              "from": "hose",
+              "to": "nozzle",
+              "kind": "fluid",
+              "label": "about 130 bar"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "That is around 40 times the pressure in your tap. When you let go of the trigger, an unloader valve sends the water back round the pump so nothing bursts.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "items": [
+            {
+              "label": "Car tyre",
+              "size": 2.2,
+              "icon": "car"
+            },
+            {
+              "label": "Tap water",
+              "size": 3,
+              "icon": "drop"
+            },
+            {
+              "label": "Pressure washer",
+              "size": 130,
+              "icon": "pump"
+            }
+          ],
+          "unit": "bar"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a pressure washer work?",
+      "a": "An electric motor or engine drives pistons in a pump that squeeze ordinary water to very high pressure. A narrow nozzle turns that pressure into a fast, cutting jet.",
+      "asks": [
+        "What is inside a pressure washer?"
+      ]
+    },
+    {
+      "q": "How much pressure does a pressure washer make?",
+      "a": "A home pressure washer usually makes about 100 to 150 bar, roughly 40 to 50 times normal mains water pressure.",
+      "asks": [
+        "How strong is a jet wash?"
+      ]
+    },
+    {
+      "q": "Why does the pump not burst when I let go of the trigger?",
+      "a": "An unloader valve senses the pressure jump when the trigger closes and sends the water back to the pump inlet, so it circulates harmlessly until you squeeze again.",
+      "asks": [
+        "What is an unloader valve?"
+      ]
+    },
+    {
+      "q": "What does the nozzle do on a pressure washer?",
+      "a": "The nozzle is a tiny hole that turns the water pressure into speed. Different nozzles make a narrow cutting jet or a wider, gentler fan of spray.",
+      "asks": [
+        "Why do pressure washers have different nozzles?"
+      ]
+    },
+    {
+      "q": "Why can a pressure washer be dangerous?",
+      "a": "The jet is fast enough to cut skin and damage soft wood or paint, so it must never be pointed at people or animals.",
+      "asks": [
+        "Can a pressure washer hurt you?"
+      ]
+    }
+  ],
+  "facts": [
+    "Home pressure washers typically work at about 100 to 150 bar, compared with about 1 to 3 bar from a mains tap.",
+    "An unloader valve recirculates water when the trigger is released so the pump is not damaged."
+  ],
+  "quiz": [
+    {
+      "say": "What turns the high pressure into a fast cleaning jet?",
+      "show": "What turns the high pressure into a fast cleaning jet?",
+      "options": [
+        {
+          "show": "The narrow nozzle",
+          "say": "The narrow nozzle"
+        },
+        {
+          "show": "The garden hose",
+          "say": "The garden hose"
+        },
+        {
+          "show": "The motor fan",
+          "say": "The motor fan"
+        }
+      ],
+      "answer": 0,
+      "why": "Forcing high-pressure water through a tiny hole makes it leave at great speed.",
+      "wrong": {
+        "1": "The garden hose only supplies water at low pressure.",
+        "2": "The motor drives the pump; it does not shape the jet."
+      }
+    }
+  ]
+}

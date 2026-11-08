@@ -1,0 +1,675 @@
+{
+  "id": "ENGX-MATL-24",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a CNC milling machine carves metal parts",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "CNC milling",
+    "computer numerical control",
+    "G-code",
+    "milling cutter",
+    "subtractive manufacturing"
+  ],
+  "examples": [
+    "How does a CNC machine work?",
+    "What does CNC stand for?",
+    "How are precise metal parts made?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "ctrl",
+          "kind": "box",
+          "x": 0.12,
+          "y": 0.2,
+          "size": 0.8,
+          "label": "CNC controller",
+          "motion": "pulse",
+          "ask": "What does CNC stand for?"
+        },
+        {
+          "id": "spindle",
+          "kind": "motor",
+          "x": 0.5,
+          "y": 0.15,
+          "size": 0.9,
+          "label": "Spindle motor",
+          "motion": "spin",
+          "ask": "What is G-code?"
+        },
+        {
+          "id": "cutter",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.45,
+          "size": 0.7,
+          "label": "Spinning cutter",
+          "motion": "spin",
+          "ask": "How does a milling cutter remove metal?"
+        },
+        {
+          "id": "table",
+          "kind": "box",
+          "x": 0.55,
+          "y": 0.75,
+          "size": 1.3,
+          "label": "Moving table",
+          "motion": "slide"
+        },
+        {
+          "id": "xmotor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.68,
+          "size": 0.7,
+          "label": "Axis motor",
+          "motion": "spin",
+          "ask": "How does a CNC machine move so precisely?"
+        },
+        {
+          "id": "screw",
+          "kind": "axle",
+          "x": 0.3,
+          "y": 0.9,
+          "size": 0.8,
+          "label": "Ball screw",
+          "motion": "spin"
+        },
+        {
+          "id": "coolant",
+          "kind": "pipe",
+          "x": 0.85,
+          "y": 0.4,
+          "size": 0.7,
+          "label": "Coolant",
+          "motion": "flow",
+          "ask": "Why is coolant sprayed on the cutter?"
+        }
+      ],
+      "links": [
+        {
+          "from": "ctrl",
+          "to": "spindle",
+          "kind": "signal"
+        },
+        {
+          "from": "ctrl",
+          "to": "xmotor",
+          "kind": "signal",
+          "label": "G-code moves"
+        },
+        {
+          "from": "xmotor",
+          "to": "screw",
+          "kind": "force"
+        },
+        {
+          "from": "screw",
+          "to": "table",
+          "kind": "force",
+          "label": "slides"
+        },
+        {
+          "from": "spindle",
+          "to": "cutter",
+          "kind": "energy",
+          "label": "spins"
+        },
+        {
+          "from": "coolant",
+          "to": "cutter",
+          "kind": "fluid"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "CNC means computer numerical control. An engineer designs a part on a computer, and software turns it into a list of instructions called G-code, telling the machine exactly where to move and how fast.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a CNC milling machine carves metal parts"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "CNC controller",
+              "motion": "pulse",
+              "ask": "What does CNC stand for?"
+            },
+            {
+              "id": "spindle",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "cutter",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Spinning cutter",
+              "motion": "spin",
+              "ask": "How does a milling cutter remove metal?"
+            },
+            {
+              "id": "table",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Moving table",
+              "motion": "slide"
+            },
+            {
+              "id": "xmotor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Axis motor",
+              "motion": "spin",
+              "ask": "How does a CNC machine move so precisely?"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Ball screw",
+              "motion": "spin"
+            },
+            {
+              "id": "coolant",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Coolant",
+              "motion": "flow",
+              "ask": "Why is coolant sprayed on the cutter?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "spindle",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "xmotor",
+              "kind": "signal",
+              "label": "G-code moves"
+            },
+            {
+              "from": "xmotor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "table",
+              "kind": "force",
+              "label": "slides"
+            },
+            {
+              "from": "spindle",
+              "to": "cutter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "coolant",
+              "to": "cutter",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The spindle motor spins a cutting tool thousands of times a minute. Its sharp edges shave off small chips of metal each time they pass, like a very hard, very fast file.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "CNC controller",
+              "motion": "pulse",
+              "ask": "What does CNC stand for?"
+            },
+            {
+              "id": "spindle",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "cutter",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Spinning cutter",
+              "motion": "spin",
+              "ask": "How does a milling cutter remove metal?"
+            },
+            {
+              "id": "table",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Moving table",
+              "motion": "slide"
+            },
+            {
+              "id": "xmotor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Axis motor",
+              "motion": "spin",
+              "ask": "How does a CNC machine move so precisely?"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Ball screw",
+              "motion": "spin"
+            },
+            {
+              "id": "coolant",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Coolant",
+              "motion": "flow",
+              "ask": "Why is coolant sprayed on the cutter?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "spindle",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "xmotor",
+              "kind": "signal",
+              "label": "G-code moves"
+            },
+            {
+              "from": "xmotor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "table",
+              "kind": "force",
+              "label": "slides"
+            },
+            {
+              "from": "spindle",
+              "to": "cutter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "coolant",
+              "to": "cutter",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Motors turn ball screws that slide the table left, right, forwards and back while the cutter moves up and down. Each tiny step is measured, so parts come out accurate to about a hundredth of a millimetre.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "CNC controller",
+              "motion": "pulse",
+              "ask": "What does CNC stand for?"
+            },
+            {
+              "id": "spindle",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "cutter",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Spinning cutter",
+              "motion": "spin",
+              "ask": "How does a milling cutter remove metal?"
+            },
+            {
+              "id": "table",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Moving table",
+              "motion": "slide"
+            },
+            {
+              "id": "xmotor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Axis motor",
+              "motion": "spin",
+              "ask": "How does a CNC machine move so precisely?"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Ball screw",
+              "motion": "spin"
+            },
+            {
+              "id": "coolant",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Coolant",
+              "motion": "flow",
+              "ask": "Why is coolant sprayed on the cutter?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "spindle",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "xmotor",
+              "kind": "signal",
+              "label": "G-code moves"
+            },
+            {
+              "from": "xmotor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "table",
+              "kind": "force",
+              "label": "slides"
+            },
+            {
+              "from": "spindle",
+              "to": "cutter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "coolant",
+              "to": "cutter",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Coolant sprays onto the cutter to carry away heat and wash out chips. Milling is subtractive: it starts with a solid block and removes metal, the opposite of 3D printing, which builds parts up layer by layer.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "CNC controller",
+              "motion": "pulse",
+              "ask": "What does CNC stand for?"
+            },
+            {
+              "id": "spindle",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "cutter",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Spinning cutter",
+              "motion": "spin",
+              "ask": "How does a milling cutter remove metal?"
+            },
+            {
+              "id": "table",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Moving table",
+              "motion": "slide"
+            },
+            {
+              "id": "xmotor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Axis motor",
+              "motion": "spin",
+              "ask": "How does a CNC machine move so precisely?"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Ball screw",
+              "motion": "spin"
+            },
+            {
+              "id": "coolant",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Coolant",
+              "motion": "flow",
+              "ask": "Why is coolant sprayed on the cutter?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "spindle",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "xmotor",
+              "kind": "signal",
+              "label": "G-code moves"
+            },
+            {
+              "from": "xmotor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "table",
+              "kind": "force",
+              "label": "slides"
+            },
+            {
+              "from": "spindle",
+              "to": "cutter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "coolant",
+              "to": "cutter",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does CNC stand for?",
+      "a": "CNC stands for computer numerical control. A computer reads a program of numbers and commands and drives the machine's motors to move the tool exactly, without a person turning the handles.",
+      "asks": [
+        "What is a CNC machine?"
+      ]
+    },
+    {
+      "q": "What is G-code?",
+      "a": "G-code is the language most CNC machines understand. Each line is a simple command, like move in a straight line to these coordinates at this speed, or turn the spindle on. Software generates it from the 3D design.",
+      "asks": [
+        "How is a CNC machine programmed?"
+      ]
+    },
+    {
+      "q": "How does a milling cutter remove metal?",
+      "a": "A milling cutter has several hard, sharp edges, often made of tungsten carbide. As it spins, each edge bites into the metal and peels off a small chip, and moving the work past the cutter carves the shape.",
+      "asks": [
+        "What is milling?"
+      ]
+    },
+    {
+      "q": "How does a CNC machine move so precisely?",
+      "a": "Servo motors turn precise ball screws, which convert turning into tiny straight movements. Sensors constantly measure each axis's position, and the controller corrects any error, so the tool lands within about a hundredth of a millimetre.",
+      "asks": [
+        "How accurate is CNC machining?"
+      ]
+    },
+    {
+      "q": "Why is coolant sprayed on the cutter?",
+      "a": "Cutting metal makes a lot of heat, which can blunt the tool and warp the part. Coolant carries heat away, lubricates the cut and flushes chips out of the way.",
+      "asks": [
+        "What is the liquid sprayed on a CNC machine?"
+      ]
+    }
+  ],
+  "facts": [
+    "Numerically controlled milling was developed at MIT with John T. Parsons, demonstrated in 1952.",
+    "A 3-axis mill moves the tool along X, Y and Z; 5-axis machines can also tilt and rotate the part or tool."
+  ],
+  "quiz": [
+    {
+      "say": "How is CNC milling different from 3D printing?",
+      "show": "CNC milling…",
+      "options": [
+        {
+          "show": "Removes material from a solid block",
+          "say": "Removes material from a solid block"
+        },
+        {
+          "show": "Adds material layer by layer",
+          "say": "Adds material layer by layer"
+        },
+        {
+          "show": "Pours liquid metal into a mould",
+          "say": "Pours liquid metal into a mould"
+        }
+      ],
+      "answer": 0,
+      "why": "Milling is subtractive: it cuts away metal until only the part is left.",
+      "wrong": {
+        "1": "Building up layers is 3D printing, which is additive.",
+        "2": "Pouring into a mould is casting."
+      }
+    }
+  ]
+}

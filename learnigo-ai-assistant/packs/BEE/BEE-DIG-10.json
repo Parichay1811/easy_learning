@@ -1,0 +1,767 @@
+{
+  "id": "BEE-DIG-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Inside a microcontroller: CPU, memory and pins on one chip",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "microcontroller",
+    "flash and SRAM",
+    "GPIO pins",
+    "fetch-decode-execute",
+    "clock speed",
+    "peripherals"
+  ],
+  "examples": [
+    "What is inside a microcontroller?",
+    "What is the difference between a microcontroller and a microprocessor?",
+    "How does a microcontroller blink an LED?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "clk",
+          "label": "16 MHz clock",
+          "icon": "clock",
+          "x": 0.12,
+          "y": 0.15,
+          "ask": "What does the clock speed mean?"
+        },
+        {
+          "id": "flash",
+          "label": "Flash 32 KB",
+          "icon": "book",
+          "x": 0.12,
+          "y": 0.5,
+          "ask": "What is the difference between flash and SRAM?"
+        },
+        {
+          "id": "ram",
+          "label": "SRAM 2 KB",
+          "icon": "pencil",
+          "x": 0.12,
+          "y": 0.85
+        },
+        {
+          "id": "cpu",
+          "label": "CPU core",
+          "icon": "chip",
+          "x": 0.42,
+          "y": 0.5,
+          "ask": "What is inside a microcontroller?"
+        },
+        {
+          "id": "adc",
+          "label": "10-bit ADC",
+          "icon": "sensor",
+          "x": 0.7,
+          "y": 0.15
+        },
+        {
+          "id": "gpio",
+          "label": "GPIO pins",
+          "icon": "plug",
+          "x": 0.7,
+          "y": 0.5,
+          "ask": "How does a microcontroller blink an LED?"
+        },
+        {
+          "id": "timer",
+          "label": "Timers",
+          "icon": "timer",
+          "x": 0.7,
+          "y": 0.85
+        },
+        {
+          "id": "led",
+          "label": "LED on pin 13",
+          "icon": "bulb",
+          "x": 0.92,
+          "y": 0.5
+        }
+      ],
+      "links": [
+        {
+          "from": "clk",
+          "to": "cpu",
+          "kind": "signal",
+          "label": "Ticks"
+        },
+        {
+          "from": "flash",
+          "to": "cpu",
+          "kind": "data",
+          "label": "Instructions"
+        },
+        {
+          "from": "cpu",
+          "to": "ram",
+          "kind": "data",
+          "label": "Variables"
+        },
+        {
+          "from": "adc",
+          "to": "cpu",
+          "kind": "data"
+        },
+        {
+          "from": "cpu",
+          "to": "gpio",
+          "kind": "data",
+          "label": "Write 1"
+        },
+        {
+          "from": "timer",
+          "to": "cpu",
+          "kind": "signal",
+          "label": "Interrupt"
+        },
+        {
+          "from": "gpio",
+          "to": "led",
+          "kind": "power",
+          "label": "5 V"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A washing machine, a microwave, a car's electric window: each is run by a microcontroller, a whole small computer on one chip that can cost less than a cup of tea. On the board is the chip inside an Arduino Uno, the ATmega328P. Let's tour it, from the clock that sets the beat to the pins that touch the outside world.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Inside a microcontroller: CPU, memory and pins on one chip"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "clk",
+              "label": "16 MHz clock",
+              "icon": "clock",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "What does the clock speed mean?"
+            },
+            {
+              "id": "flash",
+              "label": "Flash 32 KB",
+              "icon": "book",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "What is the difference between flash and SRAM?"
+            },
+            {
+              "id": "ram",
+              "label": "SRAM 2 KB",
+              "icon": "pencil",
+              "x": 0.12,
+              "y": 0.85
+            },
+            {
+              "id": "cpu",
+              "label": "CPU core",
+              "icon": "chip",
+              "x": 0.42,
+              "y": 0.5,
+              "ask": "What is inside a microcontroller?"
+            },
+            {
+              "id": "adc",
+              "label": "10-bit ADC",
+              "icon": "sensor",
+              "x": 0.7,
+              "y": 0.15
+            },
+            {
+              "id": "gpio",
+              "label": "GPIO pins",
+              "icon": "plug",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "How does a microcontroller blink an LED?"
+            },
+            {
+              "id": "timer",
+              "label": "Timers",
+              "icon": "timer",
+              "x": 0.7,
+              "y": 0.85
+            },
+            {
+              "id": "led",
+              "label": "LED on pin 13",
+              "icon": "bulb",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "clk",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Ticks"
+            },
+            {
+              "from": "flash",
+              "to": "cpu",
+              "kind": "data",
+              "label": "Instructions"
+            },
+            {
+              "from": "cpu",
+              "to": "ram",
+              "kind": "data",
+              "label": "Variables"
+            },
+            {
+              "from": "adc",
+              "to": "cpu",
+              "kind": "data"
+            },
+            {
+              "from": "cpu",
+              "to": "gpio",
+              "kind": "data",
+              "label": "Write 1"
+            },
+            {
+              "from": "timer",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Interrupt"
+            },
+            {
+              "from": "gpio",
+              "to": "led",
+              "kind": "power",
+              "label": "5 V"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Let me show you a real board in 3D. The black IC chip could be a microcontroller, with copper traces carrying signals to its pins, an LED to switch and capacitors to keep its supply steady. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Inside a microcontroller: CPU, memory and pins on one chip"
+        },
+        {
+          "op": "image",
+          "render": "circuit-board"
+        }
+      ]
+    },
+    {
+      "say": "Start at the clock, a crystal ticking 16 million times a second. On most ticks the CPU core, the brain, finishes one simple instruction, so this chip does up to about 16 million instructions per second. One tick lasts 62.5 nanoseconds. How long would a billion ticks take?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "clk",
+              "label": "16 MHz clock",
+              "icon": "clock",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "What does the clock speed mean?"
+            },
+            {
+              "id": "flash",
+              "label": "Flash 32 KB",
+              "icon": "book",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "What is the difference between flash and SRAM?"
+            },
+            {
+              "id": "ram",
+              "label": "SRAM 2 KB",
+              "icon": "pencil",
+              "x": 0.12,
+              "y": 0.85
+            },
+            {
+              "id": "cpu",
+              "label": "CPU core",
+              "icon": "chip",
+              "x": 0.42,
+              "y": 0.5,
+              "ask": "What is inside a microcontroller?"
+            },
+            {
+              "id": "adc",
+              "label": "10-bit ADC",
+              "icon": "sensor",
+              "x": 0.7,
+              "y": 0.15
+            },
+            {
+              "id": "gpio",
+              "label": "GPIO pins",
+              "icon": "plug",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "How does a microcontroller blink an LED?"
+            },
+            {
+              "id": "timer",
+              "label": "Timers",
+              "icon": "timer",
+              "x": 0.7,
+              "y": 0.85
+            },
+            {
+              "id": "led",
+              "label": "LED on pin 13",
+              "icon": "bulb",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "clk",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Ticks"
+            },
+            {
+              "from": "flash",
+              "to": "cpu",
+              "kind": "data",
+              "label": "Instructions"
+            },
+            {
+              "from": "cpu",
+              "to": "ram",
+              "kind": "data",
+              "label": "Variables"
+            },
+            {
+              "from": "adc",
+              "to": "cpu",
+              "kind": "data"
+            },
+            {
+              "from": "cpu",
+              "to": "gpio",
+              "kind": "data",
+              "label": "Write 1"
+            },
+            {
+              "from": "timer",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Interrupt"
+            },
+            {
+              "from": "gpio",
+              "to": "led",
+              "kind": "power",
+              "label": "5 V"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "16 MHz → one cycle every 1/16,000,000 s = 62.5 ns"
+        }
+      ]
+    },
+    {
+      "say": "About a minute. Here is what the CPU does all day. It fetches an instruction from flash memory, decodes it to see what it means, executes it, then moves its program counter on to the next, round and round. The program lives in flash, which keeps it without power, while variables live in SRAM, fast but forgetful. Which memory loses its data when you unplug it?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Fetch",
+              "icon": "book",
+              "note": "Read the next instruction from flash",
+              "ask": "What is the difference between a microcontroller and a microprocessor?"
+            },
+            {
+              "label": "Decode",
+              "icon": "puzzle",
+              "note": "Work out what the instruction means"
+            },
+            {
+              "label": "Execute",
+              "icon": "gear",
+              "note": "Do it: add, compare, or set a pin"
+            },
+            {
+              "label": "Next address",
+              "icon": "arrow",
+              "note": "The program counter moves on"
+            }
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "Fetch → decode → execute, again and again"
+        }
+      ]
+    },
+    {
+      "say": "SRAM does. Now the pins. GPIO means general purpose input and output. Each pin is controlled by one bit in a register, a tiny memory cell wired to the outside. Write a 1 into bit 5 of port B, and pin 13 jumps to 5 volts, lighting the LED. Write a 0 and it goes dark. So what would make the LED blink?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "clk",
+              "label": "16 MHz clock",
+              "icon": "clock",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "What does the clock speed mean?"
+            },
+            {
+              "id": "flash",
+              "label": "Flash 32 KB",
+              "icon": "book",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "What is the difference between flash and SRAM?"
+            },
+            {
+              "id": "ram",
+              "label": "SRAM 2 KB",
+              "icon": "pencil",
+              "x": 0.12,
+              "y": 0.85
+            },
+            {
+              "id": "cpu",
+              "label": "CPU core",
+              "icon": "chip",
+              "x": 0.42,
+              "y": 0.5,
+              "ask": "What is inside a microcontroller?"
+            },
+            {
+              "id": "adc",
+              "label": "10-bit ADC",
+              "icon": "sensor",
+              "x": 0.7,
+              "y": 0.15
+            },
+            {
+              "id": "gpio",
+              "label": "GPIO pins",
+              "icon": "plug",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "How does a microcontroller blink an LED?"
+            },
+            {
+              "id": "timer",
+              "label": "Timers",
+              "icon": "timer",
+              "x": 0.7,
+              "y": 0.85
+            },
+            {
+              "id": "led",
+              "label": "LED on pin 13",
+              "icon": "bulb",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "clk",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Ticks"
+            },
+            {
+              "from": "flash",
+              "to": "cpu",
+              "kind": "data",
+              "label": "Instructions"
+            },
+            {
+              "from": "cpu",
+              "to": "ram",
+              "kind": "data",
+              "label": "Variables"
+            },
+            {
+              "from": "adc",
+              "to": "cpu",
+              "kind": "data"
+            },
+            {
+              "from": "cpu",
+              "to": "gpio",
+              "kind": "data",
+              "label": "Write 1"
+            },
+            {
+              "from": "timer",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Interrupt"
+            },
+            {
+              "from": "gpio",
+              "to": "led",
+              "kind": "power",
+              "label": "5 V"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "PORTB |= (1 << 5)  →  pin 13 goes to 5 V"
+        }
+      ]
+    },
+    {
+      "say": "Setting and clearing that bit in turn. Better still, a timer counts clock ticks on its own and interrupts the CPU every half second, so the LED blinks while the CPU stays free for other work. Wow: with only 2 kilobytes of RAM, this chip runs robots and 3D printers. Brilliant! Challenge: at 16 megahertz, how many ticks fit in 500 milliseconds?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "clk",
+              "label": "16 MHz clock",
+              "icon": "clock",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "What does the clock speed mean?"
+            },
+            {
+              "id": "flash",
+              "label": "Flash 32 KB",
+              "icon": "book",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "What is the difference between flash and SRAM?"
+            },
+            {
+              "id": "ram",
+              "label": "SRAM 2 KB",
+              "icon": "pencil",
+              "x": 0.12,
+              "y": 0.85
+            },
+            {
+              "id": "cpu",
+              "label": "CPU core",
+              "icon": "chip",
+              "x": 0.42,
+              "y": 0.5,
+              "ask": "What is inside a microcontroller?"
+            },
+            {
+              "id": "adc",
+              "label": "10-bit ADC",
+              "icon": "sensor",
+              "x": 0.7,
+              "y": 0.15
+            },
+            {
+              "id": "gpio",
+              "label": "GPIO pins",
+              "icon": "plug",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "How does a microcontroller blink an LED?"
+            },
+            {
+              "id": "timer",
+              "label": "Timers",
+              "icon": "timer",
+              "x": 0.7,
+              "y": 0.85
+            },
+            {
+              "id": "led",
+              "label": "LED on pin 13",
+              "icon": "bulb",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "clk",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Ticks"
+            },
+            {
+              "from": "flash",
+              "to": "cpu",
+              "kind": "data",
+              "label": "Instructions"
+            },
+            {
+              "from": "cpu",
+              "to": "ram",
+              "kind": "data",
+              "label": "Variables"
+            },
+            {
+              "from": "adc",
+              "to": "cpu",
+              "kind": "data"
+            },
+            {
+              "from": "cpu",
+              "to": "gpio",
+              "kind": "data",
+              "label": "Write 1"
+            },
+            {
+              "from": "timer",
+              "to": "cpu",
+              "kind": "signal",
+              "label": "Interrupt"
+            },
+            {
+              "from": "gpio",
+              "to": "led",
+              "kind": "power",
+              "label": "5 V"
+            }
+          ],
+          "focus": 6
+        },
+        {
+          "op": "formula",
+          "text": "Blink: set bit, wait 500 ms, clear bit, repeat"
+        },
+        {
+          "op": "note",
+          "text": "Uno: 32 KB flash, 2 KB SRAM, 1 KB EEPROM, 16 MHz"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is inside a microcontroller?",
+      "a": "A CPU core, flash memory for the program, SRAM for variables, a clock, and peripherals such as GPIO pins, timers, an ADC and serial ports, all on one chip.",
+      "asks": [
+        "What parts does a microcontroller have?"
+      ]
+    },
+    {
+      "q": "What is the difference between a microcontroller and a microprocessor?",
+      "a": "A microprocessor is mainly the CPU and needs separate memory and support chips, as in a laptop. A microcontroller puts the CPU, memory and input-output peripherals on one cheap, low-power chip, made to control a device.",
+      "asks": [
+        "Microcontroller vs microprocessor?"
+      ]
+    },
+    {
+      "q": "What is the difference between flash and SRAM?",
+      "a": "Flash keeps its data with the power off, so it holds the program. SRAM is faster and can be rewritten endlessly, but it forgets everything when power is lost, so it holds variables while the program runs.",
+      "asks": [
+        "Where is the program stored in a microcontroller?"
+      ]
+    },
+    {
+      "q": "How does a microcontroller blink an LED?",
+      "a": "The program sets one bit in a port register, which drives the pin to the supply voltage and lights the LED through a resistor. It then waits, clears the bit, waits again and repeats.",
+      "asks": [
+        "How does code turn on a pin?"
+      ]
+    },
+    {
+      "q": "What does the clock speed mean?",
+      "a": "It is how many cycles per second the chip's clock ticks. At 16 megahertz each cycle lasts 62.5 nanoseconds, and a simple chip like the ATmega328P finishes most instructions in one or two cycles.",
+      "asks": [
+        "What does 16 MHz mean on a microcontroller?"
+      ]
+    }
+  ],
+  "facts": [
+    "The ATmega328P on an Arduino Uno has 32 KB of flash, 2 KB of SRAM and 1 KB of EEPROM, and runs at 16 MHz.",
+    "At 16 MHz one clock cycle lasts 62.5 nanoseconds.",
+    "Billions of microcontrollers are made every year, far more than PC processors."
+  ],
+  "quiz": [
+    {
+      "say": "How many clock ticks does a 16 megahertz microcontroller make in 500 milliseconds?",
+      "show": "How many clock ticks does a 16 MHz microcontroller make in 500 ms?",
+      "options": [
+        {
+          "show": "8 million",
+          "say": "8 million"
+        },
+        {
+          "show": "16 million",
+          "say": "16 million"
+        },
+        {
+          "show": "32 million",
+          "say": "32 million"
+        }
+      ],
+      "answer": 0,
+      "why": "16 million ticks a second times half a second is 8 million.",
+      "wrong": {
+        "1": "16 million is one full second of ticks.",
+        "2": "That would take two seconds."
+      }
+    },
+    {
+      "say": "Which memory holds the program when the power is off?",
+      "show": "Which memory holds the program when the power is off?",
+      "options": [
+        {
+          "show": "Flash",
+          "say": "Flash"
+        },
+        {
+          "show": "SRAM",
+          "say": "SRAM"
+        },
+        {
+          "show": "CPU registers",
+          "say": "CPU registers"
+        }
+      ],
+      "answer": 0,
+      "why": "Flash is non-volatile: it keeps the program without power.",
+      "wrong": {
+        "1": "SRAM is volatile; it forgets when the power goes, so it holds variables.",
+        "2": "Registers are tiny fast stores inside the CPU and also lose their contents without power."
+      }
+    }
+  ]
+}

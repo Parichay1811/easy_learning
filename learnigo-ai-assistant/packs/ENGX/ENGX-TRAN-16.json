@@ -1,0 +1,659 @@
+{
+  "id": "ENGX-TRAN-16",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a turbocharger adds power to an engine",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "turbocharger",
+    "turbo",
+    "compressor",
+    "intercooler",
+    "turbo lag"
+  ],
+  "examples": [
+    "What does a turbo do?",
+    "How does exhaust gas spin a turbo?",
+    "What is turbo lag?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "eng",
+          "kind": "piston",
+          "x": 0.15,
+          "y": 0.55,
+          "size": 1.3,
+          "label": "Engine cylinders",
+          "motion": "slide"
+        },
+        {
+          "id": "exh",
+          "kind": "pipe",
+          "x": 0.42,
+          "y": 0.86,
+          "size": 1,
+          "label": "Hot exhaust gas",
+          "motion": "flow",
+          "ask": "What is turbo lag?"
+        },
+        {
+          "id": "turb",
+          "kind": "fan",
+          "x": 0.7,
+          "y": 0.78,
+          "size": 1,
+          "label": "Turbine",
+          "motion": "spin",
+          "ask": "What spins a turbocharger?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.82,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Shared shaft",
+          "motion": "spin",
+          "ask": "Why are the turbine and compressor on one shaft?"
+        },
+        {
+          "id": "comp",
+          "kind": "fan",
+          "x": 0.7,
+          "y": 0.2,
+          "size": 1,
+          "label": "Compressor",
+          "motion": "spin",
+          "ask": "What does the compressor do?"
+        },
+        {
+          "id": "ic",
+          "kind": "box",
+          "x": 0.38,
+          "y": 0.14,
+          "size": 0.9,
+          "label": "Intercooler",
+          "motion": "none",
+          "ask": "What is an intercooler?"
+        }
+      ],
+      "links": [
+        {
+          "from": "eng",
+          "to": "exh",
+          "kind": "fluid",
+          "label": "hot gas out"
+        },
+        {
+          "from": "exh",
+          "to": "turb",
+          "kind": "fluid",
+          "label": "spins it"
+        },
+        {
+          "from": "turb",
+          "to": "shaft",
+          "kind": "energy"
+        },
+        {
+          "from": "shaft",
+          "to": "comp",
+          "kind": "energy"
+        },
+        {
+          "from": "comp",
+          "to": "ic",
+          "kind": "fluid",
+          "label": "squeezed air"
+        },
+        {
+          "from": "ic",
+          "to": "eng",
+          "kind": "fluid",
+          "label": "cool dense air"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An engine's power is limited by how much air it can draw in, because fuel needs oxygen to burn. A turbocharger forces extra air in, using energy that would otherwise be thrown away in the exhaust.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a turbocharger adds power to an engine"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.15,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Engine cylinders",
+              "motion": "slide"
+            },
+            {
+              "id": "exh",
+              "kind": "pipe",
+              "x": 0.42,
+              "y": 0.86,
+              "size": 1,
+              "label": "Hot exhaust gas",
+              "motion": "flow",
+              "ask": "What is turbo lag?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.78,
+              "size": 1,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What spins a turbocharger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Shared shaft",
+              "motion": "spin",
+              "ask": "Why are the turbine and compressor on one shaft?"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "ic",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.14,
+              "size": 0.9,
+              "label": "Intercooler",
+              "motion": "none",
+              "ask": "What is an intercooler?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "exh",
+              "kind": "fluid",
+              "label": "hot gas out"
+            },
+            {
+              "from": "exh",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "spins it"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "energy"
+            },
+            {
+              "from": "comp",
+              "to": "ic",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "ic",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "cool dense air"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Hot exhaust gas rushes out of the engine and spins a small turbine wheel, sometimes at well over 100,000 turns a minute.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.15,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Engine cylinders",
+              "motion": "slide"
+            },
+            {
+              "id": "exh",
+              "kind": "pipe",
+              "x": 0.42,
+              "y": 0.86,
+              "size": 1,
+              "label": "Hot exhaust gas",
+              "motion": "flow",
+              "ask": "What is turbo lag?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.78,
+              "size": 1,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What spins a turbocharger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Shared shaft",
+              "motion": "spin",
+              "ask": "Why are the turbine and compressor on one shaft?"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "ic",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.14,
+              "size": 0.9,
+              "label": "Intercooler",
+              "motion": "none",
+              "ask": "What is an intercooler?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "exh",
+              "kind": "fluid",
+              "label": "hot gas out"
+            },
+            {
+              "from": "exh",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "spins it"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "energy"
+            },
+            {
+              "from": "comp",
+              "to": "ic",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "ic",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "cool dense air"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The turbine shares a shaft with a compressor wheel on the air intake side. As it spins, the compressor squashes fresh air and forces it into the engine, so more fuel can be burned on each stroke.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.15,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Engine cylinders",
+              "motion": "slide"
+            },
+            {
+              "id": "exh",
+              "kind": "pipe",
+              "x": 0.42,
+              "y": 0.86,
+              "size": 1,
+              "label": "Hot exhaust gas",
+              "motion": "flow",
+              "ask": "What is turbo lag?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.78,
+              "size": 1,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What spins a turbocharger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Shared shaft",
+              "motion": "spin",
+              "ask": "Why are the turbine and compressor on one shaft?"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "ic",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.14,
+              "size": 0.9,
+              "label": "Intercooler",
+              "motion": "none",
+              "ask": "What is an intercooler?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "exh",
+              "kind": "fluid",
+              "label": "hot gas out"
+            },
+            {
+              "from": "exh",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "spins it"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "energy"
+            },
+            {
+              "from": "comp",
+              "to": "ic",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "ic",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "cool dense air"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Squashing air heats it, and hot air is less dense, so many turbo engines pass it through an intercooler first. Cooler, denser air carries more oxygen, letting a small engine make the power of a bigger one.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.15,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Engine cylinders",
+              "motion": "slide"
+            },
+            {
+              "id": "exh",
+              "kind": "pipe",
+              "x": 0.42,
+              "y": 0.86,
+              "size": 1,
+              "label": "Hot exhaust gas",
+              "motion": "flow",
+              "ask": "What is turbo lag?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.78,
+              "size": 1,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What spins a turbocharger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Shared shaft",
+              "motion": "spin",
+              "ask": "Why are the turbine and compressor on one shaft?"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "ic",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.14,
+              "size": 0.9,
+              "label": "Intercooler",
+              "motion": "none",
+              "ask": "What is an intercooler?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "exh",
+              "kind": "fluid",
+              "label": "hot gas out"
+            },
+            {
+              "from": "exh",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "spins it"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "energy"
+            },
+            {
+              "from": "comp",
+              "to": "ic",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "ic",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "cool dense air"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What spins a turbocharger?",
+      "a": "Hot exhaust gas from the engine flows through the turbine housing and spins the turbine wheel, using energy that would otherwise go out of the tailpipe.",
+      "asks": [
+        "How does exhaust power a turbo?"
+      ]
+    },
+    {
+      "q": "Why are the turbine and compressor on one shaft?",
+      "a": "Joining them means the exhaust-driven turbine directly spins the compressor. No belt or gears are needed, so it can spin extremely fast.",
+      "asks": [
+        "How fast does a turbo spin?"
+      ]
+    },
+    {
+      "q": "What does the compressor do?",
+      "a": "The compressor wheel squashes incoming air and pushes it into the engine at higher pressure, so each cylinder gets more oxygen and can burn more fuel.",
+      "asks": [
+        "How does a turbo make more power?"
+      ]
+    },
+    {
+      "q": "What is an intercooler?",
+      "a": "An intercooler is a radiator for the intake air. It cools the air after the compressor has squashed it, making it denser so it holds more oxygen.",
+      "asks": [
+        "Why cool the air in a turbo engine?"
+      ]
+    },
+    {
+      "q": "What is turbo lag?",
+      "a": "Turbo lag is the short delay before a turbo gives full boost when you press the accelerator. The exhaust flow has to build up and speed up the turbine before the compressor pushes in extra air.",
+      "asks": [
+        "Why is there a delay with a turbo?"
+      ]
+    }
+  ],
+  "facts": [
+    "Turbochargers can spin at well over 100,000 revolutions per minute.",
+    "Swiss engineer Alfred Büchi patented exhaust-driven turbocharging in 1905.",
+    "A supercharger does the same job as a turbo but is driven by a belt from the engine instead of by exhaust gas."
+  ],
+  "quiz": [
+    {
+      "say": "Where does a turbocharger get the energy to spin?",
+      "show": "Where does a turbocharger get the energy to spin?",
+      "options": [
+        {
+          "show": "From the hot exhaust gas",
+          "say": "From the hot exhaust gas"
+        },
+        {
+          "show": "From the car battery",
+          "say": "From the car battery"
+        },
+        {
+          "show": "From the brakes",
+          "say": "From the brakes"
+        }
+      ],
+      "answer": 0,
+      "why": "Exhaust gas leaving the engine spins the turbine, which drives the compressor on the same shaft.",
+      "wrong": {
+        "1": "A standard turbo uses no battery power.",
+        "2": "The brakes turn movement into heat; they do not drive the turbo."
+      }
+    },
+    {
+      "say": "Why does a turbo engine use an intercooler?",
+      "show": "Why does a turbo engine use an intercooler?",
+      "options": [
+        {
+          "show": "To cool the squashed air so it is denser",
+          "say": "To cool the squashed air so it is denser"
+        },
+        {
+          "show": "To warm the engine up faster",
+          "say": "To warm the engine up faster"
+        },
+        {
+          "show": "To quieten the exhaust",
+          "say": "To quieten the exhaust"
+        }
+      ],
+      "answer": 0,
+      "why": "Squashing air heats it; cooling it makes it denser so it carries more oxygen into the engine.",
+      "wrong": {
+        "1": "The intercooler cools the intake air; it does not warm the engine.",
+        "2": "Quietening the exhaust is the silencer's job."
+      }
+    }
+  ]
+}

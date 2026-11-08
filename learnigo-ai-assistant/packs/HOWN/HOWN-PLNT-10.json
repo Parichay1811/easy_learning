@@ -1,0 +1,621 @@
+{
+  "id": "HOWN-PLNT-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How does a Venus flytrap snap shut?",
+  "area": "How Nature Works",
+  "group": "HOWN — How and Why in Nature",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "Venus flytrap",
+    "carnivorous plant",
+    "trigger hairs",
+    "trap closing",
+    "plants that eat insects"
+  ],
+  "examples": [
+    "How does a Venus flytrap catch flies?",
+    "Why does a Venus flytrap eat insects?",
+    "How fast does a Venus flytrap close?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "hairs",
+          "kind": "box",
+          "x": 0.18,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Trigger hairs",
+          "motion": "pulse",
+          "ask": "How does a Venus flytrap know an insect is there?"
+        },
+        {
+          "id": "signal",
+          "kind": "coil",
+          "x": 0.5,
+          "y": 0.15,
+          "size": 0.8,
+          "label": "Electric signal",
+          "motion": "pulse"
+        },
+        {
+          "id": "lobeL",
+          "kind": "lever",
+          "x": 0.32,
+          "y": 0.58,
+          "size": 1.1,
+          "label": "Left lobe",
+          "motion": "swing"
+        },
+        {
+          "id": "lobeR",
+          "kind": "lever",
+          "x": 0.68,
+          "y": 0.58,
+          "size": 1.1,
+          "label": "Right lobe",
+          "motion": "swing"
+        },
+        {
+          "id": "snap",
+          "kind": "spring",
+          "x": 0.5,
+          "y": 0.86,
+          "size": 0.9,
+          "label": "Curved lobes snap",
+          "motion": "pulse",
+          "ask": "How does the trap close so fast?"
+        },
+        {
+          "id": "juice",
+          "kind": "tank",
+          "x": 0.85,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Digestive juices",
+          "motion": "flow",
+          "ask": "How does a Venus flytrap digest insects?"
+        }
+      ],
+      "links": [
+        {
+          "from": "hairs",
+          "to": "signal",
+          "kind": "signal",
+          "label": "two touches"
+        },
+        {
+          "from": "signal",
+          "to": "lobeL",
+          "kind": "signal"
+        },
+        {
+          "from": "signal",
+          "to": "lobeR",
+          "kind": "signal"
+        },
+        {
+          "from": "snap",
+          "to": "lobeL",
+          "kind": "force",
+          "label": "flips shut"
+        },
+        {
+          "from": "snap",
+          "to": "lobeR",
+          "kind": "force"
+        },
+        {
+          "from": "signal",
+          "to": "juice",
+          "kind": "signal",
+          "label": "more touches"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "The Venus flytrap is a plant that catches insects with leaves shaped like jaws. Each trap is two lobes hinged in the middle, with a fringe of stiff bristles around the edge.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How does a Venus flytrap snap shut?"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hairs",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Trigger hairs",
+              "motion": "pulse",
+              "ask": "How does a Venus flytrap know an insect is there?"
+            },
+            {
+              "id": "signal",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Electric signal",
+              "motion": "pulse"
+            },
+            {
+              "id": "lobeL",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Left lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "lobeR",
+              "kind": "lever",
+              "x": 0.68,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Right lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "snap",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.86,
+              "size": 0.9,
+              "label": "Curved lobes snap",
+              "motion": "pulse",
+              "ask": "How does the trap close so fast?"
+            },
+            {
+              "id": "juice",
+              "kind": "tank",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Digestive juices",
+              "motion": "flow",
+              "ask": "How does a Venus flytrap digest insects?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hairs",
+              "to": "signal",
+              "kind": "signal",
+              "label": "two touches"
+            },
+            {
+              "from": "signal",
+              "to": "lobeL",
+              "kind": "signal"
+            },
+            {
+              "from": "signal",
+              "to": "lobeR",
+              "kind": "signal"
+            },
+            {
+              "from": "snap",
+              "to": "lobeL",
+              "kind": "force",
+              "label": "flips shut"
+            },
+            {
+              "from": "snap",
+              "to": "lobeR",
+              "kind": "force"
+            },
+            {
+              "from": "signal",
+              "to": "juice",
+              "kind": "signal",
+              "label": "more touches"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Inside each lobe are tiny trigger hairs. Brushing one sends an electrical signal, but the trap waits: only a second touch within about 20 seconds makes it shut, so a raindrop does not fool it.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hairs",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Trigger hairs",
+              "motion": "pulse",
+              "ask": "How does a Venus flytrap know an insect is there?"
+            },
+            {
+              "id": "signal",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Electric signal",
+              "motion": "pulse"
+            },
+            {
+              "id": "lobeL",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Left lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "lobeR",
+              "kind": "lever",
+              "x": 0.68,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Right lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "snap",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.86,
+              "size": 0.9,
+              "label": "Curved lobes snap",
+              "motion": "pulse",
+              "ask": "How does the trap close so fast?"
+            },
+            {
+              "id": "juice",
+              "kind": "tank",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Digestive juices",
+              "motion": "flow",
+              "ask": "How does a Venus flytrap digest insects?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hairs",
+              "to": "signal",
+              "kind": "signal",
+              "label": "two touches"
+            },
+            {
+              "from": "signal",
+              "to": "lobeL",
+              "kind": "signal"
+            },
+            {
+              "from": "signal",
+              "to": "lobeR",
+              "kind": "signal"
+            },
+            {
+              "from": "snap",
+              "to": "lobeL",
+              "kind": "force",
+              "label": "flips shut"
+            },
+            {
+              "from": "snap",
+              "to": "lobeR",
+              "kind": "force"
+            },
+            {
+              "from": "signal",
+              "to": "juice",
+              "kind": "signal",
+              "label": "more touches"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The lobes are curved outward and held under tension, like a bent plastic lid. When triggered, water shifts quickly in the cells and the curve flips inward, snapping the trap shut in about a tenth of a second.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hairs",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Trigger hairs",
+              "motion": "pulse",
+              "ask": "How does a Venus flytrap know an insect is there?"
+            },
+            {
+              "id": "signal",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Electric signal",
+              "motion": "pulse"
+            },
+            {
+              "id": "lobeL",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Left lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "lobeR",
+              "kind": "lever",
+              "x": 0.68,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Right lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "snap",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.86,
+              "size": 0.9,
+              "label": "Curved lobes snap",
+              "motion": "pulse",
+              "ask": "How does the trap close so fast?"
+            },
+            {
+              "id": "juice",
+              "kind": "tank",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Digestive juices",
+              "motion": "flow",
+              "ask": "How does a Venus flytrap digest insects?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hairs",
+              "to": "signal",
+              "kind": "signal",
+              "label": "two touches"
+            },
+            {
+              "from": "signal",
+              "to": "lobeL",
+              "kind": "signal"
+            },
+            {
+              "from": "signal",
+              "to": "lobeR",
+              "kind": "signal"
+            },
+            {
+              "from": "snap",
+              "to": "lobeL",
+              "kind": "force",
+              "label": "flips shut"
+            },
+            {
+              "from": "snap",
+              "to": "lobeR",
+              "kind": "force"
+            },
+            {
+              "from": "signal",
+              "to": "juice",
+              "kind": "signal",
+              "label": "more touches"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The bristles lock like prison bars. If the insect keeps struggling, the trap seals tight and fills with digestive juices, dissolving the soft parts of its prey over about a week before it reopens.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hairs",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Trigger hairs",
+              "motion": "pulse",
+              "ask": "How does a Venus flytrap know an insect is there?"
+            },
+            {
+              "id": "signal",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Electric signal",
+              "motion": "pulse"
+            },
+            {
+              "id": "lobeL",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Left lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "lobeR",
+              "kind": "lever",
+              "x": 0.68,
+              "y": 0.58,
+              "size": 1.1,
+              "label": "Right lobe",
+              "motion": "swing"
+            },
+            {
+              "id": "snap",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.86,
+              "size": 0.9,
+              "label": "Curved lobes snap",
+              "motion": "pulse",
+              "ask": "How does the trap close so fast?"
+            },
+            {
+              "id": "juice",
+              "kind": "tank",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Digestive juices",
+              "motion": "flow",
+              "ask": "How does a Venus flytrap digest insects?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hairs",
+              "to": "signal",
+              "kind": "signal",
+              "label": "two touches"
+            },
+            {
+              "from": "signal",
+              "to": "lobeL",
+              "kind": "signal"
+            },
+            {
+              "from": "signal",
+              "to": "lobeR",
+              "kind": "signal"
+            },
+            {
+              "from": "snap",
+              "to": "lobeL",
+              "kind": "force",
+              "label": "flips shut"
+            },
+            {
+              "from": "snap",
+              "to": "lobeR",
+              "kind": "force"
+            },
+            {
+              "from": "signal",
+              "to": "juice",
+              "kind": "signal",
+              "label": "more touches"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a Venus flytrap know an insect is there?",
+      "a": "Each lobe has a few trigger hairs. Touching one sends an electrical signal, and the trap closes only if hairs are touched twice within about 20 seconds, which means something alive is moving inside.",
+      "asks": [
+        "What are the trigger hairs?"
+      ]
+    },
+    {
+      "q": "How does the trap close so fast?",
+      "a": "The lobes are curved and stored under tension. A rapid shift of water in the cells flips the curve the other way, like popping a bent lid, so the trap snaps shut in about a tenth of a second.",
+      "asks": [
+        "How fast does a flytrap close?"
+      ]
+    },
+    {
+      "q": "How does a Venus flytrap digest insects?",
+      "a": "Further touches tell the trap to seal itself into a stomach and pour out digestive juices. Over about five to twelve days it soaks up the nutrients, then reopens, leaving the dry husk behind.",
+      "asks": [
+        "How long does a flytrap take to eat a fly?"
+      ]
+    },
+    {
+      "q": "Why does a Venus flytrap eat insects?",
+      "a": "It grows in wet, boggy soil with very little nitrogen. Insects supply the nitrogen and other nutrients it cannot get from the ground, though it still makes its sugar by photosynthesis.",
+      "asks": [
+        "Why are some plants carnivorous?"
+      ]
+    },
+    {
+      "q": "Where do Venus flytraps grow in the wild?",
+      "a": "Only in a small area of boggy land in North and South Carolina in the United States. They are rare in the wild and protected by law.",
+      "asks": [
+        "Where do flytraps come from?"
+      ]
+    }
+  ],
+  "facts": [
+    "Wild Venus flytraps grow only within about 120 kilometres of Wilmington, North Carolina.",
+    "A Venus flytrap trap can close in about a tenth of a second.",
+    "A trap normally needs two touches of its trigger hairs within about 20 seconds before it closes."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a flytrap wait for two touches before closing?",
+      "show": "Why does a flytrap wait for two touches before closing?",
+      "options": [
+        {
+          "show": "To avoid wasting energy on raindrops",
+          "say": "To avoid wasting energy on raindrops"
+        },
+        {
+          "show": "Because it cannot feel the first touch",
+          "say": "Because it cannot feel the first touch"
+        },
+        {
+          "show": "To let more insects in first",
+          "say": "To let more insects in first"
+        }
+      ],
+      "answer": 0,
+      "why": "Closing costs energy, so the trap checks that the thing touching it is moving, like a live insect.",
+      "wrong": {
+        "1": "It does feel the first touch, but waits to be sure.",
+        "2": "It is not waiting for more insects, just checking the first one is alive."
+      }
+    }
+  ]
+}

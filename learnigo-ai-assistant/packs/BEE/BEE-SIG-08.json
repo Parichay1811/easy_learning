@@ -1,0 +1,533 @@
+{
+  "id": "BEE-SIG-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Bode plots: reading gain and phase on a log scale",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Bode plot",
+    "cutoff frequency",
+    "decibels",
+    "minus 20 dB per decade",
+    "phase shift",
+    "low-pass filter"
+  ],
+  "examples": [
+    "How do you draw a Bode plot?",
+    "What is the cutoff frequency of an RC filter?",
+    "Why does an RC filter roll off at 20 dB per decade?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Signal in",
+          "value": "1 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "Resistor",
+          "value": "1.59 kΩ"
+        },
+        {
+          "kind": "capacitor",
+          "label": "Capacitor",
+          "value": "100 nF",
+          "branch": 1,
+          "ask": "What is the cutoff frequency of an RC filter?"
+        },
+        {
+          "kind": "voltmeter",
+          "label": "Vout",
+          "value": "0.707 V",
+          "branch": 2,
+          "ask": "What is a decibel?"
+        }
+      ],
+      "readouts": [
+        "f = 1 kHz = fc",
+        "Vout = 0.707 V (−3 dB)",
+        "Phase −45°"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Audio equalisers, loudspeaker crossovers and control loops are all designed with a picture invented by Hendrik Bode at Bell Labs in the 1930s. On the board is a simple RC low-pass filter: 1 volt of AC in, a 1.59 kilohm resistor and a 100 nanofarad capacitor, with a voltmeter across the capacitor reading the output.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Bode plots: reading gain and phase on a log scale"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Signal in",
+              "value": "1 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "1.59 kΩ"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "100 nF",
+              "branch": 1,
+              "ask": "What is the cutoff frequency of an RC filter?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Vout",
+              "value": "0.707 V",
+              "branch": 2,
+              "ask": "What is a decibel?"
+            }
+          ],
+          "readouts": [
+            "f = 1 kHz = fc",
+            "Vout = 0.707 V (−3 dB)",
+            "Phase −45°"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The capacitor's impedance, its opposition to AC, falls as frequency rises, so at high frequencies it shorts the output and the signal fades. The turning point is the cutoff frequency, 1 over 2 pi R C, here 1 kilohertz. At exactly that frequency the voltmeter reads 0.707 volts. What fraction of the power is that?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Signal in",
+              "value": "1 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "1.59 kΩ"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "100 nF",
+              "branch": 1,
+              "ask": "What is the cutoff frequency of an RC filter?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Vout",
+              "value": "0.707 V",
+              "branch": 2,
+              "ask": "What is a decibel?"
+            }
+          ],
+          "readouts": [
+            "f = 1 kHz = fc",
+            "Vout = 0.707 V (−3 dB)",
+            "Phase −45°"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "fc = 1/(2πRC) = 1/(2π × 1590 Ω × 100 nF) ≈ 1 kHz"
+        }
+      ]
+    },
+    {
+      "say": "Half the power. Now the Bode plot. Frequency runs along a log scale, each step a factor of ten, called a decade, and gain is in decibels, 20 times the log of the voltage ratio. Below 1 kilohertz the line is flat at 0 decibels; at the cutoff it is down 3. Above it, watch the slope. How much does it fall from 1 to 10 kilohertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "log₁₀ f (Hz)",
+            "min": 1,
+            "max": 5
+          },
+          "y": {
+            "label": "Gain (dB)",
+            "min": -45,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Exact gain",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  1.5,
+                  0
+                ],
+                [
+                  2,
+                  -0.04
+                ],
+                [
+                  2.5,
+                  -0.41
+                ],
+                [
+                  3,
+                  -3.01
+                ],
+                [
+                  3.5,
+                  -10.41
+                ],
+                [
+                  4,
+                  -20.04
+                ],
+                [
+                  4.5,
+                  -30
+                ],
+                [
+                  5,
+                  -40
+                ]
+              ],
+              "ask": "Why does an RC filter roll off at 20 dB per decade?"
+            },
+            {
+              "label": "Asymptotes",
+              "type": "points",
+              "points": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  5,
+                  -40
+                ]
+              ],
+              "ask": "How do you draw a Bode plot?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "fc: −3 dB"
+            },
+            {
+              "x": 4,
+              "label": "10 kHz: −20 dB"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Gain = 20 log₁₀(0.707) = −3 dB at fc"
+        }
+      ]
+    },
+    {
+      "say": "Twenty decibels, a factor of ten in voltage. That steady slope, minus 20 decibels per decade, is the signature of one pole, one capacitor. The straight lines, the asymptotes, are what engineers sketch by hand, and the real curve is never more than 3 decibels away from them. What would two RC stages in a row give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "log₁₀ f (Hz)",
+            "min": 1,
+            "max": 5
+          },
+          "y": {
+            "label": "Gain (dB)",
+            "min": -45,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Exact gain",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  1.5,
+                  0
+                ],
+                [
+                  2,
+                  -0.04
+                ],
+                [
+                  2.5,
+                  -0.41
+                ],
+                [
+                  3,
+                  -3.01
+                ],
+                [
+                  3.5,
+                  -10.41
+                ],
+                [
+                  4,
+                  -20.04
+                ],
+                [
+                  4.5,
+                  -30
+                ],
+                [
+                  5,
+                  -40
+                ]
+              ],
+              "ask": "Why does an RC filter roll off at 20 dB per decade?"
+            },
+            {
+              "label": "Asymptotes",
+              "type": "points",
+              "points": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  5,
+                  -40
+                ]
+              ],
+              "ask": "How do you draw a Bode plot?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "fc: −3 dB"
+            },
+            {
+              "x": 4,
+              "label": "10 kHz: −20 dB"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Above fc: −20 dB per decade (voltage ÷ 10 per 10 × f)"
+        }
+      ]
+    },
+    {
+      "say": "Minus 40 decibels per decade. The second half of a Bode plot is phase: how far the output lags the input. Look: almost no lag at low frequency, minus 45 degrees at the cutoff, heading for minus 90. Phase decides whether a feedback loop stays stable. Wonderful! Challenge: what is this filter's gain in decibels at 100 kilohertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "log₁₀ f (Hz)",
+            "min": 1,
+            "max": 5
+          },
+          "y": {
+            "label": "Phase (°)",
+            "min": -90,
+            "max": 0
+          },
+          "curves": [
+            {
+              "label": "Phase",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  1,
+                  -0.57
+                ],
+                [
+                  1.5,
+                  -1.81
+                ],
+                [
+                  2,
+                  -5.71
+                ],
+                [
+                  2.5,
+                  -17.55
+                ],
+                [
+                  3,
+                  -45
+                ],
+                [
+                  3.5,
+                  -72.45
+                ],
+                [
+                  4,
+                  -84.29
+                ],
+                [
+                  4.5,
+                  -88.19
+                ],
+                [
+                  5,
+                  -89.43
+                ]
+              ],
+              "ask": "What does the phase plot show?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "fc: −45°"
+            },
+            {
+              "x": 4,
+              "label": "10 kHz: −84°"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Phase = −atan(f/fc): −45° at fc, about −84° at 10 kHz"
+        },
+        {
+          "op": "note",
+          "text": "Each pole adds −20 dB per decade and up to −90° of phase"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you draw a Bode plot?",
+      "a": "Plot gain in decibels and phase in degrees against frequency on a log scale. For simple systems, sketch straight-line asymptotes: flat until each pole, then 20 decibels per decade steeper for every pole, and correct by 3 decibels at each corner.",
+      "asks": [
+        "How do I sketch a Bode diagram?"
+      ]
+    },
+    {
+      "q": "What is the cutoff frequency of an RC filter?",
+      "a": "It is 1 over 2 pi R C, the frequency where the output falls to 0.707 of the input, minus 3 decibels, and the phase is minus 45 degrees. With 1.59 kilohms and 100 nanofarads it is about 1 kilohertz.",
+      "asks": [
+        "What is the corner frequency?"
+      ]
+    },
+    {
+      "q": "Why does an RC filter roll off at 20 dB per decade?",
+      "a": "Well above the cutoff the gain is about f c over f, so every tenfold rise in frequency cuts the voltage tenfold. A factor of ten in voltage is 20 decibels.",
+      "asks": [
+        "What does minus 20 dB per decade mean?"
+      ]
+    },
+    {
+      "q": "What is a decibel?",
+      "a": "A decibel compares two levels on a log scale. For voltage, gain in decibels is 20 times the log of output over input: 0.707 is minus 3 decibels, 0.1 is minus 20 and 0.01 is minus 40.",
+      "asks": [
+        "Why use dB on Bode plots?"
+      ]
+    },
+    {
+      "q": "What does the phase plot show?",
+      "a": "It shows how far the output sine wave lags or leads the input at each frequency. For an RC low-pass filter the lag is minus the arctangent of f over f c, going from near 0 to minus 90 degrees.",
+      "asks": [
+        "What is phase shift in a filter?"
+      ]
+    }
+  ],
+  "facts": [
+    "Hendrik Bode developed his frequency-response plots at Bell Labs in the 1930s.",
+    "A single-pole low-pass filter falls at −20 dB per decade above its cutoff frequency.",
+    "At the cutoff frequency of an RC filter the gain is −3 dB and the phase is −45°."
+  ],
+  "quiz": [
+    {
+      "say": "What is the cutoff frequency of an RC filter with 1 kilohm and 1 microfarad?",
+      "show": "What is the cutoff frequency of an RC filter with R = 1 kΩ and C = 1 µF?",
+      "options": [
+        {
+          "show": "About 159 Hz",
+          "say": "about 159 hertz"
+        },
+        {
+          "show": "1000 Hz",
+          "say": "1000 hertz"
+        },
+        {
+          "show": "About 6.3 kHz",
+          "say": "about 6.3 kilohertz"
+        }
+      ],
+      "answer": 0,
+      "why": "f c equals 1 over 2 pi R C: 1 over 2 pi times 0.001, about 159 hertz.",
+      "wrong": {
+        "1": "That is 1 over R C, which is in radians per second; it forgets the 2 pi.",
+        "2": "That multiplies by 2 pi instead of dividing."
+      }
+    },
+    {
+      "say": "An RC low-pass filter has a cutoff of 1 kilohertz. What is its gain at 100 kilohertz?",
+      "show": "An RC low-pass filter has fc = 1 kHz. What is its gain at 100 kHz?",
+      "options": [
+        {
+          "show": "About −40 dB",
+          "say": "about minus 40 decibels"
+        },
+        {
+          "show": "About −20 dB",
+          "say": "about minus 20 decibels"
+        },
+        {
+          "show": "−3 dB",
+          "say": "minus 3 decibels"
+        }
+      ],
+      "answer": 0,
+      "why": "100 kilohertz is two decades above the cutoff, and each decade costs 20 decibels.",
+      "wrong": {
+        "1": "Minus 20 decibels is the gain at 10 kilohertz, one decade up.",
+        "2": "Minus 3 decibels applies only at the cutoff itself."
+      }
+    }
+  ]
+}

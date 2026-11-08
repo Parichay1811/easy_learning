@@ -1,0 +1,224 @@
+{
+  "id": "ENGX-AERO-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a helicopter hovers",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "helicopter hover",
+    "rotor lift",
+    "tail rotor",
+    "collective",
+    "torque reaction"
+  ],
+  "examples": [
+    "How does a helicopter hover?",
+    "Why does a helicopter need a tail rotor?",
+    "How does a helicopter go straight up?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "fan",
+      "forces": [
+        {
+          "label": "Rotor lift",
+          "dir": "up",
+          "size": 4
+        },
+        {
+          "label": "Weight",
+          "dir": "down",
+          "size": 4
+        }
+      ],
+      "motion": "still"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A helicopter's rotor blades are spinning wings. As they whirl round, they push air down and get pushed up, and when that lift exactly equals the helicopter's weight, it hovers.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a helicopter hovers"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "fan",
+          "forces": [
+            {
+              "label": "Rotor lift",
+              "dir": "up",
+              "size": 4
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            }
+          ],
+          "motion": "still"
+        }
+      ]
+    },
+    {
+      "say": "The pilot raises a lever called the collective, which tilts all the blades to a steeper angle at once. They push more air down, lift beats weight, and the helicopter climbs.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "fan",
+          "forces": [
+            {
+              "label": "Rotor lift",
+              "dir": "up",
+              "size": 5
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            }
+          ],
+          "motion": "up"
+        }
+      ]
+    },
+    {
+      "say": "Spinning the rotor one way makes the body try to spin the other way, by Newton's third law. The small tail rotor pushes sideways to stop that, and the pedals change its push to turn the nose.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-why",
+          "question": "Why does a helicopter need a tail rotor?",
+          "because": [
+            {
+              "label": "Engine turns rotor",
+              "icon": "engine",
+              "note": "The engine twists the main rotor one way."
+            },
+            {
+              "label": "Body twists back",
+              "icon": "arrow",
+              "note": "By Newton's third law the body tries to spin the other way.",
+              "ask": "Why does a helicopter need a tail rotor?"
+            },
+            {
+              "label": "Tail rotor pushes",
+              "icon": "fan",
+              "note": "A small sideways rotor pushes the tail to cancel the twist.",
+              "ask": "What is the small propeller on a helicopter's tail for?"
+            }
+          ],
+          "answer": "To stop the body spinning the opposite way to the rotor"
+        }
+      ]
+    },
+    {
+      "say": "Hovering takes a lot of power, because the rotor must keep throwing air down just to stay put. Flying forward is easier, because fresh air flowing into the rotor gives extra lift.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "fan",
+          "forces": [
+            {
+              "label": "Rotor lift",
+              "dir": "up",
+              "size": 4
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            }
+          ],
+          "motion": "still",
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a helicopter hover?",
+      "a": "Its spinning rotor blades are wings that push air downwards. When the upward push from the air exactly matches the helicopter's weight, it stays still in the air.",
+      "asks": [
+        "How do helicopters stay in the air?"
+      ]
+    },
+    {
+      "q": "Why does a helicopter need a tail rotor?",
+      "a": "The engine turns the main rotor, and the rotor pushes back on the body, trying to spin it the other way. The tail rotor pushes the tail sideways to cancel that twist.",
+      "asks": [
+        "What is the small propeller on a helicopter's tail for?"
+      ]
+    },
+    {
+      "q": "What does the collective lever do?",
+      "a": "The collective changes the angle of all the main rotor blades together. More angle means more lift to climb; less angle lets the helicopter descend.",
+      "asks": [
+        "How does a helicopter go straight up?"
+      ]
+    },
+    {
+      "q": "How do helicopters with two rotors work without a tail rotor?",
+      "a": "Helicopters like the Chinook have two big rotors spinning in opposite directions. Their twists cancel each other out, so no tail rotor is needed.",
+      "asks": [
+        "How does a Chinook work?"
+      ]
+    },
+    {
+      "q": "Why is hovering hard work?",
+      "a": "In a hover the rotor must keep accelerating air downwards with no help from forward speed. Moving forward, the rotor meets fresh air and gets more lift for less power, called translational lift.",
+      "asks": [
+        "Does hovering use more fuel?"
+      ]
+    }
+  ],
+  "facts": [
+    "Igor Sikorsky's VS-300 of 1939 led the way for the single main rotor and small tail rotor used by most helicopters today.",
+    "The Boeing CH-47 Chinook uses two rotors turning in opposite directions instead of a tail rotor."
+  ],
+  "quiz": [
+    {
+      "say": "A helicopter is hovering. The pilot raises the collective lever. What happens?",
+      "show": "Raising the collective makes the helicopter…",
+      "options": [
+        {
+          "show": "Climb",
+          "say": "Climb"
+        },
+        {
+          "show": "Spin round",
+          "say": "Spin round"
+        },
+        {
+          "show": "Fly backwards",
+          "say": "Fly backwards"
+        }
+      ],
+      "answer": 0,
+      "why": "Raising the collective steepens all the blades, so they make more lift than the weight and the helicopter climbs.",
+      "wrong": {
+        "1": "Spinning is controlled by the tail rotor and the pedals.",
+        "2": "Direction comes from the cyclic stick tilting the rotor, not the collective."
+      }
+    }
+  ]
+}

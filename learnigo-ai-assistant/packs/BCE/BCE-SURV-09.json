@@ -1,0 +1,380 @@
+{
+  "id": "BCE-SURV-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Drones, photogrammetry and LiDAR: mapping a site from the air",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-SURV — Surveying and geomatics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "drone photogrammetry",
+    "ground sample distance",
+    "LiDAR",
+    "point cloud",
+    "ground control points",
+    "structure from motion"
+  ],
+  "examples": [
+    "How does drone photogrammetry make a 3D model?",
+    "What is ground sample distance?",
+    "How does LiDAR see through trees?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Plan the flight",
+          "icon": "map",
+          "note": "Height, speed and photo overlap"
+        },
+        {
+          "label": "Fly and photograph",
+          "icon": "camera",
+          "note": "About 75% overlap between photos",
+          "ask": "What is drone photogrammetry?"
+        },
+        {
+          "label": "Ground control",
+          "icon": "flag",
+          "note": "Surveyed targets fix the scale",
+          "ask": "What are ground control points?"
+        },
+        {
+          "label": "Match the photos",
+          "icon": "computer",
+          "note": "Same points found in many images"
+        },
+        {
+          "label": "Point cloud",
+          "icon": "atom",
+          "note": "Millions of 3D points"
+        },
+        {
+          "label": "Maps and models",
+          "icon": "globe",
+          "note": "Orthophoto, terrain model, volumes"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 2018 aircraft fired laser pulses down onto the jungle of northern Guatemala, and the data revealed more than sixty thousand hidden Maya structures under the trees. Civil engineers use the same tools, on drones, to map building sites in an afternoon. Here is how a drone survey goes from flight to model.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Drones, photogrammetry and LiDAR: mapping a site from the air"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Plan the flight",
+              "icon": "map",
+              "note": "Height, speed and photo overlap"
+            },
+            {
+              "label": "Fly and photograph",
+              "icon": "camera",
+              "note": "About 75% overlap between photos",
+              "ask": "What is drone photogrammetry?"
+            },
+            {
+              "label": "Ground control",
+              "icon": "flag",
+              "note": "Surveyed targets fix the scale",
+              "ask": "What are ground control points?"
+            },
+            {
+              "label": "Match the photos",
+              "icon": "computer",
+              "note": "Same points found in many images"
+            },
+            {
+              "label": "Point cloud",
+              "icon": "atom",
+              "note": "Millions of 3D points"
+            },
+            {
+              "label": "Maps and models",
+              "icon": "globe",
+              "note": "Orthophoto, terrain model, volumes"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The drone flies a grid, snapping photos that overlap by about three quarters, so every spot on the ground appears in several pictures. Software finds the same tiny features in many photos and, from the different viewpoints, works out each one's position in 3D. Why do you think so much overlap is needed?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Plan the flight",
+              "icon": "map",
+              "note": "Height, speed and photo overlap"
+            },
+            {
+              "label": "Fly and photograph",
+              "icon": "camera",
+              "note": "About 75% overlap between photos",
+              "ask": "What is drone photogrammetry?"
+            },
+            {
+              "label": "Ground control",
+              "icon": "flag",
+              "note": "Surveyed targets fix the scale",
+              "ask": "What are ground control points?"
+            },
+            {
+              "label": "Match the photos",
+              "icon": "computer",
+              "note": "Same points found in many images"
+            },
+            {
+              "label": "Point cloud",
+              "icon": "atom",
+              "note": "Millions of 3D points"
+            },
+            {
+              "label": "Maps and models",
+              "icon": "globe",
+              "note": "Orthophoto, terrain model, volumes"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "To see each point from many angles! How fine is the detail? The ground sample distance, the size of one pixel on the ground, is sensor width times height over focal length times image width. A typical drone camera at a hundred metres gives two point seven four centimetres per pixel. Fly at fifty and it halves.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Flight height (m)",
+            "max": 120
+          },
+          "y": {
+            "label": "Pixel size (cm)",
+            "max": 3.5
+          },
+          "curves": [
+            {
+              "label": "Ground sample distance",
+              "type": "line",
+              "c": 0,
+              "k": 0.0274,
+              "ask": "What is ground sample distance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "50 m: 1.37 cm"
+            },
+            {
+              "x": 100,
+              "label": "100 m: 2.74 cm",
+              "ask": "What is ground sample distance?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "GSD = (13.2 mm × 100 m) / (8.8 mm × 5472) ≈ 2.74 cm"
+        }
+      ]
+    },
+    {
+      "say": "LiDAR measures with light instead of photos. It times each laser pulse there and back: six hundred and sixty seven nanoseconds means a hundred metres. Fired hundreds of thousands of times a second, some pulses slip through gaps in the leaves and hit the ground. Which tool would you choose to map a forest floor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Photogrammetry",
+            "icon": "camera",
+            "points": [
+              "Many overlapping photos",
+              "Cheap and colourful",
+              "Sees only the top surface"
+            ]
+          },
+          "right": {
+            "title": "LiDAR",
+            "icon": "light",
+            "points": [
+              "Laser pulses, d = ct/2",
+              "Hundreds of thousands a second",
+              "Gaps in leaves reach ground"
+            ]
+          },
+          "verdict": "LiDAR wins under trees; photos win on cost and colour",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "d = c t / 2 = 3×10⁸ × 667×10⁻⁹ / 2 ≈ 100 m"
+        }
+      ]
+    },
+    {
+      "say": "LiDAR! Both methods need ground control points, surveyed targets on the ground, to fix the model to real coordinates. Engineers then measure stockpiles, track progress week by week and check finished levels. Brilliant! Challenge: at what height would that camera give one centimetre pixels?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Plan the flight",
+              "icon": "map",
+              "note": "Height, speed and photo overlap"
+            },
+            {
+              "label": "Fly and photograph",
+              "icon": "camera",
+              "note": "About 75% overlap between photos",
+              "ask": "What is drone photogrammetry?"
+            },
+            {
+              "label": "Ground control",
+              "icon": "flag",
+              "note": "Surveyed targets fix the scale",
+              "ask": "What are ground control points?"
+            },
+            {
+              "label": "Match the photos",
+              "icon": "computer",
+              "note": "Same points found in many images"
+            },
+            {
+              "label": "Point cloud",
+              "icon": "atom",
+              "note": "Millions of 3D points"
+            },
+            {
+              "label": "Maps and models",
+              "icon": "globe",
+              "note": "Orthophoto, terrain model, volumes"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is drone photogrammetry?",
+      "a": "Making maps and 3D models from many overlapping drone photos. Software matches features between photos and triangulates their 3D positions, producing point clouds, orthophotos and terrain models.",
+      "asks": [
+        "Structure from motion",
+        "How does drone photogrammetry make a 3D model?"
+      ]
+    },
+    {
+      "q": "What is ground sample distance?",
+      "a": "The size of one image pixel on the ground: sensor width times flying height over focal length times image width in pixels. About 2.7 centimetres at 100 metres for a typical survey drone.",
+      "asks": [
+        "GSD formula"
+      ]
+    },
+    {
+      "q": "How does LiDAR measure distance?",
+      "a": "It times a laser pulse to the ground and back; distance is the speed of light times the time, divided by 2. A 667 nanosecond return means about 100 metres.",
+      "asks": [
+        "How does LiDAR work?",
+        "How does LiDAR see through trees?"
+      ]
+    },
+    {
+      "q": "What are ground control points?",
+      "a": "Targets on the ground whose coordinates are surveyed by GNSS or total station. They tie the drone model to real-world coordinates and check its accuracy.",
+      "asks": [
+        "GCPs"
+      ]
+    },
+    {
+      "q": "What is the difference between LiDAR and photogrammetry?",
+      "a": "Photogrammetry builds 3D from photos and gives colour cheaply but only sees surfaces. LiDAR measures directly with laser pulses and can reach the ground through gaps in vegetation, at higher cost.",
+      "asks": [
+        "LiDAR vs photogrammetry"
+      ]
+    }
+  ],
+  "facts": [
+    "A 2018 airborne LiDAR survey of northern Guatemala identified more than 60,000 ancient Maya structures.",
+    "Light travels about 30 cm per nanosecond, so a LiDAR pulse returning after 667 ns hit something about 100 m away."
+  ],
+  "quiz": [
+    {
+      "say": "A LiDAR pulse returns after 400 nanoseconds. Light travels at 3 times 10 to the 8 metres per second. How far away was the target?",
+      "show": "A LiDAR pulse returns after 400 ns (c = 3 × 10⁸ m/s). Distance?",
+      "options": [
+        {
+          "show": "60 m",
+          "say": "60 metres"
+        },
+        {
+          "show": "120 m",
+          "say": "120 metres"
+        },
+        {
+          "show": "6 m",
+          "say": "6 metres"
+        }
+      ],
+      "answer": 0,
+      "why": "d = c t / 2 = 3×10⁸ × 400×10⁻⁹ / 2 = 60 m.",
+      "wrong": {
+        "1": "That forgets to halve for the round trip.",
+        "2": "That slips a factor of ten."
+      }
+    },
+    {
+      "say": "Flying the drone lower makes the ground sample distance…",
+      "show": "Flying the drone lower makes the ground sample distance…",
+      "options": [
+        {
+          "show": "Smaller (finer detail)",
+          "say": "Smaller (finer detail)"
+        },
+        {
+          "show": "Larger",
+          "say": "Larger"
+        },
+        {
+          "show": "Unchanged",
+          "say": "Unchanged"
+        }
+      ],
+      "answer": 0,
+      "why": "GSD is proportional to flying height.",
+      "wrong": {
+        "1": "Higher flights give larger pixels.",
+        "2": "Height directly changes the pixel size."
+      }
+    }
+  ]
+}

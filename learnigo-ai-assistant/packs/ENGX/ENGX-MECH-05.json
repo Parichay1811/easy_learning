@@ -1,0 +1,545 @@
+{
+  "id": "ENGX-MECH-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How bevel gears turn motion round a corner",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "bevel gear",
+    "right angle gears",
+    "hand drill",
+    "egg beater",
+    "cone gears"
+  ],
+  "examples": [
+    "How does a hand drill turn sideways motion into downward spinning?",
+    "What are bevel gears?",
+    "How does an egg whisk with a handle work?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "handle",
+          "kind": "lever",
+          "x": 0.15,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Crank handle",
+          "motion": "spin",
+          "ask": "Why do I turn the handle round and round?"
+        },
+        {
+          "id": "crown",
+          "kind": "gear",
+          "x": 0.38,
+          "y": 0.38,
+          "size": 1.3,
+          "label": "Big bevel gear",
+          "motion": "spin",
+          "ask": "What are bevel gears?"
+        },
+        {
+          "id": "small",
+          "kind": "gear",
+          "x": 0.62,
+          "y": 0.38,
+          "size": 0.7,
+          "label": "Small bevel gear",
+          "motion": "spin",
+          "ask": "Why does the small bevel gear spin faster?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.62,
+          "y": 0.68,
+          "size": 1,
+          "label": "Vertical shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "tool",
+          "kind": "fan",
+          "x": 0.62,
+          "y": 0.9,
+          "size": 0.7,
+          "label": "Beaters or drill bit",
+          "motion": "spin",
+          "ask": "What turns the beaters?"
+        }
+      ],
+      "links": [
+        {
+          "from": "handle",
+          "to": "crown",
+          "kind": "energy",
+          "label": "your turn"
+        },
+        {
+          "from": "crown",
+          "to": "small",
+          "kind": "force",
+          "label": "teeth at 90°"
+        },
+        {
+          "from": "small",
+          "to": "shaft",
+          "kind": "energy",
+          "label": "fast spin"
+        },
+        {
+          "from": "shaft",
+          "to": "tool",
+          "kind": "energy"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Bevel gears are cone-shaped gears whose teeth meet at an angle, usually a right angle. They let a turning shaft drive another shaft pointing a different way.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How bevel gears turn motion round a corner"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why do I turn the handle round and round?"
+            },
+            {
+              "id": "crown",
+              "kind": "gear",
+              "x": 0.38,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Big bevel gear",
+              "motion": "spin",
+              "ask": "What are bevel gears?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Small bevel gear",
+              "motion": "spin",
+              "ask": "Why does the small bevel gear spin faster?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.62,
+              "y": 0.68,
+              "size": 1,
+              "label": "Vertical shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "tool",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.9,
+              "size": 0.7,
+              "label": "Beaters or drill bit",
+              "motion": "spin",
+              "ask": "What turns the beaters?"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "crown",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "crown",
+              "to": "small",
+              "kind": "force",
+              "label": "teeth at 90°"
+            },
+            {
+              "from": "small",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "shaft",
+              "to": "tool",
+              "kind": "energy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: gears. Look at the driver gear, the small gear and the third gear. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How bevel gears turn motion round a corner"
+        },
+        {
+          "op": "image",
+          "render": "gear-train"
+        }
+      ]
+    },
+    {
+      "say": "In a hand drill or egg beater, you turn a handle on a big bevel gear that spins upright, like a bicycle wheel.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why do I turn the handle round and round?"
+            },
+            {
+              "id": "crown",
+              "kind": "gear",
+              "x": 0.38,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Big bevel gear",
+              "motion": "spin",
+              "ask": "What are bevel gears?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Small bevel gear",
+              "motion": "spin",
+              "ask": "Why does the small bevel gear spin faster?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.62,
+              "y": 0.68,
+              "size": 1,
+              "label": "Vertical shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "tool",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.9,
+              "size": 0.7,
+              "label": "Beaters or drill bit",
+              "motion": "spin",
+              "ask": "What turns the beaters?"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "crown",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "crown",
+              "to": "small",
+              "kind": "force",
+              "label": "teeth at 90°"
+            },
+            {
+              "from": "small",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "shaft",
+              "to": "tool",
+              "kind": "energy"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Its teeth mesh with a small bevel gear set at a right angle, so the small gear spins flat, about a vertical shaft. Because it has fewer teeth, it spins several times for each turn of the handle.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why do I turn the handle round and round?"
+            },
+            {
+              "id": "crown",
+              "kind": "gear",
+              "x": 0.38,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Big bevel gear",
+              "motion": "spin",
+              "ask": "What are bevel gears?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Small bevel gear",
+              "motion": "spin",
+              "ask": "Why does the small bevel gear spin faster?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.62,
+              "y": 0.68,
+              "size": 1,
+              "label": "Vertical shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "tool",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.9,
+              "size": 0.7,
+              "label": "Beaters or drill bit",
+              "motion": "spin",
+              "ask": "What turns the beaters?"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "crown",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "crown",
+              "to": "small",
+              "kind": "force",
+              "label": "teeth at 90°"
+            },
+            {
+              "from": "small",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "shaft",
+              "to": "tool",
+              "kind": "energy"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "So bevel gears do two jobs at once: they turn the motion round a corner and, here, speed it up so the beaters or drill bit whizz round.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why do I turn the handle round and round?"
+            },
+            {
+              "id": "crown",
+              "kind": "gear",
+              "x": 0.38,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Big bevel gear",
+              "motion": "spin",
+              "ask": "What are bevel gears?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Small bevel gear",
+              "motion": "spin",
+              "ask": "Why does the small bevel gear spin faster?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.62,
+              "y": 0.68,
+              "size": 1,
+              "label": "Vertical shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "tool",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.9,
+              "size": 0.7,
+              "label": "Beaters or drill bit",
+              "motion": "spin",
+              "ask": "What turns the beaters?"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "crown",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "crown",
+              "to": "small",
+              "kind": "force",
+              "label": "teeth at 90°"
+            },
+            {
+              "from": "small",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "shaft",
+              "to": "tool",
+              "kind": "energy"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What are bevel gears?",
+      "a": "Bevel gears are gears shaped like slices of a cone, with teeth on the sloping face. Two of them mesh with their shafts at an angle, most often 90 degrees.",
+      "asks": [
+        "Why are bevel gears cone shaped?"
+      ]
+    },
+    {
+      "q": "Why does the small bevel gear spin faster?",
+      "a": "It has fewer teeth than the big gear, so each turn of the big gear pushes it round several times. A 40-tooth gear driving a 10-tooth gear makes it spin four times faster.",
+      "asks": [
+        "Does a hand drill speed things up?"
+      ]
+    },
+    {
+      "q": "Where are bevel gears used?",
+      "a": "Bevel gears are used in hand drills, egg beaters, car differentials, angle grinders, some windmills and the drive shafts of some bicycles.",
+      "asks": [
+        "What uses bevel gears?"
+      ]
+    },
+    {
+      "q": "Why do I turn the handle round and round?",
+      "a": "The handle is a crank: a lever on an axle. Turning it round turns the big bevel gear, and its distance from the axle gives your hand extra turning force.",
+      "asks": [
+        "What does the crank handle do?"
+      ]
+    },
+    {
+      "q": "What turns the beaters?",
+      "a": "The small bevel gear sits on the beater shaft, so when it spins, the shaft and the beaters spin with it.",
+      "asks": [
+        "How do the whisks spin?"
+      ]
+    }
+  ],
+  "facts": [
+    "Bevel gears usually connect shafts at 90 degrees, but they can be made for other angles.",
+    "A car differential uses bevel gears to turn the drive shaft's motion through a right angle to the wheels."
+  ],
+  "quiz": [
+    {
+      "say": "What is the main job of a pair of bevel gears?",
+      "show": "What is the main job of a pair of bevel gears?",
+      "options": [
+        {
+          "show": "To turn motion through an angle",
+          "say": "To turn motion through an angle"
+        },
+        {
+          "show": "To turn spinning into sliding",
+          "say": "To turn spinning into sliding"
+        },
+        {
+          "show": "To store energy",
+          "say": "To store energy"
+        }
+      ],
+      "answer": 0,
+      "why": "Bevel gears let one shaft drive another at an angle, usually 90 degrees.",
+      "wrong": {
+        "1": "That is a rack and pinion.",
+        "2": "Springs and flywheels store energy; gears pass it on."
+      }
+    }
+  ]
+}

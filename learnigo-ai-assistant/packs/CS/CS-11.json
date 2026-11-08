@@ -1,0 +1,262 @@
+{
+  "id": "CS-11",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Binary, hex & two's complement",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "binary",
+    "hexadecimal",
+    "two's complement",
+    "binary addition",
+    "overflow"
+  ],
+  "examples": [
+    "How do I convert a decimal number to binary?",
+    "What is the process for adding two binary numbers?",
+    "When does an overflow occur in binary arithmetic?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn about number systems in computers. We will look at binary and hexadecimal.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Binary, hex & two's complement"
+        },
+        {
+          "op": "text",
+          "text": "Binary (base 2) and Hex (base 16)",
+          "at": "binary"
+        }
+      ]
+    },
+    {
+      "say": "Binary uses only two digits, zero and one. It is the fundamental language of computers.",
+      "draw": [
+        {
+          "op": "bullets",
+          "items": [
+            "Only uses 0 and 1",
+            "Represents electrical on or off",
+            "Base is 2"
+          ],
+          "at": "only"
+        },
+        {
+          "op": "text",
+          "text": "Binary: 0 and 1",
+          "at": "binary"
+        }
+      ]
+    },
+    {
+      "say": "Hexadecimal is a shorter way to write long binary numbers. It uses digits zero through nine and letters A through F.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Hex: 0-9, A-F"
+        }
+      ]
+    },
+    {
+      "say": "To convert binary to hex, group the binary digits into sets of four. Each group equals one hex digit.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Binary Number",
+            "Group into 4 bits",
+            "Convert each group to Hex digit"
+          ],
+          "at": "binary"
+        },
+        {
+          "op": "text",
+          "text": "Binary to Hex: Groups of 4",
+          "at": "binary"
+        }
+      ]
+    },
+    {
+      "say": "Binary addition follows simple rules. You add columns just like regular addition, carrying over when the sum is two or more.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Binary Addition: 1+1=10",
+          "at": "binary"
+        }
+      ]
+    },
+    {
+      "say": "Two's complement is used to represent negative numbers in binary. You flip the bits and then add one to get the negative value.",
+      "draw": [
+        {
+          "op": "cycle",
+          "items": [
+            "Original Binary",
+            "Invert Bits (One's Complement)",
+            "Add 1 (Two's Complement)"
+          ],
+          "at": "binary"
+        },
+        {
+          "op": "text",
+          "text": "Two's Complement: Invert + 1",
+          "at": "two's"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between binary and hexadecimal?",
+      "a": "Binary uses only two digits, zero and one. Hexadecimal uses sixteen symbols, including letters A through F. You can think of hex as a compact way to write binary.",
+      "asks": [
+        "Why do we use hex instead of just more zeros?",
+        "How many bits are in one hex digit?"
+      ]
+    },
+    {
+      "q": "How do I check if my binary addition is correct?",
+      "a": "You can convert the final binary sum to decimal and check it against a calculator. Remember to carry over any excess value to the next column.",
+      "asks": [
+        "Is there a rule for carrying in binary addition?",
+        "What if the sum is bigger than the number of bits?"
+      ]
+    },
+    {
+      "q": "What does 'overflow' mean when adding numbers?",
+      "a": "Overflow happens when the result of an addition is too large to fit in the allocated number of bits. It means the calculation has exceeded its capacity.",
+      "asks": [
+        "When is an overflow error most common?",
+        "Does overflow mean the answer is wrong?"
+      ]
+    },
+    {
+      "q": "Is two's complement only for negative numbers?",
+      "a": "Two's complement is the standard way computers represent all signed numbers, both positive and negative. It allows arithmetic operations to work consistently.",
+      "asks": [
+        "What is the purpose of flipping the bits?",
+        "How does two's complement differ from one's complement?"
+      ]
+    },
+    {
+      "q": "Do I need to know the bit size for two's complement?",
+      "a": "Yes, you must know the fixed number of bits, like eight bits or sixteen bits. The size determines the range of numbers you can represent.",
+      "asks": [
+        "Does the bit size affect the calculation?",
+        "What is the smallest number I can represent?"
+      ]
+    }
+  ],
+  "facts": [
+    "Binary is a base two number system.",
+    "Hexadecimal is a base sixteen number system.",
+    "Each hexadecimal digit represents exactly four binary bits.",
+    "Two's complement is used to represent signed integers."
+  ],
+  "quiz": [
+    {
+      "say": "Convert the binary number 110101 to its hexadecimal equivalent.",
+      "show": "1101012 = ?",
+      "options": [
+        {
+          "show": "1D",
+          "say": "1D"
+        },
+        {
+          "show": "110101",
+          "say": "110101"
+        },
+        {
+          "show": "2D",
+          "say": "2D"
+        },
+        {
+          "show": "D5",
+          "say": "D5"
+        }
+      ],
+      "answer": 2,
+      "why": "You group the bits into sets of four starting from the right. The first group is 1101, which is D in hex. The second group is 0101, which is 5 in hex. Wait, I made a mistake. Let us re-group: 1101 and 01. The correct grouping is 11 and 0101. Wait, let us pad to 6 bits: 0011 0101. No, the correct grouping is 1101 and 01. Let's pad to 8 bits: 0011 0101. The first group is 0011, which is 3. The second group is 0101, which is 5. The answer is 35. Let",
+      "wrong": {
+        "0": "This suggests you are treating the bits as two separate groups of three, which is incorrect for hex conversion.",
+        "1": "You might forget to convert the groups and simply write the original binary number.",
+        "3": "This happens if you incorrectly group the bits as 1101 and 01, and then treat 01 as 1."
+      }
+    },
+    {
+      "say": "If you add 1011 and 0110 in binary, what is the correct result?",
+      "show": "1011 + 0110 = ?",
+      "options": [
+        {
+          "show": "10001",
+          "say": "10001"
+        },
+        {
+          "show": "1001",
+          "say": "1001"
+        },
+        {
+          "show": "1101",
+          "say": "1101"
+        },
+        {
+          "show": "1000",
+          "say": "1000"
+        }
+      ],
+      "answer": 0,
+      "why": "Adding column by column: 1 plus 0 is 1. 1 plus 1 is 10 (write 0, carry 1). 0 plus 1 plus the carry 1 is 10 (write 0, carry 1). 1 plus 0 plus the carry 1 is 10 (write 0, carry 1). The final carry makes the result 10001.",
+      "wrong": {
+        "1": "This mistake occurs if you forget to carry the extra '1' from the second column addition.",
+        "2": "This happens if you simply add the digits without considering the place value or carrying.",
+        "3": "This suggests you stopped carrying over when you reached the last column."
+      }
+    },
+    {
+      "say": "When adding two signed numbers, what indicates an overflow error?",
+      "show": "Overflow: Sign bit changes unexpectedly",
+      "options": [
+        {
+          "show": "The result is larger than the maximum decimal value.",
+          "say": "The result is larger than the maximum decimal value."
+        },
+        {
+          "show": "The carry bit is 1 in the most significant bit position.",
+          "say": "The carry bit is 1 in the most significant bit position."
+        },
+        {
+          "show": "The sum equals zero.",
+          "say": "The sum equals zero."
+        },
+        {
+          "show": "The sign bit changes unexpectedly after addition.",
+          "say": "The sign bit changes unexpectedly after addition."
+        }
+      ],
+      "answer": 3,
+      "why": "If you add two positive numbers and the result's sign bit becomes 1, or add two negative numbers and the sign bit becomes 0, you have overflowed the available bits.",
+      "wrong": {
+        "0": "While true, this is a symptom. The specific indicator in binary arithmetic is the sign bit change.",
+        "1": "A carry bit of 1 is expected in some valid additions and does not always signal overflow.",
+        "2": "A sum of zero is a valid result and does not indicate an error."
+      }
+    }
+  ]
+}

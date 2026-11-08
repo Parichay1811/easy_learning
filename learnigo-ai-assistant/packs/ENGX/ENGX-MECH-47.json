@@ -1,0 +1,639 @@
+{
+  "id": "ENGX-MECH-47",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a mechanical pencil pushes out the lead",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "mechanical pencil",
+    "clutch",
+    "pencil lead",
+    "push button",
+    "propelling pencil"
+  ],
+  "examples": [
+    "How does clicking a mechanical pencil push the lead out?",
+    "Why does the lead not slide back in?",
+    "What is inside a mechanical pencil?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "button",
+          "kind": "piston",
+          "x": 0.08,
+          "y": 0.5,
+          "size": 0.7,
+          "label": "Push button",
+          "motion": "slide"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.27,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Return spring",
+          "motion": "pulse",
+          "ask": "What does the spring in a mechanical pencil do?"
+        },
+        {
+          "id": "clutch",
+          "kind": "box",
+          "x": 0.48,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Clutch jaws",
+          "motion": "slide",
+          "ask": "What are the clutch jaws?"
+        },
+        {
+          "id": "ring",
+          "kind": "wheel",
+          "x": 0.48,
+          "y": 0.18,
+          "size": 0.6,
+          "label": "Clutch ring",
+          "motion": "none",
+          "ask": "What does the clutch ring do?"
+        },
+        {
+          "id": "lead",
+          "kind": "piston",
+          "x": 0.7,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Lead",
+          "motion": "slide"
+        },
+        {
+          "id": "tip",
+          "kind": "box",
+          "x": 0.92,
+          "y": 0.5,
+          "size": 0.6,
+          "label": "Tip grip",
+          "motion": "none",
+          "ask": "Why does the lead not slide back in?"
+        }
+      ],
+      "links": [
+        {
+          "from": "button",
+          "to": "spring",
+          "kind": "force",
+          "label": "squashes"
+        },
+        {
+          "from": "button",
+          "to": "clutch",
+          "kind": "force",
+          "label": "pushes forward"
+        },
+        {
+          "from": "ring",
+          "to": "clutch",
+          "kind": "force",
+          "label": "squeezes jaws"
+        },
+        {
+          "from": "clutch",
+          "to": "lead",
+          "kind": "force",
+          "label": "grips and moves"
+        },
+        {
+          "from": "tip",
+          "to": "lead",
+          "kind": "force",
+          "label": "holds by friction"
+        },
+        {
+          "from": "spring",
+          "to": "clutch",
+          "kind": "force",
+          "label": "pulls back"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A mechanical pencil moves its lead forward a tiny step with each click. The key part is the clutch: a set of little jaws that grip the lead.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a mechanical pencil pushes out the lead"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "button",
+              "kind": "piston",
+              "x": 0.08,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Push button",
+              "motion": "slide"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.27,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Return spring",
+              "motion": "pulse",
+              "ask": "What does the spring in a mechanical pencil do?"
+            },
+            {
+              "id": "clutch",
+              "kind": "box",
+              "x": 0.48,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Clutch jaws",
+              "motion": "slide",
+              "ask": "What are the clutch jaws?"
+            },
+            {
+              "id": "ring",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Clutch ring",
+              "motion": "none",
+              "ask": "What does the clutch ring do?"
+            },
+            {
+              "id": "lead",
+              "kind": "piston",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Lead",
+              "motion": "slide"
+            },
+            {
+              "id": "tip",
+              "kind": "box",
+              "x": 0.92,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Tip grip",
+              "motion": "none",
+              "ask": "Why does the lead not slide back in?"
+            }
+          ],
+          "links": [
+            {
+              "from": "button",
+              "to": "spring",
+              "kind": "force",
+              "label": "squashes"
+            },
+            {
+              "from": "button",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pushes forward"
+            },
+            {
+              "from": "ring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "squeezes jaws"
+            },
+            {
+              "from": "clutch",
+              "to": "lead",
+              "kind": "force",
+              "label": "grips and moves"
+            },
+            {
+              "from": "tip",
+              "to": "lead",
+              "kind": "force",
+              "label": "holds by friction"
+            },
+            {
+              "from": "spring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "A metal ring squeezes the jaws shut on the lead. When you press the button, the clutch and lead move forward together until the ring hits a stop and the jaws spring open, letting go of the lead.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "button",
+              "kind": "piston",
+              "x": 0.08,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Push button",
+              "motion": "slide"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.27,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Return spring",
+              "motion": "pulse",
+              "ask": "What does the spring in a mechanical pencil do?"
+            },
+            {
+              "id": "clutch",
+              "kind": "box",
+              "x": 0.48,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Clutch jaws",
+              "motion": "slide",
+              "ask": "What are the clutch jaws?"
+            },
+            {
+              "id": "ring",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Clutch ring",
+              "motion": "none",
+              "ask": "What does the clutch ring do?"
+            },
+            {
+              "id": "lead",
+              "kind": "piston",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Lead",
+              "motion": "slide"
+            },
+            {
+              "id": "tip",
+              "kind": "box",
+              "x": 0.92,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Tip grip",
+              "motion": "none",
+              "ask": "Why does the lead not slide back in?"
+            }
+          ],
+          "links": [
+            {
+              "from": "button",
+              "to": "spring",
+              "kind": "force",
+              "label": "squashes"
+            },
+            {
+              "from": "button",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pushes forward"
+            },
+            {
+              "from": "ring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "squeezes jaws"
+            },
+            {
+              "from": "clutch",
+              "to": "lead",
+              "kind": "force",
+              "label": "grips and moves"
+            },
+            {
+              "from": "tip",
+              "to": "lead",
+              "kind": "force",
+              "label": "holds by friction"
+            },
+            {
+              "from": "spring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "A rubber grip in the tip holds the lead by friction, so when you let go and the spring pulls the clutch back, the lead stays where it is.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "button",
+              "kind": "piston",
+              "x": 0.08,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Push button",
+              "motion": "slide"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.27,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Return spring",
+              "motion": "pulse",
+              "ask": "What does the spring in a mechanical pencil do?"
+            },
+            {
+              "id": "clutch",
+              "kind": "box",
+              "x": 0.48,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Clutch jaws",
+              "motion": "slide",
+              "ask": "What are the clutch jaws?"
+            },
+            {
+              "id": "ring",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Clutch ring",
+              "motion": "none",
+              "ask": "What does the clutch ring do?"
+            },
+            {
+              "id": "lead",
+              "kind": "piston",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Lead",
+              "motion": "slide"
+            },
+            {
+              "id": "tip",
+              "kind": "box",
+              "x": 0.92,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Tip grip",
+              "motion": "none",
+              "ask": "Why does the lead not slide back in?"
+            }
+          ],
+          "links": [
+            {
+              "from": "button",
+              "to": "spring",
+              "kind": "force",
+              "label": "squashes"
+            },
+            {
+              "from": "button",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pushes forward"
+            },
+            {
+              "from": "ring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "squeezes jaws"
+            },
+            {
+              "from": "clutch",
+              "to": "lead",
+              "kind": "force",
+              "label": "grips and moves"
+            },
+            {
+              "from": "tip",
+              "to": "lead",
+              "kind": "force",
+              "label": "holds by friction"
+            },
+            {
+              "from": "spring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "As the clutch slides back, the ring closes the jaws on the lead again, a little further up. Each click moves the lead on by less than a millimetre.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "button",
+              "kind": "piston",
+              "x": 0.08,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Push button",
+              "motion": "slide"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.27,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Return spring",
+              "motion": "pulse",
+              "ask": "What does the spring in a mechanical pencil do?"
+            },
+            {
+              "id": "clutch",
+              "kind": "box",
+              "x": 0.48,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Clutch jaws",
+              "motion": "slide",
+              "ask": "What are the clutch jaws?"
+            },
+            {
+              "id": "ring",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Clutch ring",
+              "motion": "none",
+              "ask": "What does the clutch ring do?"
+            },
+            {
+              "id": "lead",
+              "kind": "piston",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Lead",
+              "motion": "slide"
+            },
+            {
+              "id": "tip",
+              "kind": "box",
+              "x": 0.92,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Tip grip",
+              "motion": "none",
+              "ask": "Why does the lead not slide back in?"
+            }
+          ],
+          "links": [
+            {
+              "from": "button",
+              "to": "spring",
+              "kind": "force",
+              "label": "squashes"
+            },
+            {
+              "from": "button",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pushes forward"
+            },
+            {
+              "from": "ring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "squeezes jaws"
+            },
+            {
+              "from": "clutch",
+              "to": "lead",
+              "kind": "force",
+              "label": "grips and moves"
+            },
+            {
+              "from": "tip",
+              "to": "lead",
+              "kind": "force",
+              "label": "holds by friction"
+            },
+            {
+              "from": "spring",
+              "to": "clutch",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What are the clutch jaws?",
+      "a": "The clutch is a small split tube whose jaws grip the lead. They move forward with each click, carrying the lead with them.",
+      "asks": [
+        "What grips the lead in a mechanical pencil?"
+      ]
+    },
+    {
+      "q": "What does the clutch ring do?",
+      "a": "The ring slides over the jaws and squeezes them shut on the lead. When the clutch moves forward far enough, the ring is held back and the jaws open.",
+      "asks": [
+        "How do the jaws open and close?"
+      ]
+    },
+    {
+      "q": "Why does the lead not slide back in?",
+      "a": "A small rubber grip in the tip holds the lead by friction. It is just strong enough to keep the lead still while the clutch slides back for the next click.",
+      "asks": [
+        "What holds the lead in place?"
+      ]
+    },
+    {
+      "q": "What does the spring in a mechanical pencil do?",
+      "a": "The spring is squashed when you click and pushes the clutch and button back afterwards, ready for the next click.",
+      "asks": [
+        "Why does the button spring back?"
+      ]
+    },
+    {
+      "q": "Why does the lead break?",
+      "a": "Pencil lead is a thin rod of graphite and clay, which is brittle. Too much lead sticking out or pressing hard snaps it.",
+      "asks": [
+        "How do I stop the lead snapping?"
+      ]
+    }
+  ],
+  "facts": [
+    "Common mechanical pencil leads are 0.5 or 0.7 millimetres thick.",
+    "Pencil lead contains no lead metal; it is graphite mixed with clay or polymer."
+  ],
+  "quiz": [
+    {
+      "say": "When you release the button, why does the lead not go back in with the clutch?",
+      "show": "When you release the button, why does the lead not go back in with the clutch?",
+      "options": [
+        {
+          "show": "The tip grip holds it by friction",
+          "say": "The tip grip holds it by friction"
+        },
+        {
+          "show": "Gravity holds it",
+          "say": "Gravity holds it"
+        },
+        {
+          "show": "Glue holds it",
+          "say": "Glue holds it"
+        }
+      ],
+      "answer": 0,
+      "why": "A rubber grip in the tip holds the lead while the clutch slides back.",
+      "wrong": {
+        "1": "The pencil works pointing any way, so gravity is not the answer.",
+        "2": "There is no glue; the lead must move freely."
+      }
+    }
+  ]
+}

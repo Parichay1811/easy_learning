@@ -1,0 +1,272 @@
+{
+  "id": "ENGX-COMP-23",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How video compression shrinks films",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "video compression",
+    "codec",
+    "keyframe",
+    "motion vectors",
+    "lossy compression",
+    "streaming bitrate"
+  ],
+  "examples": [
+    "How is video compressed for streaming?",
+    "Why does video go blocky?",
+    "What is a codec?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-sizes",
+      "unit": "megabits per second",
+      "items": [
+        {
+          "label": "Raw HD video",
+          "size": 1500,
+          "icon": "camera"
+        },
+        {
+          "label": "Blu-ray film",
+          "size": 30,
+          "icon": "computer"
+        },
+        {
+          "label": "HD streaming",
+          "size": 5,
+          "icon": "phone"
+        },
+        {
+          "label": "Video call",
+          "size": 1.5,
+          "icon": "person"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A film is a stream of still pictures, often 30 every second. Stored raw, one second of full HD video is about 1,500 megabits, far too much to stream over a home internet connection.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How video compression shrinks films"
+        },
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "megabits per second",
+          "items": [
+            {
+              "label": "Raw HD video",
+              "size": 1500,
+              "icon": "camera"
+            },
+            {
+              "label": "Blu-ray film",
+              "size": 30,
+              "icon": "computer"
+            },
+            {
+              "label": "HD streaming",
+              "size": 5,
+              "icon": "phone"
+            },
+            {
+              "label": "Video call",
+              "size": 1.5,
+              "icon": "person"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Compression shrinks it hundreds of times, so HD streaming needs only about 5 megabits a second. It works because most of each frame is almost the same as the one before.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "megabits per second",
+          "items": [
+            {
+              "label": "Raw HD video",
+              "size": 1500,
+              "icon": "camera"
+            },
+            {
+              "label": "Blu-ray film",
+              "size": 30,
+              "icon": "computer"
+            },
+            {
+              "label": "HD streaming",
+              "size": 5,
+              "icon": "phone"
+            },
+            {
+              "label": "Video call",
+              "size": 1.5,
+              "icon": "person"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The video starts with one complete keyframe. For the next frames, the encoder splits the picture into blocks and records which way each block moved, called motion vectors, plus any small changes left over.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Keyframe",
+              "icon": "camera",
+              "note": "One complete picture every second or two.",
+              "ask": "What is a keyframe?"
+            },
+            {
+              "label": "Motion vectors",
+              "icon": "arrow",
+              "note": "Later frames say which blocks moved where.",
+              "ask": "What are motion vectors?"
+            },
+            {
+              "label": "Small changes",
+              "icon": "gear",
+              "note": "Only the leftover differences are stored."
+            },
+            {
+              "label": "Drop fine detail",
+              "icon": "eye",
+              "note": "Detail your eye barely notices is thrown away.",
+              "ask": "What is lossy compression?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Encoders also throw away fine detail and subtle colour that our eyes barely notice. This is lossy compression, and it is why fast action or confetti can look blocky when the internet is slow.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Keyframe",
+              "icon": "camera",
+              "note": "One complete picture every second or two.",
+              "ask": "What is a keyframe?"
+            },
+            {
+              "label": "Motion vectors",
+              "icon": "arrow",
+              "note": "Later frames say which blocks moved where.",
+              "ask": "What are motion vectors?"
+            },
+            {
+              "label": "Small changes",
+              "icon": "gear",
+              "note": "Only the leftover differences are stored."
+            },
+            {
+              "label": "Drop fine detail",
+              "icon": "eye",
+              "note": "Detail your eye barely notices is thrown away.",
+              "ask": "What is lossy compression?"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a keyframe?",
+      "a": "A keyframe is a complete picture stored in full, usually every second or two. The frames in between only store changes from it, and keyframes let you skip ahead in a video without starting from the beginning.",
+      "asks": [
+        "Why does skipping in a video take a moment?"
+      ]
+    },
+    {
+      "q": "What are motion vectors?",
+      "a": "Motion vectors are little arrows saying a block of the picture moved from here to there since the last frame. Sending an arrow is far cheaper than sending the pixels all over again.",
+      "asks": [
+        "How does video compression handle moving things?"
+      ]
+    },
+    {
+      "q": "What is lossy compression?",
+      "a": "Lossy compression throws away information people are unlikely to notice, such as tiny details and slight colour differences. The file becomes much smaller, but the lost detail cannot be got back.",
+      "asks": [
+        "What is the difference between lossy and lossless?"
+      ]
+    },
+    {
+      "q": "Why does video go blocky?",
+      "a": "When the internet slows, the stream drops to a lower data rate, so the encoder must throw away more detail. Fast-changing scenes like confetti or water need the most data, so they break into visible blocks first.",
+      "asks": [
+        "Why does my stream look pixelated?"
+      ]
+    },
+    {
+      "q": "What is a codec?",
+      "a": "A codec is the method, and the software or chip, that encodes and decodes video. Common ones are H.264, HEVC and AV1; newer codecs give the same quality using less data.",
+      "asks": [
+        "What is H.264?"
+      ]
+    }
+  ],
+  "facts": [
+    "Uncompressed 1080p video at 30 frames per second with 24-bit colour needs about 1.5 gigabits per second.",
+    "The HEVC (H.265) codec typically needs about half the data of H.264 for similar picture quality."
+  ],
+  "quiz": [
+    {
+      "say": "Why can video be squeezed so much more than single photos?",
+      "show": "Video compresses well because…",
+      "options": [
+        {
+          "show": "Neighbouring frames are mostly the same",
+          "say": "Neighbouring frames are mostly the same"
+        },
+        {
+          "show": "Videos have fewer pixels than photos",
+          "say": "Videos have fewer pixels than photos"
+        },
+        {
+          "show": "Sound takes up most of the space",
+          "say": "Sound takes up most of the space"
+        }
+      ],
+      "answer": 0,
+      "why": "Most of each frame repeats the last one, so the encoder only needs to send what moved or changed.",
+      "wrong": {
+        "1": "HD video frames have as many pixels as a typical photo or more.",
+        "2": "Sound is a small part of a video file."
+      }
+    }
+  ]
+}

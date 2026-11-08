@@ -1,0 +1,505 @@
+{
+  "id": "BCE-SURV-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Traversing: closing error and the Bowditch adjustment",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-SURV — Surveying and geomatics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "closed traverse",
+    "latitudes and departures",
+    "closing error",
+    "Bowditch rule",
+    "interior angle check",
+    "relative precision"
+  ],
+  "examples": [
+    "How do you calculate the closing error of a traverse?",
+    "What is the Bowditch rule?",
+    "What is the sum of interior angles of a closed traverse?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "equal": true,
+      "x": {
+        "label": "Easting (m)",
+        "min": -30,
+        "max": 170
+      },
+      "y": {
+        "label": "Northing (m)",
+        "min": -20,
+        "max": 200
+      },
+      "curves": [
+        {
+          "label": "Traverse A-B-C-D",
+          "type": "points",
+          "closed": true,
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              150,
+              40
+            ],
+            [
+              120,
+              180
+            ],
+            [
+              -10,
+              150
+            ]
+          ],
+          "ask": "What is a traverse in surveying?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0,
+          "label": "A: start and end",
+          "ask": "How do you calculate the closing error of a traverse?"
+        },
+        {
+          "x": 150,
+          "label": "B"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Before a new road or housing estate is built, surveyors walk a loop around the site, measuring each angle and each side, like drawing a shape with a protractor and tape. This loop is a traverse. A closed traverse ends where it began, so it carries its own check. On the board, a four-sided traverse, A, B, C, D.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Traversing: closing error and the Bowditch adjustment"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": -30,
+            "max": 170
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": -20,
+            "max": 200
+          },
+          "curves": [
+            {
+              "label": "Traverse A-B-C-D",
+              "type": "points",
+              "closed": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  150,
+                  40
+                ],
+                [
+                  120,
+                  180
+                ],
+                [
+                  -10,
+                  150
+                ]
+              ],
+              "ask": "What is a traverse in surveying?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "A: start and end",
+              "ask": "How do you calculate the closing error of a traverse?"
+            },
+            {
+              "x": 150,
+              "label": "B"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is the instrument you traverse with, in 3D: a total station. At each station you level it, sight back and forward, and read an angle and a distance. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Traversing: closing error and the Bowditch adjustment"
+        },
+        {
+          "op": "image",
+          "render": "total-station"
+        }
+      ]
+    },
+    {
+      "say": "Check one: the angles. The inside angles of any closed shape add to n minus two times one hundred and eighty degrees, three hundred and sixty for four sides. Suppose your four measured angles add to three hundred and sixty degrees and forty seconds. Take ten seconds off each angle to share out the error. How much would you take off each if there were five sides?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": -30,
+            "max": 170
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": -20,
+            "max": 200
+          },
+          "curves": [
+            {
+              "label": "Traverse A-B-C-D",
+              "type": "points",
+              "closed": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  150,
+                  40
+                ],
+                [
+                  120,
+                  180
+                ],
+                [
+                  -10,
+                  150
+                ]
+              ],
+              "ask": "What is a traverse in surveying?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "A: start and end",
+              "ask": "How do you calculate the closing error of a traverse?"
+            },
+            {
+              "x": 150,
+              "label": "B"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Σ interior = (n − 2) × 180° = 360°; error 40″ → −10″ each"
+        }
+      ]
+    },
+    {
+      "say": "Eight seconds each! Now each side becomes an east step, the departure, and a north step, the latitude. Side A to B is a hundred and fifty five point two four metres on a bearing of seventy five point one degrees: a hundred and fifty metres east and forty north. Work out every side the same way.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": -30,
+            "max": 170
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": -20,
+            "max": 200
+          },
+          "curves": [
+            {
+              "label": "Traverse A-B-C-D",
+              "type": "points",
+              "closed": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  150,
+                  40
+                ],
+                [
+                  120,
+                  180
+                ],
+                [
+                  -10,
+                  150
+                ]
+              ],
+              "ask": "What is a traverse in surveying?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "A: start and end",
+              "ask": "How do you calculate the closing error of a traverse?"
+            },
+            {
+              "x": 150,
+              "label": "B"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ΔE = L sin θ = 150.0; ΔN = L cos θ = 40.0"
+        }
+      ]
+    },
+    {
+      "say": "Add all the steps. A perfect loop sums to zero, but real ones never quite do. Here the east steps add to plus six centimetres and the north steps to minus eight. The gap, the closing error, is ten centimetres. Over a perimeter of five hundred and eighty two metres that is about one in five thousand eight hundred. Good enough for a building site?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": -30,
+            "max": 170
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": -20,
+            "max": 200
+          },
+          "curves": [
+            {
+              "label": "Traverse A-B-C-D",
+              "type": "points",
+              "closed": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  150,
+                  40
+                ],
+                [
+                  120,
+                  180
+                ],
+                [
+                  -10,
+                  150
+                ]
+              ],
+              "ask": "What is a traverse in surveying?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "A: start and end",
+              "ask": "How do you calculate the closing error of a traverse?"
+            },
+            {
+              "x": 150,
+              "label": "B"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "e = √(0.06² + 0.08²) = 0.10 m → 1 in 5,822"
+        }
+      ]
+    },
+    {
+      "say": "Yes, for most sites! Now share out the error with the Bowditch rule: each side is corrected in proportion to its length. Side A to B gets about minus one point six centimetres east and plus two point one north. Then the loop closes perfectly. Excellent! Challenge: with a closing error of five centimetres instead, what would the precision be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": -30,
+            "max": 170
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": -20,
+            "max": 200
+          },
+          "curves": [
+            {
+              "label": "Traverse A-B-C-D",
+              "type": "points",
+              "closed": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  150,
+                  40
+                ],
+                [
+                  120,
+                  180
+                ],
+                [
+                  -10,
+                  150
+                ]
+              ],
+              "ask": "What is a traverse in surveying?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "A: start and end",
+              "ask": "How do you calculate the closing error of a traverse?"
+            },
+            {
+              "x": 150,
+              "label": "B"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "c = −e × L / ΣL = −0.06 × 155.24 / 582.17 ≈ −0.016 m"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a traverse in surveying?",
+      "a": "A series of connected survey lines whose lengths and angles are measured. A closed traverse returns to its start or ends on a known point, so its errors can be checked and adjusted.",
+      "asks": [
+        "Closed vs open traverse"
+      ]
+    },
+    {
+      "q": "What is the interior angle check for a closed traverse?",
+      "a": "The interior angles of a closed traverse with n sides must add to (n − 2) × 180 degrees. Any difference is the angular misclosure, shared equally among the angles if small.",
+      "asks": [
+        "Sum of interior angles of a traverse"
+      ]
+    },
+    {
+      "q": "What are latitudes and departures?",
+      "a": "The north-south and east-west components of each traverse leg: latitude is length times cos bearing, departure is length times sin bearing.",
+      "asks": [
+        "Latitude and departure formula"
+      ]
+    },
+    {
+      "q": "How do you calculate the closing error of a traverse?",
+      "a": "Add all departures and all latitudes. The closing error is the square root of the sum of their squares, and dividing the perimeter by it gives the relative precision, such as 1 in 5,800.",
+      "asks": [
+        "Linear misclosure",
+        "Relative precision"
+      ]
+    },
+    {
+      "q": "What is the Bowditch rule?",
+      "a": "Also called the compass rule: the misclosure in eastings and northings is distributed to each leg in proportion to its length divided by the total perimeter.",
+      "asks": [
+        "Compass rule",
+        "Traverse adjustment"
+      ]
+    }
+  ],
+  "facts": [
+    "The Bowditch, or compass, rule is named after the American navigator and mathematician Nathaniel Bowditch.",
+    "The interior angles of a closed traverse with n sides add up to (n − 2) × 180°."
+  ],
+  "quiz": [
+    {
+      "say": "A traverse misses closing by 0.03 metres in easting and 0.04 in northing. The perimeter is 1,000 metres. What is the relative precision?",
+      "show": "Misclosures ΔE = 0.03 m and ΔN = 0.04 m; perimeter 1,000 m. Relative precision?",
+      "options": [
+        {
+          "show": "1 in 20,000",
+          "say": "1 in 20,000"
+        },
+        {
+          "show": "1 in 14,286",
+          "say": "1 in 14,286"
+        },
+        {
+          "show": "1 in 33,333",
+          "say": "1 in 33,333"
+        }
+      ],
+      "answer": 0,
+      "why": "e = √(0.03² + 0.04²) = 0.05 m; 1,000 / 0.05 = 20,000.",
+      "wrong": {
+        "1": "That adds 0.03 and 0.04 instead of using Pythagoras.",
+        "2": "That uses only the easting error."
+      }
+    },
+    {
+      "say": "The interior angles of a closed 5-sided traverse should add to…",
+      "show": "The interior angles of a closed 5-sided traverse should add to…",
+      "options": [
+        {
+          "show": "540°",
+          "say": "540°"
+        },
+        {
+          "show": "360°",
+          "say": "360°"
+        },
+        {
+          "show": "900°",
+          "say": "900°"
+        }
+      ],
+      "answer": 0,
+      "why": "(5 − 2) × 180° = 540°.",
+      "wrong": {
+        "1": "That is for four sides.",
+        "2": "That is for seven sides."
+      }
+    }
+  ]
+}

@@ -1,0 +1,263 @@
+{
+  "id": "CS-03",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Linear & binary search",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "search algorithm",
+    "linear search",
+    "binary search",
+    "sorted data",
+    "efficiency"
+  ],
+  "examples": [
+    "When should I use binary search instead of linear search?",
+    "What must I do with the list before I can use binary search?",
+    "Can binary search work if the list is not sorted?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning about two ways to find things in a list.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Linear & binary search"
+        },
+        {
+          "op": "text",
+          "text": "Linear vs Binary Search"
+        }
+      ]
+    },
+    {
+      "say": "Linear search checks every item one by one in order.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start at first item",
+            "Check if it is the target",
+            "If no, move to next item",
+            "Repeat until found or end"
+          ],
+          "at": "item"
+        },
+        {
+          "op": "text",
+          "text": "Linear: Check each item",
+          "at": "linear"
+        }
+      ]
+    },
+    {
+      "say": "Binary search only works if the list is already sorted first.",
+      "draw": [
+        {
+          "op": "timeline",
+          "items": [
+            "Step 1: Check if sorted",
+            "Step 2: Find middle item",
+            "Step 3: Compare and narrow search"
+          ],
+          "at": "sorted"
+        },
+        {
+          "op": "text",
+          "text": "Binary: Must be sorted first",
+          "at": "binary"
+        }
+      ]
+    },
+    {
+      "say": "The first step of binary search is finding the middle element.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Find the middle element",
+          "at": "middle"
+        }
+      ]
+    },
+    {
+      "say": "Next, we compare the target value to the middle element found.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Compare target to middle",
+          "at": "compare"
+        }
+      ]
+    },
+    {
+      "say": "If the target is not the middle, we cut the list in half.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start with full list",
+            "Discard one half",
+            "Repeat on remaining half"
+          ],
+          "at": "list"
+        },
+        {
+          "op": "text",
+          "text": "Cut list in half",
+          "at": "list"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Do I have to sort the list before I can use binary search?",
+      "a": "Yes, the list absolutely must be sorted in ascending order for binary search to work correctly. If it is not sorted, the algorithm will likely fail to find the correct item.",
+      "asks": [
+        "Does the order matter for binary search?",
+        "Can I skip the sorting step?"
+      ]
+    },
+    {
+      "q": "How many steps does binary search take compared to linear search?",
+      "a": "Binary search is much faster for large lists because it eliminates half the data in every step. Linear search checks every single item one after the other.",
+      "asks": [
+        "Which search is faster?",
+        "What is the time complexity difference?"
+      ]
+    },
+    {
+      "q": "What if the item I am looking for is not in the list?",
+      "a": "Both searches will eventually tell you that the item was not found. In binary search, the process will end when the search space becomes empty.",
+      "asks": [
+        "How do I know if it's missing?",
+        "What is the failure condition?"
+      ]
+    },
+    {
+      "q": "Can I use binary search on things that are not numbers?",
+      "a": "Yes, as long as the items can be put into a definite order, like alphabetical order for words. The concept of 'sorted' applies to many data types.",
+      "asks": [
+        "Does it work with names?",
+        "Does it need numbers only?"
+      ]
+    },
+    {
+      "q": "Is there a specific formula for finding the middle point?",
+      "a": "The middle index is usually found by adding the start and end indices and dividing by two. This keeps the search balanced.",
+      "asks": [
+        "How do I calculate the middle?",
+        "What is the formula for the midpoint?"
+      ]
+    }
+  ],
+  "facts": [
+    "Linear search checks elements sequentially, one after the other.",
+    "Binary search requires the data set to be sorted first.",
+    "Binary search repeatedly divides the search interval in half.",
+    "For a list of size N, linear search takes up to N steps."
+  ],
+  "quiz": [
+    {
+      "say": "A list is: [10, 20, 30, 40, 50]. We search for 20.",
+      "show": "Start: [10, 20, 30, 40, 50]",
+      "options": [
+        {
+          "show": "Check 50 first, then 40.",
+          "say": "Check 50 first, then 40."
+        },
+        {
+          "show": "Check 30, then immediately stop.",
+          "say": "Check 30, then immediately stop."
+        },
+        {
+          "show": "The search checks the middle element (30) first.",
+          "say": "The search checks the middle element (30) first."
+        },
+        {
+          "show": "Check 10 first, then 20.",
+          "say": "Check 10 first, then 20."
+        }
+      ],
+      "answer": 2,
+      "why": "The middle element, 30, is checked first because the list is sorted, which is the core idea of binary search.",
+      "wrong": {
+        "0": "This is guessing; binary search uses the sorted order to eliminate half the list.",
+        "1": "The target might be 20, which is not 30, so you must continue comparing.",
+        "3": "This is linear search, which ignores the efficiency of binary search."
+      }
+    },
+    {
+      "say": "If a list is [5, 15, 25, 35, 45] and we search for 15.",
+      "show": "Target: 15. Middle: 25.",
+      "options": [
+        {
+          "show": "Since 15 is less than 25, the search continues in the left half [5, 15].",
+          "say": "Since 15 is less than 25, the search continues in the left half [5, 15]."
+        },
+        {
+          "show": "Check 35 next.",
+          "say": "Check 35 next."
+        },
+        {
+          "show": "Start over at the beginning.",
+          "say": "Start over at the beginning."
+        },
+        {
+          "show": "Assume 15 is not there.",
+          "say": "Assume 15 is not there."
+        }
+      ],
+      "answer": 0,
+      "why": "Because 15 is smaller than the middle element 25, we know the target must be in the left portion of the list.",
+      "wrong": {
+        "1": "We should not jump to the next element; we must use the comparison to narrow the search area.",
+        "2": "Binary search's strength is that it never needs to restart from the beginning.",
+        "3": "We must always check if the target matches the current middle element before discarding half the list."
+      }
+    },
+    {
+      "say": "What is the most important precondition for binary search?",
+      "show": "Precondition: Sorted Order",
+      "options": [
+        {
+          "show": "The data set must be sorted in ascending or descending order.",
+          "say": "The data set must be sorted in ascending or descending order."
+        },
+        {
+          "show": "The list must have an even number of items.",
+          "say": "The list must have an even number of items."
+        },
+        {
+          "show": "The list must contain only numbers.",
+          "say": "The list must contain only numbers."
+        },
+        {
+          "show": "The search must start from the first item.",
+          "say": "The search must start from the first item."
+        }
+      ],
+      "answer": 0,
+      "why": "Sorting allows the algorithm to confidently discard half the remaining data in each step.",
+      "wrong": {
+        "1": "The list can have any number of items, even or odd.",
+        "2": "It can work with words or other ordered data types.",
+        "3": "While it starts conceptually, the first action is finding the middle, not checking the first item."
+      }
+    }
+  ]
+}

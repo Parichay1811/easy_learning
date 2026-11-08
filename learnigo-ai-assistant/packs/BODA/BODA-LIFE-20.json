@@ -1,0 +1,577 @@
+{
+  "id": "BODA-LIFE-20",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How do animals keep warm in freezing winters?",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "keeping warm",
+    "blubber",
+    "fur insulation",
+    "countercurrent heat exchange",
+    "shivering"
+  ],
+  "examples": [
+    "Why don't penguins' feet freeze?",
+    "How does fur keep animals warm?",
+    "How do animals make extra heat?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "core",
+          "kind": "tank",
+          "x": 0.2,
+          "y": 0.28,
+          "size": 1.3,
+          "label": "Warm body core"
+        },
+        {
+          "id": "artery",
+          "kind": "pipe",
+          "x": 0.55,
+          "y": 0.22,
+          "size": 1,
+          "label": "Warm blood out"
+        },
+        {
+          "id": "vein",
+          "kind": "pipe",
+          "x": 0.55,
+          "y": 0.6,
+          "size": 1,
+          "label": "Cool blood back"
+        },
+        {
+          "id": "foot",
+          "kind": "box",
+          "x": 0.88,
+          "y": 0.42,
+          "size": 0.9,
+          "label": "Cold foot",
+          "ask": "Why don't penguins' feet freeze?"
+        },
+        {
+          "id": "fat",
+          "kind": "box",
+          "x": 0.15,
+          "y": 0.75,
+          "size": 1,
+          "label": "Fur and blubber",
+          "ask": "How does fur keep animals warm?"
+        },
+        {
+          "id": "shiver",
+          "kind": "motor",
+          "x": 0.5,
+          "y": 0.9,
+          "size": 0.8,
+          "label": "Shivering muscles",
+          "ask": "How do animals make extra heat?"
+        }
+      ],
+      "links": [
+        {
+          "from": "core",
+          "to": "artery",
+          "kind": "fluid",
+          "label": "warm"
+        },
+        {
+          "from": "artery",
+          "to": "foot",
+          "kind": "fluid"
+        },
+        {
+          "from": "foot",
+          "to": "vein",
+          "kind": "fluid"
+        },
+        {
+          "from": "vein",
+          "to": "core",
+          "kind": "fluid",
+          "label": "rewarmed"
+        },
+        {
+          "from": "artery",
+          "to": "vein",
+          "kind": "heat",
+          "label": "heat swaps over"
+        },
+        {
+          "from": "shiver",
+          "to": "core",
+          "kind": "heat",
+          "label": "extra heat"
+        },
+        {
+          "from": "fat",
+          "to": "core",
+          "kind": "heat",
+          "label": "holds heat in"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Animals that stay active in winter, like penguins, arctic foxes and musk oxen, have two jobs: keep their heat in, and make extra heat when they need it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How do animals keep warm in freezing winters?"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "core",
+              "kind": "tank",
+              "x": 0.2,
+              "y": 0.28,
+              "size": 1.3,
+              "label": "Warm body core"
+            },
+            {
+              "id": "artery",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.22,
+              "size": 1,
+              "label": "Warm blood out"
+            },
+            {
+              "id": "vein",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 1,
+              "label": "Cool blood back"
+            },
+            {
+              "id": "foot",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.42,
+              "size": 0.9,
+              "label": "Cold foot",
+              "ask": "Why don't penguins' feet freeze?"
+            },
+            {
+              "id": "fat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.75,
+              "size": 1,
+              "label": "Fur and blubber",
+              "ask": "How does fur keep animals warm?"
+            },
+            {
+              "id": "shiver",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Shivering muscles",
+              "ask": "How do animals make extra heat?"
+            }
+          ],
+          "links": [
+            {
+              "from": "core",
+              "to": "artery",
+              "kind": "fluid",
+              "label": "warm"
+            },
+            {
+              "from": "artery",
+              "to": "foot",
+              "kind": "fluid"
+            },
+            {
+              "from": "foot",
+              "to": "vein",
+              "kind": "fluid"
+            },
+            {
+              "from": "vein",
+              "to": "core",
+              "kind": "fluid",
+              "label": "rewarmed"
+            },
+            {
+              "from": "artery",
+              "to": "vein",
+              "kind": "heat",
+              "label": "heat swaps over"
+            },
+            {
+              "from": "shiver",
+              "to": "core",
+              "kind": "heat",
+              "label": "extra heat"
+            },
+            {
+              "from": "fat",
+              "to": "core",
+              "kind": "heat",
+              "label": "holds heat in"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Thick fur and feathers trap still air, a great insulator, and seals and whales add a thick layer of fatty blubber. An arctic fox's winter coat is so good that it does not need to make extra heat until the air drops to around minus 40 degrees.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "core",
+              "kind": "tank",
+              "x": 0.2,
+              "y": 0.28,
+              "size": 1.3,
+              "label": "Warm body core"
+            },
+            {
+              "id": "artery",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.22,
+              "size": 1,
+              "label": "Warm blood out"
+            },
+            {
+              "id": "vein",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 1,
+              "label": "Cool blood back"
+            },
+            {
+              "id": "foot",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.42,
+              "size": 0.9,
+              "label": "Cold foot",
+              "ask": "Why don't penguins' feet freeze?"
+            },
+            {
+              "id": "fat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.75,
+              "size": 1,
+              "label": "Fur and blubber",
+              "ask": "How does fur keep animals warm?"
+            },
+            {
+              "id": "shiver",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Shivering muscles",
+              "ask": "How do animals make extra heat?"
+            }
+          ],
+          "links": [
+            {
+              "from": "core",
+              "to": "artery",
+              "kind": "fluid",
+              "label": "warm"
+            },
+            {
+              "from": "artery",
+              "to": "foot",
+              "kind": "fluid"
+            },
+            {
+              "from": "foot",
+              "to": "vein",
+              "kind": "fluid"
+            },
+            {
+              "from": "vein",
+              "to": "core",
+              "kind": "fluid",
+              "label": "rewarmed"
+            },
+            {
+              "from": "artery",
+              "to": "vein",
+              "kind": "heat",
+              "label": "heat swaps over"
+            },
+            {
+              "from": "shiver",
+              "to": "core",
+              "kind": "heat",
+              "label": "extra heat"
+            },
+            {
+              "from": "fat",
+              "to": "core",
+              "kind": "heat",
+              "label": "holds heat in"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Legs, feet and flippers lose heat fast, so many animals use a heat swap. Warm blood flowing out runs right beside cold blood coming back and hands over its heat, so the feet stay cold but the heat returns to the body.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "core",
+              "kind": "tank",
+              "x": 0.2,
+              "y": 0.28,
+              "size": 1.3,
+              "label": "Warm body core"
+            },
+            {
+              "id": "artery",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.22,
+              "size": 1,
+              "label": "Warm blood out"
+            },
+            {
+              "id": "vein",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 1,
+              "label": "Cool blood back"
+            },
+            {
+              "id": "foot",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.42,
+              "size": 0.9,
+              "label": "Cold foot",
+              "ask": "Why don't penguins' feet freeze?"
+            },
+            {
+              "id": "fat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.75,
+              "size": 1,
+              "label": "Fur and blubber",
+              "ask": "How does fur keep animals warm?"
+            },
+            {
+              "id": "shiver",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Shivering muscles",
+              "ask": "How do animals make extra heat?"
+            }
+          ],
+          "links": [
+            {
+              "from": "core",
+              "to": "artery",
+              "kind": "fluid",
+              "label": "warm"
+            },
+            {
+              "from": "artery",
+              "to": "foot",
+              "kind": "fluid"
+            },
+            {
+              "from": "foot",
+              "to": "vein",
+              "kind": "fluid"
+            },
+            {
+              "from": "vein",
+              "to": "core",
+              "kind": "fluid",
+              "label": "rewarmed"
+            },
+            {
+              "from": "artery",
+              "to": "vein",
+              "kind": "heat",
+              "label": "heat swaps over"
+            },
+            {
+              "from": "shiver",
+              "to": "core",
+              "kind": "heat",
+              "label": "extra heat"
+            },
+            {
+              "from": "fat",
+              "to": "core",
+              "kind": "heat",
+              "label": "holds heat in"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "When insulation is not enough, animals make heat. Shivering muscles release heat, many mammals burn special brown fat, and emperor penguins huddle in thousands, taking turns in the warm middle.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Keep heat in",
+            "icon": "house",
+            "points": [
+              "Fur and feathers trap air",
+              "Blubber under the skin",
+              "Huddling together"
+            ]
+          },
+          "right": {
+            "title": "Make more heat",
+            "icon": "fire",
+            "points": [
+              "Shivering muscles",
+              "Brown fat burns energy",
+              "Eating more food"
+            ]
+          },
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why don't penguins' feet freeze?",
+      "a": "In a penguin's legs, warm blood going down to the feet passes close to cold blood coming back and warms it. The feet are kept just above freezing, cold enough to lose little heat but warm enough not to freeze.",
+      "asks": [
+        "How do penguins stand on ice?",
+        "What is countercurrent heat exchange?"
+      ]
+    },
+    {
+      "q": "How does fur keep animals warm?",
+      "a": "Fur and feathers trap a layer of still air next to the skin. Still air is a poor conductor of heat, so body heat escapes slowly. Animals fluff up their fur or feathers to trap even more air when it is very cold.",
+      "asks": [
+        "Why are polar bears so furry?",
+        "Why does trapped air keep animals warm?"
+      ]
+    },
+    {
+      "q": "How do animals make extra heat?",
+      "a": "They shiver, which makes muscles release heat, and many mammals burn a special brown fat that turns stored energy straight into heat. Eating more food fuels both.",
+      "asks": [
+        "Why do animals shiver?",
+        "What is brown fat?"
+      ]
+    },
+    {
+      "q": "What is blubber?",
+      "a": "Blubber is a thick layer of fat under the skin of seals, whales and walruses. It insulates them in icy water, where fur works less well, and also stores energy and helps them float.",
+      "asks": [
+        "Why do whales have blubber?",
+        "How thick is seal blubber?"
+      ]
+    },
+    {
+      "q": "How do small birds survive freezing nights?",
+      "a": "Small birds like chickadees fluff their feathers, shiver all night and may let their body temperature drop several degrees to save energy. Many roost together in tree holes and must eat a lot each day to rebuild their fat.",
+      "asks": [
+        "How do tiny birds stay warm in winter?",
+        "Why do birds fluff up in the cold?"
+      ]
+    }
+  ],
+  "facts": [
+    "An arctic fox in its winter coat does not need to raise its heat production until about minus 40 °C (Scholander and colleagues, 1950).",
+    "Emperor penguins huddle in groups of hundreds or thousands, slowly shuffling so birds take turns in the warm centre."
+  ],
+  "quiz": [
+    {
+      "say": "In a penguin's leg, where does heat from the warm blood going down end up?",
+      "show": "In a penguin's leg, where does heat from the warm blood going down end up?",
+      "options": [
+        {
+          "show": "In the cold blood coming back",
+          "say": "In the cold blood coming back"
+        },
+        {
+          "show": "Lost to the ice",
+          "say": "Lost to the ice"
+        },
+        {
+          "show": "Stored in the toes",
+          "say": "Stored in the toes"
+        }
+      ],
+      "answer": 0,
+      "why": "The vessels run side by side, so heat passes from the outgoing blood to the returning blood and goes back to the body.",
+      "wrong": {
+        "1": "The swap stops most of that heat reaching the ice.",
+        "2": "Toes cannot store heat; they stay cold."
+      }
+    },
+    {
+      "say": "Why does fluffing up its feathers help a bird keep warm?",
+      "show": "Why does fluffing up its feathers help a bird keep warm?",
+      "options": [
+        {
+          "show": "It traps more still air",
+          "say": "It traps more still air"
+        },
+        {
+          "show": "It makes the bird heavier",
+          "say": "It makes the bird heavier"
+        },
+        {
+          "show": "It lets warm air in from outside",
+          "say": "It lets warm air in from outside"
+        }
+      ],
+      "answer": 0,
+      "why": "More trapped still air means better insulation, so heat escapes more slowly.",
+      "wrong": {
+        "1": "Fluffing feathers does not change the bird's weight.",
+        "2": "In winter the outside air is cold; the point is to keep body heat in."
+      }
+    }
+  ]
+}

@@ -1,0 +1,392 @@
+{
+  "id": "BEE-PWR-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Why transmission uses high voltage: cutting I²R losses in the lines",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "transmission loss",
+    "I squared R loss",
+    "high voltage transmission",
+    "line resistance",
+    "HVDC"
+  ],
+  "examples": [
+    "Why do power lines use high voltage?",
+    "How do you calculate power loss in a transmission line?",
+    "Why not use even higher voltage?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Power station",
+          "value": "100 kV"
+        },
+        {
+          "kind": "resistor",
+          "label": "Line",
+          "value": "5 Ω",
+          "note": "The whole line treated as one 5 Ω wire",
+          "ask": "How do you calculate power loss in a transmission line?"
+        },
+        {
+          "kind": "block",
+          "label": "Town load",
+          "value": "100 MW",
+          "ask": "Does the load see the full voltage?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Line current",
+          "value": "1000 A",
+          "ask": "Why do power lines use high voltage?"
+        }
+      ],
+      "readouts": [
+        "I = P/V = 1000 A",
+        "Loss = I²R = 5 MW",
+        "5% of the power lost"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In the 1880s, Edison's low-voltage DC needed a power station every couple of kilometres, while Westinghouse's AC could be stepped up and sent far away. AC won, and high voltage is the reason. On the board, a line with 5 ohms of resistance carries 100 megawatts to a town at 100 kilovolts. Watch the line current.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Why transmission uses high voltage: cutting I²R losses in the lines"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Power station",
+              "value": "100 kV"
+            },
+            {
+              "kind": "resistor",
+              "label": "Line",
+              "value": "5 Ω",
+              "note": "The whole line treated as one 5 Ω wire",
+              "ask": "How do you calculate power loss in a transmission line?"
+            },
+            {
+              "kind": "block",
+              "label": "Town load",
+              "value": "100 MW",
+              "ask": "Does the load see the full voltage?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line current",
+              "value": "1000 A",
+              "ask": "Why do power lines use high voltage?"
+            }
+          ],
+          "readouts": [
+            "I = P/V = 1000 A",
+            "Loss = I²R = 5 MW",
+            "5% of the power lost"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is the grid in 3D. Follow the transmission lines on the tall pylons: they carry power at very high voltage, and the step-up transformer next to the power station is what makes that possible. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Why transmission uses high voltage: cutting I²R losses in the lines"
+        },
+        {
+          "op": "image",
+          "render": "power-grid"
+        }
+      ]
+    },
+    {
+      "say": "Look at the ammeter. To deliver 100 megawatts at 100 kilovolts you need P over V, 1000 amps. That current must flow through the line's resistance, and resistance turns current into heat. To keep the sums simple, we treat the whole line as one 5 ohm wire. How much power do you think is lost?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Power station",
+              "value": "100 kV"
+            },
+            {
+              "kind": "resistor",
+              "label": "Line",
+              "value": "5 Ω",
+              "note": "The whole line treated as one 5 Ω wire",
+              "ask": "How do you calculate power loss in a transmission line?"
+            },
+            {
+              "kind": "block",
+              "label": "Town load",
+              "value": "100 MW",
+              "ask": "Does the load see the full voltage?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line current",
+              "value": "1000 A",
+              "ask": "Why do power lines use high voltage?"
+            }
+          ],
+          "readouts": [
+            "I = P/V = 1000 A",
+            "Loss = I²R = 5 MW",
+            "5% of the power lost"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "I = P / V = 100 MW / 100 kV = 1000 A"
+        }
+      ]
+    },
+    {
+      "say": "Here comes the square. Loss equals I squared R: 1000 amps squared is a million, times 5 ohms, 5 megawatts, 5 percent of everything sent, just warming the air. Now raise the voltage four times, to 400 kilovolts. What happens to the current?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Power station",
+              "value": "100 kV"
+            },
+            {
+              "kind": "resistor",
+              "label": "Line",
+              "value": "5 Ω",
+              "note": "The whole line treated as one 5 Ω wire",
+              "ask": "How do you calculate power loss in a transmission line?"
+            },
+            {
+              "kind": "block",
+              "label": "Town load",
+              "value": "100 MW",
+              "ask": "Does the load see the full voltage?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line current",
+              "value": "1000 A",
+              "ask": "Why do power lines use high voltage?"
+            }
+          ],
+          "readouts": [
+            "I = P/V = 1000 A",
+            "Loss = I²R = 5 MW",
+            "5% of the power lost"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Loss = I²R = 1000² × 5 = 5,000,000 W = 5 MW"
+        }
+      ]
+    },
+    {
+      "say": "It falls four times, to 250 amps. And the loss falls by four squared, sixteen times: 250 squared times 5 is 312,500 watts, about 0.31 megawatts. Same wire, same power delivered, a sixteenth of the waste. That is the whole reason for those tall pylons. Can you see why loss goes with one over V squared?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Power station",
+              "value": "400 kV"
+            },
+            {
+              "kind": "resistor",
+              "label": "Line",
+              "value": "5 Ω",
+              "note": "The whole line treated as one 5 Ω wire",
+              "ask": "How do you calculate power loss in a transmission line?"
+            },
+            {
+              "kind": "block",
+              "label": "Town load",
+              "value": "100 MW",
+              "ask": "Does the load see the full voltage?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line current",
+              "value": "250 A",
+              "ask": "Why do power lines use high voltage?"
+            }
+          ],
+          "readouts": [
+            "I = P/V = 250 A",
+            "Loss = I²R = 0.31 MW",
+            "About 0.31% lost"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "400 kV: I = 250 A → loss = 250² × 5 ≈ 0.31 MW"
+        }
+      ]
+    },
+    {
+      "say": "Compare the bars. So why not a million volts everywhere? Higher voltage needs taller towers, longer insulators and wider spacing, and the air round the wires starts to crackle and glow, called corona. Even so, China runs a DC link at 1100 kilovolts over more than 3000 kilometres. Terrific! Challenge: check the middle bar. Why is the loss at 200 kilovolts 1.25 megawatts?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "MW",
+          "items": [
+            {
+              "label": "Loss at 100 kV",
+              "size": 5,
+              "icon": "fire"
+            },
+            {
+              "label": "Loss at 200 kV",
+              "size": 1.25,
+              "icon": "fire"
+            },
+            {
+              "label": "Loss at 400 kV",
+              "size": 0.3125,
+              "icon": "fire"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Loss ∝ 1/V²: 4 × the voltage → 1/16 of the loss"
+        },
+        {
+          "op": "note",
+          "text": "Limits: insulation, tower height and corona discharge"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do power lines use high voltage?",
+      "a": "For a given power, current equals power over voltage, so high voltage means low current. Line loss is I squared R, so raising the voltage four times cuts the current four times and the loss sixteen times.",
+      "asks": [
+        "Why is electricity transmitted at high voltage?"
+      ]
+    },
+    {
+      "q": "How do you calculate power loss in a transmission line?",
+      "a": "Find the current, I equals P over V, then the loss is I squared times the line resistance. For 100 megawatts at 100 kilovolts through 5 ohms, I is 1000 amps and the loss is 5 megawatts.",
+      "asks": [
+        "What is the formula for line loss?"
+      ]
+    },
+    {
+      "q": "Why not use even higher voltage?",
+      "a": "Higher voltage needs bigger insulators, taller towers and wider clearances, which cost money and land. Above a point the air near the conductors ionises, called corona, wasting power and making noise and radio interference.",
+      "asks": [
+        "Is there a limit to transmission voltage?"
+      ]
+    },
+    {
+      "q": "What is HVDC transmission?",
+      "a": "High-voltage direct current links convert AC to DC at one end and back at the other. For very long lines and undersea cables they lose less than AC and need fewer conductors, so they are used for links of hundreds or thousands of kilometres.",
+      "asks": [
+        "Why use DC for long-distance transmission?"
+      ]
+    },
+    {
+      "q": "Does the load see the full voltage?",
+      "a": "Not quite. The line current also causes a voltage drop, I times R. At 1000 amps through 5 ohms the drop is 5 kilovolts, 5 percent of 100 kilovolts; at 400 kilovolts and 250 amps it is only 1.25 kilovolts.",
+      "asks": [
+        "What is voltage drop on a power line?"
+      ]
+    }
+  ],
+  "facts": [
+    "Line loss is I²R, so for a fixed power it falls with the square of the transmission voltage.",
+    "China's Changji–Guquan HVDC link operates at ±1100 kV over more than 3000 km.",
+    "Worldwide, transmission and distribution losses are typically around 5 to 10 percent of electricity generated."
+  ],
+  "quiz": [
+    {
+      "say": "A 5 ohm line carries 100 megawatts at 200 kilovolts. What is the I squared R loss?",
+      "show": "A 5 Ω line carries 100 MW at 200 kV. What is the I²R loss?",
+      "options": [
+        {
+          "show": "1.25 MW",
+          "say": "1.25 megawatts"
+        },
+        {
+          "show": "2.5 MW",
+          "say": "2.5 megawatts"
+        },
+        {
+          "show": "0.5 MW",
+          "say": "0.5 megawatts"
+        }
+      ],
+      "answer": 0,
+      "why": "I is 100 megawatts over 200 kilovolts, 500 amps. 500 squared times 5 is 1.25 million watts.",
+      "wrong": {
+        "1": "That halves the 5 megawatt loss, as if loss went with 1 over V instead of 1 over V squared.",
+        "2": "Check the arithmetic: 500 squared is 250,000, and times 5 that is 1.25 million."
+      }
+    },
+    {
+      "say": "If the transmission voltage is doubled for the same power, what does the line loss become?",
+      "show": "If the transmission voltage is doubled for the same power, the line loss becomes…",
+      "options": [
+        {
+          "show": "One quarter",
+          "say": "One quarter"
+        },
+        {
+          "show": "One half",
+          "say": "One half"
+        },
+        {
+          "show": "Double",
+          "say": "Double"
+        }
+      ],
+      "answer": 0,
+      "why": "The current halves, and loss goes with current squared, so it falls to a quarter.",
+      "wrong": {
+        "1": "The current halves, but loss depends on the current squared.",
+        "2": "Higher voltage means lower current, so losses fall, not rise."
+      }
+    }
+  ]
+}

@@ -1,0 +1,670 @@
+{
+  "id": "GK-LIFE-46",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "How your phone knows where you are without GPS",
+  "area": "General Knowledge",
+  "group": "GK-LIFE — Everyday Knowledge",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "phone location",
+    "Wi-Fi positioning",
+    "mobile masts",
+    "indoor location",
+    "blue dot"
+  ],
+  "examples": [
+    "How does my phone know where I am indoors?",
+    "Why doesn't GPS work inside?",
+    "What does the circle around the blue dot mean?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "phone",
+          "label": "Your phone",
+          "icon": "phone",
+          "x": 0.5,
+          "y": 0.5,
+          "ask": "How does my phone know where I am?"
+        },
+        {
+          "id": "sat",
+          "label": "GPS satellites",
+          "icon": "satellite",
+          "x": 0.14,
+          "y": 0.12,
+          "ask": "Why doesn't GPS work well indoors?"
+        },
+        {
+          "id": "wifi",
+          "label": "Wi-Fi routers",
+          "icon": "antenna",
+          "x": 0.86,
+          "y": 0.12,
+          "ask": "How can Wi-Fi tell where I am?"
+        },
+        {
+          "id": "mast",
+          "label": "Mobile masts",
+          "icon": "tower",
+          "x": 0.12,
+          "y": 0.86
+        },
+        {
+          "id": "sensor",
+          "label": "Motion sensors",
+          "icon": "sensor",
+          "x": 0.88,
+          "y": 0.86,
+          "ask": "How do phone sensors track steps?"
+        },
+        {
+          "id": "map",
+          "label": "Blue dot on map",
+          "icon": "map",
+          "x": 0.5,
+          "y": 0.9,
+          "ask": "What does the circle around the blue dot mean?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sat",
+          "to": "phone",
+          "kind": "data",
+          "label": "weak indoors"
+        },
+        {
+          "from": "wifi",
+          "to": "phone",
+          "kind": "data",
+          "label": "signal strength"
+        },
+        {
+          "from": "mast",
+          "to": "phone",
+          "kind": "data",
+          "label": "rough area"
+        },
+        {
+          "from": "sensor",
+          "to": "phone",
+          "kind": "data",
+          "label": "steps, turns"
+        },
+        {
+          "from": "phone",
+          "to": "map",
+          "kind": "data",
+          "label": "best guess"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "You're deep inside a shopping centre with no sky in sight, yet the map on your phone still shows a little blue dot where you are. How? GPS needs the sky! Look at the network. Your phone is a detective, gathering clues from many places at once.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How your phone knows where you are without GPS"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does my phone know where I am?"
+            },
+            {
+              "id": "sat",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.14,
+              "y": 0.12,
+              "ask": "Why doesn't GPS work well indoors?"
+            },
+            {
+              "id": "wifi",
+              "label": "Wi-Fi routers",
+              "icon": "antenna",
+              "x": 0.86,
+              "y": 0.12,
+              "ask": "How can Wi-Fi tell where I am?"
+            },
+            {
+              "id": "mast",
+              "label": "Mobile masts",
+              "icon": "tower",
+              "x": 0.12,
+              "y": 0.86
+            },
+            {
+              "id": "sensor",
+              "label": "Motion sensors",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.86,
+              "ask": "How do phone sensors track steps?"
+            },
+            {
+              "id": "map",
+              "label": "Blue dot on map",
+              "icon": "map",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "What does the circle around the blue dot mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sat",
+              "to": "phone",
+              "kind": "data",
+              "label": "weak indoors"
+            },
+            {
+              "from": "wifi",
+              "to": "phone",
+              "kind": "data",
+              "label": "signal strength"
+            },
+            {
+              "from": "mast",
+              "to": "phone",
+              "kind": "data",
+              "label": "rough area"
+            },
+            {
+              "from": "sensor",
+              "to": "phone",
+              "kind": "data",
+              "label": "steps, turns"
+            },
+            {
+              "from": "phone",
+              "to": "map",
+              "kind": "data",
+              "label": "best guess"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "See the satellites? GPS works by listening to signals from satellites high in space. But those signals are very weak, and walls and roofs block them. So indoors, your phone needs other clues. Can you think of any signals inside a building?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does my phone know where I am?"
+            },
+            {
+              "id": "sat",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.14,
+              "y": 0.12,
+              "ask": "Why doesn't GPS work well indoors?"
+            },
+            {
+              "id": "wifi",
+              "label": "Wi-Fi routers",
+              "icon": "antenna",
+              "x": 0.86,
+              "y": 0.12,
+              "ask": "How can Wi-Fi tell where I am?"
+            },
+            {
+              "id": "mast",
+              "label": "Mobile masts",
+              "icon": "tower",
+              "x": 0.12,
+              "y": 0.86
+            },
+            {
+              "id": "sensor",
+              "label": "Motion sensors",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.86,
+              "ask": "How do phone sensors track steps?"
+            },
+            {
+              "id": "map",
+              "label": "Blue dot on map",
+              "icon": "map",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "What does the circle around the blue dot mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sat",
+              "to": "phone",
+              "kind": "data",
+              "label": "weak indoors"
+            },
+            {
+              "from": "wifi",
+              "to": "phone",
+              "kind": "data",
+              "label": "signal strength"
+            },
+            {
+              "from": "mast",
+              "to": "phone",
+              "kind": "data",
+              "label": "rough area"
+            },
+            {
+              "from": "sensor",
+              "to": "phone",
+              "kind": "data",
+              "label": "steps, turns"
+            },
+            {
+              "from": "phone",
+              "to": "map",
+              "kind": "data",
+              "label": "best guess"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Look at the Wi-Fi routers. Your phone can see nearby Wi-Fi networks, even ones it doesn't join. Each router has its own ID, and big databases know where many of them are. A stronger signal means closer, so your phone can work out roughly where you are.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does my phone know where I am?"
+            },
+            {
+              "id": "sat",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.14,
+              "y": 0.12,
+              "ask": "Why doesn't GPS work well indoors?"
+            },
+            {
+              "id": "wifi",
+              "label": "Wi-Fi routers",
+              "icon": "antenna",
+              "x": 0.86,
+              "y": 0.12,
+              "ask": "How can Wi-Fi tell where I am?"
+            },
+            {
+              "id": "mast",
+              "label": "Mobile masts",
+              "icon": "tower",
+              "x": 0.12,
+              "y": 0.86
+            },
+            {
+              "id": "sensor",
+              "label": "Motion sensors",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.86,
+              "ask": "How do phone sensors track steps?"
+            },
+            {
+              "id": "map",
+              "label": "Blue dot on map",
+              "icon": "map",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "What does the circle around the blue dot mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sat",
+              "to": "phone",
+              "kind": "data",
+              "label": "weak indoors"
+            },
+            {
+              "from": "wifi",
+              "to": "phone",
+              "kind": "data",
+              "label": "signal strength"
+            },
+            {
+              "from": "mast",
+              "to": "phone",
+              "kind": "data",
+              "label": "rough area"
+            },
+            {
+              "from": "sensor",
+              "to": "phone",
+              "kind": "data",
+              "label": "steps, turns"
+            },
+            {
+              "from": "phone",
+              "to": "map",
+              "kind": "data",
+              "label": "best guess"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "See the mobile masts? Your phone always talks to nearby masts, which gives a rougher clue. And at the sensors, tiny motion sensors count your steps and turns, while a compass knows which way you face. Which clue do you think is most exact?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does my phone know where I am?"
+            },
+            {
+              "id": "sat",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.14,
+              "y": 0.12,
+              "ask": "Why doesn't GPS work well indoors?"
+            },
+            {
+              "id": "wifi",
+              "label": "Wi-Fi routers",
+              "icon": "antenna",
+              "x": 0.86,
+              "y": 0.12,
+              "ask": "How can Wi-Fi tell where I am?"
+            },
+            {
+              "id": "mast",
+              "label": "Mobile masts",
+              "icon": "tower",
+              "x": 0.12,
+              "y": 0.86
+            },
+            {
+              "id": "sensor",
+              "label": "Motion sensors",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.86,
+              "ask": "How do phone sensors track steps?"
+            },
+            {
+              "id": "map",
+              "label": "Blue dot on map",
+              "icon": "map",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "What does the circle around the blue dot mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sat",
+              "to": "phone",
+              "kind": "data",
+              "label": "weak indoors"
+            },
+            {
+              "from": "wifi",
+              "to": "phone",
+              "kind": "data",
+              "label": "signal strength"
+            },
+            {
+              "from": "mast",
+              "to": "phone",
+              "kind": "data",
+              "label": "rough area"
+            },
+            {
+              "from": "sensor",
+              "to": "phone",
+              "kind": "data",
+              "label": "steps, turns"
+            },
+            {
+              "from": "phone",
+              "to": "map",
+              "kind": "data",
+              "label": "best guess"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Brilliant! Your phone mixes all the clues into its best guess, see the blue dot. The pale circle around it shows how sure it is: a big circle means unsure. Wow: some phones even sense air pressure to guess which floor you're on! Challenge: watch the circle shrink when you step outside.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does my phone know where I am?"
+            },
+            {
+              "id": "sat",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.14,
+              "y": 0.12,
+              "ask": "Why doesn't GPS work well indoors?"
+            },
+            {
+              "id": "wifi",
+              "label": "Wi-Fi routers",
+              "icon": "antenna",
+              "x": 0.86,
+              "y": 0.12,
+              "ask": "How can Wi-Fi tell where I am?"
+            },
+            {
+              "id": "mast",
+              "label": "Mobile masts",
+              "icon": "tower",
+              "x": 0.12,
+              "y": 0.86
+            },
+            {
+              "id": "sensor",
+              "label": "Motion sensors",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.86,
+              "ask": "How do phone sensors track steps?"
+            },
+            {
+              "id": "map",
+              "label": "Blue dot on map",
+              "icon": "map",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "What does the circle around the blue dot mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sat",
+              "to": "phone",
+              "kind": "data",
+              "label": "weak indoors"
+            },
+            {
+              "from": "wifi",
+              "to": "phone",
+              "kind": "data",
+              "label": "signal strength"
+            },
+            {
+              "from": "mast",
+              "to": "phone",
+              "kind": "data",
+              "label": "rough area"
+            },
+            {
+              "from": "sensor",
+              "to": "phone",
+              "kind": "data",
+              "label": "steps, turns"
+            },
+            {
+              "from": "phone",
+              "to": "map",
+              "kind": "data",
+              "label": "best guess"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does my phone know where I am?",
+      "a": "It combines clues: GPS satellites outdoors, nearby Wi-Fi networks, mobile masts and its own motion sensors, then shows its best guess as a blue dot.",
+      "asks": [
+        "How does the blue dot on maps work?"
+      ]
+    },
+    {
+      "q": "Why doesn't GPS work well indoors?",
+      "a": "GPS signals from satellites are very weak by the time they reach Earth, and roofs and walls block or bounce them.",
+      "asks": [
+        "Why is my location wrong inside?"
+      ]
+    },
+    {
+      "q": "How can Wi-Fi tell where I am?",
+      "a": "Each Wi-Fi router broadcasts its own ID. Location services keep maps of where routers are, and your phone compares signal strengths to estimate its position, often within tens of metres.",
+      "asks": [
+        "Does Wi-Fi help with location?"
+      ]
+    },
+    {
+      "q": "How do phone sensors track steps?",
+      "a": "An accelerometer feels the jolt of each step, a gyroscope feels turns, and a compass senses direction, so the phone can follow you between other clues.",
+      "asks": [
+        "What is an accelerometer?"
+      ]
+    },
+    {
+      "q": "What does the circle around the blue dot mean?",
+      "a": "It shows how accurate the guess is. You are probably somewhere inside the circle; a smaller circle means a more exact fix.",
+      "asks": [
+        "Why is there a circle around my location?"
+      ]
+    }
+  ],
+  "facts": [
+    "GPS signals are so weak that buildings and roofs can block them.",
+    "Wi-Fi positioning estimates location from the IDs and signal strengths of nearby routers."
+  ],
+  "quiz": [
+    {
+      "say": "Why might GPS fail inside a big building?",
+      "show": "Why might GPS fail inside a big building?",
+      "options": [
+        {
+          "show": "Walls and roofs block the weak satellite signals",
+          "say": "Walls and roofs block the weak satellite signals"
+        },
+        {
+          "show": "Satellites switch off at night",
+          "say": "Satellites switch off at night"
+        },
+        {
+          "show": "Buildings are too tall to see",
+          "say": "Buildings are too tall to see"
+        }
+      ],
+      "answer": 0,
+      "why": "Satellite signals are weak and easily blocked by roofs and walls.",
+      "wrong": {
+        "1": "GPS satellites work day and night.",
+        "2": "Height isn't the problem; blocking the signal is."
+      }
+    },
+    {
+      "say": "What does a big circle around the blue dot mean?",
+      "show": "What does a big circle around the blue dot mean?",
+      "options": [
+        {
+          "show": "The phone is unsure exactly where you are",
+          "say": "The phone is unsure exactly where you are"
+        },
+        {
+          "show": "You are walking fast",
+          "say": "You are walking fast"
+        },
+        {
+          "show": "The map is broken",
+          "say": "The map is broken"
+        }
+      ],
+      "answer": 0,
+      "why": "The circle shows the area you're probably in; bigger means less sure.",
+      "wrong": {
+        "1": "Speed doesn't set the circle's size.",
+        "2": "The map works; it's just less certain."
+      }
+    }
+  ]
+}

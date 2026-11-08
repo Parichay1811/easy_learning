@@ -1,0 +1,422 @@
+{
+  "id": "BEE-MACH-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Transformer losses and efficiency: copper loss, iron loss and peak efficiency",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "copper loss",
+    "iron loss",
+    "core loss",
+    "transformer efficiency",
+    "maximum efficiency condition",
+    "laminated core"
+  ],
+  "examples": [
+    "What are the losses in a transformer?",
+    "When is transformer efficiency maximum?",
+    "Why are transformer cores laminated?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-energy",
+      "unit": "kW",
+      "input": {
+        "label": "Input 101.6 kW",
+        "amount": 101.6
+      },
+      "outputs": [
+        {
+          "label": "Output 100 kW",
+          "amount": 100,
+          "useful": true,
+          "ask": "What are the losses in a transformer?"
+        },
+        {
+          "label": "Copper loss 1.2 kW",
+          "amount": 1.2,
+          "useful": false,
+          "ask": "Why does copper loss depend on load?"
+        },
+        {
+          "label": "Iron loss 0.4 kW",
+          "amount": 0.4,
+          "useful": false,
+          "ask": "Why are transformer cores laminated?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "The big transformer at the end of your street hums quietly, and on a summer evening its tank feels warm. That warmth is lost energy. On the board, a 100 kilovolt-ampere distribution transformer at full load takes in 101.6 kilowatts and delivers 100. Where do the missing 1.6 kilowatts go?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Transformer losses and efficiency: copper loss, iron loss and peak efficiency"
+        },
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "unit": "kW",
+          "input": {
+            "label": "Input 101.6 kW",
+            "amount": 101.6
+          },
+          "outputs": [
+            {
+              "label": "Output 100 kW",
+              "amount": 100,
+              "useful": true,
+              "ask": "What are the losses in a transformer?"
+            },
+            {
+              "label": "Copper loss 1.2 kW",
+              "amount": 1.2,
+              "useful": false,
+              "ask": "Why does copper loss depend on load?"
+            },
+            {
+              "label": "Iron loss 0.4 kW",
+              "amount": 0.4,
+              "useful": false,
+              "ask": "Why are transformer cores laminated?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is a transformer in 3D. See the thin laminations stacked in the iron core? They cut eddy currents, one of the losses you are about to meet. The copper coils make the other loss. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Transformer losses and efficiency: copper loss, iron loss and peak efficiency"
+        },
+        {
+          "op": "image",
+          "render": "transformer"
+        }
+      ]
+    },
+    {
+      "say": "Look at the copper loss. The current flowing through the resistance of the windings heats them: I squared R. Because it goes with current squared, it changes a lot with load: double the current and it quadruples. At full load here it is 1.2 kilowatts. What would it be at half load?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "unit": "kW",
+          "input": {
+            "label": "Input 101.6 kW",
+            "amount": 101.6
+          },
+          "outputs": [
+            {
+              "label": "Output 100 kW",
+              "amount": 100,
+              "useful": true,
+              "ask": "What are the losses in a transformer?"
+            },
+            {
+              "label": "Copper loss 1.2 kW",
+              "amount": 1.2,
+              "useful": false,
+              "ask": "Why does copper loss depend on load?"
+            },
+            {
+              "label": "Iron loss 0.4 kW",
+              "amount": 0.4,
+              "useful": false,
+              "ask": "Why are transformer cores laminated?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "P_cu = I²R ∝ (load)²: 1.2 kW at full load"
+        }
+      ]
+    },
+    {
+      "say": "A quarter, 0.3 kilowatts, as the board shows. But the iron loss stays at 0.4 kilowatts, because it depends on voltage, not load. It comes from the steel being magnetised back and forth 50 times a second, called hysteresis, and from eddy currents swirling in the core, kept small by thin insulated sheets called laminations. Which loss is bigger now?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "unit": "kW",
+          "input": {
+            "label": "Input 50.7 kW",
+            "amount": 50.7
+          },
+          "outputs": [
+            {
+              "label": "Output 50 kW",
+              "amount": 50,
+              "useful": true,
+              "ask": "What are the losses in a transformer?"
+            },
+            {
+              "label": "Copper loss 0.3 kW",
+              "amount": 0.3,
+              "useful": false,
+              "ask": "Why does copper loss depend on load?"
+            },
+            {
+              "label": "Iron loss 0.4 kW",
+              "amount": 0.4,
+              "useful": false,
+              "ask": "Why are transformer cores laminated?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Half load: P_cu = 1.2 × 0.5² = 0.3 kW"
+        }
+      ]
+    },
+    {
+      "say": "The iron loss. Now the efficiency curve, output over input across every load. It rises fast, peaks, then dips gently into overload. The peak comes exactly where copper loss equals iron loss: at 57.7 percent load, where each is 0.4 kilowatts, efficiency reaches 98.63 percent. Why would designers place the peak below full load?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Load (% of rated)",
+            "max": 120
+          },
+          "y": {
+            "label": "Efficiency (%)",
+            "min": 95,
+            "max": 99
+          },
+          "curves": [
+            {
+              "label": "Efficiency",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  10,
+                  96.04
+                ],
+                [
+                  20,
+                  97.81
+                ],
+                [
+                  30,
+                  98.33
+                ],
+                [
+                  40,
+                  98.54
+                ],
+                [
+                  50,
+                  98.62
+                ],
+                [
+                  57.74,
+                  98.63
+                ],
+                [
+                  70,
+                  98.61
+                ],
+                [
+                  80,
+                  98.56
+                ],
+                [
+                  90,
+                  98.5
+                ],
+                [
+                  100,
+                  98.43
+                ],
+                [
+                  110,
+                  98.34
+                ],
+                [
+                  120,
+                  98.26
+                ]
+              ],
+              "ask": "When is transformer efficiency maximum?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 57.74,
+              "label": "Peak 98.63%"
+            },
+            {
+              "x": 100,
+              "label": "Full load 98.43%"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Peak when P_cu = P_iron: load = √(0.4/1.2) = 57.7%"
+        }
+      ]
+    },
+    {
+      "say": "Because a street transformer spends most of its life part-loaded, and its iron loss never stops, day or night. At full load the board gives 100 over 101.6, 98.43 percent. Excellent! Challenge: work out the efficiency at 25 percent load. Remember that copper loss goes with load squared.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "unit": "kW",
+          "input": {
+            "label": "Input 101.6 kW",
+            "amount": 101.6
+          },
+          "outputs": [
+            {
+              "label": "Output 100 kW",
+              "amount": 100,
+              "useful": true,
+              "ask": "What are the losses in a transformer?"
+            },
+            {
+              "label": "Copper loss 1.2 kW",
+              "amount": 1.2,
+              "useful": false,
+              "ask": "Why does copper loss depend on load?"
+            },
+            {
+              "label": "Iron loss 0.4 kW",
+              "amount": 0.4,
+              "useful": false,
+              "ask": "Why are transformer cores laminated?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Full load: η = 100 / (100 + 1.2 + 0.4) = 98.43%"
+        },
+        {
+          "op": "note",
+          "text": "Iron loss runs 24 hours a day, so all-day efficiency matters"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What are the losses in a transformer?",
+      "a": "Two main kinds. Copper loss is I squared R heating in the windings and grows with the square of the load current. Iron, or core, loss comes from hysteresis and eddy currents in the core and stays almost constant whenever the transformer is switched on.",
+      "asks": [
+        "What causes transformer losses?"
+      ]
+    },
+    {
+      "q": "Why does copper loss depend on load?",
+      "a": "Copper loss is current squared times winding resistance. The current follows the load, so at half load the copper loss is a quarter of its full-load value.",
+      "asks": [
+        "How does copper loss change with load?"
+      ]
+    },
+    {
+      "q": "Why are transformer cores laminated?",
+      "a": "The changing flux induces eddy currents that circle inside the core and waste energy as heat. Building the core from thin sheets of silicon steel, insulated from each other, breaks up those current paths and cuts eddy-current loss.",
+      "asks": [
+        "What are laminations for?"
+      ]
+    },
+    {
+      "q": "When is transformer efficiency maximum?",
+      "a": "When the copper loss equals the iron loss. The load fraction for this is the square root of iron loss over full-load copper loss, here the square root of 0.4 over 1.2, which is about 58 percent.",
+      "asks": [
+        "What is the condition for maximum efficiency?"
+      ]
+    },
+    {
+      "q": "What is all-day efficiency?",
+      "a": "It is the energy delivered over 24 hours divided by the energy taken in. Distribution transformers are lightly loaded much of the day but always have iron loss, so they are designed for very low core loss.",
+      "asks": [
+        "Why do distribution transformers need low iron loss?"
+      ]
+    }
+  ],
+  "facts": [
+    "A transformer is most efficient at the load where copper loss equals iron loss.",
+    "Transformer cores use thin laminations of grain-oriented silicon steel to reduce eddy-current and hysteresis losses.",
+    "Transformer hum comes mainly from magnetostriction: the core changes shape slightly at twice the supply frequency."
+  ],
+  "quiz": [
+    {
+      "say": "A transformer has 2 kilowatts of copper loss at full load and 0.5 kilowatts of iron loss. What is the copper loss at half load?",
+      "show": "A transformer has 2 kW copper loss at full load and 0.5 kW iron loss. What is the copper loss at half load?",
+      "options": [
+        {
+          "show": "0.5 kW",
+          "say": "0.5 kilowatts"
+        },
+        {
+          "show": "1 kW",
+          "say": "1 kilowatt"
+        },
+        {
+          "show": "2 kW",
+          "say": "2 kilowatts"
+        }
+      ],
+      "answer": 0,
+      "why": "Copper loss goes with current squared. Half the current gives a quarter of the loss: 2 kilowatts over 4 is 0.5 kilowatts.",
+      "wrong": {
+        "1": "That halves it, as if loss went with current instead of current squared.",
+        "2": "Copper loss falls when the load falls; only iron loss stays constant."
+      }
+    },
+    {
+      "say": "Which loss stays roughly constant from no load to full load?",
+      "show": "Which loss stays roughly constant from no load to full load?",
+      "options": [
+        {
+          "show": "Iron (core) loss",
+          "say": "Iron (core) loss"
+        },
+        {
+          "show": "Copper loss",
+          "say": "Copper loss"
+        },
+        {
+          "show": "Both of them",
+          "say": "Both of them"
+        }
+      ],
+      "answer": 0,
+      "why": "Iron loss depends on the voltage and frequency, which stay fixed, so it is the same at any load.",
+      "wrong": {
+        "1": "Copper loss grows with the square of the load current.",
+        "2": "Only iron loss is constant; copper loss changes a lot."
+      }
+    }
+  ]
+}

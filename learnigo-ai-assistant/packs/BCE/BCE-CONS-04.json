@@ -1,0 +1,363 @@
+{
+  "id": "BCE-CONS-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Formwork and falsework: concrete pressure, ties and props",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONS — Construction, materials and management",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "formwork",
+    "falsework",
+    "concrete pressure on formwork",
+    "formwork ties",
+    "slab props",
+    "striking time"
+  ],
+  "examples": [
+    "How do you calculate concrete pressure on formwork?",
+    "What is the difference between formwork and falsework?",
+    "When can formwork be removed?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "door",
+      "objectAsk": "What is the difference between formwork and falsework?",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Concrete push 75 kPa",
+          "dir": "right",
+          "size": 5,
+          "ask": "How do you calculate concrete pressure on formwork?"
+        },
+        {
+          "label": "Tie rod pull",
+          "dir": "left",
+          "size": 4,
+          "ask": "What do formwork ties do?"
+        },
+        {
+          "label": "Raking prop",
+          "dir": 150,
+          "size": 2
+        },
+        {
+          "label": "Panel weight",
+          "dir": "down",
+          "size": 1
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "The core of the Burj Khalifa in Dubai rose inside self-climbing formwork, a moulding machine that jacked itself up about a floor every few days. Formwork is the temporary mould wet concrete is poured into; falsework is the scaffolding that holds it up. On the board, the forces on one face of a wall mould.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Formwork and falsework: concrete pressure, ties and props"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "door",
+          "objectAsk": "What is the difference between formwork and falsework?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Concrete push 75 kPa",
+              "dir": "right",
+              "size": 5,
+              "ask": "How do you calculate concrete pressure on formwork?"
+            },
+            {
+              "label": "Tie rod pull",
+              "dir": "left",
+              "size": 4,
+              "ask": "What do formwork ties do?"
+            },
+            {
+              "label": "Raking prop",
+              "dir": 150,
+              "size": 2
+            },
+            {
+              "label": "Panel weight",
+              "dir": "down",
+              "size": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Wet concrete behaves like a heavy liquid. Its pressure grows with depth, twenty five kilopascals for every metre, because concrete weighs about twenty five kilonewtons per cubic metre. Look at the line: pour a wall three metres deep in one go and the bottom of the mould feels seventy five kilopascals. How would pouring more slowly help?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Depth of wet concrete",
+            "max": 3
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 80
+          },
+          "curves": [
+            {
+              "label": "25 kPa per metre",
+              "type": "line",
+              "c": 0,
+              "k": 25,
+              "ask": "How do you calculate concrete pressure on formwork?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "1 m: 25 kPa"
+            },
+            {
+              "x": 3,
+              "label": "3 m: 75 kPa",
+              "ask": "How do you calculate concrete pressure on formwork?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "p = γ h = 25 kN/m³ × 3 m = 75 kPa"
+        }
+      ]
+    },
+    {
+      "say": "The lower concrete starts to stiffen, so the pressure stops growing! Steel tie rods through the wall hold the two faces together. Look at the tie: if ties sit every six hundred millimetres each way, each one holds back zero point three six square metres at seventy five kilopascals, twenty seven kilonewtons. Raking props keep the panel upright.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "door",
+          "objectAsk": "What is the difference between formwork and falsework?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Concrete push 75 kPa",
+              "dir": "right",
+              "size": 5,
+              "ask": "How do you calculate concrete pressure on formwork?"
+            },
+            {
+              "label": "Tie rod pull",
+              "dir": "left",
+              "size": 4,
+              "ask": "What do formwork ties do?"
+            },
+            {
+              "label": "Raking prop",
+              "dir": 150,
+              "size": 2
+            },
+            {
+              "label": "Panel weight",
+              "dir": "down",
+              "size": 1
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Tie load = 75 kPa × 0.6 m × 0.6 m = 27 kN"
+        }
+      ]
+    },
+    {
+      "say": "Now a slab. A two hundred millimetre slab weighs five kilopascals; add half a kilopascal of formwork and one and a half for workers and kit: seven. With props on a one point two metre grid, each prop holds ten kilonewtons, about a tonne. Look at the arrows: what happens if one prop is knocked out?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "pipe",
+          "objectAsk": "How much load does a slab prop carry?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Slab and formwork",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Workers and kit",
+              "dir": "down",
+              "size": 2
+            },
+            {
+              "label": "Prop push 10 kN",
+              "dir": "up",
+              "size": 5,
+              "ask": "How much load does a slab prop carry?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Prop load = 7 kPa × 1.2 m × 1.2 m ≈ 10 kN"
+        }
+      ]
+    },
+    {
+      "say": "Its load jumps onto its neighbours, and falsework collapses have killed workers, so props are checked by a temporary works engineer. Forms stay until the concrete is strong enough. Look at the groups: wall sides after about a day, but slab props one to two weeks. Superb! Challenge: what pressure does a four metre wall pour put on the bottom of its form?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "When can it come out? (IS 456)",
+          "groups": [
+            {
+              "label": "Wall sides",
+              "icon": "door",
+              "items": [
+                "16–24 hours",
+                "Columns, beams too"
+              ]
+            },
+            {
+              "label": "Slab soffit",
+              "icon": "house",
+              "items": [
+                "3 days",
+                "Props refixed"
+              ]
+            },
+            {
+              "label": "Slab props",
+              "icon": "pipe",
+              "items": [
+                "7 days ≤ 4.5 m",
+                "14 days > 4.5 m"
+              ]
+            },
+            {
+              "label": "Beam props",
+              "icon": "bridge",
+              "items": [
+                "14 days ≤ 6 m",
+                "21 days > 6 m"
+              ]
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between formwork and falsework?",
+      "a": "Formwork is the mould that gives concrete its shape: panels, shutters and their ties. Falsework is the temporary structure, such as props and scaffolds, that supports formwork and wet concrete until it can carry itself.",
+      "asks": [
+        "Formwork vs falsework"
+      ]
+    },
+    {
+      "q": "How do you calculate concrete pressure on formwork?",
+      "a": "For full liquid head, pressure equals the concrete unit weight, about 25 kilonewtons per cubic metre, times the depth. A 3 metre pour gives 75 kilopascals; slow pours and setting can reduce it.",
+      "asks": [
+        "Formwork pressure formula",
+        "How do you calculate concrete pressure on formwork?"
+      ]
+    },
+    {
+      "q": "What do formwork ties do?",
+      "a": "Ties are steel rods or bolts through the wall that hold the two faces of the formwork together against the concrete pressure. Each carries the pressure on its share of panel area.",
+      "asks": [
+        "Tie rod load"
+      ]
+    },
+    {
+      "q": "How much load does a slab prop carry?",
+      "a": "The slab self-weight plus formwork plus construction load, times the area each prop supports. Seven kilopascals on a 1.2 by 1.2 metre grid gives about 10 kilonewtons per prop.",
+      "asks": [
+        "Prop load calculation",
+        "Falsework design"
+      ]
+    },
+    {
+      "q": "When can formwork be removed?",
+      "a": "When the concrete is strong enough. India's IS 456 suggests 16 to 24 hours for vertical faces, 3 days for slab soffits with props refixed, and 7 to 21 days for props depending on span.",
+      "asks": [
+        "Striking time of formwork",
+        "When can formwork be removed?"
+      ]
+    }
+  ],
+  "facts": [
+    "Fresh normal-weight concrete weighs about 24 to 25 kN/m³.",
+    "IS 456 gives 7 days for props to slabs spanning up to 4.5 m and 14 days for longer spans."
+  ],
+  "quiz": [
+    {
+      "say": "A 4 metre high wall is poured quickly, so the concrete acts as a full liquid. It weighs 25 kilonewtons per cubic metre. What is the pressure at the bottom?",
+      "show": "A 4 m high wall is poured fast (full liquid head, 25 kN/m³). Pressure at the bottom?",
+      "options": [
+        {
+          "show": "100 kPa",
+          "say": "100 kilopascals"
+        },
+        {
+          "show": "6.25 kPa",
+          "say": "6.25 kilopascals"
+        },
+        {
+          "show": "29 kPa",
+          "say": "29 kilopascals"
+        }
+      ],
+      "answer": 0,
+      "why": "p = 25 × 4 = 100 kPa.",
+      "wrong": {
+        "1": "That divides instead of multiplying.",
+        "2": "That adds 25 and 4."
+      }
+    },
+    {
+      "say": "Which is falsework?",
+      "show": "Which is falsework?",
+      "options": [
+        {
+          "show": "Props under a slab",
+          "say": "Props under a slab"
+        },
+        {
+          "show": "The plywood face of a wall form",
+          "say": "The plywood face of a wall form"
+        },
+        {
+          "show": "The concrete itself",
+          "say": "The concrete itself"
+        }
+      ],
+      "answer": 0,
+      "why": "Falsework is the temporary support structure, such as props and scaffold towers.",
+      "wrong": {
+        "1": "The plywood face is formwork, the mould.",
+        "2": "Concrete is the permanent structure."
+      }
+    }
+  ]
+}

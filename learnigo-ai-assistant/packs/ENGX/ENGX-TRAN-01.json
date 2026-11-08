@@ -1,0 +1,715 @@
+{
+  "id": "ENGX-TRAN-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a car's steering turns the front wheels",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "rack and pinion steering",
+    "steering column",
+    "tie rod",
+    "power steering",
+    "car steering"
+  ],
+  "examples": [
+    "How does turning the steering wheel turn the wheels?",
+    "What is power steering?",
+    "Why do only the front wheels of a car steer?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sw",
+          "kind": "wheel",
+          "x": 0.12,
+          "y": 0.2,
+          "size": 1,
+          "label": "Steering wheel",
+          "motion": "spin",
+          "ask": "What does the steering wheel connect to?"
+        },
+        {
+          "id": "col",
+          "kind": "axle",
+          "x": 0.3,
+          "y": 0.38,
+          "size": 0.8,
+          "label": "Steering column",
+          "motion": "spin"
+        },
+        {
+          "id": "pin",
+          "kind": "gear",
+          "x": 0.45,
+          "y": 0.58,
+          "size": 0.6,
+          "label": "Pinion gear",
+          "motion": "spin",
+          "ask": "What is the pinion gear in steering?"
+        },
+        {
+          "id": "rack",
+          "kind": "box",
+          "x": 0.64,
+          "y": 0.72,
+          "size": 1.2,
+          "label": "Toothed rack",
+          "motion": "slide",
+          "ask": "What is the steering rack?"
+        },
+        {
+          "id": "assist",
+          "kind": "motor",
+          "x": 0.4,
+          "y": 0.88,
+          "size": 0.6,
+          "label": "Power assist motor",
+          "motion": "pulse",
+          "ask": "What is power steering?"
+        },
+        {
+          "id": "rod",
+          "kind": "lever",
+          "x": 0.86,
+          "y": 0.55,
+          "size": 0.8,
+          "label": "Tie rod",
+          "motion": "slide"
+        },
+        {
+          "id": "fw",
+          "kind": "wheel",
+          "x": 0.86,
+          "y": 0.2,
+          "size": 1.2,
+          "label": "Front wheel",
+          "motion": "swing",
+          "ask": "Why do only the front wheels steer?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sw",
+          "to": "col",
+          "kind": "force",
+          "label": "your turn"
+        },
+        {
+          "from": "col",
+          "to": "pin",
+          "kind": "force",
+          "label": "twist"
+        },
+        {
+          "from": "pin",
+          "to": "rack",
+          "kind": "force",
+          "label": "teeth push"
+        },
+        {
+          "from": "assist",
+          "to": "rack",
+          "kind": "energy",
+          "label": "extra push"
+        },
+        {
+          "from": "rack",
+          "to": "rod",
+          "kind": "force",
+          "label": "side push"
+        },
+        {
+          "from": "rod",
+          "to": "fw",
+          "kind": "force",
+          "label": "swivels wheel"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When you turn the steering wheel, a shaft called the steering column twists with it. At its lower end is a small gear, the pinion, the start of the rack and pinion steering found in most cars.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a car's steering turns the front wheels"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sw",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Steering wheel",
+              "motion": "spin",
+              "ask": "What does the steering wheel connect to?"
+            },
+            {
+              "id": "col",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Steering column",
+              "motion": "spin"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.6,
+              "label": "Pinion gear",
+              "motion": "spin",
+              "ask": "What is the pinion gear in steering?"
+            },
+            {
+              "id": "rack",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Toothed rack",
+              "motion": "slide",
+              "ask": "What is the steering rack?"
+            },
+            {
+              "id": "assist",
+              "kind": "motor",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Power assist motor",
+              "motion": "pulse",
+              "ask": "What is power steering?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.86,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Tie rod",
+              "motion": "slide"
+            },
+            {
+              "id": "fw",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Front wheel",
+              "motion": "swing",
+              "ask": "Why do only the front wheels steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sw",
+              "to": "col",
+              "kind": "force",
+              "label": "your turn"
+            },
+            {
+              "from": "col",
+              "to": "pin",
+              "kind": "force",
+              "label": "twist"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "assist",
+              "to": "rack",
+              "kind": "energy",
+              "label": "extra push"
+            },
+            {
+              "from": "rack",
+              "to": "rod",
+              "kind": "force",
+              "label": "side push"
+            },
+            {
+              "from": "rod",
+              "to": "fw",
+              "kind": "force",
+              "label": "swivels wheel"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The pinion's teeth mesh with a long toothed bar called the rack. As the pinion turns, it slides the rack left or right across the car, turning a twist into a sideways push.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sw",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Steering wheel",
+              "motion": "spin",
+              "ask": "What does the steering wheel connect to?"
+            },
+            {
+              "id": "col",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Steering column",
+              "motion": "spin"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.6,
+              "label": "Pinion gear",
+              "motion": "spin",
+              "ask": "What is the pinion gear in steering?"
+            },
+            {
+              "id": "rack",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Toothed rack",
+              "motion": "slide",
+              "ask": "What is the steering rack?"
+            },
+            {
+              "id": "assist",
+              "kind": "motor",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Power assist motor",
+              "motion": "pulse",
+              "ask": "What is power steering?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.86,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Tie rod",
+              "motion": "slide"
+            },
+            {
+              "id": "fw",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Front wheel",
+              "motion": "swing",
+              "ask": "Why do only the front wheels steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sw",
+              "to": "col",
+              "kind": "force",
+              "label": "your turn"
+            },
+            {
+              "from": "col",
+              "to": "pin",
+              "kind": "force",
+              "label": "twist"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "assist",
+              "to": "rack",
+              "kind": "energy",
+              "label": "extra push"
+            },
+            {
+              "from": "rack",
+              "to": "rod",
+              "kind": "force",
+              "label": "side push"
+            },
+            {
+              "from": "rod",
+              "to": "fw",
+              "kind": "force",
+              "label": "swivels wheel"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Each end of the rack pushes a tie rod, which pushes an arm on the wheel hub. The front wheels swivel on pivots, so they point the way you want to go.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sw",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Steering wheel",
+              "motion": "spin",
+              "ask": "What does the steering wheel connect to?"
+            },
+            {
+              "id": "col",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Steering column",
+              "motion": "spin"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.6,
+              "label": "Pinion gear",
+              "motion": "spin",
+              "ask": "What is the pinion gear in steering?"
+            },
+            {
+              "id": "rack",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Toothed rack",
+              "motion": "slide",
+              "ask": "What is the steering rack?"
+            },
+            {
+              "id": "assist",
+              "kind": "motor",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Power assist motor",
+              "motion": "pulse",
+              "ask": "What is power steering?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.86,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Tie rod",
+              "motion": "slide"
+            },
+            {
+              "id": "fw",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Front wheel",
+              "motion": "swing",
+              "ask": "Why do only the front wheels steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sw",
+              "to": "col",
+              "kind": "force",
+              "label": "your turn"
+            },
+            {
+              "from": "col",
+              "to": "pin",
+              "kind": "force",
+              "label": "twist"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "assist",
+              "to": "rack",
+              "kind": "energy",
+              "label": "extra push"
+            },
+            {
+              "from": "rack",
+              "to": "rod",
+              "kind": "force",
+              "label": "side push"
+            },
+            {
+              "from": "rod",
+              "to": "fw",
+              "kind": "force",
+              "label": "swivels wheel"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    },
+    {
+      "say": "Most modern cars add power steering: an electric motor, or in older cars an oil pump, adds extra push to the rack so the wheel is easy to turn even when parking.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sw",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Steering wheel",
+              "motion": "spin",
+              "ask": "What does the steering wheel connect to?"
+            },
+            {
+              "id": "col",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Steering column",
+              "motion": "spin"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.6,
+              "label": "Pinion gear",
+              "motion": "spin",
+              "ask": "What is the pinion gear in steering?"
+            },
+            {
+              "id": "rack",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Toothed rack",
+              "motion": "slide",
+              "ask": "What is the steering rack?"
+            },
+            {
+              "id": "assist",
+              "kind": "motor",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Power assist motor",
+              "motion": "pulse",
+              "ask": "What is power steering?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.86,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Tie rod",
+              "motion": "slide"
+            },
+            {
+              "id": "fw",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Front wheel",
+              "motion": "swing",
+              "ask": "Why do only the front wheels steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sw",
+              "to": "col",
+              "kind": "force",
+              "label": "your turn"
+            },
+            {
+              "from": "col",
+              "to": "pin",
+              "kind": "force",
+              "label": "twist"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "assist",
+              "to": "rack",
+              "kind": "energy",
+              "label": "extra push"
+            },
+            {
+              "from": "rack",
+              "to": "rod",
+              "kind": "force",
+              "label": "side push"
+            },
+            {
+              "from": "rod",
+              "to": "fw",
+              "kind": "force",
+              "label": "swivels wheel"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the steering wheel connect to?",
+      "a": "The steering wheel is fixed to the steering column, a shaft that runs down to the pinion gear near the front wheels. Turning the wheel twists the column and the pinion.",
+      "asks": [
+        "What is the steering column?"
+      ]
+    },
+    {
+      "q": "What is the pinion gear in steering?",
+      "a": "The pinion is a small round gear on the end of the steering column. Its teeth mesh with the rack, so when it turns it slides the rack sideways.",
+      "asks": [
+        "What does the pinion do?"
+      ]
+    },
+    {
+      "q": "What is the steering rack?",
+      "a": "The rack is a straight bar with teeth along it, running across the car. The pinion slides it left or right, and its ends push the tie rods that swivel the wheels.",
+      "asks": [
+        "How does a rack and pinion work in a car?"
+      ]
+    },
+    {
+      "q": "What is power steering?",
+      "a": "Power steering adds extra force to help you turn the wheels. Most new cars use an electric motor on the column or rack; older cars used a pump pushing oil into a cylinder on the rack.",
+      "asks": [
+        "Why is steering easy in modern cars?",
+        "How does electric power steering work?"
+      ]
+    },
+    {
+      "q": "Why do only the front wheels steer?",
+      "a": "Steering the front wheels lets the car's nose lead it round a bend while the rear wheels follow, which is stable and easy to control. Some cars and lorries also steer the rear wheels a little to turn more tightly.",
+      "asks": [
+        "Do the back wheels of a car turn?"
+      ]
+    }
+  ],
+  "facts": [
+    "Most modern cars use rack and pinion steering.",
+    "In a turn the inside front wheel is angled more sharply than the outside one because it follows a tighter circle; this is called Ackermann steering geometry.",
+    "Electric power steering only uses energy while you are steering, so it saves fuel compared with an engine-driven oil pump."
+  ],
+  "quiz": [
+    {
+      "say": "What does the rack and pinion turn the steering wheel's twist into?",
+      "show": "What does the rack and pinion turn the steering wheel's twist into?",
+      "options": [
+        {
+          "show": "A sideways sliding push",
+          "say": "A sideways sliding push"
+        },
+        {
+          "show": "An up-and-down bounce",
+          "say": "An up-and-down bounce"
+        },
+        {
+          "show": "Faster spinning of the wheels",
+          "say": "Faster spinning of the wheels"
+        }
+      ],
+      "answer": 0,
+      "why": "The turning pinion slides the toothed rack sideways, and the rack pushes the tie rods that swivel the wheels.",
+      "wrong": {
+        "1": "Up-and-down movement is the suspension's job, not the steering's.",
+        "2": "Steering changes where the wheels point; the engine and gearbox spin them."
+      }
+    },
+    {
+      "say": "What does power steering add?",
+      "show": "What does power steering add?",
+      "options": [
+        {
+          "show": "Extra force to help turn the wheels",
+          "say": "Extra force to help turn the wheels"
+        },
+        {
+          "show": "More engine power to the wheels",
+          "say": "More engine power to the wheels"
+        },
+        {
+          "show": "A second steering wheel",
+          "say": "A second steering wheel"
+        }
+      ],
+      "answer": 0,
+      "why": "A motor or pump adds force at the rack so steering feels light, especially at low speed.",
+      "wrong": {
+        "1": "Power steering helps you steer; it does not make the car faster.",
+        "2": "There is still one steering wheel; the help comes from a motor or pump."
+      }
+    }
+  ]
+}

@@ -1,0 +1,532 @@
+{
+  "id": "ENGX-HOME-14",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an espresso machine uses pressure to make coffee",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "espresso machine",
+    "espresso",
+    "9 bar pressure",
+    "coffee puck",
+    "crema",
+    "group head"
+  ],
+  "examples": [
+    "How does an espresso machine work?",
+    "Why does espresso need high pressure?",
+    "What is crema?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "tank",
+          "kind": "tank",
+          "x": 0.1,
+          "y": 0.25,
+          "size": 1,
+          "label": "Water tank",
+          "motion": "none"
+        },
+        {
+          "id": "pump",
+          "kind": "piston",
+          "x": 0.3,
+          "y": 0.6,
+          "size": 0.9,
+          "label": "Pump",
+          "motion": "pulse"
+        },
+        {
+          "id": "boiler",
+          "kind": "tank",
+          "x": 0.52,
+          "y": 0.25,
+          "size": 1,
+          "label": "Boiler",
+          "motion": "pulse",
+          "ask": "What temperature is espresso water?"
+        },
+        {
+          "id": "group",
+          "kind": "valve",
+          "x": 0.72,
+          "y": 0.45,
+          "size": 0.9,
+          "label": "Group head",
+          "motion": "none"
+        },
+        {
+          "id": "puck",
+          "kind": "box",
+          "x": 0.72,
+          "y": 0.68,
+          "size": 0.8,
+          "label": "Coffee puck",
+          "motion": "none",
+          "ask": "Why does espresso need high pressure?"
+        },
+        {
+          "id": "cup",
+          "kind": "box",
+          "x": 0.72,
+          "y": 0.9,
+          "size": 0.7,
+          "label": "Cup",
+          "motion": "none",
+          "ask": "What is crema?"
+        }
+      ],
+      "links": [
+        {
+          "from": "tank",
+          "to": "pump",
+          "kind": "fluid",
+          "label": "cold water"
+        },
+        {
+          "from": "pump",
+          "to": "boiler",
+          "kind": "fluid",
+          "label": "pressure"
+        },
+        {
+          "from": "boiler",
+          "to": "group",
+          "kind": "fluid",
+          "label": "about 93 °C"
+        },
+        {
+          "from": "group",
+          "to": "puck",
+          "kind": "fluid",
+          "label": "9 bar"
+        },
+        {
+          "from": "puck",
+          "to": "cup",
+          "kind": "fluid",
+          "label": "espresso"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An espresso machine pumps water from a tank into a boiler or heating block, which heats it to about 90 to 96 degrees, just below boiling.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an espresso machine uses pressure to make coffee"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.25,
+              "size": 1,
+              "label": "Water tank",
+              "motion": "none"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.3,
+              "y": 0.6,
+              "size": 0.9,
+              "label": "Pump",
+              "motion": "pulse"
+            },
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.52,
+              "y": 0.25,
+              "size": 1,
+              "label": "Boiler",
+              "motion": "pulse",
+              "ask": "What temperature is espresso water?"
+            },
+            {
+              "id": "group",
+              "kind": "valve",
+              "x": 0.72,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Group head",
+              "motion": "none"
+            },
+            {
+              "id": "puck",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.68,
+              "size": 0.8,
+              "label": "Coffee puck",
+              "motion": "none",
+              "ask": "Why does espresso need high pressure?"
+            },
+            {
+              "id": "cup",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.9,
+              "size": 0.7,
+              "label": "Cup",
+              "motion": "none",
+              "ask": "What is crema?"
+            }
+          ],
+          "links": [
+            {
+              "from": "tank",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "cold water"
+            },
+            {
+              "from": "pump",
+              "to": "boiler",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "boiler",
+              "to": "group",
+              "kind": "fluid",
+              "label": "about 93 °C"
+            },
+            {
+              "from": "group",
+              "to": "puck",
+              "kind": "fluid",
+              "label": "9 bar"
+            },
+            {
+              "from": "puck",
+              "to": "cup",
+              "kind": "fluid",
+              "label": "espresso"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Finely ground coffee is pressed tightly into a basket, called the puck. The pump forces the hot water through it at about 9 bar.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.25,
+              "size": 1,
+              "label": "Water tank",
+              "motion": "none"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.3,
+              "y": 0.6,
+              "size": 0.9,
+              "label": "Pump",
+              "motion": "pulse"
+            },
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.52,
+              "y": 0.25,
+              "size": 1,
+              "label": "Boiler",
+              "motion": "pulse",
+              "ask": "What temperature is espresso water?"
+            },
+            {
+              "id": "group",
+              "kind": "valve",
+              "x": 0.72,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Group head",
+              "motion": "none"
+            },
+            {
+              "id": "puck",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.68,
+              "size": 0.8,
+              "label": "Coffee puck",
+              "motion": "none",
+              "ask": "Why does espresso need high pressure?"
+            },
+            {
+              "id": "cup",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.9,
+              "size": 0.7,
+              "label": "Cup",
+              "motion": "none",
+              "ask": "What is crema?"
+            }
+          ],
+          "links": [
+            {
+              "from": "tank",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "cold water"
+            },
+            {
+              "from": "pump",
+              "to": "boiler",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "boiler",
+              "to": "group",
+              "kind": "fluid",
+              "label": "about 93 °C"
+            },
+            {
+              "from": "group",
+              "to": "puck",
+              "kind": "fluid",
+              "label": "9 bar"
+            },
+            {
+              "from": "puck",
+              "to": "cup",
+              "kind": "fluid",
+              "label": "espresso"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "That pressure is needed because the coffee is packed so tightly that water would barely trickle through on its own. Pushed hard, it pulls out flavour, oils and gases in about 25 to 30 seconds.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "items": [
+            {
+              "label": "Air around us",
+              "size": 1,
+              "icon": "wind"
+            },
+            {
+              "label": "Car tyre",
+              "size": 2.2,
+              "icon": "car"
+            },
+            {
+              "label": "Espresso",
+              "size": 9,
+              "icon": "pump"
+            }
+          ],
+          "unit": "bar"
+        }
+      ]
+    },
+    {
+      "say": "The thick shot drips into the cup topped with crema, a golden foam made of coffee oils and tiny bubbles of carbon dioxide released under pressure.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.25,
+              "size": 1,
+              "label": "Water tank",
+              "motion": "none"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.3,
+              "y": 0.6,
+              "size": 0.9,
+              "label": "Pump",
+              "motion": "pulse"
+            },
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.52,
+              "y": 0.25,
+              "size": 1,
+              "label": "Boiler",
+              "motion": "pulse",
+              "ask": "What temperature is espresso water?"
+            },
+            {
+              "id": "group",
+              "kind": "valve",
+              "x": 0.72,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Group head",
+              "motion": "none"
+            },
+            {
+              "id": "puck",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.68,
+              "size": 0.8,
+              "label": "Coffee puck",
+              "motion": "none",
+              "ask": "Why does espresso need high pressure?"
+            },
+            {
+              "id": "cup",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.9,
+              "size": 0.7,
+              "label": "Cup",
+              "motion": "none",
+              "ask": "What is crema?"
+            }
+          ],
+          "links": [
+            {
+              "from": "tank",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "cold water"
+            },
+            {
+              "from": "pump",
+              "to": "boiler",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "boiler",
+              "to": "group",
+              "kind": "fluid",
+              "label": "about 93 °C"
+            },
+            {
+              "from": "group",
+              "to": "puck",
+              "kind": "fluid",
+              "label": "9 bar"
+            },
+            {
+              "from": "puck",
+              "to": "cup",
+              "kind": "fluid",
+              "label": "espresso"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does espresso need high pressure?",
+      "a": "The coffee is ground very fine and packed tight, so water needs about 9 bar of pressure to push through. The pressure extracts strong flavour and oils quickly, making a small, intense drink.",
+      "asks": [
+        "How does an espresso machine work?"
+      ]
+    },
+    {
+      "q": "What temperature is espresso water?",
+      "a": "Usually about 90 to 96 degrees. Water that is too hot makes coffee bitter, and too cool makes it sour and weak.",
+      "asks": [
+        "Why should espresso water not be boiling?"
+      ]
+    },
+    {
+      "q": "What is crema?",
+      "a": "Crema is the golden foam on top of an espresso. It forms when pressure forces carbon dioxide and oils out of fresh coffee into tiny bubbles.",
+      "asks": [
+        "Why does espresso have foam on top?"
+      ]
+    },
+    {
+      "q": "How long should an espresso shot take?",
+      "a": "About 25 to 30 seconds for a standard shot. Much faster means the grind is too coarse; much slower means it is too fine or packed too hard.",
+      "asks": [
+        "Why does my espresso run too fast?"
+      ]
+    },
+    {
+      "q": "How does the steam wand froth milk?",
+      "a": "The boiler also makes steam. Blasting it into milk heats the milk and whips air into it, making tiny bubbles for a creamy foam.",
+      "asks": [
+        "How do coffee machines make foamy milk?"
+      ]
+    }
+  ],
+  "facts": [
+    "Espresso is usually brewed at about 9 bar, roughly nine times normal air pressure.",
+    "A typical espresso shot takes about 25 to 30 seconds to brew."
+  ],
+  "quiz": [
+    {
+      "say": "Why does an espresso machine need a pump that makes about 9 bar?",
+      "show": "Why does an espresso machine need a pump that makes about 9 bar?",
+      "options": [
+        {
+          "show": "To push water through tightly packed fine coffee",
+          "say": "To push water through tightly packed fine coffee"
+        },
+        {
+          "show": "To boil the water",
+          "say": "To boil the water"
+        },
+        {
+          "show": "To make the cup hotter",
+          "say": "To make the cup hotter"
+        }
+      ],
+      "answer": 0,
+      "why": "The fine, tamped coffee resists flow, so high pressure is needed to force water through and extract the flavour.",
+      "wrong": {
+        "1": "The heater warms the water; the pump does not boil it.",
+        "2": "Pressure has nothing to do with warming the cup."
+      }
+    }
+  ]
+}

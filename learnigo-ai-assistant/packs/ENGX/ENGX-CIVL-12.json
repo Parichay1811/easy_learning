@@ -1,0 +1,596 @@
+{
+  "id": "ENGX-CIVL-12",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a swing bridge turns to let ships pass",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "swing bridge",
+    "turntable",
+    "pivot pier",
+    "ring gear",
+    "moving bridge"
+  ],
+  "examples": [
+    "How does a swing bridge work?",
+    "Why do swing bridges turn sideways?",
+    "What holds a swing bridge when it turns?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.76,
+          "label": "Drive motor",
+          "motion": "spin",
+          "ask": "What turns a swing bridge?"
+        },
+        {
+          "id": "pin",
+          "kind": "gear",
+          "x": 0.3,
+          "y": 0.72,
+          "size": 0.7,
+          "label": "Pinion",
+          "motion": "spin"
+        },
+        {
+          "id": "ring",
+          "kind": "gear",
+          "x": 0.52,
+          "y": 0.6,
+          "size": 1.4,
+          "label": "Ring gear",
+          "motion": "spin",
+          "speed": 0.3
+        },
+        {
+          "id": "pivot",
+          "kind": "axle",
+          "x": 0.52,
+          "y": 0.36,
+          "label": "Centre pivot",
+          "ask": "Why are swing bridge arms equal on both sides?"
+        },
+        {
+          "id": "roll",
+          "kind": "wheel",
+          "x": 0.52,
+          "y": 0.9,
+          "label": "Roller ring",
+          "motion": "spin",
+          "ask": "What are the rollers for?"
+        },
+        {
+          "id": "span",
+          "kind": "lever",
+          "x": 0.82,
+          "y": 0.24,
+          "size": 1.5,
+          "label": "Swing span",
+          "motion": "swing",
+          "ask": "How does a swing bridge work?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "pin",
+          "kind": "energy",
+          "label": "turns"
+        },
+        {
+          "from": "pin",
+          "to": "ring",
+          "kind": "force",
+          "label": "meshes"
+        },
+        {
+          "from": "ring",
+          "to": "span",
+          "kind": "force",
+          "label": "rotates"
+        },
+        {
+          "from": "pivot",
+          "to": "span",
+          "kind": "force",
+          "label": "carries"
+        },
+        {
+          "from": "roll",
+          "to": "ring",
+          "kind": "force",
+          "label": "steadies"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A swing bridge opens by turning sideways on a pier in the middle of the river, leaving clear water for boats. The whole span rotates about 90 degrees, like a turnstile.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a swing bridge turns to let ships pass"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.76,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What turns a swing bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Ring gear",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "pivot",
+              "kind": "axle",
+              "x": 0.52,
+              "y": 0.36,
+              "label": "Centre pivot",
+              "ask": "Why are swing bridge arms equal on both sides?"
+            },
+            {
+              "id": "roll",
+              "kind": "wheel",
+              "x": 0.52,
+              "y": 0.9,
+              "label": "Roller ring",
+              "motion": "spin",
+              "ask": "What are the rollers for?"
+            },
+            {
+              "id": "span",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.24,
+              "size": 1.5,
+              "label": "Swing span",
+              "motion": "swing",
+              "ask": "How does a swing bridge work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "ring",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "ring",
+              "to": "span",
+              "kind": "force",
+              "label": "rotates"
+            },
+            {
+              "from": "pivot",
+              "to": "span",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "roll",
+              "to": "ring",
+              "kind": "force",
+              "label": "steadies"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "The span balances on a central pivot, with equal arms on either side, so it does not tip as it turns. Most of its weight sits right over the pier.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.76,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What turns a swing bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Ring gear",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "pivot",
+              "kind": "axle",
+              "x": 0.52,
+              "y": 0.36,
+              "label": "Centre pivot",
+              "ask": "Why are swing bridge arms equal on both sides?"
+            },
+            {
+              "id": "roll",
+              "kind": "wheel",
+              "x": 0.52,
+              "y": 0.9,
+              "label": "Roller ring",
+              "motion": "spin",
+              "ask": "What are the rollers for?"
+            },
+            {
+              "id": "span",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.24,
+              "size": 1.5,
+              "label": "Swing span",
+              "motion": "swing",
+              "ask": "How does a swing bridge work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "ring",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "ring",
+              "to": "span",
+              "kind": "force",
+              "label": "rotates"
+            },
+            {
+              "from": "pivot",
+              "to": "span",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "roll",
+              "to": "ring",
+              "kind": "force",
+              "label": "steadies"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Many swing bridges also run on a ring of steel rollers on a circular track, which steadies the span and shares the load.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.76,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What turns a swing bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Ring gear",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "pivot",
+              "kind": "axle",
+              "x": 0.52,
+              "y": 0.36,
+              "label": "Centre pivot",
+              "ask": "Why are swing bridge arms equal on both sides?"
+            },
+            {
+              "id": "roll",
+              "kind": "wheel",
+              "x": 0.52,
+              "y": 0.9,
+              "label": "Roller ring",
+              "motion": "spin",
+              "ask": "What are the rollers for?"
+            },
+            {
+              "id": "span",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.24,
+              "size": 1.5,
+              "label": "Swing span",
+              "motion": "swing",
+              "ask": "How does a swing bridge work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "ring",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "ring",
+              "to": "span",
+              "kind": "force",
+              "label": "rotates"
+            },
+            {
+              "from": "pivot",
+              "to": "span",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "roll",
+              "to": "ring",
+              "kind": "force",
+              "label": "steadies"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "A motor turns a small pinion that walks around a large ring gear, slowly swinging the span open. When it closes, wedges or jacks lift the ends onto their supports so traffic can cross safely.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.76,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What turns a swing bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Ring gear",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "pivot",
+              "kind": "axle",
+              "x": 0.52,
+              "y": 0.36,
+              "label": "Centre pivot",
+              "ask": "Why are swing bridge arms equal on both sides?"
+            },
+            {
+              "id": "roll",
+              "kind": "wheel",
+              "x": 0.52,
+              "y": 0.9,
+              "label": "Roller ring",
+              "motion": "spin",
+              "ask": "What are the rollers for?"
+            },
+            {
+              "id": "span",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.24,
+              "size": 1.5,
+              "label": "Swing span",
+              "motion": "swing",
+              "ask": "How does a swing bridge work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "ring",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "ring",
+              "to": "span",
+              "kind": "force",
+              "label": "rotates"
+            },
+            {
+              "from": "pivot",
+              "to": "span",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "roll",
+              "to": "ring",
+              "kind": "force",
+              "label": "steadies"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a swing bridge work?",
+      "a": "The whole span sits on a pier in the river and rotates horizontally, usually through about 90 degrees, to line up with the river so ships can pass on either side.",
+      "asks": [
+        "What is a swing bridge?",
+        "How does a turning bridge open?"
+      ]
+    },
+    {
+      "q": "Why are swing bridge arms equal on both sides?",
+      "a": "Equal arms balance each other around the pivot, so the span does not tip while it turns, and the motor only has to overcome friction rather than lift anything.",
+      "asks": [
+        "Why doesn't a swing bridge tip over?"
+      ]
+    },
+    {
+      "q": "What are the rollers for?",
+      "a": "A ring of rollers running on a circular track under the span helps carry its weight and keeps it level as it turns.",
+      "asks": [
+        "What does a swing bridge turn on?"
+      ]
+    },
+    {
+      "q": "What turns a swing bridge?",
+      "a": "Usually an electric or hydraulic motor drives a small pinion gear that meshes with a large ring gear around the pier, so the span rotates slowly and smoothly.",
+      "asks": [
+        "What powers a swing bridge?"
+      ]
+    },
+    {
+      "q": "What happens when a swing bridge closes?",
+      "a": "Once it lines up with the road, its ends are lifted or wedged onto fixed supports and locked, so traffic loads go into the abutments and not only the central pivot.",
+      "asks": [
+        "How is a swing bridge locked?"
+      ]
+    }
+  ],
+  "facts": [
+    "A swing bridge usually rotates through about 90 degrees on a central pier, leaving a navigation channel on one or both sides.",
+    "The El Ferdan Railway Bridge across the Suez Canal in Egypt is one of the longest swing bridges in the world, about 340 metres long."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a swing bridge have arms of equal length on both sides of its pivot?",
+      "show": "Equal arms on a swing bridge…",
+      "options": [
+        {
+          "show": "Keep it balanced as it turns",
+          "say": "Keep it balanced as it turns"
+        },
+        {
+          "show": "Make it look tidy",
+          "say": "Make it look tidy"
+        },
+        {
+          "show": "Help it float",
+          "say": "Help it float"
+        }
+      ],
+      "answer": 0,
+      "why": "Balanced arms mean the span does not tip, so it needs only a small motor to rotate it.",
+      "wrong": {
+        "1": "Looks are not the reason; balance is.",
+        "2": "Swing bridges sit on a fixed pier; they do not float."
+      }
+    }
+  ]
+}

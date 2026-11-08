@@ -1,0 +1,362 @@
+{
+  "id": "BCE-GEO-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Pile foundations: skin friction and end bearing in soft ground",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-GEO — Geotechnical engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "pile foundation",
+    "skin friction",
+    "end bearing",
+    "alpha method",
+    "pile load test"
+  ],
+  "examples": [
+    "How do piles carry load?",
+    "How do you calculate the capacity of a pile in clay?",
+    "What is the difference between skin friction and end bearing?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-layers",
+      "layers": [
+        {
+          "label": "Pile cap",
+          "size": 0.4,
+          "note": "Concrete block joining the pile heads",
+          "color": "#7f8c8d",
+          "ask": "What is a pile foundation?"
+        },
+        {
+          "label": "Soft clay 15 m",
+          "size": 3,
+          "note": "c_u = 50 kPa: grips the pile shaft",
+          "color": "#a1887f",
+          "ask": "What is skin friction on a pile?"
+        },
+        {
+          "label": "Stiff clay at the toe",
+          "size": 1,
+          "note": "c_u = 100 kPa: gives end bearing",
+          "color": "#6d4c41",
+          "ask": "What is end bearing?"
+        },
+        {
+          "label": "Rock (deeper)",
+          "size": 0.6,
+          "color": "#616161"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Shanghai, Mumbai and Lagos sit on soft ground near water, yet tall towers rise there. The trick is piles: long columns driven or bored deep into the earth. The Burj Khalifa stands on about one hundred and ninety piles, each one and a half metres across. On the board, a single concrete pile, half a metre wide and fifteen metres long, in soft clay.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Pile foundations: skin friction and end bearing in soft ground"
+        },
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Pile cap",
+              "size": 0.4,
+              "note": "Concrete block joining the pile heads",
+              "color": "#7f8c8d",
+              "ask": "What is a pile foundation?"
+            },
+            {
+              "label": "Soft clay 15 m",
+              "size": 3,
+              "note": "c_u = 50 kPa: grips the pile shaft",
+              "color": "#a1887f",
+              "ask": "What is skin friction on a pile?"
+            },
+            {
+              "label": "Stiff clay at the toe",
+              "size": 1,
+              "note": "c_u = 100 kPa: gives end bearing",
+              "color": "#6d4c41",
+              "ask": "What is end bearing?"
+            },
+            {
+              "label": "Rock (deeper)",
+              "size": 0.6,
+              "color": "#616161"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a pile foundation. The column stands on a pile cap, and the piles go down through soft clay and dense sand towards bedrock. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Pile foundations: skin friction and end bearing in soft ground"
+        },
+        {
+          "op": "image",
+          "render": "pile-foundation"
+        }
+      ]
+    },
+    {
+      "say": "Look at the forces. The load pushes down from the cap. The soil fights back in two ways: friction all along the shaft, called skin friction, and a push on the bottom, called end bearing. In soft clay, most of the help comes from the sides. Which arrow do you expect to be bigger?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "tower",
+          "objectAsk": "What is a pile foundation?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Load from cap",
+              "dir": "down",
+              "size": 4,
+              "ask": "How do you calculate pile capacity in clay?"
+            },
+            {
+              "label": "Skin friction",
+              "dir": "up",
+              "size": 3,
+              "ask": "What is skin friction on a pile?"
+            },
+            {
+              "label": "End bearing",
+              "dir": "up",
+              "size": 1,
+              "ask": "What is end bearing?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Skin friction! For clay we use the alpha method: shaft friction equals an adhesion factor, alpha, times the clay's undrained strength, times the shaft's surface area. With alpha of zero point five, strength fifty kilopascals and a shaft area of pi times zero point five times fifteen, that is about five hundred and eighty nine kilonewtons.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Pile cap",
+              "size": 0.4,
+              "note": "Concrete block joining the pile heads",
+              "color": "#7f8c8d",
+              "ask": "What is a pile foundation?"
+            },
+            {
+              "label": "Soft clay 15 m",
+              "size": 3,
+              "note": "c_u = 50 kPa: grips the pile shaft",
+              "color": "#a1887f",
+              "ask": "What is skin friction on a pile?"
+            },
+            {
+              "label": "Stiff clay at the toe",
+              "size": 1,
+              "note": "c_u = 100 kPa: gives end bearing",
+              "color": "#6d4c41",
+              "ask": "What is end bearing?"
+            },
+            {
+              "label": "Rock (deeper)",
+              "size": 0.6,
+              "color": "#616161"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Q_s = α c_u (π D L) = 0.5 × 50 × π × 0.5 × 15 ≈ 589 kN"
+        }
+      ]
+    },
+    {
+      "say": "Now the toe. End bearing in clay is nine times the strength there, a hundred kilopascals, times the base area, zero point one nine six square metres: about a hundred and seventy seven kilonewtons. Together the ultimate capacity is about seven hundred and sixty six. With a safety factor of two point five, each pile can safely carry about three hundred and six.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "kN",
+          "items": [
+            {
+              "label": "Skin friction",
+              "size": 589,
+              "icon": "arrow",
+              "ask": "What is skin friction on a pile?"
+            },
+            {
+              "label": "End bearing",
+              "size": 177,
+              "icon": "rock",
+              "ask": "What is end bearing?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Q_b = 9 c_u A_b = 9 × 100 × 0.196 ≈ 177 kN"
+        },
+        {
+          "op": "note",
+          "text": "Q_u = 589 + 177 = 766 kN → Q_a = 766 / 2.5 ≈ 306 kN"
+        }
+      ]
+    },
+    {
+      "say": "Engineers check these sums on site with a pile load test: load a real pile and measure how far it sinks. Piles usually work in groups joined by a cap, and in sand the end bearing often matters more. Excellent work! Challenge: if the pile were thirty metres long in the same clay, roughly how big would its skin friction be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Pile cap",
+              "size": 0.4,
+              "note": "Concrete block joining the pile heads",
+              "color": "#7f8c8d",
+              "ask": "What is a pile foundation?"
+            },
+            {
+              "label": "Soft clay 15 m",
+              "size": 3,
+              "note": "c_u = 50 kPa: grips the pile shaft",
+              "color": "#a1887f",
+              "ask": "What is skin friction on a pile?"
+            },
+            {
+              "label": "Stiff clay at the toe",
+              "size": 1,
+              "note": "c_u = 100 kPa: gives end bearing",
+              "color": "#6d4c41",
+              "ask": "What is end bearing?"
+            },
+            {
+              "label": "Rock (deeper)",
+              "size": 0.6,
+              "color": "#616161"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a pile foundation?",
+      "a": "A pile is a long slender column of concrete, steel or timber, driven or bored into the ground to carry loads down to deeper, stronger soil or rock. Piles are used where surface soils are too weak.",
+      "asks": [
+        "Why use piles?",
+        "Define pile foundation"
+      ]
+    },
+    {
+      "q": "What is skin friction on a pile?",
+      "a": "Skin friction, or shaft resistance, is the grip between the soil and the sides of the pile along its length. In soft clay it usually provides most of the capacity.",
+      "asks": [
+        "What is shaft resistance?"
+      ]
+    },
+    {
+      "q": "What is end bearing?",
+      "a": "End bearing is the resistance at the pile tip as it presses on the soil or rock below. It matters most when the pile sits on a strong layer like dense sand or rock.",
+      "asks": [
+        "What is base resistance of a pile?"
+      ]
+    },
+    {
+      "q": "How do you calculate pile capacity in clay?",
+      "a": "Add shaft and base resistance. Shaft: alpha times c u times the shaft area; base: 9 times c u at the tip times the base area. For our pile, 589 plus 177 is about 766 kilonewtons ultimate.",
+      "asks": [
+        "Alpha method",
+        "Pile capacity formula"
+      ]
+    },
+    {
+      "q": "What is a pile load test?",
+      "a": "A pile load test applies increasing load to a real pile, often against kentledge or reaction piles, and measures settlement. It confirms the design capacity on site.",
+      "asks": [
+        "How are piles tested?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Burj Khalifa's foundation uses 192 bored piles, each 1.5 metres in diameter.",
+    "In the alpha method, pile shaft resistance in clay is α × c_u × shaft area, with α typically between about 0.3 and 1."
+  ],
+  "quiz": [
+    {
+      "say": "A pile has 600 kilonewtons of skin friction and 150 of end bearing. What is the allowable load with a factor of safety of 2.5?",
+      "show": "A pile has skin friction 600 kN and end bearing 150 kN. Allowable load with FS = 2.5?",
+      "options": [
+        {
+          "show": "300 kN",
+          "say": "300 kilonewtons"
+        },
+        {
+          "show": "750 kN",
+          "say": "750 kilonewtons"
+        },
+        {
+          "show": "240 kN",
+          "say": "240 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "(600 + 150) ÷ 2.5 = 750 ÷ 2.5 = 300 kilonewtons.",
+      "wrong": {
+        "1": "That is the ultimate capacity before the safety factor.",
+        "2": "That forgets the end bearing."
+      }
+    },
+    {
+      "say": "In soft clay, a long pile gets most of its capacity from…",
+      "show": "In soft clay, a long pile gets most of its capacity from…",
+      "options": [
+        {
+          "show": "End bearing",
+          "say": "End bearing"
+        },
+        {
+          "show": "Skin friction",
+          "say": "Skin friction"
+        },
+        {
+          "show": "The pile cap",
+          "say": "The pile cap"
+        }
+      ],
+      "answer": 1,
+      "why": "The long shaft surface gathers far more resistance than the small tip.",
+      "wrong": {
+        "0": "The tip is small and soft clay gives little end bearing.",
+        "2": "The cap joins piles together; it does not carry the load into the ground."
+      }
+    }
+  ]
+}

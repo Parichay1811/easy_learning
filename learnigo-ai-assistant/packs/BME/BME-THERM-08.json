@@ -1,0 +1,503 @@
+{
+  "id": "BME-THERM-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The Diesel cycle: heat added at constant pressure and the cutoff ratio",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-THERM — Thermodynamics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Diesel cycle",
+    "cutoff ratio",
+    "compression ignition",
+    "Diesel efficiency",
+    "compression ratio"
+  ],
+  "examples": [
+    "What is the difference between the Otto and Diesel cycles?",
+    "What is the cutoff ratio?",
+    "Why are diesel engines more efficient?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Volume (L)",
+        "max": 1
+      },
+      "y": {
+        "label": "Pressure (kPa)",
+        "max": 6500
+      },
+      "curves": [
+        {
+          "label": "Diesel cycle, r = 18",
+          "type": "points",
+          "points": [
+            [
+              0.9,
+              100
+            ],
+            [
+              0.5,
+              227.7
+            ],
+            [
+              0.25,
+              600.9
+            ],
+            [
+              0.12,
+              1679.1
+            ],
+            [
+              0.05,
+              5719.8
+            ],
+            [
+              0.1,
+              5719.8
+            ],
+            [
+              0.2,
+              2167.4
+            ],
+            [
+              0.4,
+              821.3
+            ],
+            [
+              0.65,
+              416.2
+            ],
+            [
+              0.9,
+              263.9
+            ]
+          ],
+          "closed": true,
+          "ask": "What is the Diesel cycle?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0.05,
+          "label": "Injection starts"
+        },
+        {
+          "x": 0.1,
+          "label": "Cutoff"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Lorries, ships and generators mostly run on diesel. Rudolf Diesel patented his engine in 1892 with a clever twist: no spark plug. He squeezed air so hard that it became hot enough to light the fuel the moment it was sprayed in. Look at the cylinder: an injector where the spark plug would be.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The Diesel cycle: heat added at constant pressure and the cutoff ratio"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "inj",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.6,
+              "label": "Fuel injector",
+              "ask": "How does a diesel engine ignite its fuel?"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.4,
+              "label": "Piston"
+            },
+            {
+              "id": "crank",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.8,
+              "label": "Crankshaft"
+            },
+            {
+              "id": "turbo",
+              "kind": "fan",
+              "x": 0.15,
+              "y": 0.25,
+              "size": 0.6,
+              "label": "Turbocharger"
+            }
+          ],
+          "links": [
+            {
+              "from": "piston",
+              "to": "crank",
+              "kind": "force"
+            },
+            {
+              "from": "turbo",
+              "to": "piston",
+              "kind": "fluid",
+              "label": "Air"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Compression ignition: hot air lights the fuel"
+        }
+      ]
+    },
+    {
+      "say": "Here is an engine cylinder in 3D. In a diesel there is no spark plug: the piston squeezes the air so hard it gets hot enough to light the fuel. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The Diesel cycle: heat added at constant pressure and the cutoff ratio"
+        },
+        {
+          "op": "image",
+          "render": "piston-engine"
+        }
+      ]
+    },
+    {
+      "say": "The cycle starts like Otto's, but squeezes harder: a compression ratio of 18, from 0.9 litres to 0.05. The pressure climbs to about 5700 kilopascals and the air gets hot enough to ignite diesel. See the steep rise on the left? Now the fuel is sprayed in gradually. What happens to the pressure while it burns?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Volume (L)",
+            "max": 1
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 6500
+          },
+          "curves": [
+            {
+              "label": "Diesel cycle, r = 18",
+              "type": "points",
+              "points": [
+                [
+                  0.9,
+                  100
+                ],
+                [
+                  0.5,
+                  227.7
+                ],
+                [
+                  0.25,
+                  600.9
+                ],
+                [
+                  0.12,
+                  1679.1
+                ],
+                [
+                  0.05,
+                  5719.8
+                ],
+                [
+                  0.1,
+                  5719.8
+                ],
+                [
+                  0.2,
+                  2167.4
+                ],
+                [
+                  0.4,
+                  821.3
+                ],
+                [
+                  0.65,
+                  416.2
+                ],
+                [
+                  0.9,
+                  263.9
+                ]
+              ],
+              "closed": true,
+              "ask": "What is the Diesel cycle?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.05,
+              "label": "Injection starts"
+            },
+            {
+              "x": 0.1,
+              "label": "Cutoff"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "r = 0.9 / 0.05 = 18; P₂ = 100 × 18^1.4 = 5720 kPa"
+        }
+      ]
+    },
+    {
+      "say": "It stays flat! The piston moves down while the fuel burns, so heat is added at constant pressure. Injection stops at the cutoff, here when the volume has doubled: a cutoff ratio of 2. Then the gas expands adiabatically. See the flat top of the loop? Why might a longer cutoff give more power?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Volume (L)",
+            "max": 1
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 6500
+          },
+          "curves": [
+            {
+              "label": "Diesel cycle, r = 18",
+              "type": "points",
+              "points": [
+                [
+                  0.9,
+                  100
+                ],
+                [
+                  0.5,
+                  227.7
+                ],
+                [
+                  0.25,
+                  600.9
+                ],
+                [
+                  0.12,
+                  1679.1
+                ],
+                [
+                  0.05,
+                  5719.8
+                ],
+                [
+                  0.1,
+                  5719.8
+                ],
+                [
+                  0.2,
+                  2167.4
+                ],
+                [
+                  0.4,
+                  821.3
+                ],
+                [
+                  0.65,
+                  416.2
+                ],
+                [
+                  0.9,
+                  263.9
+                ]
+              ],
+              "closed": true,
+              "ask": "What is the Diesel cycle?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.05,
+              "label": "Injection starts"
+            },
+            {
+              "x": 0.1,
+              "label": "Cutoff"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Cutoff ratio r_c = V₃ / V₂ = 0.1 / 0.05 = 2"
+        }
+      ]
+    },
+    {
+      "say": "More fuel burns per cycle, but efficiency drops. The efficiency formula has the Otto term times a cutoff correction: about 63.2 percent here. Now compare: an Otto cycle at the same ratio of 18 would be 68.5 percent, more! See the bars? So why are diesel engines more efficient in real life?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "%",
+          "items": [
+            {
+              "label": "Diesel, r = 18",
+              "size": 63.2,
+              "icon": "bus"
+            },
+            {
+              "label": "Otto, r = 18",
+              "size": 68.5,
+              "icon": "car"
+            },
+            {
+              "label": "Otto, r = 10",
+              "size": 60.2,
+              "icon": "car"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "η = 1 − (1/18^0.4)(2^1.4 − 1)/(1.4 × 1) = 63.2%"
+        }
+      ]
+    },
+    {
+      "say": "Because a petrol engine cannot reach 18 without knocking; it is stuck near 10, at about 60 percent. The diesel only compresses air, so it can go much higher. Excellent! Real link: big marine diesels reach above 50 percent real efficiency, among the best engines ever built. Exam tip: at equal compression ratio, Otto beats Diesel.",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "%",
+          "items": [
+            {
+              "label": "Diesel, r = 18",
+              "size": 63.2,
+              "icon": "bus"
+            },
+            {
+              "label": "Otto, r = 18",
+              "size": 68.5,
+              "icon": "car"
+            },
+            {
+              "label": "Otto, r = 10",
+              "size": 60.2,
+              "icon": "car"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Same r: Otto wins. Real engines: Diesel wins via higher r"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the Diesel cycle?",
+      "a": "The ideal air-standard cycle for compression-ignition engines: adiabatic compression, heat added at constant pressure, adiabatic expansion, and heat rejected at constant volume.",
+      "asks": [
+        "Diesel cycle processes",
+        "what does the Diesel P-V diagram show"
+      ]
+    },
+    {
+      "q": "How does a diesel engine ignite its fuel?",
+      "a": "It compresses air so much that its temperature rises above the fuel's self-ignition point. The injector sprays fuel into this hot air and it lights on its own, with no spark.",
+      "asks": [
+        "compression ignition explained"
+      ]
+    },
+    {
+      "q": "What is the cutoff ratio?",
+      "a": "The ratio of the cylinder volume when fuel injection stops to the volume at the start of injection. A larger cutoff ratio means more fuel burned per cycle but lower efficiency.",
+      "asks": [
+        "cutoff ratio definition"
+      ]
+    },
+    {
+      "q": "What is the difference between the Otto and Diesel cycles?",
+      "a": "Otto adds heat at constant volume, after a spark; Diesel adds heat at constant pressure, as fuel is injected into hot compressed air. For the same compression ratio, Otto is more efficient.",
+      "asks": [
+        "Otto vs Diesel"
+      ]
+    },
+    {
+      "q": "Why are diesel engines more efficient?",
+      "a": "They can use much higher compression ratios, about 15 to 22, because only air is compressed, so there is no knock. The higher ratio more than makes up for the constant-pressure heat addition.",
+      "asks": [
+        "diesel efficiency advantage"
+      ]
+    }
+  ],
+  "facts": [
+    "Rudolf Diesel patented his compression-ignition engine in 1892.",
+    "For the same compression ratio, the air-standard Otto cycle is more efficient than the Diesel cycle."
+  ],
+  "quiz": [
+    {
+      "say": "A Diesel cycle compresses air from 1.2 litres to 0.06 litres. What is the compression ratio?",
+      "show": "Air is compressed from 1.2 L to 0.06 L. Compression ratio?",
+      "options": [
+        {
+          "show": "20",
+          "say": "20"
+        },
+        {
+          "show": "0.05",
+          "say": "0.05"
+        },
+        {
+          "show": "12",
+          "say": "12"
+        }
+      ],
+      "answer": 0,
+      "why": "r = V₁ / V₂ = 1.2 / 0.06 = 20.",
+      "wrong": {
+        "1": "That is V₂ over V₁, upside down.",
+        "2": "That divides 1.2 by 0.1 instead of 0.06."
+      }
+    },
+    {
+      "say": "In the ideal Diesel cycle, heat is added at…",
+      "show": "In the ideal Diesel cycle, heat is added at…",
+      "options": [
+        {
+          "show": "Constant pressure",
+          "say": "Constant pressure"
+        },
+        {
+          "show": "Constant volume",
+          "say": "Constant volume"
+        },
+        {
+          "show": "Constant temperature",
+          "say": "Constant temperature"
+        }
+      ],
+      "answer": 0,
+      "why": "Fuel burns as it is injected while the piston moves down, keeping the pressure roughly constant.",
+      "wrong": {
+        "1": "Constant volume heat addition is the Otto cycle.",
+        "2": "Constant temperature heat addition is the Carnot cycle."
+      }
+    }
+  ]
+}

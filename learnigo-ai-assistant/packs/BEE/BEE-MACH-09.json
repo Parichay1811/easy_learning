@@ -1,0 +1,674 @@
+{
+  "id": "BEE-MACH-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Brushless DC motors: electronic commutation in drones and e-scooters",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "brushless DC motor",
+    "BLDC",
+    "electronic commutation",
+    "Hall sensors",
+    "six-step commutation",
+    "Kv rating"
+  ],
+  "examples": [
+    "How does a brushless DC motor work?",
+    "What is six-step commutation?",
+    "What does the Kv rating of a drone motor mean?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "bat",
+          "kind": "battery",
+          "x": 0.1,
+          "y": 0.55,
+          "label": "Battery 14.8 V"
+        },
+        {
+          "id": "esc",
+          "kind": "box",
+          "x": 0.33,
+          "y": 0.55,
+          "label": "Controller (ESC)",
+          "ask": "What does the ESC controller do?"
+        },
+        {
+          "id": "hall",
+          "kind": "box",
+          "x": 0.33,
+          "y": 0.15,
+          "size": 0.7,
+          "label": "Hall sensors",
+          "ask": "What are Hall sensors for in a BLDC motor?"
+        },
+        {
+          "id": "stator",
+          "kind": "coil",
+          "x": 0.6,
+          "y": 0.25,
+          "size": 1.2,
+          "label": "Stator coils A B C"
+        },
+        {
+          "id": "rotor",
+          "kind": "magnet",
+          "x": 0.6,
+          "y": 0.68,
+          "size": 1.2,
+          "label": "Magnet rotor",
+          "motion": "spin",
+          "ask": "How does a brushless DC motor work?"
+        },
+        {
+          "id": "prop",
+          "kind": "propeller",
+          "x": 0.88,
+          "y": 0.68,
+          "label": "Propeller",
+          "ask": "What does the Kv rating of a drone motor mean?"
+        }
+      ],
+      "links": [
+        {
+          "from": "bat",
+          "to": "esc",
+          "kind": "power"
+        },
+        {
+          "from": "hall",
+          "to": "esc",
+          "kind": "signal",
+          "label": "Rotor position"
+        },
+        {
+          "from": "esc",
+          "to": "stator",
+          "kind": "power",
+          "label": "Switched phases"
+        },
+        {
+          "from": "stator",
+          "to": "rotor",
+          "kind": "energy",
+          "label": "Field"
+        },
+        {
+          "from": "rotor",
+          "to": "hall",
+          "kind": "signal"
+        },
+        {
+          "from": "rotor",
+          "to": "prop",
+          "kind": "force",
+          "label": "Thrust"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A racing drone's motors spin at more than 10,000 rpm for hours with nothing rubbing inside them. They are brushless DC motors, also found in e-scooters, computer fans and hard drives. On the board, a battery feeds a controller, the controller switches three stator coils, and a permanent-magnet rotor spins the propeller.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Brushless DC motors: electronic commutation in drones and e-scooters"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Battery 14.8 V"
+            },
+            {
+              "id": "esc",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.55,
+              "label": "Controller (ESC)",
+              "ask": "What does the ESC controller do?"
+            },
+            {
+              "id": "hall",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hall sensors",
+              "ask": "What are Hall sensors for in a BLDC motor?"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.25,
+              "size": 1.2,
+              "label": "Stator coils A B C"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.6,
+              "y": 0.68,
+              "size": 1.2,
+              "label": "Magnet rotor",
+              "motion": "spin",
+              "ask": "How does a brushless DC motor work?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.88,
+              "y": 0.68,
+              "label": "Propeller",
+              "ask": "What does the Kv rating of a drone motor mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "esc",
+              "kind": "power"
+            },
+            {
+              "from": "hall",
+              "to": "esc",
+              "kind": "signal",
+              "label": "Rotor position"
+            },
+            {
+              "from": "esc",
+              "to": "stator",
+              "kind": "power",
+              "label": "Switched phases"
+            },
+            {
+              "from": "stator",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Field"
+            },
+            {
+              "from": "rotor",
+              "to": "hall",
+              "kind": "signal"
+            },
+            {
+              "from": "rotor",
+              "to": "prop",
+              "kind": "force",
+              "label": "Thrust"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Remember the brushed motor, where the coil spins and a commutator flips its current. A brushless motor turns that inside out. Look at the rotor: the permanent magnets spin, and the coils stay still on the stator, so no current has to reach a moving part. No brushes means no sparks and no wear. But then what flips the current at the right moment?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Battery 14.8 V"
+            },
+            {
+              "id": "esc",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.55,
+              "label": "Controller (ESC)",
+              "ask": "What does the ESC controller do?"
+            },
+            {
+              "id": "hall",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hall sensors",
+              "ask": "What are Hall sensors for in a BLDC motor?"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.25,
+              "size": 1.2,
+              "label": "Stator coils A B C"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.6,
+              "y": 0.68,
+              "size": 1.2,
+              "label": "Magnet rotor",
+              "motion": "spin",
+              "ask": "How does a brushless DC motor work?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.88,
+              "y": 0.68,
+              "label": "Propeller",
+              "ask": "What does the Kv rating of a drone motor mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "esc",
+              "kind": "power"
+            },
+            {
+              "from": "hall",
+              "to": "esc",
+              "kind": "signal",
+              "label": "Rotor position"
+            },
+            {
+              "from": "esc",
+              "to": "stator",
+              "kind": "power",
+              "label": "Switched phases"
+            },
+            {
+              "from": "stator",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Field"
+            },
+            {
+              "from": "rotor",
+              "to": "hall",
+              "kind": "signal"
+            },
+            {
+              "from": "rotor",
+              "to": "prop",
+              "kind": "force",
+              "label": "Thrust"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "Brushed: coil spins, magnets still.  BLDC: magnets spin"
+        }
+      ]
+    },
+    {
+      "say": "The controller does, electronically. Follow the cycle: at each step it drives current into one coil and out of another, A to B, then A to C, then B to C, and on through six steps. Each step moves the field 60 electrical degrees and pulls the rotor magnet round after it. What must the controller know to switch at the right time?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Step 1: A+ B−",
+              "icon": "switch",
+              "note": "Current in at coil A, out at coil B",
+              "ask": "What is six-step commutation?"
+            },
+            {
+              "label": "Step 2: A+ C−",
+              "icon": "switch",
+              "note": "Field moves 60 electrical degrees"
+            },
+            {
+              "label": "Step 3: B+ C−",
+              "icon": "switch"
+            },
+            {
+              "label": "Step 4: B+ A−",
+              "icon": "switch"
+            },
+            {
+              "label": "Step 5: C+ A−",
+              "icon": "switch"
+            },
+            {
+              "label": "Step 6: C+ B−",
+              "icon": "switch",
+              "note": "Then back to step 1"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "6 steps per electrical cycle, 2 phases on at a time"
+        }
+      ]
+    },
+    {
+      "say": "It must know where the rotor is. Look at the Hall sensors, little chips that feel the magnet's field as it passes and tell the controller the rotor angle. Sensorless controllers watch the back EMF in the coil that is switched off instead. Either way, switching follows the rotor, so it never falls out of step. How do you think the controller changes the speed?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Battery 14.8 V"
+            },
+            {
+              "id": "esc",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.55,
+              "label": "Controller (ESC)",
+              "ask": "What does the ESC controller do?"
+            },
+            {
+              "id": "hall",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hall sensors",
+              "ask": "What are Hall sensors for in a BLDC motor?"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.25,
+              "size": 1.2,
+              "label": "Stator coils A B C"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.6,
+              "y": 0.68,
+              "size": 1.2,
+              "label": "Magnet rotor",
+              "motion": "spin",
+              "ask": "How does a brushless DC motor work?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.88,
+              "y": 0.68,
+              "label": "Propeller",
+              "ask": "What does the Kv rating of a drone motor mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "esc",
+              "kind": "power"
+            },
+            {
+              "from": "hall",
+              "to": "esc",
+              "kind": "signal",
+              "label": "Rotor position"
+            },
+            {
+              "from": "esc",
+              "to": "stator",
+              "kind": "power",
+              "label": "Switched phases"
+            },
+            {
+              "from": "stator",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Field"
+            },
+            {
+              "from": "rotor",
+              "to": "hall",
+              "kind": "signal"
+            },
+            {
+              "from": "rotor",
+              "to": "prop",
+              "kind": "force",
+              "label": "Thrust"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Hall sensors (or back EMF) give the rotor position"
+        }
+      ]
+    },
+    {
+      "say": "By pulse-width modulation: chopping the battery voltage thousands of times a second to set its average. A drone motor rated 920 Kv, meaning 920 rpm per volt at no load, spins at about 13,600 rpm on a 14.8 volt battery. Brilliant! Challenge: what no-load speed would a 2300 Kv motor reach on 11.1 volts?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Battery 14.8 V"
+            },
+            {
+              "id": "esc",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.55,
+              "label": "Controller (ESC)",
+              "ask": "What does the ESC controller do?"
+            },
+            {
+              "id": "hall",
+              "kind": "box",
+              "x": 0.33,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hall sensors",
+              "ask": "What are Hall sensors for in a BLDC motor?"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.25,
+              "size": 1.2,
+              "label": "Stator coils A B C"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.6,
+              "y": 0.68,
+              "size": 1.2,
+              "label": "Magnet rotor",
+              "motion": "spin",
+              "ask": "How does a brushless DC motor work?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.88,
+              "y": 0.68,
+              "label": "Propeller",
+              "ask": "What does the Kv rating of a drone motor mean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "esc",
+              "kind": "power"
+            },
+            {
+              "from": "hall",
+              "to": "esc",
+              "kind": "signal",
+              "label": "Rotor position"
+            },
+            {
+              "from": "esc",
+              "to": "stator",
+              "kind": "power",
+              "label": "Switched phases"
+            },
+            {
+              "from": "stator",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Field"
+            },
+            {
+              "from": "rotor",
+              "to": "hall",
+              "kind": "signal"
+            },
+            {
+              "from": "rotor",
+              "to": "prop",
+              "kind": "force",
+              "label": "Thrust"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "rpm ≈ Kv × V = 920 × 14.8 ≈ 13,600 rpm"
+        },
+        {
+          "op": "note",
+          "text": "Kv means no-load rpm per volt"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a brushless DC motor work?",
+      "a": "Permanent magnets on the rotor are pulled round by the field of fixed stator coils. An electronic controller switches current through the coils in sequence, timed by the rotor position, doing the job a commutator does in a brushed motor.",
+      "asks": [
+        "What is a BLDC motor?"
+      ]
+    },
+    {
+      "q": "What does the ESC controller do?",
+      "a": "The electronic speed controller uses six transistors to connect the battery to the three motor phases in the right order, and pulse-width modulation to set the average voltage and so the speed.",
+      "asks": [
+        "What is an electronic speed controller?"
+      ]
+    },
+    {
+      "q": "What are Hall sensors for in a BLDC motor?",
+      "a": "They are small magnetic-field sensors on the stator that switch as rotor magnets pass. Their three outputs give the rotor position in six steps, telling the controller when to switch to the next coil pair.",
+      "asks": [
+        "How does a brushless motor know the rotor position?"
+      ]
+    },
+    {
+      "q": "What is six-step commutation?",
+      "a": "The controller energises two of the three phases at a time, in six combinations per electrical cycle: A B, A C, B C, B A, C A and C B. Each step moves the stator field 60 electrical degrees ahead.",
+      "asks": [
+        "What is trapezoidal commutation?"
+      ]
+    },
+    {
+      "q": "What does the Kv rating of a drone motor mean?",
+      "a": "Kv is the no-load speed in rpm per volt. A 920 Kv motor on 14.8 volts spins at about 920 times 14.8, roughly 13,600 rpm, before a propeller loads it down.",
+      "asks": [
+        "What is Kv in a motor?"
+      ]
+    }
+  ],
+  "facts": [
+    "A BLDC motor's controller typically uses six power transistors arranged as a three-phase bridge.",
+    "A 920 Kv motor on 14.8 V spins at about 13,600 rpm with no load.",
+    "Hard disk drives use brushless motors to spin their platters, commonly at 5400 or 7200 rpm."
+  ],
+  "quiz": [
+    {
+      "say": "What no-load speed does a 2300 Kv motor reach on 11.1 volts?",
+      "show": "What no-load speed does a 2300 Kv motor reach on 11.1 V?",
+      "options": [
+        {
+          "show": "About 25,500 rpm",
+          "say": "about 25,500 rpm"
+        },
+        {
+          "show": "About 207 rpm",
+          "say": "about 207 rpm"
+        },
+        {
+          "show": "About 2300 rpm",
+          "say": "about 2300 rpm"
+        }
+      ],
+      "answer": 0,
+      "why": "Multiply Kv by the voltage: 2300 times 11.1 is about 25,530 rpm.",
+      "wrong": {
+        "1": "That divides Kv by the voltage instead of multiplying.",
+        "2": "That is the speed for just 1 volt."
+      }
+    },
+    {
+      "say": "In a BLDC motor, what replaces the brushes and commutator?",
+      "show": "In a BLDC motor, what replaces the brushes and commutator?",
+      "options": [
+        {
+          "show": "The electronic controller",
+          "say": "The electronic controller"
+        },
+        {
+          "show": "The permanent magnets",
+          "say": "The permanent magnets"
+        },
+        {
+          "show": "The propeller",
+          "say": "The propeller"
+        }
+      ],
+      "answer": 0,
+      "why": "The controller switches the coil currents in sequence using the rotor position: commutation done electronically.",
+      "wrong": {
+        "1": "The magnets make the rotor field; they do not switch any current.",
+        "2": "The propeller is just the load."
+      }
+    }
+  ]
+}

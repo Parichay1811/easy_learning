@@ -1,0 +1,464 @@
+{
+  "id": "BEE-SIG-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The frequency spectrum: seeing a signal as a row of frequencies",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "frequency spectrum",
+    "FFT",
+    "harmonic distortion",
+    "THD",
+    "frequency resolution",
+    "spectrum analyser"
+  ],
+  "examples": [
+    "What is a frequency spectrum?",
+    "How does an FFT work in simple terms?",
+    "What is total harmonic distortion?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (ms)",
+        "max": 40
+      },
+      "y": {
+        "label": "Current (per unit)",
+        "min": -1.3,
+        "max": 1.3
+      },
+      "curves": [
+        {
+          "label": "50 Hz fundamental",
+          "type": "sine",
+          "a": 1,
+          "k": 0.05,
+          "ask": "Where do harmonics on the mains come from?"
+        },
+        {
+          "label": "150 Hz 3rd harmonic",
+          "type": "sine",
+          "a": 0.2,
+          "k": 0.15,
+          "ask": "What is total harmonic distortion?"
+        },
+        {
+          "label": "250 Hz 5th harmonic",
+          "type": "sine",
+          "a": 0.1,
+          "k": 0.25
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your eyes see a wiggle, but your ears hear notes. The spectrum is the ears' view: which frequencies are present, and how strong each is. On the board are the three ingredients of the current drawn by a building full of computers and LED lights: a 50 hertz fundamental, a 3rd harmonic at 150 hertz and a 5th at 250. Added together, they make a distorted wave.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The frequency spectrum: seeing a signal as a row of frequencies"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 40
+          },
+          "y": {
+            "label": "Current (per unit)",
+            "min": -1.3,
+            "max": 1.3
+          },
+          "curves": [
+            {
+              "label": "50 Hz fundamental",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "ask": "Where do harmonics on the mains come from?"
+            },
+            {
+              "label": "150 Hz 3rd harmonic",
+              "type": "sine",
+              "a": 0.2,
+              "k": 0.15,
+              "ask": "What is total harmonic distortion?"
+            },
+            {
+              "label": "250 Hz 5th harmonic",
+              "type": "sine",
+              "a": 0.1,
+              "k": 0.25
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the same signal seen another way. The horizontal axis is frequency, and each spike is one ingredient: a tall one at 50 hertz with height 1, a smaller one at 150 hertz, 0.2, and a smaller still at 250 hertz, 0.1. Three spikes tell you everything the wiggly wave did, far more clearly. Which spikes would an engineer worry about?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency (Hz)",
+            "max": 300
+          },
+          "y": {
+            "label": "Amplitude (per unit)",
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "Spectrum",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  50,
+                  0
+                ],
+                [
+                  50,
+                  1
+                ],
+                [
+                  50,
+                  0
+                ],
+                [
+                  150,
+                  0
+                ],
+                [
+                  150,
+                  0.2
+                ],
+                [
+                  150,
+                  0
+                ],
+                [
+                  250,
+                  0
+                ],
+                [
+                  250,
+                  0.1
+                ],
+                [
+                  250,
+                  0
+                ],
+                [
+                  300,
+                  0
+                ]
+              ],
+              "ask": "What is a frequency spectrum?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "50 Hz: 1.0"
+            },
+            {
+              "x": 150,
+              "label": "150 Hz: 0.2"
+            },
+            {
+              "x": 250,
+              "label": "250 Hz: 0.1"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Spectrum: 50 Hz → 1.0, 150 Hz → 0.2, 250 Hz → 0.1"
+        }
+      ]
+    },
+    {
+      "say": "The harmonics, because they heat transformers and neutral wires without doing useful work. We roll them into one number, total harmonic distortion: the square root of the sum of the harmonic amplitudes squared, over the fundamental. Here the root of 0.04 plus 0.01, over 1, about 22 percent. Is that a clean supply?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency (Hz)",
+            "max": 300
+          },
+          "y": {
+            "label": "Amplitude (per unit)",
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "Spectrum",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  50,
+                  0
+                ],
+                [
+                  50,
+                  1
+                ],
+                [
+                  50,
+                  0
+                ],
+                [
+                  150,
+                  0
+                ],
+                [
+                  150,
+                  0.2
+                ],
+                [
+                  150,
+                  0
+                ],
+                [
+                  250,
+                  0
+                ],
+                [
+                  250,
+                  0.1
+                ],
+                [
+                  250,
+                  0
+                ],
+                [
+                  300,
+                  0
+                ]
+              ],
+              "ask": "What is a frequency spectrum?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "50 Hz: 1.0"
+            },
+            {
+              "x": 150,
+              "label": "150 Hz: 0.2"
+            },
+            {
+              "x": 250,
+              "label": "250 Hz: 0.1"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "THD = √(0.2² + 0.1²) / 1.0 ≈ 0.22 = 22%"
+        }
+      ]
+    },
+    {
+      "say": "Not very: for supply voltage, standards often aim for under about 8 percent. So how does a meter find these spikes? Follow the chain: it samples the signal, here 1000 samples at 10 kilohertz, then runs the fast Fourier transform, or FFT, which compares the samples with a whole set of frequencies at once. The spikes land in bins 10 hertz apart. How would you get finer bins?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Sample N points",
+              "icon": "clock",
+              "note": "1000 samples at 10 kHz take 0.1 s"
+            },
+            {
+              "label": "FFT",
+              "icon": "computer",
+              "note": "Fast Fourier transform: about N log N steps",
+              "ask": "How does an FFT work in simple terms?"
+            },
+            {
+              "label": "Bins every 10 Hz",
+              "icon": "ruler",
+              "note": "Resolution = 10 kHz / 1000 = 10 Hz",
+              "ask": "What sets the frequency resolution of an FFT?"
+            },
+            {
+              "label": "Spectrum",
+              "icon": "chip",
+              "note": "The strength of each frequency present"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Resolution Δf = fs / N = 10,000 / 1000 = 10 Hz"
+        }
+      ]
+    },
+    {
+      "say": "Record for longer: the resolution is one over the recording time, so 0.1 seconds gives 10 hertz and a full second would give 1 hertz. The same idea finds Wi-Fi channels, tunes guitars and spots worn bearings by their hum. Excellent! Challenge: with 2048 samples at 44.1 kilohertz, how far apart are the bins?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Sample N points",
+              "icon": "clock",
+              "note": "1000 samples at 10 kHz take 0.1 s"
+            },
+            {
+              "label": "FFT",
+              "icon": "computer",
+              "note": "Fast Fourier transform: about N log N steps",
+              "ask": "How does an FFT work in simple terms?"
+            },
+            {
+              "label": "Bins every 10 Hz",
+              "icon": "ruler",
+              "note": "Resolution = 10 kHz / 1000 = 10 Hz",
+              "ask": "What sets the frequency resolution of an FFT?"
+            },
+            {
+              "label": "Spectrum",
+              "icon": "chip",
+              "note": "The strength of each frequency present"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Δf = 1 / recording time = 1 / 0.1 s = 10 Hz"
+        },
+        {
+          "op": "note",
+          "text": "The FFT’s N log N speed made real-time spectra possible"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a frequency spectrum?",
+      "a": "It shows a signal as the frequencies it contains and how strong each one is, instead of as a wave against time. A pure tone is one spike; a distorted wave has a spike for each harmonic.",
+      "asks": [
+        "What does a spectrum show?"
+      ]
+    },
+    {
+      "q": "How does an FFT work in simple terms?",
+      "a": "The fast Fourier transform takes a block of samples and measures how well they match sine waves at a set of evenly spaced frequencies, reusing shared calculations so it needs about N log N steps instead of N squared.",
+      "asks": [
+        "What is the fast Fourier transform?"
+      ]
+    },
+    {
+      "q": "What is total harmonic distortion?",
+      "a": "THD is the square root of the sum of the squares of the harmonic amplitudes, divided by the fundamental. Harmonics of 0.2 and 0.1 on a fundamental of 1 give about 22 percent.",
+      "asks": [
+        "How do you calculate THD?"
+      ]
+    },
+    {
+      "q": "What sets the frequency resolution of an FFT?",
+      "a": "The bin spacing is the sampling rate divided by the number of samples, which equals one over the recording time. 1000 samples at 10 kilohertz span 0.1 seconds, so the bins are 10 hertz apart.",
+      "asks": [
+        "How do you get finer frequency bins?"
+      ]
+    },
+    {
+      "q": "Where do harmonics on the mains come from?",
+      "a": "Non-linear loads such as computer power supplies, LED drivers and variable speed drives draw current in short pulses instead of smooth sine waves. Those pulses contain odd harmonics like 150 and 250 hertz on a 50 hertz supply.",
+      "asks": [
+        "What causes harmonic distortion?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Cooley–Tukey FFT algorithm, published in 1965, made fast spectrum analysis practical.",
+    "FFT bin spacing equals the sampling rate divided by the number of samples.",
+    "Power-quality standards such as EN 50160 and IEEE 519 limit voltage THD to about 8% on low-voltage networks."
+  ],
+  "quiz": [
+    {
+      "say": "An FFT uses 2048 samples taken at 44.1 kilohertz. How far apart are its frequency bins?",
+      "show": "An FFT uses 2048 samples taken at 44.1 kHz. How far apart are its frequency bins?",
+      "options": [
+        {
+          "show": "About 21.5 Hz",
+          "say": "about 21.5 hertz"
+        },
+        {
+          "show": "About 46 ms",
+          "say": "about 46 milliseconds"
+        },
+        {
+          "show": "2048 Hz",
+          "say": "2048 hertz"
+        }
+      ],
+      "answer": 0,
+      "why": "Bin spacing is 44,100 over 2048, about 21.5 hertz.",
+      "wrong": {
+        "1": "46 milliseconds is the recording time, not the bin spacing.",
+        "2": "That is the number of samples, not a frequency."
+      }
+    },
+    {
+      "say": "Harmonics of 0.3 and 0.4 sit on a fundamental of 1. What is the total harmonic distortion?",
+      "show": "Harmonics of 0.3 and 0.4 sit on a fundamental of 1. What is the THD?",
+      "options": [
+        {
+          "show": "50%",
+          "say": "50 percent"
+        },
+        {
+          "show": "70%",
+          "say": "70 percent"
+        },
+        {
+          "show": "12%",
+          "say": "12 percent"
+        }
+      ],
+      "answer": 0,
+      "why": "The root of 0.09 plus 0.16 is the root of 0.25, which is 0.5, so 50 percent.",
+      "wrong": {
+        "1": "That adds the amplitudes directly instead of as a root sum of squares.",
+        "2": "That multiplies 0.3 by 0.4; THD adds the squares under a root."
+      }
+    }
+  ]
+}

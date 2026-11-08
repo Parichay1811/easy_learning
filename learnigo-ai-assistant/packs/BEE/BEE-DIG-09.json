@@ -1,0 +1,673 @@
+{
+  "id": "BEE-DIG-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "ADC and DAC: turning a voltage into a number and back",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "analog-to-digital converter",
+    "digital-to-analog converter",
+    "ADC resolution",
+    "quantisation error",
+    "sample and hold"
+  ],
+  "examples": [
+    "What is the resolution of a 12-bit ADC?",
+    "How does an ADC turn a voltage into a number?",
+    "What is quantisation error?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (ms)",
+        "max": 4
+      },
+      "y": {
+        "label": "Voltage (V)",
+        "min": 0,
+        "max": 8
+      },
+      "curves": [
+        {
+          "label": "Analog input",
+          "type": "sine",
+          "c": 4,
+          "a": 3.5,
+          "k": 0.25,
+          "ask": "How does an ADC turn a voltage into a number?"
+        },
+        {
+          "label": "3-bit code (×1 V)",
+          "type": "points",
+          "points": [
+            [
+              0,
+              4
+            ],
+            [
+              0.5,
+              4
+            ],
+            [
+              0.5,
+              6
+            ],
+            [
+              1,
+              6
+            ],
+            [
+              1,
+              7
+            ],
+            [
+              1.5,
+              7
+            ],
+            [
+              1.5,
+              6
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2.5,
+              4
+            ],
+            [
+              2.5,
+              1
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              3.5,
+              0
+            ],
+            [
+              3.5,
+              1
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          "ask": "What is quantisation error?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0.5,
+          "label": "6.47 V → 110"
+        },
+        {
+          "x": 3,
+          "label": "0.5 V → 000"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your voice is a smooth wave, but your phone can only store numbers. On every call it crosses between the two worlds twice: an ADC, an analog-to-digital converter, turns voltage into numbers, and a DAC turns numbers back into voltage. On the board, the smooth curve is the input, and the staircase is what a 3-bit converter makes of it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "ADC and DAC: turning a voltage into a number and back"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 4
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": 0,
+            "max": 8
+          },
+          "curves": [
+            {
+              "label": "Analog input",
+              "type": "sine",
+              "c": 4,
+              "a": 3.5,
+              "k": 0.25,
+              "ask": "How does an ADC turn a voltage into a number?"
+            },
+            {
+              "label": "3-bit code (×1 V)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  6
+                ],
+                [
+                  1,
+                  6
+                ],
+                [
+                  1,
+                  7
+                ],
+                [
+                  1.5,
+                  7
+                ],
+                [
+                  1.5,
+                  6
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  1
+                ],
+                [
+                  3,
+                  1
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  4,
+                  1
+                ]
+              ],
+              "ask": "What is quantisation error?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "6.47 V → 110"
+            },
+            {
+              "x": 3,
+              "label": "0.5 V → 000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Follow the chain. First comes sample and hold: like a camera flash, it freezes the voltage at one instant, here every half millisecond, so the converter has a steady value to measure. Then the quantiser rounds it down to a whole step, and out comes a binary code. How many samples is that each second?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Sensor 0–8 V",
+              "icon": "sensor",
+              "note": "A smooth, changing voltage"
+            },
+            {
+              "label": "Sample & hold",
+              "icon": "camera",
+              "note": "Freezes the voltage while it is measured",
+              "ask": "What does sample and hold do?"
+            },
+            {
+              "label": "Quantise",
+              "icon": "ruler",
+              "note": "Rounds down to a whole step of 1 LSB"
+            },
+            {
+              "label": "Binary code",
+              "icon": "chip",
+              "note": "3 bits: 000 to 111",
+              "ask": "What is the resolution of a 12-bit ADC?"
+            },
+            {
+              "label": "Processor",
+              "icon": "computer",
+              "note": "Stores or works on the numbers"
+            },
+            {
+              "label": "DAC",
+              "icon": "sound",
+              "note": "Turns each code back into a voltage",
+              "ask": "How does a DAC work?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "One sample every 0.5 ms = 2000 samples/s"
+        }
+      ]
+    },
+    {
+      "say": "Two thousand. Now look at the staircase. Three bits give 2 to the 3, eight codes from 000 to 111, so an 8 volt range is cut into steps of 1 volt. One step is called an LSB, the least significant bit. At half a millisecond the input is 6.47 volts, and the converter writes 110, six. Where did the 0.47 volts go?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 4
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": 0,
+            "max": 8
+          },
+          "curves": [
+            {
+              "label": "Analog input",
+              "type": "sine",
+              "c": 4,
+              "a": 3.5,
+              "k": 0.25,
+              "ask": "How does an ADC turn a voltage into a number?"
+            },
+            {
+              "label": "3-bit code (×1 V)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  6
+                ],
+                [
+                  1,
+                  6
+                ],
+                [
+                  1,
+                  7
+                ],
+                [
+                  1.5,
+                  7
+                ],
+                [
+                  1.5,
+                  6
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  1
+                ],
+                [
+                  3,
+                  1
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  4,
+                  1
+                ]
+              ],
+              "ask": "What is quantisation error?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "6.47 V → 110"
+            },
+            {
+              "x": 3,
+              "label": "0.5 V → 000"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "LSB = Vref / 2ⁿ = 8 V / 2³ = 1 V"
+        }
+      ]
+    },
+    {
+      "say": "Those lost 0.47 volts are quantisation error, the gap between the smooth curve and the staircase. You shrink it with more bits: a 12-bit ADC on 3.3 volts has 4096 steps of about 0.8 millivolts. A DAC runs the other way, turning each code into a voltage and holding it, and a filter smooths the steps. How many steps does a 10-bit ADC have?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 4
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": 0,
+            "max": 8
+          },
+          "curves": [
+            {
+              "label": "Analog input",
+              "type": "sine",
+              "c": 4,
+              "a": 3.5,
+              "k": 0.25,
+              "ask": "How does an ADC turn a voltage into a number?"
+            },
+            {
+              "label": "3-bit code (×1 V)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  6
+                ],
+                [
+                  1,
+                  6
+                ],
+                [
+                  1,
+                  7
+                ],
+                [
+                  1.5,
+                  7
+                ],
+                [
+                  1.5,
+                  6
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  1
+                ],
+                [
+                  3,
+                  1
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  4,
+                  1
+                ]
+              ],
+              "ask": "What is quantisation error?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "6.47 V → 110"
+            },
+            {
+              "x": 3,
+              "label": "0.5 V → 000"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Error: 0 to 1 LSB when rounding down"
+        }
+      ]
+    },
+    {
+      "say": "It has 1024. The last box, the DAC, drives your earphones: music stored as 16-bit numbers, 44,100 of them each second, becomes a smooth voltage again. Two numbers decide the quality: bits for fine steps, and sample rate for fast changes. Great job! Challenge: what is one step of a 10-bit ADC with a 5 volt range?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Sensor 0–8 V",
+              "icon": "sensor",
+              "note": "A smooth, changing voltage"
+            },
+            {
+              "label": "Sample & hold",
+              "icon": "camera",
+              "note": "Freezes the voltage while it is measured",
+              "ask": "What does sample and hold do?"
+            },
+            {
+              "label": "Quantise",
+              "icon": "ruler",
+              "note": "Rounds down to a whole step of 1 LSB"
+            },
+            {
+              "label": "Binary code",
+              "icon": "chip",
+              "note": "3 bits: 000 to 111",
+              "ask": "What is the resolution of a 12-bit ADC?"
+            },
+            {
+              "label": "Processor",
+              "icon": "computer",
+              "note": "Stores or works on the numbers"
+            },
+            {
+              "label": "DAC",
+              "icon": "sound",
+              "note": "Turns each code back into a voltage",
+              "ask": "How does a DAC work?"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "12-bit, 3.3 V: 3.3 / 4096 ≈ 0.81 mV per step"
+        },
+        {
+          "op": "note",
+          "text": "Audio CD: 16 bits, 44,100 samples a second"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the resolution of a 12-bit ADC?",
+      "a": "A 12-bit ADC has 2 to the 12, or 4096, codes. Its step size, the LSB, is the reference voltage divided by 4096, so with 3.3 volts each step is about 0.8 millivolts.",
+      "asks": [
+        "How small a voltage can a 12-bit ADC see?"
+      ]
+    },
+    {
+      "q": "How does an ADC turn a voltage into a number?",
+      "a": "It samples the voltage, holds it steady, then compares it with fractions of a reference voltage to find which step it falls in. A common design, successive approximation, decides one bit per comparison, starting with the most significant bit.",
+      "asks": [
+        "How does analog to digital conversion work?"
+      ]
+    },
+    {
+      "q": "What is quantisation error?",
+      "a": "It is the difference between the true voltage and the voltage its code stands for. Because the converter has only whole steps, the error is up to one LSB, or plus or minus half an LSB if it rounds to the nearest step.",
+      "asks": [
+        "Why is an ADC reading not exact?"
+      ]
+    },
+    {
+      "q": "What does sample and hold do?",
+      "a": "It captures the input voltage at one instant and holds it constant on a small capacitor while the converter measures it, so the reading is not smeared by the signal changing.",
+      "asks": [
+        "Why does an ADC need sample and hold?"
+      ]
+    },
+    {
+      "q": "How does a DAC work?",
+      "a": "A DAC adds up currents or voltages weighted by each bit, for example with an R-2R resistor ladder, so the output is proportional to the code. A low-pass filter then smooths the staircase into a continuous signal.",
+      "asks": [
+        "What is a digital to analog converter?"
+      ]
+    }
+  ],
+  "facts": [
+    "An audio CD stores 16-bit samples at 44,100 samples per second for each channel.",
+    "An n-bit converter has 2ⁿ levels, so a 12-bit ADC has 4096.",
+    "The Arduino Uno's ATmega328P has a 10-bit ADC, giving 1024 levels."
+  ],
+  "quiz": [
+    {
+      "say": "What is the step size of a 10-bit ADC with a 5 volt reference?",
+      "show": "What is the step size of a 10-bit ADC with a 5 V reference?",
+      "options": [
+        {
+          "show": "About 4.9 mV",
+          "say": "about 4.9 millivolts"
+        },
+        {
+          "show": "About 0.5 V",
+          "say": "about 0.5 volts"
+        },
+        {
+          "show": "About 1.2 mV",
+          "say": "about 1.2 millivolts"
+        }
+      ],
+      "answer": 0,
+      "why": "10 bits give 1024 steps, and 5 volts over 1024 is about 4.88 millivolts.",
+      "wrong": {
+        "1": "That divides by 10, the number of bits, instead of by 2 to the 10.",
+        "2": "That is 5 volts over 4096, the step of a 12-bit converter."
+      }
+    },
+    {
+      "say": "A 3-bit ADC with an 8 volt range reads 6.47 volts. Rounding down, what code does it give?",
+      "show": "A 3-bit ADC with an 8 V range reads 6.47 V. Rounding down, what code does it give?",
+      "options": [
+        {
+          "show": "110",
+          "say": "110"
+        },
+        {
+          "show": "111",
+          "say": "111"
+        },
+        {
+          "show": "101",
+          "say": "101"
+        }
+      ],
+      "answer": 0,
+      "why": "Each step is 1 volt, so 6.47 volts falls in step 6, which is binary 110.",
+      "wrong": {
+        "1": "111 is seven, which would need at least 7 volts.",
+        "2": "101 is five; 6.47 volts is above the 6 volt step."
+      }
+    }
+  ]
+}

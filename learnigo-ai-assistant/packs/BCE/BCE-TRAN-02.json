@@ -1,0 +1,378 @@
+{
+  "id": "BCE-TRAN-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Horizontal curves and superelevation: why roads tilt on bends",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-TRAN — Transportation engineering",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "superelevation",
+    "horizontal curve",
+    "side friction factor",
+    "minimum radius",
+    "transition curve",
+    "centripetal force"
+  ],
+  "examples": [
+    "What is superelevation on a road?",
+    "How do you calculate the minimum radius of a curve?",
+    "Why are race tracks banked?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "car",
+      "objectAsk": "Why does a car need a force to go round a curve?",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Weight",
+          "dir": "down",
+          "size": 4
+        },
+        {
+          "label": "Road reaction",
+          "dir": 100,
+          "size": 4,
+          "ask": "What is superelevation?"
+        },
+        {
+          "label": "Side friction",
+          "dir": 186,
+          "size": 2,
+          "ask": "What is the formula for superelevation?"
+        },
+        {
+          "label": "Net pull to centre",
+          "dir": "left",
+          "size": 3,
+          "ask": "Why does a car need a force to go round a curve?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Watch cyclists in a velodrome: the track tilts so steeply on the bends that they seem to ride on the wall. Roads do the same, just more gently. That tilt is called superelevation. On the board, a car on a tilted bend, with the centre of the curve to the left. Let us see which forces keep it on the road.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Horizontal curves and superelevation: why roads tilt on bends"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "car",
+          "objectAsk": "Why does a car need a force to go round a curve?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Road reaction",
+              "dir": 100,
+              "size": 4,
+              "ask": "What is superelevation?"
+            },
+            {
+              "label": "Side friction",
+              "dir": 186,
+              "size": 2,
+              "ask": "What is the formula for superelevation?"
+            },
+            {
+              "label": "Net pull to centre",
+              "dir": "left",
+              "size": 3,
+              "ask": "Why does a car need a force to go round a curve?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "To go round a bend, something must pull the car towards the centre. Look at the road reaction: because the road tilts, it leans inwards and gives part of that pull. Side friction from the tyres gives the rest. Without either, the car would carry straight on. What would happen on an icy, flat bend?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "car",
+          "objectAsk": "Why does a car need a force to go round a curve?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Road reaction",
+              "dir": 100,
+              "size": 4,
+              "ask": "What is superelevation?"
+            },
+            {
+              "label": "Side friction",
+              "dir": 186,
+              "size": 2,
+              "ask": "What is the formula for superelevation?"
+            },
+            {
+              "label": "Net pull to centre",
+              "dir": "left",
+              "size": 3,
+              "ask": "Why does a car need a force to go round a curve?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "It would slide outwards! Engineers balance the two with one formula: superelevation plus side friction equals speed squared over one hundred and twenty seven times the radius, with speed in kilometres per hour and radius in metres. At eighty on a two hundred and fifty metre bend, that is zero point two. With a seven percent tilt, friction must supply zero point one three.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "car",
+          "objectAsk": "Why does a car need a force to go round a curve?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Road reaction",
+              "dir": 100,
+              "size": 4,
+              "ask": "What is superelevation?"
+            },
+            {
+              "label": "Side friction",
+              "dir": 186,
+              "size": 2,
+              "ask": "What is the formula for superelevation?"
+            },
+            {
+              "label": "Net pull to centre",
+              "dir": "left",
+              "size": 3,
+              "ask": "Why does a car need a force to go round a curve?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "e + f = v² / 127R = 80² / (127 × 250) ≈ 0.20"
+        }
+      ]
+    },
+    {
+      "say": "Now see how friction demand changes with speed on that bend. At forty seven kilometres per hour the tilt does all the work. At eighty you need zero point one three, just under the design limit of zero point one four. At a hundred and twenty you would need almost zero point four, far more than wet tyres can give. Where does the blue curve cross the limit line?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (km/h)",
+            "max": 120
+          },
+          "y": {
+            "label": "Side friction needed",
+            "min": -0.1,
+            "max": 0.4
+          },
+          "curves": [
+            {
+              "label": "f for R 250 m, e 0.07",
+              "type": "power",
+              "c": -0.07,
+              "a": 0.000031496,
+              "k": 2,
+              "ask": "What is the formula for superelevation?"
+            },
+            {
+              "label": "Design limit 0.14",
+              "type": "line",
+              "c": 0.14,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 47,
+              "label": "47 km/h: f = 0"
+            },
+            {
+              "x": 80,
+              "label": "80 km/h: f = 0.13",
+              "ask": "What is the minimum radius of a curve?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Minimum radius at 80 km/h: 80² / (127 × 0.21) ≈ 240 m."
+        }
+      ]
+    },
+    {
+      "say": "Just above eighty, so the bend is designed for eighty! Engineers also add a transition curve, a spiral, so the tilt and the turning build up gently, not with a jolt. Brilliant work! Exam tip: remember the one hundred and twenty seven comes from three point six squared times g. Challenge: what is the minimum radius at a hundred kilometres per hour with e plus f of zero point two one?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (km/h)",
+            "max": 120
+          },
+          "y": {
+            "label": "Side friction needed",
+            "min": -0.1,
+            "max": 0.4
+          },
+          "curves": [
+            {
+              "label": "f for R 250 m, e 0.07",
+              "type": "power",
+              "c": -0.07,
+              "a": 0.000031496,
+              "k": 2,
+              "ask": "What is the formula for superelevation?"
+            },
+            {
+              "label": "Design limit 0.14",
+              "type": "line",
+              "c": 0.14,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 47,
+              "label": "47 km/h: f = 0"
+            },
+            {
+              "x": 80,
+              "label": "80 km/h: f = 0.13",
+              "ask": "What is the minimum radius of a curve?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is superelevation?",
+      "a": "Superelevation is the inward tilt of a road across a bend, raising the outer edge. It lets part of the road reaction push the vehicle towards the centre, so less side friction is needed.",
+      "asks": [
+        "Why do roads tilt on bends?",
+        "What is banking of roads?"
+      ]
+    },
+    {
+      "q": "Why does a car need a force to go round a curve?",
+      "a": "Moving in a circle needs a centripetal force towards the centre, equal to mass times speed squared over radius. On a road it comes from the tilted road reaction and tyre friction.",
+      "asks": [
+        "Centripetal force on a curve"
+      ]
+    },
+    {
+      "q": "What is the formula for superelevation?",
+      "a": "e plus f equals v squared over 127 R, with v in kilometres per hour and R in metres. For 80 kilometres per hour on a 250 metre bend, e plus f is about 0.20.",
+      "asks": [
+        "e + f = v²/127R",
+        "Side friction factor"
+      ]
+    },
+    {
+      "q": "What is the minimum radius of a curve?",
+      "a": "The smallest radius allowed for a design speed, using the maximum superelevation and side friction: R equals v squared over 127 times e plus f. At 80 kilometres per hour with 0.07 plus 0.14 it is about 240 metres.",
+      "asks": [
+        "How do you calculate the minimum radius of a curve?"
+      ]
+    },
+    {
+      "q": "What is a transition curve?",
+      "a": "A transition curve, often a clothoid spiral, joins a straight to a circular bend with a steadily shrinking radius, so the steering and the superelevation build up gradually.",
+      "asks": [
+        "Why use a spiral curve?"
+      ]
+    }
+  ],
+  "facts": [
+    "India's road congress (IRC) limits superelevation to 7% on plain and rolling terrain and 10% on hill roads not bound by snow.",
+    "The 127 in e + f = v²/127R comes from 3.6² × 9.81 ≈ 127, converting km/h to m/s."
+  ],
+  "quiz": [
+    {
+      "say": "A bend has a radius of 150 metres, a design speed of 60 kilometres per hour and a superelevation of 0.07. What side friction is needed?",
+      "show": "v = 60 km/h, R = 150 m, e = 0.07. Side friction needed?",
+      "options": [
+        {
+          "show": "About 0.12",
+          "say": "about 0.12"
+        },
+        {
+          "show": "About 0.19",
+          "say": "about 0.19"
+        },
+        {
+          "show": "About 0.26",
+          "say": "about 0.26"
+        }
+      ],
+      "answer": 0,
+      "why": "v²/127R = 3,600 / 19,050 ≈ 0.19, so f = 0.19 − 0.07 ≈ 0.12.",
+      "wrong": {
+        "1": "That is e plus f together; subtract the superelevation.",
+        "2": "That adds the superelevation instead of subtracting it."
+      }
+    },
+    {
+      "say": "Superelevation helps a car round a bend because…",
+      "show": "Superelevation helps a car round a bend because…",
+      "options": [
+        {
+          "show": "The tilted road reaction leans towards the centre",
+          "say": "The tilted road reaction leans towards the centre"
+        },
+        {
+          "show": "It makes the car heavier",
+          "say": "It makes the car heavier"
+        },
+        {
+          "show": "It removes the need for tyres",
+          "say": "It removes the need for tyres"
+        }
+      ],
+      "answer": 0,
+      "why": "Tilting the road turns part of the reaction into a pull towards the centre.",
+      "wrong": {
+        "1": "Mass does not change with tilt.",
+        "2": "Friction is still needed at most speeds."
+      }
+    }
+  ]
+}

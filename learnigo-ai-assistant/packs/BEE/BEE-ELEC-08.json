@@ -1,0 +1,430 @@
+{
+  "id": "BEE-ELEC-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The common-emitter amplifier: biasing and voltage gain, worked through",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "common-emitter amplifier",
+    "voltage divider bias",
+    "Q-point",
+    "voltage gain",
+    "emitter resistor"
+  ],
+  "examples": [
+    "How does a common emitter amplifier work?",
+    "How do I bias a transistor amplifier?",
+    "How do I calculate the gain of a common emitter amplifier?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "layout": "common-emitter",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Vcc",
+          "value": "12 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "33 kΩ"
+        },
+        {
+          "kind": "resistor",
+          "label": "R2",
+          "value": "10 kΩ",
+          "ask": "Why does a transistor amplifier need biasing?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R_C",
+          "value": "2.7 kΩ",
+          "ask": "Why put the collector voltage near half the supply?"
+        },
+        {
+          "kind": "npn",
+          "label": "NPN, β = 100",
+          "ask": "What is a common-emitter amplifier?",
+          "note": "Base fed from the R1–R2 midpoint"
+        },
+        {
+          "kind": "resistor",
+          "label": "R_E",
+          "value": "1 kΩ",
+          "ask": "What does the emitter resistor do?"
+        }
+      ],
+      "readouts": [
+        "V_B = 2.8 V, V_E = 2.1 V",
+        "I_C ≈ 2.1 mA",
+        "V_C ≈ 6.4 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A microphone gives only a few millivolts. To hear it you need gain, and for decades the workhorse has been the common-emitter amplifier. On the board: a 12 volt supply, a divider of 33 and 10 kilohms that feeds the transistor's base, and the transistor itself with a 2.7 kilohm collector resistor and a 1 kilohm emitter resistor.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The common-emitter amplifier: biasing and voltage gain, worked through"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "common-emitter",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Vcc",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "33 kΩ"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "10 kΩ",
+              "ask": "Why does a transistor amplifier need biasing?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_C",
+              "value": "2.7 kΩ",
+              "ask": "Why put the collector voltage near half the supply?"
+            },
+            {
+              "kind": "npn",
+              "label": "NPN, β = 100",
+              "ask": "What is a common-emitter amplifier?",
+              "note": "Base fed from the R1–R2 midpoint"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_E",
+              "value": "1 kΩ",
+              "ask": "What does the emitter resistor do?"
+            }
+          ],
+          "readouts": [
+            "V_B = 2.8 V, V_E = 2.1 V",
+            "I_C ≈ 2.1 mA",
+            "V_C ≈ 6.4 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Biasing comes first: setting resting currents so the signal can swing both ways. The divider puts 12 times 10 over 43, about 2.8 volts, on the base. Its own current, about 0.28 milliamps, is more than ten times the base current, so the base hardly disturbs it. Why must the transistor already be on before the signal arrives?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "common-emitter",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Vcc",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "33 kΩ"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "10 kΩ",
+              "ask": "Why does a transistor amplifier need biasing?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_C",
+              "value": "2.7 kΩ",
+              "ask": "Why put the collector voltage near half the supply?"
+            },
+            {
+              "kind": "npn",
+              "label": "NPN, β = 100",
+              "ask": "What is a common-emitter amplifier?",
+              "note": "Base fed from the R1–R2 midpoint"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_E",
+              "value": "1 kΩ",
+              "ask": "What does the emitter resistor do?"
+            }
+          ],
+          "readouts": [
+            "V_B = 2.8 V, V_E = 2.1 V",
+            "I_C ≈ 2.1 mA",
+            "V_C ≈ 6.4 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "V_B = 12 × 10/(33 + 10) ≈ 2.8 V"
+        }
+      ]
+    },
+    {
+      "say": "Because the base-emitter junction ignores anything below about 0.7 volts. The emitter sits 0.7 volts below the base, so 2.1 volts across 1 kilohm gives 2.1 milliamps, and the collector current is nearly the same. The collector resistor drops about 5.6 volts, so the collector rests at 6.4 volts, near the middle of 12. Why aim for the middle?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "common-emitter",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Vcc",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "33 kΩ"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "10 kΩ",
+              "ask": "Why does a transistor amplifier need biasing?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_C",
+              "value": "2.7 kΩ",
+              "ask": "Why put the collector voltage near half the supply?"
+            },
+            {
+              "kind": "npn",
+              "label": "NPN, β = 100",
+              "ask": "What is a common-emitter amplifier?",
+              "note": "Base fed from the R1–R2 midpoint"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_E",
+              "value": "1 kΩ",
+              "ask": "What does the emitter resistor do?"
+            }
+          ],
+          "readouts": [
+            "V_B = 2.8 V, V_E = 2.1 V",
+            "I_C ≈ 2.1 mA",
+            "V_C ≈ 6.4 V"
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "I_C ≈ (2.8 − 0.7)/1 kΩ = 2.1 mA;  V_C ≈ 6.4 V"
+        }
+      ]
+    },
+    {
+      "say": "To leave room to swing up and down without clipping. Now the gain. The transistor has its own tiny emitter resistance, r e, about 25 millivolts over the collector current, roughly 12 ohms. With a bypass capacitor across R E for signals, the gain is about minus R C over r e: 2700 over 12, about minus 225. A 10 millivolt input becomes 2.25 volts. What does the minus sign mean?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 2
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -3,
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "Input × 100",
+              "type": "sine",
+              "a": 1,
+              "k": 1
+            },
+            {
+              "label": "Output",
+              "type": "sine",
+              "a": 2.25,
+              "k": 1,
+              "phase": 180,
+              "ask": "How do I calculate the gain of a common-emitter amplifier?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.25,
+              "label": "Inverted, ×225"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "A_v ≈ −R_C / r_e = −2700 / 12 ≈ −225"
+        }
+      ]
+    },
+    {
+      "say": "The output is upside down: when the input rises, the output falls, a 180 degree shift. Great work! The trade-off: without the bypass capacitor the gain is only R C over R E, about 2.7, but far steadier against heat and beta changes. Exam tip: solve the DC bias with capacitors open, then the AC gain with them shorted. Challenge: what gain would a 5.4 kilohm R C give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 2
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -3,
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "Input × 100",
+              "type": "sine",
+              "a": 1,
+              "k": 1
+            },
+            {
+              "label": "Output",
+              "type": "sine",
+              "a": 2.25,
+              "k": 1,
+              "phase": 180,
+              "ask": "How do I calculate the gain of a common-emitter amplifier?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.25,
+              "label": "Inverted, ×225"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Unbypassed: A_v ≈ −R_C/R_E = −2.7 kΩ/1 kΩ = −2.7"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a common-emitter amplifier?",
+      "a": "A one-transistor amplifier with the emitter common to input and output. The signal goes in at the base and comes out at the collector, with a large voltage gain and an inverted shape.",
+      "asks": [
+        "How does a common emitter amplifier work?"
+      ]
+    },
+    {
+      "q": "Why does a transistor amplifier need biasing?",
+      "a": "The base-emitter junction needs about 0.7 volts before current flows. Biasing sets a resting current and voltage, the Q-point, so the signal swings around it in the active region.",
+      "asks": [
+        "What is the Q-point?",
+        "Why use voltage divider bias?"
+      ]
+    },
+    {
+      "q": "Why put the collector voltage near half the supply?",
+      "a": "It gives the output equal room to swing up and down before clipping at the supply or at saturation.",
+      "asks": [
+        "Where should the Q-point be?"
+      ]
+    },
+    {
+      "q": "How do I calculate the gain of a common-emitter amplifier?",
+      "a": "With the emitter bypassed, gain is about minus R C over r e, where r e is 25 millivolts over I C. Without the bypass, it is about minus R C over R E.",
+      "asks": [
+        "Common emitter gain formula",
+        "What is re?"
+      ]
+    },
+    {
+      "q": "What does the emitter resistor do?",
+      "a": "It sets the collector current from the base voltage and gives negative feedback that keeps the bias steady against temperature and beta. A bypass capacitor removes its effect for signals, raising the gain.",
+      "asks": [
+        "Why is there a resistor in the emitter?"
+      ]
+    }
+  ],
+  "facts": [
+    "At room temperature the small-signal emitter resistance r e is about 25 millivolts divided by the emitter current.",
+    "A common-emitter amplifier inverts the signal, a phase shift of 180 degrees."
+  ],
+  "quiz": [
+    {
+      "say": "A bias divider sets the base at 3.7 volts, and the emitter resistor is 1.5 kilohms. What is the emitter current?",
+      "show": "A bias divider sets V_B = 3.7 V and R_E = 1.5 kΩ. What is the emitter current?",
+      "options": [
+        {
+          "show": "2 mA",
+          "say": "2 milliamps"
+        },
+        {
+          "show": "2.5 mA",
+          "say": "2.5 milliamps"
+        },
+        {
+          "show": "0.47 mA",
+          "say": "0.47 milliamps"
+        }
+      ],
+      "answer": 0,
+      "why": "The emitter is 0.7 volts below the base, at 3 volts, and 3 over 1.5 kilohms is 2 milliamps.",
+      "wrong": {
+        "1": "That forgets the 0.7 volt base-emitter drop.",
+        "2": "That divides only the 0.7 volt drop by the resistor."
+      }
+    },
+    {
+      "say": "Compared with its input, what is the output of a common-emitter amplifier like?",
+      "show": "Compared with its input, the output of a common-emitter amplifier is...",
+      "options": [
+        {
+          "show": "Inverted",
+          "say": "Inverted"
+        },
+        {
+          "show": "In phase",
+          "say": "In phase"
+        },
+        {
+          "show": "Shifted by 90°",
+          "say": "Shifted by 90 degrees"
+        }
+      ],
+      "answer": 0,
+      "why": "A rising base voltage raises the collector current, which pulls the collector voltage down.",
+      "wrong": {
+        "1": "In-phase output comes from emitter followers or non-inverting op-amp stages.",
+        "2": "A 90 degree shift comes from capacitors or inductors, not from the transistor stage itself."
+      }
+    }
+  ]
+}

@@ -1,0 +1,720 @@
+{
+  "id": "BCE-HYD-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Pipe networks for water supply: head loss, loops and Hardy Cross",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-HYD — Hydraulics and water resources",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "pipe network",
+    "Darcy–Weisbach head loss",
+    "Hardy Cross method",
+    "continuity at nodes",
+    "residual pressure"
+  ],
+  "examples": [
+    "How do you analyse a water distribution network?",
+    "How do you calculate head loss in a pipe?",
+    "What is the Hardy Cross method?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "res",
+          "label": "Reservoir",
+          "icon": "ocean",
+          "x": 0.07,
+          "y": 0.5,
+          "ask": "Why are water mains laid in loops?"
+        },
+        {
+          "id": "pump",
+          "label": "Pump",
+          "icon": "pump",
+          "x": 0.24,
+          "y": 0.5
+        },
+        {
+          "id": "a",
+          "label": "A: junction",
+          "icon": "pipe",
+          "x": 0.45,
+          "y": 0.22,
+          "ask": "What is the continuity rule at a pipe junction?"
+        },
+        {
+          "id": "b",
+          "label": "B: uses 20 L/s",
+          "icon": "house",
+          "x": 0.85,
+          "y": 0.22,
+          "ask": "How do you calculate friction head loss in a pipe?"
+        },
+        {
+          "id": "c",
+          "label": "C: uses 20 L/s",
+          "icon": "house",
+          "x": 0.85,
+          "y": 0.78,
+          "ask": "What water pressure is needed in a distribution network?"
+        },
+        {
+          "id": "d",
+          "label": "D: uses 10 L/s",
+          "icon": "house",
+          "x": 0.45,
+          "y": 0.78,
+          "ask": "What is the Hardy Cross method?"
+        }
+      ],
+      "links": [
+        {
+          "from": "res",
+          "to": "pump",
+          "kind": "fluid"
+        },
+        {
+          "from": "pump",
+          "to": "a",
+          "kind": "fluid",
+          "label": "50 L/s"
+        },
+        {
+          "from": "a",
+          "to": "b",
+          "kind": "fluid",
+          "label": "30 L/s"
+        },
+        {
+          "from": "a",
+          "to": "d",
+          "kind": "fluid",
+          "label": "20 L/s"
+        },
+        {
+          "from": "b",
+          "to": "c",
+          "kind": "fluid",
+          "label": "10 L/s"
+        },
+        {
+          "from": "d",
+          "to": "c",
+          "kind": "fluid",
+          "label": "10 L/s"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Turn on a tap in Lagos, Delhi or São Paulo and the water has travelled through a vast web of pipes. Water mains are laid in loops, so if one pipe bursts, water can still reach homes another way. On the board, a pump feeds a small loop with fifty litres per second, and three neighbourhoods draw water from it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Pipe networks for water supply: head loss, loops and Hardy Cross"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "Reservoir",
+              "icon": "ocean",
+              "x": 0.07,
+              "y": 0.5,
+              "ask": "Why are water mains laid in loops?"
+            },
+            {
+              "id": "pump",
+              "label": "Pump",
+              "icon": "pump",
+              "x": 0.24,
+              "y": 0.5
+            },
+            {
+              "id": "a",
+              "label": "A: junction",
+              "icon": "pipe",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What is the continuity rule at a pipe junction?"
+            },
+            {
+              "id": "b",
+              "label": "B: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.22,
+              "ask": "How do you calculate friction head loss in a pipe?"
+            },
+            {
+              "id": "c",
+              "label": "C: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.78,
+              "ask": "What water pressure is needed in a distribution network?"
+            },
+            {
+              "id": "d",
+              "label": "D: uses 10 L/s",
+              "icon": "house",
+              "x": 0.45,
+              "y": 0.78,
+              "ask": "What is the Hardy Cross method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "a",
+              "kind": "fluid",
+              "label": "50 L/s"
+            },
+            {
+              "from": "a",
+              "to": "b",
+              "kind": "fluid",
+              "label": "30 L/s"
+            },
+            {
+              "from": "a",
+              "to": "d",
+              "kind": "fluid",
+              "label": "20 L/s"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            },
+            {
+              "from": "d",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Rule one, at every junction: flow in equals flow out, just like Kirchhoff's current law in circuits. Fifty litres per second arrive at A; thirty head towards B and twenty towards D. At B, twenty are used and ten carry on to C. Can you check node D?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "Reservoir",
+              "icon": "ocean",
+              "x": 0.07,
+              "y": 0.5,
+              "ask": "Why are water mains laid in loops?"
+            },
+            {
+              "id": "pump",
+              "label": "Pump",
+              "icon": "pump",
+              "x": 0.24,
+              "y": 0.5
+            },
+            {
+              "id": "a",
+              "label": "A: junction",
+              "icon": "pipe",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What is the continuity rule at a pipe junction?"
+            },
+            {
+              "id": "b",
+              "label": "B: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.22,
+              "ask": "How do you calculate friction head loss in a pipe?"
+            },
+            {
+              "id": "c",
+              "label": "C: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.78,
+              "ask": "What water pressure is needed in a distribution network?"
+            },
+            {
+              "id": "d",
+              "label": "D: uses 10 L/s",
+              "icon": "house",
+              "x": 0.45,
+              "y": 0.78,
+              "ask": "What is the Hardy Cross method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "a",
+              "kind": "fluid",
+              "label": "50 L/s"
+            },
+            {
+              "from": "a",
+              "to": "b",
+              "kind": "fluid",
+              "label": "30 L/s"
+            },
+            {
+              "from": "a",
+              "to": "d",
+              "kind": "fluid",
+              "label": "20 L/s"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            },
+            {
+              "from": "d",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Node rule: ΣQ_in = ΣQ_out → 50 = 30 + 20"
+        }
+      ]
+    },
+    {
+      "say": "D takes in twenty, uses ten and sends ten to C. Rule two: water loses head, its pressure energy, to friction along every pipe. Darcy–Weisbach gives the loss. For a pipe five hundred metres long and two hundred millimetres wide carrying thirty litres per second, the speed is about zero point nine five metres per second and the loss about two point three metres.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "Reservoir",
+              "icon": "ocean",
+              "x": 0.07,
+              "y": 0.5,
+              "ask": "Why are water mains laid in loops?"
+            },
+            {
+              "id": "pump",
+              "label": "Pump",
+              "icon": "pump",
+              "x": 0.24,
+              "y": 0.5
+            },
+            {
+              "id": "a",
+              "label": "A: junction",
+              "icon": "pipe",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What is the continuity rule at a pipe junction?"
+            },
+            {
+              "id": "b",
+              "label": "B: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.22,
+              "ask": "How do you calculate friction head loss in a pipe?"
+            },
+            {
+              "id": "c",
+              "label": "C: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.78,
+              "ask": "What water pressure is needed in a distribution network?"
+            },
+            {
+              "id": "d",
+              "label": "D: uses 10 L/s",
+              "icon": "house",
+              "x": 0.45,
+              "y": 0.78,
+              "ask": "What is the Hardy Cross method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "a",
+              "kind": "fluid",
+              "label": "50 L/s"
+            },
+            {
+              "from": "a",
+              "to": "b",
+              "kind": "fluid",
+              "label": "30 L/s"
+            },
+            {
+              "from": "a",
+              "to": "d",
+              "kind": "fluid",
+              "label": "20 L/s"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            },
+            {
+              "from": "d",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "h_f = fLV²/2gD = 0.02×500×0.955²/(2×9.81×0.2) ≈ 2.3 m"
+        },
+        {
+          "op": "note",
+          "text": "V = Q/A = 0.03 / (π × 0.1²) ≈ 0.955 m/s"
+        }
+      ]
+    },
+    {
+      "say": "Rule three, around any loop: head losses add to zero, counting clockwise as positive, like Kirchhoff's voltage law. If they do not balance, the guessed flows are wrong. Hardy Cross's method of nineteen thirty six corrects each loop's flow by a small amount, again and again, until they balance.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "Reservoir",
+              "icon": "ocean",
+              "x": 0.07,
+              "y": 0.5,
+              "ask": "Why are water mains laid in loops?"
+            },
+            {
+              "id": "pump",
+              "label": "Pump",
+              "icon": "pump",
+              "x": 0.24,
+              "y": 0.5
+            },
+            {
+              "id": "a",
+              "label": "A: junction",
+              "icon": "pipe",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What is the continuity rule at a pipe junction?"
+            },
+            {
+              "id": "b",
+              "label": "B: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.22,
+              "ask": "How do you calculate friction head loss in a pipe?"
+            },
+            {
+              "id": "c",
+              "label": "C: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.78,
+              "ask": "What water pressure is needed in a distribution network?"
+            },
+            {
+              "id": "d",
+              "label": "D: uses 10 L/s",
+              "icon": "house",
+              "x": 0.45,
+              "y": 0.78,
+              "ask": "What is the Hardy Cross method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "a",
+              "kind": "fluid",
+              "label": "50 L/s"
+            },
+            {
+              "from": "a",
+              "to": "b",
+              "kind": "fluid",
+              "label": "30 L/s"
+            },
+            {
+              "from": "a",
+              "to": "d",
+              "kind": "fluid",
+              "label": "20 L/s"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            },
+            {
+              "from": "d",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "ΔQ = −Σh_f / (n Σ h_f/Q), with n = 2"
+        },
+        {
+          "op": "note",
+          "text": "Repeat for every loop until the correction is tiny."
+        }
+      ]
+    },
+    {
+      "say": "Finally, check the pressure at every node. India's guidelines ask for at least about seven metres of pressure head for single-storey homes, and more for taller ones, so water reaches upstairs taps. Today software solves networks of thousands of pipes in seconds with these same rules. Brilliant! Challenge: if C doubled its demand, which pipes would carry more?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "Reservoir",
+              "icon": "ocean",
+              "x": 0.07,
+              "y": 0.5,
+              "ask": "Why are water mains laid in loops?"
+            },
+            {
+              "id": "pump",
+              "label": "Pump",
+              "icon": "pump",
+              "x": 0.24,
+              "y": 0.5
+            },
+            {
+              "id": "a",
+              "label": "A: junction",
+              "icon": "pipe",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What is the continuity rule at a pipe junction?"
+            },
+            {
+              "id": "b",
+              "label": "B: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.22,
+              "ask": "How do you calculate friction head loss in a pipe?"
+            },
+            {
+              "id": "c",
+              "label": "C: uses 20 L/s",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.78,
+              "ask": "What water pressure is needed in a distribution network?"
+            },
+            {
+              "id": "d",
+              "label": "D: uses 10 L/s",
+              "icon": "house",
+              "x": 0.45,
+              "y": 0.78,
+              "ask": "What is the Hardy Cross method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "a",
+              "kind": "fluid",
+              "label": "50 L/s"
+            },
+            {
+              "from": "a",
+              "to": "b",
+              "kind": "fluid",
+              "label": "30 L/s"
+            },
+            {
+              "from": "a",
+              "to": "d",
+              "kind": "fluid",
+              "label": "20 L/s"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            },
+            {
+              "from": "d",
+              "to": "c",
+              "kind": "fluid",
+              "label": "10 L/s"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the continuity rule at a pipe junction?",
+      "a": "The total flow into a junction equals the total flow out, including any demand taken there. At A, 50 litres per second in equals 30 plus 20 out.",
+      "asks": [
+        "Node equation in pipe networks"
+      ]
+    },
+    {
+      "q": "How do you calculate friction head loss in a pipe?",
+      "a": "Use Darcy–Weisbach: h f equals f L V squared over 2 g D. For 500 metres of 200 millimetre pipe at 0.955 metres per second with f of 0.02, the loss is about 2.3 metres.",
+      "asks": [
+        "Darcy Weisbach equation",
+        "Head loss formula"
+      ]
+    },
+    {
+      "q": "What is the Hardy Cross method?",
+      "a": "An iterative method for pipe networks: guess flows that satisfy continuity, then correct each loop's flow by minus the sum of head losses over n times the sum of h f over Q, repeating until the losses around every loop balance.",
+      "asks": [
+        "Hardy Cross iteration"
+      ]
+    },
+    {
+      "q": "Why are water mains laid in loops?",
+      "a": "Loops give every point two or more supply routes, so a burst or a repair does not cut off customers, and pressures stay more even.",
+      "asks": [
+        "Looped vs branched network"
+      ]
+    },
+    {
+      "q": "What water pressure is needed in a distribution network?",
+      "a": "Enough residual pressure to reach the highest taps. India's CPHEEO manual suggests about 7 metres for single-storey, 12 for two-storey and 17 for three-storey buildings.",
+      "asks": [
+        "Minimum residual pressure"
+      ]
+    }
+  ],
+  "facts": [
+    "Hardy Cross published his iterative method for pipe networks in 1936.",
+    "With a constant friction factor, Darcy–Weisbach head loss grows with the square of velocity.",
+    "India's CPHEEO manual suggests minimum residual pressures of about 7 m, 12 m and 17 m for one-, two- and three-storey buildings."
+  ],
+  "quiz": [
+    {
+      "say": "A junction receives 80 litres per second. One pipe leaves with 35 and the local demand is 15. What flows in the other outgoing pipe?",
+      "show": "A junction receives 80 L/s. One pipe leaves with 35 L/s and local demand is 15 L/s. Flow in the other outgoing pipe?",
+      "options": [
+        {
+          "show": "30 L/s",
+          "say": "30 litres per second"
+        },
+        {
+          "show": "45 L/s",
+          "say": "45 litres per second"
+        },
+        {
+          "show": "65 L/s",
+          "say": "65 litres per second"
+        }
+      ],
+      "answer": 0,
+      "why": "80 = 35 + 15 + Q, so Q = 30 litres per second.",
+      "wrong": {
+        "1": "That forgets the local demand of 15.",
+        "2": "That forgets the 35 litres per second pipe."
+      }
+    },
+    {
+      "say": "Doubling the velocity in a pipe, with the same friction factor, makes the friction head loss…",
+      "show": "Doubling the velocity in a pipe, with the same friction factor, makes the friction head loss…",
+      "options": [
+        {
+          "show": "2 times bigger",
+          "say": "2 times bigger"
+        },
+        {
+          "show": "4 times bigger",
+          "say": "4 times bigger"
+        },
+        {
+          "show": "Unchanged",
+          "say": "Unchanged"
+        }
+      ],
+      "answer": 1,
+      "why": "Head loss goes with V squared, and 2² = 4.",
+      "wrong": {
+        "0": "Loss grows with the square of velocity, not in direct proportion.",
+        "2": "Faster flow always means more friction loss."
+      }
+    }
+  ]
+}

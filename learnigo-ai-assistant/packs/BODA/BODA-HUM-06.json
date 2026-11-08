@@ -1,0 +1,653 @@
+{
+  "id": "BODA-HUM-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How the diaphragm pulls air into your lungs",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "diaphragm",
+    "breathing in",
+    "rib muscles",
+    "air pressure",
+    "inhale",
+    "exhale"
+  ],
+  "examples": [
+    "What does the diaphragm do?",
+    "How do we breathe in?",
+    "Why does air rush into the lungs?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "nose",
+          "kind": "fan",
+          "x": 0.5,
+          "y": 0.08,
+          "size": 0.6,
+          "label": "Nose and mouth",
+          "motion": "spin",
+          "speed": 0.5
+        },
+        {
+          "id": "trachea",
+          "kind": "pipe",
+          "x": 0.5,
+          "y": 0.26,
+          "size": 0.8,
+          "label": "Windpipe",
+          "motion": "flow"
+        },
+        {
+          "id": "lungL",
+          "kind": "tank",
+          "x": 0.3,
+          "y": 0.52,
+          "size": 1.2,
+          "label": "Left lung",
+          "motion": "pulse"
+        },
+        {
+          "id": "lungR",
+          "kind": "tank",
+          "x": 0.7,
+          "y": 0.52,
+          "size": 1.2,
+          "label": "Right lung",
+          "motion": "pulse"
+        },
+        {
+          "id": "ribs",
+          "kind": "lever",
+          "x": 0.1,
+          "y": 0.45,
+          "size": 0.9,
+          "label": "Rib muscles",
+          "motion": "swing",
+          "ask": "What do the rib muscles do in breathing?"
+        },
+        {
+          "id": "dia",
+          "kind": "piston",
+          "x": 0.5,
+          "y": 0.85,
+          "size": 1.4,
+          "label": "Diaphragm",
+          "motion": "slide",
+          "ask": "What does the diaphragm do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "nose",
+          "to": "trachea",
+          "kind": "fluid",
+          "label": "air"
+        },
+        {
+          "from": "trachea",
+          "to": "lungL",
+          "kind": "fluid",
+          "label": "air"
+        },
+        {
+          "from": "trachea",
+          "to": "lungR",
+          "kind": "fluid",
+          "label": "air"
+        },
+        {
+          "from": "dia",
+          "to": "lungL",
+          "kind": "force",
+          "label": "pulls down"
+        },
+        {
+          "from": "dia",
+          "to": "lungR",
+          "kind": "force",
+          "label": "pulls down"
+        },
+        {
+          "from": "ribs",
+          "to": "lungL",
+          "kind": "force",
+          "label": "lifts out"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your lungs have no muscles of their own. They are pulled open by the diaphragm, a dome-shaped sheet of muscle under them, working like the plunger of a syringe.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How the diaphragm pulls air into your lungs"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nose",
+              "kind": "fan",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.6,
+              "label": "Nose and mouth",
+              "motion": "spin",
+              "speed": 0.5
+            },
+            {
+              "id": "trachea",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.26,
+              "size": 0.8,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungL",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Left lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "lungR",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Right lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Rib muscles",
+              "motion": "swing",
+              "ask": "What do the rib muscles do in breathing?"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.4,
+              "label": "Diaphragm",
+              "motion": "slide",
+              "ask": "What does the diaphragm do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "nose",
+              "to": "trachea",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungL",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungR",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "dia",
+              "to": "lungL",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "dia",
+              "to": "lungR",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "ribs",
+              "to": "lungL",
+              "kind": "force",
+              "label": "lifts out"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: the lungs. Look at the trachea, the bronchus and the bronchioles. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How the diaphragm pulls air into your lungs"
+        },
+        {
+          "op": "image",
+          "render": "lungs"
+        }
+      ]
+    },
+    {
+      "say": "To breathe in, the diaphragm tightens and flattens, moving down. That makes the chest space taller, and the lungs, stuck to the chest wall, stretch with it.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nose",
+              "kind": "fan",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.6,
+              "label": "Nose and mouth",
+              "motion": "spin",
+              "speed": 0.5
+            },
+            {
+              "id": "trachea",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.26,
+              "size": 0.8,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungL",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Left lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "lungR",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Right lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Rib muscles",
+              "motion": "swing",
+              "ask": "What do the rib muscles do in breathing?"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.4,
+              "label": "Diaphragm",
+              "motion": "slide",
+              "ask": "What does the diaphragm do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "nose",
+              "to": "trachea",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungL",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungR",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "dia",
+              "to": "lungL",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "dia",
+              "to": "lungR",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "ribs",
+              "to": "lungL",
+              "kind": "force",
+              "label": "lifts out"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "At the same time, muscles between the ribs lift them up and out, making the chest wider. Bigger space means lower air pressure inside, so outside air rushes in through the windpipe.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nose",
+              "kind": "fan",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.6,
+              "label": "Nose and mouth",
+              "motion": "spin",
+              "speed": 0.5
+            },
+            {
+              "id": "trachea",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.26,
+              "size": 0.8,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungL",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Left lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "lungR",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Right lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Rib muscles",
+              "motion": "swing",
+              "ask": "What do the rib muscles do in breathing?"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.4,
+              "label": "Diaphragm",
+              "motion": "slide",
+              "ask": "What does the diaphragm do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "nose",
+              "to": "trachea",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungL",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungR",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "dia",
+              "to": "lungL",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "dia",
+              "to": "lungR",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "ribs",
+              "to": "lungL",
+              "kind": "force",
+              "label": "lifts out"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "To breathe out at rest, the diaphragm simply relaxes and domes back up. The stretchy lungs spring back, the space shrinks, pressure rises and air flows out.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nose",
+              "kind": "fan",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.6,
+              "label": "Nose and mouth",
+              "motion": "spin",
+              "speed": 0.5
+            },
+            {
+              "id": "trachea",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.26,
+              "size": 0.8,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungL",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Left lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "lungR",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.52,
+              "size": 1.2,
+              "label": "Right lung",
+              "motion": "pulse"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Rib muscles",
+              "motion": "swing",
+              "ask": "What do the rib muscles do in breathing?"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.4,
+              "label": "Diaphragm",
+              "motion": "slide",
+              "ask": "What does the diaphragm do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "nose",
+              "to": "trachea",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungL",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "trachea",
+              "to": "lungR",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "dia",
+              "to": "lungL",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "dia",
+              "to": "lungR",
+              "kind": "force",
+              "label": "pulls down"
+            },
+            {
+              "from": "ribs",
+              "to": "lungL",
+              "kind": "force",
+              "label": "lifts out"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the diaphragm do?",
+      "a": "The diaphragm is a dome of muscle under your lungs. When it contracts it flattens and moves down, enlarging the chest so air is drawn in. When it relaxes it rises and air flows out.",
+      "asks": [
+        "Tell me about the diaphragm",
+        "Which muscle makes us breathe?"
+      ]
+    },
+    {
+      "q": "Why does air rush into the lungs?",
+      "a": "When the chest gets bigger, the air inside the lungs spreads out and its pressure drops below the air pressure outside. Air always flows from higher to lower pressure, so it rushes in.",
+      "asks": [
+        "How does breathing in work?"
+      ]
+    },
+    {
+      "q": "Do lungs have muscles?",
+      "a": "Lungs have no muscles to inflate themselves. They are like stretchy bags pulled open by the diaphragm and rib muscles, and they spring back when those muscles relax.",
+      "asks": [
+        "Can lungs move by themselves?"
+      ]
+    },
+    {
+      "q": "What do the rib muscles do in breathing?",
+      "a": "Muscles between the ribs, called intercostals, lift the ribcage up and out when you breathe in, making the chest wider. They work harder when you breathe deeply.",
+      "asks": [
+        "Tell me about the rib muscles"
+      ]
+    },
+    {
+      "q": "Is breathing out work for the body?",
+      "a": "At rest, breathing out is mostly passive: the muscles relax and the stretched lungs recoil. When you blow hard or exercise, belly and rib muscles push the air out faster.",
+      "asks": [
+        "Do you need muscles to breathe out?"
+      ]
+    }
+  ],
+  "facts": [
+    "The diaphragm is the main muscle of quiet breathing.",
+    "At rest, breathing out is mainly passive, driven by the elastic recoil of the lungs."
+  ],
+  "quiz": [
+    {
+      "say": "What happens to the diaphragm when you breathe in?",
+      "show": "What happens to the diaphragm when you breathe in?",
+      "options": [
+        {
+          "show": "It relaxes and domes upwards",
+          "say": "It relaxes and domes upwards"
+        },
+        {
+          "show": "It contracts and flattens downwards",
+          "say": "It contracts and flattens downwards"
+        },
+        {
+          "show": "It stays still",
+          "say": "It stays still"
+        }
+      ],
+      "answer": 1,
+      "why": "Contracting flattens the diaphragm, enlarging the chest so pressure falls and air flows in.",
+      "wrong": {
+        "0": "Relaxing and doming up is what happens when you breathe out.",
+        "2": "The diaphragm moves with every breath; it is the main breathing muscle."
+      }
+    }
+  ]
+}

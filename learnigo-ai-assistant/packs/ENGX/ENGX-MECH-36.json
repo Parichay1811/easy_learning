@@ -1,0 +1,734 @@
+{
+  "id": "ENGX-MECH-36",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a differential lets wheels turn at different speeds",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "differential",
+    "spider gears",
+    "cornering",
+    "ring gear",
+    "side gears"
+  ],
+  "examples": [
+    "Why do the wheels need to turn at different speeds round a corner?",
+    "What is a differential?",
+    "Why does one wheel spin in mud?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.5,
+          "y": 0.92,
+          "size": 0.8,
+          "label": "Drive shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "pinion",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.74,
+          "size": 0.6,
+          "label": "Drive pinion",
+          "motion": "spin"
+        },
+        {
+          "id": "ring",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.48,
+          "size": 1.4,
+          "label": "Ring gear and cage",
+          "motion": "spin",
+          "ask": "What does the ring gear do?"
+        },
+        {
+          "id": "spider",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.18,
+          "size": 0.6,
+          "label": "Spider gears",
+          "motion": "spin",
+          "ask": "What do spider gears do?"
+        },
+        {
+          "id": "leftg",
+          "kind": "gear",
+          "x": 0.27,
+          "y": 0.48,
+          "size": 0.7,
+          "label": "Left side gear",
+          "motion": "spin"
+        },
+        {
+          "id": "rightg",
+          "kind": "gear",
+          "x": 0.73,
+          "y": 0.48,
+          "size": 0.7,
+          "label": "Right side gear",
+          "motion": "spin"
+        },
+        {
+          "id": "leftw",
+          "kind": "wheel",
+          "x": 0.08,
+          "y": 0.48,
+          "size": 1,
+          "label": "Left wheel",
+          "motion": "spin",
+          "ask": "Why do the wheels need to turn at different speeds round a corner?"
+        },
+        {
+          "id": "rightw",
+          "kind": "wheel",
+          "x": 0.92,
+          "y": 0.48,
+          "size": 1,
+          "label": "Right wheel",
+          "motion": "spin",
+          "ask": "Why do the wheels need to turn at different speeds round a corner?"
+        }
+      ],
+      "links": [
+        {
+          "from": "shaft",
+          "to": "pinion",
+          "kind": "energy"
+        },
+        {
+          "from": "pinion",
+          "to": "ring",
+          "kind": "force",
+          "label": "bevel gears"
+        },
+        {
+          "from": "ring",
+          "to": "spider",
+          "kind": "force",
+          "label": "carries round"
+        },
+        {
+          "from": "spider",
+          "to": "leftg",
+          "kind": "force"
+        },
+        {
+          "from": "spider",
+          "to": "rightg",
+          "kind": "force"
+        },
+        {
+          "from": "leftg",
+          "to": "leftw",
+          "kind": "energy"
+        },
+        {
+          "from": "rightg",
+          "to": "rightw",
+          "kind": "energy"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When a car turns a corner, the outside wheel travels further than the inside wheel, so it must turn faster. If both were fixed to one axle, a tyre would have to skid.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a differential lets wheels turn at different speeds"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.92,
+              "size": 0.8,
+              "label": "Drive shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.74,
+              "size": 0.6,
+              "label": "Drive pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.4,
+              "label": "Ring gear and cage",
+              "motion": "spin",
+              "ask": "What does the ring gear do?"
+            },
+            {
+              "id": "spider",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Spider gears",
+              "motion": "spin",
+              "ask": "What do spider gears do?"
+            },
+            {
+              "id": "leftg",
+              "kind": "gear",
+              "x": 0.27,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Left side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rightg",
+              "kind": "gear",
+              "x": 0.73,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Right side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "leftw",
+              "kind": "wheel",
+              "x": 0.08,
+              "y": 0.48,
+              "size": 1,
+              "label": "Left wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            },
+            {
+              "id": "rightw",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 1,
+              "label": "Right wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shaft",
+              "to": "pinion",
+              "kind": "energy"
+            },
+            {
+              "from": "pinion",
+              "to": "ring",
+              "kind": "force",
+              "label": "bevel gears"
+            },
+            {
+              "from": "ring",
+              "to": "spider",
+              "kind": "force",
+              "label": "carries round"
+            },
+            {
+              "from": "spider",
+              "to": "leftg",
+              "kind": "force"
+            },
+            {
+              "from": "spider",
+              "to": "rightg",
+              "kind": "force"
+            },
+            {
+              "from": "leftg",
+              "to": "leftw",
+              "kind": "energy"
+            },
+            {
+              "from": "rightg",
+              "to": "rightw",
+              "kind": "energy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The differential solves this. The drive shaft turns a pinion, which turns a big ring gear. The ring gear carries a cage holding small gears called spider gears.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.92,
+              "size": 0.8,
+              "label": "Drive shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.74,
+              "size": 0.6,
+              "label": "Drive pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.4,
+              "label": "Ring gear and cage",
+              "motion": "spin",
+              "ask": "What does the ring gear do?"
+            },
+            {
+              "id": "spider",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Spider gears",
+              "motion": "spin",
+              "ask": "What do spider gears do?"
+            },
+            {
+              "id": "leftg",
+              "kind": "gear",
+              "x": 0.27,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Left side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rightg",
+              "kind": "gear",
+              "x": 0.73,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Right side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "leftw",
+              "kind": "wheel",
+              "x": 0.08,
+              "y": 0.48,
+              "size": 1,
+              "label": "Left wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            },
+            {
+              "id": "rightw",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 1,
+              "label": "Right wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shaft",
+              "to": "pinion",
+              "kind": "energy"
+            },
+            {
+              "from": "pinion",
+              "to": "ring",
+              "kind": "force",
+              "label": "bevel gears"
+            },
+            {
+              "from": "ring",
+              "to": "spider",
+              "kind": "force",
+              "label": "carries round"
+            },
+            {
+              "from": "spider",
+              "to": "leftg",
+              "kind": "force"
+            },
+            {
+              "from": "spider",
+              "to": "rightg",
+              "kind": "force"
+            },
+            {
+              "from": "leftg",
+              "to": "leftw",
+              "kind": "energy"
+            },
+            {
+              "from": "rightg",
+              "to": "rightw",
+              "kind": "energy"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    },
+    {
+      "say": "The spider gears mesh with two side gears, one joined to each wheel. Going straight, the spider gears do not spin on their own pins; they carry both side gears round at the same speed.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.92,
+              "size": 0.8,
+              "label": "Drive shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.74,
+              "size": 0.6,
+              "label": "Drive pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.4,
+              "label": "Ring gear and cage",
+              "motion": "spin",
+              "ask": "What does the ring gear do?"
+            },
+            {
+              "id": "spider",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Spider gears",
+              "motion": "spin",
+              "ask": "What do spider gears do?"
+            },
+            {
+              "id": "leftg",
+              "kind": "gear",
+              "x": 0.27,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Left side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rightg",
+              "kind": "gear",
+              "x": 0.73,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Right side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "leftw",
+              "kind": "wheel",
+              "x": 0.08,
+              "y": 0.48,
+              "size": 1,
+              "label": "Left wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            },
+            {
+              "id": "rightw",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 1,
+              "label": "Right wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shaft",
+              "to": "pinion",
+              "kind": "energy"
+            },
+            {
+              "from": "pinion",
+              "to": "ring",
+              "kind": "force",
+              "label": "bevel gears"
+            },
+            {
+              "from": "ring",
+              "to": "spider",
+              "kind": "force",
+              "label": "carries round"
+            },
+            {
+              "from": "spider",
+              "to": "leftg",
+              "kind": "force"
+            },
+            {
+              "from": "spider",
+              "to": "rightg",
+              "kind": "force"
+            },
+            {
+              "from": "leftg",
+              "to": "leftw",
+              "kind": "energy"
+            },
+            {
+              "from": "rightg",
+              "to": "rightw",
+              "kind": "energy"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "On a bend, the spider gears start to spin, letting one wheel speed up as the other slows by the same amount. The catch: if one wheel is on ice or mud, it can spin while the other gets almost no drive.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.92,
+              "size": 0.8,
+              "label": "Drive shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.74,
+              "size": 0.6,
+              "label": "Drive pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "ring",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1.4,
+              "label": "Ring gear and cage",
+              "motion": "spin",
+              "ask": "What does the ring gear do?"
+            },
+            {
+              "id": "spider",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Spider gears",
+              "motion": "spin",
+              "ask": "What do spider gears do?"
+            },
+            {
+              "id": "leftg",
+              "kind": "gear",
+              "x": 0.27,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Left side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rightg",
+              "kind": "gear",
+              "x": 0.73,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Right side gear",
+              "motion": "spin"
+            },
+            {
+              "id": "leftw",
+              "kind": "wheel",
+              "x": 0.08,
+              "y": 0.48,
+              "size": 1,
+              "label": "Left wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            },
+            {
+              "id": "rightw",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 1,
+              "label": "Right wheel",
+              "motion": "spin",
+              "ask": "Why do the wheels need to turn at different speeds round a corner?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shaft",
+              "to": "pinion",
+              "kind": "energy"
+            },
+            {
+              "from": "pinion",
+              "to": "ring",
+              "kind": "force",
+              "label": "bevel gears"
+            },
+            {
+              "from": "ring",
+              "to": "spider",
+              "kind": "force",
+              "label": "carries round"
+            },
+            {
+              "from": "spider",
+              "to": "leftg",
+              "kind": "force"
+            },
+            {
+              "from": "spider",
+              "to": "rightg",
+              "kind": "force"
+            },
+            {
+              "from": "leftg",
+              "to": "leftw",
+              "kind": "energy"
+            },
+            {
+              "from": "rightg",
+              "to": "rightw",
+              "kind": "energy"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do the wheels need to turn at different speeds round a corner?",
+      "a": "On a bend, the outside wheel follows a bigger circle than the inside wheel, so it covers more ground in the same time and must turn faster.",
+      "asks": [
+        "Why does the outer wheel go further?"
+      ]
+    },
+    {
+      "q": "What does the ring gear do?",
+      "a": "The ring gear is a large bevel gear turned by the drive shaft's pinion. It turns the motion through a right angle and carries the cage of spider gears round with it.",
+      "asks": [
+        "What is the crown wheel?"
+      ]
+    },
+    {
+      "q": "What do spider gears do?",
+      "a": "Spider gears sit in the cage between the two side gears. Going straight they hold both wheels at the same speed; on a bend they spin so one wheel can go faster and the other slower.",
+      "asks": [
+        "How does a differential work?"
+      ]
+    },
+    {
+      "q": "Why does one wheel spin in mud?",
+      "a": "An open differential always gives both wheels the same turning force, limited by the wheel with least grip. If one wheel is on mud, it spins easily and the other gets almost nothing.",
+      "asks": [
+        "What is a limited slip differential?"
+      ]
+    },
+    {
+      "q": "Where else are differentials used?",
+      "a": "In almost every car, truck and tractor, in some robots and toy cars, and even in ancient Chinese south-pointing chariots.",
+      "asks": [
+        "Do all cars have a differential?"
+      ]
+    }
+  ],
+  "facts": [
+    "In an open differential, the ring gear's speed is the average of the two wheel speeds.",
+    "Going straight, the spider gears do not rotate on their own pins."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a car need a differential?",
+      "show": "Why does a car need a differential?",
+      "options": [
+        {
+          "show": "The outside wheel must turn faster on a bend",
+          "say": "The outside wheel must turn faster on a bend"
+        },
+        {
+          "show": "To make the car go faster",
+          "say": "To make the car go faster"
+        },
+        {
+          "show": "To change gear",
+          "say": "To change gear"
+        }
+      ],
+      "answer": 0,
+      "why": "On a bend the outside wheel travels further, so the differential lets it turn faster than the inside one.",
+      "wrong": {
+        "1": "A differential does not add speed.",
+        "2": "Changing gear is the gearbox's job."
+      }
+    }
+  ]
+}

@@ -1,0 +1,643 @@
+{
+  "id": "ENGX-FLUD-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How mains water pressure reaches upstairs taps",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "water pressure",
+    "mains water",
+    "stopcock",
+    "loft tank",
+    "head of water",
+    "booster pump"
+  ],
+  "examples": [
+    "How does water get upstairs without a pump?",
+    "Why is my upstairs shower weak?",
+    "What is the stopcock for?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "res",
+          "label": "High reservoir",
+          "icon": "mountain",
+          "x": 0.1,
+          "y": 0.18,
+          "ask": "Where does mains water pressure come from?"
+        },
+        {
+          "id": "pump",
+          "label": "Pumping station",
+          "icon": "pump",
+          "x": 0.3,
+          "y": 0.6
+        },
+        {
+          "id": "main",
+          "label": "Water main",
+          "icon": "pipe",
+          "x": 0.52,
+          "y": 0.82
+        },
+        {
+          "id": "stop",
+          "label": "Stopcock",
+          "icon": "valve",
+          "x": 0.72,
+          "y": 0.82,
+          "ask": "What is the stopcock for?"
+        },
+        {
+          "id": "down",
+          "label": "Kitchen tap",
+          "icon": "drop",
+          "x": 0.9,
+          "y": 0.62
+        },
+        {
+          "id": "up",
+          "label": "Upstairs taps",
+          "icon": "house",
+          "x": 0.9,
+          "y": 0.3,
+          "ask": "Why is my upstairs shower weak?"
+        },
+        {
+          "id": "loft",
+          "label": "Loft cold tank",
+          "icon": "drop",
+          "x": 0.68,
+          "y": 0.12,
+          "ask": "What is the tank in the loft for?"
+        }
+      ],
+      "links": [
+        {
+          "from": "res",
+          "to": "pump",
+          "kind": "fluid",
+          "label": "downhill"
+        },
+        {
+          "from": "pump",
+          "to": "main",
+          "kind": "fluid",
+          "label": "pressure"
+        },
+        {
+          "from": "main",
+          "to": "stop",
+          "kind": "fluid"
+        },
+        {
+          "from": "stop",
+          "to": "down",
+          "kind": "fluid",
+          "label": "mains pressure"
+        },
+        {
+          "from": "stop",
+          "to": "up",
+          "kind": "fluid",
+          "label": "pushed up"
+        },
+        {
+          "from": "stop",
+          "to": "loft",
+          "kind": "fluid",
+          "label": "older homes"
+        },
+        {
+          "from": "loft",
+          "to": "up",
+          "kind": "fluid",
+          "label": "gravity"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Water pressure starts far away. Water companies store water in reservoirs or towers on high ground, or use pumping stations, so the water in the mains is always squeezed.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How mains water pressure reaches upstairs taps"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "High reservoir",
+              "icon": "mountain",
+              "x": 0.1,
+              "y": 0.18,
+              "ask": "Where does mains water pressure come from?"
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.3,
+              "y": 0.6
+            },
+            {
+              "id": "main",
+              "label": "Water main",
+              "icon": "pipe",
+              "x": 0.52,
+              "y": 0.82
+            },
+            {
+              "id": "stop",
+              "label": "Stopcock",
+              "icon": "valve",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "What is the stopcock for?"
+            },
+            {
+              "id": "down",
+              "label": "Kitchen tap",
+              "icon": "drop",
+              "x": 0.9,
+              "y": 0.62
+            },
+            {
+              "id": "up",
+              "label": "Upstairs taps",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.3,
+              "ask": "Why is my upstairs shower weak?"
+            },
+            {
+              "id": "loft",
+              "label": "Loft cold tank",
+              "icon": "drop",
+              "x": 0.68,
+              "y": 0.12,
+              "ask": "What is the tank in the loft for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "pump",
+              "to": "main",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "main",
+              "to": "stop",
+              "kind": "fluid"
+            },
+            {
+              "from": "stop",
+              "to": "down",
+              "kind": "fluid",
+              "label": "mains pressure"
+            },
+            {
+              "from": "stop",
+              "to": "up",
+              "kind": "fluid",
+              "label": "pushed up"
+            },
+            {
+              "from": "stop",
+              "to": "loft",
+              "kind": "fluid",
+              "label": "older homes"
+            },
+            {
+              "from": "loft",
+              "to": "up",
+              "kind": "fluid",
+              "label": "gravity"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "That pressure travels through the underground main into your house through a valve called the stopcock, which can shut off the whole supply.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "High reservoir",
+              "icon": "mountain",
+              "x": 0.1,
+              "y": 0.18,
+              "ask": "Where does mains water pressure come from?"
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.3,
+              "y": 0.6
+            },
+            {
+              "id": "main",
+              "label": "Water main",
+              "icon": "pipe",
+              "x": 0.52,
+              "y": 0.82
+            },
+            {
+              "id": "stop",
+              "label": "Stopcock",
+              "icon": "valve",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "What is the stopcock for?"
+            },
+            {
+              "id": "down",
+              "label": "Kitchen tap",
+              "icon": "drop",
+              "x": 0.9,
+              "y": 0.62
+            },
+            {
+              "id": "up",
+              "label": "Upstairs taps",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.3,
+              "ask": "Why is my upstairs shower weak?"
+            },
+            {
+              "id": "loft",
+              "label": "Loft cold tank",
+              "icon": "drop",
+              "x": 0.68,
+              "y": 0.12,
+              "ask": "What is the tank in the loft for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "pump",
+              "to": "main",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "main",
+              "to": "stop",
+              "kind": "fluid"
+            },
+            {
+              "from": "stop",
+              "to": "down",
+              "kind": "fluid",
+              "label": "mains pressure"
+            },
+            {
+              "from": "stop",
+              "to": "up",
+              "kind": "fluid",
+              "label": "pushed up"
+            },
+            {
+              "from": "stop",
+              "to": "loft",
+              "kind": "fluid",
+              "label": "older homes"
+            },
+            {
+              "from": "loft",
+              "to": "up",
+              "kind": "fluid",
+              "label": "gravity"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Because the water is pushed from a level higher than your house, the pressure can lift it up the pipes to an upstairs tap without any pump in your home.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "High reservoir",
+              "icon": "mountain",
+              "x": 0.1,
+              "y": 0.18,
+              "ask": "Where does mains water pressure come from?"
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.3,
+              "y": 0.6
+            },
+            {
+              "id": "main",
+              "label": "Water main",
+              "icon": "pipe",
+              "x": 0.52,
+              "y": 0.82
+            },
+            {
+              "id": "stop",
+              "label": "Stopcock",
+              "icon": "valve",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "What is the stopcock for?"
+            },
+            {
+              "id": "down",
+              "label": "Kitchen tap",
+              "icon": "drop",
+              "x": 0.9,
+              "y": 0.62
+            },
+            {
+              "id": "up",
+              "label": "Upstairs taps",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.3,
+              "ask": "Why is my upstairs shower weak?"
+            },
+            {
+              "id": "loft",
+              "label": "Loft cold tank",
+              "icon": "drop",
+              "x": 0.68,
+              "y": 0.12,
+              "ask": "What is the tank in the loft for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "pump",
+              "to": "main",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "main",
+              "to": "stop",
+              "kind": "fluid"
+            },
+            {
+              "from": "stop",
+              "to": "down",
+              "kind": "fluid",
+              "label": "mains pressure"
+            },
+            {
+              "from": "stop",
+              "to": "up",
+              "kind": "fluid",
+              "label": "pushed up"
+            },
+            {
+              "from": "stop",
+              "to": "loft",
+              "kind": "fluid",
+              "label": "older homes"
+            },
+            {
+              "from": "loft",
+              "to": "up",
+              "kind": "fluid",
+              "label": "gravity"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "Older homes often send water up to a tank in the loft first, then let gravity feed the taps below it. Upstairs showers fed this way can be weak, because the tank is only a little higher than them.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "High reservoir",
+              "icon": "mountain",
+              "x": 0.1,
+              "y": 0.18,
+              "ask": "Where does mains water pressure come from?"
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.3,
+              "y": 0.6
+            },
+            {
+              "id": "main",
+              "label": "Water main",
+              "icon": "pipe",
+              "x": 0.52,
+              "y": 0.82
+            },
+            {
+              "id": "stop",
+              "label": "Stopcock",
+              "icon": "valve",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "What is the stopcock for?"
+            },
+            {
+              "id": "down",
+              "label": "Kitchen tap",
+              "icon": "drop",
+              "x": 0.9,
+              "y": 0.62
+            },
+            {
+              "id": "up",
+              "label": "Upstairs taps",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.3,
+              "ask": "Why is my upstairs shower weak?"
+            },
+            {
+              "id": "loft",
+              "label": "Loft cold tank",
+              "icon": "drop",
+              "x": 0.68,
+              "y": 0.12,
+              "ask": "What is the tank in the loft for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "pump",
+              "to": "main",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "main",
+              "to": "stop",
+              "kind": "fluid"
+            },
+            {
+              "from": "stop",
+              "to": "down",
+              "kind": "fluid",
+              "label": "mains pressure"
+            },
+            {
+              "from": "stop",
+              "to": "up",
+              "kind": "fluid",
+              "label": "pushed up"
+            },
+            {
+              "from": "stop",
+              "to": "loft",
+              "kind": "fluid",
+              "label": "older homes"
+            },
+            {
+              "from": "loft",
+              "to": "up",
+              "kind": "fluid",
+              "label": "gravity"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Where does mains water pressure come from?",
+      "a": "From height and pumps. Water is stored in high reservoirs, water towers or pumped mains, and the weight of water above, or the pump, pushes water through the pipes to every house.",
+      "asks": [
+        "How does water get upstairs without a pump?",
+        "Why is tap water under pressure?"
+      ]
+    },
+    {
+      "q": "What is the stopcock for?",
+      "a": "The stopcock is the main valve where the water supply enters your home. Turning it off stops all the mains water, which you need to do quickly if a pipe bursts.",
+      "asks": [
+        "Where is the main water valve?",
+        "How do I turn off the water to my house?"
+      ]
+    },
+    {
+      "q": "Why is my upstairs shower weak?",
+      "a": "If it is fed from a tank in the loft, the tank is only a short way above the shower, so the pressure is small. Higher-up taps also have less pressure than lower ones on the same supply.",
+      "asks": [
+        "Why is the water pressure low upstairs?"
+      ]
+    },
+    {
+      "q": "What is the tank in the loft for?",
+      "a": "In many older homes, mains water fills a cold-water tank in the loft, which then feeds the hot-water cylinder and some taps by gravity. It keeps a store of water if the mains is cut off.",
+      "asks": [
+        "Why do some houses have a water tank in the attic?"
+      ]
+    },
+    {
+      "q": "Why is water pressure lower at the top of a hill?",
+      "a": "Pressure depends on how far the water source is above you. A house high on a hill is closer to the reservoir level, so less height is left to push the water.",
+      "asks": [
+        "Does height affect water pressure?"
+      ]
+    }
+  ],
+  "facts": [
+    "Every 10 metres of height of water adds about 1 bar of pressure.",
+    "The stopcock is the valve where the mains water enters a home and can shut off the whole supply."
+  ],
+  "quiz": [
+    {
+      "say": "Why can mains water reach an upstairs tap without a pump in the house?",
+      "show": "Why can mains water reach an upstairs tap without a pump in the house?",
+      "options": [
+        {
+          "show": "The water is pushed from a higher reservoir or pump",
+          "say": "The water is pushed from a higher reservoir or pump"
+        },
+        {
+          "show": "Water naturally flows upwards",
+          "say": "Water naturally flows upwards"
+        },
+        {
+          "show": "The taps pull it up",
+          "say": "The taps pull it up"
+        }
+      ],
+      "answer": 0,
+      "why": "The water is stored higher up or pumped, so the pressure in the main pushes it up your pipes.",
+      "wrong": {
+        "1": "Water flows downhill on its own; it needs pressure to rise.",
+        "2": "Taps are valves; they cannot pull water."
+      }
+    }
+  ]
+}

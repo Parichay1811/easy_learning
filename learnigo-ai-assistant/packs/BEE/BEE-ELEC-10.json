@@ -1,0 +1,376 @@
+{
+  "id": "BEE-ELEC-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Op-amps: the non-inverting amplifier and the voltage follower",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "non-inverting amplifier",
+    "voltage follower",
+    "unity-gain buffer",
+    "feedback fraction",
+    "input resistance"
+  ],
+  "examples": [
+    "What is the gain of a non-inverting amplifier?",
+    "What is a voltage follower used for?",
+    "What is the difference between inverting and non-inverting op-amps?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "layout": "non-inverting",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Input to + pin",
+          "value": "0.5 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "10 kΩ",
+          "ask": "What is the feedback fraction?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R_f",
+          "value": "90 kΩ",
+          "ask": "What is a non-inverting amplifier?"
+        },
+        {
+          "kind": "opamp",
+          "label": "Op-amp",
+          "ask": "Why use a buffer with a gain of 1?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Load",
+          "value": "1 kΩ"
+        }
+      ],
+      "readouts": [
+        "V− = V+ = 0.5 V",
+        "Gain = 1 + 90/10 = 10",
+        "V_out = 5 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Some sensors, like a pH probe or a piezo guitar pickup, have a huge internal resistance and give up if you draw current from them. An op-amp's plus input draws almost none. On the board, a 0.5 volt input goes straight into the plus pin, and the output feeds a divider, 90 kilohms and 10 kilohms, back to the minus pin, as well as driving a 1 kilohm load.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Op-amps: the non-inverting amplifier and the voltage follower"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "non-inverting",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input to + pin",
+              "value": "0.5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "10 kΩ",
+              "ask": "What is the feedback fraction?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_f",
+              "value": "90 kΩ",
+              "ask": "What is a non-inverting amplifier?"
+            },
+            {
+              "kind": "opamp",
+              "label": "Op-amp",
+              "ask": "Why use a buffer with a gain of 1?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "1 kΩ"
+            }
+          ],
+          "readouts": [
+            "V− = V+ = 0.5 V",
+            "Gain = 1 + 90/10 = 10",
+            "V_out = 5 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Golden rule: the output adjusts until the minus input equals the plus input, 0.5 volts. The minus input sits at the divider's midpoint, so 0.5 volts across R1, 10 kilohms, means 50 microamps. The same current flows up through R f, since none enters the pin, adding 50 microamps times 90 kilohms, 4.5 volts. So the output is 5 volts. What fraction of the output is fed back?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "non-inverting",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input to + pin",
+              "value": "0.5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "10 kΩ",
+              "ask": "What is the feedback fraction?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_f",
+              "value": "90 kΩ",
+              "ask": "What is a non-inverting amplifier?"
+            },
+            {
+              "kind": "opamp",
+              "label": "Op-amp",
+              "ask": "Why use a buffer with a gain of 1?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "1 kΩ"
+            }
+          ],
+          "readouts": [
+            "V− = V+ = 0.5 V",
+            "Gain = 1 + 90/10 = 10",
+            "V_out = 5 V"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V_out = 0.5 V + 50 µA × 90 kΩ = 5 V"
+        }
+      ]
+    },
+    {
+      "say": "One tenth, R1 over the total. So the gain is 1 plus R f over R1, which is 10, and look at the plot: the output is in phase, not upside down like the inverting amplifier. What is the smallest gain this circuit can ever have?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 2
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -6,
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "Input 0.5 V",
+              "type": "sine",
+              "a": 0.5,
+              "k": 1
+            },
+            {
+              "label": "Output, gain +10",
+              "type": "sine",
+              "a": 5,
+              "k": 1,
+              "ask": "What is the difference between inverting and non-inverting amplifiers?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.25,
+              "label": "In phase, ×10"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "A_v = 1 + R_f/R1 = 1 + 90/10 = 10"
+        }
+      ]
+    },
+    {
+      "say": "One. Make R f a plain wire from the output to the minus pin and remove R1, and the gain is 1 plus zero, which is 1. The output simply follows the input: a voltage follower. So why would anyone want an amplifier that doesn't amplify?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "follower",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input to + pin",
+              "value": "0.5 V"
+            },
+            {
+              "kind": "opamp",
+              "label": "Op-amp follower",
+              "value": "×1",
+              "ask": "What is a voltage follower?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "1 kΩ"
+            }
+          ],
+          "readouts": [
+            "R_f = 0, R1 removed",
+            "Gain = 1",
+            "V_out = 0.5 V"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Follower: A_v = 1 + 0 = 1,  V_out = V_in"
+        }
+      ]
+    },
+    {
+      "say": "Because of what it isolates. A sensor with 100 kilohms inside, wired straight to a 1 kilohm load, forms a voltage divider, and the load gets 1 part in 101, about 1 percent of the signal. Through a follower, the sensor sees a huge input resistance and the load is driven by a tiny output resistance, so nearly all of it arrives. Brilliant! Challenge: choose R f for a gain of 5 with R1 of 10 kilohms.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Sensor direct to load",
+            "icon": "sensor",
+            "points": [
+              "Sensor resistance 100 kΩ",
+              "Load 1 kΩ",
+              "Load gets 1/101, about 1%"
+            ]
+          },
+          "right": {
+            "title": "Through a follower",
+            "icon": "chip",
+            "points": [
+              "Input resistance: huge",
+              "Output resistance: tiny",
+              "Load gets about 100%"
+            ]
+          },
+          "verdict": "A buffer stops the load dragging the sensor down",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Direct: 1 kΩ/(100 kΩ + 1 kΩ) ≈ 1 % of the signal"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a non-inverting amplifier?",
+      "a": "The signal goes to the op-amp's plus input and a divider feeds a fraction of the output back to the minus input. The gain is 1 plus R f over R1, and the output is in phase.",
+      "asks": [
+        "Non-inverting amplifier gain formula"
+      ]
+    },
+    {
+      "q": "What is a voltage follower?",
+      "a": "An op-amp with its output wired straight to its minus input and the signal on its plus input. The gain is exactly 1, so the output copies the input.",
+      "asks": [
+        "What is a unity gain buffer?"
+      ]
+    },
+    {
+      "q": "Why use a buffer with a gain of 1?",
+      "a": "It has a very high input resistance, so it hardly loads the source, and a very low output resistance, so it can drive a heavy load without the voltage sagging.",
+      "asks": [
+        "Why use a voltage follower?"
+      ]
+    },
+    {
+      "q": "What is the feedback fraction?",
+      "a": "The share of the output sent back to the minus input: R1 over R1 plus R f. The closed-loop gain is one over it, here 10.",
+      "asks": [
+        "What is beta in op-amp feedback?"
+      ]
+    },
+    {
+      "q": "What is the difference between inverting and non-inverting amplifiers?",
+      "a": "Inverting: gain minus R f over R in, output upside down, input resistance equal to R in. Non-inverting: gain 1 plus R f over R1, output in phase, and a very high input resistance.",
+      "asks": [
+        "Inverting versus non-inverting op-amp"
+      ]
+    }
+  ],
+  "facts": [
+    "A voltage follower has a gain of exactly one but can supply far more current than the source driving it.",
+    "A non-inverting amplifier's gain, 1 plus R f over R1, can never be less than 1."
+  ],
+  "quiz": [
+    {
+      "say": "A non-inverting amplifier has a feedback resistor of 47 kilohms and R1 of 4.7 kilohms. What is its gain?",
+      "show": "A non-inverting amplifier has R_f = 47 kΩ and R1 = 4.7 kΩ. What is its gain?",
+      "options": [
+        {
+          "show": "11",
+          "say": "11"
+        },
+        {
+          "show": "10",
+          "say": "10"
+        },
+        {
+          "show": "−10",
+          "say": "minus 10"
+        }
+      ],
+      "answer": 0,
+      "why": "The gain is 1 plus 47 over 4.7, which is 1 plus 10, so 11.",
+      "wrong": {
+        "1": "That forgets the 1 in 1 plus R f over R1.",
+        "2": "Minus R f over R in is the inverting formula; this circuit does not invert."
+      }
+    },
+    {
+      "say": "A sensor with 100 kilohms of internal resistance drives a 1 kilohm load directly. Roughly what fraction of its voltage reaches the load?",
+      "show": "A sensor with 100 kΩ internal resistance drives a 1 kΩ load directly. Roughly what fraction of its voltage reaches the load?",
+      "options": [
+        {
+          "show": "1%",
+          "say": "about 1 percent"
+        },
+        {
+          "show": "50%",
+          "say": "about 50 percent"
+        },
+        {
+          "show": "99%",
+          "say": "about 99 percent"
+        }
+      ],
+      "answer": 0,
+      "why": "It is a divider: 1 over 100 plus 1, about 1 percent.",
+      "wrong": {
+        "1": "Half would need the load to equal the sensor resistance.",
+        "2": "Nearly all would need the load to be far larger than 100 kilohms, or a buffer."
+      }
+    }
+  ]
+}

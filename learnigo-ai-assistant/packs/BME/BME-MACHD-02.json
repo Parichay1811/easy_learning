@@ -1,0 +1,549 @@
+{
+  "id": "BME-MACHD-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Belt and chain drives: speed ratio, belt tensions and power",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MACHD — Machine design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "belt drive",
+    "chain drive",
+    "tight side tension",
+    "capstan equation",
+    "velocity ratio"
+  ],
+  "examples": [
+    "How do I calculate belt drive speed ratio?",
+    "What is the ratio of belt tensions?",
+    "When should I use a chain instead of a belt?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.55,
+          "label": "Motor 1440 rpm"
+        },
+        {
+          "id": "p1",
+          "kind": "wheel",
+          "x": 0.32,
+          "y": 0.55,
+          "size": 0.6,
+          "label": "Pulley 100 mm",
+          "ask": "How do I calculate belt drive speed ratio?"
+        },
+        {
+          "id": "p2",
+          "kind": "wheel",
+          "x": 0.72,
+          "y": 0.55,
+          "size": 1.8,
+          "label": "Pulley 300 mm",
+          "ask": "How do I calculate belt drive speed ratio?"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.92,
+          "y": 0.25,
+          "label": "Fan 480 rpm"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "p1",
+          "kind": "power"
+        },
+        {
+          "from": "p1",
+          "to": "p2",
+          "kind": "force",
+          "label": "Belt 7.5 m/s"
+        },
+        {
+          "from": "p2",
+          "to": "fan",
+          "kind": "power"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Open the bonnet of a car and you will see a long ribbed belt snaking round pulleys, driving the alternator and the water pump. Belts and chains carry power between shafts that are far apart. Look at the board: a motor pulley of 100 millimetres driving a 300 millimetre pulley on a fan.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Belt and chain drives: speed ratio, belt tensions and power"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.55,
+              "label": "Motor 1440 rpm"
+            },
+            {
+              "id": "p1",
+              "kind": "wheel",
+              "x": 0.32,
+              "y": 0.55,
+              "size": 0.6,
+              "label": "Pulley 100 mm",
+              "ask": "How do I calculate belt drive speed ratio?"
+            },
+            {
+              "id": "p2",
+              "kind": "wheel",
+              "x": 0.72,
+              "y": 0.55,
+              "size": 1.8,
+              "label": "Pulley 300 mm",
+              "ask": "How do I calculate belt drive speed ratio?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.25,
+              "label": "Fan 480 rpm"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "p1",
+              "kind": "power"
+            },
+            {
+              "from": "p1",
+              "to": "p2",
+              "kind": "force",
+              "label": "Belt 7.5 m/s"
+            },
+            {
+              "from": "p2",
+              "to": "fan",
+              "kind": "power"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Belts: quiet, cheap, absorb shocks; chains: no slip"
+        }
+      ]
+    },
+    {
+      "say": "Belts and chains are cousins of the pulley, so here is one in 3D. Watch how the rope wraps the wheels and carries the pull from one to the other. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Belt and chain drives: speed ratio, belt tensions and power"
+        },
+        {
+          "op": "image",
+          "render": "pulley"
+        }
+      ]
+    },
+    {
+      "say": "The belt moves at one speed, so both pulley rims move together. A pulley three times bigger turns three times slower: 1440 over 3, that is 480 rpm. Belt speed is pi times diameter times revolutions per second: pi times 0.1 times 24, about 7.5 metres per second. Does the fan pulley turn the same way?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.55,
+              "label": "Motor 1440 rpm"
+            },
+            {
+              "id": "p1",
+              "kind": "wheel",
+              "x": 0.32,
+              "y": 0.55,
+              "size": 0.6,
+              "label": "Pulley 100 mm",
+              "ask": "How do I calculate belt drive speed ratio?"
+            },
+            {
+              "id": "p2",
+              "kind": "wheel",
+              "x": 0.72,
+              "y": 0.55,
+              "size": 1.8,
+              "label": "Pulley 300 mm",
+              "ask": "How do I calculate belt drive speed ratio?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.25,
+              "label": "Fan 480 rpm"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "p1",
+              "kind": "power"
+            },
+            {
+              "from": "p1",
+              "to": "p2",
+              "kind": "force",
+              "label": "Belt 7.5 m/s"
+            },
+            {
+              "from": "p2",
+              "to": "fan",
+              "kind": "power"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "N₂ = N₁ D₁/D₂ = 1440 × 100/300 = 480 rpm"
+        }
+      ]
+    },
+    {
+      "say": "Yes, an open belt keeps the same direction. A belt works by friction, so one side is pulled tight and the other slack. The capstan equation says T1 over T2 equals e to the mu theta, where theta is the wrap angle in radians. See the graph: more wrap means a far bigger ratio. With mu 0.3 and half a turn, it is 2.57.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Wrap angle (°)",
+            "max": 360
+          },
+          "y": {
+            "label": "Tension ratio T1/T2",
+            "max": 7
+          },
+          "curves": [
+            {
+              "label": "Flat belt, μ = 0.3",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  45,
+                  1.27
+                ],
+                [
+                  90,
+                  1.6
+                ],
+                [
+                  135,
+                  2.03
+                ],
+                [
+                  180,
+                  2.57
+                ],
+                [
+                  225,
+                  3.25
+                ],
+                [
+                  270,
+                  4.11
+                ],
+                [
+                  315,
+                  5.2
+                ],
+                [
+                  360,
+                  6.59
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the ratio of belt tensions?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 180,
+              "label": "Half wrap: 2.57"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "T₁/T₂ = e^(μθ) = e^(0.3π) = 2.57"
+        }
+      ]
+    },
+    {
+      "say": "If the tight side carries 1000 newtons, the slack side carries 1000 over 2.57, about 390. The useful pull is the difference, 610 newtons, and power is that times belt speed: 610 times 7.54, about 4.6 kilowatts. What happens if you ask for more than that?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Wrap angle (°)",
+            "max": 360
+          },
+          "y": {
+            "label": "Tension ratio T1/T2",
+            "max": 7
+          },
+          "curves": [
+            {
+              "label": "Flat belt, μ = 0.3",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  45,
+                  1.27
+                ],
+                [
+                  90,
+                  1.6
+                ],
+                [
+                  135,
+                  2.03
+                ],
+                [
+                  180,
+                  2.57
+                ],
+                [
+                  225,
+                  3.25
+                ],
+                [
+                  270,
+                  4.11
+                ],
+                [
+                  315,
+                  5.2
+                ],
+                [
+                  360,
+                  6.59
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the ratio of belt tensions?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 180,
+              "label": "Half wrap: 2.57"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P = (T₁ − T₂)v = (1000 − 390) × 7.54 ≈ 4.6 kW"
+        }
+      ]
+    },
+    {
+      "say": "The belt slips and squeals! V-belts wedge into grooves to grip harder, and chains, with teeth, never slip at all, like on a bicycle: a 44-tooth chainring and an 11-tooth sprocket give 4 to 1. Well done! Exam tip: the wrap angle on the small pulley limits the power, so keep it large.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.55,
+              "label": "Motor 1440 rpm"
+            },
+            {
+              "id": "p1",
+              "kind": "wheel",
+              "x": 0.32,
+              "y": 0.55,
+              "size": 0.6,
+              "label": "Pulley 100 mm",
+              "ask": "How do I calculate belt drive speed ratio?"
+            },
+            {
+              "id": "p2",
+              "kind": "wheel",
+              "x": 0.72,
+              "y": 0.55,
+              "size": 1.8,
+              "label": "Pulley 300 mm",
+              "ask": "How do I calculate belt drive speed ratio?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.25,
+              "label": "Fan 480 rpm"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "p1",
+              "kind": "power"
+            },
+            {
+              "from": "p1",
+              "to": "p2",
+              "kind": "force",
+              "label": "Belt 7.5 m/s"
+            },
+            {
+              "from": "p2",
+              "to": "fan",
+              "kind": "power"
+            }
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "Bicycle: 44/11 = 4 wheel turns per pedal turn"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I calculate belt drive speed ratio?",
+      "a": "The speeds are inversely proportional to the pulley diameters: N1 D1 equals N2 D2. A pulley three times bigger turns three times slower.",
+      "asks": [
+        "pulley speed formula",
+        "velocity ratio belt"
+      ]
+    },
+    {
+      "q": "What is the ratio of belt tensions?",
+      "a": "For a flat belt about to slip, the tight side tension over the slack side tension equals e to the power mu theta, with theta the wrap angle in radians.",
+      "asks": [
+        "capstan equation",
+        "Euler belt equation"
+      ]
+    },
+    {
+      "q": "How much power can a belt transmit?",
+      "a": "Power equals the tight side tension minus the slack side tension, times the belt speed. A 610 newton difference at 7.54 metres per second carries about 4.6 kilowatts.",
+      "asks": [
+        "belt power formula"
+      ]
+    },
+    {
+      "q": "When should I use a chain instead of a belt?",
+      "a": "Use a chain when you need an exact speed ratio with no slip and high force at low speed, like bicycles and motorcycles. Belts are quieter, cheaper, need no oil and soak up shocks.",
+      "asks": [
+        "chain vs belt"
+      ]
+    },
+    {
+      "q": "Why do V-belts grip better?",
+      "a": "The belt wedges into a V-shaped groove, so the side walls press on it much harder than a flat belt presses on a flat pulley, raising the effective friction.",
+      "asks": [
+        "V-belt advantage"
+      ]
+    }
+  ],
+  "facts": [
+    "For a flat belt, T₁/T₂ = e^(μθ), the capstan equation.",
+    "Chain drives have no slip, so their speed ratio is exact."
+  ],
+  "quiz": [
+    {
+      "say": "A 150 millimetre pulley on a motor at 960 rpm drives a 360 millimetre pulley. What is the driven speed?",
+      "show": "150 mm pulley at 960 rpm drives a 360 mm pulley. Driven speed?",
+      "options": [
+        {
+          "show": "400 rpm",
+          "say": "400 rpm"
+        },
+        {
+          "show": "2304 rpm",
+          "say": "2304 rpm"
+        },
+        {
+          "show": "960 rpm",
+          "say": "960 rpm"
+        }
+      ],
+      "answer": 0,
+      "why": "N₂ = 960 × 150/360 = 400 rpm.",
+      "wrong": {
+        "1": "That inverts the ratio; the larger pulley turns slower.",
+        "2": "Different pulley sizes change the speed."
+      }
+    },
+    {
+      "say": "A belt has a tight side tension of 900 newtons and a slack side of 300 newtons, moving at 10 metres per second. What power does it carry?",
+      "show": "T₁ = 900 N, T₂ = 300 N, v = 10 m/s. Power?",
+      "options": [
+        {
+          "show": "6 kW",
+          "say": "6 kilowatts"
+        },
+        {
+          "show": "12 kW",
+          "say": "12 kilowatts"
+        },
+        {
+          "show": "9 kW",
+          "say": "9 kilowatts"
+        }
+      ],
+      "answer": 0,
+      "why": "P = (900 − 300) × 10 = 6000 W.",
+      "wrong": {
+        "1": "That adds the tensions; only the difference drives the pulley.",
+        "2": "That uses only the tight side tension."
+      }
+    }
+  ]
+}

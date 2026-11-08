@@ -1,0 +1,681 @@
+{
+  "id": "BEE-PWR-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Grid frequency, renewables and smart grids: keeping 50 hertz steady",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "grid frequency",
+    "system inertia",
+    "rate of change of frequency",
+    "frequency response",
+    "smart grid",
+    "battery storage"
+  ],
+  "examples": [
+    "Why does grid frequency drop when a power station trips?",
+    "Why do renewables make frequency control harder?",
+    "What is a smart grid?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (s)",
+        "max": 60
+      },
+      "y": {
+        "label": "Frequency (Hz)",
+        "min": 49.4,
+        "max": 50.2
+      },
+      "curves": [
+        {
+          "label": "Grid frequency",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              0,
+              50
+            ],
+            [
+              1,
+              49.79
+            ],
+            [
+              2.5,
+              49.68
+            ],
+            [
+              5,
+              49.61
+            ],
+            [
+              8,
+              49.6
+            ],
+            [
+              12,
+              49.66
+            ],
+            [
+              20,
+              49.76
+            ],
+            [
+              30,
+              49.8
+            ],
+            [
+              45,
+              49.82
+            ],
+            [
+              60,
+              49.85
+            ]
+          ],
+          "ask": "Why does grid frequency drop when a power station trips?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 1,
+          "label": "Falls ≈ 0.21 Hz/s"
+        },
+        {
+          "x": 8,
+          "label": "Lowest 49.6 Hz"
+        },
+        {
+          "x": 30,
+          "label": "Held ≈ 49.8 Hz"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "On 9 August 2019, after a lightning strike, two big generators in Britain tripped within moments, frequency fell to 48.8 hertz, and about a million customers briefly lost power. Frequency is the grid's heartbeat. On the board is a smaller event: a 1 gigawatt power station trips on a 30 gigawatt grid. Watch the frequency fall from 50 hertz.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Grid frequency, renewables and smart grids: keeping 50 hertz steady"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 60
+          },
+          "y": {
+            "label": "Frequency (Hz)",
+            "min": 49.4,
+            "max": 50.2
+          },
+          "curves": [
+            {
+              "label": "Grid frequency",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  50
+                ],
+                [
+                  1,
+                  49.79
+                ],
+                [
+                  2.5,
+                  49.68
+                ],
+                [
+                  5,
+                  49.61
+                ],
+                [
+                  8,
+                  49.6
+                ],
+                [
+                  12,
+                  49.66
+                ],
+                [
+                  20,
+                  49.76
+                ],
+                [
+                  30,
+                  49.8
+                ],
+                [
+                  45,
+                  49.82
+                ],
+                [
+                  60,
+                  49.85
+                ]
+              ],
+              "ask": "Why does grid frequency drop when a power station trips?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Falls ≈ 0.21 Hz/s"
+            },
+            {
+              "x": 8,
+              "label": "Lowest 49.6 Hz"
+            },
+            {
+              "x": 30,
+              "label": "Held ≈ 49.8 Hz"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is a grid in 3D, from power station to homes. Every generator on it spins in step, and the frequency tells you whether supply and demand are balanced. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Grid frequency, renewables and smart grids: keeping 50 hertz steady"
+        },
+        {
+          "op": "image",
+          "render": "power-grid"
+        }
+      ]
+    },
+    {
+      "say": "Why does it fall? Every generator spins in step with the grid, and their heavy rotors store kinetic energy, called inertia. When supply drops below demand, the missing power is taken from that spinning energy, so the rotors, and the frequency, slow down. With an inertia constant H of 4 seconds, the first fall is about 0.21 hertz per second. What would less inertia do?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 60
+          },
+          "y": {
+            "label": "Frequency (Hz)",
+            "min": 49.4,
+            "max": 50.2
+          },
+          "curves": [
+            {
+              "label": "Grid frequency",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  50
+                ],
+                [
+                  1,
+                  49.79
+                ],
+                [
+                  2.5,
+                  49.68
+                ],
+                [
+                  5,
+                  49.61
+                ],
+                [
+                  8,
+                  49.6
+                ],
+                [
+                  12,
+                  49.66
+                ],
+                [
+                  20,
+                  49.76
+                ],
+                [
+                  30,
+                  49.8
+                ],
+                [
+                  45,
+                  49.82
+                ],
+                [
+                  60,
+                  49.85
+                ]
+              ],
+              "ask": "Why does grid frequency drop when a power station trips?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Falls ≈ 0.21 Hz/s"
+            },
+            {
+              "x": 8,
+              "label": "Lowest 49.6 Hz"
+            },
+            {
+              "x": 30,
+              "label": "Held ≈ 49.8 Hz"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "RoCoF = ΔP·f₀/(2HS) = 1 × 50/(2 × 4 × 30) ≈ 0.21 Hz/s"
+        }
+      ]
+    },
+    {
+      "say": "Make it fall faster. Follow the chain: within seconds, primary response kicks in, as governors open steam valves and batteries inject power, in proportion to the drop. That stops the fall at the lowest point, the nadir, 49.6 hertz here, and holds it near 49.8. Then the control room restores 50 hertz over minutes. Where do wind and solar fit in this picture?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Inertia",
+              "icon": "gear",
+              "note": "Spinning rotors give up energy: 0–10 s",
+              "ask": "What is system inertia?"
+            },
+            {
+              "label": "Primary response",
+              "icon": "turbine",
+              "note": "Governors and batteries add power in seconds",
+              "ask": "What is primary frequency response?"
+            },
+            {
+              "label": "Secondary control",
+              "icon": "computer",
+              "note": "The control room restores 50 Hz in minutes"
+            },
+            {
+              "label": "Reserve plants",
+              "icon": "factory",
+              "note": "Fresh units start to rebuild the margin"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "4% droop: full extra power at 2 Hz below 50"
+        }
+      ]
+    },
+    {
+      "say": "Here is the challenge. Solar panels and most modern wind turbines connect through inverters, not spinning generators, so they add no natural inertia. As they replace coal and gas plants, frequency can fall faster after a trip. Look at the smart grid: the battery can respond in under a second, and the control centre talks to everything by data links. How could electric cars help?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "solar",
+              "label": "Solar farm",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.15,
+              "ask": "Why do renewables make frequency control harder?"
+            },
+            {
+              "id": "wind",
+              "label": "Wind farm",
+              "icon": "wind",
+              "x": 0.1,
+              "y": 0.5
+            },
+            {
+              "id": "gas",
+              "label": "Gas plant",
+              "icon": "factory",
+              "x": 0.1,
+              "y": 0.85
+            },
+            {
+              "id": "grid",
+              "label": "Grid 50 Hz",
+              "icon": "tower",
+              "x": 0.45,
+              "y": 0.5
+            },
+            {
+              "id": "bat",
+              "label": "Grid battery",
+              "icon": "battery",
+              "x": 0.45,
+              "y": 0.12
+            },
+            {
+              "id": "ctrl",
+              "label": "Control centre",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.88,
+              "ask": "What is a smart grid?"
+            },
+            {
+              "id": "city",
+              "label": "City homes",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.3
+            },
+            {
+              "id": "ev",
+              "label": "EV chargers",
+              "icon": "car",
+              "x": 0.85,
+              "y": 0.72
+            }
+          ],
+          "links": [
+            {
+              "from": "solar",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "wind",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "gas",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "bat",
+              "to": "grid",
+              "kind": "power",
+              "label": "Fast response"
+            },
+            {
+              "from": "grid",
+              "to": "city",
+              "kind": "power"
+            },
+            {
+              "from": "grid",
+              "to": "ev",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "bat",
+              "kind": "data"
+            },
+            {
+              "from": "ctrl",
+              "to": "ev",
+              "kind": "data",
+              "label": "Pause charging"
+            },
+            {
+              "from": "ctrl",
+              "to": "gas",
+              "kind": "data"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Solar and most wind use inverters: no natural inertia"
+        }
+      ]
+    },
+    {
+      "say": "By pausing their charging for a few seconds when frequency dips, millions of cars become a giant shock absorber. That is the smart grid: power and data flowing together, with batteries, flexible demand and grid-forming inverters that mimic inertia. Wonderful! Challenge: with H of only 2 seconds, what would the initial rate of fall be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "solar",
+              "label": "Solar farm",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.15,
+              "ask": "Why do renewables make frequency control harder?"
+            },
+            {
+              "id": "wind",
+              "label": "Wind farm",
+              "icon": "wind",
+              "x": 0.1,
+              "y": 0.5
+            },
+            {
+              "id": "gas",
+              "label": "Gas plant",
+              "icon": "factory",
+              "x": 0.1,
+              "y": 0.85
+            },
+            {
+              "id": "grid",
+              "label": "Grid 50 Hz",
+              "icon": "tower",
+              "x": 0.45,
+              "y": 0.5
+            },
+            {
+              "id": "bat",
+              "label": "Grid battery",
+              "icon": "battery",
+              "x": 0.45,
+              "y": 0.12
+            },
+            {
+              "id": "ctrl",
+              "label": "Control centre",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.88,
+              "ask": "What is a smart grid?"
+            },
+            {
+              "id": "city",
+              "label": "City homes",
+              "icon": "house",
+              "x": 0.85,
+              "y": 0.3
+            },
+            {
+              "id": "ev",
+              "label": "EV chargers",
+              "icon": "car",
+              "x": 0.85,
+              "y": 0.72
+            }
+          ],
+          "links": [
+            {
+              "from": "solar",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "wind",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "gas",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "bat",
+              "to": "grid",
+              "kind": "power",
+              "label": "Fast response"
+            },
+            {
+              "from": "grid",
+              "to": "city",
+              "kind": "power"
+            },
+            {
+              "from": "grid",
+              "to": "ev",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "bat",
+              "kind": "data"
+            },
+            {
+              "from": "ctrl",
+              "to": "ev",
+              "kind": "data",
+              "label": "Pause charging"
+            },
+            {
+              "from": "ctrl",
+              "to": "gas",
+              "kind": "data"
+            }
+          ],
+          "focus": 7
+        },
+        {
+          "op": "formula",
+          "text": "Half the inertia → twice the initial rate of fall"
+        },
+        {
+          "op": "note",
+          "text": "Grid-forming inverters can supply synthetic inertia"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does grid frequency drop when a power station trips?",
+      "a": "Generation suddenly falls below demand. The shortfall is drawn from the kinetic energy of every spinning generator rotor, so they all slow together, and frequency falls until other plants and batteries make up the gap.",
+      "asks": [
+        "What makes grid frequency change?"
+      ]
+    },
+    {
+      "q": "What is system inertia?",
+      "a": "It is the kinetic energy stored in the rotating masses of synchronous generators and motors, which resists sudden frequency changes. It is measured by the inertia constant H, stored energy divided by machine rating, typically 2 to 9 seconds.",
+      "asks": [
+        "What is the inertia constant H?"
+      ]
+    },
+    {
+      "q": "What is primary frequency response?",
+      "a": "It is automatic extra power from governors and fast reserves within seconds of a frequency drop, set in proportion to the drop by a droop setting. It stops the fall, and then slower controls restore exactly 50 hertz.",
+      "asks": [
+        "What happens in the first seconds after a trip?"
+      ]
+    },
+    {
+      "q": "Why do renewables make frequency control harder?",
+      "a": "Solar panels and most modern wind turbines connect through inverters, which do not naturally provide inertia. With less spinning mass the frequency falls faster after a loss, so grids add fast batteries, synthetic inertia and new stability services.",
+      "asks": [
+        "Do wind and solar reduce grid inertia?"
+      ]
+    },
+    {
+      "q": "What is a smart grid?",
+      "a": "A smart grid adds sensors, communication and control to the power network, so generation, storage and flexible demand such as electric cars and heat pumps can respond in real time to keep the grid balanced and efficient.",
+      "asks": [
+        "What makes a grid smart?"
+      ]
+    }
+  ],
+  "facts": [
+    "On 9 August 2019, Great Britain's grid frequency fell to 48.8 Hz and about a million customers were briefly disconnected.",
+    "The initial rate of change of frequency is ΔP·f₀ / (2HS): about 0.21 Hz/s for a 1 GW loss on a 30 GW grid with H = 4 s.",
+    "Grid-scale batteries can respond to a frequency drop in under a second."
+  ],
+  "quiz": [
+    {
+      "say": "A 30 gigawatt grid with an inertia constant of 2 seconds loses 1 gigawatt. What is the initial rate of fall of its 50 hertz frequency?",
+      "show": "A 30 GW grid with H = 2 s loses 1 GW. What is the initial rate of fall of its 50 Hz frequency?",
+      "options": [
+        {
+          "show": "About 0.42 Hz/s",
+          "say": "about 0.42 hertz per second"
+        },
+        {
+          "show": "About 0.21 Hz/s",
+          "say": "about 0.21 hertz per second"
+        },
+        {
+          "show": "About 0.83 Hz/s",
+          "say": "about 0.83 hertz per second"
+        }
+      ],
+      "answer": 0,
+      "why": "1 times 50, over 2 times 2 times 30, is 50 over 120, about 0.42 hertz per second: half the inertia, double the rate.",
+      "wrong": {
+        "1": "0.21 hertz per second is the answer for H of 4 seconds.",
+        "2": "That forgets the 2 in the 2 H S denominator."
+      }
+    },
+    {
+      "say": "Why can solar and wind farms reduce grid inertia?",
+      "show": "Why can solar and wind farms reduce grid inertia?",
+      "options": [
+        {
+          "show": "They connect through inverters with no spinning mass",
+          "say": "They connect through inverters with no spinning mass"
+        },
+        {
+          "show": "Their DC voltage is too high",
+          "say": "Their DC voltage is too high"
+        },
+        {
+          "show": "They only run at night",
+          "say": "They only run at night"
+        }
+      ],
+      "answer": 0,
+      "why": "Inverter-based generation has no rotor locked to the grid, so it stores no kinetic energy unless it is programmed to mimic inertia.",
+      "wrong": {
+        "1": "Their DC is converted to grid AC; the voltage level is not the issue.",
+        "2": "Solar runs in daylight, and inertia has nothing to do with the time of day."
+      }
+    }
+  ]
+}

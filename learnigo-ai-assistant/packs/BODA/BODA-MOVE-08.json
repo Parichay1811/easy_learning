@@ -1,0 +1,571 @@
+{
+  "id": "BODA-MOVE-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How do insects beat their wings so fast?",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "insect flight",
+    "wingbeat frequency",
+    "insect flight muscles",
+    "thorax",
+    "buzzing insects"
+  ],
+  "examples": [
+    "How fast does a bee flap its wings?",
+    "Why do insects buzz?",
+    "How do mosquitoes fly?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "thorax",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.52,
+          "size": 1.3,
+          "label": "Thorax box",
+          "ask": "How can insect muscles beat so fast?"
+        },
+        {
+          "id": "vert",
+          "kind": "piston",
+          "x": 0.25,
+          "y": 0.82,
+          "size": 0.9,
+          "label": "Up-down muscles",
+          "motion": "slide"
+        },
+        {
+          "id": "long",
+          "kind": "piston",
+          "x": 0.75,
+          "y": 0.82,
+          "size": 0.9,
+          "label": "Front-back muscles",
+          "motion": "slide"
+        },
+        {
+          "id": "wingL",
+          "kind": "lever",
+          "x": 0.15,
+          "y": 0.3,
+          "size": 1.1,
+          "label": "Left wing",
+          "motion": "swing"
+        },
+        {
+          "id": "wingR",
+          "kind": "lever",
+          "x": 0.85,
+          "y": 0.3,
+          "size": 1.1,
+          "label": "Right wing",
+          "motion": "swing"
+        },
+        {
+          "id": "hinge",
+          "kind": "spring",
+          "x": 0.5,
+          "y": 0.14,
+          "size": 0.8,
+          "label": "Springy hinge",
+          "ask": "What is resilin?"
+        }
+      ],
+      "links": [
+        {
+          "from": "vert",
+          "to": "thorax",
+          "kind": "force",
+          "label": "roof down"
+        },
+        {
+          "from": "long",
+          "to": "thorax",
+          "kind": "force",
+          "label": "roof up"
+        },
+        {
+          "from": "thorax",
+          "to": "wingL",
+          "kind": "force"
+        },
+        {
+          "from": "thorax",
+          "to": "wingR",
+          "kind": "force"
+        },
+        {
+          "from": "hinge",
+          "to": "wingL",
+          "kind": "energy",
+          "label": "rebound"
+        },
+        {
+          "from": "hinge",
+          "to": "wingR",
+          "kind": "energy"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Many insects beat their wings hundreds of times a second, faster than nerves can fire muscles one beat at a time. The trick is that the muscles do not pull the wings directly: they squeeze the box of the thorax.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How do insects beat their wings so fast?"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "thorax",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.52,
+              "size": 1.3,
+              "label": "Thorax box",
+              "ask": "How can insect muscles beat so fast?"
+            },
+            {
+              "id": "vert",
+              "kind": "piston",
+              "x": 0.25,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Up-down muscles",
+              "motion": "slide"
+            },
+            {
+              "id": "long",
+              "kind": "piston",
+              "x": 0.75,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Front-back muscles",
+              "motion": "slide"
+            },
+            {
+              "id": "wingL",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Left wing",
+              "motion": "swing"
+            },
+            {
+              "id": "wingR",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Right wing",
+              "motion": "swing"
+            },
+            {
+              "id": "hinge",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Springy hinge",
+              "ask": "What is resilin?"
+            }
+          ],
+          "links": [
+            {
+              "from": "vert",
+              "to": "thorax",
+              "kind": "force",
+              "label": "roof down"
+            },
+            {
+              "from": "long",
+              "to": "thorax",
+              "kind": "force",
+              "label": "roof up"
+            },
+            {
+              "from": "thorax",
+              "to": "wingL",
+              "kind": "force"
+            },
+            {
+              "from": "thorax",
+              "to": "wingR",
+              "kind": "force"
+            },
+            {
+              "from": "hinge",
+              "to": "wingL",
+              "kind": "energy",
+              "label": "rebound"
+            },
+            {
+              "from": "hinge",
+              "to": "wingR",
+              "kind": "energy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "One set of muscles pulls the roof of the thorax down, which levers the wings up. The other set squashes the thorax from front to back, so the roof pops up and the wings flick down.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "thorax",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.52,
+              "size": 1.3,
+              "label": "Thorax box",
+              "ask": "How can insect muscles beat so fast?"
+            },
+            {
+              "id": "vert",
+              "kind": "piston",
+              "x": 0.25,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Up-down muscles",
+              "motion": "slide"
+            },
+            {
+              "id": "long",
+              "kind": "piston",
+              "x": 0.75,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Front-back muscles",
+              "motion": "slide"
+            },
+            {
+              "id": "wingL",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Left wing",
+              "motion": "swing"
+            },
+            {
+              "id": "wingR",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Right wing",
+              "motion": "swing"
+            },
+            {
+              "id": "hinge",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Springy hinge",
+              "ask": "What is resilin?"
+            }
+          ],
+          "links": [
+            {
+              "from": "vert",
+              "to": "thorax",
+              "kind": "force",
+              "label": "roof down"
+            },
+            {
+              "from": "long",
+              "to": "thorax",
+              "kind": "force",
+              "label": "roof up"
+            },
+            {
+              "from": "thorax",
+              "to": "wingL",
+              "kind": "force"
+            },
+            {
+              "from": "thorax",
+              "to": "wingR",
+              "kind": "force"
+            },
+            {
+              "from": "hinge",
+              "to": "wingL",
+              "kind": "energy",
+              "label": "rebound"
+            },
+            {
+              "from": "hinge",
+              "to": "wingR",
+              "kind": "energy"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The thorax walls and a rubbery protein called resilin act like a spring, storing energy and bouncing back. These muscles fire again by themselves each time they are stretched, so one nerve signal drives many wingbeats.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "thorax",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.52,
+              "size": 1.3,
+              "label": "Thorax box",
+              "ask": "How can insect muscles beat so fast?"
+            },
+            {
+              "id": "vert",
+              "kind": "piston",
+              "x": 0.25,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Up-down muscles",
+              "motion": "slide"
+            },
+            {
+              "id": "long",
+              "kind": "piston",
+              "x": 0.75,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Front-back muscles",
+              "motion": "slide"
+            },
+            {
+              "id": "wingL",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Left wing",
+              "motion": "swing"
+            },
+            {
+              "id": "wingR",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Right wing",
+              "motion": "swing"
+            },
+            {
+              "id": "hinge",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Springy hinge",
+              "ask": "What is resilin?"
+            }
+          ],
+          "links": [
+            {
+              "from": "vert",
+              "to": "thorax",
+              "kind": "force",
+              "label": "roof down"
+            },
+            {
+              "from": "long",
+              "to": "thorax",
+              "kind": "force",
+              "label": "roof up"
+            },
+            {
+              "from": "thorax",
+              "to": "wingL",
+              "kind": "force"
+            },
+            {
+              "from": "thorax",
+              "to": "wingR",
+              "kind": "force"
+            },
+            {
+              "from": "hinge",
+              "to": "wingL",
+              "kind": "energy",
+              "label": "rebound"
+            },
+            {
+              "from": "hinge",
+              "to": "wingR",
+              "kind": "energy"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "The beat speed sets the buzz you hear. A honeybee beats its wings about 230 times a second and a mosquito around 600, while a butterfly flaps only about ten times a second with its big, slow wings.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "beats a second",
+          "items": [
+            {
+              "label": "Butterfly",
+              "size": 10,
+              "icon": "butterfly"
+            },
+            {
+              "label": "Hummingbird",
+              "size": 50,
+              "icon": "bird"
+            },
+            {
+              "label": "Housefly",
+              "size": 190,
+              "icon": "ant"
+            },
+            {
+              "label": "Honeybee",
+              "size": 230,
+              "icon": "bee"
+            },
+            {
+              "label": "Mosquito",
+              "size": 600,
+              "icon": "ant"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How can insect muscles beat so fast?",
+      "a": "In bees, flies and beetles the flight muscles are a special kind that contract again automatically when they are stretched. The springy thorax stretches each set in turn, so one nerve signal can produce many beats.",
+      "asks": [
+        "Why are insect wingbeats so fast?",
+        "How do flies flap so quickly?"
+      ]
+    },
+    {
+      "q": "What is resilin?",
+      "a": "Resilin is a rubbery protein in insect wing hinges and joints. It is one of the springiest materials known, giving back nearly all the energy put into stretching it. Fleas use it to power their jumps too.",
+      "asks": [
+        "What makes insect wings springy?",
+        "What protein helps fleas jump?"
+      ]
+    },
+    {
+      "q": "Why do insects buzz?",
+      "a": "The buzz is the sound of the wings beating the air. The faster the wingbeat, the higher the pitch, so a mosquito's whine is higher than a bee's hum.",
+      "asks": [
+        "What makes the buzzing sound?",
+        "Why does a mosquito whine?"
+      ]
+    },
+    {
+      "q": "How fast does a bee flap its wings?",
+      "a": "A honeybee beats its wings about 230 times a second. It uses short, quick strokes rather than big sweeps, which is unusual for an insect its size.",
+      "asks": [
+        "How many times a second do bee wings beat?",
+        "How do bees fly?"
+      ]
+    },
+    {
+      "q": "How do butterflies fly with slow wingbeats?",
+      "a": "Butterflies have large, light wings and flap only about 5 to 12 times a second. Their muscles fire once for each beat, like ours, giving a fluttering, bobbing flight that makes them hard for birds to catch.",
+      "asks": [
+        "Why do butterflies flutter?",
+        "How slowly do butterflies flap?"
+      ]
+    }
+  ],
+  "facts": [
+    "Honeybees beat their wings about 230 times a second (Altshuler and colleagues, 2005).",
+    "Resilin returns about 97 percent of the energy used to stretch it."
+  ],
+  "quiz": [
+    {
+      "say": "How can a fly beat its wings faster than its nerves can fire?",
+      "show": "How can a fly beat its wings faster than its nerves can fire?",
+      "options": [
+        {
+          "show": "Its muscles restart each time they're stretched",
+          "say": "Its muscles restart each time they're stretched"
+        },
+        {
+          "show": "Its wings flap on their own",
+          "say": "Its wings flap on their own"
+        },
+        {
+          "show": "It has a separate muscle for every beat",
+          "say": "It has a separate muscle for every beat"
+        }
+      ],
+      "answer": 0,
+      "why": "Its flight muscles contract again automatically when the springy thorax stretches them, so one nerve signal gives many beats.",
+      "wrong": {
+        "1": "The wings need muscle power; they do not flap on their own.",
+        "2": "Two sets of muscles do all the beats by squeezing the thorax."
+      }
+    },
+    {
+      "say": "Which of these has the highest-pitched buzz?",
+      "show": "Which of these has the highest-pitched buzz?",
+      "options": [
+        {
+          "show": "Mosquito",
+          "say": "Mosquito"
+        },
+        {
+          "show": "Honeybee",
+          "say": "Honeybee"
+        },
+        {
+          "show": "Butterfly",
+          "say": "Butterfly"
+        }
+      ],
+      "answer": 0,
+      "why": "A mosquito beats its wings about 600 times a second, faster than the others, so its buzz is highest.",
+      "wrong": {
+        "1": "A honeybee beats about 230 times a second, giving a lower hum.",
+        "2": "A butterfly flaps so slowly you cannot hear it."
+      }
+    }
+  ]
+}

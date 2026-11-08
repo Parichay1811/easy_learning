@@ -1,0 +1,639 @@
+{
+  "id": "ENGX-ROBO-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a robot vacuum finds its way around",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "robot vacuum navigation",
+    "SLAM mapping",
+    "cliff sensors",
+    "wheel encoders",
+    "charging dock"
+  ],
+  "examples": [
+    "How does a robot vacuum know where it is?",
+    "Why doesn't a robot vacuum fall down the stairs?",
+    "How does a robot vacuum find its dock?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "lid",
+          "label": "Lidar or camera",
+          "icon": "sensor",
+          "x": 0.12,
+          "y": 0.15,
+          "ask": "How does a robot vacuum map my house?"
+        },
+        {
+          "id": "bump",
+          "label": "Bump sensor",
+          "icon": "switch",
+          "x": 0.12,
+          "y": 0.5,
+          "ask": "Why do some robot vacuums bump into things?"
+        },
+        {
+          "id": "cliff",
+          "label": "Cliff sensors",
+          "icon": "eye",
+          "x": 0.12,
+          "y": 0.85,
+          "ask": "How does a robot vacuum avoid falling down stairs?"
+        },
+        {
+          "id": "brain",
+          "label": "Map and planner",
+          "icon": "chip",
+          "x": 0.48,
+          "y": 0.5
+        },
+        {
+          "id": "wheel",
+          "label": "Wheel motors",
+          "icon": "wheel",
+          "x": 0.82,
+          "y": 0.2
+        },
+        {
+          "id": "enc",
+          "label": "Wheel encoders",
+          "icon": "gear",
+          "x": 0.85,
+          "y": 0.6,
+          "ask": "What are wheel encoders?"
+        },
+        {
+          "id": "dock",
+          "label": "Charging dock",
+          "icon": "battery",
+          "x": 0.5,
+          "y": 0.9,
+          "ask": "How does a robot vacuum find its dock?"
+        }
+      ],
+      "links": [
+        {
+          "from": "lid",
+          "to": "brain",
+          "kind": "data",
+          "label": "distances"
+        },
+        {
+          "from": "bump",
+          "to": "brain",
+          "kind": "signal"
+        },
+        {
+          "from": "cliff",
+          "to": "brain",
+          "kind": "signal",
+          "label": "drop ahead"
+        },
+        {
+          "from": "brain",
+          "to": "wheel",
+          "kind": "signal",
+          "label": "drive"
+        },
+        {
+          "from": "wheel",
+          "to": "enc",
+          "kind": "force"
+        },
+        {
+          "from": "enc",
+          "to": "brain",
+          "kind": "data",
+          "label": "distance moved"
+        },
+        {
+          "from": "dock",
+          "to": "brain",
+          "kind": "signal",
+          "label": "infrared beacon"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A smart robot vacuum does not wander randomly. It builds a map of your home and keeps track of where it is on that map, a trick called SLAM: simultaneous localisation and mapping.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a robot vacuum finds its way around"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "lid",
+              "label": "Lidar or camera",
+              "icon": "sensor",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "How does a robot vacuum map my house?"
+            },
+            {
+              "id": "bump",
+              "label": "Bump sensor",
+              "icon": "switch",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Why do some robot vacuums bump into things?"
+            },
+            {
+              "id": "cliff",
+              "label": "Cliff sensors",
+              "icon": "eye",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "How does a robot vacuum avoid falling down stairs?"
+            },
+            {
+              "id": "brain",
+              "label": "Map and planner",
+              "icon": "chip",
+              "x": 0.48,
+              "y": 0.5
+            },
+            {
+              "id": "wheel",
+              "label": "Wheel motors",
+              "icon": "wheel",
+              "x": 0.82,
+              "y": 0.2
+            },
+            {
+              "id": "enc",
+              "label": "Wheel encoders",
+              "icon": "gear",
+              "x": 0.85,
+              "y": 0.6,
+              "ask": "What are wheel encoders?"
+            },
+            {
+              "id": "dock",
+              "label": "Charging dock",
+              "icon": "battery",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "How does a robot vacuum find its dock?"
+            }
+          ],
+          "links": [
+            {
+              "from": "lid",
+              "to": "brain",
+              "kind": "data",
+              "label": "distances"
+            },
+            {
+              "from": "bump",
+              "to": "brain",
+              "kind": "signal"
+            },
+            {
+              "from": "cliff",
+              "to": "brain",
+              "kind": "signal",
+              "label": "drop ahead"
+            },
+            {
+              "from": "brain",
+              "to": "wheel",
+              "kind": "signal",
+              "label": "drive"
+            },
+            {
+              "from": "wheel",
+              "to": "enc",
+              "kind": "force"
+            },
+            {
+              "from": "enc",
+              "to": "brain",
+              "kind": "data",
+              "label": "distance moved"
+            },
+            {
+              "from": "dock",
+              "to": "brain",
+              "kind": "signal",
+              "label": "infrared beacon"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "A spinning lidar on top, or a camera, measures distances to walls and furniture. Wheel encoders count how far each wheel has turned, so the robot knows how far it has moved.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "lid",
+              "label": "Lidar or camera",
+              "icon": "sensor",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "How does a robot vacuum map my house?"
+            },
+            {
+              "id": "bump",
+              "label": "Bump sensor",
+              "icon": "switch",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Why do some robot vacuums bump into things?"
+            },
+            {
+              "id": "cliff",
+              "label": "Cliff sensors",
+              "icon": "eye",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "How does a robot vacuum avoid falling down stairs?"
+            },
+            {
+              "id": "brain",
+              "label": "Map and planner",
+              "icon": "chip",
+              "x": 0.48,
+              "y": 0.5
+            },
+            {
+              "id": "wheel",
+              "label": "Wheel motors",
+              "icon": "wheel",
+              "x": 0.82,
+              "y": 0.2
+            },
+            {
+              "id": "enc",
+              "label": "Wheel encoders",
+              "icon": "gear",
+              "x": 0.85,
+              "y": 0.6,
+              "ask": "What are wheel encoders?"
+            },
+            {
+              "id": "dock",
+              "label": "Charging dock",
+              "icon": "battery",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "How does a robot vacuum find its dock?"
+            }
+          ],
+          "links": [
+            {
+              "from": "lid",
+              "to": "brain",
+              "kind": "data",
+              "label": "distances"
+            },
+            {
+              "from": "bump",
+              "to": "brain",
+              "kind": "signal"
+            },
+            {
+              "from": "cliff",
+              "to": "brain",
+              "kind": "signal",
+              "label": "drop ahead"
+            },
+            {
+              "from": "brain",
+              "to": "wheel",
+              "kind": "signal",
+              "label": "drive"
+            },
+            {
+              "from": "wheel",
+              "to": "enc",
+              "kind": "force"
+            },
+            {
+              "from": "enc",
+              "to": "brain",
+              "kind": "data",
+              "label": "distance moved"
+            },
+            {
+              "from": "dock",
+              "to": "brain",
+              "kind": "signal",
+              "label": "infrared beacon"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Infrared cliff sensors underneath look down all the time; if the floor suddenly disappears, the robot stops before it falls down the stairs. A springy front bumper tells it when it touches something.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "lid",
+              "label": "Lidar or camera",
+              "icon": "sensor",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "How does a robot vacuum map my house?"
+            },
+            {
+              "id": "bump",
+              "label": "Bump sensor",
+              "icon": "switch",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Why do some robot vacuums bump into things?"
+            },
+            {
+              "id": "cliff",
+              "label": "Cliff sensors",
+              "icon": "eye",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "How does a robot vacuum avoid falling down stairs?"
+            },
+            {
+              "id": "brain",
+              "label": "Map and planner",
+              "icon": "chip",
+              "x": 0.48,
+              "y": 0.5
+            },
+            {
+              "id": "wheel",
+              "label": "Wheel motors",
+              "icon": "wheel",
+              "x": 0.82,
+              "y": 0.2
+            },
+            {
+              "id": "enc",
+              "label": "Wheel encoders",
+              "icon": "gear",
+              "x": 0.85,
+              "y": 0.6,
+              "ask": "What are wheel encoders?"
+            },
+            {
+              "id": "dock",
+              "label": "Charging dock",
+              "icon": "battery",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "How does a robot vacuum find its dock?"
+            }
+          ],
+          "links": [
+            {
+              "from": "lid",
+              "to": "brain",
+              "kind": "data",
+              "label": "distances"
+            },
+            {
+              "from": "bump",
+              "to": "brain",
+              "kind": "signal"
+            },
+            {
+              "from": "cliff",
+              "to": "brain",
+              "kind": "signal",
+              "label": "drop ahead"
+            },
+            {
+              "from": "brain",
+              "to": "wheel",
+              "kind": "signal",
+              "label": "drive"
+            },
+            {
+              "from": "wheel",
+              "to": "enc",
+              "kind": "force"
+            },
+            {
+              "from": "enc",
+              "to": "brain",
+              "kind": "data",
+              "label": "distance moved"
+            },
+            {
+              "from": "dock",
+              "to": "brain",
+              "kind": "signal",
+              "label": "infrared beacon"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "With the map, the planner cleans in neat rows, room by room, and remembers what is done. When the battery runs low, it heads home to the dock, guided by an infrared signal.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "lid",
+              "label": "Lidar or camera",
+              "icon": "sensor",
+              "x": 0.12,
+              "y": 0.15,
+              "ask": "How does a robot vacuum map my house?"
+            },
+            {
+              "id": "bump",
+              "label": "Bump sensor",
+              "icon": "switch",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Why do some robot vacuums bump into things?"
+            },
+            {
+              "id": "cliff",
+              "label": "Cliff sensors",
+              "icon": "eye",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "How does a robot vacuum avoid falling down stairs?"
+            },
+            {
+              "id": "brain",
+              "label": "Map and planner",
+              "icon": "chip",
+              "x": 0.48,
+              "y": 0.5
+            },
+            {
+              "id": "wheel",
+              "label": "Wheel motors",
+              "icon": "wheel",
+              "x": 0.82,
+              "y": 0.2
+            },
+            {
+              "id": "enc",
+              "label": "Wheel encoders",
+              "icon": "gear",
+              "x": 0.85,
+              "y": 0.6,
+              "ask": "What are wheel encoders?"
+            },
+            {
+              "id": "dock",
+              "label": "Charging dock",
+              "icon": "battery",
+              "x": 0.5,
+              "y": 0.9,
+              "ask": "How does a robot vacuum find its dock?"
+            }
+          ],
+          "links": [
+            {
+              "from": "lid",
+              "to": "brain",
+              "kind": "data",
+              "label": "distances"
+            },
+            {
+              "from": "bump",
+              "to": "brain",
+              "kind": "signal"
+            },
+            {
+              "from": "cliff",
+              "to": "brain",
+              "kind": "signal",
+              "label": "drop ahead"
+            },
+            {
+              "from": "brain",
+              "to": "wheel",
+              "kind": "signal",
+              "label": "drive"
+            },
+            {
+              "from": "wheel",
+              "to": "enc",
+              "kind": "force"
+            },
+            {
+              "from": "enc",
+              "to": "brain",
+              "kind": "data",
+              "label": "distance moved"
+            },
+            {
+              "from": "dock",
+              "to": "brain",
+              "kind": "signal",
+              "label": "infrared beacon"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a robot vacuum map my house?",
+      "a": "Many use a spinning laser, called lidar, or a camera to measure distances to walls and furniture while wheel sensors track how far they have gone. Software stitches this into a floor map and tracks the robot's place on it.",
+      "asks": [
+        "What is SLAM?"
+      ]
+    },
+    {
+      "q": "How does a robot vacuum avoid falling down stairs?",
+      "a": "Infrared cliff sensors under the front shine light at the floor and watch for the reflection. If the reflection vanishes because there is a drop, the robot stops and backs away.",
+      "asks": [
+        "Why doesn't a robot vacuum fall down the stairs?"
+      ]
+    },
+    {
+      "q": "How does a robot vacuum find its dock?",
+      "a": "The dock sends out infrared signals the robot can detect, and robots with maps also remember where the dock is. It follows the signal home to recharge.",
+      "asks": [
+        "How does a Roomba go home?"
+      ]
+    },
+    {
+      "q": "Why do some robot vacuums bump into things?",
+      "a": "Simpler models have no map and rely on the bumper: they bounce off objects and turn in a new direction. That works, but it takes longer and can miss spots.",
+      "asks": [
+        "Why does my robot vacuum move randomly?"
+      ]
+    },
+    {
+      "q": "What are wheel encoders?",
+      "a": "Sensors that count tiny turns of each wheel. From the counts, the robot works out how far it has travelled and how much it has turned, which is called odometry.",
+      "asks": [
+        "What is odometry?"
+      ]
+    }
+  ],
+  "facts": [
+    "SLAM stands for simultaneous localisation and mapping.",
+    "The iRobot Roomba, launched in 2002, was one of the first popular home robot vacuums."
+  ],
+  "quiz": [
+    {
+      "say": "What stops a robot vacuum from falling down the stairs?",
+      "show": "Which part stops it falling down stairs?",
+      "options": [
+        {
+          "show": "Downward-facing cliff sensors",
+          "say": "Downward-facing cliff sensors"
+        },
+        {
+          "show": "The front bumper",
+          "say": "The front bumper"
+        },
+        {
+          "show": "The charging dock",
+          "say": "The charging dock"
+        }
+      ],
+      "answer": 0,
+      "why": "Cliff sensors see the floor's reflection vanish at a drop, and the robot stops.",
+      "wrong": {
+        "1": "The bumper only senses things it hits in front.",
+        "2": "The dock recharges the robot; it does not detect drops."
+      }
+    }
+  ]
+}

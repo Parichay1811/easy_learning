@@ -1,0 +1,610 @@
+{
+  "id": "ENGX-AERO-25",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an ion engine pushes a spacecraft",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "ion engine",
+    "ion thruster",
+    "xenon propellant",
+    "electric propulsion",
+    "solar electric propulsion"
+  ],
+  "examples": [
+    "How does an ion engine work?",
+    "Why are ion engines so efficient?",
+    "Can an ion engine launch a rocket from Earth?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sun",
+          "kind": "battery",
+          "x": 0.1,
+          "y": 0.18,
+          "label": "Solar panels",
+          "motion": "pulse",
+          "ask": "Where does an ion engine get its power?"
+        },
+        {
+          "id": "tank",
+          "kind": "tank",
+          "x": 0.1,
+          "y": 0.72,
+          "label": "Xenon tank",
+          "motion": "none"
+        },
+        {
+          "id": "ch",
+          "kind": "box",
+          "x": 0.4,
+          "y": 0.5,
+          "label": "Ionisation chamber",
+          "motion": "pulse",
+          "ask": "What is an ion?"
+        },
+        {
+          "id": "grid",
+          "kind": "coil",
+          "x": 0.65,
+          "y": 0.5,
+          "label": "Charged grids",
+          "motion": "pulse",
+          "ask": "How does an ion engine push a spacecraft?"
+        },
+        {
+          "id": "beam",
+          "kind": "pipe",
+          "x": 0.9,
+          "y": 0.5,
+          "label": "Ion beam",
+          "motion": "flow",
+          "ask": "How does an ion engine push a spacecraft?"
+        },
+        {
+          "id": "neut",
+          "kind": "coil",
+          "x": 0.72,
+          "y": 0.85,
+          "label": "Neutraliser",
+          "motion": "pulse",
+          "ask": "Why does an ion engine need a neutraliser?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sun",
+          "to": "ch",
+          "kind": "power",
+          "label": "electricity"
+        },
+        {
+          "from": "sun",
+          "to": "grid",
+          "kind": "power"
+        },
+        {
+          "from": "tank",
+          "to": "ch",
+          "kind": "fluid",
+          "label": "xenon gas"
+        },
+        {
+          "from": "ch",
+          "to": "grid",
+          "kind": "fluid",
+          "label": "ions"
+        },
+        {
+          "from": "grid",
+          "to": "beam",
+          "kind": "energy",
+          "label": "ions flung out"
+        },
+        {
+          "from": "neut",
+          "to": "beam",
+          "kind": "energy",
+          "label": "adds electrons"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An ion engine uses electricity instead of burning fuel. Solar panels power it, and its propellant is xenon, a heavy gas stored in a tank.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an ion engine pushes a spacecraft"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sun",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Solar panels",
+              "motion": "pulse",
+              "ask": "Where does an ion engine get its power?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.72,
+              "label": "Xenon tank",
+              "motion": "none"
+            },
+            {
+              "id": "ch",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.5,
+              "label": "Ionisation chamber",
+              "motion": "pulse",
+              "ask": "What is an ion?"
+            },
+            {
+              "id": "grid",
+              "kind": "coil",
+              "x": 0.65,
+              "y": 0.5,
+              "label": "Charged grids",
+              "motion": "pulse",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "beam",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Ion beam",
+              "motion": "flow",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "neut",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.85,
+              "label": "Neutraliser",
+              "motion": "pulse",
+              "ask": "Why does an ion engine need a neutraliser?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "ch",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "sun",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "tank",
+              "to": "ch",
+              "kind": "fluid",
+              "label": "xenon gas"
+            },
+            {
+              "from": "ch",
+              "to": "grid",
+              "kind": "fluid",
+              "label": "ions"
+            },
+            {
+              "from": "grid",
+              "to": "beam",
+              "kind": "energy",
+              "label": "ions flung out"
+            },
+            {
+              "from": "neut",
+              "to": "beam",
+              "kind": "energy",
+              "label": "adds electrons"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Inside the chamber, fast electrons knock electrons off the xenon atoms, turning them into positively charged ions.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sun",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Solar panels",
+              "motion": "pulse",
+              "ask": "Where does an ion engine get its power?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.72,
+              "label": "Xenon tank",
+              "motion": "none"
+            },
+            {
+              "id": "ch",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.5,
+              "label": "Ionisation chamber",
+              "motion": "pulse",
+              "ask": "What is an ion?"
+            },
+            {
+              "id": "grid",
+              "kind": "coil",
+              "x": 0.65,
+              "y": 0.5,
+              "label": "Charged grids",
+              "motion": "pulse",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "beam",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Ion beam",
+              "motion": "flow",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "neut",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.85,
+              "label": "Neutraliser",
+              "motion": "pulse",
+              "ask": "Why does an ion engine need a neutraliser?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "ch",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "sun",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "tank",
+              "to": "ch",
+              "kind": "fluid",
+              "label": "xenon gas"
+            },
+            {
+              "from": "ch",
+              "to": "grid",
+              "kind": "fluid",
+              "label": "ions"
+            },
+            {
+              "from": "grid",
+              "to": "beam",
+              "kind": "energy",
+              "label": "ions flung out"
+            },
+            {
+              "from": "neut",
+              "to": "beam",
+              "kind": "energy",
+              "label": "adds electrons"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Electrically charged grids at the back pull the ions and fling them out at more than 30 kilometres per second, many times faster than a chemical rocket's exhaust. Throwing them backwards pushes the craft forwards.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sun",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Solar panels",
+              "motion": "pulse",
+              "ask": "Where does an ion engine get its power?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.72,
+              "label": "Xenon tank",
+              "motion": "none"
+            },
+            {
+              "id": "ch",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.5,
+              "label": "Ionisation chamber",
+              "motion": "pulse",
+              "ask": "What is an ion?"
+            },
+            {
+              "id": "grid",
+              "kind": "coil",
+              "x": 0.65,
+              "y": 0.5,
+              "label": "Charged grids",
+              "motion": "pulse",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "beam",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Ion beam",
+              "motion": "flow",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "neut",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.85,
+              "label": "Neutraliser",
+              "motion": "pulse",
+              "ask": "Why does an ion engine need a neutraliser?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "ch",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "sun",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "tank",
+              "to": "ch",
+              "kind": "fluid",
+              "label": "xenon gas"
+            },
+            {
+              "from": "ch",
+              "to": "grid",
+              "kind": "fluid",
+              "label": "ions"
+            },
+            {
+              "from": "grid",
+              "to": "beam",
+              "kind": "energy",
+              "label": "ions flung out"
+            },
+            {
+              "from": "neut",
+              "to": "beam",
+              "kind": "energy",
+              "label": "adds electrons"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The push is tiny, about the weight of a sheet of paper, but it can run for years. Bit by bit the spacecraft builds up huge speed using very little propellant, which is why missions like Dawn used ion engines.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sun",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Solar panels",
+              "motion": "pulse",
+              "ask": "Where does an ion engine get its power?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.72,
+              "label": "Xenon tank",
+              "motion": "none"
+            },
+            {
+              "id": "ch",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.5,
+              "label": "Ionisation chamber",
+              "motion": "pulse",
+              "ask": "What is an ion?"
+            },
+            {
+              "id": "grid",
+              "kind": "coil",
+              "x": 0.65,
+              "y": 0.5,
+              "label": "Charged grids",
+              "motion": "pulse",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "beam",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Ion beam",
+              "motion": "flow",
+              "ask": "How does an ion engine push a spacecraft?"
+            },
+            {
+              "id": "neut",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.85,
+              "label": "Neutraliser",
+              "motion": "pulse",
+              "ask": "Why does an ion engine need a neutraliser?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "ch",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "sun",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "tank",
+              "to": "ch",
+              "kind": "fluid",
+              "label": "xenon gas"
+            },
+            {
+              "from": "ch",
+              "to": "grid",
+              "kind": "fluid",
+              "label": "ions"
+            },
+            {
+              "from": "grid",
+              "to": "beam",
+              "kind": "energy",
+              "label": "ions flung out"
+            },
+            {
+              "from": "neut",
+              "to": "beam",
+              "kind": "energy",
+              "label": "adds electrons"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does an ion engine push a spacecraft?",
+      "a": "It turns xenon gas into charged ions and uses electrically charged grids to fire them out of the back extremely fast. By Newton's third law, throwing the ions backwards pushes the spacecraft forwards.",
+      "asks": [
+        "How do ion thrusters work?"
+      ]
+    },
+    {
+      "q": "What is an ion?",
+      "a": "An ion is an atom that has gained or lost electrons, so it carries an electric charge. Xenon atoms that lose an electron become positive ions that electric fields can push.",
+      "asks": [
+        "What does ionised mean?"
+      ]
+    },
+    {
+      "q": "Where does an ion engine get its power?",
+      "a": "Usually from large solar panels. That is why ion engines suit missions in the inner solar system, where sunlight is strong; far from the Sun there is much less solar power.",
+      "asks": [
+        "Do ion engines need electricity?"
+      ]
+    },
+    {
+      "q": "Why does an ion engine need a neutraliser?",
+      "a": "Firing out only positive ions would leave the spacecraft negatively charged, pulling the ions back. A neutraliser sprays electrons into the beam to keep everything balanced.",
+      "asks": [
+        "What does the neutraliser do?"
+      ]
+    },
+    {
+      "q": "Why not use ion engines to launch from Earth?",
+      "a": "Their push is far too weak to lift anything against Earth's gravity; the weight of a sheet of paper can't lift a rocket. They only work in space, where even a tiny push adds up over months.",
+      "asks": [
+        "Can an ion engine launch a rocket from Earth?"
+      ]
+    }
+  ],
+  "facts": [
+    "NASA's Dawn spacecraft used ion engines to orbit both the asteroid Vesta and the dwarf planet Ceres.",
+    "Ion engines can be roughly ten times more fuel-efficient than chemical rockets."
+  ],
+  "quiz": [
+    {
+      "say": "Why are ion engines good for long space missions?",
+      "show": "Ion engines suit long missions because…",
+      "options": [
+        {
+          "show": "They use very little propellant for the speed they add",
+          "say": "They use very little propellant for the speed they add"
+        },
+        {
+          "show": "They push harder than any other rocket",
+          "say": "They push harder than any other rocket"
+        },
+        {
+          "show": "They need no electricity",
+          "say": "They need no electricity"
+        }
+      ],
+      "answer": 0,
+      "why": "Their exhaust is so fast that a little xenon goes a long way, and they can keep pushing for years.",
+      "wrong": {
+        "1": "Their push is tiny; they win by running for a very long time.",
+        "2": "They need a lot of electricity, usually from solar panels."
+      }
+    }
+  ]
+}

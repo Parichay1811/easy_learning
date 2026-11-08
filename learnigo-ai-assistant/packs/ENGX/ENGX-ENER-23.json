@@ -1,0 +1,670 @@
+{
+  "id": "ENGX-ENER-23",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a solar power tower makes electricity at night",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "concentrated solar power",
+    "solar power tower",
+    "heliostat",
+    "molten salt storage",
+    "CSP"
+  ],
+  "examples": [
+    "What is concentrated solar power?",
+    "How can solar power work at night?",
+    "What are the mirrors around a solar tower for?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "mirrors",
+          "kind": "box",
+          "x": 0.12,
+          "y": 0.78,
+          "size": 1.3,
+          "label": "Heliostat mirrors",
+          "motion": "swing",
+          "ask": "What are heliostats?"
+        },
+        {
+          "id": "recv",
+          "kind": "tank",
+          "x": 0.3,
+          "y": 0.15,
+          "label": "Receiver on tower",
+          "motion": "pulse",
+          "ask": "How hot does the receiver get?"
+        },
+        {
+          "id": "hot",
+          "kind": "tank",
+          "x": 0.55,
+          "y": 0.3,
+          "label": "Hot salt tank",
+          "ask": "Why use molten salt?"
+        },
+        {
+          "id": "cold",
+          "kind": "tank",
+          "x": 0.38,
+          "y": 0.62,
+          "size": 0.9,
+          "label": "Cold salt tank"
+        },
+        {
+          "id": "sg",
+          "kind": "tank",
+          "x": 0.66,
+          "y": 0.75,
+          "size": 0.9,
+          "label": "Steam generator",
+          "motion": "pulse"
+        },
+        {
+          "id": "turb",
+          "kind": "fan",
+          "x": 0.86,
+          "y": 0.55,
+          "label": "Steam turbine",
+          "motion": "spin"
+        },
+        {
+          "id": "gen",
+          "kind": "coil",
+          "x": 0.88,
+          "y": 0.18,
+          "label": "Generator",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "mirrors",
+          "to": "recv",
+          "kind": "energy",
+          "label": "sunlight"
+        },
+        {
+          "from": "recv",
+          "to": "hot",
+          "kind": "heat",
+          "label": "hot salt"
+        },
+        {
+          "from": "hot",
+          "to": "sg",
+          "kind": "heat"
+        },
+        {
+          "from": "sg",
+          "to": "cold",
+          "kind": "fluid",
+          "label": "cooled salt"
+        },
+        {
+          "from": "cold",
+          "to": "recv",
+          "kind": "fluid",
+          "label": "pumped up"
+        },
+        {
+          "from": "sg",
+          "to": "turb",
+          "kind": "fluid",
+          "label": "steam"
+        },
+        {
+          "from": "turb",
+          "to": "gen",
+          "kind": "energy"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A solar power tower uses thousands of flat mirrors called heliostats, each turning to follow the sun, to aim sunlight at one spot at the top of a tall tower.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a solar power tower makes electricity at night"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mirrors",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Heliostat mirrors",
+              "motion": "swing",
+              "ask": "What are heliostats?"
+            },
+            {
+              "id": "recv",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "label": "Receiver on tower",
+              "motion": "pulse",
+              "ask": "How hot does the receiver get?"
+            },
+            {
+              "id": "hot",
+              "kind": "tank",
+              "x": 0.55,
+              "y": 0.3,
+              "label": "Hot salt tank",
+              "ask": "Why use molten salt?"
+            },
+            {
+              "id": "cold",
+              "kind": "tank",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Cold salt tank"
+            },
+            {
+              "id": "sg",
+              "kind": "tank",
+              "x": 0.66,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Steam generator",
+              "motion": "pulse"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.55,
+              "label": "Steam turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.88,
+              "y": 0.18,
+              "label": "Generator",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "mirrors",
+              "to": "recv",
+              "kind": "energy",
+              "label": "sunlight"
+            },
+            {
+              "from": "recv",
+              "to": "hot",
+              "kind": "heat",
+              "label": "hot salt"
+            },
+            {
+              "from": "hot",
+              "to": "sg",
+              "kind": "heat"
+            },
+            {
+              "from": "sg",
+              "to": "cold",
+              "kind": "fluid",
+              "label": "cooled salt"
+            },
+            {
+              "from": "cold",
+              "to": "recv",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "sg",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turb",
+              "to": "gen",
+              "kind": "energy"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The concentrated sunlight heats a receiver to several hundred degrees. Molten salt pumped through it is heated to about 565 degrees Celsius and stored in a big insulated tank.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mirrors",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Heliostat mirrors",
+              "motion": "swing",
+              "ask": "What are heliostats?"
+            },
+            {
+              "id": "recv",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "label": "Receiver on tower",
+              "motion": "pulse",
+              "ask": "How hot does the receiver get?"
+            },
+            {
+              "id": "hot",
+              "kind": "tank",
+              "x": 0.55,
+              "y": 0.3,
+              "label": "Hot salt tank",
+              "ask": "Why use molten salt?"
+            },
+            {
+              "id": "cold",
+              "kind": "tank",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Cold salt tank"
+            },
+            {
+              "id": "sg",
+              "kind": "tank",
+              "x": 0.66,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Steam generator",
+              "motion": "pulse"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.55,
+              "label": "Steam turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.88,
+              "y": 0.18,
+              "label": "Generator",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "mirrors",
+              "to": "recv",
+              "kind": "energy",
+              "label": "sunlight"
+            },
+            {
+              "from": "recv",
+              "to": "hot",
+              "kind": "heat",
+              "label": "hot salt"
+            },
+            {
+              "from": "hot",
+              "to": "sg",
+              "kind": "heat"
+            },
+            {
+              "from": "sg",
+              "to": "cold",
+              "kind": "fluid",
+              "label": "cooled salt"
+            },
+            {
+              "from": "cold",
+              "to": "recv",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "sg",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turb",
+              "to": "gen",
+              "kind": "energy"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "When power is needed, the hot salt flows through a steam generator, boiling water to drive a turbine and generator, just like a normal power station. The cooled salt returns to a cold tank, ready to be heated again.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mirrors",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Heliostat mirrors",
+              "motion": "swing",
+              "ask": "What are heliostats?"
+            },
+            {
+              "id": "recv",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "label": "Receiver on tower",
+              "motion": "pulse",
+              "ask": "How hot does the receiver get?"
+            },
+            {
+              "id": "hot",
+              "kind": "tank",
+              "x": 0.55,
+              "y": 0.3,
+              "label": "Hot salt tank",
+              "ask": "Why use molten salt?"
+            },
+            {
+              "id": "cold",
+              "kind": "tank",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Cold salt tank"
+            },
+            {
+              "id": "sg",
+              "kind": "tank",
+              "x": 0.66,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Steam generator",
+              "motion": "pulse"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.55,
+              "label": "Steam turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.88,
+              "y": 0.18,
+              "label": "Generator",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "mirrors",
+              "to": "recv",
+              "kind": "energy",
+              "label": "sunlight"
+            },
+            {
+              "from": "recv",
+              "to": "hot",
+              "kind": "heat",
+              "label": "hot salt"
+            },
+            {
+              "from": "hot",
+              "to": "sg",
+              "kind": "heat"
+            },
+            {
+              "from": "sg",
+              "to": "cold",
+              "kind": "fluid",
+              "label": "cooled salt"
+            },
+            {
+              "from": "cold",
+              "to": "recv",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "sg",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turb",
+              "to": "gen",
+              "kind": "energy"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Because hot salt stays hot for many hours, the plant can keep making electricity after sunset. Some towers store enough heat to run right through the night.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mirrors",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Heliostat mirrors",
+              "motion": "swing",
+              "ask": "What are heliostats?"
+            },
+            {
+              "id": "recv",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "label": "Receiver on tower",
+              "motion": "pulse",
+              "ask": "How hot does the receiver get?"
+            },
+            {
+              "id": "hot",
+              "kind": "tank",
+              "x": 0.55,
+              "y": 0.3,
+              "label": "Hot salt tank",
+              "ask": "Why use molten salt?"
+            },
+            {
+              "id": "cold",
+              "kind": "tank",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Cold salt tank"
+            },
+            {
+              "id": "sg",
+              "kind": "tank",
+              "x": 0.66,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Steam generator",
+              "motion": "pulse"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.55,
+              "label": "Steam turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.88,
+              "y": 0.18,
+              "label": "Generator",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "mirrors",
+              "to": "recv",
+              "kind": "energy",
+              "label": "sunlight"
+            },
+            {
+              "from": "recv",
+              "to": "hot",
+              "kind": "heat",
+              "label": "hot salt"
+            },
+            {
+              "from": "hot",
+              "to": "sg",
+              "kind": "heat"
+            },
+            {
+              "from": "sg",
+              "to": "cold",
+              "kind": "fluid",
+              "label": "cooled salt"
+            },
+            {
+              "from": "cold",
+              "to": "recv",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "sg",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turb",
+              "to": "gen",
+              "kind": "energy"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What are heliostats?",
+      "a": "Heliostats are flat mirrors on motorised stands that track the sun across the sky, so each one keeps reflecting sunlight onto the receiver at the top of the tower. A large plant can have over 10,000 of them.",
+      "asks": [
+        "Why are there so many mirrors?"
+      ]
+    },
+    {
+      "q": "How hot does the receiver get?",
+      "a": "Concentrated sunlight can heat it to well over 500 degrees Celsius. It is a wall of metal tubes carrying molten salt, which soaks up the heat.",
+      "asks": [
+        "What is at the top of a solar tower?"
+      ]
+    },
+    {
+      "q": "Why use molten salt?",
+      "a": "A mix of sodium and potassium nitrate melts at around 220 degrees Celsius and can be heated to about 565 degrees without boiling. It stores lots of heat cheaply and loses little overnight in insulated tanks.",
+      "asks": [
+        "How does a solar tower store heat?"
+      ]
+    },
+    {
+      "q": "How is concentrated solar different from solar panels?",
+      "a": "Solar panels turn light straight into electricity. Concentrated solar uses mirrors to make heat, then runs a steam turbine, which is more complicated but lets it store heat cheaply for use at night.",
+      "asks": [
+        "Is concentrated solar the same as solar panels?"
+      ]
+    },
+    {
+      "q": "Where are solar power towers built?",
+      "a": "They need strong, direct sunshine and clear skies, so they are built in sunny dry places such as southern Spain, Morocco, Chile, China, the Middle East and the south-western United States.",
+      "asks": [
+        "Why are solar towers in deserts?"
+      ]
+    }
+  ],
+  "facts": [
+    "Gemasolar in Spain, opened in 2011, was the first commercial solar tower to store heat in molten salt, giving up to about 15 hours of output without sunshine.",
+    "The molten salt in solar towers is typically heated to about 565 degrees Celsius."
+  ],
+  "quiz": [
+    {
+      "say": "What lets a solar power tower keep making electricity after sunset?",
+      "show": "A solar tower works at night thanks to…",
+      "options": [
+        {
+          "show": "Heat stored in hot molten salt",
+          "say": "Heat stored in hot molten salt"
+        },
+        {
+          "show": "Moonlight reflected by the mirrors",
+          "say": "Moonlight reflected by the mirrors"
+        },
+        {
+          "show": "Batteries charged by the turbine",
+          "say": "Batteries charged by the turbine"
+        }
+      ],
+      "answer": 0,
+      "why": "The salt is heated by day and stored in insulated tanks, then used to make steam at night.",
+      "wrong": {
+        "1": "Moonlight is far too weak to run a power station.",
+        "2": "The tower stores heat, not electricity in batteries."
+      }
+    }
+  ]
+}

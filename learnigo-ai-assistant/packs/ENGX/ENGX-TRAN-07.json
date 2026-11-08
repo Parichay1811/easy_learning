@@ -1,0 +1,600 @@
+{
+  "id": "ENGX-TRAN-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a CVT gearbox gives smooth endless gears",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "CVT",
+    "continuously variable transmission",
+    "variable pulley",
+    "push belt",
+    "gearless transmission"
+  ],
+  "examples": [
+    "How does a CVT work?",
+    "Why does a CVT have no gear changes?",
+    "How can a pulley change size?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "eng",
+          "kind": "motor",
+          "x": 0.1,
+          "y": 0.5,
+          "size": 1,
+          "label": "Engine",
+          "motion": "spin"
+        },
+        {
+          "id": "drive",
+          "kind": "wheel",
+          "x": 0.33,
+          "y": 0.5,
+          "size": 1,
+          "label": "Drive pulley",
+          "motion": "spin",
+          "ask": "How does a CVT pulley change size?"
+        },
+        {
+          "id": "belt",
+          "kind": "belt",
+          "x": 0.55,
+          "y": 0.22,
+          "size": 1.2,
+          "label": "Steel belt",
+          "motion": "flow",
+          "ask": "What is the belt in a CVT made of?"
+        },
+        {
+          "id": "driven",
+          "kind": "wheel",
+          "x": 0.75,
+          "y": 0.5,
+          "size": 1.4,
+          "label": "Driven pulley",
+          "motion": "spin",
+          "ask": "What is the driven pulley?"
+        },
+        {
+          "id": "cone",
+          "kind": "piston",
+          "x": 0.33,
+          "y": 0.85,
+          "size": 0.7,
+          "label": "Sliding pulley half",
+          "motion": "slide",
+          "ask": "What moves the pulley halves?"
+        },
+        {
+          "id": "wheels",
+          "kind": "wheel",
+          "x": 0.92,
+          "y": 0.84,
+          "size": 1,
+          "label": "Car wheels",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "eng",
+          "to": "drive",
+          "kind": "energy"
+        },
+        {
+          "from": "drive",
+          "to": "belt",
+          "kind": "force",
+          "label": "grips belt"
+        },
+        {
+          "from": "belt",
+          "to": "driven",
+          "kind": "force",
+          "label": "turns it"
+        },
+        {
+          "from": "cone",
+          "to": "drive",
+          "kind": "force",
+          "label": "changes width"
+        },
+        {
+          "from": "driven",
+          "to": "wheels",
+          "kind": "energy"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A continuously variable transmission, or CVT, has no fixed gears at all. Instead a belt runs between two pulleys whose working size can change smoothly.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a CVT gearbox gives smooth endless gears"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "wheel",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 1,
+              "label": "Drive pulley",
+              "motion": "spin",
+              "ask": "How does a CVT pulley change size?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.22,
+              "size": 1.2,
+              "label": "Steel belt",
+              "motion": "flow",
+              "ask": "What is the belt in a CVT made of?"
+            },
+            {
+              "id": "driven",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven pulley",
+              "motion": "spin",
+              "ask": "What is the driven pulley?"
+            },
+            {
+              "id": "cone",
+              "kind": "piston",
+              "x": 0.33,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Sliding pulley half",
+              "motion": "slide",
+              "ask": "What moves the pulley halves?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.84,
+              "size": 1,
+              "label": "Car wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "belt",
+              "kind": "force",
+              "label": "grips belt"
+            },
+            {
+              "from": "belt",
+              "to": "driven",
+              "kind": "force",
+              "label": "turns it"
+            },
+            {
+              "from": "cone",
+              "to": "drive",
+              "kind": "force",
+              "label": "changes width"
+            },
+            {
+              "from": "driven",
+              "to": "wheels",
+              "kind": "energy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Each pulley is two cone-shaped halves facing each other. The belt sits in the V-shaped groove between them, and how far apart the halves are decides how far out the belt rides.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "wheel",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 1,
+              "label": "Drive pulley",
+              "motion": "spin",
+              "ask": "How does a CVT pulley change size?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.22,
+              "size": 1.2,
+              "label": "Steel belt",
+              "motion": "flow",
+              "ask": "What is the belt in a CVT made of?"
+            },
+            {
+              "id": "driven",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven pulley",
+              "motion": "spin",
+              "ask": "What is the driven pulley?"
+            },
+            {
+              "id": "cone",
+              "kind": "piston",
+              "x": 0.33,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Sliding pulley half",
+              "motion": "slide",
+              "ask": "What moves the pulley halves?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.84,
+              "size": 1,
+              "label": "Car wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "belt",
+              "kind": "force",
+              "label": "grips belt"
+            },
+            {
+              "from": "belt",
+              "to": "driven",
+              "kind": "force",
+              "label": "turns it"
+            },
+            {
+              "from": "cone",
+              "to": "drive",
+              "kind": "force",
+              "label": "changes width"
+            },
+            {
+              "from": "driven",
+              "to": "wheels",
+              "kind": "energy"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Push the drive pulley's halves together and the belt is squeezed outward, so it acts like a bigger pulley. At the same time the driven pulley's halves part and the belt sinks inward. The ratio changes with no steps.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "wheel",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 1,
+              "label": "Drive pulley",
+              "motion": "spin",
+              "ask": "How does a CVT pulley change size?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.22,
+              "size": 1.2,
+              "label": "Steel belt",
+              "motion": "flow",
+              "ask": "What is the belt in a CVT made of?"
+            },
+            {
+              "id": "driven",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven pulley",
+              "motion": "spin",
+              "ask": "What is the driven pulley?"
+            },
+            {
+              "id": "cone",
+              "kind": "piston",
+              "x": 0.33,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Sliding pulley half",
+              "motion": "slide",
+              "ask": "What moves the pulley halves?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.84,
+              "size": 1,
+              "label": "Car wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "belt",
+              "kind": "force",
+              "label": "grips belt"
+            },
+            {
+              "from": "belt",
+              "to": "driven",
+              "kind": "force",
+              "label": "turns it"
+            },
+            {
+              "from": "cone",
+              "to": "drive",
+              "kind": "force",
+              "label": "changes width"
+            },
+            {
+              "from": "driven",
+              "to": "wheels",
+              "kind": "energy"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "A small circle driving a big one is like first gear; the reverse is like top gear. A computer keeps the engine at its most efficient speed while the car speeds up smoothly, with no gear changes to feel.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "wheel",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 1,
+              "label": "Drive pulley",
+              "motion": "spin",
+              "ask": "How does a CVT pulley change size?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.22,
+              "size": 1.2,
+              "label": "Steel belt",
+              "motion": "flow",
+              "ask": "What is the belt in a CVT made of?"
+            },
+            {
+              "id": "driven",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven pulley",
+              "motion": "spin",
+              "ask": "What is the driven pulley?"
+            },
+            {
+              "id": "cone",
+              "kind": "piston",
+              "x": 0.33,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Sliding pulley half",
+              "motion": "slide",
+              "ask": "What moves the pulley halves?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.84,
+              "size": 1,
+              "label": "Car wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "belt",
+              "kind": "force",
+              "label": "grips belt"
+            },
+            {
+              "from": "belt",
+              "to": "driven",
+              "kind": "force",
+              "label": "turns it"
+            },
+            {
+              "from": "cone",
+              "to": "drive",
+              "kind": "force",
+              "label": "changes width"
+            },
+            {
+              "from": "driven",
+              "to": "wheels",
+              "kind": "energy"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a CVT pulley change size?",
+      "a": "Each pulley is two cones facing each other. Sliding the cones together pushes the belt outward to ride on a bigger circle; sliding them apart lets it sink to a smaller one.",
+      "asks": [
+        "How can a pulley get bigger?"
+      ]
+    },
+    {
+      "q": "What is the belt in a CVT made of?",
+      "a": "Most car CVTs use a belt or chain made of many steel parts, running in special oil. Small scooters use a simpler rubber belt.",
+      "asks": [
+        "Is a CVT belt rubber?"
+      ]
+    },
+    {
+      "q": "What is the driven pulley?",
+      "a": "The driven pulley is the one that turns towards the wheels. When the belt rides low on the drive pulley and high on the driven pulley, the wheels turn slowly with lots of force, like a low gear.",
+      "asks": [
+        "Which pulley turns the wheels?"
+      ]
+    },
+    {
+      "q": "What moves the pulley halves?",
+      "a": "Oil pressure controlled by a computer slides one half of each pulley along its shaft. The two pulleys change size in opposite directions, so the belt stays tight.",
+      "asks": [
+        "What controls a CVT?"
+      ]
+    },
+    {
+      "q": "Why can a CVT save fuel?",
+      "a": "Because the ratio can be anything within its range, the CVT can hold the engine at the speed where it uses fuel most efficiently. The trade-off is a droning engine note when you accelerate hard.",
+      "asks": [
+        "Are CVTs efficient?"
+      ]
+    }
+  ],
+  "facts": [
+    "A CVT can give any ratio within its range, not just a set of fixed gears.",
+    "The DAF 600 car of 1958 used an early rubber-belt CVT called the Variomatic.",
+    "Many small scooters use a simple rubber-belt CVT that changes ratio automatically as the engine speeds up."
+  ],
+  "quiz": [
+    {
+      "say": "In a CVT, what happens when the drive pulley's cone halves move together?",
+      "show": "In a CVT, what happens when the drive pulley's cone halves move together?",
+      "options": [
+        {
+          "show": "The belt rides on a bigger circle",
+          "say": "The belt rides on a bigger circle"
+        },
+        {
+          "show": "The belt comes off",
+          "say": "The belt comes off"
+        },
+        {
+          "show": "The engine stops",
+          "say": "The engine stops"
+        }
+      ],
+      "answer": 0,
+      "why": "Squeezing the cones together pushes the belt outward, so the drive pulley acts bigger and the ratio moves towards top gear.",
+      "wrong": {
+        "1": "The other pulley opens at the same time, so the belt stays tight and in place.",
+        "2": "Changing the pulley size changes the ratio; the engine keeps running."
+      }
+    }
+  ]
+}

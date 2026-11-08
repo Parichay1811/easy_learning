@@ -1,0 +1,517 @@
+{
+  "id": "BEE-PWR-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The per-unit system: one scale for every voltage in the grid",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "per-unit system",
+    "base impedance",
+    "base MVA",
+    "change of base",
+    "per-unit impedance"
+  ],
+  "examples": [
+    "Why do engineers use the per-unit system?",
+    "How do you calculate base impedance?",
+    "How do you change per-unit impedance to a new base?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "g",
+          "label": "Generator 11 kV",
+          "icon": "factory",
+          "x": 0.08,
+          "y": 0.5
+        },
+        {
+          "id": "t1",
+          "label": "T1 11/132 kV",
+          "icon": "lightning",
+          "x": 0.29,
+          "y": 0.5,
+          "ask": "Why is a transformer's per-unit impedance the same on both sides?"
+        },
+        {
+          "id": "line",
+          "label": "Line 17.4 Ω",
+          "icon": "tower",
+          "x": 0.5,
+          "y": 0.5,
+          "ask": "How do you calculate base impedance?"
+        },
+        {
+          "id": "t2",
+          "label": "T2 132/33 kV",
+          "icon": "lightning",
+          "x": 0.71,
+          "y": 0.5
+        },
+        {
+          "id": "load",
+          "label": "Town 33 kV",
+          "icon": "house",
+          "x": 0.92,
+          "y": 0.5,
+          "ask": "Why do engineers use the per-unit system?"
+        }
+      ],
+      "links": [
+        {
+          "from": "g",
+          "to": "t1",
+          "kind": "power",
+          "label": "11 kV zone"
+        },
+        {
+          "from": "t1",
+          "to": "line",
+          "kind": "power",
+          "label": "132 kV zone"
+        },
+        {
+          "from": "line",
+          "to": "t2",
+          "kind": "power"
+        },
+        {
+          "from": "t2",
+          "to": "load",
+          "kind": "power",
+          "label": "33 kV zone"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A grid is a patchwork of voltages: 11 kilovolts at the generator, 132 on the line, 33 in town. Doing sums across all those transformers is a recipe for mistakes. So engineers use a clever trick, the per-unit system, where every quantity is a fraction of a chosen base. Look at the three voltage zones on the board.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The per-unit system: one scale for every voltage in the grid"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "g",
+              "label": "Generator 11 kV",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "id": "t1",
+              "label": "T1 11/132 kV",
+              "icon": "lightning",
+              "x": 0.29,
+              "y": 0.5,
+              "ask": "Why is a transformer's per-unit impedance the same on both sides?"
+            },
+            {
+              "id": "line",
+              "label": "Line 17.4 Ω",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How do you calculate base impedance?"
+            },
+            {
+              "id": "t2",
+              "label": "T2 132/33 kV",
+              "icon": "lightning",
+              "x": 0.71,
+              "y": 0.5
+            },
+            {
+              "id": "load",
+              "label": "Town 33 kV",
+              "icon": "house",
+              "x": 0.92,
+              "y": 0.5,
+              "ask": "Why do engineers use the per-unit system?"
+            }
+          ],
+          "links": [
+            {
+              "from": "g",
+              "to": "t1",
+              "kind": "power",
+              "label": "11 kV zone"
+            },
+            {
+              "from": "t1",
+              "to": "line",
+              "kind": "power",
+              "label": "132 kV zone"
+            },
+            {
+              "from": "line",
+              "to": "t2",
+              "kind": "power"
+            },
+            {
+              "from": "t2",
+              "to": "load",
+              "kind": "power",
+              "label": "33 kV zone"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Follow the chain. First pick one power base for the whole network, say 100 megavolt-amperes. Then each zone gets its own voltage base, its normal voltage, 11, 132 and 33 kilovolts, linked by the transformer ratios. So 1.0 per unit means normal voltage anywhere in the grid. What would 0.95 per unit mean?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Pick S_base 100 MVA",
+              "icon": "scale",
+              "note": "One power base for the whole network"
+            },
+            {
+              "label": "V_base per zone",
+              "icon": "ruler",
+              "note": "11, 132 and 33 kV, set by the transformers"
+            },
+            {
+              "label": "Z_base = V²/S",
+              "icon": "pencil",
+              "note": "132² / 100 = 174.24 Ω",
+              "ask": "How do you calculate base impedance?"
+            },
+            {
+              "label": "Z_pu = Z / Z_base",
+              "icon": "puzzle",
+              "note": "17.424 / 174.24 = 0.1 pu"
+            },
+            {
+              "label": "Solve, then convert",
+              "icon": "computer",
+              "note": "Multiply by the bases to get amps and volts",
+              "ask": "How do you get back to real amps and volts?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "S_base = 100 MVA; V_base = 11, 132 and 33 kV"
+        }
+      ]
+    },
+    {
+      "say": "Five percent low. Now impedance. Base impedance is base voltage squared over base power. In the 132 kilovolt zone that is 132 squared over 100, 174.24 ohms. Our line has 17.424 ohms, so in per unit it is 17.424 over 174.24, exactly 0.1. Why might 0.1 be easier to work with than 17.4 ohms?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Pick S_base 100 MVA",
+              "icon": "scale",
+              "note": "One power base for the whole network"
+            },
+            {
+              "label": "V_base per zone",
+              "icon": "ruler",
+              "note": "11, 132 and 33 kV, set by the transformers"
+            },
+            {
+              "label": "Z_base = V²/S",
+              "icon": "pencil",
+              "note": "132² / 100 = 174.24 Ω",
+              "ask": "How do you calculate base impedance?"
+            },
+            {
+              "label": "Z_pu = Z / Z_base",
+              "icon": "puzzle",
+              "note": "17.424 / 174.24 = 0.1 pu"
+            },
+            {
+              "label": "Solve, then convert",
+              "icon": "computer",
+              "note": "Multiply by the bases to get amps and volts",
+              "ask": "How do you get back to real amps and volts?"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "Z_base = V²/S = 132² / 100 = 174.24 Ω"
+        }
+      ]
+    },
+    {
+      "say": "Because the magic happens at the transformers. Seen from either side, a transformer has the same per-unit impedance, so it becomes a plain impedance with no ratio to track. The whole grid turns into one easy circuit of per-unit numbers, and since typical values fall in narrow ranges, a wrong one stands out. Which transformer shows 0.2 per unit?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "g",
+              "label": "Generator 1.0 pu",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "Why do engineers use the per-unit system?"
+            },
+            {
+              "id": "t1",
+              "label": "T1 X = 0.2 pu",
+              "icon": "lightning",
+              "x": 0.29,
+              "y": 0.5,
+              "ask": "How do you change per-unit impedance to a new base?"
+            },
+            {
+              "id": "line",
+              "label": "Line X = 0.1 pu",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How do you calculate base impedance?"
+            },
+            {
+              "id": "t2",
+              "label": "T2 X = 0.1 pu",
+              "icon": "lightning",
+              "x": 0.71,
+              "y": 0.5,
+              "ask": "Why is a transformer's per-unit impedance the same on both sides?"
+            },
+            {
+              "id": "load",
+              "label": "Town 1.0 pu",
+              "icon": "house",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "g",
+              "to": "t1",
+              "kind": "power"
+            },
+            {
+              "from": "t1",
+              "to": "line",
+              "kind": "power"
+            },
+            {
+              "from": "line",
+              "to": "t2",
+              "kind": "power"
+            },
+            {
+              "from": "t2",
+              "to": "load",
+              "kind": "power"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "A transformer has the same pu value on both sides"
+        }
+      ]
+    },
+    {
+      "say": "T1. Its nameplate says 0.1 per unit on its own 50 megavolt-ampere rating, so on our 100 base it doubles to 0.2: multiply by new base power over old. Excellent! Exam tip: change every nameplate value to the common base first. Challenge: using the note, what is the base current in the 33 kilovolt zone?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "g",
+              "label": "Generator 1.0 pu",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "Why do engineers use the per-unit system?"
+            },
+            {
+              "id": "t1",
+              "label": "T1 X = 0.2 pu",
+              "icon": "lightning",
+              "x": 0.29,
+              "y": 0.5,
+              "ask": "How do you change per-unit impedance to a new base?"
+            },
+            {
+              "id": "line",
+              "label": "Line X = 0.1 pu",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How do you calculate base impedance?"
+            },
+            {
+              "id": "t2",
+              "label": "T2 X = 0.1 pu",
+              "icon": "lightning",
+              "x": 0.71,
+              "y": 0.5,
+              "ask": "Why is a transformer's per-unit impedance the same on both sides?"
+            },
+            {
+              "id": "load",
+              "label": "Town 1.0 pu",
+              "icon": "house",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "g",
+              "to": "t1",
+              "kind": "power"
+            },
+            {
+              "from": "t1",
+              "to": "line",
+              "kind": "power"
+            },
+            {
+              "from": "line",
+              "to": "t2",
+              "kind": "power"
+            },
+            {
+              "from": "t2",
+              "to": "load",
+              "kind": "power"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Z_new = Z_old × S_new/S_old = 0.1 × 100/50 = 0.2 pu"
+        },
+        {
+          "op": "note",
+          "text": "I_base = 100 MVA / (√3 × 132 kV) ≈ 437 A"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do engineers use the per-unit system?",
+      "a": "It expresses every voltage, current and impedance as a fraction of a base value. Transformers then drop out of the sums, values from very different machines fall in similar ranges, and mistakes are easier to spot.",
+      "asks": [
+        "What is the point of per unit?"
+      ]
+    },
+    {
+      "q": "How do you calculate base impedance?",
+      "a": "Base impedance equals base voltage squared divided by base power. For 132 kilovolts and 100 megavolt-amperes it is 132 squared over 100, which is 174.24 ohms.",
+      "asks": [
+        "What is the base impedance formula?"
+      ]
+    },
+    {
+      "q": "How do you change per-unit impedance to a new base?",
+      "a": "Multiply by the new base power over the old, and by the old base voltage over the new, squared. A transformer of 0.1 per unit on 50 megavolt-amperes becomes 0.2 per unit on 100, at the same voltage.",
+      "asks": [
+        "How do you convert per unit to a common base?"
+      ]
+    },
+    {
+      "q": "Why is a transformer's per-unit impedance the same on both sides?",
+      "a": "The base voltages on each side are chosen in the transformer's turns ratio, so the impedance referred across it and the base impedance both change by the ratio squared. Their quotient, the per-unit value, stays the same.",
+      "asks": [
+        "Does per unit remove transformers?"
+      ]
+    },
+    {
+      "q": "How do you get back to real amps and volts?",
+      "a": "Multiply the per-unit answer by the base. The base current is base power over root 3 times base voltage: in the 132 kilovolt zone with 100 megavolt-amperes, about 437 amps.",
+      "asks": [
+        "How do you convert per unit to actual values?"
+      ]
+    }
+  ],
+  "facts": [
+    "Base impedance Z_base = V_base² / S_base.",
+    "Transformer nameplates give impedance as a percent or per-unit value on the transformer’s own rating.",
+    "Transformer reactances typically lie around 0.05 to 0.15 pu on their own rating."
+  ],
+  "quiz": [
+    {
+      "say": "What is the base impedance for 33 kilovolts and 100 megavolt-amperes?",
+      "show": "What is the base impedance for 33 kV and 100 MVA?",
+      "options": [
+        {
+          "show": "10.89 Ω",
+          "say": "10.89 ohms"
+        },
+        {
+          "show": "0.33 Ω",
+          "say": "0.33 ohms"
+        },
+        {
+          "show": "330 Ω",
+          "say": "330 ohms"
+        }
+      ],
+      "answer": 0,
+      "why": "33 squared is 1089, and divided by 100 that is 10.89 ohms.",
+      "wrong": {
+        "1": "That divides 33 by 100 without squaring.",
+        "2": "That multiplies instead of using V squared over S."
+      }
+    },
+    {
+      "say": "A transformer is 0.08 per unit on 25 megavolt-amperes. What is it on a 100 megavolt-ampere base at the same voltage?",
+      "show": "A transformer is 0.08 pu on 25 MVA. What is it on a 100 MVA base at the same voltage?",
+      "options": [
+        {
+          "show": "0.32 pu",
+          "say": "0.32 per unit"
+        },
+        {
+          "show": "0.02 pu",
+          "say": "0.02 per unit"
+        },
+        {
+          "show": "0.08 pu",
+          "say": "0.08 per unit"
+        }
+      ],
+      "answer": 0,
+      "why": "Multiply by new base over old: 0.08 times 100 over 25, which is 4, gives 0.32 per unit.",
+      "wrong": {
+        "1": "That divides by 4; a bigger power base makes the per-unit impedance bigger.",
+        "2": "The per-unit value changes whenever the power base changes."
+      }
+    }
+  ]
+}

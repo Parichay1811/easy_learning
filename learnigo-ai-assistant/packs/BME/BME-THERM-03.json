@@ -1,0 +1,579 @@
+{
+  "id": "BME-THERM-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Boundary work: reading work as the area under a P–V curve",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-THERM — Thermodynamics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "boundary work",
+    "P-V diagram",
+    "path function",
+    "area under the curve",
+    "net work of a cycle"
+  ],
+  "examples": [
+    "How do I find work from a P-V diagram?",
+    "Why is work a path function?",
+    "What does the area inside a P-V cycle mean?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Volume (m³)",
+        "max": 0.5
+      },
+      "y": {
+        "label": "Pressure (kPa)",
+        "max": 300
+      },
+      "curves": [
+        {
+          "label": "Constant pressure",
+          "type": "points",
+          "points": [
+            [
+              0.1,
+              200
+            ],
+            [
+              0.4,
+              200
+            ]
+          ],
+          "ask": "What is the work at constant pressure?"
+        },
+        {
+          "label": "Constant temperature",
+          "type": "points",
+          "points": [
+            [
+              0.1,
+              200
+            ],
+            [
+              0.13,
+              153.8
+            ],
+            [
+              0.16,
+              125
+            ],
+            [
+              0.2,
+              100
+            ],
+            [
+              0.25,
+              80
+            ],
+            [
+              0.3,
+              66.7
+            ],
+            [
+              0.35,
+              57.1
+            ],
+            [
+              0.4,
+              50
+            ]
+          ],
+          "smooth": true,
+          "ask": "How do I find the work at constant temperature?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0.1,
+          "label": "Start 0.1 m³"
+        },
+        {
+          "x": 0.4,
+          "label": "End 0.4 m³"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "When the hot gas in a car cylinder pushes the piston down, it does work. How much? Draw the process on a pressure–volume diagram and the answer is a simple area. Here gas starts at 200 kilopascals and 0.1 cubic metres, and expands to 0.4.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Boundary work: reading work as the area under a P–V curve"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyl",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Gas (system)",
+              "ask": "How do I find work from a P-V diagram?"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.25,
+              "label": "Piston",
+              "ask": "What is the work at constant pressure?"
+            },
+            {
+              "id": "heat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.6,
+              "label": "Surroundings"
+            }
+          ],
+          "links": [
+            {
+              "from": "heat",
+              "to": "cyl",
+              "kind": "heat",
+              "label": "Heat"
+            },
+            {
+              "from": "cyl",
+              "to": "piston",
+              "kind": "force",
+              "label": "Work"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Expansion from 0.1 m³ to 0.4 m³, starting at 200 kPa"
+        }
+      ]
+    },
+    {
+      "say": "Work is force times distance. Force is pressure times piston area, and area times distance is the change in volume. So at constant pressure, W equals P times delta V: 200 times 0.3, which is 60 kilojoules. See the flat line? The work is the rectangle underneath it.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Volume (m³)",
+            "max": 0.5
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Constant pressure",
+              "type": "points",
+              "points": [
+                [
+                  0.1,
+                  200
+                ],
+                [
+                  0.4,
+                  200
+                ]
+              ],
+              "ask": "What is the work at constant pressure?"
+            },
+            {
+              "label": "Constant temperature",
+              "type": "points",
+              "points": [
+                [
+                  0.1,
+                  200
+                ],
+                [
+                  0.13,
+                  153.8
+                ],
+                [
+                  0.16,
+                  125
+                ],
+                [
+                  0.2,
+                  100
+                ],
+                [
+                  0.25,
+                  80
+                ],
+                [
+                  0.3,
+                  66.7
+                ],
+                [
+                  0.35,
+                  57.1
+                ],
+                [
+                  0.4,
+                  50
+                ]
+              ],
+              "smooth": true,
+              "ask": "How do I find the work at constant temperature?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.1,
+              "label": "Start 0.1 m³"
+            },
+            {
+              "x": 0.4,
+              "label": "End 0.4 m³"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "W = P ΔV = 200 kPa × 0.3 m³ = 60 kJ"
+        }
+      ]
+    },
+    {
+      "say": "Now take the same start and end volumes, but let the gas expand at constant temperature. The pressure falls as the volume grows, along the curve. The area under it is P1 V1 times the log of V2 over V1: 20 times ln 4, about 27.7 kilojoules. See the lower curve? Same start, same end volume: why less work?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Volume (m³)",
+            "max": 0.5
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Constant pressure",
+              "type": "points",
+              "points": [
+                [
+                  0.1,
+                  200
+                ],
+                [
+                  0.4,
+                  200
+                ]
+              ],
+              "ask": "What is the work at constant pressure?"
+            },
+            {
+              "label": "Constant temperature",
+              "type": "points",
+              "points": [
+                [
+                  0.1,
+                  200
+                ],
+                [
+                  0.13,
+                  153.8
+                ],
+                [
+                  0.16,
+                  125
+                ],
+                [
+                  0.2,
+                  100
+                ],
+                [
+                  0.25,
+                  80
+                ],
+                [
+                  0.3,
+                  66.7
+                ],
+                [
+                  0.35,
+                  57.1
+                ],
+                [
+                  0.4,
+                  50
+                ]
+              ],
+              "smooth": true,
+              "ask": "How do I find the work at constant temperature?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.1,
+              "label": "Start 0.1 m³"
+            },
+            {
+              "x": 0.4,
+              "label": "End 0.4 m³"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "W = P₁V₁ ln(V₂/V₁) = 20 × ln 4 = 27.7 kJ"
+        }
+      ]
+    },
+    {
+      "say": "Because the pressure pushing the piston was lower along the way. So work depends on the path, not just the end states. We call it a path function. And if the gas is squashed instead, from right to left, the area counts as negative: work done on the gas. Which way is the piston moving then?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Volume (m³)",
+            "max": 0.5
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Constant pressure",
+              "type": "points",
+              "points": [
+                [
+                  0.1,
+                  200
+                ],
+                [
+                  0.4,
+                  200
+                ]
+              ],
+              "ask": "What is the work at constant pressure?"
+            },
+            {
+              "label": "Constant temperature",
+              "type": "points",
+              "points": [
+                [
+                  0.1,
+                  200
+                ],
+                [
+                  0.13,
+                  153.8
+                ],
+                [
+                  0.16,
+                  125
+                ],
+                [
+                  0.2,
+                  100
+                ],
+                [
+                  0.25,
+                  80
+                ],
+                [
+                  0.3,
+                  66.7
+                ],
+                [
+                  0.35,
+                  57.1
+                ],
+                [
+                  0.4,
+                  50
+                ]
+              ],
+              "smooth": true,
+              "ask": "How do I find the work at constant temperature?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.1,
+              "label": "Start 0.1 m³"
+            },
+            {
+              "x": 0.4,
+              "label": "End 0.4 m³"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Compression: work is done on the gas, so W < 0"
+        }
+      ]
+    },
+    {
+      "say": "Inwards! Now join paths into a loop: expand at 200 kilopascals, then come back at 100. The net work is the area inside the loop: 100 times 0.3, which is 30 kilojoules. Every engine cycle works this way. Superb! Exam tip: going clockwise round the loop means the cycle produces net work.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Volume (m³)",
+            "max": 0.5
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Cycle",
+              "type": "points",
+              "points": [
+                [
+                  0.1,
+                  200
+                ],
+                [
+                  0.4,
+                  200
+                ],
+                [
+                  0.4,
+                  100
+                ],
+                [
+                  0.1,
+                  100
+                ]
+              ],
+              "closed": true,
+              "ask": 3
+            }
+          ],
+          "marks": [],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "W_net = (200 − 100) × 0.3 = 30 kJ"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I find work from a P-V diagram?",
+      "a": "The boundary work is the area under the process curve on a pressure–volume diagram, measured down to the volume axis. Expansion gives positive work done by the gas.",
+      "asks": [
+        "work equals area under PV curve"
+      ]
+    },
+    {
+      "q": "What is the work at constant pressure?",
+      "a": "W equals P times the change in volume. With pressure in kilopascals and volume in cubic metres, the answer comes out in kilojoules.",
+      "asks": [
+        "isobaric work formula"
+      ]
+    },
+    {
+      "q": "How do I find the work at constant temperature?",
+      "a": "For an ideal gas at constant temperature, W equals P1 V1 times the natural log of V2 over V1.",
+      "asks": [
+        "isothermal work formula"
+      ]
+    },
+    {
+      "q": "What does the area inside a P-V cycle mean?",
+      "a": "It is the net work done in one cycle. If the cycle runs clockwise on the diagram, the system produces net work, like an engine.",
+      "asks": [
+        "net work of a cycle",
+        "area enclosed by a cycle"
+      ]
+    },
+    {
+      "q": "Why is work a path function?",
+      "a": "Different paths between the same two states have different areas under them on the P–V diagram, so they involve different amounts of work.",
+      "asks": [
+        "path function vs state function"
+      ]
+    }
+  ],
+  "facts": [
+    "One kilopascal times one cubic metre equals one kilojoule.",
+    "The net work of a cycle equals the area enclosed by its path on a P–V diagram."
+  ],
+  "quiz": [
+    {
+      "say": "A gas expands at a constant 150 kilopascals from 0.2 to 0.6 cubic metres. How much work does it do?",
+      "show": "Gas expands at 150 kPa from 0.2 m³ to 0.6 m³. Work done?",
+      "options": [
+        {
+          "show": "60 kJ",
+          "say": "60 kilojoules"
+        },
+        {
+          "show": "90 kJ",
+          "say": "90 kilojoules"
+        },
+        {
+          "show": "30 kJ",
+          "say": "30 kilojoules"
+        }
+      ],
+      "answer": 0,
+      "why": "W = P ΔV = 150 × 0.4 = 60 kJ.",
+      "wrong": {
+        "1": "That uses the final volume, 0.6, instead of the change, 0.4.",
+        "2": "That uses the starting volume, 0.2, instead of the change."
+      }
+    },
+    {
+      "say": "Two processes go between the same two states. Which quantity must be the same for both?",
+      "show": "Two different processes link the same two states. Which is the same for both?",
+      "options": [
+        {
+          "show": "The change in internal energy",
+          "say": "The change in internal energy"
+        },
+        {
+          "show": "The work done",
+          "say": "The work done"
+        },
+        {
+          "show": "The heat transferred",
+          "say": "The heat transferred"
+        }
+      ],
+      "answer": 0,
+      "why": "Internal energy is a property, so its change depends only on the end states.",
+      "wrong": {
+        "1": "Work depends on the path, the area under each curve.",
+        "2": "Heat also depends on the path."
+      }
+    }
+  ]
+}

@@ -1,0 +1,441 @@
+{
+  "id": "BEE-MACH-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "DC generators and back EMF: why a spinning motor pushes back on its supply",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "back EMF",
+    "DC generator",
+    "armature resistance",
+    "starting current",
+    "regenerative braking",
+    "E = kΦω"
+  ],
+  "examples": [
+    "What is back EMF in a DC motor?",
+    "Why does a motor draw a huge current when it starts?",
+    "How does regenerative braking work?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Supply",
+          "value": "24 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "Armature R",
+          "value": "0.5 Ω",
+          "ask": "Why does a motor draw a huge current when it starts?"
+        },
+        {
+          "kind": "motor",
+          "label": "Motor",
+          "value": "E = 0 V",
+          "note": "Not turning yet: no back EMF",
+          "ask": "What is back EMF in a DC motor?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter",
+          "value": "48 A",
+          "ask": "What is the DC motor voltage equation?"
+        }
+      ],
+      "readouts": [
+        "ω = 0 rad/s",
+        "I = 24 / 0.5 = 48 A"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Switch on a big motor, like a lift or a workshop saw, and the lights can dip for a moment. Why? On the board, a DC motor with 0.5 ohms of armature resistance has just been connected to 24 volts. It is not turning yet, so only that small resistance limits the current: 24 over 0.5, a whopping 48 amps.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "DC generators and back EMF: why a spinning motor pushes back on its supply"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "24 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Armature R",
+              "value": "0.5 Ω",
+              "ask": "Why does a motor draw a huge current when it starts?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "E = 0 V",
+              "note": "Not turning yet: no back EMF",
+              "ask": "What is back EMF in a DC motor?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "48 A",
+              "ask": "What is the DC motor voltage equation?"
+            }
+          ],
+          "readouts": [
+            "ω = 0 rad/s",
+            "I = 24 / 0.5 = 48 A"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is a DC machine in 3D. Spin this same machine with an engine and it becomes a generator: the armature coils cut the field and a voltage appears at the brushes. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "DC generators and back EMF: why a spinning motor pushes back on its supply"
+        },
+        {
+          "op": "image",
+          "render": "dc-motor"
+        }
+      ]
+    },
+    {
+      "say": "Now flip the idea. Turn the same machine with an engine or a turbine, and the coil cuts through the magnetic field, so a voltage is induced in it: it has become a generator. That voltage, E, equals k phi times the speed omega. Our machine has k phi of 0.5, so at 40 radians per second it makes 20 volts. What happens to E if it spins twice as fast?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "drive",
+              "kind": "wheel",
+              "x": 0.1,
+              "y": 0.45,
+              "label": "Driven shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "n",
+              "kind": "magnet",
+              "x": 0.32,
+              "y": 0.45,
+              "label": "North pole"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.52,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Armature coil",
+              "motion": "spin",
+              "ask": "How does a DC generator make voltage?"
+            },
+            {
+              "id": "s",
+              "kind": "magnet",
+              "x": 0.72,
+              "y": 0.45,
+              "label": "South pole"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.52,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Commutator"
+            },
+            {
+              "id": "lamp",
+              "kind": "bulb",
+              "x": 0.9,
+              "y": 0.82,
+              "label": "Lamp"
+            }
+          ],
+          "links": [
+            {
+              "from": "drive",
+              "to": "coil",
+              "kind": "force",
+              "label": "40 rad/s"
+            },
+            {
+              "from": "coil",
+              "to": "comm",
+              "kind": "power"
+            },
+            {
+              "from": "comm",
+              "to": "lamp",
+              "kind": "power",
+              "label": "E = 20 V"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "E = kΦω = 0.5 × 40 rad/s = 20 V"
+        }
+      ]
+    },
+    {
+      "say": "E doubles. And here is the key: a motor is also a generator, even while it is motoring. As it speeds up it makes a voltage that opposes the supply, called back EMF. At 40 radians per second the back EMF is 20 volts, leaving only 4 volts across the resistance, so the current falls to 8 amps. Watch the ammeter. What decides how fast the motor finally runs?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "24 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Armature R",
+              "value": "0.5 Ω",
+              "ask": "Why does a motor draw a huge current when it starts?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "E = 20 V",
+              "note": "Spinning: back EMF opposes the supply",
+              "ask": "What is back EMF in a DC motor?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "8 A",
+              "ask": "What is the DC motor voltage equation?"
+            }
+          ],
+          "readouts": [
+            "ω = 40 rad/s (382 rpm)",
+            "I = (24 − 20)/0.5 = 8 A",
+            "T = 0.5 × 8 = 4 N·m"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "V = E + I·R  →  I = (24 − 20)/0.5 = 8 A"
+        }
+      ]
+    },
+    {
+      "say": "It speeds up until the back EMF leaves just enough current for the load torque. Now push it faster, say an electric car rolling downhill. At 52 radians per second the back EMF is 26 volts, more than the supply, so current flows backwards, 4 amps, charging the battery. That is regenerative braking. What does the motor feel while it charges?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "24 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Armature R",
+              "value": "0.5 Ω",
+              "ask": "Why does a motor draw a huge current when it starts?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "E = 26 V",
+              "note": "Spinning: back EMF opposes the supply",
+              "ask": "How does regenerative braking work?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "-4 A",
+              "ask": "What is the DC motor voltage equation?"
+            }
+          ],
+          "readouts": [
+            "ω = 52 rad/s",
+            "I = (24 − 26)/0.5 = −4 A",
+            "Back to supply: 96 W"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "E > V:  I = (24 − 26)/0.5 = −4 A, into the supply"
+        }
+      ]
+    },
+    {
+      "say": "A braking torque that slows the car. So back EMF is the motor's built-in regulator, and it explains the dipping lights: at start-up there is none. That is why big motors get starters that add resistance, like 2.5 ohms to hold the start current to 8 amps, or ramp up the voltage. Excellent! Challenge: at what speed would this motor draw zero current?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "24 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Armature R",
+              "value": "0.5 Ω",
+              "ask": "Why does a motor draw a huge current when it starts?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "E = 20 V",
+              "note": "Spinning: back EMF opposes the supply",
+              "ask": "What is back EMF in a DC motor?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "8 A",
+              "ask": "What is the DC motor voltage equation?"
+            }
+          ],
+          "readouts": [
+            "ω = 40 rad/s (382 rpm)",
+            "I = (24 − 20)/0.5 = 8 A",
+            "T = 0.5 × 8 = 4 N·m"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "With a 2.5 Ω starter: I = 24 / (0.5 + 2.5) = 8 A"
+        },
+        {
+          "op": "note",
+          "text": "Large DC motors use starters to limit the current at switch-on"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is back EMF in a DC motor?",
+      "a": "As the armature spins in the field it acts as a generator, inducing a voltage that opposes the supply. This back EMF equals k phi times speed, and the current is supply voltage minus back EMF, divided by the armature resistance.",
+      "asks": [
+        "Why does a spinning motor generate voltage?"
+      ]
+    },
+    {
+      "q": "Why does a motor draw a huge current when it starts?",
+      "a": "At standstill there is no back EMF, so only the small armature resistance limits the current. A 24 volt motor with 0.5 ohms draws 48 amps at the instant of starting, and this falls as it speeds up.",
+      "asks": [
+        "What is motor inrush current?"
+      ]
+    },
+    {
+      "q": "How does a DC generator make voltage?",
+      "a": "When the armature coil is turned through the magnetic field, the changing flux through it induces a voltage, E equals k phi omega. The commutator turns the alternating coil voltage into DC at the brushes.",
+      "asks": [
+        "How does a dynamo work?"
+      ]
+    },
+    {
+      "q": "How does regenerative braking work?",
+      "a": "When the wheels drive the motor fast enough that its back EMF exceeds the supply voltage, the current reverses. The machine then works as a generator, charging the battery and producing a braking torque.",
+      "asks": [
+        "How do electric cars recover energy when braking?"
+      ]
+    },
+    {
+      "q": "What is the DC motor voltage equation?",
+      "a": "V equals E plus I times R a: the supply voltage is shared between the back EMF and the drop across the armature resistance. Rearranged, the current equals V minus E, over R a.",
+      "asks": [
+        "What is V = E + IR for a motor?"
+      ]
+    }
+  ],
+  "facts": [
+    "A DC machine's EMF is E = kΦω: proportional to speed for a fixed field.",
+    "Electric and hybrid cars use regenerative braking to recover part of their kinetic energy.",
+    "Without back EMF, a motor's starting current is limited only by its winding resistance."
+  ],
+  "quiz": [
+    {
+      "say": "A 24 volt DC motor with 0.5 ohms of armature resistance runs with 22 volts of back EMF. What current does it draw?",
+      "show": "A 24 V DC motor with a 0.5 Ω armature runs with 22 V back EMF. What current does it draw?",
+      "options": [
+        {
+          "show": "4 A",
+          "say": "4 amps"
+        },
+        {
+          "show": "48 A",
+          "say": "48 amps"
+        },
+        {
+          "show": "44 A",
+          "say": "44 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "I equals V minus E over R: 24 minus 22 is 2 volts, and 2 over 0.5 ohms is 4 amps.",
+      "wrong": {
+        "1": "48 amps is the starting current, when there is no back EMF.",
+        "2": "That divides the back EMF by the resistance instead of the difference."
+      }
+    },
+    {
+      "say": "Why does regenerative braking charge the battery?",
+      "show": "Why does regenerative braking charge the battery?",
+      "options": [
+        {
+          "show": "Back EMF exceeds the supply voltage",
+          "say": "Back EMF exceeds the supply voltage"
+        },
+        {
+          "show": "The armature resistance rises",
+          "say": "The armature resistance rises"
+        },
+        {
+          "show": "The magnetic field switches off",
+          "say": "The magnetic field switches off"
+        }
+      ],
+      "answer": 0,
+      "why": "When driven fast enough, E is bigger than V, so current flows back into the supply.",
+      "wrong": {
+        "1": "The resistance hardly changes, and it could not reverse the current anyway.",
+        "2": "Without a field there is no EMF at all, so nothing would be generated."
+      }
+    }
+  ]
+}

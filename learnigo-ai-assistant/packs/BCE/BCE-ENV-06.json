@@ -1,0 +1,489 @@
+{
+  "id": "BCE-ENV-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "BOD: measuring pollution by the oxygen microbes use",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-ENV — Environmental engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "biochemical oxygen demand",
+    "BOD5",
+    "ultimate BOD",
+    "BOD rate constant",
+    "oxygen sag curve",
+    "Streeter–Phelps"
+  ],
+  "examples": [
+    "What is BOD and how is it measured?",
+    "How do you calculate BOD from a dilution test?",
+    "Why is the BOD test five days?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Dilute the sample",
+          "icon": "flask",
+          "note": "6 mL of sewage in a 300 mL bottle"
+        },
+        {
+          "label": "Measure oxygen",
+          "icon": "sensor",
+          "note": "Dissolved oxygen at the start: 8.6 mg/L"
+        },
+        {
+          "label": "Dark, 20 °C, 5 days",
+          "icon": "timer",
+          "note": "Microbes eat and use up oxygen",
+          "ask": "Why is BOD measured over 5 days?"
+        },
+        {
+          "label": "Measure again",
+          "icon": "sensor",
+          "note": "Oxygen left: 4.5 mg/L"
+        },
+        {
+          "label": "Work out BOD",
+          "icon": "pencil",
+          "note": "Oxygen used ÷ fraction of sample",
+          "ask": "What is BOD?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Why five days? A British Royal Commission on sewage, early in the twentieth century, picked five days at twenty degrees Celsius, the story goes, because no British river takes longer to reach the sea. The test they set up, BOD, is still the world's favourite measure of how dirty water is. Let us see how it is done.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "BOD: measuring pollution by the oxygen microbes use"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Dilute the sample",
+              "icon": "flask",
+              "note": "6 mL of sewage in a 300 mL bottle"
+            },
+            {
+              "label": "Measure oxygen",
+              "icon": "sensor",
+              "note": "Dissolved oxygen at the start: 8.6 mg/L"
+            },
+            {
+              "label": "Dark, 20 °C, 5 days",
+              "icon": "timer",
+              "note": "Microbes eat and use up oxygen",
+              "ask": "Why is BOD measured over 5 days?"
+            },
+            {
+              "label": "Measure again",
+              "icon": "sensor",
+              "note": "Oxygen left: 4.5 mg/L"
+            },
+            {
+              "label": "Work out BOD",
+              "icon": "pencil",
+              "note": "Oxygen used ÷ fraction of sample",
+              "ask": "What is BOD?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Follow the chain. BOD, biochemical oxygen demand, is the oxygen microbes use while eating the dirt. We dilute six millilitres of sewage into a three hundred millilitre bottle, a fraction of zero point zero two. Oxygen falls from eight point six to four point five in five dark days. So BOD five is four point one over zero point zero two: two hundred and five milligrams per litre.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Dilute the sample",
+              "icon": "flask",
+              "note": "6 mL of sewage in a 300 mL bottle"
+            },
+            {
+              "label": "Measure oxygen",
+              "icon": "sensor",
+              "note": "Dissolved oxygen at the start: 8.6 mg/L"
+            },
+            {
+              "label": "Dark, 20 °C, 5 days",
+              "icon": "timer",
+              "note": "Microbes eat and use up oxygen",
+              "ask": "Why is BOD measured over 5 days?"
+            },
+            {
+              "label": "Measure again",
+              "icon": "sensor",
+              "note": "Oxygen left: 4.5 mg/L"
+            },
+            {
+              "label": "Work out BOD",
+              "icon": "pencil",
+              "note": "Oxygen used ÷ fraction of sample",
+              "ask": "What is BOD?"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "BOD₅ = (D₁ − D₂) / P = (8.6 − 4.5) / 0.02 = 205 mg/L"
+        }
+      ]
+    },
+    {
+      "say": "Now the curve. The microbes eat fast at first, then slow down as food runs out. Total demand, called ultimate BOD, here is three hundred milligrams per litre. With a rate of zero point two three per day, about sixty eight percent is used by day five: that is our two hundred and five. By day twenty it is nearly all gone. What share would be used by day ten, more or less than ninety percent?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (days)",
+            "max": 20
+          },
+          "y": {
+            "label": "BOD used (mg/L)",
+            "max": 320
+          },
+          "curves": [
+            {
+              "label": "BOD exerted",
+              "type": "rise",
+              "a": 300,
+              "k": 4.35,
+              "ask": "What is ultimate BOD?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "BOD₅ = 205 mg/L",
+              "ask": "Why is BOD measured over 5 days?"
+            },
+            {
+              "x": 20,
+              "label": "Day 20: 297 mg/L"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "BOD_t = L₀(1 − e^(−kt)) = 300(1 − e^(−1.15)) ≈ 205 mg/L"
+        }
+      ]
+    },
+    {
+      "say": "Just under ninety! Here is why BOD matters. Pour waste into a river and microbes downstream use up its oxygen. See the sag: oxygen drops from eight to its lowest, three point seven milligrams per litre, after about two point eight days of flow, then the river breathes in air and recovers. Many fish struggle below about five.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Travel time (days)",
+            "max": 15
+          },
+          "y": {
+            "label": "Oxygen (mg/L)",
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "River oxygen",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  8
+                ],
+                [
+                  0.5,
+                  6.27
+                ],
+                [
+                  1,
+                  5.1
+                ],
+                [
+                  1.5,
+                  4.37
+                ],
+                [
+                  2,
+                  3.95
+                ],
+                [
+                  2.5,
+                  3.76
+                ],
+                [
+                  3,
+                  3.75
+                ],
+                [
+                  4,
+                  4.05
+                ],
+                [
+                  5,
+                  4.57
+                ],
+                [
+                  6,
+                  5.17
+                ],
+                [
+                  8,
+                  6.3
+                ],
+                [
+                  10,
+                  7.19
+                ],
+                [
+                  12,
+                  7.81
+                ],
+                [
+                  15,
+                  8.38
+                ]
+              ],
+              "ask": "What is the oxygen sag curve?"
+            },
+            {
+              "label": "Saturation 9 mg/L",
+              "type": "line",
+              "c": 9,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 2.8,
+              "label": "Lowest 3.7 mg/L",
+              "ask": "What is the oxygen sag curve?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Streeter–Phelps: decay 0.23/d, re-aeration 0.46/d, mixed BOD 20 mg/L."
+        }
+      ]
+    },
+    {
+      "say": "Engineers use this sag curve to set how clean a discharge must be, so the lowest point stays safe for fish. COD, chemical oxygen demand, is a faster test using a strong chemical, done in a couple of hours. Great work! Challenge: if the ultimate BOD were one hundred, about what would BOD five be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Travel time (days)",
+            "max": 15
+          },
+          "y": {
+            "label": "Oxygen (mg/L)",
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "River oxygen",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  8
+                ],
+                [
+                  0.5,
+                  6.27
+                ],
+                [
+                  1,
+                  5.1
+                ],
+                [
+                  1.5,
+                  4.37
+                ],
+                [
+                  2,
+                  3.95
+                ],
+                [
+                  2.5,
+                  3.76
+                ],
+                [
+                  3,
+                  3.75
+                ],
+                [
+                  4,
+                  4.05
+                ],
+                [
+                  5,
+                  4.57
+                ],
+                [
+                  6,
+                  5.17
+                ],
+                [
+                  8,
+                  6.3
+                ],
+                [
+                  10,
+                  7.19
+                ],
+                [
+                  12,
+                  7.81
+                ],
+                [
+                  15,
+                  8.38
+                ]
+              ],
+              "ask": "What is the oxygen sag curve?"
+            },
+            {
+              "label": "Saturation 9 mg/L",
+              "type": "line",
+              "c": 9,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 2.8,
+              "label": "Lowest 3.7 mg/L",
+              "ask": "What is the oxygen sag curve?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is BOD?",
+      "a": "Biochemical oxygen demand is the amount of dissolved oxygen microbes use while breaking down the organic matter in water, usually measured over 5 days at 20 degrees Celsius. Raw sewage is often 200 to 400 milligrams per litre.",
+      "asks": [
+        "What does BOD mean?",
+        "How is BOD measured?"
+      ]
+    },
+    {
+      "q": "Why is BOD measured over 5 days?",
+      "a": "The 5-day, 20 degree test was set by the British Royal Commission on Sewage Disposal in the early 1900s. By day 5 most of the easily eaten matter, about two thirds, has been used.",
+      "asks": [
+        "What is BOD5?"
+      ]
+    },
+    {
+      "q": "What is ultimate BOD?",
+      "a": "Ultimate BOD, L0, is the total oxygen the microbes would use given unlimited time. BOD at time t is L0 times 1 minus e to the minus k t; with k of 0.23 per day, BOD5 is about 68 percent of L0.",
+      "asks": [
+        "BOD curve formula"
+      ]
+    },
+    {
+      "q": "What is the oxygen sag curve?",
+      "a": "It shows dissolved oxygen in a river below a waste outfall: oxygen falls as microbes eat, reaches a lowest point, then recovers as air dissolves back in. The Streeter–Phelps equation predicts it.",
+      "asks": [
+        "Streeter-Phelps equation",
+        "DO sag curve"
+      ]
+    },
+    {
+      "q": "What is the difference between BOD and COD?",
+      "a": "BOD measures oxygen used by microbes over 5 days. COD uses a strong chemical oxidant to oxidise almost everything in about 2 hours, so COD is always higher than BOD.",
+      "asks": [
+        "BOD vs COD"
+      ]
+    }
+  ],
+  "facts": [
+    "The standard BOD test runs for 5 days at 20 °C in the dark.",
+    "H. W. Streeter and Earle Phelps published their oxygen sag model for the Ohio River in 1925."
+  ],
+  "quiz": [
+    {
+      "say": "In a BOD test, dissolved oxygen falls from 9.0 to 5.0 milligrams per litre, and the sample fraction is 0.04. What is the BOD five?",
+      "show": "DO falls from 9.0 to 5.0 mg/L in 5 days; the sample fraction P = 0.04. BOD₅?",
+      "options": [
+        {
+          "show": "100 mg/L",
+          "say": "100 milligrams per litre"
+        },
+        {
+          "show": "4 mg/L",
+          "say": "4 milligrams per litre"
+        },
+        {
+          "show": "0.16 mg/L",
+          "say": "0.16 milligrams per litre"
+        }
+      ],
+      "answer": 0,
+      "why": "BOD₅ = (9.0 − 5.0) / 0.04 = 4 / 0.04 = 100 mg/L.",
+      "wrong": {
+        "1": "That forgets to divide by the dilution fraction.",
+        "2": "That multiplies by the fraction instead of dividing."
+      }
+    },
+    {
+      "say": "Below a sewage outfall, river oxygen…",
+      "show": "Below a sewage outfall, river oxygen…",
+      "options": [
+        {
+          "show": "Dips to a low point, then recovers",
+          "say": "Dips to a low point, then recovers"
+        },
+        {
+          "show": "Rises steadily",
+          "say": "Rises steadily"
+        },
+        {
+          "show": "Stays the same",
+          "say": "Stays the same"
+        }
+      ],
+      "answer": 0,
+      "why": "Microbes use oxygen faster than air replaces it at first, then re-aeration wins: the sag curve.",
+      "wrong": {
+        "1": "Decomposing waste uses oxygen, so it cannot rise at first.",
+        "2": "The BOD load clearly changes the oxygen level."
+      }
+    }
+  ]
+}

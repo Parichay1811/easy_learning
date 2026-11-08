@@ -1,0 +1,251 @@
+{
+  "id": "MATH-CALC-29",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Euler's method & logistic growth",
+  "area": "Mathematics",
+  "group": "MATH-CALC — Calculus",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "euler's method",
+    "logistic growth",
+    "approximation",
+    "carrying capacity",
+    "differential equation"
+  ],
+  "examples": [
+    "How do I choose the step size for Euler's method?",
+    "What does the carrying capacity mean in a population model?",
+    "Can I use Euler's method if the function is not continuous?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we look at approximating solutions to differential equations. We use a method called Euler's method. This helps us estimate values when exact solutions are hard to find.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Euler's method & logistic growth"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Euler's Method",
+            "Approximating solutions",
+            "Differential equations"
+          ],
+          "at": "euler's"
+        },
+        {
+          "op": "text",
+          "text": "Euler's Method: Approximation",
+          "at": "euler's"
+        }
+      ]
+    },
+    {
+      "say": "The basic idea is to use the slope at the beginning of a small interval. We assume the slope stays constant over that small time step. This gives us a first estimate for the next point.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start point (ycurrent)",
+            "Calculate slope at start",
+            "ynext = ycurrent + slope h",
+            "Next point (ynext)"
+          ],
+          "at": "point"
+        },
+        {
+          "op": "text",
+          "text": "ynext = ycurrent + slope h",
+          "at": "slope"
+        }
+      ]
+    },
+    {
+      "say": "For the logistic model, the slope is given by r times y divided by K times bracket minus y over K. Here K is the carrying capacity. We use this slope to step forward.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Current y",
+            "Calculate slope: ry / K (1 - y/K)",
+            "ynext = ycurrent + slope h",
+            "Next y value"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Slope = ry / K (1 - y/K)",
+          "at": "slope"
+        }
+      ]
+    },
+    {
+      "say": "Let us say we start at y equals one and want to find the value at time one. We choose a step size h of zero point five. We calculate the slope at the start, then use the formula to find the next y value.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start: y=1 at t=0",
+            "Step size h=0.5",
+            "Calculate slope at t=0",
+            "Estimate y at t=0.5"
+          ],
+          "at": "start"
+        },
+        {
+          "op": "text",
+          "text": "y(1) approximation with h=0.5"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between Euler's method and the exact solution?",
+      "a": "Euler's method provides an approximation using straight lines over small steps. The exact solution is the true mathematical value derived from the equation.",
+      "asks": [
+        "Is Euler's method always an estimate?",
+        "How accurate is Euler's method compared to the real answer?"
+      ]
+    },
+    {
+      "q": "What does the carrying capacity K represent in this model?",
+      "a": "The carrying capacity K is the maximum population size the environment can sustain indefinitely. The growth rate slows down as the population approaches K.",
+      "asks": [
+        "Why does the growth stop near K?",
+        "What is the meaning of K in population ecology?"
+      ]
+    },
+    {
+      "q": "If I use a smaller step size h, will my answer be better?",
+      "a": "Yes, generally using a smaller step size h makes the approximation closer to the true value. This is because the straight line assumption is better over shorter distances.",
+      "asks": [
+        "Does smaller h mean more accurate?",
+        "How does step size affect the result?"
+      ]
+    },
+    {
+      "q": "Do I need to calculate the slope at every single point?",
+      "a": "Yes, you must calculate the slope using the current estimated y value at each step. This slope dictates how much you move to find the next estimate.",
+      "asks": [
+        "Do I use the initial slope for all steps?",
+        "How is the slope calculated for the next step?"
+      ]
+    },
+    {
+      "q": "Is this method only for population growth problems?",
+      "a": "No, Euler's method can approximate solutions for any differential equation. The logistic model is just one specific example of using it.",
+      "asks": [
+        "Can I use this for physics problems?",
+        "Is this method limited to biology?"
+      ]
+    }
+  ],
+  "facts": [
+    "The logistic growth model is often described by the differential equation dy/dt = ry (1 - y/K).",
+    "The carrying capacity, K, represents the upper limit of the population size.",
+    "Euler's method approximates the solution by using the derivative at the beginning of each small time interval.",
+    "The step size, h, determines how many small steps are taken to reach the final time."
+  ],
+  "quiz": [
+    {
+      "say": "If the slope at a point is five, and the step size h is zero point two, what is the estimated change in y?",
+      "show": "Change in y = slope h",
+      "options": [
+        {
+          "show": "ten",
+          "say": "ten"
+        },
+        {
+          "show": "2.5",
+          "say": "2.5"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        },
+        {
+          "show": "one",
+          "say": "one"
+        }
+      ],
+      "answer": 3,
+      "why": "The change is simply the slope multiplied by the step size, five times zero point two equals one.",
+      "wrong": {
+        "0": "This is incorrect because you multiplied the slope by ten instead of the step size.",
+        "1": "This is incorrect because you divided the slope by the step size instead of multiplying.",
+        "2": "This is incorrect because you forgot to use the step size h in the calculation."
+      }
+    },
+    {
+      "say": "In the logistic model, if the population y is exactly equal to the carrying capacity K, what is the slope?",
+      "show": "Slope when y=K",
+      "options": [
+        {
+          "show": "ry",
+          "say": "ry"
+        },
+        {
+          "show": "zero",
+          "say": "zero"
+        },
+        {
+          "show": "r",
+          "say": "r"
+        },
+        {
+          "show": "rK",
+          "say": "rK"
+        }
+      ],
+      "answer": 1,
+      "why": "When y equals K, the term (one minus y over K) becomes zero, making the entire slope zero.",
+      "wrong": {
+        "0": "This is incorrect because you ignored the limiting factor represented by the term involving K.",
+        "2": "This is incorrect because the growth rate is not simply r when y equals K.",
+        "3": "This is incorrect because you multiplied r by K instead of evaluating the full expression."
+      }
+    },
+    {
+      "say": "To estimate y(1) starting from y(0) using h=0.5, what is the first calculation?",
+      "show": "y(0.5) = y(0) + slope(0) 0.5",
+      "options": [
+        {
+          "show": "slope(0) 0.5",
+          "say": "slope(0) 0.5"
+        },
+        {
+          "show": "y(0) + slope(0) + 0.5",
+          "say": "y(0) + slope(0) + 0.5"
+        },
+        {
+          "show": "Calculate the slope at y(0) first",
+          "say": "Calculate the slope at y(0) first"
+        },
+        {
+          "show": "y(0) + 0.5",
+          "say": "y(0) + 0.5"
+        }
+      ],
+      "answer": 2,
+      "why": "You must first find the slope using the starting value y(0) before you can calculate the first estimate y(0.5).",
+      "wrong": {
+        "0": "This is incorrect because it only calculates the change, not the new value y(0.5).",
+        "1": "This is incorrect because you added the step size twice in the calculation.",
+        "3": "This is incorrect because you added the step size directly without considering the slope."
+      }
+    }
+  ]
+}

@@ -1,0 +1,636 @@
+{
+  "id": "ENGX-MECH-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How bicycle gears make hills easier",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "bicycle gears",
+    "derailleur",
+    "chainring",
+    "rear sprocket",
+    "cassette",
+    "low gear"
+  ],
+  "examples": [
+    "Why is a low gear easier for going uphill?",
+    "How do bike gears work?",
+    "What does the derailleur do?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "pedal",
+          "kind": "lever",
+          "x": 0.12,
+          "y": 0.6,
+          "size": 0.8,
+          "label": "Pedal crank",
+          "motion": "spin"
+        },
+        {
+          "id": "chainring",
+          "kind": "gear",
+          "x": 0.28,
+          "y": 0.6,
+          "size": 1.3,
+          "label": "Chainring",
+          "motion": "spin",
+          "ask": "What is the chainring?"
+        },
+        {
+          "id": "chain",
+          "kind": "belt",
+          "x": 0.52,
+          "y": 0.6,
+          "size": 1.2,
+          "label": "Chain",
+          "motion": "flow"
+        },
+        {
+          "id": "sprocket",
+          "kind": "gear",
+          "x": 0.74,
+          "y": 0.6,
+          "size": 0.8,
+          "label": "Rear sprocket",
+          "motion": "spin",
+          "ask": "Why is a low gear easier for going uphill?"
+        },
+        {
+          "id": "derailleur",
+          "kind": "lever",
+          "x": 0.74,
+          "y": 0.88,
+          "size": 0.6,
+          "label": "Derailleur",
+          "motion": "swing",
+          "ask": "What does the derailleur do?"
+        },
+        {
+          "id": "wheel",
+          "kind": "wheel",
+          "x": 0.74,
+          "y": 0.25,
+          "size": 1.5,
+          "label": "Back wheel",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "pedal",
+          "to": "chainring",
+          "kind": "energy",
+          "label": "your legs"
+        },
+        {
+          "from": "chainring",
+          "to": "chain",
+          "kind": "force"
+        },
+        {
+          "from": "chain",
+          "to": "sprocket",
+          "kind": "force",
+          "label": "pulls teeth"
+        },
+        {
+          "from": "derailleur",
+          "to": "chain",
+          "kind": "force",
+          "label": "shifts chain"
+        },
+        {
+          "from": "sprocket",
+          "to": "wheel",
+          "kind": "energy"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your legs turn the pedals and the big front gear, called the chainring. A chain carries that motion to a smaller gear, the rear sprocket, fixed to the back wheel.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How bicycle gears make hills easier"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Pedal crank",
+              "motion": "spin"
+            },
+            {
+              "id": "chainring",
+              "kind": "gear",
+              "x": 0.28,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Chainring",
+              "motion": "spin",
+              "ask": "What is the chainring?"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Chain",
+              "motion": "flow"
+            },
+            {
+              "id": "sprocket",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Rear sprocket",
+              "motion": "spin",
+              "ask": "Why is a low gear easier for going uphill?"
+            },
+            {
+              "id": "derailleur",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Derailleur",
+              "motion": "swing",
+              "ask": "What does the derailleur do?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Back wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "chainring",
+              "kind": "energy",
+              "label": "your legs"
+            },
+            {
+              "from": "chainring",
+              "to": "chain",
+              "kind": "force"
+            },
+            {
+              "from": "chain",
+              "to": "sprocket",
+              "kind": "force",
+              "label": "pulls teeth"
+            },
+            {
+              "from": "derailleur",
+              "to": "chain",
+              "kind": "force",
+              "label": "shifts chain"
+            },
+            {
+              "from": "sprocket",
+              "to": "wheel",
+              "kind": "energy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: gears. Look at the driver gear, the small gear and the third gear. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How bicycle gears make hills easier"
+        },
+        {
+          "op": "image",
+          "render": "gear-train"
+        }
+      ]
+    },
+    {
+      "say": "The back wheel has a stack of sprockets of different sizes. With a 40-tooth chainring and a 20-tooth sprocket, one turn of the pedals turns the wheel twice.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Pedal crank",
+              "motion": "spin"
+            },
+            {
+              "id": "chainring",
+              "kind": "gear",
+              "x": 0.28,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Chainring",
+              "motion": "spin",
+              "ask": "What is the chainring?"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Chain",
+              "motion": "flow"
+            },
+            {
+              "id": "sprocket",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Rear sprocket",
+              "motion": "spin",
+              "ask": "Why is a low gear easier for going uphill?"
+            },
+            {
+              "id": "derailleur",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Derailleur",
+              "motion": "swing",
+              "ask": "What does the derailleur do?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Back wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "chainring",
+              "kind": "energy",
+              "label": "your legs"
+            },
+            {
+              "from": "chainring",
+              "to": "chain",
+              "kind": "force"
+            },
+            {
+              "from": "chain",
+              "to": "sprocket",
+              "kind": "force",
+              "label": "pulls teeth"
+            },
+            {
+              "from": "derailleur",
+              "to": "chain",
+              "kind": "force",
+              "label": "shifts chain"
+            },
+            {
+              "from": "sprocket",
+              "to": "wheel",
+              "kind": "energy"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Uphill, you shift to a big rear sprocket. Now the wheel turns fewer times for each pedal turn, so you go slower, but each push needs less force: a low gear. On the flat, a small sprocket gives a high gear for speed.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Pedal crank",
+              "motion": "spin"
+            },
+            {
+              "id": "chainring",
+              "kind": "gear",
+              "x": 0.28,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Chainring",
+              "motion": "spin",
+              "ask": "What is the chainring?"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Chain",
+              "motion": "flow"
+            },
+            {
+              "id": "sprocket",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Rear sprocket",
+              "motion": "spin",
+              "ask": "Why is a low gear easier for going uphill?"
+            },
+            {
+              "id": "derailleur",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Derailleur",
+              "motion": "swing",
+              "ask": "What does the derailleur do?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Back wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "chainring",
+              "kind": "energy",
+              "label": "your legs"
+            },
+            {
+              "from": "chainring",
+              "to": "chain",
+              "kind": "force"
+            },
+            {
+              "from": "chain",
+              "to": "sprocket",
+              "kind": "force",
+              "label": "pulls teeth"
+            },
+            {
+              "from": "derailleur",
+              "to": "chain",
+              "kind": "force",
+              "label": "shifts chain"
+            },
+            {
+              "from": "sprocket",
+              "to": "wheel",
+              "kind": "energy"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The derailleur is a sprung arm that pushes the chain sideways from one sprocket to the next when you click the gear lever. Gears do not add energy; they let your legs work at a comfortable speed.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Pedal crank",
+              "motion": "spin"
+            },
+            {
+              "id": "chainring",
+              "kind": "gear",
+              "x": 0.28,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Chainring",
+              "motion": "spin",
+              "ask": "What is the chainring?"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.52,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Chain",
+              "motion": "flow"
+            },
+            {
+              "id": "sprocket",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Rear sprocket",
+              "motion": "spin",
+              "ask": "Why is a low gear easier for going uphill?"
+            },
+            {
+              "id": "derailleur",
+              "kind": "lever",
+              "x": 0.74,
+              "y": 0.88,
+              "size": 0.6,
+              "label": "Derailleur",
+              "motion": "swing",
+              "ask": "What does the derailleur do?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Back wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "chainring",
+              "kind": "energy",
+              "label": "your legs"
+            },
+            {
+              "from": "chainring",
+              "to": "chain",
+              "kind": "force"
+            },
+            {
+              "from": "chain",
+              "to": "sprocket",
+              "kind": "force",
+              "label": "pulls teeth"
+            },
+            {
+              "from": "derailleur",
+              "to": "chain",
+              "kind": "force",
+              "label": "shifts chain"
+            },
+            {
+              "from": "sprocket",
+              "to": "wheel",
+              "kind": "energy"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the chainring?",
+      "a": "The chainring is the toothed gear attached to the pedals. Its teeth pull the chain along as you pedal. Many bikes have two or three chainrings of different sizes.",
+      "asks": [
+        "What is the front gear on a bike?"
+      ]
+    },
+    {
+      "q": "Why is a low gear easier for going uphill?",
+      "a": "In a low gear the chain runs on a big rear sprocket, so the wheel turns fewer times per pedal turn. You trade speed for force, so each push on the pedals needs less effort.",
+      "asks": [
+        "Which gear should I use uphill?",
+        "Why does a big back gear help?"
+      ]
+    },
+    {
+      "q": "What does the chain do?",
+      "a": "The chain is a loop of linked rollers that wraps around the chainring and the sprocket. It carries the pull from the front gear to the back gear without slipping.",
+      "asks": [
+        "How does the chain move the wheel?"
+      ]
+    },
+    {
+      "q": "What does the derailleur do?",
+      "a": "The derailleur is a spring-loaded arm near the rear sprockets. When you shift, a cable moves it sideways, guiding the chain onto a bigger or smaller sprocket, and it keeps the chain tight.",
+      "asks": [
+        "How does a bike change gear?"
+      ]
+    },
+    {
+      "q": "How do you work out a bike's gear ratio?",
+      "a": "Divide the chainring teeth by the sprocket teeth. A 44-tooth chainring with an 11-tooth sprocket gives 4, so the wheel turns four times per pedal turn.",
+      "asks": [
+        "How many times does the wheel turn per pedal turn?"
+      ]
+    }
+  ],
+  "facts": [
+    "The number of back-wheel turns per pedal turn equals chainring teeth divided by rear sprocket teeth.",
+    "Derailleur gears became common on racing bikes in the 1930s and 1950s; the Tour de France allowed them from 1937."
+  ],
+  "quiz": [
+    {
+      "say": "A bike has a 42-tooth chainring and a 14-tooth sprocket. How many times does the wheel turn per pedal turn?",
+      "show": "A bike has a 42-tooth chainring and a 14-tooth sprocket. How many times does the wheel turn per pedal turn?",
+      "options": [
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "14",
+          "say": "14"
+        },
+        {
+          "show": "56",
+          "say": "56"
+        }
+      ],
+      "answer": 0,
+      "why": "42 divided by 14 is 3, so the wheel turns three times.",
+      "wrong": {
+        "1": "That is the sprocket's tooth count, not the ratio.",
+        "2": "Adding the teeth does not give the ratio; you divide."
+      }
+    },
+    {
+      "say": "Going up a steep hill, which rear sprocket makes pedalling easiest?",
+      "show": "Going up a steep hill, which rear sprocket makes pedalling easiest?",
+      "options": [
+        {
+          "show": "The smallest",
+          "say": "The smallest"
+        },
+        {
+          "show": "The biggest",
+          "say": "The biggest"
+        },
+        {
+          "show": "It makes no difference",
+          "say": "It makes no difference"
+        }
+      ],
+      "answer": 1,
+      "why": "A big rear sprocket gives a low gear: fewer wheel turns per pedal turn, but less force needed.",
+      "wrong": {
+        "0": "The smallest sprocket is the high gear for speed on the flat.",
+        "2": "The sprocket size changes how much force each pedal push needs."
+      }
+    }
+  ]
+}

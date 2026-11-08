@@ -1,0 +1,430 @@
+{
+  "id": "BCE-TRAN-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Flexible pavement layers and the fourth power law of axle damage",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-TRAN — Transportation engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "flexible pavement",
+    "pavement layers",
+    "CBR",
+    "fourth power law",
+    "standard axle",
+    "load spreading"
+  ],
+  "examples": [
+    "What are the layers of a flexible pavement?",
+    "What is the fourth power law in pavements?",
+    "How does CBR affect pavement thickness?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-layers",
+      "layers": [
+        {
+          "label": "Surface course",
+          "note": "40 mm asphalt: waterproof and grippy",
+          "size": 0.4
+        },
+        {
+          "label": "Binder course",
+          "note": "60 mm dense bituminous macadam",
+          "size": 0.5
+        },
+        {
+          "label": "Base course",
+          "note": "250 mm wet mix crushed stone",
+          "size": 1.3,
+          "ask": "How does a flexible pavement spread the wheel load?"
+        },
+        {
+          "label": "Sub-base",
+          "note": "200 mm granular layer, drains water",
+          "size": 1
+        },
+        {
+          "label": "Subgrade",
+          "note": "500 mm compacted soil; strength = CBR",
+          "size": 1.4,
+          "ask": "What is CBR?"
+        },
+        {
+          "label": "Natural ground",
+          "size": 0.8
+        }
+      ],
+      "flow": {
+        "label": "Wheel load spreads",
+        "from": 0,
+        "to": 4
+      }
+    }
+  ],
+  "explain": [
+    {
+      "say": "From 1958 to 1960, near Ottawa in Illinois, army drivers drove loaded trucks round test loops day and night until the roads broke. This was the AASHO Road Test, and it still shapes how roads are designed. On the board is a flexible pavement, the kind with an asphalt top, cut open layer by layer.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Flexible pavement layers and the fourth power law of axle damage"
+        },
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Surface course",
+              "note": "40 mm asphalt: waterproof and grippy",
+              "size": 0.4
+            },
+            {
+              "label": "Binder course",
+              "note": "60 mm dense bituminous macadam",
+              "size": 0.5
+            },
+            {
+              "label": "Base course",
+              "note": "250 mm wet mix crushed stone",
+              "size": 1.3,
+              "ask": "How does a flexible pavement spread the wheel load?"
+            },
+            {
+              "label": "Sub-base",
+              "note": "200 mm granular layer, drains water",
+              "size": 1
+            },
+            {
+              "label": "Subgrade",
+              "note": "500 mm compacted soil; strength = CBR",
+              "size": 1.4,
+              "ask": "What is CBR?"
+            },
+            {
+              "label": "Natural ground",
+              "size": 0.8
+            }
+          ],
+          "flow": {
+            "label": "Wheel load spreads",
+            "from": 0,
+            "to": 4
+          }
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a road, cut open. Look at the surface course, the binder course, the base, the sub-base and the subgrade underneath. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Flexible pavement layers and the fourth power law of axle damage"
+        },
+        {
+          "op": "image",
+          "render": "pavement-layers"
+        }
+      ]
+    },
+    {
+      "say": "A loaded wheel presses on a small patch, about the size of a dinner plate, at about five hundred and sixty kilopascals. Each layer spreads the load wider, like a pyramid of acrobats. By the top of the soil, about fifty five centimetres down, the pressure is only about thirty kilopascals, roughly one eighteenth. Which layer does most of that spreading?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Surface course",
+              "note": "40 mm asphalt: waterproof and grippy",
+              "size": 0.4
+            },
+            {
+              "label": "Binder course",
+              "note": "60 mm dense bituminous macadam",
+              "size": 0.5
+            },
+            {
+              "label": "Base course",
+              "note": "250 mm wet mix crushed stone",
+              "size": 1.3,
+              "ask": "How does a flexible pavement spread the wheel load?"
+            },
+            {
+              "label": "Sub-base",
+              "note": "200 mm granular layer, drains water",
+              "size": 1
+            },
+            {
+              "label": "Subgrade",
+              "note": "500 mm compacted soil; strength = CBR",
+              "size": 1.4,
+              "ask": "What is CBR?"
+            },
+            {
+              "label": "Natural ground",
+              "size": 0.8
+            }
+          ],
+          "flow": {
+            "label": "Wheel load spreads",
+            "from": 0,
+            "to": 4
+          },
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "σ_z = p[1 − 1/(1 + (a/z)²)^1.5] ≈ 30 kPa at 0.55 m"
+        },
+        {
+          "op": "note",
+          "text": "Wheel 20 kN at 0.56 MPa: contact radius a ≈ 0.107 m."
+        }
+      ]
+    },
+    {
+      "say": "The thick stone base! Now look at the bottom, the subgrade, the natural soil. Its strength is measured by CBR, the California bearing ratio, a percentage of the strength of a standard crushed rock. Soft clay might be three percent, good gravel thirty. The weaker the soil, the thicker the layers on top must be.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Surface course",
+              "note": "40 mm asphalt: waterproof and grippy",
+              "size": 0.4
+            },
+            {
+              "label": "Binder course",
+              "note": "60 mm dense bituminous macadam",
+              "size": 0.5
+            },
+            {
+              "label": "Base course",
+              "note": "250 mm wet mix crushed stone",
+              "size": 1.3,
+              "ask": "How does a flexible pavement spread the wheel load?"
+            },
+            {
+              "label": "Sub-base",
+              "note": "200 mm granular layer, drains water",
+              "size": 1
+            },
+            {
+              "label": "Subgrade",
+              "note": "500 mm compacted soil; strength = CBR",
+              "size": 1.4,
+              "ask": "What is CBR?"
+            },
+            {
+              "label": "Natural ground",
+              "size": 0.8
+            }
+          ],
+          "flow": {
+            "label": "Wheel load spreads",
+            "from": 0,
+            "to": 4
+          },
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Here is the big lesson of the road test. Damage grows with the fourth power of axle load. A standard axle of eighty kilonewtons counts as one. A hundred kilonewton axle does two point four times the damage, and a doubled axle of a hundred and sixty does sixteen times. Which do you think harms roads most: cars, or overloaded trucks?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Axle load (kN)",
+            "max": 160
+          },
+          "y": {
+            "label": "Damage (std axles)",
+            "max": 17
+          },
+          "curves": [
+            {
+              "label": "Fourth power law",
+              "type": "power",
+              "a": 2.4414e-8,
+              "k": 4,
+              "ask": "What is the fourth power law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 80,
+              "label": "Standard 80 kN: 1",
+              "ask": "What is a standard axle?"
+            },
+            {
+              "x": 100,
+              "label": "100 kN: 2.44"
+            },
+            {
+              "x": 160,
+              "label": "160 kN: 16"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Damage = (P / 80)⁴ = (100 / 80)⁴ ≈ 2.44"
+        }
+      ]
+    },
+    {
+      "say": "Overloaded trucks, by far! An eight kilonewton car axle does one ten thousandth of a standard axle's damage. So engineers design roads for the number of standard axles expected, often millions. Excellent work! Challenge: how many times more damage does a hundred and twenty kilonewton axle do than a standard one?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Axle load (kN)",
+            "max": 160
+          },
+          "y": {
+            "label": "Damage (std axles)",
+            "max": 17
+          },
+          "curves": [
+            {
+              "label": "Fourth power law",
+              "type": "power",
+              "a": 2.4414e-8,
+              "k": 4,
+              "ask": "What is the fourth power law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 80,
+              "label": "Standard 80 kN: 1",
+              "ask": "What is a standard axle?"
+            },
+            {
+              "x": 100,
+              "label": "100 kN: 2.44"
+            },
+            {
+              "x": 160,
+              "label": "160 kN: 16"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What are the layers of a flexible pavement?",
+      "a": "From the top: a bituminous surface course, a binder course, a granular base, a granular sub-base and the compacted subgrade soil. Each layer is stronger than the one below it.",
+      "asks": [
+        "Flexible pavement structure"
+      ]
+    },
+    {
+      "q": "How does a flexible pavement spread the wheel load?",
+      "a": "Each layer spreads the load over a wider area, so the pressure falls with depth. A 560 kilopascal tyre pressure drops to about 30 kilopascals at 0.55 metres depth.",
+      "asks": [
+        "Load distribution in pavement"
+      ]
+    },
+    {
+      "q": "What is CBR?",
+      "a": "The California bearing ratio compares the load needed to push a plunger into a soil with the load for a standard crushed rock, as a percentage. Low CBR soils need thicker pavements.",
+      "asks": [
+        "California bearing ratio",
+        "How does CBR affect pavement thickness?"
+      ]
+    },
+    {
+      "q": "What is the fourth power law?",
+      "a": "From the AASHO Road Test: pavement damage grows roughly with the fourth power of axle load. An axle twice as heavy does about 16 times the damage.",
+      "asks": [
+        "Fourth power law in pavements",
+        "Axle load damage"
+      ]
+    },
+    {
+      "q": "What is a standard axle?",
+      "a": "A single axle with dual wheels carrying 80 kilonewtons, about 8.2 tonnes. Mixed traffic is converted into equivalent standard axles for design.",
+      "asks": [
+        "ESAL",
+        "Equivalent standard axle load"
+      ]
+    }
+  ],
+  "facts": [
+    "The AASHO Road Test ran near Ottawa, Illinois, from 1958 to 1960.",
+    "Pavement design converts mixed traffic into equivalent standard axles of 80 kN (18,000 lb)."
+  ],
+  "quiz": [
+    {
+      "say": "By the fourth power law, how much more damage does a 120 kilonewton axle do than a standard 80 kilonewton axle?",
+      "show": "By the fourth power law, how much more damage does a 120 kN axle do than an 80 kN axle?",
+      "options": [
+        {
+          "show": "About 5.1 times",
+          "say": "about 5.1 times"
+        },
+        {
+          "show": "1.5 times",
+          "say": "1.5 times"
+        },
+        {
+          "show": "2.25 times",
+          "say": "2.25 times"
+        }
+      ],
+      "answer": 0,
+      "why": "(120 / 80)⁴ = 1.5⁴ ≈ 5.06.",
+      "wrong": {
+        "1": "That is just the load ratio, not raised to the fourth power.",
+        "2": "That squares the ratio instead of raising it to the fourth power."
+      }
+    },
+    {
+      "say": "Which layer is the natural soil the pavement rests on?",
+      "show": "Which layer is the natural soil the pavement rests on?",
+      "options": [
+        {
+          "show": "Subgrade",
+          "say": "Subgrade"
+        },
+        {
+          "show": "Binder course",
+          "say": "Binder course"
+        },
+        {
+          "show": "Surface course",
+          "say": "Surface course"
+        }
+      ],
+      "answer": 0,
+      "why": "The subgrade is the compacted natural soil at the bottom.",
+      "wrong": {
+        "1": "The binder course is a bituminous layer near the top.",
+        "2": "The surface course is the top asphalt layer."
+      }
+    }
+  ]
+}

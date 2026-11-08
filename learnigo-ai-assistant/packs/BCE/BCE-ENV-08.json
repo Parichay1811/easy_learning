@@ -1,0 +1,363 @@
+{
+  "id": "BCE-ENV-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Cleaning flue gas: precipitators, scrubbers and catalysts for NOx",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-ENV — Environmental engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "electrostatic precipitator",
+    "flue gas desulphurisation",
+    "selective catalytic reduction",
+    "PM2.5",
+    "Deutsch–Anderson equation"
+  ],
+  "examples": [
+    "How does an electrostatic precipitator work?",
+    "How do power stations remove sulphur dioxide?",
+    "What is PM2.5?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Boiler",
+          "icon": "fire",
+          "note": "Burning coal makes dust, SO₂ and NOx"
+        },
+        {
+          "label": "SCR unit",
+          "icon": "flask",
+          "note": "Ammonia turns NOx into nitrogen",
+          "ask": "How is NOx removed?"
+        },
+        {
+          "label": "Precipitator",
+          "icon": "lightning",
+          "note": "Charged plates grab the dust",
+          "ask": "How does an electrostatic precipitator work?"
+        },
+        {
+          "label": "FGD scrubber",
+          "icon": "drop",
+          "note": "Limestone slurry soaks up SO₂",
+          "ask": "What is flue gas desulphurisation?"
+        },
+        {
+          "label": "Stack",
+          "icon": "factory",
+          "note": "Cleaned gas rises and spreads"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In December 1952 a thick smog sat over London for five days, and thousands of people died. Britain passed the Clean Air Act in 1956. Today a big power station or cement kiln cleans its smoke in a row of machines before it ever leaves the chimney. Follow the gas on the board, from the boiler to the stack.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Cleaning flue gas: precipitators, scrubbers and catalysts for NOx"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Boiler",
+              "icon": "fire",
+              "note": "Burning coal makes dust, SO₂ and NOx"
+            },
+            {
+              "label": "SCR unit",
+              "icon": "flask",
+              "note": "Ammonia turns NOx into nitrogen",
+              "ask": "How is NOx removed?"
+            },
+            {
+              "label": "Precipitator",
+              "icon": "lightning",
+              "note": "Charged plates grab the dust",
+              "ask": "How does an electrostatic precipitator work?"
+            },
+            {
+              "label": "FGD scrubber",
+              "icon": "drop",
+              "note": "Limestone slurry soaks up SO₂",
+              "ask": "What is flue gas desulphurisation?"
+            },
+            {
+              "label": "Stack",
+              "icon": "factory",
+              "note": "Cleaned gas rises and spreads"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Why worry about dust? Compare the sizes. A human hair is about seventy micrometres across. PM ten particles are ten, and PM two point five are smaller still: tiny enough to slip deep into your lungs and even your blood. The WHO advises a yearly average of just five micrograms per cubic metre. Which size do you think is most dangerous?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "µm",
+          "items": [
+            {
+              "label": "Human hair",
+              "size": 70,
+              "icon": "person"
+            },
+            {
+              "label": "PM10",
+              "size": 10,
+              "icon": "sand"
+            },
+            {
+              "label": "PM2.5",
+              "size": 2.5,
+              "icon": "smoke"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The smallest! The electrostatic precipitator catches dust by giving it an electric charge, so it flies to big earthed plates. More plate area catches more. With gas at a hundred cubic metres per second and a drift speed of zero point one metres per second, five thousand square metres of plates catches ninety nine point three percent.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Plate area (m²)",
+            "max": 6000
+          },
+          "y": {
+            "label": "Dust caught (%)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "Efficiency",
+              "type": "rise",
+              "a": 100,
+              "k": 1000,
+              "ask": "How does an electrostatic precipitator work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 2000,
+              "label": "2000 m²: 86.5%"
+            },
+            {
+              "x": 5000,
+              "label": "5000 m²: 99.3%",
+              "ask": "How does an electrostatic precipitator work?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "η = 1 − e^(−wA/Q) = 1 − e^(−0.1×5000/100) ≈ 99.3%"
+        }
+      ]
+    },
+    {
+      "say": "Next, the scrubber. Sulphur dioxide causes acid rain, so the gas is sprayed with a slurry of crushed limestone. The sulphur dioxide reacts with it, and the product becomes gypsum, used to make plasterboard. Wet scrubbers remove well over ninety percent. What useful thing comes out of the chimney cleaning?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Boiler",
+              "icon": "fire",
+              "note": "Burning coal makes dust, SO₂ and NOx"
+            },
+            {
+              "label": "SCR unit",
+              "icon": "flask",
+              "note": "Ammonia turns NOx into nitrogen",
+              "ask": "How is NOx removed?"
+            },
+            {
+              "label": "Precipitator",
+              "icon": "lightning",
+              "note": "Charged plates grab the dust",
+              "ask": "How does an electrostatic precipitator work?"
+            },
+            {
+              "label": "FGD scrubber",
+              "icon": "drop",
+              "note": "Limestone slurry soaks up SO₂",
+              "ask": "What is flue gas desulphurisation?"
+            },
+            {
+              "label": "Stack",
+              "icon": "factory",
+              "note": "Cleaned gas rises and spreads"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "CaCO₃ + SO₂ → CaSO₃ + CO₂ (oxidised to gypsum)"
+        }
+      ]
+    },
+    {
+      "say": "Gypsum for plasterboard! And look back at the SCR unit: ammonia and a catalyst turn nitrogen oxides into plain nitrogen and water. Together these three can make a coal plant's smoke almost invisible. Well done! Challenge: if you halved the plate area of our precipitator, what share of the dust would escape?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Boiler",
+              "icon": "fire",
+              "note": "Burning coal makes dust, SO₂ and NOx"
+            },
+            {
+              "label": "SCR unit",
+              "icon": "flask",
+              "note": "Ammonia turns NOx into nitrogen",
+              "ask": "How is NOx removed?"
+            },
+            {
+              "label": "Precipitator",
+              "icon": "lightning",
+              "note": "Charged plates grab the dust",
+              "ask": "How does an electrostatic precipitator work?"
+            },
+            {
+              "label": "FGD scrubber",
+              "icon": "drop",
+              "note": "Limestone slurry soaks up SO₂",
+              "ask": "What is flue gas desulphurisation?"
+            },
+            {
+              "label": "Stack",
+              "icon": "factory",
+              "note": "Cleaned gas rises and spreads"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do power stations clean their flue gas?",
+      "a": "Typically with a selective catalytic reduction unit for NOx, an electrostatic precipitator or fabric filter for dust, and a flue gas desulphurisation scrubber for sulphur dioxide, before the stack.",
+      "asks": [
+        "Air pollution control equipment"
+      ]
+    },
+    {
+      "q": "What is PM2.5?",
+      "a": "PM2.5 means particles smaller than 2.5 micrometres, about thirty times thinner than a hair. They reach deep into the lungs; the 2021 WHO guideline for the yearly average is 5 micrograms per cubic metre.",
+      "asks": [
+        "What is PM10?",
+        "Fine particulate matter"
+      ]
+    },
+    {
+      "q": "How does an electrostatic precipitator work?",
+      "a": "Wires at high voltage charge the dust, which drifts to earthed collecting plates. The plates are rapped to drop the dust into hoppers. Efficiency follows 1 minus e to the minus w A over Q.",
+      "asks": [
+        "Deutsch-Anderson equation",
+        "ESP efficiency"
+      ]
+    },
+    {
+      "q": "What is flue gas desulphurisation?",
+      "a": "FGD removes sulphur dioxide from flue gas, usually by spraying limestone slurry that reacts with it to form calcium sulphite, then gypsum.",
+      "asks": [
+        "How is SO2 removed?",
+        "Wet limestone scrubber"
+      ]
+    },
+    {
+      "q": "How is NOx removed?",
+      "a": "Selective catalytic reduction injects ammonia over a catalyst at about 300 to 400 degrees Celsius, turning nitrogen oxides into nitrogen and water. Low-NOx burners also cut how much forms.",
+      "asks": [
+        "What is SCR?"
+      ]
+    }
+  ],
+  "facts": [
+    "London's Great Smog of December 1952 led to the UK's Clean Air Act of 1956.",
+    "The WHO 2021 air quality guideline for PM2.5 is an annual mean of 5 µg/m³."
+  ],
+  "quiz": [
+    {
+      "say": "A precipitator has drift speed 0.1 metres per second, plate area 2,000 square metres and gas flow 100 cubic metres per second. What is its efficiency? e to the minus 2 is about 0.135.",
+      "show": "An ESP has w = 0.1 m/s, A = 2,000 m², Q = 100 m³/s. Efficiency (e⁻² ≈ 0.135)?",
+      "options": [
+        {
+          "show": "About 86%",
+          "say": "about 86 percent"
+        },
+        {
+          "show": "About 99%",
+          "say": "about 99 percent"
+        },
+        {
+          "show": "About 13.5%",
+          "say": "about 13.5 percent"
+        }
+      ],
+      "answer": 0,
+      "why": "wA/Q = 0.1 × 2,000 / 100 = 2, so η = 1 − 0.135 ≈ 86.5 percent.",
+      "wrong": {
+        "1": "That needs about 5,000 square metres of plates.",
+        "2": "That is the share escaping, not the share caught."
+      }
+    },
+    {
+      "say": "Which unit removes sulphur dioxide?",
+      "show": "Which unit removes sulphur dioxide?",
+      "options": [
+        {
+          "show": "Limestone scrubber",
+          "say": "Limestone scrubber"
+        },
+        {
+          "show": "Electrostatic precipitator",
+          "say": "Electrostatic precipitator"
+        },
+        {
+          "show": "Stack",
+          "say": "Stack"
+        }
+      ],
+      "answer": 0,
+      "why": "In flue gas desulphurisation, limestone slurry reacts with SO₂.",
+      "wrong": {
+        "1": "The precipitator removes dust.",
+        "2": "The stack only releases the gas high up."
+      }
+    }
+  ]
+}

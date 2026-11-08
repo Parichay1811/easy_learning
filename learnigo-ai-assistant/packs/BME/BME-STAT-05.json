@@ -1,0 +1,386 @@
+{
+  "id": "BME-STAT-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Method of sections: cutting a truss bridge to find one member force fast",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "method of sections",
+    "truss bridge",
+    "chord force",
+    "section cut",
+    "moment equation"
+  ],
+  "examples": [
+    "When should I use the method of sections?",
+    "How do I find the force in the top chord of a truss?",
+    "Method of sections worked example"
+  ],
+  "figure": [
+    {
+      "name": "x-beam",
+      "length": 12,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "point",
+          "at": 0.3333333333333333,
+          "size": 30,
+          "label": "Deck 30 kN",
+          "ask": "Why does the top chord carry the bending moment?"
+        },
+        {
+          "kind": "point",
+          "at": 0.6666666666666666,
+          "size": 30,
+          "label": "Deck 30 kN"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Imagine a footbridge truss, 12 metres long and 3 metres deep, with the deck loads of 30 kilonewtons at the third points. You want the force in one top bar in the middle. Solving every joint would take ages. Instead, cut the truss in two and look at one piece. First, see how the whole truss bends like a beam.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Method of sections: cutting a truss bridge to find one member force fast"
+        },
+        {
+          "name": "x-beam",
+          "length": 12,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.3333333333333333,
+              "size": 30,
+              "label": "Deck 30 kN",
+              "ask": "Why does the top chord carry the bending moment?"
+            },
+            {
+              "kind": "point",
+              "at": 0.6666666666666666,
+              "size": 30,
+              "label": "Deck 30 kN"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Truss: span 12 m, depth 3 m, three 4 m panels"
+        }
+      ]
+    },
+    {
+      "say": "Here is a truss bridge in 3D. Imagine sawing straight through it: the top chord, a diagonal and the bottom chord would each be cut, and those three forces are what the method of sections finds. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Method of sections: cutting a truss bridge to find one member force fast"
+        },
+        {
+          "op": "image",
+          "render": "bridge-truss"
+        }
+      ]
+    },
+    {
+      "say": "Each support takes 30 kilonewtons. Now look at the bending moment diagram below the beam. Between the two loads it stays flat at 120 kilonewton metres. That is 30 times 4. The top and bottom chords must resist that bending moment. Which chord do you think is squashed?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 12,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.3333333333333333,
+              "size": 30,
+              "label": "Deck 30 kN",
+              "ask": "Why does the top chord carry the bending moment?"
+            },
+            {
+              "kind": "point",
+              "at": 0.6666666666666666,
+              "size": 30,
+              "label": "Deck 30 kN"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M = 30 kN × 4 m = 120 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "The top one, like the top of a bent ruler. Cut through the middle panel and keep the left piece. Take moments about the bottom joint where the other two cut bars meet: only the top chord has a lever arm, the full 3 metre depth. So its force is 120 divided by 3, which is 40 kilonewtons of compression.",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "bridge",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Reaction 30 kN",
+              "dir": "up",
+              "size": 3
+            },
+            {
+              "label": "Deck load 30 kN",
+              "dir": "down",
+              "size": 3
+            },
+            {
+              "label": "Top chord 40 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "How do I find the force in the top chord of a truss?"
+            },
+            {
+              "label": "Bottom chord 40 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "How do I find the force in the top chord of a truss?"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "F_top = M / h = 120 / 3 = 40 kN compression"
+        }
+      ]
+    },
+    {
+      "say": "The bottom chord pulls the other way with 40 kilonewtons of tension, so the sideways forces cancel. And the diagonal? The upward reaction and the downward deck load already cancel, so the diagonal in this panel carries zero force. See how the four arrows balance? Why can you cut through no more than three bars?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "bridge",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Reaction 30 kN",
+              "dir": "up",
+              "size": 3
+            },
+            {
+              "label": "Deck load 30 kN",
+              "dir": "down",
+              "size": 3
+            },
+            {
+              "label": "Top chord 40 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "How do I find the force in the top chord of a truss?"
+            },
+            {
+              "label": "Bottom chord 40 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "How do I find the force in the top chord of a truss?"
+            }
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "F_bottom = 40 kN tension, F_diagonal = 0"
+        }
+      ]
+    },
+    {
+      "say": "Because a piece gives only three equilibrium equations. Fantastic work! Exam tip: choose the moment centre where two of the cut bars meet, and the third falls out in one line. Challenge: if the bridge were 4 metres deep, what would the top chord carry?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "bridge",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Reaction 30 kN",
+              "dir": "up",
+              "size": 3
+            },
+            {
+              "label": "Deck load 30 kN",
+              "dir": "down",
+              "size": 3
+            },
+            {
+              "label": "Top chord 40 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "How do I find the force in the top chord of a truss?"
+            },
+            {
+              "label": "Bottom chord 40 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "How do I find the force in the top chord of a truss?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Tip: take moments where two cut members meet"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "When should I use the method of sections?",
+      "a": "Use it when you need the force in only a few members, especially in the middle of a long truss. One cut and one moment equation can give a member force directly.",
+      "asks": [
+        "method of sections vs joints"
+      ]
+    },
+    {
+      "q": "Why does the top chord carry the bending moment?",
+      "a": "The truss acts like a deep beam. At a cut, the bending moment is resisted by a couple formed by the top and bottom chords, so each chord force is the moment divided by the depth.",
+      "asks": [
+        "chord force equals moment over depth"
+      ]
+    },
+    {
+      "q": "How do I find the force in the top chord of a truss?",
+      "a": "Cut through the panel, keep one side, and take moments about the joint where the other two cut members meet. The top chord force is that moment divided by its lever arm, usually the truss depth.",
+      "asks": [
+        "top chord force calculation"
+      ]
+    },
+    {
+      "q": "How many members can I cut in the method of sections?",
+      "a": "Usually no more than three with unknown forces, because a free piece in a plane gives only three equilibrium equations.",
+      "asks": [
+        "maximum members cut in a section"
+      ]
+    },
+    {
+      "q": "Why is the diagonal force zero in the middle panel?",
+      "a": "With symmetric loads, the shear between the two loads is zero. The diagonals are what carry shear in a truss, so in that panel they carry no force.",
+      "asks": [
+        "diagonal carries shear in truss"
+      ]
+    }
+  ],
+  "facts": [
+    "In a truss, chord forces resist bending moment and web members such as diagonals resist shear.",
+    "A section cut gives three equilibrium equations for a plane truss, so up to three unknown member forces can be found."
+  ],
+  "quiz": [
+    {
+      "say": "At a section, the bending moment is 180 kilonewton metres and the truss is 2 metres deep. What force is in the top chord?",
+      "show": "Moment at the cut 180 kN·m, truss depth 2 m. Top chord force?",
+      "options": [
+        {
+          "show": "90 kN",
+          "say": "90 kilonewtons"
+        },
+        {
+          "show": "360 kN",
+          "say": "360 kilonewtons"
+        },
+        {
+          "show": "180 kN",
+          "say": "180 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "Chord force = M / h = 180 / 2 = 90 kN, in compression for the top chord.",
+      "wrong": {
+        "1": "That multiplies by the depth instead of dividing.",
+        "2": "The moment must be divided by the lever arm to give a force."
+      }
+    },
+    {
+      "say": "In a simply supported truss with downward loads, the bottom chord is usually in…",
+      "show": "In a simply supported truss with downward loads, the bottom chord is in…",
+      "options": [
+        {
+          "show": "Tension",
+          "say": "Tension"
+        },
+        {
+          "show": "Compression",
+          "say": "Compression"
+        },
+        {
+          "show": "Zero force",
+          "say": "Zero force"
+        }
+      ],
+      "answer": 0,
+      "why": "The truss sags like a beam, stretching the bottom edge, so the bottom chord is in tension.",
+      "wrong": {
+        "1": "Compression is in the top chord, on the inside of the bend.",
+        "2": "The chords carry the bending moment, which is not zero."
+      }
+    }
+  ]
+}

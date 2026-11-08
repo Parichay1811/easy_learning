@@ -1,0 +1,761 @@
+{
+  "id": "BODA-LIFE-21",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How does energy flow through an ocean food web?",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "ocean food web",
+    "marine food chain",
+    "phytoplankton",
+    "krill",
+    "top predators"
+  ],
+  "examples": [
+    "What is at the bottom of the ocean food web?",
+    "How can the biggest whales live on tiny krill?",
+    "Why are there fewer sharks than small fish?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "sun",
+          "label": "Sunlight",
+          "icon": "sun",
+          "x": 0.1,
+          "y": 0.1
+        },
+        {
+          "id": "phyto",
+          "label": "Phytoplankton",
+          "icon": "leaf",
+          "x": 0.35,
+          "y": 0.22,
+          "ask": "What is at the bottom of the ocean food web?"
+        },
+        {
+          "id": "zoo",
+          "label": "Krill and copepods",
+          "icon": "germ",
+          "x": 0.68,
+          "y": 0.22
+        },
+        {
+          "id": "small",
+          "label": "Small fish",
+          "icon": "fish",
+          "x": 0.38,
+          "y": 0.55
+        },
+        {
+          "id": "whale",
+          "label": "Blue whale",
+          "icon": "whale",
+          "x": 0.9,
+          "y": 0.45,
+          "ask": "How can the biggest whales live on tiny krill?"
+        },
+        {
+          "id": "tuna",
+          "label": "Tuna and squid",
+          "icon": "fish",
+          "x": 0.62,
+          "y": 0.72
+        },
+        {
+          "id": "orca",
+          "label": "Orcas and sharks",
+          "icon": "whale",
+          "x": 0.88,
+          "y": 0.9,
+          "ask": "What are top predators?"
+        },
+        {
+          "id": "decomp",
+          "label": "Bacteria recycle",
+          "icon": "germ",
+          "x": 0.12,
+          "y": 0.85,
+          "ask": "What happens to dead things in the ocean?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sun",
+          "to": "phyto",
+          "kind": "energy",
+          "label": "light"
+        },
+        {
+          "from": "phyto",
+          "to": "zoo",
+          "kind": "food"
+        },
+        {
+          "from": "zoo",
+          "to": "small",
+          "kind": "food"
+        },
+        {
+          "from": "zoo",
+          "to": "whale",
+          "kind": "food",
+          "label": "krill"
+        },
+        {
+          "from": "small",
+          "to": "tuna",
+          "kind": "food"
+        },
+        {
+          "from": "tuna",
+          "to": "orca",
+          "kind": "food"
+        },
+        {
+          "from": "small",
+          "to": "orca",
+          "kind": "food"
+        },
+        {
+          "from": "whale",
+          "to": "decomp",
+          "kind": "food",
+          "label": "remains sink"
+        },
+        {
+          "from": "decomp",
+          "to": "phyto",
+          "kind": "food",
+          "label": "nutrients"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In the ocean, almost all food starts with phytoplankton, microscopic algae drifting in sunlit surface water. They capture the sun's energy by photosynthesis, like grass on land.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How does energy flow through an ocean food web?"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.1
+            },
+            {
+              "id": "phyto",
+              "label": "Phytoplankton",
+              "icon": "leaf",
+              "x": 0.35,
+              "y": 0.22,
+              "ask": "What is at the bottom of the ocean food web?"
+            },
+            {
+              "id": "zoo",
+              "label": "Krill and copepods",
+              "icon": "germ",
+              "x": 0.68,
+              "y": 0.22
+            },
+            {
+              "id": "small",
+              "label": "Small fish",
+              "icon": "fish",
+              "x": 0.38,
+              "y": 0.55
+            },
+            {
+              "id": "whale",
+              "label": "Blue whale",
+              "icon": "whale",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "How can the biggest whales live on tiny krill?"
+            },
+            {
+              "id": "tuna",
+              "label": "Tuna and squid",
+              "icon": "fish",
+              "x": 0.62,
+              "y": 0.72
+            },
+            {
+              "id": "orca",
+              "label": "Orcas and sharks",
+              "icon": "whale",
+              "x": 0.88,
+              "y": 0.9,
+              "ask": "What are top predators?"
+            },
+            {
+              "id": "decomp",
+              "label": "Bacteria recycle",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What happens to dead things in the ocean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "phyto",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "phyto",
+              "to": "zoo",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "small",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "whale",
+              "kind": "food",
+              "label": "krill"
+            },
+            {
+              "from": "small",
+              "to": "tuna",
+              "kind": "food"
+            },
+            {
+              "from": "tuna",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "small",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "whale",
+              "to": "decomp",
+              "kind": "food",
+              "label": "remains sink"
+            },
+            {
+              "from": "decomp",
+              "to": "phyto",
+              "kind": "food",
+              "label": "nutrients"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: a food web. Look at the sun, the grass and the grasshopper. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How does energy flow through an ocean food web?"
+        },
+        {
+          "op": "image",
+          "render": "food-web"
+        }
+      ]
+    },
+    {
+      "say": "Tiny animals called zooplankton, such as copepods and krill, graze on phytoplankton. Small fish like anchovies eat them, tuna and squid eat the small fish, and so on up to top predators like orcas and sharks.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.1
+            },
+            {
+              "id": "phyto",
+              "label": "Phytoplankton",
+              "icon": "leaf",
+              "x": 0.35,
+              "y": 0.22,
+              "ask": "What is at the bottom of the ocean food web?"
+            },
+            {
+              "id": "zoo",
+              "label": "Krill and copepods",
+              "icon": "germ",
+              "x": 0.68,
+              "y": 0.22
+            },
+            {
+              "id": "small",
+              "label": "Small fish",
+              "icon": "fish",
+              "x": 0.38,
+              "y": 0.55
+            },
+            {
+              "id": "whale",
+              "label": "Blue whale",
+              "icon": "whale",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "How can the biggest whales live on tiny krill?"
+            },
+            {
+              "id": "tuna",
+              "label": "Tuna and squid",
+              "icon": "fish",
+              "x": 0.62,
+              "y": 0.72
+            },
+            {
+              "id": "orca",
+              "label": "Orcas and sharks",
+              "icon": "whale",
+              "x": 0.88,
+              "y": 0.9,
+              "ask": "What are top predators?"
+            },
+            {
+              "id": "decomp",
+              "label": "Bacteria recycle",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What happens to dead things in the ocean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "phyto",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "phyto",
+              "to": "zoo",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "small",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "whale",
+              "kind": "food",
+              "label": "krill"
+            },
+            {
+              "from": "small",
+              "to": "tuna",
+              "kind": "food"
+            },
+            {
+              "from": "tuna",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "small",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "whale",
+              "to": "decomp",
+              "kind": "food",
+              "label": "remains sink"
+            },
+            {
+              "from": "decomp",
+              "to": "phyto",
+              "kind": "food",
+              "label": "nutrients"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Some giants skip the middle steps. Blue whales feed straight on krill, gulping huge mouthfuls of water and sieving them through baleen plates, eating several tonnes a day in the feeding season.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.1
+            },
+            {
+              "id": "phyto",
+              "label": "Phytoplankton",
+              "icon": "leaf",
+              "x": 0.35,
+              "y": 0.22,
+              "ask": "What is at the bottom of the ocean food web?"
+            },
+            {
+              "id": "zoo",
+              "label": "Krill and copepods",
+              "icon": "germ",
+              "x": 0.68,
+              "y": 0.22
+            },
+            {
+              "id": "small",
+              "label": "Small fish",
+              "icon": "fish",
+              "x": 0.38,
+              "y": 0.55
+            },
+            {
+              "id": "whale",
+              "label": "Blue whale",
+              "icon": "whale",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "How can the biggest whales live on tiny krill?"
+            },
+            {
+              "id": "tuna",
+              "label": "Tuna and squid",
+              "icon": "fish",
+              "x": 0.62,
+              "y": 0.72
+            },
+            {
+              "id": "orca",
+              "label": "Orcas and sharks",
+              "icon": "whale",
+              "x": 0.88,
+              "y": 0.9,
+              "ask": "What are top predators?"
+            },
+            {
+              "id": "decomp",
+              "label": "Bacteria recycle",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What happens to dead things in the ocean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "phyto",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "phyto",
+              "to": "zoo",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "small",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "whale",
+              "kind": "food",
+              "label": "krill"
+            },
+            {
+              "from": "small",
+              "to": "tuna",
+              "kind": "food"
+            },
+            {
+              "from": "tuna",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "small",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "whale",
+              "to": "decomp",
+              "kind": "food",
+              "label": "remains sink"
+            },
+            {
+              "from": "decomp",
+              "to": "phyto",
+              "kind": "food",
+              "label": "nutrients"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "At each step only about a tenth of the energy passes on; the rest is used for living or lost as heat, which is why there are far fewer sharks than sardines. When anything dies, bacteria break it down, releasing nutrients that feed the phytoplankton again.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.1
+            },
+            {
+              "id": "phyto",
+              "label": "Phytoplankton",
+              "icon": "leaf",
+              "x": 0.35,
+              "y": 0.22,
+              "ask": "What is at the bottom of the ocean food web?"
+            },
+            {
+              "id": "zoo",
+              "label": "Krill and copepods",
+              "icon": "germ",
+              "x": 0.68,
+              "y": 0.22
+            },
+            {
+              "id": "small",
+              "label": "Small fish",
+              "icon": "fish",
+              "x": 0.38,
+              "y": 0.55
+            },
+            {
+              "id": "whale",
+              "label": "Blue whale",
+              "icon": "whale",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "How can the biggest whales live on tiny krill?"
+            },
+            {
+              "id": "tuna",
+              "label": "Tuna and squid",
+              "icon": "fish",
+              "x": 0.62,
+              "y": 0.72
+            },
+            {
+              "id": "orca",
+              "label": "Orcas and sharks",
+              "icon": "whale",
+              "x": 0.88,
+              "y": 0.9,
+              "ask": "What are top predators?"
+            },
+            {
+              "id": "decomp",
+              "label": "Bacteria recycle",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What happens to dead things in the ocean?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "phyto",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "phyto",
+              "to": "zoo",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "small",
+              "kind": "food"
+            },
+            {
+              "from": "zoo",
+              "to": "whale",
+              "kind": "food",
+              "label": "krill"
+            },
+            {
+              "from": "small",
+              "to": "tuna",
+              "kind": "food"
+            },
+            {
+              "from": "tuna",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "small",
+              "to": "orca",
+              "kind": "food"
+            },
+            {
+              "from": "whale",
+              "to": "decomp",
+              "kind": "food",
+              "label": "remains sink"
+            },
+            {
+              "from": "decomp",
+              "to": "phyto",
+              "kind": "food",
+              "label": "nutrients"
+            }
+          ],
+          "focus": 7
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is at the bottom of the ocean food web?",
+      "a": "Phytoplankton: microscopic algae and bacteria that photosynthesise in sunlit water. They make the food that nearly every other sea creature depends on, directly or indirectly.",
+      "asks": [
+        "What do ocean food chains start with?",
+        "Who are the producers in the sea?"
+      ]
+    },
+    {
+      "q": "How can the biggest whales live on tiny krill?",
+      "a": "Krill swarm in enormous numbers, and a blue whale engulfs a huge mouthful of water full of them, then pushes the water out through its baleen plates, keeping the krill. Feeding low on the food web means lots of energy is available.",
+      "asks": [
+        "What do blue whales eat?",
+        "How much krill does a whale eat?"
+      ]
+    },
+    {
+      "q": "What are top predators?",
+      "a": "Top predators, like orcas and great white sharks, are at the top of the food web and have few natural enemies. There are relatively few of them, and they help keep the numbers of other animals in balance.",
+      "asks": [
+        "What is an apex predator?",
+        "What eats sharks?"
+      ]
+    },
+    {
+      "q": "What happens to dead things in the ocean?",
+      "a": "Dead plankton and animals sink as a drizzle called marine snow, and bacteria break them down, releasing nutrients. A dead whale on the seabed, a whale fall, can feed deep-sea animals for decades.",
+      "asks": [
+        "What is marine snow?",
+        "What is a whale fall?"
+      ]
+    },
+    {
+      "q": "Why are there fewer sharks than small fish?",
+      "a": "Only about a tenth of the energy at one level reaches the next, because animals use most of it to live. So each level up can support far fewer animals than the one below.",
+      "asks": [
+        "Why are there so few top predators?",
+        "What is the ten percent rule?"
+      ]
+    }
+  ],
+  "facts": [
+    "Roughly 10 percent of the energy at one level of a food chain passes to the next.",
+    "A whale carcass on the deep seabed, called a whale fall, can feed deep-sea animals for decades."
+  ],
+  "quiz": [
+    {
+      "say": "Why are there far fewer sharks than sardines?",
+      "show": "Why are there far fewer sharks than sardines?",
+      "options": [
+        {
+          "show": "Only about a tenth of the energy passes up each step",
+          "say": "Only about a tenth of the energy passes up each step"
+        },
+        {
+          "show": "Sharks eat each other",
+          "say": "Sharks eat each other"
+        },
+        {
+          "show": "Sardines live longer",
+          "say": "Sardines live longer"
+        }
+      ],
+      "answer": 0,
+      "why": "Most energy is used or lost as heat at each level, so less is left to support animals higher up.",
+      "wrong": {
+        "1": "Some sharks do, but that is not the main reason.",
+        "2": "Sardines do not live longer than sharks."
+      }
+    },
+    {
+      "say": "What would happen to ocean life if phytoplankton disappeared?",
+      "show": "What would happen to ocean life if phytoplankton disappeared?",
+      "options": [
+        {
+          "show": "Almost all food webs would collapse",
+          "say": "Almost all food webs would collapse"
+        },
+        {
+          "show": "Only whales would suffer",
+          "say": "Only whales would suffer"
+        },
+        {
+          "show": "Nothing, fish would eat seaweed",
+          "say": "Nothing, fish would eat seaweed"
+        }
+      ],
+      "answer": 0,
+      "why": "Phytoplankton make the food at the base of nearly every ocean food chain.",
+      "wrong": {
+        "1": "Fish, seabirds and almost everything else depend on them too.",
+        "2": "Seaweed grows only along coasts and could not feed the open ocean."
+      }
+    }
+  ]
+}

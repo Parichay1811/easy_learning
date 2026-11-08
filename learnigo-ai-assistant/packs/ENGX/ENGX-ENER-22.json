@@ -1,0 +1,630 @@
+{
+  "id": "ENGX-ENER-22",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a solar farm sends power to the grid",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "solar farm",
+    "solar park",
+    "solar inverter",
+    "solar tracker",
+    "grid connection"
+  ],
+  "examples": [
+    "How does a solar farm work?",
+    "How does solar farm electricity reach my home?",
+    "Why do solar farms have batteries?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "sun",
+          "label": "Sunlight",
+          "icon": "sun",
+          "x": 0.08,
+          "y": 0.18
+        },
+        {
+          "id": "panels",
+          "label": "Panel rows",
+          "icon": "chip",
+          "x": 0.25,
+          "y": 0.45,
+          "ask": "Why do solar farm panels tilt?"
+        },
+        {
+          "id": "inv",
+          "label": "Inverters",
+          "icon": "switch",
+          "x": 0.45,
+          "y": 0.45,
+          "ask": "What does an inverter do in a solar farm?"
+        },
+        {
+          "id": "tx",
+          "label": "Transformer",
+          "icon": "magnet",
+          "x": 0.65,
+          "y": 0.45
+        },
+        {
+          "id": "sub",
+          "label": "Substation",
+          "icon": "factory",
+          "x": 0.82,
+          "y": 0.22
+        },
+        {
+          "id": "grid",
+          "label": "Grid to homes",
+          "icon": "house",
+          "x": 0.9,
+          "y": 0.72
+        },
+        {
+          "id": "batt",
+          "label": "Battery store",
+          "icon": "battery",
+          "x": 0.48,
+          "y": 0.82,
+          "ask": "Why do solar farms add batteries?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sun",
+          "to": "panels",
+          "kind": "energy",
+          "label": "light"
+        },
+        {
+          "from": "panels",
+          "to": "inv",
+          "kind": "power",
+          "label": "DC"
+        },
+        {
+          "from": "inv",
+          "to": "tx",
+          "kind": "power",
+          "label": "AC"
+        },
+        {
+          "from": "tx",
+          "to": "sub",
+          "kind": "power"
+        },
+        {
+          "from": "sub",
+          "to": "grid",
+          "kind": "power"
+        },
+        {
+          "from": "inv",
+          "to": "batt",
+          "kind": "power",
+          "label": "midday charge"
+        },
+        {
+          "from": "batt",
+          "to": "tx",
+          "kind": "power",
+          "label": "evening"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A solar farm is thousands of panels in long rows, tilted towards the sun or turning to follow it. Each panel turns sunlight into direct current electricity, which flows one way only.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a solar farm sends power to the grid"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.08,
+              "y": 0.18
+            },
+            {
+              "id": "panels",
+              "label": "Panel rows",
+              "icon": "chip",
+              "x": 0.25,
+              "y": 0.45,
+              "ask": "Why do solar farm panels tilt?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverters",
+              "icon": "switch",
+              "x": 0.45,
+              "y": 0.45,
+              "ask": "What does an inverter do in a solar farm?"
+            },
+            {
+              "id": "tx",
+              "label": "Transformer",
+              "icon": "magnet",
+              "x": 0.65,
+              "y": 0.45
+            },
+            {
+              "id": "sub",
+              "label": "Substation",
+              "icon": "factory",
+              "x": 0.82,
+              "y": 0.22
+            },
+            {
+              "id": "grid",
+              "label": "Grid to homes",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.72
+            },
+            {
+              "id": "batt",
+              "label": "Battery store",
+              "icon": "battery",
+              "x": 0.48,
+              "y": 0.82,
+              "ask": "Why do solar farms add batteries?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "panels",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "panels",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "tx",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "tx",
+              "to": "sub",
+              "kind": "power"
+            },
+            {
+              "from": "sub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "inv",
+              "to": "batt",
+              "kind": "power",
+              "label": "midday charge"
+            },
+            {
+              "from": "batt",
+              "to": "tx",
+              "kind": "power",
+              "label": "evening"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The grid uses alternating current, so the direct current goes to inverters, whose electronic switches flip it back and forth to make smooth alternating current in step with the grid.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.08,
+              "y": 0.18
+            },
+            {
+              "id": "panels",
+              "label": "Panel rows",
+              "icon": "chip",
+              "x": 0.25,
+              "y": 0.45,
+              "ask": "Why do solar farm panels tilt?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverters",
+              "icon": "switch",
+              "x": 0.45,
+              "y": 0.45,
+              "ask": "What does an inverter do in a solar farm?"
+            },
+            {
+              "id": "tx",
+              "label": "Transformer",
+              "icon": "magnet",
+              "x": 0.65,
+              "y": 0.45
+            },
+            {
+              "id": "sub",
+              "label": "Substation",
+              "icon": "factory",
+              "x": 0.82,
+              "y": 0.22
+            },
+            {
+              "id": "grid",
+              "label": "Grid to homes",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.72
+            },
+            {
+              "id": "batt",
+              "label": "Battery store",
+              "icon": "battery",
+              "x": 0.48,
+              "y": 0.82,
+              "ask": "Why do solar farms add batteries?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "panels",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "panels",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "tx",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "tx",
+              "to": "sub",
+              "kind": "power"
+            },
+            {
+              "from": "sub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "inv",
+              "to": "batt",
+              "kind": "power",
+              "label": "midday charge"
+            },
+            {
+              "from": "batt",
+              "to": "tx",
+              "kind": "power",
+              "label": "evening"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Transformers raise the voltage, and a substation connects the farm to the grid, which carries the power to homes. A big solar farm can supply tens of thousands of homes on a sunny day.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.08,
+              "y": 0.18
+            },
+            {
+              "id": "panels",
+              "label": "Panel rows",
+              "icon": "chip",
+              "x": 0.25,
+              "y": 0.45,
+              "ask": "Why do solar farm panels tilt?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverters",
+              "icon": "switch",
+              "x": 0.45,
+              "y": 0.45,
+              "ask": "What does an inverter do in a solar farm?"
+            },
+            {
+              "id": "tx",
+              "label": "Transformer",
+              "icon": "magnet",
+              "x": 0.65,
+              "y": 0.45
+            },
+            {
+              "id": "sub",
+              "label": "Substation",
+              "icon": "factory",
+              "x": 0.82,
+              "y": 0.22
+            },
+            {
+              "id": "grid",
+              "label": "Grid to homes",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.72
+            },
+            {
+              "id": "batt",
+              "label": "Battery store",
+              "icon": "battery",
+              "x": 0.48,
+              "y": 0.82,
+              "ask": "Why do solar farms add batteries?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "panels",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "panels",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "tx",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "tx",
+              "to": "sub",
+              "kind": "power"
+            },
+            {
+              "from": "sub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "inv",
+              "to": "batt",
+              "kind": "power",
+              "label": "midday charge"
+            },
+            {
+              "from": "batt",
+              "to": "tx",
+              "kind": "power",
+              "label": "evening"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Solar output peaks at midday and stops at night, so many new solar farms add battery stores. They soak up spare midday power and release it in the evening, when demand is high.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Sunlight",
+              "icon": "sun",
+              "x": 0.08,
+              "y": 0.18
+            },
+            {
+              "id": "panels",
+              "label": "Panel rows",
+              "icon": "chip",
+              "x": 0.25,
+              "y": 0.45,
+              "ask": "Why do solar farm panels tilt?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverters",
+              "icon": "switch",
+              "x": 0.45,
+              "y": 0.45,
+              "ask": "What does an inverter do in a solar farm?"
+            },
+            {
+              "id": "tx",
+              "label": "Transformer",
+              "icon": "magnet",
+              "x": 0.65,
+              "y": 0.45
+            },
+            {
+              "id": "sub",
+              "label": "Substation",
+              "icon": "factory",
+              "x": 0.82,
+              "y": 0.22
+            },
+            {
+              "id": "grid",
+              "label": "Grid to homes",
+              "icon": "house",
+              "x": 0.9,
+              "y": 0.72
+            },
+            {
+              "id": "batt",
+              "label": "Battery store",
+              "icon": "battery",
+              "x": 0.48,
+              "y": 0.82,
+              "ask": "Why do solar farms add batteries?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "panels",
+              "kind": "energy",
+              "label": "light"
+            },
+            {
+              "from": "panels",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "tx",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "tx",
+              "to": "sub",
+              "kind": "power"
+            },
+            {
+              "from": "sub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "inv",
+              "to": "batt",
+              "kind": "power",
+              "label": "midday charge"
+            },
+            {
+              "from": "batt",
+              "to": "tx",
+              "kind": "power",
+              "label": "evening"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do solar farm panels tilt?",
+      "a": "Panels collect most when sunlight hits them square on. Fixed rows are tilted towards the midday sun, and trackers turn the panels through the day to follow it, collecting about 15 to 25 percent more over a year.",
+      "asks": [
+        "What is a solar tracker?"
+      ]
+    },
+    {
+      "q": "What does an inverter do in a solar farm?",
+      "a": "It turns the panels' direct current into alternating current matching the grid's voltage and frequency, using fast electronic switches. It also finds the best operating point so the panels give their most power.",
+      "asks": [
+        "Why does solar power need an inverter?"
+      ]
+    },
+    {
+      "q": "Why do solar farms add batteries?",
+      "a": "Solar output peaks at midday, when demand is often lower, and drops to zero at night. Batteries store spare midday energy and release it in the evening peak, making the solar power more useful.",
+      "asks": [
+        "Can solar farms work at night?"
+      ]
+    },
+    {
+      "q": "How much land does a solar farm need?",
+      "a": "Roughly 1.5 to 2.5 hectares for each megawatt, depending on how the rows are spaced. Sheep can often graze between the rows, and some solar farms float on reservoirs or cover car parks instead.",
+      "asks": [
+        "How big is a solar farm?"
+      ]
+    },
+    {
+      "q": "Does a solar farm work on cloudy days?",
+      "a": "Yes, but less. Panels still make electricity from light scattered through cloud, often 10 to 25 percent of their sunny output, and nothing at night.",
+      "asks": [
+        "Do solar panels work when it is cloudy?"
+      ]
+    }
+  ],
+  "facts": [
+    "Solar panels make direct current, so solar farms use inverters to turn it into alternating current for the grid.",
+    "Single-axis trackers, which turn panels to follow the sun, typically raise a solar farm's yearly output by around 15 to 25 percent."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a solar farm need inverters?",
+      "show": "Solar farm inverters…",
+      "options": [
+        {
+          "show": "Turn the panels' direct current into alternating current",
+          "say": "Turn the panels' direct current into alternating current"
+        },
+        {
+          "show": "Store power for the night",
+          "say": "Store power for the night"
+        },
+        {
+          "show": "Cool the panels down",
+          "say": "Cool the panels down"
+        }
+      ],
+      "answer": 0,
+      "why": "Panels make direct current, but the grid runs on alternating current, so inverters convert it.",
+      "wrong": {
+        "1": "Storing power is the job of batteries.",
+        "2": "Inverters convert electricity; they do not cool panels."
+      }
+    }
+  ]
+}

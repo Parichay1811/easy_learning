@@ -1,0 +1,362 @@
+{
+  "id": "BCE-GEO-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Earth pressure and slope stability: Rankine's wedge and the safety factor",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-GEO — Geotechnical engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "active earth pressure",
+    "Rankine coefficient",
+    "retaining wall",
+    "sliding check",
+    "slope stability"
+  ],
+  "examples": [
+    "How do you calculate earth pressure on a retaining wall?",
+    "What is the factor of safety against sliding?",
+    "How do you check the stability of a slope?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "rock",
+      "objectAsk": "How do you check a retaining wall for sliding?",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Soil push 48 kN/m",
+          "dir": "left",
+          "size": 2,
+          "ask": "What is active earth pressure?"
+        },
+        {
+          "label": "Wall weight 200 kN/m",
+          "dir": "down",
+          "size": 5
+        },
+        {
+          "label": "Base friction 100 kN/m",
+          "dir": "right",
+          "size": 3,
+          "ask": "How do you check a retaining wall for sliding?"
+        },
+        {
+          "label": "Ground pushes up",
+          "dir": "up",
+          "size": 5
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every hillside road from the Himalayas to the Andes leans on retaining walls holding back the earth. The soil behind a wall is always trying to slump forward and push it over. On the board, a four metre concrete wall holds back sand. Let us work out the push and check the wall stays put.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Earth pressure and slope stability: Rankine's wedge and the safety factor"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "rock",
+          "objectAsk": "How do you check a retaining wall for sliding?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Soil push 48 kN/m",
+              "dir": "left",
+              "size": 2,
+              "ask": "What is active earth pressure?"
+            },
+            {
+              "label": "Wall weight 200 kN/m",
+              "dir": "down",
+              "size": 5
+            },
+            {
+              "label": "Base friction 100 kN/m",
+              "dir": "right",
+              "size": 3,
+              "ask": "How do you check a retaining wall for sliding?"
+            },
+            {
+              "label": "Ground pushes up",
+              "dir": "up",
+              "size": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The push grows with depth, like water pressure but smaller, because the grains partly hold themselves up. Rankine's active coefficient, K a, for sand with a friction angle of thirty degrees is one third. So the pressure is one third of eighteen times the depth: six kilopascals per metre, reaching twenty four at the base.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Depth (m)",
+            "max": 4
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "Active pressure",
+              "type": "line",
+              "k": 6,
+              "ask": "What is Rankine's coefficient Ka?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 4,
+              "label": "Base: 24 kPa",
+              "ask": "Where does the earth pressure force act on a wall?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "K_a = (1 − sin 30°)/(1 + sin 30°) = 0.5/1.5 = 1/3"
+        },
+        {
+          "op": "note",
+          "text": "p = K_a γ z = ⅓ × 18 × 4 = 24 kPa at the base"
+        }
+      ]
+    },
+    {
+      "say": "The total push is the area of that triangle: half times twenty four times four, forty eight kilonewtons per metre of wall. It acts a third of the way up, one point three three metres above the base, at the triangle's centre. Which way will the wall try to move?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "rock",
+          "objectAsk": "How do you check a retaining wall for sliding?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Soil push 48 kN/m",
+              "dir": "left",
+              "size": 2,
+              "ask": "What is active earth pressure?"
+            },
+            {
+              "label": "Wall weight 200 kN/m",
+              "dir": "down",
+              "size": 5
+            },
+            {
+              "label": "Base friction 100 kN/m",
+              "dir": "right",
+              "size": 3,
+              "ask": "How do you check a retaining wall for sliding?"
+            },
+            {
+              "label": "Ground pushes up",
+              "dir": "up",
+              "size": 5
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P_a = ½ K_a γ H² = ½ × ⅓ × 18 × 4² = 48 kN/m"
+        }
+      ]
+    },
+    {
+      "say": "Forward, by sliding or tipping over its toe. To stop sliding, friction under the base must win. A wall weighing two hundred kilonewtons per metre with a friction coefficient of zero point five can resist a hundred, so the safety factor against sliding is a hundred over forty eight, about two point one. Codes usually want at least one point five.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "rock",
+          "objectAsk": "How do you check a retaining wall for sliding?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Soil push 48 kN/m",
+              "dir": "left",
+              "size": 2,
+              "ask": "What is active earth pressure?"
+            },
+            {
+              "label": "Wall weight 200 kN/m",
+              "dir": "down",
+              "size": 5
+            },
+            {
+              "label": "Base friction 100 kN/m",
+              "dir": "right",
+              "size": 3,
+              "ask": "How do you check a retaining wall for sliding?"
+            },
+            {
+              "label": "Ground pushes up",
+              "dir": "up",
+              "size": 5
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "FS_sliding = μW / P_a = 0.5 × 200 / 48 ≈ 2.1"
+        }
+      ]
+    },
+    {
+      "say": "Slopes follow the same logic. For a long dry sand slope, the safety factor is tan phi over tan of the slope angle. With phi of thirty five degrees on a twenty five degree slope, that is zero point seven over zero point four seven, about one point five. Steepen it to thirty five degrees and it drops to one, right on the edge. Brilliant! Challenge: why do walls have drains?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "rock",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Downhill pull",
+              "dir": 205,
+              "size": 2,
+              "ask": "How do you find the factor of safety of a slope?"
+            },
+            {
+              "label": "Friction holds",
+              "dir": 25,
+              "size": 3,
+              "ask": "How do you find the factor of safety of a slope?"
+            },
+            {
+              "label": "Slope pushes back",
+              "dir": 115,
+              "size": 3
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "FS = tan φ / tan β = tan 35° / tan 25° ≈ 1.50"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is active earth pressure?",
+      "a": "Active pressure is the push of soil on a wall that moves slightly away from it, letting the soil expand a little. It is the smallest pressure the soil can exert and is used to design most retaining walls.",
+      "asks": [
+        "Define active pressure"
+      ]
+    },
+    {
+      "q": "What is Rankine's coefficient Ka?",
+      "a": "K a equals 1 minus sine phi over 1 plus sine phi. For a friction angle of 30 degrees it is one third, so the sideways pressure is a third of the vertical stress.",
+      "asks": [
+        "Ka formula",
+        "Coefficient of active earth pressure"
+      ]
+    },
+    {
+      "q": "How do you check a retaining wall for sliding?",
+      "a": "Compare the friction the base can resist, the friction coefficient times the wall's weight, with the horizontal soil push. A ratio of at least about 1.5 is usually required; here it is about 2.1.",
+      "asks": [
+        "Factor of safety against sliding"
+      ]
+    },
+    {
+      "q": "Where does the earth pressure force act on a wall?",
+      "a": "For a triangular pressure from dry soil, the resultant acts at one third of the wall height above the base, the centre of the triangle.",
+      "asks": [
+        "Point of action of earth pressure"
+      ]
+    },
+    {
+      "q": "How do you find the factor of safety of a slope?",
+      "a": "For a long, dry slope in sand, divide tan phi by tan of the slope angle. For more complex slopes engineers use slip-circle methods, such as those of Bishop, checking many possible failure surfaces.",
+      "asks": [
+        "Slope stability factor of safety",
+        "Infinite slope analysis"
+      ]
+    }
+  ],
+  "facts": [
+    "William Rankine published his theory of earth pressure in 1857.",
+    "Water pressure building up behind a wall can push harder than the soil itself, which is why retaining walls need drains and weep holes.",
+    "For a dry, infinite slope in sand, the factor of safety is tan φ / tan β."
+  ],
+  "quiz": [
+    {
+      "say": "Sand with K a of one third and unit weight 18 kilonewtons per cubic metre sits behind a 6 metre wall. What is the active force, half K a gamma H squared?",
+      "show": "Sand with Ka = 1/3 and γ = 18 kN/m³ behind a 6 m wall. Active force ½ Ka γ H²?",
+      "options": [
+        {
+          "show": "108 kN/m",
+          "say": "108 kilonewtons per metre"
+        },
+        {
+          "show": "216 kN/m",
+          "say": "216 kilonewtons per metre"
+        },
+        {
+          "show": "36 kN/m",
+          "say": "36 kilonewtons per metre"
+        }
+      ],
+      "answer": 0,
+      "why": "½ × ⅓ × 18 × 36 = 108 kilonewtons per metre.",
+      "wrong": {
+        "1": "That forgets the half for the triangle.",
+        "2": "That is the pressure at the base, 36 kilopascals, not the total force."
+      }
+    },
+    {
+      "say": "Why do retaining walls have weep holes or drains?",
+      "show": "Why do retaining walls have weep holes or drains?",
+      "options": [
+        {
+          "show": "To let water out so it cannot add pressure",
+          "say": "To let water out so it cannot add pressure"
+        },
+        {
+          "show": "To make the wall lighter",
+          "say": "To make the wall lighter"
+        },
+        {
+          "show": "To let plants grow through",
+          "say": "To let plants grow through"
+        }
+      ],
+      "answer": 0,
+      "why": "Trapped water adds a large extra push on the wall.",
+      "wrong": {
+        "1": "The holes are tiny and weight actually helps a wall resist sliding.",
+        "2": "Plants in walls are a nuisance, not a design aim."
+      }
+    }
+  ]
+}

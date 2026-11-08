@@ -1,0 +1,378 @@
+{
+  "id": "BEE-DIG-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Half and full adders: how a chip adds two binary numbers",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "half adder",
+    "full adder",
+    "carry bit",
+    "ripple carry adder",
+    "carry lookahead"
+  ],
+  "examples": [
+    "What is the difference between a half adder and a full adder?",
+    "How does a ripple carry adder work?",
+    "Why is the sum bit an XOR?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "Bit 0: 0 + 1",
+          "icon": "chip",
+          "note": "Sum 1, carry 0",
+          "ask": "What is the difference between a half adder and a full adder?"
+        },
+        {
+          "label": "Bit 1: 1 + 1",
+          "icon": "chip",
+          "note": "Sum 0, carry 1 to the next bit",
+          "ask": "How does a ripple carry adder work?"
+        },
+        {
+          "label": "Bit 2: 1 + 1 + 1",
+          "icon": "chip",
+          "note": "Sum 1, carry 1"
+        },
+        {
+          "label": "Bit 3: 0 + 0 + 1",
+          "icon": "chip",
+          "note": "Sum 1, carry 0",
+          "ask": "When does a full adder produce a carry out?"
+        },
+        {
+          "label": "Result 1101 = 13",
+          "icon": "computer",
+          "note": "0110 (6) + 0111 (7) = 1101 (13)",
+          "ask": "Why are ripple carry adders slow?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every time your calculator adds, a row of tiny circuits called full adders does it bit by bit, exactly the way you add on paper, carrying ones. On the board, a 4-bit adder is working out six plus seven. In binary that is 0110 plus 0111. Watch the carry travel from right to left.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Half and full adders: how a chip adds two binary numbers"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Bit 0: 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "What is the difference between a half adder and a full adder?"
+            },
+            {
+              "label": "Bit 1: 1 + 1",
+              "icon": "chip",
+              "note": "Sum 0, carry 1 to the next bit",
+              "ask": "How does a ripple carry adder work?"
+            },
+            {
+              "label": "Bit 2: 1 + 1 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 1"
+            },
+            {
+              "label": "Bit 3: 0 + 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "When does a full adder produce a carry out?"
+            },
+            {
+              "label": "Result 1101 = 13",
+              "icon": "computer",
+              "note": "0110 (6) + 0111 (7) = 1101 (13)",
+              "ask": "Why are ripple carry adders slow?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Start small, with a half adder, which adds two single bits. Look at the groups: the sum bit is 1 when the bits differ, which is exactly XOR. And the carry is 1 only for one plus one, which is AND. So one XOR gate and one AND gate make a half adder. What is one plus one in binary?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Half adder: one bit plus one bit",
+          "groups": [
+            {
+              "label": "Sum = 1",
+              "icon": "bulb",
+              "items": [
+                "0 + 1",
+                "1 + 0"
+              ],
+              "ask": "Why is the sum bit an XOR?"
+            },
+            {
+              "label": "Sum = 0",
+              "icon": "switch",
+              "items": [
+                "0 + 0",
+                "1 + 1 (carry 1)"
+              ]
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Half adder: S = A ⊕ B,  C = A · B"
+        }
+      ]
+    },
+    {
+      "say": "It is 10. Now look at bit 1: one plus one gives a sum bit of 0 and a carry of 1 that moves left. A half adder has nowhere to take that carry in, so every bit after the first needs a full adder, with three inputs: A, B and carry in. Where does this carry go next?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Bit 0: 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "What is the difference between a half adder and a full adder?"
+            },
+            {
+              "label": "Bit 1: 1 + 1",
+              "icon": "chip",
+              "note": "Sum 0, carry 1 to the next bit",
+              "ask": "How does a ripple carry adder work?"
+            },
+            {
+              "label": "Bit 2: 1 + 1 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 1"
+            },
+            {
+              "label": "Bit 3: 0 + 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "When does a full adder produce a carry out?"
+            },
+            {
+              "label": "Result 1101 = 13",
+              "icon": "computer",
+              "note": "0110 (6) + 0111 (7) = 1101 (13)",
+              "ask": "Why are ripple carry adders slow?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "1 + 1 = 10₂: sum 0, carry 1"
+        }
+      ]
+    },
+    {
+      "say": "Bit 2 shows a full adder at work: one plus one plus the carry one is three, binary 11, so sum 1 and carry 1. Its sum is A XOR B XOR carry in, and it carries out whenever at least two inputs are 1. A full adder is simply two half adders and an OR gate. Can you work out bit 3?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Bit 0: 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "What is the difference between a half adder and a full adder?"
+            },
+            {
+              "label": "Bit 1: 1 + 1",
+              "icon": "chip",
+              "note": "Sum 0, carry 1 to the next bit",
+              "ask": "How does a ripple carry adder work?"
+            },
+            {
+              "label": "Bit 2: 1 + 1 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 1"
+            },
+            {
+              "label": "Bit 3: 0 + 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "When does a full adder produce a carry out?"
+            },
+            {
+              "label": "Result 1101 = 13",
+              "icon": "computer",
+              "note": "0110 (6) + 0111 (7) = 1101 (13)",
+              "ask": "Why are ripple carry adders slow?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "S = A ⊕ B ⊕ Cin;  Cout = AB + Cin(A ⊕ B)"
+        }
+      ]
+    },
+    {
+      "say": "Read the answer at the end: 1101, which is eight plus four plus one, thirteen. Six plus seven, done in hardware! The catch is that each carry must ripple through every stage, so a 64-bit ripple adder is slow, and real processors use carry-lookahead adders that work out carries early. Great work! Challenge: add 0101 and 0011.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Bit 0: 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "What is the difference between a half adder and a full adder?"
+            },
+            {
+              "label": "Bit 1: 1 + 1",
+              "icon": "chip",
+              "note": "Sum 0, carry 1 to the next bit",
+              "ask": "How does a ripple carry adder work?"
+            },
+            {
+              "label": "Bit 2: 1 + 1 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 1"
+            },
+            {
+              "label": "Bit 3: 0 + 0 + 1",
+              "icon": "chip",
+              "note": "Sum 1, carry 0",
+              "ask": "When does a full adder produce a carry out?"
+            },
+            {
+              "label": "Result 1101 = 13",
+              "icon": "computer",
+              "note": "0110 (6) + 0111 (7) = 1101 (13)",
+              "ask": "Why are ripple carry adders slow?"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "0110 + 0111 = 1101₂ = 8 + 4 + 1 = 13"
+        },
+        {
+          "op": "note",
+          "text": "Ripple delay grows with each bit; fast CPUs use carry lookahead"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a half adder and a full adder?",
+      "a": "A half adder adds two bits and gives a sum and a carry. A full adder adds three bits, the two inputs plus a carry in from the previous column, so full adders can be chained to add numbers of any length.",
+      "asks": [
+        "Half adder vs full adder?"
+      ]
+    },
+    {
+      "q": "Why is the sum bit an XOR?",
+      "a": "Adding two bits gives a sum bit of 1 when exactly one of them is 1, and 0 when both are 0 or both are 1, because one plus one makes 10. That pattern is exactly the XOR truth table.",
+      "asks": [
+        "Why does a half adder use XOR?"
+      ]
+    },
+    {
+      "q": "How does a ripple carry adder work?",
+      "a": "It is a row of full adders, one per bit. Each adder's carry out feeds the next adder's carry in, so the carry ripples from the least significant bit to the most significant bit.",
+      "asks": [
+        "What is a ripple adder?"
+      ]
+    },
+    {
+      "q": "When does a full adder produce a carry out?",
+      "a": "Whenever at least two of its three inputs are 1. In logic, carry out equals A AND B, or carry in AND A XOR B.",
+      "asks": [
+        "What is the carry out equation?"
+      ]
+    },
+    {
+      "q": "Why are ripple carry adders slow?",
+      "a": "The top bit cannot settle until the carry has passed through every stage below it, so the delay grows with the number of bits. Carry-lookahead adders work out the carries in parallel to avoid this wait.",
+      "asks": [
+        "What is carry lookahead?"
+      ]
+    }
+  ],
+  "facts": [
+    "A full adder can be built from two half adders and one OR gate.",
+    "In binary, 0110 + 0111 = 1101, which is 6 + 7 = 13.",
+    "Modern processors use carry-lookahead or similar fast adders rather than plain ripple-carry chains for wide numbers."
+  ],
+  "quiz": [
+    {
+      "say": "What are the sum and carry of a full adder with A equals 1, B equals 0 and carry in equals 1?",
+      "show": "What are the sum and carry of a full adder with A = 1, B = 0, Cin = 1?",
+      "options": [
+        {
+          "show": "Sum 0, carry 1",
+          "say": "Sum 0, carry 1"
+        },
+        {
+          "show": "Sum 1, carry 0",
+          "say": "Sum 1, carry 0"
+        },
+        {
+          "show": "Sum 1, carry 1",
+          "say": "Sum 1, carry 1"
+        }
+      ],
+      "answer": 0,
+      "why": "One plus zero plus one is two, binary 10: sum bit 0, carry 1.",
+      "wrong": {
+        "1": "That would be the answer for a total of one, not two.",
+        "2": "Sum 1 and carry 1 means three, which needs all three inputs at 1."
+      }
+    },
+    {
+      "say": "What is 0101 plus 0011 in binary?",
+      "show": "What is 0101 + 0011 in binary?",
+      "options": [
+        {
+          "show": "1000",
+          "say": "1000"
+        },
+        {
+          "show": "0110",
+          "say": "0110"
+        },
+        {
+          "show": "1110",
+          "say": "1110"
+        }
+      ],
+      "answer": 0,
+      "why": "Five plus three is eight, which is 1000. The carry ripples all the way from bit 0 to bit 3.",
+      "wrong": {
+        "1": "0110 is six; it drops the carries instead of passing them on.",
+        "2": "1110 is fourteen; the carries have been added in the wrong places."
+      }
+    }
+  ]
+}

@@ -1,0 +1,402 @@
+{
+  "id": "BEE-ACC-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Power factor correction: how a capacitor cuts the current a motor draws",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "power factor correction",
+    "capacitor bank",
+    "reactive power compensation",
+    "line current",
+    "leading current"
+  ],
+  "examples": [
+    "How does a capacitor improve power factor?",
+    "What size capacitor do I need for power factor correction?",
+    "Why does line current drop after correction?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Mains",
+          "value": "230 V 50 Hz"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Line ammeter",
+          "value": "8 A",
+          "ask": "Why does the line current drop when a capacitor is added?"
+        },
+        {
+          "kind": "motor",
+          "label": "Motor",
+          "value": "1840 W",
+          "branch": 1,
+          "ask": "What is power factor correction?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Motor ammeter",
+          "value": "10 A",
+          "branch": 1,
+          "ask": "Why don't the branch currents add up to the line current?"
+        },
+        {
+          "kind": "capacitor",
+          "label": "Capacitor",
+          "value": "83 µF",
+          "branch": 2,
+          "ask": "How do I size a power factor correction capacitor?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Capacitor ammeter",
+          "value": "6 A",
+          "branch": 2
+        }
+      ],
+      "readouts": [
+        "Line current: 10 → 8 A",
+        "PF: 0.8 → 1.0",
+        "Q_C = 1380 var"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Factories in India, Brazil and many other countries can pay extra on their electricity bill if their power factor is poor. The cure is cheap: a capacitor. On the board is our motor: 230 volts, 10 amps, power factor 0.8, so 1840 watts real and 1380 volt-amperes reactive. Keep an eye on the line ammeter.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Power factor correction: how a capacitor cuts the current a motor draws"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line ammeter",
+              "value": "10 A",
+              "ask": "Why does the line current drop when a capacitor is added?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "1840 W",
+              "ask": "What is power factor correction?"
+            }
+          ],
+          "readouts": [
+            "Line current 10 A",
+            "PF = 0.8 lagging"
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "That reactive power, 1380 vars, sloshes all the way from the power station and back, and the line must carry the full 10 amps for it. The motor's current lags the voltage by 37 degrees. Is there any part that could supply reactive power locally, right next to the motor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line ammeter",
+              "value": "10 A",
+              "ask": "Why does the line current drop when a capacitor is added?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "1840 W",
+              "ask": "What is power factor correction?"
+            }
+          ],
+          "readouts": [
+            "Line current 10 A",
+            "PF = 0.8 lagging"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Inductive loads draw lagging current; capacitors draw leading current."
+        }
+      ]
+    },
+    {
+      "say": "A capacitor! Its current leads the voltage, the exact opposite of the motor's. Choose it to make 1380 vars: C equals Q over V squared times omega, which is 1380 over 230 squared times 314, about 83 microfarads. It draws 6 amps, leading. Now look at the line ammeter: what does it read?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line ammeter",
+              "value": "8 A",
+              "ask": "Why does the line current drop when a capacitor is added?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "1840 W",
+              "branch": 1,
+              "ask": "What is power factor correction?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Motor ammeter",
+              "value": "10 A",
+              "branch": 1,
+              "ask": "Why don't the branch currents add up to the line current?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "83 µF",
+              "branch": 2,
+              "ask": "How do I size a power factor correction capacitor?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Capacitor ammeter",
+              "value": "6 A",
+              "branch": 2
+            }
+          ],
+          "readouts": [
+            "Line current: 10 → 8 A",
+            "PF: 0.8 → 1.0",
+            "Q_C = 1380 var"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "C = Q/(V²ω) = 1380/(230² × 314) ≈ 83 µF"
+        }
+      ]
+    },
+    {
+      "say": "Just 8 amps, though the branch meters read 10 and 6. How? AC currents add as arrows. The motor's 10 amps points 37 degrees down, made of 8 amps along and 6 amps down. The capacitor's 6 amps points straight up and cancels the down part, leaving 8 amps in phase. Kirchhoff's current law still holds, with phasors. What is the new power factor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "motor",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Motor I: 10 A",
+              "dir": -37,
+              "size": 5
+            },
+            {
+              "label": "Capacitor I: 6 A",
+              "dir": 90,
+              "size": 3,
+              "ask": "Why does the line current drop when a capacitor is added?"
+            },
+            {
+              "label": "Line I: 8 A",
+              "dir": 0,
+              "size": 4,
+              "ask": "Why don't the branch currents add up to the line current?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "10∠−37° + 6∠90° = 8∠0° A"
+        }
+      ]
+    },
+    {
+      "say": "Exactly 1, since current and voltage are now in step. The motor still gets its 1840 watts, but cable losses, which go as current squared, fall to 64 percent of before. Superb! Exam tip: in practice engineers correct to about 0.95, not all the way to 1, to avoid overcorrecting. Challenge: what line current would a power factor of 0.95 give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Line ammeter",
+              "value": "8 A",
+              "ask": "Why does the line current drop when a capacitor is added?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "1840 W",
+              "branch": 1,
+              "ask": "What is power factor correction?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Motor ammeter",
+              "value": "10 A",
+              "branch": 1,
+              "ask": "Why don't the branch currents add up to the line current?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "83 µF",
+              "branch": 2,
+              "ask": "How do I size a power factor correction capacitor?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Capacitor ammeter",
+              "value": "6 A",
+              "branch": 2
+            }
+          ],
+          "readouts": [
+            "Line current: 10 → 8 A",
+            "PF: 0.8 → 1.0",
+            "Q_C = 1380 var"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Line I = P/V = 1840/230 = 8 A;  losses × 0.64"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is power factor correction?",
+      "a": "Adding capacitors near an inductive load so they supply its reactive power locally. The line then carries less current for the same real power.",
+      "asks": [
+        "How do capacitors improve power factor?",
+        "Why add capacitors to a motor?"
+      ]
+    },
+    {
+      "q": "How do I size a power factor correction capacitor?",
+      "a": "Find the reactive power to cancel, Q, then C equals Q over V squared times omega. For 1380 vars at 230 volts and 50 hertz it is about 83 microfarads.",
+      "asks": [
+        "Capacitor size for PF correction"
+      ]
+    },
+    {
+      "q": "Why does the line current drop when a capacitor is added?",
+      "a": "The capacitor's leading current cancels the lagging part of the motor's current. Only the in-phase part, which carries the real power, is left for the line.",
+      "asks": [
+        "Why is the line current less than the motor current?"
+      ]
+    },
+    {
+      "q": "Why don't the branch currents add up to the line current?",
+      "a": "AC currents add as phasors, not as plain numbers. The motor's 10 amps and the capacitor's 6 amps point in different directions, and their arrow sum is 8 amps.",
+      "asks": [
+        "Why is 10 A plus 6 A equal to 8 A?"
+      ]
+    },
+    {
+      "q": "Why correct to 0.95 and not 1?",
+      "a": "Loads change during the day. Correcting to about 0.95 avoids swinging into a leading power factor at light load, and needs fewer capacitors for nearly all the benefit.",
+      "asks": [
+        "Can you overcorrect power factor?"
+      ]
+    }
+  ],
+  "facts": [
+    "Cable losses are proportional to the square of the current, so cutting the current from 10 to 8 amps cuts those losses by 36 percent.",
+    "Many electricity suppliers charge large industrial users extra when their power factor falls below a set limit, often around 0.9."
+  ],
+  "quiz": [
+    {
+      "say": "A load uses 4600 watts from 230 volts. What line current flows at a power factor of 0.8?",
+      "show": "A load uses 4600 W from 230 V. What line current flows at power factor 0.8?",
+      "options": [
+        {
+          "show": "25 A",
+          "say": "25 amps"
+        },
+        {
+          "show": "20 A",
+          "say": "20 amps"
+        },
+        {
+          "show": "16 A",
+          "say": "16 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "I is P over V times the power factor: 4600 over 230 times 0.8, which is 4600 over 184, or 25 amps.",
+      "wrong": {
+        "1": "20 amps is the current at power factor 1.",
+        "2": "That multiplies by 0.8 instead of dividing by it."
+      }
+    },
+    {
+      "say": "To correct the lagging power factor of a motor, what do you add?",
+      "show": "To correct the lagging power factor of a motor, you add...",
+      "options": [
+        {
+          "show": "Capacitors in parallel",
+          "say": "Capacitors in parallel"
+        },
+        {
+          "show": "Inductors in parallel",
+          "say": "Inductors in parallel"
+        },
+        {
+          "show": "Resistors in series",
+          "say": "Resistors in series"
+        }
+      ],
+      "answer": 0,
+      "why": "Capacitors draw leading current, which cancels the motor's lagging reactive current.",
+      "wrong": {
+        "1": "Inductors would add even more lagging current.",
+        "2": "Series resistors only waste power and do not cancel reactive current."
+      }
+    }
+  ]
+}

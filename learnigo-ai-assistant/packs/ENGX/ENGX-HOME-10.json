@@ -1,0 +1,550 @@
+{
+  "id": "ENGX-HOME-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a hair dryer blows hot air",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "hair dryer",
+    "heating element",
+    "hair dryer fan",
+    "thermal cut-out",
+    "nichrome coil"
+  ],
+  "examples": [
+    "How does a hair dryer make hot air?",
+    "Why does my hair dryer switch off when it gets too hot?",
+    "Why does a hair dryer use so much power?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "switch",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.75,
+          "size": 0.8,
+          "label": "Switch and settings",
+          "motion": "none"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.22,
+          "y": 0.35,
+          "size": 0.9,
+          "label": "Small motor",
+          "motion": "spin"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.42,
+          "y": 0.35,
+          "size": 1.1,
+          "label": "Fan",
+          "motion": "spin",
+          "ask": "What does the fan in a hair dryer do?"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.66,
+          "y": 0.35,
+          "size": 1.2,
+          "label": "Heating coil",
+          "motion": "pulse",
+          "ask": "How does a hair dryer make hot air?"
+        },
+        {
+          "id": "cutout",
+          "kind": "valve",
+          "x": 0.66,
+          "y": 0.78,
+          "size": 0.7,
+          "label": "Thermal cut-out",
+          "motion": "none",
+          "ask": "Why does my hair dryer switch off when it gets too hot?"
+        },
+        {
+          "id": "nozzle",
+          "kind": "pipe",
+          "x": 0.9,
+          "y": 0.35,
+          "size": 0.8,
+          "label": "Nozzle",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "switch",
+          "to": "motor",
+          "kind": "power"
+        },
+        {
+          "from": "switch",
+          "to": "coil",
+          "kind": "power"
+        },
+        {
+          "from": "motor",
+          "to": "fan",
+          "kind": "energy",
+          "label": "spins"
+        },
+        {
+          "from": "fan",
+          "to": "coil",
+          "kind": "fluid",
+          "label": "air flow"
+        },
+        {
+          "from": "coil",
+          "to": "nozzle",
+          "kind": "heat",
+          "label": "hot air"
+        },
+        {
+          "from": "cutout",
+          "to": "coil",
+          "kind": "signal",
+          "label": "cuts if too hot"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A hair dryer is a fan and a heater in a tube. A small motor spins the fan, which pulls air in at the back through a grille.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a hair dryer blows hot air"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "switch",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Switch and settings",
+              "motion": "none"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.22,
+              "y": 0.35,
+              "size": 0.9,
+              "label": "Small motor",
+              "motion": "spin"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.42,
+              "y": 0.35,
+              "size": 1.1,
+              "label": "Fan",
+              "motion": "spin",
+              "ask": "What does the fan in a hair dryer do?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.66,
+              "y": 0.35,
+              "size": 1.2,
+              "label": "Heating coil",
+              "motion": "pulse",
+              "ask": "How does a hair dryer make hot air?"
+            },
+            {
+              "id": "cutout",
+              "kind": "valve",
+              "x": 0.66,
+              "y": 0.78,
+              "size": 0.7,
+              "label": "Thermal cut-out",
+              "motion": "none",
+              "ask": "Why does my hair dryer switch off when it gets too hot?"
+            },
+            {
+              "id": "nozzle",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.35,
+              "size": 0.8,
+              "label": "Nozzle",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "switch",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "switch",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "motor",
+              "to": "fan",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "fan",
+              "to": "coil",
+              "kind": "fluid",
+              "label": "air flow"
+            },
+            {
+              "from": "coil",
+              "to": "nozzle",
+              "kind": "heat",
+              "label": "hot air"
+            },
+            {
+              "from": "cutout",
+              "to": "coil",
+              "kind": "signal",
+              "label": "cuts if too hot"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The air is pushed over a coil of nichrome wire wound on a heat-proof frame. Current makes the coil glow hot, and the air passing over it warms up.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "switch",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Switch and settings",
+              "motion": "none"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.22,
+              "y": 0.35,
+              "size": 0.9,
+              "label": "Small motor",
+              "motion": "spin"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.42,
+              "y": 0.35,
+              "size": 1.1,
+              "label": "Fan",
+              "motion": "spin",
+              "ask": "What does the fan in a hair dryer do?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.66,
+              "y": 0.35,
+              "size": 1.2,
+              "label": "Heating coil",
+              "motion": "pulse",
+              "ask": "How does a hair dryer make hot air?"
+            },
+            {
+              "id": "cutout",
+              "kind": "valve",
+              "x": 0.66,
+              "y": 0.78,
+              "size": 0.7,
+              "label": "Thermal cut-out",
+              "motion": "none",
+              "ask": "Why does my hair dryer switch off when it gets too hot?"
+            },
+            {
+              "id": "nozzle",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.35,
+              "size": 0.8,
+              "label": "Nozzle",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "switch",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "switch",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "motor",
+              "to": "fan",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "fan",
+              "to": "coil",
+              "kind": "fluid",
+              "label": "air flow"
+            },
+            {
+              "from": "coil",
+              "to": "nozzle",
+              "kind": "heat",
+              "label": "hot air"
+            },
+            {
+              "from": "cutout",
+              "to": "coil",
+              "kind": "signal",
+              "label": "cuts if too hot"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Almost all the electricity ends up as heat in the air; only a small share drives the fan.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "input": {
+            "label": "Electricity",
+            "amount": 100
+          },
+          "outputs": [
+            {
+              "label": "Heat in the air",
+              "amount": 94,
+              "useful": true
+            },
+            {
+              "label": "Moving air from fan",
+              "amount": 5,
+              "useful": true
+            },
+            {
+              "label": "Sound",
+              "amount": 1,
+              "useful": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "If the air intake is blocked and the coil overheats, a thermal cut-out switch breaks the circuit until it cools down, which stops it melting or catching fire.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "switch",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Switch and settings",
+              "motion": "none"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.22,
+              "y": 0.35,
+              "size": 0.9,
+              "label": "Small motor",
+              "motion": "spin"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.42,
+              "y": 0.35,
+              "size": 1.1,
+              "label": "Fan",
+              "motion": "spin",
+              "ask": "What does the fan in a hair dryer do?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.66,
+              "y": 0.35,
+              "size": 1.2,
+              "label": "Heating coil",
+              "motion": "pulse",
+              "ask": "How does a hair dryer make hot air?"
+            },
+            {
+              "id": "cutout",
+              "kind": "valve",
+              "x": 0.66,
+              "y": 0.78,
+              "size": 0.7,
+              "label": "Thermal cut-out",
+              "motion": "none",
+              "ask": "Why does my hair dryer switch off when it gets too hot?"
+            },
+            {
+              "id": "nozzle",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.35,
+              "size": 0.8,
+              "label": "Nozzle",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "switch",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "switch",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "motor",
+              "to": "fan",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "fan",
+              "to": "coil",
+              "kind": "fluid",
+              "label": "air flow"
+            },
+            {
+              "from": "coil",
+              "to": "nozzle",
+              "kind": "heat",
+              "label": "hot air"
+            },
+            {
+              "from": "cutout",
+              "to": "coil",
+              "kind": "signal",
+              "label": "cuts if too hot"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a hair dryer make hot air?",
+      "a": "A fan blows air across a coil of nichrome wire. The wire heats up as current flows through it, and the passing air carries that heat out of the nozzle.",
+      "asks": [
+        "What is inside a hair dryer?"
+      ]
+    },
+    {
+      "q": "What does the fan in a hair dryer do?",
+      "a": "The fan pulls air in at the back and pushes it over the heating coil and out of the front. Moving air dries hair by carrying away the evaporated water.",
+      "asks": [
+        "Why does a hair dryer need a fan?"
+      ]
+    },
+    {
+      "q": "Why does my hair dryer switch off when it gets too hot?",
+      "a": "A thermal cut-out senses when the coil is too hot, often because the back grille is blocked by fluff, and cuts the power until it cools.",
+      "asks": [
+        "Why did my hair dryer stop working suddenly?"
+      ]
+    },
+    {
+      "q": "Why does a hair dryer use so much power?",
+      "a": "Heating air quickly takes a lot of energy. Most hair dryers draw about 1,800 to 2,400 watts, nearly all of it to heat the coil.",
+      "asks": [
+        "How many watts is a hair dryer?"
+      ]
+    },
+    {
+      "q": "How does hot air dry hair faster?",
+      "a": "Warm air can hold more water vapour, and heat gives water molecules the energy to evaporate. Moving air carries the damp air away so more can evaporate.",
+      "asks": [
+        "Why does warm air dry things?"
+      ]
+    }
+  ],
+  "facts": [
+    "Typical hair dryers are rated at about 1,800 to 2,400 watts.",
+    "A thermal cut-out stops a hair dryer overheating when its air intake is blocked."
+  ],
+  "quiz": [
+    {
+      "say": "Where does most of the electrical energy in a hair dryer go?",
+      "show": "Where does most of the electrical energy in a hair dryer go?",
+      "options": [
+        {
+          "show": "Heating the air",
+          "say": "Heating the air"
+        },
+        {
+          "show": "Spinning the fan",
+          "say": "Spinning the fan"
+        },
+        {
+          "show": "Making sound",
+          "say": "Making sound"
+        }
+      ],
+      "answer": 0,
+      "why": "The heating coil uses by far the most power; the fan motor only needs a small share.",
+      "wrong": {
+        "1": "The fan motor uses only a small part of the power.",
+        "2": "Very little energy becomes sound."
+      }
+    }
+  ]
+}

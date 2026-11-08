@@ -1,0 +1,346 @@
+{
+  "id": "BEE-EMAG-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Lenz's law and eddy currents: why a magnet falls slowly through a copper pipe",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-EMAG — Electromagnetics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Lenz's law",
+    "eddy currents",
+    "induction braking",
+    "laminated core",
+    "induction hob"
+  ],
+  "examples": [
+    "Why does a magnet fall slowly through a copper pipe?",
+    "What is Lenz's law?",
+    "Why are transformer cores laminated?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "mag",
+          "kind": "magnet",
+          "x": 0.5,
+          "y": 0.22,
+          "label": "Falling magnet",
+          "motion": "slide",
+          "ask": "Why does a magnet fall slowly through a copper pipe?"
+        },
+        {
+          "id": "pipe",
+          "kind": "pipe",
+          "x": 0.5,
+          "y": 0.62,
+          "size": 1.4,
+          "label": "Copper pipe",
+          "ask": "What are eddy currents?"
+        }
+      ],
+      "links": [
+        {
+          "from": "mag",
+          "to": "pipe",
+          "kind": "force",
+          "label": "Changing flux"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Drop a strong magnet down a copper pipe and something eerie happens: it drifts down slowly, as if through honey. Copper is not magnetic, so what is holding it up? On the board, a magnet falls into a copper pipe. The answer is Lenz's law, which Heinrich Lenz stated in 1834.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Lenz's law and eddy currents: why a magnet falls slowly through a copper pipe"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mag",
+              "kind": "magnet",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Falling magnet",
+              "motion": "slide",
+              "ask": "Why does a magnet fall slowly through a copper pipe?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.62,
+              "size": 1.4,
+              "label": "Copper pipe",
+              "ask": "What are eddy currents?"
+            }
+          ],
+          "links": [
+            {
+              "from": "mag",
+              "to": "pipe",
+              "kind": "force",
+              "label": "Changing flux"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "As the magnet falls, the flux through each ring of copper below it grows, and the flux through each ring above it shrinks. By Faraday's law those changes induce voltages, and because copper conducts so well, currents swirl round the pipe walls in loops. These are eddy currents, like little whirlpools. Do eddy currents need a wire, or can they flow inside solid metal?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mag",
+              "kind": "magnet",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Falling magnet",
+              "motion": "slide",
+              "ask": "Why does a magnet fall slowly through a copper pipe?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.62,
+              "size": 1.4,
+              "label": "Copper pipe",
+              "ask": "What are eddy currents?"
+            }
+          ],
+          "links": [
+            {
+              "from": "mag",
+              "to": "pipe",
+              "kind": "force",
+              "label": "Changing flux"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Eddy currents: loops of induced current inside solid metal."
+        }
+      ]
+    },
+    {
+      "say": "They flow inside solid metal, round and round. Now Lenz's law: an induced current always flows so that its own magnetic field opposes the change that caused it. Below the magnet, the currents make a field that repels it; above it, a field that pulls it back. Either way, the magnet is braked. Could the induced current ever help the magnet speed up?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mag",
+              "kind": "magnet",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Falling magnet",
+              "motion": "slide",
+              "ask": "Why does a magnet fall slowly through a copper pipe?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.62,
+              "size": 1.4,
+              "label": "Copper pipe",
+              "ask": "What are eddy currents?"
+            }
+          ],
+          "links": [
+            {
+              "from": "mag",
+              "to": "pipe",
+              "kind": "force",
+              "label": "Changing flux"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "EMF = −N dΦ/dt   (the minus sign is Lenz's law)"
+        }
+      ]
+    },
+    {
+      "say": "Never, or you would get energy from nothing! That is the deep reason for Lenz's law: conservation of energy. The faster the magnet falls, the bigger the eddy currents and the stronger the drag, until the drag equals the 0.2 newton weight of a 20 gram magnet. Then the forces balance and it falls at a steady speed. Where does its lost potential energy go?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "magnet",
+          "motion": "down",
+          "forces": [
+            {
+              "label": "Weight 0.2 N",
+              "dir": "down",
+              "size": 3,
+              "ask": "Why is Lenz's law a consequence of energy conservation?"
+            },
+            {
+              "label": "Eddy-current drag",
+              "dir": "up",
+              "size": 3,
+              "ask": "What is Lenz's law?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Steady fall: drag = weight = 0.02 × 9.81 ≈ 0.2 N"
+        }
+      ]
+    },
+    {
+      "say": "Into heat in the pipe. Lovely! Engineers use this both ways. Induction hobs and the eddy-current brakes on some trains and roller coasters want the heat and the drag. Transformer and motor cores do not, so they are built from thin insulated steel sheets, called laminations, that cut the eddy loops short. Challenge: why would a pipe with a slit down its length brake the magnet far less?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Solid iron core",
+            "icon": "rock",
+            "points": [
+              "Big eddy-current loops",
+              "Wastes power as heat",
+              "Core runs hot"
+            ]
+          },
+          "right": {
+            "title": "Laminated core",
+            "icon": "book",
+            "points": [
+              "Thin insulated sheets",
+              "Eddy loops cut short",
+              "Far less heat loss"
+            ]
+          },
+          "verdict": "Laminations keep eddy losses small",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "A cut in the metal breaks the eddy-current loops."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Lenz's law?",
+      "a": "The direction of an induced current is always such that its magnetic field opposes the change in flux that produced it. It is the minus sign in Faraday's law.",
+      "asks": [
+        "State Lenz's law",
+        "Why is there a minus sign in Faraday's law?"
+      ]
+    },
+    {
+      "q": "What are eddy currents?",
+      "a": "Loops of induced current that swirl inside a solid piece of metal when the magnetic flux through it changes. They turn energy into heat.",
+      "asks": [
+        "Define eddy currents"
+      ]
+    },
+    {
+      "q": "Why does a magnet fall slowly through a copper pipe?",
+      "a": "The falling magnet induces eddy currents in the pipe, and by Lenz's law their fields push against its motion. The drag grows with speed until it balances the weight.",
+      "asks": [
+        "Magnet in a copper tube explanation"
+      ]
+    },
+    {
+      "q": "Why is Lenz's law a consequence of energy conservation?",
+      "a": "If the induced current helped the change, the magnet would speed up and make even more current, creating energy from nothing. Opposing the change means work must be done, and that work becomes electrical energy.",
+      "asks": [
+        "Why must the induced current oppose the change?"
+      ]
+    },
+    {
+      "q": "Why are transformer cores laminated?",
+      "a": "Thin insulated steel sheets break up the paths that eddy currents need, so the currents, and the heat they waste, are much smaller.",
+      "asks": [
+        "How do laminations reduce eddy current loss?"
+      ]
+    }
+  ],
+  "facts": [
+    "Heinrich Lenz stated his rule for the direction of induced currents in 1834.",
+    "Induction hobs heat a steel pan directly through eddy currents induced by a rapidly changing magnetic field."
+  ],
+  "quiz": [
+    {
+      "say": "A magnet's north pole is pushed towards a coil. What does the near end of the coil become?",
+      "show": "A magnet's north pole is pushed towards a coil. The near end of the coil becomes...",
+      "options": [
+        {
+          "show": "A north pole",
+          "say": "A north pole"
+        },
+        {
+          "show": "A south pole",
+          "say": "A south pole"
+        },
+        {
+          "show": "Unmagnetised",
+          "say": "Unmagnetised"
+        }
+      ],
+      "answer": 0,
+      "why": "By Lenz's law the coil opposes the approach, and a north pole facing the magnet's north pole repels it.",
+      "wrong": {
+        "1": "A south pole would attract the magnet and help the change, breaking energy conservation.",
+        "2": "The changing flux induces a current, and that current magnetises the coil."
+      }
+    },
+    {
+      "say": "A 50 gram magnet falls through a copper pipe at a steady speed. What is the eddy-current drag on it? Take g as 9.8.",
+      "show": "A 50 g magnet falls through a copper pipe at a steady speed. What is the eddy-current drag on it? (g = 9.8 m/s²)",
+      "options": [
+        {
+          "show": "0.49 N",
+          "say": "0.49 newtons"
+        },
+        {
+          "show": "0 N",
+          "say": "zero newtons"
+        },
+        {
+          "show": "4.9 N",
+          "say": "4.9 newtons"
+        }
+      ],
+      "answer": 0,
+      "why": "At steady speed the forces balance, so the drag equals the weight: 0.05 times 9.8, which is 0.49 newtons.",
+      "wrong": {
+        "1": "With no drag the magnet would keep speeding up.",
+        "2": "That uses 0.5 kilograms; 50 grams is 0.05 kilograms."
+      }
+    }
+  ]
+}

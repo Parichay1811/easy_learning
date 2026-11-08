@@ -1,0 +1,342 @@
+{
+  "id": "BME-SOM-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Euler buckling: the critical load that makes a slender column bow",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-SOM — Mechanics of materials",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Euler buckling",
+    "critical load",
+    "effective length",
+    "slenderness ratio",
+    "column end conditions"
+  ],
+  "examples": [
+    "What is Euler's buckling formula?",
+    "How do end conditions affect buckling?",
+    "Why do long columns buckle instead of crushing?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "ruler",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Load P",
+          "dir": "down",
+          "size": 4,
+          "ask": "What is buckling?"
+        },
+        {
+          "label": "Support push P",
+          "dir": "up",
+          "size": 4
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Press the ends of a plastic ruler together. Nothing happens, nothing happens, and then it suddenly bows out sideways. It has not crushed; it has buckled. In 1744 Leonhard Euler worked out the exact load where this happens. Look at the two equal pushes squeezing the ruler.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Euler buckling: the critical load that makes a slender column bow"
+        },
+        {
+          "name": "x-forces",
+          "object": "ruler",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Load P",
+              "dir": "down",
+              "size": 4,
+              "ask": "What is buckling?"
+            },
+            {
+              "label": "Support push P",
+              "dir": "up",
+              "size": 4
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Buckling: a sudden sideways bowing under compression"
+        }
+      ]
+    },
+    {
+      "say": "Euler's critical load is pi squared E I over L squared, for a column pinned at both ends. Take a solid steel rod 20 millimetres across and 1 metre long. I is about 7850 millimetres to the fourth, so P critical is about 15.5 kilonewtons. See the curve on the graph? What happens when the rod gets longer?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Length (m)",
+            "min": 0.5,
+            "max": 3
+          },
+          "y": {
+            "label": "Load (kN)",
+            "max": 90
+          },
+          "curves": [
+            {
+              "label": "Euler buckling",
+              "type": "power",
+              "a": 15.5,
+              "k": -2,
+              "ask": "What is Euler's buckling formula?"
+            },
+            {
+              "label": "Crushing 78.5 kN",
+              "type": "line",
+              "c": 78.5,
+              "k": 0,
+              "ask": "Why do long columns buckle instead of crushing?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "15.5 kN at 1 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P_cr = π²EI/L² = π² × 200 000 × 7854 / 1000² = 15.5 kN"
+        }
+      ]
+    },
+    {
+      "say": "It falls fast, with one over L squared: double the length, a quarter of the load. The ends matter too. Replace L by the effective length, K times L. A flagpole fixed at the bottom and free at the top has K equals 2: only 3.9 kilonewtons. Fixed at both ends, K is 0.5: 62 kilonewtons. See the bars? Which end condition is strongest?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "kN",
+          "items": [
+            {
+              "label": "Fixed–free",
+              "size": 3.88,
+              "icon": "tower"
+            },
+            {
+              "label": "Pinned–pinned",
+              "size": 15.5,
+              "icon": "tower"
+            },
+            {
+              "label": "Fixed–fixed",
+              "size": 62,
+              "icon": "tower"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "K = 2 (fixed–free), 1 (pinned), 0.5 (fixed–fixed)"
+        }
+      ]
+    },
+    {
+      "say": "Fixed at both ends, sixteen times the flagpole! But Euler is not the whole story. A short rod crushes first, when the stress reaches yield: 250 megapascals times 314 square millimetres, about 78.5 kilonewtons. See the flat line? Long columns buckle below it; very short ones crush. Where does our 1 metre rod fall?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Length (m)",
+            "min": 0.5,
+            "max": 3
+          },
+          "y": {
+            "label": "Load (kN)",
+            "max": 90
+          },
+          "curves": [
+            {
+              "label": "Euler buckling",
+              "type": "power",
+              "a": 15.5,
+              "k": -2,
+              "ask": "What is Euler's buckling formula?"
+            },
+            {
+              "label": "Crushing 78.5 kN",
+              "type": "line",
+              "c": 78.5,
+              "k": 0,
+              "ask": "Why do long columns buckle instead of crushing?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "15.5 kN at 1 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "P_crush = σy A = 250 × 314 = 78.5 kN"
+        }
+      ]
+    },
+    {
+      "say": "Well below the crushing line, so it buckles. Great work! Real link: scaffolding tubes, bicycle frames and building columns are all checked for buckling, and bracing halfway shortens the effective length. Exam tip: buckling happens about the axis with the smaller I, so check the weak direction. Challenge: what is P critical for a 2 metre pinned rod?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Length (m)",
+            "min": 0.5,
+            "max": 3
+          },
+          "y": {
+            "label": "Load (kN)",
+            "max": 90
+          },
+          "curves": [
+            {
+              "label": "Euler buckling",
+              "type": "power",
+              "a": 15.5,
+              "k": -2,
+              "ask": "What is Euler's buckling formula?"
+            },
+            {
+              "label": "Crushing 78.5 kN",
+              "type": "line",
+              "c": 78.5,
+              "k": 0,
+              "ask": "Why do long columns buckle instead of crushing?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "15.5 kN at 1 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Tip: buckling uses the smaller I of the section"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is buckling?",
+      "a": "Buckling is a sudden sideways bending of a slender member under compression. It can happen at a stress well below the material's yield strength.",
+      "asks": [
+        "what happens when a column buckles"
+      ]
+    },
+    {
+      "q": "What is Euler's buckling formula?",
+      "a": "P critical equals pi squared E I over the effective length squared. It gives the axial load at which a slender, straight, elastic column buckles.",
+      "asks": [
+        "critical buckling load formula"
+      ]
+    },
+    {
+      "q": "How do end conditions affect buckling?",
+      "a": "They change the effective length, K times L. Fixed-free has K of 2, pinned-pinned 1, and fixed-fixed 0.5, so fixed ends allow a much bigger load.",
+      "asks": [
+        "effective length factor"
+      ]
+    },
+    {
+      "q": "What is the slenderness ratio?",
+      "a": "It is the effective length divided by the radius of gyration of the section. High slenderness means a column will buckle rather than crush.",
+      "asks": [
+        "slenderness ratio definition"
+      ]
+    },
+    {
+      "q": "Why do long columns buckle instead of crushing?",
+      "a": "The buckling load falls with one over length squared, while the crushing load does not depend on length. For a long column the buckling load is reached first.",
+      "asks": [
+        "short vs long columns"
+      ]
+    }
+  ],
+  "facts": [
+    "The Euler critical load of a pinned-pinned column is pi squared E I over L squared.",
+    "A column fixed at both ends has an effective length of half its actual length."
+  ],
+  "quiz": [
+    {
+      "say": "A pinned column has a critical load of 40 kilonewtons. What is the critical load if its length doubles?",
+      "show": "A pinned column buckles at 40 kN. Length doubled: new P_cr?",
+      "options": [
+        {
+          "show": "10 kN",
+          "say": "10 kilonewtons"
+        },
+        {
+          "show": "20 kN",
+          "say": "20 kilonewtons"
+        },
+        {
+          "show": "160 kN",
+          "say": "160 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "P_cr goes as 1 / L², so doubling L divides it by 4: 40 / 4 = 10 kN.",
+      "wrong": {
+        "1": "Length is squared in the formula, so it falls by four, not two.",
+        "2": "A longer column is weaker, not stronger."
+      }
+    },
+    {
+      "say": "A column is fixed at the base and free at the top. What is its effective length factor K?",
+      "show": "Column fixed at the base, free at the top. Effective length factor K?",
+      "options": [
+        {
+          "show": "2",
+          "say": "2"
+        },
+        {
+          "show": "1",
+          "say": "1"
+        },
+        {
+          "show": "0.5",
+          "say": "0.5"
+        }
+      ],
+      "answer": 0,
+      "why": "A fixed-free column bends like half of a pinned column twice as long, so K equals 2.",
+      "wrong": {
+        "1": "K equals 1 is for pinned at both ends.",
+        "2": "K equals 0.5 is for fixed at both ends."
+      }
+    }
+  ]
+}

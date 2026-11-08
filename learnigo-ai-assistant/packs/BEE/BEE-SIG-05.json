@@ -1,0 +1,415 @@
+{
+  "id": "BEE-SIG-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "First-order step response: the time constant and the 63% rule",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "first-order system",
+    "time constant",
+    "step response",
+    "RL circuit",
+    "63 percent rule",
+    "settling time"
+  ],
+  "examples": [
+    "What is the time constant of an RL circuit?",
+    "Why does a first-order system reach 63% in one time constant?",
+    "How long does a first-order system take to settle?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Battery",
+          "value": "12 V"
+        },
+        {
+          "kind": "switch",
+          "label": "Switch at t = 0"
+        },
+        {
+          "kind": "resistor",
+          "label": "Resistor",
+          "value": "6 Ω"
+        },
+        {
+          "kind": "inductor",
+          "label": "Inductor",
+          "value": "3 H",
+          "ask": "Why does the current start at zero in an RL circuit?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter",
+          "value": "→ 2 A",
+          "ask": "What is the time constant of an RL circuit?"
+        }
+      ],
+      "readouts": [
+        "τ = L/R = 3/6 = 0.5 s",
+        "Final I = 12/6 = 2 A"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A cup of tea cooling, a thermometer settling, a car's speed after you press the pedal: all follow the same curve. They are first-order systems, with one way to store energy. On the board, 12 volts is switched onto a 6 ohm resistor and a 3 henry inductor, a coil that stores energy in its magnetic field. Watch the current build up.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "First-order step response: the time constant and the 63% rule"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch at t = 0"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "6 Ω"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "3 H",
+              "ask": "Why does the current start at zero in an RL circuit?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "→ 2 A",
+              "ask": "What is the time constant of an RL circuit?"
+            }
+          ],
+          "readouts": [
+            "τ = L/R = 3/6 = 0.5 s",
+            "Final I = 12/6 = 2 A"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the inductor. It resists any change in current, so at the instant you close the switch the current is zero and all 12 volts sit across the coil. As the current grows, more voltage goes to the resistor and less is left to push the change. The pace is set by the time constant, tau, L over R: 3 over 6, half a second. What current is it heading for?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch at t = 0"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "6 Ω"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "3 H",
+              "ask": "Why does the current start at zero in an RL circuit?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "→ 2 A",
+              "ask": "What is the time constant of an RL circuit?"
+            }
+          ],
+          "readouts": [
+            "τ = L/R = 3/6 = 0.5 s",
+            "Final I = 12/6 = 2 A"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "τ = L/R = 3 H / 6 Ω = 0.5 s"
+        }
+      ]
+    },
+    {
+      "say": "12 over 6, 2 amps, once the coil no longer opposes anything. Here is the curve. It starts steeply, at 4 amps per second, the straight tangent line, and if it kept that pace it would reach 2 amps in exactly one tau. Instead it bends over: after one tau it has 63 percent, 1.26 amps. Why 63 percent?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 3
+          },
+          "y": {
+            "label": "Current (A)",
+            "max": 2.2
+          },
+          "curves": [
+            {
+              "label": "Current i(t)",
+              "type": "rise",
+              "a": 2,
+              "k": 0.5,
+              "ask": "Why does a first-order system reach 63% in one time constant?"
+            },
+            {
+              "label": "Initial slope 4 A/s",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.5,
+                  2
+                ]
+              ],
+              "ask": "What is the initial slope of the step response?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "τ: 1.26 A (63%)"
+            },
+            {
+              "x": 1.5,
+              "label": "3τ: 1.90 A (95%)"
+            },
+            {
+              "x": 2.5,
+              "label": "5τ: 1.99 A (99%)"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "i(t) = 2(1 − e^(−t/0.5)) A"
+        }
+      ]
+    },
+    {
+      "say": "Because after one tau, e to the minus 1, 37 percent, of the gap is still left, so 63 percent is done. Every further tau closes 63 percent of what remains: 95 percent after 3 tau, 1.9 amps, and 99.3 percent after 5 tau. Engineers call 5 tau settled, here 2.5 seconds. What happens when you switch the battery off?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 3
+          },
+          "y": {
+            "label": "Current (A)",
+            "max": 2.2
+          },
+          "curves": [
+            {
+              "label": "Current i(t)",
+              "type": "rise",
+              "a": 2,
+              "k": 0.5,
+              "ask": "Why does a first-order system reach 63% in one time constant?"
+            },
+            {
+              "label": "Initial slope 4 A/s",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.5,
+                  2
+                ]
+              ],
+              "ask": "What is the initial slope of the step response?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "τ: 1.26 A (63%)"
+            },
+            {
+              "x": 1.5,
+              "label": "3τ: 1.90 A (95%)"
+            },
+            {
+              "x": 2.5,
+              "label": "5τ: 1.99 A (99%)"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "1 − e^(−1) = 0.632;  3τ: 95%;  5τ: 99.3%"
+        }
+      ]
+    },
+    {
+      "say": "With a diode to give it a path, the current dies away on the same timescale, falling to 37 percent, 0.74 amps, after one tau. Rise and decay are mirror images. Fantastic! Exam tip: one shape and one number, tau, describe every first-order system. Challenge: what is tau for a 10 kilohm resistor and a 47 microfarad capacitor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 3
+          },
+          "y": {
+            "label": "Current (A)",
+            "max": 2.2
+          },
+          "curves": [
+            {
+              "label": "Decay after switch-off",
+              "type": "decay",
+              "a": 2,
+              "k": 0.5,
+              "ask": "How long does a first-order system take to settle?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "τ: 0.74 A (37%)"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Off: i(t) = 2e^(−t/0.5), 0.74 A after one τ"
+        },
+        {
+          "op": "note",
+          "text": "A freewheel diode gives the coil current a path to die away"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the time constant of an RL circuit?",
+      "a": "It is L divided by R. A 3 henry inductor with 6 ohms has a time constant of 0.5 seconds, the time to reach 63 percent of the final current.",
+      "asks": [
+        "How do you calculate tau for an inductor circuit?"
+      ]
+    },
+    {
+      "q": "Why does a first-order system reach 63% in one time constant?",
+      "a": "The response is 1 minus e to the minus t over tau. At t equals tau that is 1 minus e to the minus 1, which is 1 minus 0.368, or 63.2 percent.",
+      "asks": [
+        "Where does 63 percent come from?"
+      ]
+    },
+    {
+      "q": "How long does a first-order system take to settle?",
+      "a": "About 5 time constants to be within 1 percent of the final value, or 4 time constants to be within 2 percent. For tau of 0.5 seconds, that is about 2 to 2.5 seconds.",
+      "asks": [
+        "What is the settling time of a first-order system?"
+      ]
+    },
+    {
+      "q": "Why does the current start at zero in an RL circuit?",
+      "a": "An inductor opposes changes in current with a voltage of L times di by dt. At switch-on the current cannot jump, so it starts at zero with the full supply across the inductor, giving an initial slope of V over L.",
+      "asks": [
+        "Why can't inductor current change instantly?"
+      ]
+    },
+    {
+      "q": "What is the initial slope of the step response?",
+      "a": "The tangent at time zero has a slope of final value over tau. For 2 amps and 0.5 seconds it is 4 amps per second, which is also V over L, 12 over 3.",
+      "asks": [
+        "What does the tangent at t = 0 show?"
+      ]
+    }
+  ],
+  "facts": [
+    "A first-order system reaches 63.2% of its final value after one time constant.",
+    "For an RL circuit τ = L/R; for an RC circuit τ = RC.",
+    "After five time constants a first-order response is within 1% of its final value."
+  ],
+  "quiz": [
+    {
+      "say": "What is the time constant for a 10 kilohm resistor and a 47 microfarad capacitor?",
+      "show": "What is τ for a 10 kΩ resistor and a 47 µF capacitor?",
+      "options": [
+        {
+          "show": "0.47 s",
+          "say": "0.47 seconds"
+        },
+        {
+          "show": "4.7 s",
+          "say": "4.7 seconds"
+        },
+        {
+          "show": "0.047 s",
+          "say": "0.047 seconds"
+        }
+      ],
+      "answer": 0,
+      "why": "Tau equals R C: 10,000 times 0.000047 is 0.47 seconds.",
+      "wrong": {
+        "1": "That is ten times too long; check the microfarads.",
+        "2": "That is ten times too short."
+      }
+    },
+    {
+      "say": "A first-order system heads for 2 amps with a time constant of 0.5 seconds. What is the current after 1.5 seconds?",
+      "show": "A first-order system heads for 2 A with τ = 0.5 s. What is the current after 1.5 s?",
+      "options": [
+        {
+          "show": "About 1.9 A",
+          "say": "about 1.9 amps"
+        },
+        {
+          "show": "About 1.26 A",
+          "say": "about 1.26 amps"
+        },
+        {
+          "show": "Exactly 2 A",
+          "say": "exactly 2 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "1.5 seconds is 3 tau, so it reaches 95 percent: about 1.9 amps.",
+      "wrong": {
+        "1": "1.26 amps is the value after one tau, 0.5 seconds.",
+        "2": "It only approaches 2 amps; after 3 tau it is still 5 percent short."
+      }
+    }
+  ]
+}

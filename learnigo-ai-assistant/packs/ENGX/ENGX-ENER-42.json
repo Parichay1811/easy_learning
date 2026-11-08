@@ -1,0 +1,760 @@
+{
+  "id": "ENGX-ENER-42",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How James Watt's steam engine worked",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "steam engine",
+    "James Watt",
+    "separate condenser",
+    "beam engine",
+    "centrifugal governor"
+  ],
+  "examples": [
+    "How did the steam engine work?",
+    "What did James Watt invent?",
+    "Why was the steam engine so important?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "boiler",
+          "kind": "tank",
+          "x": 0.1,
+          "y": 0.7,
+          "size": 1.2,
+          "label": "Boiler",
+          "motion": "pulse",
+          "ask": "How does steam push a piston?"
+        },
+        {
+          "id": "valve",
+          "kind": "valve",
+          "x": 0.24,
+          "y": 0.38,
+          "size": 0.7,
+          "label": "Steam valve"
+        },
+        {
+          "id": "cyl",
+          "kind": "piston",
+          "x": 0.4,
+          "y": 0.55,
+          "label": "Cylinder and piston",
+          "motion": "slide"
+        },
+        {
+          "id": "cond",
+          "kind": "tank",
+          "x": 0.4,
+          "y": 0.88,
+          "size": 0.8,
+          "label": "Separate condenser",
+          "ask": "Why was Watt's separate condenser so important?"
+        },
+        {
+          "id": "beam",
+          "kind": "lever",
+          "x": 0.56,
+          "y": 0.15,
+          "size": 1.4,
+          "label": "Rocking beam",
+          "motion": "swing",
+          "ask": "What did the beam do in a steam engine?"
+        },
+        {
+          "id": "gear",
+          "kind": "gear",
+          "x": 0.74,
+          "y": 0.45,
+          "size": 0.9,
+          "label": "Sun and planet gear",
+          "motion": "spin"
+        },
+        {
+          "id": "fly",
+          "kind": "wheel",
+          "x": 0.9,
+          "y": 0.68,
+          "size": 1.3,
+          "label": "Flywheel",
+          "motion": "spin"
+        },
+        {
+          "id": "gov",
+          "kind": "weight",
+          "x": 0.9,
+          "y": 0.16,
+          "size": 0.6,
+          "label": "Centrifugal governor",
+          "motion": "swing",
+          "ask": "What does a steam engine governor do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "boiler",
+          "to": "valve",
+          "kind": "fluid",
+          "label": "steam"
+        },
+        {
+          "from": "valve",
+          "to": "cyl",
+          "kind": "fluid"
+        },
+        {
+          "from": "cyl",
+          "to": "cond",
+          "kind": "fluid",
+          "label": "used steam"
+        },
+        {
+          "from": "cyl",
+          "to": "beam",
+          "kind": "force",
+          "label": "push"
+        },
+        {
+          "from": "beam",
+          "to": "gear",
+          "kind": "force"
+        },
+        {
+          "from": "gear",
+          "to": "fly",
+          "kind": "energy",
+          "label": "rotation"
+        },
+        {
+          "from": "fly",
+          "to": "gov",
+          "kind": "force"
+        },
+        {
+          "from": "gov",
+          "to": "valve",
+          "kind": "signal",
+          "label": "controls speed"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In a steam engine, a fire boils water in a boiler, and the steam takes up about 1,700 times more space than the water did. That push of expanding steam can move a piston.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How James Watt's steam engine worked"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.7,
+              "size": 1.2,
+              "label": "Boiler",
+              "motion": "pulse",
+              "ask": "How does steam push a piston?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.24,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Steam valve"
+            },
+            {
+              "id": "cyl",
+              "kind": "piston",
+              "x": 0.4,
+              "y": 0.55,
+              "label": "Cylinder and piston",
+              "motion": "slide"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Separate condenser",
+              "ask": "Why was Watt's separate condenser so important?"
+            },
+            {
+              "id": "beam",
+              "kind": "lever",
+              "x": 0.56,
+              "y": 0.15,
+              "size": 1.4,
+              "label": "Rocking beam",
+              "motion": "swing",
+              "ask": "What did the beam do in a steam engine?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Sun and planet gear",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "gov",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.16,
+              "size": 0.6,
+              "label": "Centrifugal governor",
+              "motion": "swing",
+              "ask": "What does a steam engine governor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "valve",
+              "to": "cyl",
+              "kind": "fluid"
+            },
+            {
+              "from": "cyl",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cyl",
+              "to": "beam",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "beam",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "fly",
+              "kind": "energy",
+              "label": "rotation"
+            },
+            {
+              "from": "fly",
+              "to": "gov",
+              "kind": "force"
+            },
+            {
+              "from": "gov",
+              "to": "valve",
+              "kind": "signal",
+              "label": "controls speed"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Older Newcomen engines cooled the steam inside the cylinder itself, wasting heat by chilling and reheating it every stroke. In 1765 James Watt realised he could condense the steam in a separate chamber, so the cylinder stayed hot.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.7,
+              "size": 1.2,
+              "label": "Boiler",
+              "motion": "pulse",
+              "ask": "How does steam push a piston?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.24,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Steam valve"
+            },
+            {
+              "id": "cyl",
+              "kind": "piston",
+              "x": 0.4,
+              "y": 0.55,
+              "label": "Cylinder and piston",
+              "motion": "slide"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Separate condenser",
+              "ask": "Why was Watt's separate condenser so important?"
+            },
+            {
+              "id": "beam",
+              "kind": "lever",
+              "x": 0.56,
+              "y": 0.15,
+              "size": 1.4,
+              "label": "Rocking beam",
+              "motion": "swing",
+              "ask": "What did the beam do in a steam engine?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Sun and planet gear",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "gov",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.16,
+              "size": 0.6,
+              "label": "Centrifugal governor",
+              "motion": "swing",
+              "ask": "What does a steam engine governor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "valve",
+              "to": "cyl",
+              "kind": "fluid"
+            },
+            {
+              "from": "cyl",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cyl",
+              "to": "beam",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "beam",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "fly",
+              "kind": "energy",
+              "label": "rotation"
+            },
+            {
+              "from": "fly",
+              "to": "gov",
+              "kind": "force"
+            },
+            {
+              "from": "gov",
+              "to": "valve",
+              "kind": "signal",
+              "label": "controls speed"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Steam pushes the piston, and a big rocking beam passes the motion on. Watt's sun and planet gears turned that rocking into rotation, spinning a heavy flywheel to drive factory machines.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.7,
+              "size": 1.2,
+              "label": "Boiler",
+              "motion": "pulse",
+              "ask": "How does steam push a piston?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.24,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Steam valve"
+            },
+            {
+              "id": "cyl",
+              "kind": "piston",
+              "x": 0.4,
+              "y": 0.55,
+              "label": "Cylinder and piston",
+              "motion": "slide"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Separate condenser",
+              "ask": "Why was Watt's separate condenser so important?"
+            },
+            {
+              "id": "beam",
+              "kind": "lever",
+              "x": 0.56,
+              "y": 0.15,
+              "size": 1.4,
+              "label": "Rocking beam",
+              "motion": "swing",
+              "ask": "What did the beam do in a steam engine?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Sun and planet gear",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "gov",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.16,
+              "size": 0.6,
+              "label": "Centrifugal governor",
+              "motion": "swing",
+              "ask": "What does a steam engine governor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "valve",
+              "to": "cyl",
+              "kind": "fluid"
+            },
+            {
+              "from": "cyl",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cyl",
+              "to": "beam",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "beam",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "fly",
+              "kind": "energy",
+              "label": "rotation"
+            },
+            {
+              "from": "fly",
+              "to": "gov",
+              "kind": "force"
+            },
+            {
+              "from": "gov",
+              "to": "valve",
+              "kind": "signal",
+              "label": "controls speed"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "A spinning governor with two heavy balls swung outwards as the engine sped up, closing the steam valve a little, and dropped inwards to open it again as it slowed. This kept the engine at a steady speed automatically.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.7,
+              "size": 1.2,
+              "label": "Boiler",
+              "motion": "pulse",
+              "ask": "How does steam push a piston?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.24,
+              "y": 0.38,
+              "size": 0.7,
+              "label": "Steam valve"
+            },
+            {
+              "id": "cyl",
+              "kind": "piston",
+              "x": 0.4,
+              "y": 0.55,
+              "label": "Cylinder and piston",
+              "motion": "slide"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Separate condenser",
+              "ask": "Why was Watt's separate condenser so important?"
+            },
+            {
+              "id": "beam",
+              "kind": "lever",
+              "x": 0.56,
+              "y": 0.15,
+              "size": 1.4,
+              "label": "Rocking beam",
+              "motion": "swing",
+              "ask": "What did the beam do in a steam engine?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Sun and planet gear",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "gov",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.16,
+              "size": 0.6,
+              "label": "Centrifugal governor",
+              "motion": "swing",
+              "ask": "What does a steam engine governor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "valve",
+              "to": "cyl",
+              "kind": "fluid"
+            },
+            {
+              "from": "cyl",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cyl",
+              "to": "beam",
+              "kind": "force",
+              "label": "push"
+            },
+            {
+              "from": "beam",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "fly",
+              "kind": "energy",
+              "label": "rotation"
+            },
+            {
+              "from": "fly",
+              "to": "gov",
+              "kind": "force"
+            },
+            {
+              "from": "gov",
+              "to": "valve",
+              "kind": "signal",
+              "label": "controls speed"
+            }
+          ],
+          "focus": 7
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does steam push a piston?",
+      "a": "Water turning to steam expands enormously, about 1,700 times. Let into a closed cylinder, the steam presses on the piston and pushes it along; then the steam is let out or condensed so the piston can return.",
+      "asks": [
+        "How does a steam engine make things move?"
+      ]
+    },
+    {
+      "q": "Why was Watt's separate condenser so important?",
+      "a": "It let the cylinder stay hot all the time while the steam was cooled elsewhere, so far less fuel was wasted reheating metal. Watt's engines used roughly a quarter of the coal of a Newcomen engine for the same work.",
+      "asks": [
+        "What did James Watt improve?"
+      ]
+    },
+    {
+      "q": "What did the beam do in a steam engine?",
+      "a": "The beam was a huge rocking lever on a pivot. One end was linked to the piston and the other to a pump or crank, carrying the force across.",
+      "asks": [
+        "What is a beam engine?"
+      ]
+    },
+    {
+      "q": "What does a steam engine governor do?",
+      "a": "It is a pair of heavy balls spun by the engine. If the engine speeds up, they fly outwards and close the steam valve a little; if it slows, they drop and open it, keeping the speed steady.",
+      "asks": [
+        "How did steam engines control their speed?"
+      ]
+    },
+    {
+      "q": "How efficient were early steam engines?",
+      "a": "Very inefficient. Newcomen engines turned only about 1 percent of the coal's energy into work, and Watt's best engines a few percent; modern steam turbines reach over 40 percent.",
+      "asks": [
+        "Were steam engines efficient?"
+      ]
+    }
+  ],
+  "facts": [
+    "James Watt patented his separate condenser in 1769.",
+    "The unit of power, the watt, is named after James Watt."
+  ],
+  "quiz": [
+    {
+      "say": "What problem did Watt's separate condenser solve?",
+      "show": "The separate condenser fixed…",
+      "options": [
+        {
+          "show": "The cylinder being cooled and reheated every stroke",
+          "say": "The cylinder being cooled and reheated every stroke"
+        },
+        {
+          "show": "The boiler being unable to make steam",
+          "say": "The boiler being unable to make steam"
+        },
+        {
+          "show": "The engine having no piston",
+          "say": "The engine having no piston"
+        }
+      ],
+      "answer": 0,
+      "why": "Condensing steam in a separate chamber kept the cylinder hot, saving the fuel that had been wasted reheating it.",
+      "wrong": {
+        "1": "Boilers made steam well; the waste happened in the cylinder.",
+        "2": "Earlier engines already had pistons."
+      }
+    }
+  ]
+}

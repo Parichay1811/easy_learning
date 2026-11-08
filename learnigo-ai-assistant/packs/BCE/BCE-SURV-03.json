@@ -1,0 +1,501 @@
+{
+  "id": "BCE-SURV-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Total stations: distance by light and coordinates by bearing",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-SURV — Surveying and geomatics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "total station",
+    "EDM",
+    "phase shift",
+    "slope distance",
+    "coordinates from bearing and distance",
+    "reflectorless"
+  ],
+  "examples": [
+    "How does a total station measure distance?",
+    "How do you convert slope distance to horizontal distance?",
+    "How do you calculate coordinates from bearing and distance?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "tel",
+          "kind": "pipe",
+          "x": 0.2,
+          "y": 0.3,
+          "label": "Telescope"
+        },
+        {
+          "id": "edm",
+          "kind": "bulb",
+          "x": 0.35,
+          "y": 0.3,
+          "label": "Infrared EDM",
+          "ask": "How does EDM measure distance?"
+        },
+        {
+          "id": "mot",
+          "kind": "motor",
+          "x": 0.2,
+          "y": 0.6,
+          "label": "Servo motors"
+        },
+        {
+          "id": "kb",
+          "kind": "box",
+          "x": 0.2,
+          "y": 0.85,
+          "label": "Keypad and memory",
+          "ask": "How do you calculate coordinates from a total station?"
+        },
+        {
+          "id": "pr",
+          "kind": "box",
+          "x": 0.88,
+          "y": 0.35,
+          "label": "Prism on pole"
+        }
+      ],
+      "links": [
+        {
+          "from": "edm",
+          "to": "pr",
+          "kind": "signal",
+          "label": "Light out"
+        },
+        {
+          "from": "pr",
+          "to": "edm",
+          "kind": "signal",
+          "label": "Light back"
+        },
+        {
+          "from": "mot",
+          "to": "tel",
+          "kind": "force"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "On a modern building site one surveyor can work alone: a robotic total station follows a prism on a pole, measuring angles and distances to the millimetre. It is a theodolite with a laser rangefinder and a computer inside. Here are its parts, with a beam of light going out to the prism and back.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Total stations: distance by light and coordinates by bearing"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tel",
+              "kind": "pipe",
+              "x": 0.2,
+              "y": 0.3,
+              "label": "Telescope"
+            },
+            {
+              "id": "edm",
+              "kind": "bulb",
+              "x": 0.35,
+              "y": 0.3,
+              "label": "Infrared EDM",
+              "ask": "How does EDM measure distance?"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.2,
+              "y": 0.6,
+              "label": "Servo motors"
+            },
+            {
+              "id": "kb",
+              "kind": "box",
+              "x": 0.2,
+              "y": 0.85,
+              "label": "Keypad and memory",
+              "ask": "How do you calculate coordinates from a total station?"
+            },
+            {
+              "id": "pr",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.35,
+              "label": "Prism on pole"
+            }
+          ],
+          "links": [
+            {
+              "from": "edm",
+              "to": "pr",
+              "kind": "signal",
+              "label": "Light out"
+            },
+            {
+              "from": "pr",
+              "to": "edm",
+              "kind": "signal",
+              "label": "Light back"
+            },
+            {
+              "from": "mot",
+              "to": "tel",
+              "kind": "force"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a total station on its tripod, sending its EDM beam to a reflector prism. It measures the angle and the distance in one go. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Total stations: distance by light and coordinates by bearing"
+        },
+        {
+          "op": "image",
+          "render": "total-station"
+        }
+      ]
+    },
+    {
+      "say": "How does light measure distance? The EDM sends out an infrared beam whose brightness rises and falls in a wave, here twenty metres long. Look at the two curves: the returning wave arrives a quarter of a wave behind. If the beam made fifteen whole waves plus that quarter on its round trip, the distance is three hundred and five metres over two: one hundred and fifty two point five.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Along the wave (m)",
+            "max": 40
+          },
+          "y": {
+            "label": "Signal",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "Sent wave",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "ask": "How does EDM measure distance?"
+            },
+            {
+              "label": "Returned wave",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -90,
+              "ask": "How does EDM measure distance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Sent peak"
+            },
+            {
+              "x": 10,
+              "label": "Returned peak"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "D = (n λ + Δλ) / 2 = (15 × 20 + 5) / 2 = 152.5 m"
+        }
+      ]
+    },
+    {
+      "say": "But how does it know there were fifteen whole waves? It repeats the trick with several different wavelengths, like checking a clock with hour and minute hands. The beam travels along a slope, though. A slope distance of a hundred and fifty point five seven three metres at five degrees up gives exactly a hundred and fifty metres flat and thirteen point one two metres of rise.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Along the wave (m)",
+            "max": 40
+          },
+          "y": {
+            "label": "Signal",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "Sent wave",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "ask": "How does EDM measure distance?"
+            },
+            {
+              "label": "Returned wave",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -90,
+              "ask": "How does EDM measure distance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Sent peak"
+            },
+            {
+              "x": 10,
+              "label": "Returned peak"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "H = S cos 5° = 150.573 × 0.99619 ≈ 150.000 m"
+        }
+      ]
+    },
+    {
+      "say": "Now the magic: coordinates. From station S at easting one thousand, northing two thousand, point P is a hundred and fifty metres away on a bearing of sixty degrees. East goes up by distance times sine of the bearing, a hundred and twenty nine point nine; north by distance times cosine, seventy five. Which way would P move if the bearing were ninety degrees?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": 980,
+            "max": 1150
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": 1980,
+            "max": 2150
+          },
+          "curves": [
+            {
+              "label": "Bearing 60°, 150 m",
+              "type": "points",
+              "points": [
+                [
+                  1000,
+                  2000
+                ],
+                [
+                  1129.904,
+                  2075
+                ]
+              ],
+              "ask": "How do you calculate coordinates from a total station?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1000,
+              "label": "Station S"
+            },
+            {
+              "x": 1129.9,
+              "label": "Point P"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "E = 1000 + 150 sin 60° = 1129.904 m"
+        },
+        {
+          "op": "note",
+          "text": "N = 2000 + 150 cos 60° = 2075.000 m"
+        }
+      ]
+    },
+    {
+      "say": "Due east! Run it backwards and you get stakeout: type in the design coordinates of a column and the total station guides the pole onto the exact spot. Reflectorless models even bounce the beam off a wall. Brilliant! Challenge: from a station at five hundred, five hundred, what are the coordinates of a point a hundred metres away at bearing ninety degrees?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tel",
+              "kind": "pipe",
+              "x": 0.2,
+              "y": 0.3,
+              "label": "Telescope"
+            },
+            {
+              "id": "edm",
+              "kind": "bulb",
+              "x": 0.35,
+              "y": 0.3,
+              "label": "Infrared EDM",
+              "ask": "How does EDM measure distance?"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.2,
+              "y": 0.6,
+              "label": "Servo motors"
+            },
+            {
+              "id": "kb",
+              "kind": "box",
+              "x": 0.2,
+              "y": 0.85,
+              "label": "Keypad and memory",
+              "ask": "How do you calculate coordinates from a total station?"
+            },
+            {
+              "id": "pr",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.35,
+              "label": "Prism on pole"
+            }
+          ],
+          "links": [
+            {
+              "from": "edm",
+              "to": "pr",
+              "kind": "signal",
+              "label": "Light out"
+            },
+            {
+              "from": "pr",
+              "to": "edm",
+              "kind": "signal",
+              "label": "Light back"
+            },
+            {
+              "from": "mot",
+              "to": "tel",
+              "kind": "force"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a total station?",
+      "a": "An electronic theodolite combined with an electronic distance meter and a computer. It measures horizontal and vertical angles and slope distance, then works out coordinates and heights.",
+      "asks": [
+        "Total station vs theodolite"
+      ]
+    },
+    {
+      "q": "How does EDM measure distance?",
+      "a": "Electronic distance measurement sends a modulated light beam to a prism and compares the phase of the returning wave with the outgoing one. Several modulation wavelengths fix the whole number of waves.",
+      "asks": [
+        "Phase shift distance measurement",
+        "How does a total station measure distance?"
+      ]
+    },
+    {
+      "q": "How do you convert slope distance to horizontal distance?",
+      "a": "Multiply the slope distance by the cosine of the vertical angle. The height difference is the slope distance times the sine. 150.573 metres at 5 degrees gives 150.000 metres and 13.12 metres.",
+      "asks": [
+        "Slope to horizontal distance"
+      ]
+    },
+    {
+      "q": "How do you calculate coordinates from a total station?",
+      "a": "Add distance times the sine of the bearing to the station easting, and distance times the cosine to the northing. 150 metres at 60 degrees adds 129.904 east and 75.000 north.",
+      "asks": [
+        "Coordinates from bearing and distance",
+        "Polar to rectangular"
+      ]
+    },
+    {
+      "q": "What is a reflectorless total station?",
+      "a": "One whose laser can measure to an ordinary surface such as a wall or rock face without a prism, useful for unreachable or dangerous points.",
+      "asks": [
+        "Prismless EDM"
+      ]
+    }
+  ],
+  "facts": [
+    "Erik Bergstrand in Sweden developed the Geodimeter, an early electro-optical distance meter, in the late 1940s.",
+    "A typical total station EDM is accurate to about ±(2 mm + 2 mm per km)."
+  ],
+  "quiz": [
+    {
+      "say": "A point is 200 metres from a station at zero, zero on a bearing of 30 degrees. What are its easting and northing?",
+      "show": "A point is 200 m from (0, 0) on a bearing of 30°. Its coordinates (E, N)?",
+      "options": [
+        {
+          "show": "(100.0, 173.2)",
+          "say": "easting 100, northing 173.2"
+        },
+        {
+          "show": "(173.2, 100.0)",
+          "say": "easting 173.2, northing 100"
+        },
+        {
+          "show": "(200.0, 30.0)",
+          "say": "easting 200, northing 30"
+        }
+      ],
+      "answer": 0,
+      "why": "E = 200 sin 30° = 100.0; N = 200 cos 30° = 173.2.",
+      "wrong": {
+        "1": "That swaps sine and cosine: bearings are measured from north.",
+        "2": "That mixes the distance and angle as coordinates."
+      }
+    },
+    {
+      "say": "A total station EDM finds distance by…",
+      "show": "A total station EDM finds distance by…",
+      "options": [
+        {
+          "show": "Comparing the phase of returning light",
+          "say": "Comparing the phase of returning light"
+        },
+        {
+          "show": "Counting footsteps",
+          "say": "Counting footsteps"
+        },
+        {
+          "show": "Measuring sound echoes",
+          "say": "Measuring sound echoes"
+        }
+      ],
+      "answer": 0,
+      "why": "The phase shift between sent and returned modulated light gives the distance.",
+      "wrong": {
+        "1": "Pacing is a rough field method, not EDM.",
+        "2": "Sound is far too slow and unsteady in air for millimetre work."
+      }
+    }
+  ]
+}

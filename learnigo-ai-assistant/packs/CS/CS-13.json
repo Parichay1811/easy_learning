@@ -1,0 +1,272 @@
+{
+  "id": "CS-13",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Fetch–decode–execute cycle",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "cpu",
+    "fetch cycle",
+    "decode cycle",
+    "execute cycle",
+    "registers",
+    "buses"
+  ],
+  "examples": [
+    "What is the difference between a register and a memory location?",
+    "How does the CPU know what instruction to run next?",
+    "If the clock speed is high, does the CPU run faster?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn how the computer brain works. It follows a cycle to run programs.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Fetch–decode–execute cycle"
+        },
+        {
+          "op": "flow",
+          "items": [
+            "Fetch: Get the instruction",
+            "Decode: Figure out the instruction",
+            "Execute: Carry out the instruction"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Fetch-Decode-Execute Cycle",
+          "at": "cycle"
+        }
+      ]
+    },
+    {
+      "say": "Registers are small storage areas inside the CPU. They hold data right now. Think of them as the CPU's quick scratchpad.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Registers: Fast CPU storage",
+          "at": "registers"
+        }
+      ]
+    },
+    {
+      "say": "Buses are like electrical pathways connecting parts. They carry data between components. Think of them as the computer's roads.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Buses: Data pathways",
+          "at": "buses"
+        }
+      ]
+    },
+    {
+      "say": "The fetch cycle gets the next instruction from memory. The program counter tells the address. The data bus carries the instruction.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "PC sends address to MAR",
+            "Memory sends instruction to MDR",
+            "MDR holds the instruction"
+          ],
+          "at": "address"
+        },
+        {
+          "op": "text",
+          "text": "Fetch: PC → MAR → Memory",
+          "at": "fetch"
+        }
+      ]
+    },
+    {
+      "say": "The decode cycle translates the instruction. The control unit figures out what the instruction means. It prepares the necessary components.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Instruction moves to Control Unit",
+            "Control Unit reads opcode",
+            "Control Unit sends control signals"
+          ],
+          "at": "instruction"
+        },
+        {
+          "op": "text",
+          "text": "Decode: Control Unit interprets instruction",
+          "at": "decode"
+        }
+      ]
+    },
+    {
+      "say": "The execute cycle performs the action. The CPU uses the data and registers to calculate or move data. This is where the work happens.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Data moves to ALU",
+            "ALU performs operation (e.g., addition)",
+            "Result is stored back in a register"
+          ],
+          "at": "data"
+        },
+        {
+          "op": "text",
+          "text": "Execute: ALU performs calculation",
+          "at": "execute"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the main difference between the fetch and decode stages?",
+      "a": "Fetch gets the instruction from memory using an address. Decode figures out what that instruction actually means to the CPU.",
+      "asks": [
+        "Does fetch just get the bits?",
+        "What happens after fetching the instruction?"
+      ]
+    },
+    {
+      "q": "Do all instructions use the ALU?",
+      "a": "No, some instructions only move data or change addresses. The ALU is only needed for calculations like adding or subtracting numbers.",
+      "asks": [
+        "When is the ALU not used?",
+        "Does every cycle need calculation?"
+      ]
+    },
+    {
+      "q": "How does the CPU know which instruction to fetch next?",
+      "a": "The program counter register keeps track of the memory address of the next instruction. It automatically updates after each fetch.",
+      "asks": [
+        "What keeps track of the next step?",
+        "Does the PC change by one every time?"
+      ]
+    },
+    {
+      "q": "What is the role of the buses in this cycle?",
+      "a": "Buses act as the physical connections. They carry the address signals and the actual data between the CPU and main memory.",
+      "asks": [
+        "Are buses like wires?",
+        "What travels on the buses?"
+      ]
+    },
+    {
+      "q": "Does CPU speed only depend on clock speed?",
+      "a": "No, performance also depends on how many registers and how fast the internal components work together.",
+      "asks": [
+        "Is clock speed everything?",
+        "What affects processing speed besides clock speed?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Program Counter holds the memory address of the next instruction.",
+    "The Arithmetic Logic Unit performs calculations and comparisons.",
+    "The data bus transfers the actual data or instruction bits.",
+    "The cycle repeats continuously while the computer is running."
+  ],
+  "quiz": [
+    {
+      "say": "If the CPU needs to add two numbers, which stage is primarily responsible for the calculation?",
+      "show": "ALU performs addition",
+      "options": [
+        {
+          "show": "Fetch cycle",
+          "say": "Fetch cycle"
+        },
+        {
+          "show": "Decode cycle",
+          "say": "Decode cycle"
+        },
+        {
+          "show": "Register write",
+          "say": "Register write"
+        },
+        {
+          "show": "Execute cycle",
+          "say": "Execute cycle"
+        }
+      ],
+      "answer": 3,
+      "why": "The execute cycle uses the ALU to perform the required arithmetic operation.",
+      "wrong": {
+        "0": "This stage only retrieves the instruction, not the data for calculation.",
+        "1": "This stage only interprets what the instruction means, it does no math.",
+        "2": "Writing to a register is storage, not the actual calculation itself."
+      }
+    },
+    {
+      "say": "What component holds the address of the instruction to be fetched next?",
+      "show": "Program Counter (PC)",
+      "options": [
+        {
+          "show": "Memory Address Register (MAR)",
+          "say": "Memory Address Register (MAR)"
+        },
+        {
+          "show": "Data Bus",
+          "say": "Data Bus"
+        },
+        {
+          "show": "Control Unit",
+          "say": "Control Unit"
+        },
+        {
+          "show": "Program Counter",
+          "say": "Program Counter"
+        }
+      ],
+      "answer": 3,
+      "why": "The Program Counter is specifically designed to point to the next sequential instruction address.",
+      "wrong": {
+        "0": "The MAR holds the address currently being accessed, not necessarily the next one.",
+        "1": "The Data Bus carries the data, it does not store the address.",
+        "2": "The Control Unit manages the cycle, it does not store the next address."
+      }
+    },
+    {
+      "say": "If the data needs to move from main memory to the CPU, which bus is mainly used to carry the information?",
+      "show": "Data Bus",
+      "options": [
+        {
+          "show": "Internal Bus",
+          "say": "Internal Bus"
+        },
+        {
+          "show": "Data Bus",
+          "say": "Data Bus"
+        },
+        {
+          "show": "Address Bus",
+          "say": "Address Bus"
+        },
+        {
+          "show": "Control Bus",
+          "say": "Control Bus"
+        }
+      ],
+      "answer": 1,
+      "why": "The data bus is the pathway responsible for moving the actual bits of information.",
+      "wrong": {
+        "0": "This is too general; the Data Bus is the specific pathway for data transfer.",
+        "2": "The address bus only carries the location or address, not the data itself.",
+        "3": "The control bus carries timing and control signals, not the bulk data."
+      }
+    }
+  ]
+}

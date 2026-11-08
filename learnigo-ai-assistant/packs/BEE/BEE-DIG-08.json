@@ -1,0 +1,966 @@
+{
+  "id": "BEE-DIG-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Counters and shift registers: flip-flops in a row that count and shift",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "binary counter",
+    "frequency divider",
+    "shift register",
+    "serial to parallel",
+    "modulus counter"
+  ],
+  "examples": [
+    "How does a 2-bit binary counter work?",
+    "How does a counter divide frequency?",
+    "What is a shift register used for?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (clock periods)",
+        "max": 4
+      },
+      "y": {
+        "label": "Logic level",
+        "min": -0.5,
+        "max": 5.5
+      },
+      "curves": [
+        {
+          "label": "Clock",
+          "type": "points",
+          "points": [
+            [
+              0,
+              4
+            ],
+            [
+              0.5,
+              4
+            ],
+            [
+              0.5,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1.5,
+              4
+            ],
+            [
+              1.5,
+              5
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2.5,
+              4
+            ],
+            [
+              2.5,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3.5,
+              4
+            ],
+            [
+              3.5,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "ask": "What is a modulus counter?"
+        },
+        {
+          "label": "Q0 (bit 0)",
+          "type": "points",
+          "points": [
+            [
+              0,
+              2
+            ],
+            [
+              0.5,
+              2
+            ],
+            [
+              0.5,
+              3
+            ],
+            [
+              1.5,
+              3
+            ],
+            [
+              1.5,
+              2
+            ],
+            [
+              2.5,
+              2
+            ],
+            [
+              2.5,
+              3
+            ],
+            [
+              3.5,
+              3
+            ],
+            [
+              3.5,
+              2
+            ],
+            [
+              4,
+              2
+            ]
+          ],
+          "ask": "How does a counter divide frequency?"
+        },
+        {
+          "label": "Q1 (bit 1)",
+          "type": "points",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              1.5,
+              0
+            ],
+            [
+              1.5,
+              1
+            ],
+            [
+              3.5,
+              1
+            ],
+            [
+              3.5,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          "ask": "How does a 2-bit binary counter work?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 1,
+          "label": "Count 1 (01)"
+        },
+        {
+          "x": 2,
+          "label": "Count 2 (10)"
+        },
+        {
+          "x": 3,
+          "label": "Count 3 (11)"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Inside a quartz watch, a crystal vibrates 32,768 times a second, and a chain of 15 flip-flops halves that again and again until exactly one tick per second comes out. That chain is a counter. On the board, a clock and two flip-flop outputs, Q0 and Q1, show a 2-bit counter at work.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Counters and shift registers: flip-flops in a row that count and shift"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (clock periods)",
+            "max": 4
+          },
+          "y": {
+            "label": "Logic level",
+            "min": -0.5,
+            "max": 5.5
+          },
+          "curves": [
+            {
+              "label": "Clock",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  1.5,
+                  4
+                ],
+                [
+                  1.5,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  5
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3.5,
+                  4
+                ],
+                [
+                  3.5,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ]
+              ],
+              "ask": "What is a modulus counter?"
+            },
+            {
+              "label": "Q0 (bit 0)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  0.5,
+                  2
+                ],
+                [
+                  0.5,
+                  3
+                ],
+                [
+                  1.5,
+                  3
+                ],
+                [
+                  1.5,
+                  2
+                ],
+                [
+                  2.5,
+                  2
+                ],
+                [
+                  2.5,
+                  3
+                ],
+                [
+                  3.5,
+                  3
+                ],
+                [
+                  3.5,
+                  2
+                ],
+                [
+                  4,
+                  2
+                ]
+              ],
+              "ask": "How does a counter divide frequency?"
+            },
+            {
+              "label": "Q1 (bit 1)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1.5,
+                  0
+                ],
+                [
+                  1.5,
+                  1
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  4,
+                  0
+                ]
+              ],
+              "ask": "How does a 2-bit binary counter work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Count 1 (01)"
+            },
+            {
+              "x": 2,
+              "label": "Count 2 (10)"
+            },
+            {
+              "x": 3,
+              "label": "Count 3 (11)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at Q0. It toggles, flipping from 0 to 1 or back, on every rising clock edge. So it makes one full cycle for every two clock cycles: half the frequency. Each flip-flop in a chain halves it again, which is how 15 of them turn 32,768 hertz into 1 hertz. How many halvings turn 16 megahertz into 1 megahertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (clock periods)",
+            "max": 4
+          },
+          "y": {
+            "label": "Logic level",
+            "min": -0.5,
+            "max": 5.5
+          },
+          "curves": [
+            {
+              "label": "Clock",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  1.5,
+                  4
+                ],
+                [
+                  1.5,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  5
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3.5,
+                  4
+                ],
+                [
+                  3.5,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ]
+              ],
+              "ask": "What is a modulus counter?"
+            },
+            {
+              "label": "Q0 (bit 0)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  0.5,
+                  2
+                ],
+                [
+                  0.5,
+                  3
+                ],
+                [
+                  1.5,
+                  3
+                ],
+                [
+                  1.5,
+                  2
+                ],
+                [
+                  2.5,
+                  2
+                ],
+                [
+                  2.5,
+                  3
+                ],
+                [
+                  3.5,
+                  3
+                ],
+                [
+                  3.5,
+                  2
+                ],
+                [
+                  4,
+                  2
+                ]
+              ],
+              "ask": "How does a counter divide frequency?"
+            },
+            {
+              "label": "Q1 (bit 1)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1.5,
+                  0
+                ],
+                [
+                  1.5,
+                  1
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  4,
+                  0
+                ]
+              ],
+              "ask": "How does a 2-bit binary counter work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Count 1 (01)"
+            },
+            {
+              "x": 2,
+              "label": "Count 2 (10)"
+            },
+            {
+              "x": 3,
+              "label": "Count 3 (11)"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "f(Q0) = f(clock) / 2"
+        }
+      ]
+    },
+    {
+      "say": "Now read Q1 and Q0 together as a binary number at each mark. After the first edge it is 01, one. Then 10, two. Then 11, three. Q1 toggles only when Q0 falls from 1 to 0, just like a carry. On the next edge it rolls over to 00. Two flip-flops give four states: a mod-4 counter. How many states do 8 flip-flops give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (clock periods)",
+            "max": 4
+          },
+          "y": {
+            "label": "Logic level",
+            "min": -0.5,
+            "max": 5.5
+          },
+          "curves": [
+            {
+              "label": "Clock",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  1.5,
+                  4
+                ],
+                [
+                  1.5,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  5
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3.5,
+                  4
+                ],
+                [
+                  3.5,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ]
+              ],
+              "ask": "What is a modulus counter?"
+            },
+            {
+              "label": "Q0 (bit 0)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  0.5,
+                  2
+                ],
+                [
+                  0.5,
+                  3
+                ],
+                [
+                  1.5,
+                  3
+                ],
+                [
+                  1.5,
+                  2
+                ],
+                [
+                  2.5,
+                  2
+                ],
+                [
+                  2.5,
+                  3
+                ],
+                [
+                  3.5,
+                  3
+                ],
+                [
+                  3.5,
+                  2
+                ],
+                [
+                  4,
+                  2
+                ]
+              ],
+              "ask": "How does a counter divide frequency?"
+            },
+            {
+              "label": "Q1 (bit 1)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1.5,
+                  0
+                ],
+                [
+                  1.5,
+                  1
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  4,
+                  0
+                ]
+              ],
+              "ask": "How does a 2-bit binary counter work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Count 1 (01)"
+            },
+            {
+              "x": 2,
+              "label": "Count 2 (10)"
+            },
+            {
+              "x": 3,
+              "label": "Count 3 (11)"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Q1Q0: 00 → 01 → 10 → 11 → 00"
+        }
+      ]
+    },
+    {
+      "say": "Same flip-flops, new wiring: a shift register. Each flip-flop passes its bit to the next on every clock edge, so data marches along the chain. Send in 1, 0, 1, 1 one bit at a time, and after four edges all four bits sit side by side, ready to read at once. That is serial in, parallel out. Where might a chip need that?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Data in 1011",
+              "icon": "mail",
+              "note": "One bit arrives on each clock edge",
+              "ask": "What is serial in, parallel out?"
+            },
+            {
+              "label": "Flip-flop 1",
+              "icon": "chip",
+              "note": "Holds the newest bit"
+            },
+            {
+              "label": "Flip-flop 2",
+              "icon": "chip",
+              "note": "Takes the bit from flip-flop 1"
+            },
+            {
+              "label": "Flip-flop 3",
+              "icon": "chip",
+              "note": "Takes the bit from flip-flop 2"
+            },
+            {
+              "label": "Flip-flop 4",
+              "icon": "chip",
+              "note": "Holds the oldest bit"
+            },
+            {
+              "label": "Parallel out",
+              "icon": "computer",
+              "note": "After 4 clocks, all 4 bits at once",
+              "ask": "What is a shift register used for?"
+            }
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "4 clocks: serial 1, 0, 1, 1 → parallel 1011"
+        }
+      ]
+    },
+    {
+      "say": "A serial port works exactly this way: bits arrive one after another on a single wire, and a shift register turns them back into bytes. LED display drivers do the reverse. Excellent! Challenge: a 3-bit counter starts at 000. What does it read after 10 clock edges?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Data in 1011",
+              "icon": "mail",
+              "note": "One bit arrives on each clock edge",
+              "ask": "What is serial in, parallel out?"
+            },
+            {
+              "label": "Flip-flop 1",
+              "icon": "chip",
+              "note": "Holds the newest bit"
+            },
+            {
+              "label": "Flip-flop 2",
+              "icon": "chip",
+              "note": "Takes the bit from flip-flop 1"
+            },
+            {
+              "label": "Flip-flop 3",
+              "icon": "chip",
+              "note": "Takes the bit from flip-flop 2"
+            },
+            {
+              "label": "Flip-flop 4",
+              "icon": "chip",
+              "note": "Holds the oldest bit"
+            },
+            {
+              "label": "Parallel out",
+              "icon": "computer",
+              "note": "After 4 clocks, all 4 bits at once",
+              "ask": "What is a shift register used for?"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "n flip-flops: 2ⁿ states; frequency ÷ 2ⁿ"
+        },
+        {
+          "op": "note",
+          "text": "Serial ports, SPI links and LED drivers all use shift registers"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a 2-bit binary counter work?",
+      "a": "Two flip-flops count clock edges. Q0 toggles on every edge and Q1 toggles whenever Q0 falls from 1 to 0, so together they step through 00, 01, 10, 11 and roll over to 00.",
+      "asks": [
+        "How do flip-flops count?"
+      ]
+    },
+    {
+      "q": "How does a counter divide frequency?",
+      "a": "Each toggling flip-flop changes state once per input cycle, so its output completes one cycle for every two input cycles. A chain of n flip-flops divides the frequency by 2 to the n.",
+      "asks": [
+        "What is a frequency divider?"
+      ]
+    },
+    {
+      "q": "What is a modulus counter?",
+      "a": "The modulus is the number of states a counter goes through before repeating. n flip-flops give up to 2 to the n states, and extra logic can reset the count early, as in a mod-10 decade counter.",
+      "asks": [
+        "What does mod-4 counter mean?"
+      ]
+    },
+    {
+      "q": "What is a shift register used for?",
+      "a": "It moves bits along a chain of flip-flops, one place per clock edge. It converts serial data to parallel and back, delays signals, and drives long rows of LEDs from a few pins.",
+      "asks": [
+        "What does a shift register do?"
+      ]
+    },
+    {
+      "q": "What is serial in, parallel out?",
+      "a": "Bits enter one at a time on a single wire, and after as many clock edges as there are flip-flops, all of them can be read together on separate outputs. It is how serial links rebuild bytes.",
+      "asks": [
+        "What is SIPO?"
+      ]
+    }
+  ],
+  "facts": [
+    "A quartz watch crystal runs at 32,768 Hz, which is 2¹⁵, so 15 halvings give exactly 1 Hz.",
+    "The 74HC595 is a widely used 8-bit serial-in, parallel-out shift register.",
+    "An n-bit binary counter has 2ⁿ states, from 0 to 2ⁿ − 1."
+  ],
+  "quiz": [
+    {
+      "say": "A 3-bit counter starts at 000. What does it show after 10 clock edges?",
+      "show": "A 3-bit counter starts at 000. What does it show after 10 clock edges?",
+      "options": [
+        {
+          "show": "010",
+          "say": "010"
+        },
+        {
+          "show": "101",
+          "say": "101"
+        },
+        {
+          "show": "000",
+          "say": "000"
+        }
+      ],
+      "answer": 0,
+      "why": "Three bits count 0 to 7 and roll over, so after 10 edges it shows 10 minus 8, which is 2, binary 010.",
+      "wrong": {
+        "1": "101 is five; that would be after 5 or 13 edges.",
+        "2": "It returns to 000 after 8 edges, not 10."
+      }
+    },
+    {
+      "say": "A 16 megahertz clock drives a chain of 4 toggle flip-flops. What frequency comes out of the last one?",
+      "show": "A 16 MHz clock drives a chain of 4 toggle flip-flops. What frequency comes out of the last one?",
+      "options": [
+        {
+          "show": "1 MHz",
+          "say": "1 megahertz"
+        },
+        {
+          "show": "4 MHz",
+          "say": "4 megahertz"
+        },
+        {
+          "show": "64 MHz",
+          "say": "64 megahertz"
+        }
+      ],
+      "answer": 0,
+      "why": "Each stage halves it: 16 to 8 to 4 to 2 to 1 megahertz, since 2 to the 4 is 16.",
+      "wrong": {
+        "1": "That divides by 4, the number of flip-flops, instead of by 2 to the 4.",
+        "2": "Flip-flop dividers lower the frequency; they never multiply it."
+      }
+    }
+  ]
+}

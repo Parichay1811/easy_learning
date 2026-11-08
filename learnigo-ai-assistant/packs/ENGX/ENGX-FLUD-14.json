@@ -1,0 +1,634 @@
+{
+  "id": "ENGX-FLUD-14",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an air conditioner cools a room",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "air conditioner",
+    "split air conditioner",
+    "indoor unit",
+    "outdoor unit",
+    "refrigerant"
+  ],
+  "examples": [
+    "How does an air conditioner make cold air?",
+    "Why does an air conditioner blow hot air outside?",
+    "Why does an air conditioner drip water?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "indoorfan",
+          "kind": "fan",
+          "x": 0.1,
+          "y": 0.3,
+          "size": 0.9,
+          "label": "Indoor fan",
+          "motion": "spin"
+        },
+        {
+          "id": "evap",
+          "kind": "coil",
+          "x": 0.3,
+          "y": 0.3,
+          "size": 1,
+          "label": "Cold indoor coil",
+          "motion": "flow",
+          "ask": "How does an air conditioner make cold air?"
+        },
+        {
+          "id": "comp",
+          "kind": "motor",
+          "x": 0.6,
+          "y": 0.7,
+          "size": 1,
+          "label": "Compressor",
+          "motion": "pulse",
+          "ask": "What does the compressor do?"
+        },
+        {
+          "id": "cond",
+          "kind": "coil",
+          "x": 0.72,
+          "y": 0.3,
+          "size": 1,
+          "label": "Hot outdoor coil",
+          "motion": "flow",
+          "ask": "Why does an air conditioner blow hot air outside?"
+        },
+        {
+          "id": "outfan",
+          "kind": "fan",
+          "x": 0.92,
+          "y": 0.3,
+          "size": 0.9,
+          "label": "Outdoor fan",
+          "motion": "spin"
+        },
+        {
+          "id": "exp",
+          "kind": "valve",
+          "x": 0.3,
+          "y": 0.75,
+          "size": 0.8,
+          "label": "Expansion valve",
+          "motion": "none"
+        }
+      ],
+      "links": [
+        {
+          "from": "indoorfan",
+          "to": "evap",
+          "kind": "heat",
+          "label": "room heat"
+        },
+        {
+          "from": "evap",
+          "to": "comp",
+          "kind": "fluid",
+          "label": "warm gas"
+        },
+        {
+          "from": "comp",
+          "to": "cond",
+          "kind": "fluid",
+          "label": "hot gas"
+        },
+        {
+          "from": "cond",
+          "to": "outfan",
+          "kind": "heat",
+          "label": "heat dumped outside"
+        },
+        {
+          "from": "cond",
+          "to": "exp",
+          "kind": "fluid",
+          "label": "liquid"
+        },
+        {
+          "from": "exp",
+          "to": "evap",
+          "kind": "fluid",
+          "label": "very cold"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An air conditioner does not make cold. It moves heat from inside your room to the outside, using a special fluid called a refrigerant that flows round sealed pipes.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an air conditioner cools a room"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "indoorfan",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Indoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "evap",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1,
+              "label": "Cold indoor coil",
+              "motion": "flow",
+              "ask": "How does an air conditioner make cold air?"
+            },
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.7,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "pulse",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "cond",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "size": 1,
+              "label": "Hot outdoor coil",
+              "motion": "flow",
+              "ask": "Why does an air conditioner blow hot air outside?"
+            },
+            {
+              "id": "outfan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Outdoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "exp",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Expansion valve",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "indoorfan",
+              "to": "evap",
+              "kind": "heat",
+              "label": "room heat"
+            },
+            {
+              "from": "evap",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "warm gas"
+            },
+            {
+              "from": "comp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "hot gas"
+            },
+            {
+              "from": "cond",
+              "to": "outfan",
+              "kind": "heat",
+              "label": "heat dumped outside"
+            },
+            {
+              "from": "cond",
+              "to": "exp",
+              "kind": "fluid",
+              "label": "liquid"
+            },
+            {
+              "from": "exp",
+              "to": "evap",
+              "kind": "fluid",
+              "label": "very cold"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Indoors, a fan blows room air over a very cold coil. The refrigerant inside boils into a gas as it soaks up heat, so the air comes out cooler, and water from the air drips off the coil.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "indoorfan",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Indoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "evap",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1,
+              "label": "Cold indoor coil",
+              "motion": "flow",
+              "ask": "How does an air conditioner make cold air?"
+            },
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.7,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "pulse",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "cond",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "size": 1,
+              "label": "Hot outdoor coil",
+              "motion": "flow",
+              "ask": "Why does an air conditioner blow hot air outside?"
+            },
+            {
+              "id": "outfan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Outdoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "exp",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Expansion valve",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "indoorfan",
+              "to": "evap",
+              "kind": "heat",
+              "label": "room heat"
+            },
+            {
+              "from": "evap",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "warm gas"
+            },
+            {
+              "from": "comp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "hot gas"
+            },
+            {
+              "from": "cond",
+              "to": "outfan",
+              "kind": "heat",
+              "label": "heat dumped outside"
+            },
+            {
+              "from": "cond",
+              "to": "exp",
+              "kind": "fluid",
+              "label": "liquid"
+            },
+            {
+              "from": "exp",
+              "to": "evap",
+              "kind": "fluid",
+              "label": "very cold"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The warm gas travels outside to the compressor, which squeezes it so it becomes very hot, hotter than the outdoor air.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "indoorfan",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Indoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "evap",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1,
+              "label": "Cold indoor coil",
+              "motion": "flow",
+              "ask": "How does an air conditioner make cold air?"
+            },
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.7,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "pulse",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "cond",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "size": 1,
+              "label": "Hot outdoor coil",
+              "motion": "flow",
+              "ask": "Why does an air conditioner blow hot air outside?"
+            },
+            {
+              "id": "outfan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Outdoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "exp",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Expansion valve",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "indoorfan",
+              "to": "evap",
+              "kind": "heat",
+              "label": "room heat"
+            },
+            {
+              "from": "evap",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "warm gas"
+            },
+            {
+              "from": "comp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "hot gas"
+            },
+            {
+              "from": "cond",
+              "to": "outfan",
+              "kind": "heat",
+              "label": "heat dumped outside"
+            },
+            {
+              "from": "cond",
+              "to": "exp",
+              "kind": "fluid",
+              "label": "liquid"
+            },
+            {
+              "from": "exp",
+              "to": "evap",
+              "kind": "fluid",
+              "label": "very cold"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "In the outdoor coil the hot gas gives its heat to the outside air and turns back into a liquid. It then passes through an expansion valve, cools sharply, and goes back indoors to collect more heat.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "indoorfan",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Indoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "evap",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1,
+              "label": "Cold indoor coil",
+              "motion": "flow",
+              "ask": "How does an air conditioner make cold air?"
+            },
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.7,
+              "size": 1,
+              "label": "Compressor",
+              "motion": "pulse",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "cond",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "size": 1,
+              "label": "Hot outdoor coil",
+              "motion": "flow",
+              "ask": "Why does an air conditioner blow hot air outside?"
+            },
+            {
+              "id": "outfan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Outdoor fan",
+              "motion": "spin"
+            },
+            {
+              "id": "exp",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Expansion valve",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "indoorfan",
+              "to": "evap",
+              "kind": "heat",
+              "label": "room heat"
+            },
+            {
+              "from": "evap",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "warm gas"
+            },
+            {
+              "from": "comp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "hot gas"
+            },
+            {
+              "from": "cond",
+              "to": "outfan",
+              "kind": "heat",
+              "label": "heat dumped outside"
+            },
+            {
+              "from": "cond",
+              "to": "exp",
+              "kind": "fluid",
+              "label": "liquid"
+            },
+            {
+              "from": "exp",
+              "to": "evap",
+              "kind": "fluid",
+              "label": "very cold"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does an air conditioner make cold air?",
+      "a": "It blows room air over a cold coil where refrigerant is boiling. Boiling takes in heat, so the coil pulls heat out of the air, and cooler air comes out.",
+      "asks": [
+        "Where does the cold come from in an air conditioner?"
+      ]
+    },
+    {
+      "q": "What does the compressor do?",
+      "a": "The compressor squeezes the refrigerant gas, which makes it much hotter. Being hotter than outside air lets it dump the heat outdoors.",
+      "asks": [
+        "Why does an air conditioner need a compressor?"
+      ]
+    },
+    {
+      "q": "Why does an air conditioner blow hot air outside?",
+      "a": "That hot air is the heat taken from your room plus the energy the compressor used. The outdoor unit has to get rid of it.",
+      "asks": [
+        "Why is the outdoor unit hot?"
+      ]
+    },
+    {
+      "q": "Why does an air conditioner drip water?",
+      "a": "When warm, humid room air touches the cold coil, its water vapour condenses into droplets, just like on a cold drink. A pipe drains that water away.",
+      "asks": [
+        "Where does the water from an air conditioner come from?"
+      ]
+    },
+    {
+      "q": "Is an air conditioner like a fridge?",
+      "a": "Yes. Both use the same refrigeration cycle to pump heat from a cold place to a warmer one. A fridge cools a small box; an air conditioner cools a room.",
+      "asks": [
+        "How is an air conditioner similar to a fridge?"
+      ]
+    }
+  ],
+  "facts": [
+    "Willis Carrier designed one of the first modern air-conditioning systems in 1902, to control humidity in a printing plant.",
+    "Air conditioners also dry the air, because water vapour condenses on the cold indoor coil."
+  ],
+  "quiz": [
+    {
+      "say": "Where does the heat from your room go when the air conditioner runs?",
+      "show": "Where does the heat from your room go when the air conditioner runs?",
+      "options": [
+        {
+          "show": "Outside, through the outdoor unit",
+          "say": "Outside, through the outdoor unit"
+        },
+        {
+          "show": "It is destroyed",
+          "say": "It is destroyed"
+        },
+        {
+          "show": "Into the walls",
+          "say": "Into the walls"
+        }
+      ],
+      "answer": 0,
+      "why": "The refrigerant carries the heat outside, where the outdoor coil and fan release it.",
+      "wrong": {
+        "1": "Energy cannot be destroyed; it can only be moved.",
+        "2": "The heat is carried by the refrigerant to the outside unit, not stored in walls."
+      }
+    }
+  ]
+}

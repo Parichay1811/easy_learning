@@ -1,0 +1,611 @@
+{
+  "id": "BCE-TRAN-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Traffic flow theory: speed, density, flow and road capacity",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-TRAN — Transportation engineering",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "traffic flow",
+    "traffic density",
+    "Greenshields model",
+    "road capacity",
+    "jam density",
+    "fundamental diagram"
+  ],
+  "examples": [
+    "What is the relationship between speed, flow and density?",
+    "How do you find the capacity of a road lane?",
+    "Why do traffic jams form for no reason?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Density (veh/km)",
+        "max": 100
+      },
+      "y": {
+        "label": "Flow (veh/h)",
+        "max": 2400
+      },
+      "curves": [
+        {
+          "label": "Flow per lane",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              10,
+              810
+            ],
+            [
+              20,
+              1440
+            ],
+            [
+              30,
+              1890
+            ],
+            [
+              40,
+              2160
+            ],
+            [
+              50,
+              2250
+            ],
+            [
+              60,
+              2160
+            ],
+            [
+              70,
+              1890
+            ],
+            [
+              80,
+              1440
+            ],
+            [
+              90,
+              810
+            ],
+            [
+              100,
+              0
+            ]
+          ],
+          "ask": "What is the fundamental relationship of traffic flow?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 30,
+          "label": "30 veh/km: 1890"
+        },
+        {
+          "x": 50,
+          "label": "Capacity 2250 veh/h",
+          "ask": "What is road capacity?"
+        },
+        {
+          "x": 70,
+          "label": "Jammed side: 1890"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 2008 Japanese researchers put twenty two cars on a circular track in Nagoya and asked the drivers to keep a steady speed. Within minutes a traffic jam appeared out of nowhere and rolled backwards round the ring. To understand why, engineers use the curve on the board. Let us build it from scratch.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Traffic flow theory: speed, density, flow and road capacity"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Density (veh/km)",
+            "max": 100
+          },
+          "y": {
+            "label": "Flow (veh/h)",
+            "max": 2400
+          },
+          "curves": [
+            {
+              "label": "Flow per lane",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  10,
+                  810
+                ],
+                [
+                  20,
+                  1440
+                ],
+                [
+                  30,
+                  1890
+                ],
+                [
+                  40,
+                  2160
+                ],
+                [
+                  50,
+                  2250
+                ],
+                [
+                  60,
+                  2160
+                ],
+                [
+                  70,
+                  1890
+                ],
+                [
+                  80,
+                  1440
+                ],
+                [
+                  90,
+                  810
+                ],
+                [
+                  100,
+                  0
+                ]
+              ],
+              "ask": "What is the fundamental relationship of traffic flow?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 veh/km: 1890"
+            },
+            {
+              "x": 50,
+              "label": "Capacity 2250 veh/h",
+              "ask": "What is road capacity?"
+            },
+            {
+              "x": 70,
+              "label": "Jammed side: 1890"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Start with speed. On an empty road you drive at the free-flow speed, here ninety kilometres per hour. As more cars pack in, everyone slows, until at the jam density, a hundred vehicles per kilometre, nobody moves. Greenshields in 1935 drew this as a straight line. At thirty vehicles per kilometre, the speed is sixty three. What is the speed at fifty?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Density (veh/km)",
+            "max": 100
+          },
+          "y": {
+            "label": "Speed (km/h)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "Greenshields speed",
+              "type": "line",
+              "c": 90,
+              "k": -0.9,
+              "ask": "What is Greenshields' model?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 veh/km: 63 km/h"
+            },
+            {
+              "x": 100,
+              "label": "Jam density",
+              "ask": "What is jam density?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "v = v_f (1 − k/k_j) = 90 (1 − 30/100) = 63 km/h"
+        }
+      ]
+    },
+    {
+      "say": "Forty five! Now flow, the number of cars passing you each hour, is simply density times speed. Thirty vehicles per kilometre at sixty three kilometres per hour gives one thousand eight hundred and ninety vehicles per hour. Plot that for every density and you get this hill, the fundamental diagram.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Density (veh/km)",
+            "max": 100
+          },
+          "y": {
+            "label": "Flow (veh/h)",
+            "max": 2400
+          },
+          "curves": [
+            {
+              "label": "Flow per lane",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  10,
+                  810
+                ],
+                [
+                  20,
+                  1440
+                ],
+                [
+                  30,
+                  1890
+                ],
+                [
+                  40,
+                  2160
+                ],
+                [
+                  50,
+                  2250
+                ],
+                [
+                  60,
+                  2160
+                ],
+                [
+                  70,
+                  1890
+                ],
+                [
+                  80,
+                  1440
+                ],
+                [
+                  90,
+                  810
+                ],
+                [
+                  100,
+                  0
+                ]
+              ],
+              "ask": "What is the fundamental relationship of traffic flow?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 veh/km: 1890"
+            },
+            {
+              "x": 50,
+              "label": "Capacity 2250 veh/h",
+              "ask": "What is road capacity?"
+            },
+            {
+              "x": 70,
+              "label": "Jammed side: 1890"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "q = k × v = 30 × 63 = 1890 veh/h"
+        }
+      ]
+    },
+    {
+      "say": "See the top of the hill? That is the capacity, two thousand two hundred and fifty vehicles per hour, reached at half the jam density and half the free speed. Past it, adding cars cuts the flow. Look at seventy vehicles per kilometre: the same one thousand eight hundred and ninety, but crawling at twenty seven. Which side of the hill would you rather drive on?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Density (veh/km)",
+            "max": 100
+          },
+          "y": {
+            "label": "Flow (veh/h)",
+            "max": 2400
+          },
+          "curves": [
+            {
+              "label": "Flow per lane",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  10,
+                  810
+                ],
+                [
+                  20,
+                  1440
+                ],
+                [
+                  30,
+                  1890
+                ],
+                [
+                  40,
+                  2160
+                ],
+                [
+                  50,
+                  2250
+                ],
+                [
+                  60,
+                  2160
+                ],
+                [
+                  70,
+                  1890
+                ],
+                [
+                  80,
+                  1440
+                ],
+                [
+                  90,
+                  810
+                ],
+                [
+                  100,
+                  0
+                ]
+              ],
+              "ask": "What is the fundamental relationship of traffic flow?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 veh/km: 1890"
+            },
+            {
+              "x": 50,
+              "label": "Capacity 2250 veh/h",
+              "ask": "What is road capacity?"
+            },
+            {
+              "x": 70,
+              "label": "Jammed side: 1890"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "q_max = v_f k_j / 4 = 90 × 100 / 4 = 2250 veh/h"
+        }
+      ]
+    },
+    {
+      "say": "The left side, flowing freely! A small brake tap near capacity can tip traffic over the top, and the jam spreads backwards, just like on the Nagoya track. That is why smart motorways use ramp meters and variable speed limits to keep flow near the peak. Wonderful! Challenge: with free speed one hundred and jam density one hundred and twenty, what is the capacity?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Density (veh/km)",
+            "max": 100
+          },
+          "y": {
+            "label": "Flow (veh/h)",
+            "max": 2400
+          },
+          "curves": [
+            {
+              "label": "Flow per lane",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  10,
+                  810
+                ],
+                [
+                  20,
+                  1440
+                ],
+                [
+                  30,
+                  1890
+                ],
+                [
+                  40,
+                  2160
+                ],
+                [
+                  50,
+                  2250
+                ],
+                [
+                  60,
+                  2160
+                ],
+                [
+                  70,
+                  1890
+                ],
+                [
+                  80,
+                  1440
+                ],
+                [
+                  90,
+                  810
+                ],
+                [
+                  100,
+                  0
+                ]
+              ],
+              "ask": "What is the fundamental relationship of traffic flow?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 veh/km: 1890"
+            },
+            {
+              "x": 50,
+              "label": "Capacity 2250 veh/h",
+              "ask": "What is road capacity?"
+            },
+            {
+              "x": 70,
+              "label": "Jammed side: 1890"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the fundamental relationship of traffic flow?",
+      "a": "Flow equals density times speed: q equals k times v. Thirty vehicles per kilometre moving at 63 kilometres per hour gives 1,890 vehicles per hour.",
+      "asks": [
+        "q = kv",
+        "Relationship between speed flow and density"
+      ]
+    },
+    {
+      "q": "What is Greenshields' model?",
+      "a": "Greenshields' 1935 model says speed falls in a straight line with density, from the free-flow speed on an empty road to zero at jam density. It makes the flow-density curve a parabola.",
+      "asks": [
+        "Greenshields traffic model"
+      ]
+    },
+    {
+      "q": "What is road capacity?",
+      "a": "Capacity is the maximum flow a lane can carry. In the Greenshields model it is free speed times jam density over 4; with 90 kilometres per hour and 100 vehicles per kilometre that is 2,250 vehicles per hour.",
+      "asks": [
+        "How do you find the capacity of a lane?"
+      ]
+    },
+    {
+      "q": "What is jam density?",
+      "a": "Jam density is the density at which traffic stops completely, typically around 100 to 150 vehicles per kilometre per lane, depending on vehicle length and gaps.",
+      "asks": [
+        "Define jam density"
+      ]
+    },
+    {
+      "q": "Why do phantom traffic jams form?",
+      "a": "Near capacity, one driver braking makes the next brake harder, and the wave grows and travels backwards. Flow drops even though nothing blocks the road.",
+      "asks": [
+        "What is a shockwave in traffic?",
+        "Traffic jam for no reason"
+      ]
+    }
+  ],
+  "facts": [
+    "Bruce Greenshields published his linear speed–density model in 1935.",
+    "In a 2008 experiment led by Yuki Sugiyama, 22 cars on a 230 m circular track formed a jam with no bottleneck."
+  ],
+  "quiz": [
+    {
+      "say": "Traffic has a density of 40 vehicles per kilometre and moves at 50 kilometres per hour. What is the flow?",
+      "show": "Traffic has a density of 40 veh/km and a speed of 50 km/h. Flow?",
+      "options": [
+        {
+          "show": "2,000 veh/h",
+          "say": "2,000 vehicles per hour"
+        },
+        {
+          "show": "90 veh/h",
+          "say": "90 vehicles per hour"
+        },
+        {
+          "show": "1.25 veh/h",
+          "say": "1.25 vehicles per hour"
+        }
+      ],
+      "answer": 0,
+      "why": "q = k × v = 40 × 50 = 2,000 vehicles per hour.",
+      "wrong": {
+        "1": "That adds density and speed.",
+        "2": "That divides speed by density."
+      }
+    },
+    {
+      "say": "In the Greenshields model, maximum flow occurs at…",
+      "show": "In the Greenshields model, maximum flow occurs at…",
+      "options": [
+        {
+          "show": "Half the jam density",
+          "say": "Half the jam density"
+        },
+        {
+          "show": "Zero density",
+          "say": "Zero density"
+        },
+        {
+          "show": "The jam density",
+          "say": "The jam density"
+        }
+      ],
+      "answer": 0,
+      "why": "The flow parabola peaks at k = k_j / 2, where speed is half the free speed.",
+      "wrong": {
+        "1": "With no cars, flow is zero.",
+        "2": "At jam density speed is zero, so flow is zero."
+      }
+    }
+  ]
+}

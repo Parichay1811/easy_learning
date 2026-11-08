@@ -1,0 +1,425 @@
+{
+  "id": "BEE-CIRC-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Nodal analysis step by step: solving a circuit from its node voltages",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "nodal analysis",
+    "node voltage method",
+    "reference node",
+    "ground",
+    "KCL equations"
+  ],
+  "examples": [
+    "How do I do nodal analysis?",
+    "How many equations does nodal analysis need?",
+    "How do I write KCL in terms of node voltages?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Source",
+          "value": "12 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "2 Ω",
+          "ask": "How do I write the current through a resistor in nodal analysis?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R2",
+          "value": "6 Ω",
+          "branch": 1,
+          "ask": "What is nodal analysis?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R3",
+          "value": "3 Ω",
+          "branch": 2,
+          "ask": "How many equations does nodal analysis need?"
+        },
+        {
+          "kind": "voltmeter",
+          "label": "Node A voltage",
+          "value": "6 V",
+          "branch": 3,
+          "ask": "How do I check a nodal answer?"
+        }
+      ],
+      "readouts": [
+        "V_A = 6 V",
+        "I1 = 3 A = 1 A + 2 A"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every circuit simulator, from SPICE in a chip lab to the apps on your laptop, solves circuits the same way: it finds the voltage at each node. Let's do it by hand. On the board, a 12 volt source feeds R1, 2 ohms, into a node we'll call A, and from A two resistors, 6 and 3 ohms, run down to the bottom wire.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Nodal analysis step by step: solving a circuit from its node voltages"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "How do I write the current through a resistor in nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What is nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "3 Ω",
+              "branch": 2,
+              "ask": "How many equations does nodal analysis need?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Node A voltage",
+              "value": "6 V",
+              "branch": 3,
+              "ask": "How do I check a nodal answer?"
+            }
+          ],
+          "readouts": [
+            "V_A = 6 V",
+            "I1 = 3 A = 1 A + 2 A"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Step one: pick a reference node, called ground, and call its voltage zero. The bottom wire is the natural choice. Step two: name every other unknown node. Here only one is unknown: node A, where R1, R2 and R3 meet. The top of the source is fixed at 12 volts. How many equations will we need for one unknown?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "How do I write the current through a resistor in nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What is nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "3 Ω",
+              "branch": 2,
+              "ask": "How many equations does nodal analysis need?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Node A voltage",
+              "value": "6 V",
+              "branch": 3,
+              "ask": "How do I check a nodal answer?"
+            }
+          ],
+          "readouts": [
+            "V_A = 6 V",
+            "I1 = 3 A = 1 A + 2 A"
+          ]
+        },
+        {
+          "op": "note",
+          "text": "Step 1: choose ground. Step 2: name the unknown node voltages."
+        }
+      ]
+    },
+    {
+      "say": "Just one. Step three: write Kirchhoff's current law at A, adding the currents leaving through each resistor. Through R1 back towards the source, V A minus 12, over 2. Through R2 to ground, V A over 6. Through R3, V A over 3. The leaving currents must total zero. Can you see why the first term will turn out negative?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "How do I write the current through a resistor in nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What is nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "3 Ω",
+              "branch": 2,
+              "ask": "How many equations does nodal analysis need?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Node A voltage",
+              "value": "6 V",
+              "branch": 3,
+              "ask": "How do I check a nodal answer?"
+            }
+          ],
+          "readouts": [
+            "V_A = 6 V",
+            "I1 = 3 A = 1 A + 2 A"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "(V_A − 12)/2 + V_A/6 + V_A/3 = 0"
+        }
+      ]
+    },
+    {
+      "say": "Because current really flows into A from the source. Step four: solve. Multiply everything by 6 to clear the fractions: 3 times V A, minus 36, plus V A, plus 2 times V A, equals zero. So 6 times V A equals 36, and V A is 6 volts. The voltmeter agrees. What current flows through R1 then?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "How do I write the current through a resistor in nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What is nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "3 Ω",
+              "branch": 2,
+              "ask": "How many equations does nodal analysis need?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Node A voltage",
+              "value": "6 V",
+              "branch": 3,
+              "ask": "How do I check a nodal answer?"
+            }
+          ],
+          "readouts": [
+            "V_A = 6 V",
+            "I1 = 3 A = 1 A + 2 A"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "3V_A − 36 + V_A + 2V_A = 0, so V_A = 6 V"
+        }
+      ]
+    },
+    {
+      "say": "12 minus 6, over 2, which is 3 amps in. Out through R2: 6 over 6 is 1 amp, and through R3: 6 over 3 is 2 amps. 1 plus 2 makes 3, so it balances. Superb! Exam tip: a circuit with N nodes needs N minus 1 equations. Write each one as currents leaving equals zero, and the signs look after themselves.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "How do I write the current through a resistor in nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What is nodal analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "3 Ω",
+              "branch": 2,
+              "ask": "How many equations does nodal analysis need?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Node A voltage",
+              "value": "6 V",
+              "branch": 3,
+              "ask": "How do I check a nodal answer?"
+            }
+          ],
+          "readouts": [
+            "V_A = 6 V",
+            "I1 = 3 A = 1 A + 2 A"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "I1 = (12 − 6)/2 = 3 A = 1 A + 2 A"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is nodal analysis?",
+      "a": "Nodal analysis finds the voltage at every node relative to a chosen ground, by writing Kirchhoff's current law at each unknown node and solving the equations.",
+      "asks": [
+        "Explain the node voltage method",
+        "How does nodal analysis work?"
+      ]
+    },
+    {
+      "q": "How do I write the current through a resistor in nodal analysis?",
+      "a": "The current leaving a node through a resistor is the node's voltage minus the voltage at the far end, divided by the resistance.",
+      "asks": [
+        "Current through R1 in terms of node voltages"
+      ]
+    },
+    {
+      "q": "How do I choose the ground node?",
+      "a": "Pick the node with the most connections, often the bottom wire or the negative terminal of the source. Any node works, but a good choice makes the equations shorter.",
+      "asks": [
+        "Which node should be the reference?"
+      ]
+    },
+    {
+      "q": "How many equations does nodal analysis need?",
+      "a": "One for each node except ground, so N minus 1 for a circuit with N nodes. Nodes whose voltage is fixed by a source need no equation.",
+      "asks": [
+        "Number of nodal equations"
+      ]
+    },
+    {
+      "q": "How do I check a nodal answer?",
+      "a": "Work out each branch current from the node voltages and check that Kirchhoff's current law balances at every node.",
+      "asks": [
+        "How can I verify node voltages?"
+      ]
+    }
+  ],
+  "facts": [
+    "SPICE, a widely used circuit simulator, was developed at the University of California, Berkeley, in the early 1970s.",
+    "Nodal analysis applies Kirchhoff's current law at each node whose voltage is unknown."
+  ],
+  "quiz": [
+    {
+      "say": "A node connects to a 10 volt point through 5 ohms and to ground through another 5 ohms. What is the node voltage?",
+      "show": "A node connects to a 10 V point through 5 Ω and to ground through 5 Ω. What is the node voltage?",
+      "options": [
+        {
+          "show": "5 V",
+          "say": "5 volts"
+        },
+        {
+          "show": "10 V",
+          "say": "10 volts"
+        },
+        {
+          "show": "2.5 V",
+          "say": "2.5 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "KCL gives V minus 10 over 5, plus V over 5, equals zero, so 2V equals 10 and V is 5 volts.",
+      "wrong": {
+        "1": "The node would only reach 10 volts if no current flowed to ground.",
+        "2": "That halves the answer twice; equal resistors split the voltage in half once."
+      }
+    },
+    {
+      "say": "A circuit has 4 nodes including ground. How many nodal equations do you need at most?",
+      "show": "A circuit has 4 nodes including ground. How many nodal equations do you need at most?",
+      "options": [
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "4",
+          "say": "4"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        }
+      ],
+      "answer": 0,
+      "why": "You need one equation per node except the reference, so 4 minus 1 gives 3.",
+      "wrong": {
+        "1": "Ground is fixed at zero, so it needs no equation.",
+        "2": "There cannot be more equations than unknown nodes."
+      }
+    }
+  ]
+}

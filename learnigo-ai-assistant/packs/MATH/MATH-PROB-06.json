@@ -1,0 +1,220 @@
+{
+  "id": "MATH-PROB-06",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Binomial distribution",
+  "area": "Mathematics",
+  "group": "MATH-PROB — Probability",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "binomial distribution",
+    "fixed number of trials",
+    "success or failure",
+    "probability formula"
+  ],
+  "examples": [
+    "When do I know to use the binomial distribution formula?",
+    "What is the difference between P(X=r) and P(X>=r)?",
+    "Does the probability of success have to stay the same every time?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn about the binomial distribution. Say this when you have a fixed number of trials. Say this when each trial is independent of the others. Say this when there are only two outcomes, success or failure.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Binomial distribution"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Fixed number of trials",
+            "Each trial is independent",
+            "Only two outcomes: success or failure"
+          ],
+          "at": "fixed"
+        },
+        {
+          "op": "text",
+          "text": "Binomial Conditions: Fixed trials, Independent, Two outcomes",
+          "at": "binomial"
+        }
+      ]
+    },
+    {
+      "say": "The probability of getting exactly r successes is our main formula. Say this formula is P(X equals r) equals the number of ways times the probability to the r power times the probability of failure to the remaining power. Say this is written as C(n, r) times p to the r times q to the n minus r.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "P(X=r) = C(n, r) p^r q^(n-r)"
+        }
+      ]
+    },
+    {
+      "say": "Let us look at a concrete example now. Say you flip a coin ten times. Say the probability of heads is zero point five. Say we want the probability of getting exactly three heads. Say here n is ten, r is three, p is zero point five, and q is zero point five.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Example: n=10, r=3, p=0.5",
+          "at": "example"
+        }
+      ]
+    },
+    {
+      "say": "To find the probability of three or more successes, we use the cumulative approach. Say this means we must add up the individual probabilities. Say we calculate P(X equals 3) plus P(X equals 4) plus P(X equals 5) up to P(X equals 10).",
+      "draw": [
+        {
+          "op": "text",
+          "text": "P(X>=3) = P(X=3) + P(X=4) + ... + P(X=10)"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What if the probability changes between trials?",
+      "a": "The binomial distribution requires the probability of success to remain constant. If the probability changes, you should use a different method to solve the problem. You should check if the conditions are met first.",
+      "asks": [
+        "Does p have to be the same every time?",
+        "What if the trials are not equally likely?"
+      ]
+    },
+    {
+      "q": "How do I calculate P(X is greater than or equal to r)?",
+      "a": "You must sum the probabilities for every outcome from r up to the total number of trials. Alternatively, you can use the complement rule by calculating one minus P(X is less than r).",
+      "asks": [
+        "How do I find P(X >= 3)?",
+        "Is there an easier way than adding many probabilities?"
+      ]
+    },
+    {
+      "q": "What is the difference between binomial and normal distribution?",
+      "a": "The binomial distribution is for discrete counts, like counting successes. The normal distribution is for continuous measurements, like height or weight. They model different types of data.",
+      "asks": [
+        "When do I use the normal curve instead?",
+        "Are they related at all?"
+      ]
+    },
+    {
+      "q": "What does 'independent trials' really mean?",
+      "a": "It means that the outcome of one trial does not affect the outcome of any other trial. For example, flipping a coin does not change the next flip. This is a key condition.",
+      "asks": [
+        "Do the trials have to be separate events?",
+        "Does the first result matter for the second?"
+      ]
+    },
+    {
+      "q": "What is 'q' in the formula?",
+      "a": "The variable q represents the probability of failure. It is calculated by subtracting the probability of success, p, from one. So, q equals one minus p.",
+      "asks": [
+        "Where does q come from?",
+        "Is q always 1 minus p?"
+      ]
+    }
+  ],
+  "facts": [
+    "The binomial distribution applies when there are a fixed number of trials, denoted by n.",
+    "Each trial must be independent, meaning one trial does not influence another.",
+    "The probability of success, p, and failure, q, must remain constant for every trial.",
+    "The probability of exactly r successes is given by C(n, r) times p to the r times q to the n minus r."
+  ],
+  "quiz": [
+    {
+      "say": "A machine has a 0 point 2 probability of failure. If ten items are tested, what is the probability of exactly two failures?",
+      "show": "n=10, p=0.2, r=2",
+      "options": [
+        {
+          "show": "0 point 16",
+          "say": "0 point 16"
+        },
+        {
+          "show": "0 point 32",
+          "say": "0 point 32"
+        },
+        {
+          "show": "0 point 60",
+          "say": "0 point 60"
+        },
+        {
+          "show": "0 point 307",
+          "say": "0 point 307"
+        }
+      ],
+      "answer": 3,
+      "why": "This fits the binomial model because we have ten fixed trials, and the failure probability is constant.",
+      "wrong": {
+        "0": "This is too low because it forgets to multiply by the number of ways to get two failures.",
+        "1": "This incorrectly calculates p squared times q to the power of eight.",
+        "2": "This incorrectly assumes the trials are not independent."
+      }
+    },
+    {
+      "say": "If you roll a standard die six times, what is the probability of getting at least four sixes?",
+      "show": "P(X>=4) for 6 rolls",
+      "options": [
+        {
+          "show": "P(X=4) only",
+          "say": "P(X=4) only"
+        },
+        {
+          "show": "1 minus P(X<=3)",
+          "say": "1 minus P(X<=3)"
+        },
+        {
+          "show": "P(X=4) times 3",
+          "say": "P(X=4) times 3"
+        },
+        {
+          "show": "A calculated sum of three terms",
+          "say": "A calculated sum of three terms"
+        }
+      ],
+      "answer": 3,
+      "why": "You must calculate P(X=4) plus P(X=5) plus P(X=6) because 'at least four' means four or more.",
+      "wrong": {
+        "0": "This only calculates the minimum required successes and ignores the rest.",
+        "1": "This is a valid method, but the calculation is complex and prone to error.",
+        "2": "This incorrectly multiplies the probability by the number of ways."
+      }
+    },
+    {
+      "say": "A student guesses on a true or false quiz with 10 questions. The probability of guessing correctly is 0 point 5. What is the probability of getting at least 9 correct?",
+      "show": "P(X>=9) for 10 guesses",
+      "options": [
+        {
+          "show": "P(X=9) only",
+          "say": "P(X=9) only"
+        },
+        {
+          "show": "1 minus P(X<=8)",
+          "say": "1 minus P(X<=8)"
+        },
+        {
+          "show": "0 point 5 to the power of 10",
+          "say": "0 point 5 to the power of 10"
+        },
+        {
+          "show": "P(X=9) + P(X=10)",
+          "say": "P(X=9) + P(X=10)"
+        }
+      ],
+      "answer": 3,
+      "why": "To find 'at least 9', you must sum the probability of exactly 9 and the probability of exactly 10.",
+      "wrong": {
+        "0": "This only counts the minimum required success and ignores the possibility of getting all ten correct.",
+        "1": "This is a correct conceptual approach, but the calculation is often harder than direct summation.",
+        "2": "This incorrectly calculates the probability of only one specific sequence of outcomes."
+      }
+    }
+  ]
+}

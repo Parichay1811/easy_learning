@@ -1,0 +1,363 @@
+{
+  "id": "BCE-STRA-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Influence lines: how a moving truck loads a bridge",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "influence line",
+    "moving load",
+    "unit load",
+    "Müller-Breslau principle",
+    "maximum moment position"
+  ],
+  "examples": [
+    "What is an influence line?",
+    "How do you find the maximum moment from a moving load?",
+    "How do you draw the influence line for a reaction?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 10,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "What is an influence line?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "point",
+          "at": 0.3,
+          "size": 100,
+          "label": "Axle 100 kN",
+          "ask": "Where should a moving load be placed for maximum moment?"
+        }
+      ],
+      "show": "beam"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A truck rolling across a bridge is a load that moves. So an engineer asks: where must the truck be to do the most harm? Influence lines answer that. Here a hundred kilonewton axle stands three metres onto a ten metre span. The left support feels seventy kilonewtons and the right thirty.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Influence lines: how a moving truck loads a bridge"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 10,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is an influence line?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.3,
+              "size": 100,
+              "label": "Axle 100 kN",
+              "ask": "Where should a moving load be placed for maximum moment?"
+            }
+          ],
+          "show": "beam"
+        }
+      ]
+    },
+    {
+      "say": "Now a new kind of graph. Along the bottom is where a one kilonewton load stands; up the side is the left reaction it causes. It starts at one when the load sits on that support and falls straight to zero at the far end. At three metres it reads zero point seven, and seven tenths of a hundred is seventy. Do you see the match?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Load position (m)",
+            "max": 10
+          },
+          "y": {
+            "label": "R_A per 1 kN",
+            "max": 1
+          },
+          "curves": [
+            {
+              "label": "R_A influence line",
+              "type": "line",
+              "c": 1,
+              "k": -0.1,
+              "ask": "What is an influence line?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "Axle at 3 m"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "R_A = 1 − x/L → at 3 m: 0.7 × 100 = 70 kN"
+        }
+      ]
+    },
+    {
+      "say": "Here is the influence line for the moment at midspan. It is a triangle, peaking at two point five when the load is right in the middle. So the worst place for our axle is midspan: a hundred times two point five, two hundred and fifty kilonewton metres. Where would the axle do nothing at all to this moment?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Load position (m)",
+            "max": 10
+          },
+          "y": {
+            "label": "Midspan M per kN",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "M influence line",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  2.5
+                ],
+                [
+                  10,
+                  0
+                ]
+              ],
+              "ask": "How is an influence line different from a bending moment diagram?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Load at midspan",
+              "ask": "Where should a moving load be placed for maximum moment?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M_mid = 100 × 2.5 = 250 kN·m"
+        },
+        {
+          "op": "note",
+          "text": "Peak ordinate = ab/L = 5 × 5 / 10 = 2.5"
+        }
+      ]
+    },
+    {
+      "say": "Right over a support. Now check with the beam itself. Roll the axle to midspan and the moment diagram peaks at exactly two hundred and fifty kilonewton metres. The influence line predicted it without redrawing a single diagram, which is its power when hundreds of load positions need checking.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 10,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is an influence line?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 100,
+              "label": "Axle 100 kN",
+              "ask": "Where should a moving load be placed for maximum moment?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "One more trick. A spread load, like a traffic jam, uses the area under the influence line. The triangle's area is twelve and a half, so ten kilonewtons per metre gives a hundred and twenty five kilonewton metres, the same as w L squared over eight. Wonderful! Challenge: where should the jam stand for the biggest left reaction?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Load position (m)",
+            "max": 10
+          },
+          "y": {
+            "label": "Midspan M per kN",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "M influence line",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  2.5
+                ],
+                [
+                  10,
+                  0
+                ]
+              ],
+              "ask": "How is an influence line different from a bending moment diagram?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Load at midspan",
+              "ask": "Where should a moving load be placed for maximum moment?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M = w × area = 10 × ½ × 10 × 2.5 = 125 kN·m"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an influence line?",
+      "a": "An influence line shows how one response, such as a reaction or the moment at one section, changes as a single unit load moves across the structure.",
+      "asks": [
+        "Define influence line",
+        "What does an influence line show?"
+      ]
+    },
+    {
+      "q": "How is an influence line different from a bending moment diagram?",
+      "a": "A bending moment diagram shows the moment everywhere for one fixed set of loads. An influence line shows the moment at one fixed point for every position of a moving load.",
+      "asks": [
+        "Influence line vs bending moment diagram"
+      ]
+    },
+    {
+      "q": "How do you use an influence line for a distributed load?",
+      "a": "Multiply the load per metre by the area under the influence line where the load sits. For the midspan moment of a 10 metre span, 10 kilonewtons per metre times an area of 12.5 gives 125 kilonewton metres.",
+      "asks": [
+        "Influence line with a UDL"
+      ]
+    },
+    {
+      "q": "Where should a moving load be placed for maximum moment?",
+      "a": "Put it where the influence line ordinate is largest. For the moment at midspan of a simple beam, that is right at midspan.",
+      "asks": [
+        "Worst position of a moving load"
+      ]
+    },
+    {
+      "q": "What is the Müller-Breslau principle?",
+      "a": "It says the influence line for a force has the same shape as the deflected structure when that restraint is removed and given a unit displacement. It lets you sketch influence lines quickly.",
+      "asks": [
+        "Muller Breslau principle"
+      ]
+    }
+  ],
+  "facts": [
+    "The Müller-Breslau principle gives the shape of an influence line as the deflected shape when the matching restraint is released and given a unit displacement.",
+    "Bridge codes model traffic with standard vehicles and lane loads, such as IRC Class AA loading in India and Load Model 1 in Eurocode EN 1991-2."
+  ],
+  "quiz": [
+    {
+      "say": "The influence line for the left reaction of a 20 metre span is 1 minus x over 20. What is the left reaction for a 200 kilonewton load at 5 metres?",
+      "show": "Left-reaction influence line of a 20 m span: 1 − x/20. A 200 kN load at x = 5 m gives R_A =",
+      "options": [
+        {
+          "show": "150 kN",
+          "say": "150 kilonewtons"
+        },
+        {
+          "show": "50 kN",
+          "say": "50 kilonewtons"
+        },
+        {
+          "show": "100 kN",
+          "say": "100 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "The ordinate at 5 metres is 1 − 5/20 = 0.75, and 0.75 × 200 = 150 kilonewtons.",
+      "wrong": {
+        "1": "That is the right reaction, using 5/20 instead of 1 − 5/20.",
+        "2": "Half the load is only right with the load at midspan."
+      }
+    },
+    {
+      "say": "An influence line shows…",
+      "show": "An influence line shows…",
+      "options": [
+        {
+          "show": "The moment along a beam for one fixed load",
+          "say": "The moment along a beam for one fixed load"
+        },
+        {
+          "show": "A response at one point as a unit load moves",
+          "say": "A response at one point as a unit load moves"
+        },
+        {
+          "show": "The deflected shape of a loaded beam",
+          "say": "The deflected shape of a loaded beam"
+        }
+      ],
+      "answer": 1,
+      "why": "Each point on an influence line is the response at a fixed section for the unit load at that position.",
+      "wrong": {
+        "0": "That is a bending moment diagram.",
+        "2": "The Müller-Breslau principle links them, but a deflected shape under load is a different plot."
+      }
+    }
+  ]
+}

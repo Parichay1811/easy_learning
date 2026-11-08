@@ -1,0 +1,575 @@
+{
+  "id": "ENGX-AERO-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an autopilot flies a plane",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "autopilot",
+    "autothrottle",
+    "flight control computer",
+    "autoland",
+    "aircraft feedback loop"
+  ],
+  "examples": [
+    "How does autopilot work on a plane?",
+    "Does the plane fly itself?",
+    "Can autopilot land a plane?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "pilot",
+          "label": "Pilot sets target",
+          "icon": "person",
+          "x": 0.1,
+          "y": 0.2,
+          "ask": "Who controls the autopilot?"
+        },
+        {
+          "id": "sens",
+          "label": "Sensors",
+          "icon": "sensor",
+          "x": 0.1,
+          "y": 0.8,
+          "ask": "How does the autopilot know where the plane is?"
+        },
+        {
+          "id": "comp",
+          "label": "Autopilot computer",
+          "icon": "computer",
+          "x": 0.45,
+          "y": 0.5,
+          "ask": "How does an autopilot work?"
+        },
+        {
+          "id": "serv",
+          "label": "Servo motors",
+          "icon": "motor",
+          "x": 0.75,
+          "y": 0.2
+        },
+        {
+          "id": "surf",
+          "label": "Control surfaces",
+          "icon": "plane",
+          "x": 0.9,
+          "y": 0.55
+        },
+        {
+          "id": "thr",
+          "label": "Autothrottle",
+          "icon": "engine",
+          "x": 0.7,
+          "y": 0.85
+        }
+      ],
+      "links": [
+        {
+          "from": "pilot",
+          "to": "comp",
+          "kind": "data",
+          "label": "targets"
+        },
+        {
+          "from": "sens",
+          "to": "comp",
+          "kind": "data",
+          "label": "where we are"
+        },
+        {
+          "from": "comp",
+          "to": "serv",
+          "kind": "signal",
+          "label": "commands"
+        },
+        {
+          "from": "serv",
+          "to": "surf",
+          "kind": "force",
+          "label": "move"
+        },
+        {
+          "from": "comp",
+          "to": "thr",
+          "kind": "signal",
+          "label": "thrust"
+        },
+        {
+          "from": "surf",
+          "to": "sens",
+          "kind": "signal",
+          "label": "plane responds"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An autopilot is a computer that flies the plane towards targets the pilots set, such as a height, a heading or a route. It never stops checking where the plane is and correcting.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an autopilot flies a plane"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "pilot",
+              "label": "Pilot sets target",
+              "icon": "person",
+              "x": 0.1,
+              "y": 0.2,
+              "ask": "Who controls the autopilot?"
+            },
+            {
+              "id": "sens",
+              "label": "Sensors",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.8,
+              "ask": "How does the autopilot know where the plane is?"
+            },
+            {
+              "id": "comp",
+              "label": "Autopilot computer",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does an autopilot work?"
+            },
+            {
+              "id": "serv",
+              "label": "Servo motors",
+              "icon": "motor",
+              "x": 0.75,
+              "y": 0.2
+            },
+            {
+              "id": "surf",
+              "label": "Control surfaces",
+              "icon": "plane",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "thr",
+              "label": "Autothrottle",
+              "icon": "engine",
+              "x": 0.7,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "pilot",
+              "to": "comp",
+              "kind": "data",
+              "label": "targets"
+            },
+            {
+              "from": "sens",
+              "to": "comp",
+              "kind": "data",
+              "label": "where we are"
+            },
+            {
+              "from": "comp",
+              "to": "serv",
+              "kind": "signal",
+              "label": "commands"
+            },
+            {
+              "from": "serv",
+              "to": "surf",
+              "kind": "force",
+              "label": "move"
+            },
+            {
+              "from": "comp",
+              "to": "thr",
+              "kind": "signal",
+              "label": "thrust"
+            },
+            {
+              "from": "surf",
+              "to": "sens",
+              "kind": "signal",
+              "label": "plane responds"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Sensors tell it the plane's attitude, speed, height and position, from gyroscopes, air-data probes and satellite navigation. The computer compares where the plane is with where it should be.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "pilot",
+              "label": "Pilot sets target",
+              "icon": "person",
+              "x": 0.1,
+              "y": 0.2,
+              "ask": "Who controls the autopilot?"
+            },
+            {
+              "id": "sens",
+              "label": "Sensors",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.8,
+              "ask": "How does the autopilot know where the plane is?"
+            },
+            {
+              "id": "comp",
+              "label": "Autopilot computer",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does an autopilot work?"
+            },
+            {
+              "id": "serv",
+              "label": "Servo motors",
+              "icon": "motor",
+              "x": 0.75,
+              "y": 0.2
+            },
+            {
+              "id": "surf",
+              "label": "Control surfaces",
+              "icon": "plane",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "thr",
+              "label": "Autothrottle",
+              "icon": "engine",
+              "x": 0.7,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "pilot",
+              "to": "comp",
+              "kind": "data",
+              "label": "targets"
+            },
+            {
+              "from": "sens",
+              "to": "comp",
+              "kind": "data",
+              "label": "where we are"
+            },
+            {
+              "from": "comp",
+              "to": "serv",
+              "kind": "signal",
+              "label": "commands"
+            },
+            {
+              "from": "serv",
+              "to": "surf",
+              "kind": "force",
+              "label": "move"
+            },
+            {
+              "from": "comp",
+              "to": "thr",
+              "kind": "signal",
+              "label": "thrust"
+            },
+            {
+              "from": "surf",
+              "to": "sens",
+              "kind": "signal",
+              "label": "plane responds"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "If the plane drifts off target, the computer commands motors or the fly-by-wire system to move the control surfaces, and the autothrottle adjusts engine power. Then it measures again, many times a second.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "pilot",
+              "label": "Pilot sets target",
+              "icon": "person",
+              "x": 0.1,
+              "y": 0.2,
+              "ask": "Who controls the autopilot?"
+            },
+            {
+              "id": "sens",
+              "label": "Sensors",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.8,
+              "ask": "How does the autopilot know where the plane is?"
+            },
+            {
+              "id": "comp",
+              "label": "Autopilot computer",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does an autopilot work?"
+            },
+            {
+              "id": "serv",
+              "label": "Servo motors",
+              "icon": "motor",
+              "x": 0.75,
+              "y": 0.2
+            },
+            {
+              "id": "surf",
+              "label": "Control surfaces",
+              "icon": "plane",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "thr",
+              "label": "Autothrottle",
+              "icon": "engine",
+              "x": 0.7,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "pilot",
+              "to": "comp",
+              "kind": "data",
+              "label": "targets"
+            },
+            {
+              "from": "sens",
+              "to": "comp",
+              "kind": "data",
+              "label": "where we are"
+            },
+            {
+              "from": "comp",
+              "to": "serv",
+              "kind": "signal",
+              "label": "commands"
+            },
+            {
+              "from": "serv",
+              "to": "surf",
+              "kind": "force",
+              "label": "move"
+            },
+            {
+              "from": "comp",
+              "to": "thr",
+              "kind": "signal",
+              "label": "thrust"
+            },
+            {
+              "from": "surf",
+              "to": "sens",
+              "kind": "signal",
+              "label": "plane responds"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The pilots still choose the targets, watch closely and take over whenever needed. Autopilots handle most of the cruise, and special systems can even land the plane in fog.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "pilot",
+              "label": "Pilot sets target",
+              "icon": "person",
+              "x": 0.1,
+              "y": 0.2,
+              "ask": "Who controls the autopilot?"
+            },
+            {
+              "id": "sens",
+              "label": "Sensors",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.8,
+              "ask": "How does the autopilot know where the plane is?"
+            },
+            {
+              "id": "comp",
+              "label": "Autopilot computer",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does an autopilot work?"
+            },
+            {
+              "id": "serv",
+              "label": "Servo motors",
+              "icon": "motor",
+              "x": 0.75,
+              "y": 0.2
+            },
+            {
+              "id": "surf",
+              "label": "Control surfaces",
+              "icon": "plane",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "thr",
+              "label": "Autothrottle",
+              "icon": "engine",
+              "x": 0.7,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "pilot",
+              "to": "comp",
+              "kind": "data",
+              "label": "targets"
+            },
+            {
+              "from": "sens",
+              "to": "comp",
+              "kind": "data",
+              "label": "where we are"
+            },
+            {
+              "from": "comp",
+              "to": "serv",
+              "kind": "signal",
+              "label": "commands"
+            },
+            {
+              "from": "serv",
+              "to": "surf",
+              "kind": "force",
+              "label": "move"
+            },
+            {
+              "from": "comp",
+              "to": "thr",
+              "kind": "signal",
+              "label": "thrust"
+            },
+            {
+              "from": "surf",
+              "to": "sens",
+              "kind": "signal",
+              "label": "plane responds"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does an autopilot work?",
+      "a": "It is a feedback loop: sensors measure the plane's height, heading and speed, a computer compares them with the pilots' targets, and motors move the controls to fix any difference. It repeats this many times a second.",
+      "asks": [
+        "What does autopilot do?",
+        "Does the plane fly itself?"
+      ]
+    },
+    {
+      "q": "How does the autopilot know where the plane is?",
+      "a": "Gyroscopes and accelerometers sense which way the plane points and turns, probes measure airspeed and height from the air, and GPS and radio beacons give its position.",
+      "asks": [
+        "What sensors does an autopilot use?"
+      ]
+    },
+    {
+      "q": "Who controls the autopilot?",
+      "a": "The pilots. They set targets like height, heading, speed or a programmed route, switch modes on and off, and can disconnect it instantly with a button on the control stick.",
+      "asks": [
+        "Can pilots turn off the autopilot?"
+      ]
+    },
+    {
+      "q": "Can autopilot take off?",
+      "a": "Airliner autopilots normally don't do the take-off; pilots fly it by hand and switch the autopilot on during the climb. Some systems can land the plane automatically in fog.",
+      "asks": [
+        "Can autopilot land a plane?"
+      ]
+    },
+    {
+      "q": "Why do pilots still need to be there?",
+      "a": "Autopilots follow targets but can't judge unexpected situations like storms ahead, emergencies or new instructions from air traffic control. Pilots make the decisions and fly by hand when needed.",
+      "asks": [
+        "Could a plane fly without pilots?"
+      ]
+    }
+  ],
+  "facts": [
+    "Lawrence Sperry demonstrated an early gyroscopic autopilot in 1914, flying with his hands off the controls.",
+    "Autoland systems let suitably equipped airliners land in fog with almost no visibility."
+  ],
+  "quiz": [
+    {
+      "say": "A gust pushes the plane's nose up while the autopilot is on. What does the autopilot do?",
+      "show": "A gust lifts the nose. The autopilot…",
+      "options": [
+        {
+          "show": "Senses it and moves the elevator to correct",
+          "say": "Senses it and moves the elevator to correct"
+        },
+        {
+          "show": "Waits for the pilot to notice",
+          "say": "Waits for the pilot to notice"
+        },
+        {
+          "show": "Switches the engines off",
+          "say": "Switches the engines off"
+        }
+      ],
+      "answer": 0,
+      "why": "Its sensors spot the change and it commands the elevator to bring the nose back to the target.",
+      "wrong": {
+        "1": "Correcting on its own, quickly, is the autopilot's whole job.",
+        "2": "It may adjust thrust, but it never shuts engines down to correct the nose."
+      }
+    }
+  ]
+}

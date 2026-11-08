@@ -1,0 +1,640 @@
+{
+  "id": "ENGX-TRAN-18",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a car's cooling system stops the engine overheating",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "engine cooling system",
+    "radiator",
+    "coolant",
+    "thermostat",
+    "water pump"
+  ],
+  "examples": [
+    "What does a car radiator do?",
+    "Why does a car engine need a thermostat?",
+    "Why does the fan keep running after I stop the car?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "pump",
+          "kind": "wheel",
+          "x": 0.2,
+          "y": 0.15,
+          "size": 0.7,
+          "label": "Water pump",
+          "motion": "spin",
+          "ask": "What does the water pump do?"
+        },
+        {
+          "id": "eng",
+          "kind": "box",
+          "x": 0.2,
+          "y": 0.58,
+          "size": 1.4,
+          "label": "Hot engine block",
+          "motion": "pulse",
+          "ask": "Why does a car engine get so hot?"
+        },
+        {
+          "id": "thermo",
+          "kind": "valve",
+          "x": 0.48,
+          "y": 0.15,
+          "size": 0.7,
+          "label": "Thermostat",
+          "motion": "pulse",
+          "ask": "What does a thermostat do in a car?"
+        },
+        {
+          "id": "rad",
+          "kind": "tank",
+          "x": 0.7,
+          "y": 0.48,
+          "size": 1.3,
+          "label": "Radiator",
+          "motion": "none",
+          "ask": "How does a radiator cool the engine?"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.92,
+          "y": 0.48,
+          "size": 0.8,
+          "label": "Cooling fan",
+          "motion": "spin",
+          "ask": "Why does a car have a cooling fan?"
+        },
+        {
+          "id": "hose",
+          "kind": "pipe",
+          "x": 0.46,
+          "y": 0.88,
+          "size": 1,
+          "label": "Return hose",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "pump",
+          "to": "eng",
+          "kind": "fluid",
+          "label": "coolant in"
+        },
+        {
+          "from": "eng",
+          "to": "thermo",
+          "kind": "heat",
+          "label": "hot coolant"
+        },
+        {
+          "from": "thermo",
+          "to": "rad",
+          "kind": "fluid",
+          "label": "when hot"
+        },
+        {
+          "from": "fan",
+          "to": "rad",
+          "kind": "fluid",
+          "label": "air"
+        },
+        {
+          "from": "rad",
+          "to": "hose",
+          "kind": "fluid",
+          "label": "cooled"
+        },
+        {
+          "from": "hose",
+          "to": "pump",
+          "kind": "fluid"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Burning fuel makes far more heat than movement, so an engine would quickly overheat without cooling. A liquid called coolant flows through passages around the hot cylinders and carries heat away.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a car's cooling system stops the engine overheating"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pump",
+              "kind": "wheel",
+              "x": 0.2,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Water pump",
+              "motion": "spin",
+              "ask": "What does the water pump do?"
+            },
+            {
+              "id": "eng",
+              "kind": "box",
+              "x": 0.2,
+              "y": 0.58,
+              "size": 1.4,
+              "label": "Hot engine block",
+              "motion": "pulse",
+              "ask": "Why does a car engine get so hot?"
+            },
+            {
+              "id": "thermo",
+              "kind": "valve",
+              "x": 0.48,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Thermostat",
+              "motion": "pulse",
+              "ask": "What does a thermostat do in a car?"
+            },
+            {
+              "id": "rad",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.48,
+              "size": 1.3,
+              "label": "Radiator",
+              "motion": "none",
+              "ask": "How does a radiator cool the engine?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 0.8,
+              "label": "Cooling fan",
+              "motion": "spin",
+              "ask": "Why does a car have a cooling fan?"
+            },
+            {
+              "id": "hose",
+              "kind": "pipe",
+              "x": 0.46,
+              "y": 0.88,
+              "size": 1,
+              "label": "Return hose",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "pump",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "coolant in"
+            },
+            {
+              "from": "eng",
+              "to": "thermo",
+              "kind": "heat",
+              "label": "hot coolant"
+            },
+            {
+              "from": "thermo",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "when hot"
+            },
+            {
+              "from": "fan",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "rad",
+              "to": "hose",
+              "kind": "fluid",
+              "label": "cooled"
+            },
+            {
+              "from": "hose",
+              "to": "pump",
+              "kind": "fluid"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "A water pump, turned by the engine or a small motor, pushes the coolant round and round the circuit, from the engine to the radiator and back.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pump",
+              "kind": "wheel",
+              "x": 0.2,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Water pump",
+              "motion": "spin",
+              "ask": "What does the water pump do?"
+            },
+            {
+              "id": "eng",
+              "kind": "box",
+              "x": 0.2,
+              "y": 0.58,
+              "size": 1.4,
+              "label": "Hot engine block",
+              "motion": "pulse",
+              "ask": "Why does a car engine get so hot?"
+            },
+            {
+              "id": "thermo",
+              "kind": "valve",
+              "x": 0.48,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Thermostat",
+              "motion": "pulse",
+              "ask": "What does a thermostat do in a car?"
+            },
+            {
+              "id": "rad",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.48,
+              "size": 1.3,
+              "label": "Radiator",
+              "motion": "none",
+              "ask": "How does a radiator cool the engine?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 0.8,
+              "label": "Cooling fan",
+              "motion": "spin",
+              "ask": "Why does a car have a cooling fan?"
+            },
+            {
+              "id": "hose",
+              "kind": "pipe",
+              "x": 0.46,
+              "y": 0.88,
+              "size": 1,
+              "label": "Return hose",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "pump",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "coolant in"
+            },
+            {
+              "from": "eng",
+              "to": "thermo",
+              "kind": "heat",
+              "label": "hot coolant"
+            },
+            {
+              "from": "thermo",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "when hot"
+            },
+            {
+              "from": "fan",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "rad",
+              "to": "hose",
+              "kind": "fluid",
+              "label": "cooled"
+            },
+            {
+              "from": "hose",
+              "to": "pump",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "A thermostat valve stays closed while the engine is cold, so it warms up quickly. When the coolant reaches about 90 degrees Celsius, the thermostat opens and lets it flow to the radiator.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pump",
+              "kind": "wheel",
+              "x": 0.2,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Water pump",
+              "motion": "spin",
+              "ask": "What does the water pump do?"
+            },
+            {
+              "id": "eng",
+              "kind": "box",
+              "x": 0.2,
+              "y": 0.58,
+              "size": 1.4,
+              "label": "Hot engine block",
+              "motion": "pulse",
+              "ask": "Why does a car engine get so hot?"
+            },
+            {
+              "id": "thermo",
+              "kind": "valve",
+              "x": 0.48,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Thermostat",
+              "motion": "pulse",
+              "ask": "What does a thermostat do in a car?"
+            },
+            {
+              "id": "rad",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.48,
+              "size": 1.3,
+              "label": "Radiator",
+              "motion": "none",
+              "ask": "How does a radiator cool the engine?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 0.8,
+              "label": "Cooling fan",
+              "motion": "spin",
+              "ask": "Why does a car have a cooling fan?"
+            },
+            {
+              "id": "hose",
+              "kind": "pipe",
+              "x": 0.46,
+              "y": 0.88,
+              "size": 1,
+              "label": "Return hose",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "pump",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "coolant in"
+            },
+            {
+              "from": "eng",
+              "to": "thermo",
+              "kind": "heat",
+              "label": "hot coolant"
+            },
+            {
+              "from": "thermo",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "when hot"
+            },
+            {
+              "from": "fan",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "rad",
+              "to": "hose",
+              "kind": "fluid",
+              "label": "cooled"
+            },
+            {
+              "from": "hose",
+              "to": "pump",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The radiator is a maze of thin tubes and fins at the front of the car. Air rushing through, helped by a fan when the car is slow, carries the heat away, and the cooled liquid returns to the engine.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pump",
+              "kind": "wheel",
+              "x": 0.2,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Water pump",
+              "motion": "spin",
+              "ask": "What does the water pump do?"
+            },
+            {
+              "id": "eng",
+              "kind": "box",
+              "x": 0.2,
+              "y": 0.58,
+              "size": 1.4,
+              "label": "Hot engine block",
+              "motion": "pulse",
+              "ask": "Why does a car engine get so hot?"
+            },
+            {
+              "id": "thermo",
+              "kind": "valve",
+              "x": 0.48,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Thermostat",
+              "motion": "pulse",
+              "ask": "What does a thermostat do in a car?"
+            },
+            {
+              "id": "rad",
+              "kind": "tank",
+              "x": 0.7,
+              "y": 0.48,
+              "size": 1.3,
+              "label": "Radiator",
+              "motion": "none",
+              "ask": "How does a radiator cool the engine?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.92,
+              "y": 0.48,
+              "size": 0.8,
+              "label": "Cooling fan",
+              "motion": "spin",
+              "ask": "Why does a car have a cooling fan?"
+            },
+            {
+              "id": "hose",
+              "kind": "pipe",
+              "x": 0.46,
+              "y": 0.88,
+              "size": 1,
+              "label": "Return hose",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "pump",
+              "to": "eng",
+              "kind": "fluid",
+              "label": "coolant in"
+            },
+            {
+              "from": "eng",
+              "to": "thermo",
+              "kind": "heat",
+              "label": "hot coolant"
+            },
+            {
+              "from": "thermo",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "when hot"
+            },
+            {
+              "from": "fan",
+              "to": "rad",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "rad",
+              "to": "hose",
+              "kind": "fluid",
+              "label": "cooled"
+            },
+            {
+              "from": "hose",
+              "to": "pump",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does a car engine get so hot?",
+      "a": "Burning fuel releases a lot of heat, and only about a quarter to a third of it becomes movement. The rest heats the engine and exhaust, so it must be carried away.",
+      "asks": [
+        "Why do engines need cooling?"
+      ]
+    },
+    {
+      "q": "What does the water pump do?",
+      "a": "The water pump is a spinning impeller, driven by the engine or an electric motor, that pushes coolant round the engine and radiator.",
+      "asks": [
+        "What moves the coolant?"
+      ]
+    },
+    {
+      "q": "What does a thermostat do in a car?",
+      "a": "The thermostat is a valve that stays shut while the engine is cold and opens when the coolant is hot, at about 90 degrees Celsius. This warms the engine quickly, then keeps it at a steady temperature.",
+      "asks": [
+        "Why does a car engine need a thermostat?"
+      ]
+    },
+    {
+      "q": "How does a radiator cool the engine?",
+      "a": "Hot coolant flows through many thin tubes covered in fins. Air passing between the fins takes the heat away, so the liquid comes out cooler.",
+      "asks": [
+        "What is a car radiator for?"
+      ]
+    },
+    {
+      "q": "Why does a car have a cooling fan?",
+      "a": "When the car is slow or stopped in traffic, not enough air rushes through the radiator. An electric fan switches on to pull air through, and may keep running for a while after you stop.",
+      "asks": [
+        "Why does the fan run after I stop the car?"
+      ]
+    }
+  ],
+  "facts": [
+    "Coolant is usually water mixed with antifreeze, which lowers its freezing point and raises its boiling point.",
+    "The cooling system is kept under pressure, which raises the boiling point of the coolant above 100 degrees Celsius.",
+    "A car's heater warms the cabin using hot coolant from the engine."
+  ],
+  "quiz": [
+    {
+      "say": "Why does the thermostat stay closed when the engine is cold?",
+      "show": "Why does the thermostat stay closed when the engine is cold?",
+      "options": [
+        {
+          "show": "So the engine warms up quickly",
+          "say": "So the engine warms up quickly"
+        },
+        {
+          "show": "To stop the coolant freezing",
+          "say": "To stop the coolant freezing"
+        },
+        {
+          "show": "To save the radiator from wear",
+          "say": "To save the radiator from wear"
+        }
+      ],
+      "answer": 0,
+      "why": "With the thermostat shut, coolant does not go to the radiator, so the engine reaches its working temperature fast.",
+      "wrong": {
+        "1": "Antifreeze in the coolant stops it freezing.",
+        "2": "Radiators do not wear out from use; the aim is quick warm-up."
+      }
+    }
+  ]
+}

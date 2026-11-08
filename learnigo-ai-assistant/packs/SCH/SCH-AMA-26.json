@@ -1,0 +1,363 @@
+{
+  "id": "SCH-AMA-26",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "How a 2×2 matrix moves every point on a grid",
+  "area": "School Explainers",
+  "group": "SCH-AMA — Advanced Maths (class 11–12)",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "matrix transformation",
+    "basis vectors",
+    "columns of a matrix",
+    "rotation matrix",
+    "linear map"
+  ],
+  "examples": [
+    "What does a matrix do to a point?",
+    "What do the columns of a matrix mean?",
+    "How does a rotation matrix work?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "Grid of points",
+          "icon": "map",
+          "note": "Every point (x, y) on a flat plane."
+        },
+        {
+          "label": "Where (1, 0) lands",
+          "icon": "arrow",
+          "note": "Column 1 tells you where (1, 0) goes.",
+          "ask": "What do the columns of a matrix mean?"
+        },
+        {
+          "label": "Where (0, 1) lands",
+          "icon": "arrow",
+          "note": "Column 2 tells you where (0, 1) goes."
+        },
+        {
+          "label": "Mix the columns",
+          "icon": "gear",
+          "note": "(x, y) goes to x lots of col 1 + y of col 2.",
+          "ask": "What does a matrix do to a point?"
+        },
+        {
+          "label": "Whole grid moves",
+          "icon": "globe",
+          "note": "Lines stay straight and evenly spaced."
+        }
+      ],
+      "loop": false
+    }
+  ],
+  "explain": [
+    {
+      "say": "When you rotate a photo on your phone, every single dot of it moves. A matrix is the recipe that tells each dot where to go. Look at the first stage: a grid of points, each with an x and a y.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a 2×2 matrix moves every point on a grid"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Grid of points",
+              "icon": "map",
+              "note": "Every point (x, y) on a flat plane."
+            },
+            {
+              "label": "Where (1, 0) lands",
+              "icon": "arrow",
+              "note": "Column 1 tells you where (1, 0) goes.",
+              "ask": "What do the columns of a matrix mean?"
+            },
+            {
+              "label": "Where (0, 1) lands",
+              "icon": "arrow",
+              "note": "Column 2 tells you where (0, 1) goes."
+            },
+            {
+              "label": "Mix the columns",
+              "icon": "gear",
+              "note": "(x, y) goes to x lots of col 1 + y of col 2.",
+              "ask": "What does a matrix do to a point?"
+            },
+            {
+              "label": "Whole grid moves",
+              "icon": "globe",
+              "note": "Lines stay straight and evenly spaced."
+            }
+          ],
+          "loop": false,
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Here is the secret. The first column of the matrix says where the point 1, 0 lands. For a quarter-turn rotation, the first column is 0, 1. So 1, 0 swings up to 0, 1. See the second stage?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Grid of points",
+              "icon": "map",
+              "note": "Every point (x, y) on a flat plane."
+            },
+            {
+              "label": "Where (1, 0) lands",
+              "icon": "arrow",
+              "note": "Column 1 tells you where (1, 0) goes.",
+              "ask": "What do the columns of a matrix mean?"
+            },
+            {
+              "label": "Where (0, 1) lands",
+              "icon": "arrow",
+              "note": "Column 2 tells you where (0, 1) goes."
+            },
+            {
+              "label": "Mix the columns",
+              "icon": "gear",
+              "note": "(x, y) goes to x lots of col 1 + y of col 2.",
+              "ask": "What does a matrix do to a point?"
+            },
+            {
+              "label": "Whole grid moves",
+              "icon": "globe",
+              "note": "Lines stay straight and evenly spaced."
+            }
+          ],
+          "loop": false,
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The second column says where 0, 1 lands. For our rotation it is minus 1, 0. So 0, 1 swings to the left. Look at the third stage. Two columns, two landing spots. That is the whole matrix!",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Grid of points",
+              "icon": "map",
+              "note": "Every point (x, y) on a flat plane."
+            },
+            {
+              "label": "Where (1, 0) lands",
+              "icon": "arrow",
+              "note": "Column 1 tells you where (1, 0) goes.",
+              "ask": "What do the columns of a matrix mean?"
+            },
+            {
+              "label": "Where (0, 1) lands",
+              "icon": "arrow",
+              "note": "Column 2 tells you where (0, 1) goes."
+            },
+            {
+              "label": "Mix the columns",
+              "icon": "gear",
+              "note": "(x, y) goes to x lots of col 1 + y of col 2.",
+              "ask": "What does a matrix do to a point?"
+            },
+            {
+              "label": "Whole grid moves",
+              "icon": "globe",
+              "note": "Lines stay straight and evenly spaced."
+            }
+          ],
+          "loop": false,
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Now any point. Take 2, 1: that is 2 lots of the first column plus 1 lot of the second. 2 times 0, 1 plus minus 1, 0 gives minus 1, 2. Look at the fourth stage. Can you check it is a quarter turn of 2, 1?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Grid of points",
+              "icon": "map",
+              "note": "Every point (x, y) on a flat plane."
+            },
+            {
+              "label": "Where (1, 0) lands",
+              "icon": "arrow",
+              "note": "Column 1 tells you where (1, 0) goes.",
+              "ask": "What do the columns of a matrix mean?"
+            },
+            {
+              "label": "Where (0, 1) lands",
+              "icon": "arrow",
+              "note": "Column 2 tells you where (0, 1) goes."
+            },
+            {
+              "label": "Mix the columns",
+              "icon": "gear",
+              "note": "(x, y) goes to x lots of col 1 + y of col 2.",
+              "ask": "What does a matrix do to a point?"
+            },
+            {
+              "label": "Whole grid moves",
+              "icon": "globe",
+              "note": "Lines stay straight and evenly spaced."
+            }
+          ],
+          "loop": false,
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "It is! Well done. Every point moves the same way, so the whole grid turns, with straight lines staying straight. Games, photo apps and robot arms all move things with matrices like this.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Grid of points",
+              "icon": "map",
+              "note": "Every point (x, y) on a flat plane."
+            },
+            {
+              "label": "Where (1, 0) lands",
+              "icon": "arrow",
+              "note": "Column 1 tells you where (1, 0) goes.",
+              "ask": "What do the columns of a matrix mean?"
+            },
+            {
+              "label": "Where (0, 1) lands",
+              "icon": "arrow",
+              "note": "Column 2 tells you where (0, 1) goes."
+            },
+            {
+              "label": "Mix the columns",
+              "icon": "gear",
+              "note": "(x, y) goes to x lots of col 1 + y of col 2.",
+              "ask": "What does a matrix do to a point?"
+            },
+            {
+              "label": "Whole grid moves",
+              "icon": "globe",
+              "note": "Lines stay straight and evenly spaced."
+            }
+          ],
+          "loop": false,
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does a matrix do to a point?",
+      "a": "It moves it. A 2 by 2 matrix sends the point x, y to x times the first column plus y times the second column.",
+      "asks": [
+        "How do you multiply a matrix by a point?"
+      ]
+    },
+    {
+      "q": "What do the columns of a matrix mean?",
+      "a": "The first column is where the point 1, 0 lands, and the second column is where 0, 1 lands. Those two landing spots decide where everything else goes.",
+      "asks": [
+        "Why do the columns matter?"
+      ]
+    },
+    {
+      "q": "How does a rotation matrix work?",
+      "a": "For a quarter turn anticlockwise, 1, 0 goes to 0, 1 and 0, 1 goes to minus 1, 0. So the matrix has columns 0, 1 and minus 1, 0.",
+      "asks": [
+        "What is the matrix for a 90 degree rotation?"
+      ]
+    },
+    {
+      "q": "Why do straight lines stay straight?",
+      "a": "A matrix moves points by mixing the two columns in proportion. Evenly spaced points on a line stay evenly spaced on a new line. That is called a linear transformation.",
+      "asks": [
+        "What is a linear transformation?"
+      ]
+    },
+    {
+      "q": "What matrix leaves everything where it is?",
+      "a": "The identity matrix, with columns 1, 0 and 0, 1. It sends every point back to itself.",
+      "asks": [
+        "What is the identity matrix?"
+      ]
+    }
+  ],
+  "facts": [
+    "The columns of a 2×2 matrix are the images of the points (1, 0) and (0, 1).",
+    "The matrix with columns (0, 1) and (−1, 0) rotates the plane 90° anticlockwise about the origin."
+  ],
+  "quiz": [
+    {
+      "say": "A matrix has columns (3, 0) and (0, 3). What does it do?",
+      "show": "A matrix has columns (3, 0) and (0, 3). What does it do?",
+      "options": [
+        {
+          "show": "Rotates by 90°",
+          "say": "Rotates by 90°"
+        },
+        {
+          "show": "Reflects in the x-axis",
+          "say": "Reflects in the x-axis"
+        },
+        {
+          "show": "Enlarges by scale factor 3",
+          "say": "Enlarges by scale factor 3"
+        }
+      ],
+      "answer": 2,
+      "why": "(1, 0) goes to (3, 0) and (0, 1) goes to (0, 3): everything is 3 times further from the origin.",
+      "wrong": {
+        "0": "A rotation would swing (1, 0) round, not stretch it.",
+        "1": "A reflection in the x-axis would send (0, 1) to (0, −1)."
+      }
+    },
+    {
+      "say": "Using the quarter turn matrix, where does the point 1, 3 go?",
+      "show": "Using the quarter-turn matrix, where does (1, 3) go?",
+      "options": [
+        {
+          "show": "(−3, 1)",
+          "say": "(−3, 1)"
+        },
+        {
+          "show": "(3, 1)",
+          "say": "(3, 1)"
+        },
+        {
+          "show": "(1, −3)",
+          "say": "(1, −3)"
+        }
+      ],
+      "answer": 0,
+      "why": "1 × (0, 1) + 3 × (−1, 0) = (−3, 1).",
+      "wrong": {
+        "1": "(3, 1) swaps the numbers but forgets the minus sign.",
+        "2": "(1, −3) is a reflection in the x-axis."
+      }
+    }
+  ]
+}

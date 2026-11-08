@@ -1,0 +1,412 @@
+{
+  "id": "BME-HEAT-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Thermal resistance networks: walls as resistors in series",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-HEAT — Heat transfer",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "thermal resistance",
+    "R-value",
+    "composite wall",
+    "overall heat transfer coefficient",
+    "electrical analogy"
+  ],
+  "examples": [
+    "How do I find heat loss through a composite wall?",
+    "What is thermal resistance?",
+    "Why is heat flow like electric current?"
+  ],
+  "figure": [
+    {
+      "name": "x-layers",
+      "layers": [
+        {
+          "label": "Inside air film",
+          "note": "R = 1/h = 0.10 K/W (h = 10)",
+          "color": "#f0c090",
+          "size": 0.5,
+          "ask": "What is the resistance of an air film?"
+        },
+        {
+          "label": "Brick 100 mm",
+          "note": "R = 0.1/0.7 = 0.14 K/W",
+          "color": "#b5653c",
+          "size": 1.4
+        },
+        {
+          "label": "Insulation 50 mm",
+          "note": "R = 0.05/0.04 = 1.25 K/W",
+          "color": "#f3e27a",
+          "size": 1,
+          "ask": "Why does insulation matter so much in a wall?"
+        },
+        {
+          "label": "Outside air film",
+          "note": "R = 1/25 = 0.04 K/W",
+          "color": "#9cc3e6",
+          "size": 0.5
+        }
+      ],
+      "flow": {
+        "label": "13 W per m²",
+        "from": 0,
+        "to": 3
+      },
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A real wall is not one material: plaster, brick, insulation, cladding, with air films on both faces. How do you add them up? Engineers borrowed a trick from electricity. Look at the wall: four layers, each resisting the heat a different amount. One square metre, 20 degrees inside and 0 outside.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Thermal resistance networks: walls as resistors in series"
+        },
+        {
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Inside air film",
+              "note": "R = 1/h = 0.10 K/W (h = 10)",
+              "color": "#f0c090",
+              "size": 0.5,
+              "ask": "What is the resistance of an air film?"
+            },
+            {
+              "label": "Brick 100 mm",
+              "note": "R = 0.1/0.7 = 0.14 K/W",
+              "color": "#b5653c",
+              "size": 1.4
+            },
+            {
+              "label": "Insulation 50 mm",
+              "note": "R = 0.05/0.04 = 1.25 K/W",
+              "color": "#f3e27a",
+              "size": 1,
+              "ask": "Why does insulation matter so much in a wall?"
+            },
+            {
+              "label": "Outside air film",
+              "note": "R = 1/25 = 0.04 K/W",
+              "color": "#9cc3e6",
+              "size": 0.5
+            }
+          ],
+          "flow": {
+            "label": "13 W per m²",
+            "from": 0,
+            "to": 3
+          },
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Per square metre of wall, 20 °C in, 0 °C out"
+        }
+      ]
+    },
+    {
+      "say": "Each layer has a thermal resistance. For conduction it is L over k A; for a surface air film it is 1 over h A. Heat flow is like current, temperature difference like voltage, so Q equals delta T over R, just like Ohm's law. See the circuit: four resistors in series.",
+      "draw": [
+        {
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Temp. difference",
+              "value": "20 K",
+              "ask": "Why is heat flow like electric current?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Inside film",
+              "value": "0.10 K/W"
+            },
+            {
+              "kind": "resistor",
+              "label": "Brick",
+              "value": "0.14 K/W"
+            },
+            {
+              "kind": "resistor",
+              "label": "Insulation",
+              "value": "1.25 K/W",
+              "ask": "Why does insulation matter so much in a wall?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Outside film",
+              "value": "0.04 K/W"
+            }
+          ],
+          "readouts": [
+            "R total = 1.53 K/W",
+            "Q = 13.0 W"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Q = ΔT / R_total, R_cond = L/kA, R_conv = 1/hA"
+        }
+      ]
+    },
+    {
+      "say": "Series resistances simply add: 0.10 plus 0.14 plus 1.25 plus 0.04 gives 1.53 kelvin per watt. So Q is 20 over 1.53, about 13 watts per square metre. Look at the resistor values: which layer does most of the work?",
+      "draw": [
+        {
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Temp. difference",
+              "value": "20 K",
+              "ask": "Why is heat flow like electric current?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Inside film",
+              "value": "0.10 K/W"
+            },
+            {
+              "kind": "resistor",
+              "label": "Brick",
+              "value": "0.14 K/W"
+            },
+            {
+              "kind": "resistor",
+              "label": "Insulation",
+              "value": "1.25 K/W",
+              "ask": "Why does insulation matter so much in a wall?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Outside film",
+              "value": "0.04 K/W"
+            }
+          ],
+          "readouts": [
+            "R total = 1.53 K/W",
+            "Q = 13.0 W"
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "Q = 20 / 1.533 = 13.0 W"
+        }
+      ]
+    },
+    {
+      "say": "The insulation, with 1.25 of the 1.53! The temperature drop across each layer is Q times its R, so the biggest drop happens across the biggest resistance. See the graph: the line falls gently through the brick, then plunges across the insulation from about 17 degrees to half a degree.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Position (mm)",
+            "min": -10,
+            "max": 160
+          },
+          "y": {
+            "label": "Temperature (°C)",
+            "max": 22
+          },
+          "curves": [
+            {
+              "label": "Through the wall",
+              "type": "points",
+              "points": [
+                [
+                  -10,
+                  20
+                ],
+                [
+                  0,
+                  18.7
+                ],
+                [
+                  100,
+                  16.8
+                ],
+                [
+                  150,
+                  0.5
+                ],
+                [
+                  160,
+                  0
+                ]
+              ],
+              "ask": "How do I find the temperature between layers?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "Brick | insulation"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ΔT_ins = 13.05 × 1.25 = 16.3 K"
+        }
+      ]
+    },
+    {
+      "say": "Lovely. Without the insulation, Q would be 20 over 0.28, about 71 watts per square metre, more than five times worse! Real link: building codes give the U-value, which is 1 over the total R per square metre. Exam tip: layers side by side, like a window in a wall, are parallel resistances.",
+      "draw": [
+        {
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Temp. difference",
+              "value": "20 K",
+              "ask": "Why is heat flow like electric current?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Inside film",
+              "value": "0.10 K/W"
+            },
+            {
+              "kind": "resistor",
+              "label": "Brick",
+              "value": "0.14 K/W"
+            },
+            {
+              "kind": "resistor",
+              "label": "Insulation",
+              "value": "1.25 K/W",
+              "ask": "Why does insulation matter so much in a wall?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Outside film",
+              "value": "0.04 K/W"
+            }
+          ],
+          "readouts": [
+            "R total = 1.53 K/W",
+            "Q = 13.0 W"
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "U = 1/R_total = 0.65 W/m²·K for this wall"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does insulation matter so much in a wall?",
+      "a": "Insulation has a very low conductivity, so even a thin layer has a large thermal resistance. In series, that big resistance dominates the total and cuts the heat flow.",
+      "asks": [
+        "which layer controls heat loss"
+      ]
+    },
+    {
+      "q": "Why is heat flow like electric current?",
+      "a": "Heat flow Q equals temperature difference over thermal resistance, just as current equals voltage over resistance. So series and parallel rules from circuits work for heat too.",
+      "asks": [
+        "thermal electrical analogy"
+      ]
+    },
+    {
+      "q": "How do I find the temperature between layers?",
+      "a": "Find Q first, then subtract Q times each resistance in turn from the hot side temperature. The biggest resistance has the biggest temperature drop.",
+      "asks": [
+        "interface temperature composite wall"
+      ]
+    },
+    {
+      "q": "What is the resistance of an air film?",
+      "a": "A surface where heat passes to or from air by convection has a resistance of 1 over h A. Still indoor air with h about 10 gives 0.1 kelvin per watt for one square metre.",
+      "asks": [
+        "convection resistance"
+      ]
+    },
+    {
+      "q": "What is a U-value?",
+      "a": "The U-value is the overall heat transfer coefficient, one over the total resistance per square metre, in watts per square metre kelvin. Lower U means a better insulated wall.",
+      "asks": [
+        "overall heat transfer coefficient"
+      ]
+    }
+  ],
+  "facts": [
+    "Thermal resistances in series add, just like electrical resistors.",
+    "The U-value of a wall is the reciprocal of its total thermal resistance per square metre."
+  ],
+  "quiz": [
+    {
+      "say": "Three layers in series have resistances of 0.2, 0.5 and 0.3 kelvin per watt. The temperature difference across them is 30 kelvin. What is the heat flow?",
+      "show": "R = 0.2, 0.5 and 0.3 K/W in series, ΔT = 30 K. Heat flow?",
+      "options": [
+        {
+          "show": "30 W",
+          "say": "30 watts"
+        },
+        {
+          "show": "10 W",
+          "say": "10 watts"
+        },
+        {
+          "show": "300 W",
+          "say": "300 watts"
+        }
+      ],
+      "answer": 0,
+      "why": "R_total = 1.0 K/W, so Q = 30/1.0 = 30 W.",
+      "wrong": {
+        "1": "That divides by 3 as if taking an average resistance; series resistances add.",
+        "2": "That multiplies the resistances in a parallel-like way; series ones just add to 1.0."
+      }
+    },
+    {
+      "say": "Across which layer of a composite wall is the temperature drop largest?",
+      "show": "Where is the biggest temperature drop in a composite wall?",
+      "options": [
+        {
+          "show": "Across the layer with the largest thermal resistance",
+          "say": "Across the layer with the largest thermal resistance"
+        },
+        {
+          "show": "Across the thickest layer, always",
+          "say": "Across the thickest layer, always"
+        },
+        {
+          "show": "Across the outside air film",
+          "say": "Across the outside air film"
+        }
+      ],
+      "answer": 0,
+      "why": "The same Q passes through every layer, so ΔT = Q × R is largest where R is largest.",
+      "wrong": {
+        "1": "A thick layer of a good conductor can still have a small resistance.",
+        "2": "The outside film usually has a small resistance because wind makes h large."
+      }
+    }
+  ]
+}

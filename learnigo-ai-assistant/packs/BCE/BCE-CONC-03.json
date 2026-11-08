@@ -1,0 +1,384 @@
+{
+  "id": "BCE-CONC-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Reinforced concrete beams: putting the steel where the tension is",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONC — Concrete and steel design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "reinforced concrete beam",
+    "tension reinforcement",
+    "neutral axis",
+    "stirrups",
+    "lever arm"
+  ],
+  "examples": [
+    "Why does steel go at the bottom of a concrete beam?",
+    "How do you calculate the steel area for a beam?",
+    "What are stirrups for?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 6,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "What are stirrups for?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 20,
+          "label": "20 kN/m",
+          "ask": "Why does the steel go at the bottom of a beam?"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Concrete is superb in compression, but it cracks under a pull at about a tenth of its crushing strength. In the eighteen sixties a French gardener, Joseph Monier, put iron mesh into his concrete flowerpots, and reinforced concrete was born. Here is a six metre beam carrying twenty kilonewtons per metre.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Reinforced concrete beams: putting the steel where the tension is"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What are stirrups for?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 20,
+              "label": "20 kN/m",
+              "ask": "Why does the steel go at the bottom of a beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a reinforced concrete beam, cut open. Look at the main bars low down in the tension zone, the stirrups wrapped around them, and the concrete cover outside. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Reinforced concrete beams: putting the steel where the tension is"
+        },
+        {
+          "op": "image",
+          "render": "rc-beam-cutaway"
+        }
+      ]
+    },
+    {
+      "say": "The moment peaks at ninety kilonewton metres at midspan, and it is sagging. So the bottom of the beam is stretched and the top is squashed. Plain concrete would crack at the bottom almost at once. Where should the steel bars go?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What are stirrups for?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 20,
+              "label": "20 kN/m",
+              "ask": "Why does the steel go at the bottom of a beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M = wL²/8 = 20 × 6² / 8 = 90 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "At the bottom! This slice through the beam shows the idea. Above the neutral axis, the line of no stress, concrete takes the squeeze. Below it, the concrete cracks finely and the steel bars carry all the pull. A layer of cover concrete protects the bars from rust and fire.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Compression zone",
+              "size": 1.2,
+              "note": "Concrete is squeezed here",
+              "color": "#9aa5b1"
+            },
+            {
+              "label": "Neutral axis",
+              "size": 0.3,
+              "note": "No stress on this line",
+              "ask": "What is the neutral axis?"
+            },
+            {
+              "label": "Tension zone",
+              "size": 1.6,
+              "note": "Concrete cracks finely; steel takes the pull",
+              "color": "#c9ced6",
+              "ask": "Why does concrete need steel reinforcement?"
+            },
+            {
+              "label": "Steel bars 3×16 mm",
+              "size": 0.4,
+              "note": "Main bars near the bottom face",
+              "color": "#c0392b",
+              "ask": "Why does the steel go at the bottom of a beam?"
+            },
+            {
+              "label": "Cover 30 mm",
+              "size": 0.3,
+              "note": "Protects bars from rust and fire",
+              "ask": "What is concrete cover?"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "How much steel? The bars' pull times the lever arm, the distance up to the squeeze, must equal the moment. With five hundred megapascal steel and a lever arm of about four hundred and five millimetres, we need about five hundred and eleven square millimetres. Three sixteen millimetre bars give six hundred and three. Why choose a little more?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Compression zone",
+              "size": 1.2,
+              "note": "Concrete is squeezed here",
+              "color": "#9aa5b1"
+            },
+            {
+              "label": "Neutral axis",
+              "size": 0.3,
+              "note": "No stress on this line",
+              "ask": "What is the neutral axis?"
+            },
+            {
+              "label": "Tension zone",
+              "size": 1.6,
+              "note": "Concrete cracks finely; steel takes the pull",
+              "color": "#c9ced6",
+              "ask": "Why does concrete need steel reinforcement?"
+            },
+            {
+              "label": "Steel bars 3×16 mm",
+              "size": 0.4,
+              "note": "Main bars near the bottom face",
+              "color": "#c0392b",
+              "ask": "Why does the steel go at the bottom of a beam?"
+            },
+            {
+              "label": "Cover 30 mm",
+              "size": 0.3,
+              "note": "Protects bars from rust and fire",
+              "ask": "What is concrete cover?"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "A_s = M/(0.87 f_y z) = 90×10⁶/(0.87×500×405) ≈ 511 mm²"
+        },
+        {
+          "op": "note",
+          "text": "3 bars of 16 mm = 603 mm², more than 511 mm², so OK."
+        }
+      ]
+    },
+    {
+      "say": "For a margin, and because bars come in fixed sizes. Two more places need steel. Near the supports the shear is largest, sixty kilonewtons here, so we add stirrups, steel loops that stop diagonal cracks. And over supports or in cantilevers, tension flips to the top, so bars go up there. Well done! Challenge: sketch the bars in a balcony.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What are stirrups for?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 20,
+              "label": "20 kN/m",
+              "ask": "Why does the steel go at the bottom of a beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does concrete need steel reinforcement?",
+      "a": "Concrete is strong in compression but weak in tension, cracking at about a tenth of its compressive strength. Steel bars carry the tension so the beam can bend without breaking.",
+      "asks": [
+        "Why reinforce concrete?"
+      ]
+    },
+    {
+      "q": "Why does the steel go at the bottom of a beam?",
+      "a": "A simply supported beam sags, which stretches the bottom face. The steel goes where the tension is, near the bottom, with just enough cover to protect it.",
+      "asks": [
+        "Where is the reinforcement in a beam?"
+      ]
+    },
+    {
+      "q": "What is the neutral axis?",
+      "a": "The neutral axis is the line in a bent beam where there is neither tension nor compression. Above it the beam is squeezed and below it stretched, for a sagging beam.",
+      "asks": [
+        "Define neutral axis"
+      ]
+    },
+    {
+      "q": "What are stirrups for?",
+      "a": "Stirrups, or links, are loops of steel around the main bars. They resist shear, stopping diagonal cracks near the supports, and hold the main bars in place.",
+      "asks": [
+        "What do links do in a beam?",
+        "Shear reinforcement"
+      ]
+    },
+    {
+      "q": "What is concrete cover?",
+      "a": "Cover is the concrete between the steel and the outer surface, typically 25 to 50 millimetres. It protects the bars from corrosion and fire and helps them grip the concrete.",
+      "asks": [
+        "Why is cover needed?"
+      ]
+    }
+  ],
+  "facts": [
+    "Concrete's tensile strength is roughly a tenth of its compressive strength.",
+    "Steel and concrete expand with heat by almost the same amount, about 10 to 12 millionths per degree, so they stay bonded together.",
+    "Joseph Monier patented iron-reinforced concrete planters in 1867."
+  ],
+  "quiz": [
+    {
+      "say": "A beam has a moment of 120 kilonewton metres, steel of 500 megapascals and a lever arm of 400 millimetres. Using A s equals M over 0.87 f y z, what steel area is needed?",
+      "show": "M = 120 kN·m, f_y = 500 MPa, z = 400 mm. Steel area from A_s = M/(0.87 f_y z)?",
+      "options": [
+        {
+          "show": "About 690 mm²",
+          "say": "about 690 square millimetres"
+        },
+        {
+          "show": "600 mm²",
+          "say": "600 square millimetres"
+        },
+        {
+          "show": "About 1380 mm²",
+          "say": "about 1380 square millimetres"
+        }
+      ],
+      "answer": 0,
+      "why": "120 × 10⁶ ÷ (0.87 × 500 × 400) = 120,000,000 ÷ 174,000 ≈ 690 square millimetres.",
+      "wrong": {
+        "1": "That leaves out the 0.87 factor on the steel strength.",
+        "2": "That would be for a lever arm of only 200 millimetres."
+      }
+    },
+    {
+      "say": "In a cantilever balcony slab, the main bars go…",
+      "show": "In a cantilever balcony slab, the main bars go…",
+      "options": [
+        {
+          "show": "Near the top",
+          "say": "Near the top"
+        },
+        {
+          "show": "Near the bottom",
+          "say": "Near the bottom"
+        },
+        {
+          "show": "In the middle of the depth",
+          "say": "In the middle of the depth"
+        }
+      ],
+      "answer": 0,
+      "why": "A cantilever hogs, so the tension is at the top.",
+      "wrong": {
+        "1": "Bottom bars suit sagging spans, not cantilevers.",
+        "2": "The middle is near the neutral axis, where steel does almost nothing."
+      }
+    }
+  ]
+}

@@ -1,0 +1,500 @@
+{
+  "id": "BCE-SURV-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Earthwork volumes and the mass-haul diagram: cut, fill and balance",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-SURV — Surveying and geomatics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "earthwork volume",
+    "average end area",
+    "prismoidal formula",
+    "mass-haul diagram",
+    "balance point",
+    "bulking factor"
+  ],
+  "examples": [
+    "How do you calculate earthwork volume between cross-sections?",
+    "How do you read a mass-haul diagram?",
+    "What is the prismoidal formula?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "equal": true,
+      "x": {
+        "label": "Offset (m)",
+        "min": -10,
+        "max": 10
+      },
+      "y": {
+        "label": "Height (m)",
+        "min": 0,
+        "max": 5
+      },
+      "curves": [
+        {
+          "label": "Embankment section",
+          "type": "points",
+          "points": [
+            [
+              -9,
+              0
+            ],
+            [
+              -5,
+              2
+            ],
+            [
+              5,
+              2
+            ],
+            [
+              9,
+              0
+            ]
+          ],
+          "ask": "How do you calculate the area of a road cross-section?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0,
+          "label": "Top width 10 m"
+        },
+        {
+          "x": 7,
+          "label": "Side slope 2 : 1"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A new road over rolling hills means digging through the high parts, called cuts, and building up the low parts, called embankments or fills. Moving millions of tonnes of earth is one of the biggest costs of the job. It starts with a cross-section. On the board, an embankment two metres high.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Earthwork volumes and the mass-haul diagram: cut, fill and balance"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Offset (m)",
+            "min": -10,
+            "max": 10
+          },
+          "y": {
+            "label": "Height (m)",
+            "min": 0,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Embankment section",
+              "type": "points",
+              "points": [
+                [
+                  -9,
+                  0
+                ],
+                [
+                  -5,
+                  2
+                ],
+                [
+                  5,
+                  2
+                ],
+                [
+                  9,
+                  0
+                ]
+              ],
+              "ask": "How do you calculate the area of a road cross-section?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Top width 10 m"
+            },
+            {
+              "x": 7,
+              "label": "Side slope 2 : 1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at its shape: a flat top ten metres wide, with sides sloping two across for every one up. Its area is the top width plus the slope times the height, all times the height: ten plus four, times two, twenty eight square metres. Why are the sides sloped, not vertical?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Offset (m)",
+            "min": -10,
+            "max": 10
+          },
+          "y": {
+            "label": "Height (m)",
+            "min": 0,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Embankment section",
+              "type": "points",
+              "points": [
+                [
+                  -9,
+                  0
+                ],
+                [
+                  -5,
+                  2
+                ],
+                [
+                  5,
+                  2
+                ],
+                [
+                  9,
+                  0
+                ]
+              ],
+              "ask": "How do you calculate the area of a road cross-section?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Top width 10 m"
+            },
+            {
+              "x": 7,
+              "label": "Side slope 2 : 1"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "A = (b + n h) h = (10 + 2 × 2) × 2 = 28 m²"
+        }
+      ]
+    },
+    {
+      "say": "So the soil does not slump! Now volume. Take sections twenty metres apart, twenty and thirty square metres. Average the end areas and multiply by the gap: five hundred cubic metres. But dug soil is fluffy. A cubic metre from the ground fills about one point two five in a truck and squeezes to zero point nine once compacted.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "m³",
+          "items": [
+            {
+              "label": "In the ground",
+              "size": 1,
+              "icon": "soil"
+            },
+            {
+              "label": "Loose in a truck",
+              "size": 1.25,
+              "icon": "car"
+            },
+            {
+              "label": "Compacted",
+              "size": 0.9,
+              "icon": "wheel"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V = L (A₁ + A₂) / 2 = 20 × (20 + 30) / 2 = 500 m³"
+        },
+        {
+          "op": "note",
+          "text": "Prismoidal: L/6 (A₁ + 4A_m + A₂) gives 493 m³ when A_m = 24.5 m²."
+        }
+      ]
+    },
+    {
+      "say": "Now the mass-haul diagram. Add up the volumes along the road, cut as plus, fill as minus. Look at the curve: it rises while the road is in cut and falls while it is in fill. The peak at four hundred metres is exactly where cutting ends and filling begins. What does a falling curve mean?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Chainage (m)",
+            "max": 1000
+          },
+          "y": {
+            "label": "Cumulative vol. (m³)",
+            "min": -1500,
+            "max": 6000
+          },
+          "curves": [
+            {
+              "label": "Mass-haul curve",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  100,
+                  1500
+                ],
+                [
+                  200,
+                  3500
+                ],
+                [
+                  300,
+                  5000
+                ],
+                [
+                  400,
+                  5600
+                ],
+                [
+                  500,
+                  5000
+                ],
+                [
+                  600,
+                  3200
+                ],
+                [
+                  700,
+                  1000
+                ],
+                [
+                  800,
+                  -500
+                ],
+                [
+                  900,
+                  -1200
+                ],
+                [
+                  1000,
+                  -800
+                ]
+              ],
+              "ask": "What is a mass-haul diagram?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 400,
+              "label": "Cut ends, fill starts"
+            },
+            {
+              "x": 767,
+              "label": "Balance point",
+              "ask": "What is a mass-haul diagram?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Filling! Where the curve returns to zero, at about seven hundred and sixty seven metres, everything dug so far has been placed: a balance point. Beyond it the road ends eight hundred cubic metres short, so soil must be brought in from a borrow pit. Excellent! Challenge: sections forty and sixty square metres, twenty five metres apart: what volume?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Chainage (m)",
+            "max": 1000
+          },
+          "y": {
+            "label": "Cumulative vol. (m³)",
+            "min": -1500,
+            "max": 6000
+          },
+          "curves": [
+            {
+              "label": "Mass-haul curve",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  100,
+                  1500
+                ],
+                [
+                  200,
+                  3500
+                ],
+                [
+                  300,
+                  5000
+                ],
+                [
+                  400,
+                  5600
+                ],
+                [
+                  500,
+                  5000
+                ],
+                [
+                  600,
+                  3200
+                ],
+                [
+                  700,
+                  1000
+                ],
+                [
+                  800,
+                  -500
+                ],
+                [
+                  900,
+                  -1200
+                ],
+                [
+                  1000,
+                  -800
+                ]
+              ],
+              "ask": "What is a mass-haul diagram?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 400,
+              "label": "Cut ends, fill starts"
+            },
+            {
+              "x": 767,
+              "label": "Balance point",
+              "ask": "What is a mass-haul diagram?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you calculate the area of a road cross-section?",
+      "a": "For level ground, area equals the formation width plus the side slope ratio times the height, all times the height. A 10 metre top, 2 metres high with 2 to 1 slopes, gives 28 square metres.",
+      "asks": [
+        "Cross-section area formula"
+      ]
+    },
+    {
+      "q": "What is the average end area method?",
+      "a": "The volume between two cross-sections is the distance between them times the average of their areas. Twenty metres apart with 20 and 30 square metres gives 500 cubic metres.",
+      "asks": [
+        "How do you calculate earthwork volume between cross-sections?"
+      ]
+    },
+    {
+      "q": "What is the prismoidal formula?",
+      "a": "A more exact volume: L over 6 times the first area plus 4 times the middle area plus the last area. It suits curved or changing sections.",
+      "asks": [
+        "Prismoidal rule"
+      ]
+    },
+    {
+      "q": "What is a mass-haul diagram?",
+      "a": "A graph of cumulative earthwork volume along a route, cut positive and fill negative. Rising parts are cut, falling parts are fill, and where it crosses a horizontal line the cut and fill balance.",
+      "asks": [
+        "How do you read a mass-haul diagram?",
+        "Balance point"
+      ]
+    },
+    {
+      "q": "What is bulking of soil?",
+      "a": "Soil swells when dug, often by about 25 percent for common earth, and shrinks when compacted. Volumes are converted between bank, loose and compacted states for planning trucks and fill.",
+      "asks": [
+        "Swell and shrinkage factor"
+      ]
+    }
+  ],
+  "facts": [
+    "On a mass-haul diagram, a rising curve means cut and a falling curve means fill.",
+    "The prismoidal formula gives exact volumes for solids whose cross-section area varies as a quadratic along their length."
+  ],
+  "quiz": [
+    {
+      "say": "Two cross-sections of 40 and 60 square metres are 25 metres apart. What is the volume by the average end area method?",
+      "show": "Cross-sections of 40 m² and 60 m² are 25 m apart. Volume by average end area?",
+      "options": [
+        {
+          "show": "1,250 m³",
+          "say": "1,250 cubic metres"
+        },
+        {
+          "show": "2,500 m³",
+          "say": "2,500 cubic metres"
+        },
+        {
+          "show": "125 m³",
+          "say": "125 cubic metres"
+        }
+      ],
+      "answer": 0,
+      "why": "V = 25 × (40 + 60) / 2 = 25 × 50 = 1,250 m³.",
+      "wrong": {
+        "1": "That forgets to average the areas.",
+        "2": "That slips a factor of ten."
+      }
+    },
+    {
+      "say": "On a mass-haul diagram, a falling section of curve means…",
+      "show": "On a mass-haul diagram, a falling section of curve means…",
+      "options": [
+        {
+          "show": "The road is in fill",
+          "say": "The road is in fill"
+        },
+        {
+          "show": "The road is in cut",
+          "say": "The road is in cut"
+        },
+        {
+          "show": "No earthwork",
+          "say": "No earthwork"
+        }
+      ],
+      "answer": 0,
+      "why": "Fill is counted negative, so the cumulative volume falls.",
+      "wrong": {
+        "1": "Cut makes the curve rise.",
+        "2": "A flat curve would mean no earthwork."
+      }
+    }
+  ]
+}

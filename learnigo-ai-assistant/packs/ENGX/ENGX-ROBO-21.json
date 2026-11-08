@@ -1,0 +1,570 @@
+{
+  "id": "ENGX-ROBO-21",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How automatic sliding doors know when to open",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "automatic doors",
+    "microwave motion sensor",
+    "safety beam",
+    "sliding door motor",
+    "door controller"
+  ],
+  "examples": [
+    "How do automatic doors know when to open?",
+    "Why don't automatic doors close on people?",
+    "What sensor opens automatic doors?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sens",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.1,
+          "label": "Motion sensor",
+          "motion": "pulse",
+          "ask": "How do automatic doors detect people?"
+        },
+        {
+          "id": "ctrl",
+          "kind": "box",
+          "x": 0.15,
+          "y": 0.35,
+          "label": "Controller",
+          "motion": "pulse"
+        },
+        {
+          "id": "mot",
+          "kind": "motor",
+          "x": 0.15,
+          "y": 0.75,
+          "label": "Motor and gearbox",
+          "motion": "spin"
+        },
+        {
+          "id": "belt",
+          "kind": "belt",
+          "x": 0.5,
+          "y": 0.5,
+          "label": "Toothed belt",
+          "motion": "flow",
+          "ask": "How does the door move?"
+        },
+        {
+          "id": "door",
+          "kind": "box",
+          "x": 0.55,
+          "y": 0.85,
+          "label": "Door panels",
+          "motion": "slide",
+          "ask": "How does the door move?"
+        },
+        {
+          "id": "beam",
+          "kind": "bulb",
+          "x": 0.88,
+          "y": 0.65,
+          "label": "Safety beam",
+          "motion": "pulse",
+          "ask": "Why don't automatic doors close on people?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sens",
+          "to": "ctrl",
+          "kind": "signal",
+          "label": "someone coming"
+        },
+        {
+          "from": "beam",
+          "to": "ctrl",
+          "kind": "signal",
+          "label": "doorway blocked"
+        },
+        {
+          "from": "ctrl",
+          "to": "mot",
+          "kind": "power"
+        },
+        {
+          "from": "mot",
+          "to": "belt",
+          "kind": "force"
+        },
+        {
+          "from": "belt",
+          "to": "door",
+          "kind": "force",
+          "label": "slides"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Above an automatic door sits a motion sensor, often a small radar that bounces microwaves off anything moving towards it. When you walk up, the reflected waves change and the sensor signals the controller.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How automatic sliding doors know when to open"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sens",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.1,
+              "label": "Motion sensor",
+              "motion": "pulse",
+              "ask": "How do automatic doors detect people?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.35,
+              "label": "Controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.75,
+              "label": "Motor and gearbox",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Toothed belt",
+              "motion": "flow",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.85,
+              "label": "Door panels",
+              "motion": "slide",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.88,
+              "y": 0.65,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why don't automatic doors close on people?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sens",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "someone coming"
+            },
+            {
+              "from": "beam",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "doorway blocked"
+            },
+            {
+              "from": "ctrl",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "door",
+              "kind": "force",
+              "label": "slides"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The controller switches on a motor, which drives a toothed belt running along the top of the doorway. The door panels hang from a track, clipped to the belt, and slide apart.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sens",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.1,
+              "label": "Motion sensor",
+              "motion": "pulse",
+              "ask": "How do automatic doors detect people?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.35,
+              "label": "Controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.75,
+              "label": "Motor and gearbox",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Toothed belt",
+              "motion": "flow",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.85,
+              "label": "Door panels",
+              "motion": "slide",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.88,
+              "y": 0.65,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why don't automatic doors close on people?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sens",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "someone coming"
+            },
+            {
+              "from": "beam",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "doorway blocked"
+            },
+            {
+              "from": "ctrl",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "door",
+              "kind": "force",
+              "label": "slides"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "While you are in the doorway, infrared safety beams or presence sensors keep the doors open. Only when the doorway is clear does a timer let them close.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sens",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.1,
+              "label": "Motion sensor",
+              "motion": "pulse",
+              "ask": "How do automatic doors detect people?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.35,
+              "label": "Controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.75,
+              "label": "Motor and gearbox",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Toothed belt",
+              "motion": "flow",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.85,
+              "label": "Door panels",
+              "motion": "slide",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.88,
+              "y": 0.65,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why don't automatic doors close on people?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sens",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "someone coming"
+            },
+            {
+              "from": "beam",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "doorway blocked"
+            },
+            {
+              "from": "ctrl",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "door",
+              "kind": "force",
+              "label": "slides"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "As the doors near the end of their travel the controller slows the motor, so they don't slam. If a door meets something unexpected, the motor senses the extra effort and reverses.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sens",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.1,
+              "label": "Motion sensor",
+              "motion": "pulse",
+              "ask": "How do automatic doors detect people?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.35,
+              "label": "Controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.75,
+              "label": "Motor and gearbox",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Toothed belt",
+              "motion": "flow",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.85,
+              "label": "Door panels",
+              "motion": "slide",
+              "ask": "How does the door move?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.88,
+              "y": 0.65,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why don't automatic doors close on people?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sens",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "someone coming"
+            },
+            {
+              "from": "beam",
+              "to": "ctrl",
+              "kind": "signal",
+              "label": "doorway blocked"
+            },
+            {
+              "from": "ctrl",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "door",
+              "kind": "force",
+              "label": "slides"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do automatic doors detect people?",
+      "a": "Most use a microwave radar sensor that notices movement from the change in reflected waves, or an infrared sensor that detects a person's warmth or reflection. Some use pressure mats.",
+      "asks": [
+        "What sensor opens automatic doors?"
+      ]
+    },
+    {
+      "q": "Why don't automatic doors close on people?",
+      "a": "Safety sensors, like infrared beams across the doorway or presence detectors above it, tell the controller someone is there, so the doors stay open. Many motors also reverse if they meet resistance.",
+      "asks": [
+        "Can automatic doors trap you?"
+      ]
+    },
+    {
+      "q": "Why do automatic doors sometimes open when I just walk past?",
+      "a": "Motion sensors watch a zone in front of the door, and walking through it can trigger them. Better sensors can tell whether you are heading towards the door or just passing by.",
+      "asks": [
+        "Why do shop doors open when I walk by?"
+      ]
+    },
+    {
+      "q": "What happens to automatic doors in a power cut?",
+      "a": "Many have batteries to keep working for a while, and doors on escape routes are designed to be pushed open by hand or to open automatically when power fails.",
+      "asks": [
+        "Can you open automatic doors without power?"
+      ]
+    },
+    {
+      "q": "How does the door move?",
+      "a": "An electric motor drives a toothed belt along the top of the doorway. The door panels hang on rollers from a track and are clipped to the belt, so they slide as it moves.",
+      "asks": [
+        "What moves an automatic sliding door?"
+      ]
+    }
+  ],
+  "facts": [
+    "Microwave motion sensors use the Doppler effect: waves bounced off a moving person come back at a slightly changed frequency.",
+    "Many automatic doors combine a motion sensor for opening with infrared safety sensors in the doorway."
+  ],
+  "quiz": [
+    {
+      "say": "What keeps an automatic door from closing while you are standing in the doorway?",
+      "show": "The doors stay open while you stand there because of…",
+      "options": [
+        {
+          "show": "A safety sensor that detects you",
+          "say": "A safety sensor that detects you"
+        },
+        {
+          "show": "The weight of the doors",
+          "say": "The weight of the doors"
+        },
+        {
+          "show": "A spring that never lets them close",
+          "say": "A spring that never lets them close"
+        }
+      ],
+      "answer": 0,
+      "why": "Safety beams or presence sensors tell the controller the doorway is blocked, so it holds the doors open.",
+      "wrong": {
+        "1": "Weight cannot sense anyone; the doors are motor-driven.",
+        "2": "The doors do close once the doorway is clear."
+      }
+    }
+  ]
+}

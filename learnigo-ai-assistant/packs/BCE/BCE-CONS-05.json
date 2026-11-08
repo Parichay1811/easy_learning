@@ -1,0 +1,869 @@
+{
+  "id": "BCE-CONS-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Critical path method: forward pass, backward pass and float",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONS — Construction, materials and management",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "critical path method",
+    "activity on node",
+    "forward pass",
+    "backward pass",
+    "total float",
+    "project crashing"
+  ],
+  "examples": [
+    "How do you find the critical path of a project?",
+    "How do you calculate float in CPM?",
+    "What is a forward pass and backward pass?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "st",
+          "label": "Start",
+          "icon": "flag",
+          "x": 0.04,
+          "y": 0.5
+        },
+        {
+          "id": "A",
+          "label": "A Excavate 4d",
+          "icon": "crane",
+          "x": 0.22,
+          "y": 0.22,
+          "ask": "How do you find the critical path?"
+        },
+        {
+          "id": "C",
+          "label": "C Order steel 9d",
+          "icon": "mail",
+          "x": 0.3,
+          "y": 0.8,
+          "ask": "What is float in CPM?"
+        },
+        {
+          "id": "B",
+          "label": "B Foundations 6d",
+          "icon": "rock",
+          "x": 0.45,
+          "y": 0.22
+        },
+        {
+          "id": "E",
+          "label": "E Drainage 3d",
+          "icon": "pipe",
+          "x": 0.5,
+          "y": 0.55,
+          "ask": "What is float in CPM?"
+        },
+        {
+          "id": "D",
+          "label": "D Erect steel 5d",
+          "icon": "tower",
+          "x": 0.68,
+          "y": 0.35
+        },
+        {
+          "id": "F",
+          "label": "F Slab, roof 4d",
+          "icon": "house",
+          "x": 0.84,
+          "y": 0.35
+        },
+        {
+          "id": "fin",
+          "label": "Finish day 19",
+          "icon": "flag",
+          "x": 0.96,
+          "y": 0.6,
+          "ask": "What is the critical path method?"
+        }
+      ],
+      "links": [
+        {
+          "from": "st",
+          "to": "A",
+          "kind": "signal"
+        },
+        {
+          "from": "st",
+          "to": "C",
+          "kind": "signal"
+        },
+        {
+          "from": "A",
+          "to": "B",
+          "kind": "power",
+          "label": "critical"
+        },
+        {
+          "from": "A",
+          "to": "E",
+          "kind": "signal"
+        },
+        {
+          "from": "B",
+          "to": "D",
+          "kind": "power",
+          "label": "critical"
+        },
+        {
+          "from": "C",
+          "to": "D",
+          "kind": "signal"
+        },
+        {
+          "from": "D",
+          "to": "F",
+          "kind": "power",
+          "label": "critical"
+        },
+        {
+          "from": "E",
+          "to": "F",
+          "kind": "signal"
+        },
+        {
+          "from": "F",
+          "to": "fin",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1957 two engineers, Morgan Walker of DuPont and James Kelley of Remington Rand, worked out a way to find which jobs in a huge project really set its finish date. They called it the critical path method. On the board, a small steel building: six activities, each with its duration in days, and arrows showing what must finish first.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Critical path method: forward pass, backward pass and float"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "st",
+              "label": "Start",
+              "icon": "flag",
+              "x": 0.04,
+              "y": 0.5
+            },
+            {
+              "id": "A",
+              "label": "A Excavate 4d",
+              "icon": "crane",
+              "x": 0.22,
+              "y": 0.22,
+              "ask": "How do you find the critical path?"
+            },
+            {
+              "id": "C",
+              "label": "C Order steel 9d",
+              "icon": "mail",
+              "x": 0.3,
+              "y": 0.8,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "B",
+              "label": "B Foundations 6d",
+              "icon": "rock",
+              "x": 0.45,
+              "y": 0.22
+            },
+            {
+              "id": "E",
+              "label": "E Drainage 3d",
+              "icon": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "D",
+              "label": "D Erect steel 5d",
+              "icon": "tower",
+              "x": 0.68,
+              "y": 0.35
+            },
+            {
+              "id": "F",
+              "label": "F Slab, roof 4d",
+              "icon": "house",
+              "x": 0.84,
+              "y": 0.35
+            },
+            {
+              "id": "fin",
+              "label": "Finish day 19",
+              "icon": "flag",
+              "x": 0.96,
+              "y": 0.6,
+              "ask": "What is the critical path method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "st",
+              "to": "A",
+              "kind": "signal"
+            },
+            {
+              "from": "st",
+              "to": "C",
+              "kind": "signal"
+            },
+            {
+              "from": "A",
+              "to": "B",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "A",
+              "to": "E",
+              "kind": "signal"
+            },
+            {
+              "from": "B",
+              "to": "D",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "C",
+              "to": "D",
+              "kind": "signal"
+            },
+            {
+              "from": "D",
+              "to": "F",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "E",
+              "to": "F",
+              "kind": "signal"
+            },
+            {
+              "from": "F",
+              "to": "fin",
+              "kind": "power"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First the forward pass: the earliest each job can start and finish. A starts at zero and ends at day four; B runs from four to ten. C, ordering steel, runs from zero to nine. Look at D: it needs both B and C, so it waits for the later one and starts on day ten. Carry on and F finishes on day nineteen. Why does D wait for B, not C?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "st",
+              "label": "Start",
+              "icon": "flag",
+              "x": 0.04,
+              "y": 0.5
+            },
+            {
+              "id": "A",
+              "label": "A Excavate 4d",
+              "icon": "crane",
+              "x": 0.22,
+              "y": 0.22,
+              "ask": "How do you find the critical path?"
+            },
+            {
+              "id": "C",
+              "label": "C Order steel 9d",
+              "icon": "mail",
+              "x": 0.3,
+              "y": 0.8,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "B",
+              "label": "B Foundations 6d",
+              "icon": "rock",
+              "x": 0.45,
+              "y": 0.22
+            },
+            {
+              "id": "E",
+              "label": "E Drainage 3d",
+              "icon": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "D",
+              "label": "D Erect steel 5d",
+              "icon": "tower",
+              "x": 0.68,
+              "y": 0.35
+            },
+            {
+              "id": "F",
+              "label": "F Slab, roof 4d",
+              "icon": "house",
+              "x": 0.84,
+              "y": 0.35
+            },
+            {
+              "id": "fin",
+              "label": "Finish day 19",
+              "icon": "flag",
+              "x": 0.96,
+              "y": 0.6,
+              "ask": "What is the critical path method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "st",
+              "to": "A",
+              "kind": "signal"
+            },
+            {
+              "from": "st",
+              "to": "C",
+              "kind": "signal"
+            },
+            {
+              "from": "A",
+              "to": "B",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "A",
+              "to": "E",
+              "kind": "signal"
+            },
+            {
+              "from": "B",
+              "to": "D",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "C",
+              "to": "D",
+              "kind": "signal"
+            },
+            {
+              "from": "D",
+              "to": "F",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "E",
+              "to": "F",
+              "kind": "signal"
+            },
+            {
+              "from": "F",
+              "to": "fin",
+              "kind": "power"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "EF = ES + duration; D starts at max(10, 9) = 10"
+        }
+      ]
+    },
+    {
+      "say": "B finishes later! Now the backward pass, from day nineteen back: the latest each job can start without delaying the end. F must start by fifteen, D by ten, so C must finish by day ten and could start on day one. The gap is float. C has one day of float. Drainage, E, has eight days.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "st",
+              "label": "Start",
+              "icon": "flag",
+              "x": 0.04,
+              "y": 0.5
+            },
+            {
+              "id": "A",
+              "label": "A Excavate 4d",
+              "icon": "crane",
+              "x": 0.22,
+              "y": 0.22,
+              "ask": "How do you find the critical path?"
+            },
+            {
+              "id": "C",
+              "label": "C Order steel 9d",
+              "icon": "mail",
+              "x": 0.3,
+              "y": 0.8,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "B",
+              "label": "B Foundations 6d",
+              "icon": "rock",
+              "x": 0.45,
+              "y": 0.22
+            },
+            {
+              "id": "E",
+              "label": "E Drainage 3d",
+              "icon": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "D",
+              "label": "D Erect steel 5d",
+              "icon": "tower",
+              "x": 0.68,
+              "y": 0.35
+            },
+            {
+              "id": "F",
+              "label": "F Slab, roof 4d",
+              "icon": "house",
+              "x": 0.84,
+              "y": 0.35
+            },
+            {
+              "id": "fin",
+              "label": "Finish day 19",
+              "icon": "flag",
+              "x": 0.96,
+              "y": 0.6,
+              "ask": "What is the critical path method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "st",
+              "to": "A",
+              "kind": "signal"
+            },
+            {
+              "from": "st",
+              "to": "C",
+              "kind": "signal"
+            },
+            {
+              "from": "A",
+              "to": "B",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "A",
+              "to": "E",
+              "kind": "signal"
+            },
+            {
+              "from": "B",
+              "to": "D",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "C",
+              "to": "D",
+              "kind": "signal"
+            },
+            {
+              "from": "D",
+              "to": "F",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "E",
+              "to": "F",
+              "kind": "signal"
+            },
+            {
+              "from": "F",
+              "to": "fin",
+              "kind": "power"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Float = LS − ES: C = 1 − 0 = 1 day; E = 12 − 4 = 8 days"
+        }
+      ]
+    },
+    {
+      "say": "Jobs with zero float form the critical path: A, B, D and F, four plus six plus five plus four, nineteen days. See the thick arrows. Delay any of them by a day and the whole project slips a day. Which job could you safely start a week late?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "st",
+              "label": "Start",
+              "icon": "flag",
+              "x": 0.04,
+              "y": 0.5
+            },
+            {
+              "id": "A",
+              "label": "A Excavate 4d",
+              "icon": "crane",
+              "x": 0.22,
+              "y": 0.22,
+              "ask": "How do you find the critical path?"
+            },
+            {
+              "id": "C",
+              "label": "C Order steel 9d",
+              "icon": "mail",
+              "x": 0.3,
+              "y": 0.8,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "B",
+              "label": "B Foundations 6d",
+              "icon": "rock",
+              "x": 0.45,
+              "y": 0.22
+            },
+            {
+              "id": "E",
+              "label": "E Drainage 3d",
+              "icon": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "D",
+              "label": "D Erect steel 5d",
+              "icon": "tower",
+              "x": 0.68,
+              "y": 0.35
+            },
+            {
+              "id": "F",
+              "label": "F Slab, roof 4d",
+              "icon": "house",
+              "x": 0.84,
+              "y": 0.35
+            },
+            {
+              "id": "fin",
+              "label": "Finish day 19",
+              "icon": "flag",
+              "x": 0.96,
+              "y": 0.6,
+              "ask": "What is the critical path method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "st",
+              "to": "A",
+              "kind": "signal"
+            },
+            {
+              "from": "st",
+              "to": "C",
+              "kind": "signal"
+            },
+            {
+              "from": "A",
+              "to": "B",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "A",
+              "to": "E",
+              "kind": "signal"
+            },
+            {
+              "from": "B",
+              "to": "D",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "C",
+              "to": "D",
+              "kind": "signal"
+            },
+            {
+              "from": "D",
+              "to": "F",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "E",
+              "to": "F",
+              "kind": "signal"
+            },
+            {
+              "from": "F",
+              "to": "fin",
+              "kind": "power"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Critical path A–B–D–F = 4 + 6 + 5 + 4 = 19 days"
+        }
+      ]
+    },
+    {
+      "say": "Drainage, E, with its eight days of float! To finish sooner, managers crash the project: add workers or machines to critical jobs, cheapest per day saved first. But watch out, a new critical path can appear. Wonderful! Challenge: if the steel order took eleven days instead of nine, when would the project finish?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "st",
+              "label": "Start",
+              "icon": "flag",
+              "x": 0.04,
+              "y": 0.5
+            },
+            {
+              "id": "A",
+              "label": "A Excavate 4d",
+              "icon": "crane",
+              "x": 0.22,
+              "y": 0.22,
+              "ask": "How do you find the critical path?"
+            },
+            {
+              "id": "C",
+              "label": "C Order steel 9d",
+              "icon": "mail",
+              "x": 0.3,
+              "y": 0.8,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "B",
+              "label": "B Foundations 6d",
+              "icon": "rock",
+              "x": 0.45,
+              "y": 0.22
+            },
+            {
+              "id": "E",
+              "label": "E Drainage 3d",
+              "icon": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "ask": "What is float in CPM?"
+            },
+            {
+              "id": "D",
+              "label": "D Erect steel 5d",
+              "icon": "tower",
+              "x": 0.68,
+              "y": 0.35
+            },
+            {
+              "id": "F",
+              "label": "F Slab, roof 4d",
+              "icon": "house",
+              "x": 0.84,
+              "y": 0.35
+            },
+            {
+              "id": "fin",
+              "label": "Finish day 19",
+              "icon": "flag",
+              "x": 0.96,
+              "y": 0.6,
+              "ask": "What is the critical path method?"
+            }
+          ],
+          "links": [
+            {
+              "from": "st",
+              "to": "A",
+              "kind": "signal"
+            },
+            {
+              "from": "st",
+              "to": "C",
+              "kind": "signal"
+            },
+            {
+              "from": "A",
+              "to": "B",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "A",
+              "to": "E",
+              "kind": "signal"
+            },
+            {
+              "from": "B",
+              "to": "D",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "C",
+              "to": "D",
+              "kind": "signal"
+            },
+            {
+              "from": "D",
+              "to": "F",
+              "kind": "power",
+              "label": "critical"
+            },
+            {
+              "from": "E",
+              "to": "F",
+              "kind": "signal"
+            },
+            {
+              "from": "F",
+              "to": "fin",
+              "kind": "power"
+            }
+          ],
+          "focus": 7
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the critical path method?",
+      "a": "A scheduling method that models a project as linked activities with durations, finds the earliest and latest times for each, and identifies the longest chain, the critical path, which sets the finish date.",
+      "asks": [
+        "CPM",
+        "What is CPM in project management?"
+      ]
+    },
+    {
+      "q": "How do you do a forward pass?",
+      "a": "Start the first activities at time zero; each early finish is early start plus duration; an activity's early start is the latest early finish of all activities before it.",
+      "asks": [
+        "What is a forward pass and backward pass?"
+      ]
+    },
+    {
+      "q": "What is float in CPM?",
+      "a": "Total float is how long an activity can be delayed without delaying the project: late start minus early start. Activity C here has 1 day, drainage E has 8.",
+      "asks": [
+        "How do you calculate float in CPM?",
+        "Total float"
+      ]
+    },
+    {
+      "q": "How do you find the critical path?",
+      "a": "Do the forward and backward passes; activities with zero total float are critical. Here A, B, D and F, taking 19 days, form the critical path.",
+      "asks": [
+        "How do you find the critical path of a project?"
+      ]
+    },
+    {
+      "q": "What is crashing a project?",
+      "a": "Shortening the project by adding resources to critical activities, choosing those with the lowest extra cost per day saved, while checking that new critical paths do not appear.",
+      "asks": [
+        "Project crashing"
+      ]
+    }
+  ],
+  "facts": [
+    "The critical path method was developed in 1957 by Morgan R. Walker of DuPont and James E. Kelley Jr. of Remington Rand.",
+    "PERT, a related method with uncertain durations, was developed for the US Navy Polaris missile programme in 1958."
+  ],
+  "quiz": [
+    {
+      "say": "An activity has an early start of day 5, a duration of 3 days and a late finish of day 12. What is its total float?",
+      "show": "An activity has ES = 5, duration 3 and LF = 12. Total float?",
+      "options": [
+        {
+          "show": "4 days",
+          "say": "4 days"
+        },
+        {
+          "show": "7 days",
+          "say": "7 days"
+        },
+        {
+          "show": "3 days",
+          "say": "3 days"
+        }
+      ],
+      "answer": 0,
+      "why": "EF = 5 + 3 = 8; float = LF − EF = 12 − 8 = 4 days.",
+      "wrong": {
+        "1": "That is LF minus ES, forgetting the duration.",
+        "2": "That is the duration, not the float."
+      }
+    },
+    {
+      "say": "Activities on the critical path have…",
+      "show": "Activities on the critical path have…",
+      "options": [
+        {
+          "show": "Zero total float",
+          "say": "Zero total float"
+        },
+        {
+          "show": "The most float",
+          "say": "The most float"
+        },
+        {
+          "show": "The shortest durations",
+          "say": "The shortest durations"
+        }
+      ],
+      "answer": 0,
+      "why": "Any delay to a zero-float activity delays the project.",
+      "wrong": {
+        "1": "Activities with lots of float are the least critical.",
+        "2": "Critical activities can be long or short."
+      }
+    }
+  ]
+}

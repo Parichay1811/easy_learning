@@ -1,0 +1,591 @@
+{
+  "id": "ENGX-CIVL-18",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a tuned mass damper calms a skyscraper",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "tuned mass damper",
+    "Taipei 101",
+    "pendulum damper",
+    "vibration control",
+    "building sway"
+  ],
+  "examples": [
+    "What is a tuned mass damper?",
+    "How does the giant ball in Taipei 101 work?",
+    "Why do skyscrapers have dampers?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "wind",
+          "kind": "fan",
+          "x": 0.12,
+          "y": 0.14,
+          "size": 0.8,
+          "label": "Wind gusts",
+          "motion": "spin",
+          "ask": "Why do skyscrapers sway?"
+        },
+        {
+          "id": "top",
+          "kind": "box",
+          "x": 0.55,
+          "y": 0.12,
+          "size": 1.5,
+          "label": "Top floors",
+          "motion": "swing"
+        },
+        {
+          "id": "cab",
+          "kind": "spring",
+          "x": 0.55,
+          "y": 0.36,
+          "label": "Hanging cables",
+          "motion": "swing",
+          "ask": "Why must the damper be tuned?"
+        },
+        {
+          "id": "mass",
+          "kind": "weight",
+          "x": 0.55,
+          "y": 0.6,
+          "size": 1.4,
+          "label": "Damper mass",
+          "motion": "swing",
+          "ask": "What is a tuned mass damper?"
+        },
+        {
+          "id": "dl",
+          "kind": "piston",
+          "x": 0.22,
+          "y": 0.66,
+          "label": "Left shock absorber",
+          "motion": "slide",
+          "ask": "What do the shock absorbers do?"
+        },
+        {
+          "id": "dr",
+          "kind": "piston",
+          "x": 0.88,
+          "y": 0.66,
+          "label": "Right shock absorber",
+          "motion": "slide",
+          "ask": "What do the shock absorbers do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "wind",
+          "to": "top",
+          "kind": "force",
+          "label": "pushes"
+        },
+        {
+          "from": "top",
+          "to": "cab",
+          "kind": "force"
+        },
+        {
+          "from": "cab",
+          "to": "mass",
+          "kind": "force"
+        },
+        {
+          "from": "mass",
+          "to": "dl",
+          "kind": "energy",
+          "label": "to heat"
+        },
+        {
+          "from": "mass",
+          "to": "dr",
+          "kind": "energy",
+          "label": "to heat"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Wind and earthquakes can make a skyscraper sway back and forth at its own natural rhythm. A tuned mass damper is a giant weight near the top that fights this swaying.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a tuned mass damper calms a skyscraper"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wind",
+              "kind": "fan",
+              "x": 0.12,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Wind gusts",
+              "motion": "spin",
+              "ask": "Why do skyscrapers sway?"
+            },
+            {
+              "id": "top",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.12,
+              "size": 1.5,
+              "label": "Top floors",
+              "motion": "swing"
+            },
+            {
+              "id": "cab",
+              "kind": "spring",
+              "x": 0.55,
+              "y": 0.36,
+              "label": "Hanging cables",
+              "motion": "swing",
+              "ask": "Why must the damper be tuned?"
+            },
+            {
+              "id": "mass",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Damper mass",
+              "motion": "swing",
+              "ask": "What is a tuned mass damper?"
+            },
+            {
+              "id": "dl",
+              "kind": "piston",
+              "x": 0.22,
+              "y": 0.66,
+              "label": "Left shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            },
+            {
+              "id": "dr",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.66,
+              "label": "Right shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "top",
+              "kind": "force",
+              "label": "pushes"
+            },
+            {
+              "from": "top",
+              "to": "cab",
+              "kind": "force"
+            },
+            {
+              "from": "cab",
+              "to": "mass",
+              "kind": "force"
+            },
+            {
+              "from": "mass",
+              "to": "dl",
+              "kind": "energy",
+              "label": "to heat"
+            },
+            {
+              "from": "mass",
+              "to": "dr",
+              "kind": "energy",
+              "label": "to heat"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "In Taipei 101 the damper is a 660-tonne steel ball. It is free to swing, so when the building sways one way, the heavy mass lags behind and pulls the other way.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wind",
+              "kind": "fan",
+              "x": 0.12,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Wind gusts",
+              "motion": "spin",
+              "ask": "Why do skyscrapers sway?"
+            },
+            {
+              "id": "top",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.12,
+              "size": 1.5,
+              "label": "Top floors",
+              "motion": "swing"
+            },
+            {
+              "id": "cab",
+              "kind": "spring",
+              "x": 0.55,
+              "y": 0.36,
+              "label": "Hanging cables",
+              "motion": "swing",
+              "ask": "Why must the damper be tuned?"
+            },
+            {
+              "id": "mass",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Damper mass",
+              "motion": "swing",
+              "ask": "What is a tuned mass damper?"
+            },
+            {
+              "id": "dl",
+              "kind": "piston",
+              "x": 0.22,
+              "y": 0.66,
+              "label": "Left shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            },
+            {
+              "id": "dr",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.66,
+              "label": "Right shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "top",
+              "kind": "force",
+              "label": "pushes"
+            },
+            {
+              "from": "top",
+              "to": "cab",
+              "kind": "force"
+            },
+            {
+              "from": "cab",
+              "to": "mass",
+              "kind": "force"
+            },
+            {
+              "from": "mass",
+              "to": "dl",
+              "kind": "energy",
+              "label": "to heat"
+            },
+            {
+              "from": "mass",
+              "to": "dr",
+              "kind": "energy",
+              "label": "to heat"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The damper is tuned: its cables or springs are set so it swings at the same natural rhythm as the building. That is what lets it push against the sway at just the right moments.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wind",
+              "kind": "fan",
+              "x": 0.12,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Wind gusts",
+              "motion": "spin",
+              "ask": "Why do skyscrapers sway?"
+            },
+            {
+              "id": "top",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.12,
+              "size": 1.5,
+              "label": "Top floors",
+              "motion": "swing"
+            },
+            {
+              "id": "cab",
+              "kind": "spring",
+              "x": 0.55,
+              "y": 0.36,
+              "label": "Hanging cables",
+              "motion": "swing",
+              "ask": "Why must the damper be tuned?"
+            },
+            {
+              "id": "mass",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Damper mass",
+              "motion": "swing",
+              "ask": "What is a tuned mass damper?"
+            },
+            {
+              "id": "dl",
+              "kind": "piston",
+              "x": 0.22,
+              "y": 0.66,
+              "label": "Left shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            },
+            {
+              "id": "dr",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.66,
+              "label": "Right shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "top",
+              "kind": "force",
+              "label": "pushes"
+            },
+            {
+              "from": "top",
+              "to": "cab",
+              "kind": "force"
+            },
+            {
+              "from": "cab",
+              "to": "mass",
+              "kind": "force"
+            },
+            {
+              "from": "mass",
+              "to": "dl",
+              "kind": "energy",
+              "label": "to heat"
+            },
+            {
+              "from": "mass",
+              "to": "dr",
+              "kind": "energy",
+              "label": "to heat"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Big shock absorbers connect the mass to the building and turn the swinging energy into heat. The sway dies away faster, so people at the top feel much less motion.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wind",
+              "kind": "fan",
+              "x": 0.12,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Wind gusts",
+              "motion": "spin",
+              "ask": "Why do skyscrapers sway?"
+            },
+            {
+              "id": "top",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.12,
+              "size": 1.5,
+              "label": "Top floors",
+              "motion": "swing"
+            },
+            {
+              "id": "cab",
+              "kind": "spring",
+              "x": 0.55,
+              "y": 0.36,
+              "label": "Hanging cables",
+              "motion": "swing",
+              "ask": "Why must the damper be tuned?"
+            },
+            {
+              "id": "mass",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Damper mass",
+              "motion": "swing",
+              "ask": "What is a tuned mass damper?"
+            },
+            {
+              "id": "dl",
+              "kind": "piston",
+              "x": 0.22,
+              "y": 0.66,
+              "label": "Left shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            },
+            {
+              "id": "dr",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.66,
+              "label": "Right shock absorber",
+              "motion": "slide",
+              "ask": "What do the shock absorbers do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "top",
+              "kind": "force",
+              "label": "pushes"
+            },
+            {
+              "from": "top",
+              "to": "cab",
+              "kind": "force"
+            },
+            {
+              "from": "cab",
+              "to": "mass",
+              "kind": "force"
+            },
+            {
+              "from": "mass",
+              "to": "dl",
+              "kind": "energy",
+              "label": "to heat"
+            },
+            {
+              "from": "mass",
+              "to": "dr",
+              "kind": "energy",
+              "label": "to heat"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do skyscrapers sway?",
+      "a": "Wind gusts and earthquakes push tall buildings sideways, and like a ruler twanged on a desk, a tall building springs back and forth at its own natural rhythm.",
+      "asks": [
+        "Why do tall buildings move?"
+      ]
+    },
+    {
+      "q": "What is a tuned mass damper?",
+      "a": "It is a large mass, often hundreds of tonnes, mounted near the top of a tall structure on springs or cables and tuned to the building's natural rhythm. As the building sways, the mass moves against it and soaks up the motion.",
+      "asks": [
+        "What is the giant ball in Taipei 101?",
+        "How does a damper stop swaying?"
+      ]
+    },
+    {
+      "q": "Why must the damper be tuned?",
+      "a": "The mass only cancels sway well if it swings at the same natural rhythm as the building. Engineers set its cable length or spring stiffness so the two match.",
+      "asks": [
+        "What does tuned mean in a tuned mass damper?"
+      ]
+    },
+    {
+      "q": "What do the shock absorbers do?",
+      "a": "Hydraulic shock absorbers between the mass and the building resist its movement and turn the energy of the sway into heat, so the motion dies away instead of carrying on.",
+      "asks": [
+        "Where does the swaying energy go?"
+      ]
+    },
+    {
+      "q": "Does a damper make a building stronger?",
+      "a": "Not really; the building is already strong enough to be safe. The damper mainly reduces the swaying people feel, making upper floors more comfortable in strong winds.",
+      "asks": [
+        "Is a tuned mass damper for safety or comfort?"
+      ]
+    }
+  ],
+  "facts": [
+    "The tuned mass damper in Taipei 101 is a steel sphere weighing about 660 tonnes, hung between the 87th and 92nd floors.",
+    "Tuned mass dampers are also fitted to some bridges, chimneys and tall towers."
+  ],
+  "quiz": [
+    {
+      "say": "For a tuned mass damper to work well, what must it match?",
+      "show": "A tuned mass damper must match the building's…",
+      "options": [
+        {
+          "show": "Natural swaying rhythm",
+          "say": "Natural swaying rhythm"
+        },
+        {
+          "show": "Paint colour",
+          "say": "Paint colour"
+        },
+        {
+          "show": "Number of lifts",
+          "say": "Number of lifts"
+        }
+      ],
+      "answer": 0,
+      "why": "If the mass swings at the building's natural rhythm, it moves against the sway at the right times and soaks up energy.",
+      "wrong": {
+        "1": "Colour has no effect on motion.",
+        "2": "The lifts do not decide how the damper is tuned."
+      }
+    }
+  ]
+}

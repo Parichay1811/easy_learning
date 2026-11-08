@@ -1,0 +1,378 @@
+{
+  "id": "BEE-CIRC-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Kirchhoff's voltage law: why the voltages around a loop add to zero",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Kirchhoff's voltage law",
+    "KVL",
+    "voltage drop",
+    "series circuit",
+    "closed loop"
+  ],
+  "examples": [
+    "What is Kirchhoff's voltage law?",
+    "How do voltage drops add up in a series circuit?",
+    "How do I get the signs right in KVL?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Battery",
+          "value": "12 V",
+          "ask": "What is Kirchhoff's voltage law?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "2 Ω",
+          "ask": "Why is the current the same everywhere in series?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R2",
+          "value": "4 Ω"
+        },
+        {
+          "kind": "resistor",
+          "label": "R3",
+          "value": "6 Ω",
+          "ask": "Which resistor gets the biggest voltage drop?"
+        }
+      ],
+      "readouts": [
+        "I = 12 V / 12 Ω = 1 A",
+        "Drops: 2 + 4 + 6 V",
+        "Sum = 12 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Walk up a hill and back down to where you started, and your total change in height is zero. Voltage is like height for charge. On the board, a 12 volt battery lifts the charge up, and three resistors in series, 2, 4 and 6 ohms, let it back down. Let's follow one loop round.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Kirchhoff's voltage law: why the voltages around a loop add to zero"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V",
+              "ask": "What is Kirchhoff's voltage law?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "Why is the current the same everywhere in series?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "4 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "6 Ω",
+              "ask": "Which resistor gets the biggest voltage drop?"
+            }
+          ],
+          "readouts": [
+            "I = 12 V / 12 Ω = 1 A",
+            "Drops: 2 + 4 + 6 V",
+            "Sum = 12 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First the current. In series there is only one path, so the resistances simply add: 2 plus 4 plus 6 makes 12 ohms. Then Ohm's law gives 12 volts over 12 ohms, which is 1 amp, the same current through every part. Will the 6 ohm resistor carry more current than the 2 ohm one?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V",
+              "ask": "What is Kirchhoff's voltage law?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "Why is the current the same everywhere in series?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "4 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "6 Ω",
+              "ask": "Which resistor gets the biggest voltage drop?"
+            }
+          ],
+          "readouts": [
+            "I = 12 V / 12 Ω = 1 A",
+            "Drops: 2 + 4 + 6 V",
+            "Sum = 12 V"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "R_total = 2 + 4 + 6 = 12 Ω, so I = 1 A"
+        }
+      ]
+    },
+    {
+      "say": "No, the same 1 amp flows everywhere in a series loop. But the voltage drops differ. Each drop is I times R: 2 volts across R1, 4 volts across R2 and 6 volts across R3. The biggest resistor takes the biggest share. Which resistor drops 4 volts?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V",
+              "ask": "What is Kirchhoff's voltage law?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "Why is the current the same everywhere in series?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "4 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "6 Ω",
+              "ask": "Which resistor gets the biggest voltage drop?"
+            }
+          ],
+          "readouts": [
+            "I = 12 V / 12 Ω = 1 A",
+            "Drops: 2 + 4 + 6 V",
+            "Sum = 12 V"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "V1 = 2 V, V2 = 4 V, V3 = 6 V"
+        }
+      ]
+    },
+    {
+      "say": "R2, yes. Now Kirchhoff's voltage law: go round any closed loop, add the rises and the drops, and you get zero. Here: plus 12 at the battery, then minus 2, minus 4 and minus 6. Back to zero, just like the hill walk. What would the drops add to with a 9 volt battery instead?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V",
+              "ask": "What is Kirchhoff's voltage law?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "Why is the current the same everywhere in series?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "4 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "6 Ω",
+              "ask": "Which resistor gets the biggest voltage drop?"
+            }
+          ],
+          "readouts": [
+            "I = 12 V / 12 Ω = 1 A",
+            "Drops: 2 + 4 + 6 V",
+            "Sum = 12 V"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "+12 − 2 − 4 − 6 = 0"
+        }
+      ]
+    },
+    {
+      "say": "Nine volts, always the supply. Look: 0.75 amps flows, and the drops become 1.5, 3 and 4.5 volts. Brilliant. Exam tip: pick a direction round the loop, count a rise as plus and a drop as minus, and stick to it. Kirchhoff's voltage law is simply energy conservation for every coulomb of charge.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "9 V",
+              "ask": "What is Kirchhoff's voltage law?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "Why is the current the same everywhere in series?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "4 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "6 Ω",
+              "ask": "Which resistor gets the biggest voltage drop?"
+            }
+          ],
+          "readouts": [
+            "I = 9 V / 12 Ω = 0.75 A",
+            "Drops: 1.5 + 3 + 4.5 V",
+            "Sum = 9 V"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "+9 − 1.5 − 3 − 4.5 = 0"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Kirchhoff's voltage law?",
+      "a": "The algebraic sum of all the voltages around any closed loop is zero. The rises from sources exactly equal the drops across the other parts.",
+      "asks": [
+        "State KVL",
+        "What is KVL?"
+      ]
+    },
+    {
+      "q": "Why is the current the same everywhere in series?",
+      "a": "A series circuit has only one path, so every charge that passes one part must pass all the others. By Kirchhoff's current law nothing can split off.",
+      "asks": [
+        "Is current the same in a series circuit?"
+      ]
+    },
+    {
+      "q": "Which resistor gets the biggest voltage drop?",
+      "a": "In series the drop is I times R with the same I, so the largest resistance takes the largest share of the voltage.",
+      "asks": [
+        "How is voltage shared in series?"
+      ]
+    },
+    {
+      "q": "What sign convention should I use for KVL?",
+      "a": "Choose a direction round the loop. Count going from minus to plus through a source as a rise and going through a resistor along the current as a drop, then keep that choice for the whole loop.",
+      "asks": [
+        "How do I get the signs right in KVL?",
+        "KVL plus or minus"
+      ]
+    },
+    {
+      "q": "Why does KVL work?",
+      "a": "Voltage is energy per unit charge. A charge that goes round a loop and returns to its start must end with the same energy, so all the gains and losses cancel.",
+      "asks": [
+        "Is KVL conservation of energy?"
+      ]
+    }
+  ],
+  "facts": [
+    "Kirchhoff's voltage law is a form of the conservation of energy.",
+    "In a series circuit the total resistance is the sum of the individual resistances."
+  ],
+  "quiz": [
+    {
+      "say": "A 24 volt supply feeds a 3 ohm and a 5 ohm resistor in series. What is the voltage across the 5 ohm resistor?",
+      "show": "A 24 V supply feeds 3 Ω and 5 Ω in series. What is the voltage across the 5 Ω resistor?",
+      "options": [
+        {
+          "show": "15 V",
+          "say": "15 volts"
+        },
+        {
+          "show": "9 V",
+          "say": "9 volts"
+        },
+        {
+          "show": "12 V",
+          "say": "12 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "The total is 8 ohms, so the current is 24 over 8, which is 3 amps. Across 5 ohms that drops 3 times 5, which is 15 volts.",
+      "wrong": {
+        "1": "9 volts is the drop across the 3 ohm resistor.",
+        "2": "12 volts would split the supply equally, ignoring the resistances."
+      }
+    },
+    {
+      "say": "Going round a loop, a battery adds 10 volts and one resistor drops 6 volts. What does the only other resistor drop?",
+      "show": "Round a loop, a battery adds 10 V and one resistor drops 6 V. What does the only other resistor drop?",
+      "options": [
+        {
+          "show": "4 V",
+          "say": "4 volts"
+        },
+        {
+          "show": "16 V",
+          "say": "16 volts"
+        },
+        {
+          "show": "6 V",
+          "say": "6 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "The drops must add up to the rise: 10 minus 6 leaves 4 volts.",
+      "wrong": {
+        "1": "That adds the rise and the drop instead of balancing them.",
+        "2": "Equal drops only happen with equal resistors."
+      }
+    }
+  ]
+}

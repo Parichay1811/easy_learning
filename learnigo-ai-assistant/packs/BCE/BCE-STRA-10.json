@@ -1,0 +1,690 @@
+{
+  "id": "BCE-STRA-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Arches and cables: thrust, sag and the upside-down moment diagram",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "cable sag",
+    "arch thrust",
+    "horizontal tension",
+    "funicular shape",
+    "wL²/8d"
+  ],
+  "examples": [
+    "How do you calculate the tension in a cable?",
+    "Why does an arch push outwards?",
+    "What is the relationship between sag and cable tension?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Span (m)",
+        "max": 40
+      },
+      "y": {
+        "label": "Height (m)",
+        "min": -4.5,
+        "max": 4.5
+      },
+      "curves": [
+        {
+          "label": "Cable (tension)",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              5,
+              -1.75
+            ],
+            [
+              10,
+              -3
+            ],
+            [
+              15,
+              -3.75
+            ],
+            [
+              20,
+              -4
+            ],
+            [
+              25,
+              -3.75
+            ],
+            [
+              30,
+              -3
+            ],
+            [
+              35,
+              -1.75
+            ],
+            [
+              40,
+              0
+            ]
+          ],
+          "ask": "Why does a cable take a curved shape?"
+        },
+        {
+          "label": "Arch (compression)",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              5,
+              1.75
+            ],
+            [
+              10,
+              3
+            ],
+            [
+              15,
+              3.75
+            ],
+            [
+              20,
+              4
+            ],
+            [
+              25,
+              3.75
+            ],
+            [
+              30,
+              3
+            ],
+            [
+              35,
+              1.75
+            ],
+            [
+              40,
+              0
+            ]
+          ],
+          "ask": "What is arch thrust?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 20,
+          "label": "Sag 4 m",
+          "ask": "How do you find the horizontal tension in a cable?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Hang a chain between your hands and it takes a graceful curve. Flip that curve upside down and you have the shape of a perfect arch. Robert Hooke wrote about this in sixteen seventy five, and Gaudí designed churches with hanging chains. On the board, a cable hangs over a forty metre span and an arch rises above it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Arches and cables: thrust, sag and the upside-down moment diagram"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Span (m)",
+            "max": 40
+          },
+          "y": {
+            "label": "Height (m)",
+            "min": -4.5,
+            "max": 4.5
+          },
+          "curves": [
+            {
+              "label": "Cable (tension)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  -1.75
+                ],
+                [
+                  10,
+                  -3
+                ],
+                [
+                  15,
+                  -3.75
+                ],
+                [
+                  20,
+                  -4
+                ],
+                [
+                  25,
+                  -3.75
+                ],
+                [
+                  30,
+                  -3
+                ],
+                [
+                  35,
+                  -1.75
+                ],
+                [
+                  40,
+                  0
+                ]
+              ],
+              "ask": "Why does a cable take a curved shape?"
+            },
+            {
+              "label": "Arch (compression)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  1.75
+                ],
+                [
+                  10,
+                  3
+                ],
+                [
+                  15,
+                  3.75
+                ],
+                [
+                  20,
+                  4
+                ],
+                [
+                  25,
+                  3.75
+                ],
+                [
+                  30,
+                  3
+                ],
+                [
+                  35,
+                  1.75
+                ],
+                [
+                  40,
+                  0
+                ]
+              ],
+              "ask": "What is arch thrust?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "Sag 4 m",
+              "ask": "How do you find the horizontal tension in a cable?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a suspension bridge. The main cables hang in a curve between the towers, the hangers carry the deck, and the anchorages hold the huge pull at each end. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Arches and cables: thrust, sag and the upside-down moment diagram"
+        },
+        {
+          "op": "image",
+          "render": "suspension-bridge"
+        }
+      ]
+    },
+    {
+      "say": "Here is the secret link. A forty metre beam carrying five kilonewtons per metre would have a peak moment of one thousand kilonewton metres. A cable carrying the same load takes up exactly the shape of that moment diagram, upside down, with no bending at all: it carries everything by pure tension.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 40,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find the horizontal tension in a cable?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "How do you find the horizontal tension in a cable?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Beam: M = wL²/8 = 5 × 40² / 8 = 1000 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "The cable swaps bending for a horizontal pull, called H. Divide the beam moment by the sag: one thousand over four metres gives a pull of two hundred and fifty kilonewtons. Halve the sag and the pull doubles. So can a cable ever be pulled perfectly straight?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Span (m)",
+            "max": 40
+          },
+          "y": {
+            "label": "Height (m)",
+            "min": -4.5,
+            "max": 4.5
+          },
+          "curves": [
+            {
+              "label": "Cable (tension)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  -1.75
+                ],
+                [
+                  10,
+                  -3
+                ],
+                [
+                  15,
+                  -3.75
+                ],
+                [
+                  20,
+                  -4
+                ],
+                [
+                  25,
+                  -3.75
+                ],
+                [
+                  30,
+                  -3
+                ],
+                [
+                  35,
+                  -1.75
+                ],
+                [
+                  40,
+                  0
+                ]
+              ],
+              "ask": "Why does a cable take a curved shape?"
+            },
+            {
+              "label": "Arch (compression)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  1.75
+                ],
+                [
+                  10,
+                  3
+                ],
+                [
+                  15,
+                  3.75
+                ],
+                [
+                  20,
+                  4
+                ],
+                [
+                  25,
+                  3.75
+                ],
+                [
+                  30,
+                  3
+                ],
+                [
+                  35,
+                  1.75
+                ],
+                [
+                  40,
+                  0
+                ]
+              ],
+              "ask": "What is arch thrust?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "Sag 4 m",
+              "ask": "How do you find the horizontal tension in a cable?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "H = wL²/(8d) = 1000 / 4 = 250 kN"
+        },
+        {
+          "op": "note",
+          "text": "Each support also takes V = wL/2 = 100 kN, so T_max = √(250² + 100²) ≈ 269 kN."
+        }
+      ]
+    },
+    {
+      "say": "Never, the pull would have to be endless! The arch is the mirror image: the same two hundred and fifty kilonewtons, but as a push called thrust. Its feet shove outward and down on the abutments, the solid blocks at each end, and the ground must push back. Weak ground under an abutment and the arch spreads and falls.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "rock",
+          "objectAsk": "Why do arches need strong abutments?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Arch thrust 250 kN",
+              "dir": "left",
+              "size": 5,
+              "ask": "What is arch thrust?"
+            },
+            {
+              "label": "Arch weight 100 kN",
+              "dir": "down",
+              "size": 2
+            },
+            {
+              "label": "Soil resists",
+              "dir": "right",
+              "size": 5,
+              "ask": "Why do arches need strong abutments?"
+            },
+            {
+              "label": "Ground pushes up",
+              "dir": "up",
+              "size": 2
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "So cables and arches are the purest structures: no bending, only tension or compression. Japan's Akashi Kaikyō Bridge hangs on cables, and China's Chaotianmen Bridge leaps the Yangtze as a steel arch. Wonderful work. Challenge: a thirty metre cable with a three metre sag carries four kilonewtons per metre. What is H?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Span (m)",
+            "max": 40
+          },
+          "y": {
+            "label": "Height (m)",
+            "min": -4.5,
+            "max": 4.5
+          },
+          "curves": [
+            {
+              "label": "Cable (tension)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  -1.75
+                ],
+                [
+                  10,
+                  -3
+                ],
+                [
+                  15,
+                  -3.75
+                ],
+                [
+                  20,
+                  -4
+                ],
+                [
+                  25,
+                  -3.75
+                ],
+                [
+                  30,
+                  -3
+                ],
+                [
+                  35,
+                  -1.75
+                ],
+                [
+                  40,
+                  0
+                ]
+              ],
+              "ask": "Why does a cable take a curved shape?"
+            },
+            {
+              "label": "Arch (compression)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  5,
+                  1.75
+                ],
+                [
+                  10,
+                  3
+                ],
+                [
+                  15,
+                  3.75
+                ],
+                [
+                  20,
+                  4
+                ],
+                [
+                  25,
+                  3.75
+                ],
+                [
+                  30,
+                  3
+                ],
+                [
+                  35,
+                  1.75
+                ],
+                [
+                  40,
+                  0
+                ]
+              ],
+              "ask": "What is arch thrust?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "Sag 4 m",
+              "ask": "How do you find the horizontal tension in a cable?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does a cable take a curved shape?",
+      "a": "A cable can only carry tension, so it hangs in whatever shape puts its loads into pure pull. Under a load spread evenly along the span that shape is a parabola, the upside-down moment diagram.",
+      "asks": [
+        "Why is a cable parabolic?",
+        "What is a funicular shape?"
+      ]
+    },
+    {
+      "q": "What is arch thrust?",
+      "a": "Thrust is the horizontal push an arch exerts on its supports. An arch carries load in compression, so its feet push outward, and the abutments must resist it.",
+      "asks": [
+        "Why does an arch push outwards?"
+      ]
+    },
+    {
+      "q": "How do you find the horizontal tension in a cable?",
+      "a": "Divide the simple-beam moment by the sag: H equals w L squared over 8 d. For 5 kilonewtons per metre over 40 metres with 4 metres sag, H is 250 kilonewtons.",
+      "asks": [
+        "Cable tension formula",
+        "H = wL²/8d"
+      ]
+    },
+    {
+      "q": "Why does a smaller sag mean a bigger tension?",
+      "a": "The moment the cable must balance is fixed by the load and span, and H times the sag must equal it. A smaller sag means a shorter lever arm, so H must grow.",
+      "asks": [
+        "Tight cable vs slack cable"
+      ]
+    },
+    {
+      "q": "Why do arches need strong abutments?",
+      "a": "An arch only stands while its feet cannot spread. The abutments and ground must resist the outward thrust; if they move, the arch flattens and can collapse.",
+      "asks": [
+        "What holds an arch up?"
+      ]
+    }
+  ],
+  "facts": [
+    "Under a load spread evenly along the span, a cable hangs as a parabola with horizontal tension H = wL²/8d.",
+    "Robert Hooke published the hanging-chain principle for arches in 1675, hidden in a Latin anagram.",
+    "The Akashi Kaikyō Bridge in Japan has a main span of 1991 metres."
+  ],
+  "quiz": [
+    {
+      "say": "A thirty metre cable carries 4 kilonewtons per metre with a sag of 3 metres. What is the horizontal tension?",
+      "show": "A 30 m cable carries 4 kN/m with a 3 m sag. Horizontal tension H?",
+      "options": [
+        {
+          "show": "150 kN",
+          "say": "150 kilonewtons"
+        },
+        {
+          "show": "450 kN",
+          "say": "450 kilonewtons"
+        },
+        {
+          "show": "60 kN",
+          "say": "60 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "H = wL²/8d = 4 × 900 / 24 = 150 kilonewtons.",
+      "wrong": {
+        "1": "That is the beam moment, 450 kilonewton metres, before dividing by the sag.",
+        "2": "That is the vertical reaction at each support, w L over 2."
+      }
+    },
+    {
+      "say": "An arch shaped like an upside-down hanging chain carries its load mainly by…",
+      "show": "An arch shaped like an upside-down hanging chain carries its load mainly by…",
+      "options": [
+        {
+          "show": "Bending",
+          "say": "Bending"
+        },
+        {
+          "show": "Compression",
+          "say": "Compression"
+        },
+        {
+          "show": "Tension",
+          "say": "Tension"
+        }
+      ],
+      "answer": 1,
+      "why": "Inverting the pure-tension chain gives a shape in pure compression.",
+      "wrong": {
+        "0": "The ideal shape avoids bending; that is the whole point.",
+        "2": "Tension is the hanging chain; the arch is its mirror in compression."
+      }
+    }
+  ]
+}

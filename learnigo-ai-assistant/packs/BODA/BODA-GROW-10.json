@@ -1,0 +1,601 @@
+{
+  "id": "BODA-GROW-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How your body clock works and why jet lag happens",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "body clock",
+    "circadian rhythm",
+    "jet lag",
+    "melatonin",
+    "daylight"
+  ],
+  "examples": [
+    "What is a body clock?",
+    "Why do I get jet lag?",
+    "What is melatonin?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "sun",
+          "label": "Daylight",
+          "icon": "sun",
+          "x": 0.1,
+          "y": 0.2
+        },
+        {
+          "id": "eye",
+          "label": "Eyes",
+          "icon": "eye",
+          "x": 0.3,
+          "y": 0.2
+        },
+        {
+          "id": "clock",
+          "label": "Master clock",
+          "icon": "clock",
+          "x": 0.55,
+          "y": 0.42,
+          "ask": "What is the body clock?"
+        },
+        {
+          "id": "mel",
+          "label": "Melatonin",
+          "icon": "moon",
+          "x": 0.88,
+          "y": 0.2,
+          "ask": "What is melatonin?"
+        },
+        {
+          "id": "temp",
+          "label": "Body temperature",
+          "icon": "thermometer",
+          "x": 0.25,
+          "y": 0.82
+        },
+        {
+          "id": "food",
+          "label": "Hunger",
+          "icon": "stomach",
+          "x": 0.55,
+          "y": 0.85
+        },
+        {
+          "id": "alert",
+          "label": "Alertness",
+          "icon": "brain",
+          "x": 0.86,
+          "y": 0.75
+        }
+      ],
+      "links": [
+        {
+          "from": "sun",
+          "to": "eye",
+          "kind": "energy",
+          "label": "Light"
+        },
+        {
+          "from": "eye",
+          "to": "clock",
+          "kind": "signal",
+          "label": "Resets clock",
+          "ask": "How does light reset the body clock?"
+        },
+        {
+          "from": "clock",
+          "to": "mel",
+          "kind": "signal",
+          "label": "Evening"
+        },
+        {
+          "from": "clock",
+          "to": "temp",
+          "kind": "signal"
+        },
+        {
+          "from": "clock",
+          "to": "food",
+          "kind": "signal"
+        },
+        {
+          "from": "clock",
+          "to": "alert",
+          "kind": "signal"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your body runs on a daily rhythm of about 24 hours, called a circadian rhythm. It makes you sleepy at night and alert in the day, even without a clock on the wall.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How your body clock works and why jet lag happens"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Daylight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.2
+            },
+            {
+              "id": "eye",
+              "label": "Eyes",
+              "icon": "eye",
+              "x": 0.3,
+              "y": 0.2
+            },
+            {
+              "id": "clock",
+              "label": "Master clock",
+              "icon": "clock",
+              "x": 0.55,
+              "y": 0.42,
+              "ask": "What is the body clock?"
+            },
+            {
+              "id": "mel",
+              "label": "Melatonin",
+              "icon": "moon",
+              "x": 0.88,
+              "y": 0.2,
+              "ask": "What is melatonin?"
+            },
+            {
+              "id": "temp",
+              "label": "Body temperature",
+              "icon": "thermometer",
+              "x": 0.25,
+              "y": 0.82
+            },
+            {
+              "id": "food",
+              "label": "Hunger",
+              "icon": "stomach",
+              "x": 0.55,
+              "y": 0.85
+            },
+            {
+              "id": "alert",
+              "label": "Alertness",
+              "icon": "brain",
+              "x": 0.86,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "eye",
+              "kind": "energy",
+              "label": "Light"
+            },
+            {
+              "from": "eye",
+              "to": "clock",
+              "kind": "signal",
+              "label": "Resets clock",
+              "ask": "How does light reset the body clock?"
+            },
+            {
+              "from": "clock",
+              "to": "mel",
+              "kind": "signal",
+              "label": "Evening"
+            },
+            {
+              "from": "clock",
+              "to": "temp",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "food",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "alert",
+              "kind": "signal"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The master clock is a tiny cluster of about 20,000 nerve cells deep in the brain. Special light sensors in your eyes report daylight to it each morning, resetting it to the real day.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Daylight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.2
+            },
+            {
+              "id": "eye",
+              "label": "Eyes",
+              "icon": "eye",
+              "x": 0.3,
+              "y": 0.2
+            },
+            {
+              "id": "clock",
+              "label": "Master clock",
+              "icon": "clock",
+              "x": 0.55,
+              "y": 0.42,
+              "ask": "What is the body clock?"
+            },
+            {
+              "id": "mel",
+              "label": "Melatonin",
+              "icon": "moon",
+              "x": 0.88,
+              "y": 0.2,
+              "ask": "What is melatonin?"
+            },
+            {
+              "id": "temp",
+              "label": "Body temperature",
+              "icon": "thermometer",
+              "x": 0.25,
+              "y": 0.82
+            },
+            {
+              "id": "food",
+              "label": "Hunger",
+              "icon": "stomach",
+              "x": 0.55,
+              "y": 0.85
+            },
+            {
+              "id": "alert",
+              "label": "Alertness",
+              "icon": "brain",
+              "x": 0.86,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "eye",
+              "kind": "energy",
+              "label": "Light"
+            },
+            {
+              "from": "eye",
+              "to": "clock",
+              "kind": "signal",
+              "label": "Resets clock",
+              "ask": "How does light reset the body clock?"
+            },
+            {
+              "from": "clock",
+              "to": "mel",
+              "kind": "signal",
+              "label": "Evening"
+            },
+            {
+              "from": "clock",
+              "to": "temp",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "food",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "alert",
+              "kind": "signal"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "In the evening, as light fades, the clock signals a gland to release melatonin, a hormone that helps you feel sleepy. It also times your body temperature, hunger and alertness.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Daylight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.2
+            },
+            {
+              "id": "eye",
+              "label": "Eyes",
+              "icon": "eye",
+              "x": 0.3,
+              "y": 0.2
+            },
+            {
+              "id": "clock",
+              "label": "Master clock",
+              "icon": "clock",
+              "x": 0.55,
+              "y": 0.42,
+              "ask": "What is the body clock?"
+            },
+            {
+              "id": "mel",
+              "label": "Melatonin",
+              "icon": "moon",
+              "x": 0.88,
+              "y": 0.2,
+              "ask": "What is melatonin?"
+            },
+            {
+              "id": "temp",
+              "label": "Body temperature",
+              "icon": "thermometer",
+              "x": 0.25,
+              "y": 0.82
+            },
+            {
+              "id": "food",
+              "label": "Hunger",
+              "icon": "stomach",
+              "x": 0.55,
+              "y": 0.85
+            },
+            {
+              "id": "alert",
+              "label": "Alertness",
+              "icon": "brain",
+              "x": 0.86,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "eye",
+              "kind": "energy",
+              "label": "Light"
+            },
+            {
+              "from": "eye",
+              "to": "clock",
+              "kind": "signal",
+              "label": "Resets clock",
+              "ask": "How does light reset the body clock?"
+            },
+            {
+              "from": "clock",
+              "to": "mel",
+              "kind": "signal",
+              "label": "Evening"
+            },
+            {
+              "from": "clock",
+              "to": "temp",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "food",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "alert",
+              "kind": "signal"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Fly across several time zones and your clock is still set to home time. You feel sleepy in the day and awake at night until daylight slowly resets it, roughly one time zone per day: that is jet lag.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sun",
+              "label": "Daylight",
+              "icon": "sun",
+              "x": 0.1,
+              "y": 0.2
+            },
+            {
+              "id": "eye",
+              "label": "Eyes",
+              "icon": "eye",
+              "x": 0.3,
+              "y": 0.2
+            },
+            {
+              "id": "clock",
+              "label": "Master clock",
+              "icon": "clock",
+              "x": 0.55,
+              "y": 0.42,
+              "ask": "What is the body clock?"
+            },
+            {
+              "id": "mel",
+              "label": "Melatonin",
+              "icon": "moon",
+              "x": 0.88,
+              "y": 0.2,
+              "ask": "What is melatonin?"
+            },
+            {
+              "id": "temp",
+              "label": "Body temperature",
+              "icon": "thermometer",
+              "x": 0.25,
+              "y": 0.82
+            },
+            {
+              "id": "food",
+              "label": "Hunger",
+              "icon": "stomach",
+              "x": 0.55,
+              "y": 0.85
+            },
+            {
+              "id": "alert",
+              "label": "Alertness",
+              "icon": "brain",
+              "x": 0.86,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sun",
+              "to": "eye",
+              "kind": "energy",
+              "label": "Light"
+            },
+            {
+              "from": "eye",
+              "to": "clock",
+              "kind": "signal",
+              "label": "Resets clock",
+              "ask": "How does light reset the body clock?"
+            },
+            {
+              "from": "clock",
+              "to": "mel",
+              "kind": "signal",
+              "label": "Evening"
+            },
+            {
+              "from": "clock",
+              "to": "temp",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "food",
+              "kind": "signal"
+            },
+            {
+              "from": "clock",
+              "to": "alert",
+              "kind": "signal"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the body clock?",
+      "a": "The body clock is a group of about 20,000 nerve cells in the brain, called the suprachiasmatic nucleus, that keeps a roughly 24-hour rhythm. It times sleep, hormones, temperature and hunger.",
+      "asks": [
+        "What is a circadian rhythm?",
+        "Where is the body clock?"
+      ]
+    },
+    {
+      "q": "How does light reset the body clock?",
+      "a": "Special light-sensitive cells in the retina, separate from the ones used for seeing, detect daylight and signal the master clock. Morning light nudges the clock to match the real day.",
+      "asks": [
+        "Why does daylight wake you up?",
+        "How do eyes set the body clock?"
+      ]
+    },
+    {
+      "q": "What is melatonin?",
+      "a": "Melatonin is a hormone released by the pineal gland in the brain when it gets dark, under the control of the body clock. It signals to the body that it is night-time and helps you feel sleepy.",
+      "asks": [
+        "What makes us sleepy at night?",
+        "What does the pineal gland do?"
+      ]
+    },
+    {
+      "q": "Why do I get jet lag?",
+      "a": "After a fast flight across time zones, your body clock is still on home time, so you feel sleepy, hungry or awake at the wrong times. Daylight in the new place gradually resets it, about one time zone a day.",
+      "asks": [
+        "What causes jet lag?",
+        "How long does jet lag last?"
+      ]
+    },
+    {
+      "q": "Why is jet lag worse flying east?",
+      "a": "Flying east means you must shift your clock earlier, but most people's natural rhythm runs slightly longer than 24 hours, so it is easier to stay up later than to go to sleep earlier.",
+      "asks": [
+        "Is jet lag worse going east or west?",
+        "Why is flying east harder?"
+      ]
+    }
+  ],
+  "facts": [
+    "The master body clock, the suprachiasmatic nucleus, contains about 20,000 nerve cells.",
+    "The word circadian comes from Latin for \"about a day\".",
+    "Melatonin is made by the pineal gland, mostly in darkness."
+  ],
+  "quiz": [
+    {
+      "say": "After flying from London to New York, why does someone feel awake at night?",
+      "show": "Jet lag happens because…",
+      "options": [
+        {
+          "show": "The body clock is still set to home time",
+          "say": "The body clock is still set to home time"
+        },
+        {
+          "show": "Planes use up the body's melatonin",
+          "say": "Planes use up the body's melatonin"
+        },
+        {
+          "show": "The air on planes is thinner",
+          "say": "The air on planes is thinner"
+        }
+      ],
+      "answer": 0,
+      "why": "The internal clock keeps home time until daylight in the new place slowly resets it.",
+      "wrong": {
+        "1": "Flying does not use up melatonin; its timing is just still on home time.",
+        "2": "Cabin air can be tiring, but the mismatch of the body clock causes jet lag."
+      }
+    }
+  ]
+}

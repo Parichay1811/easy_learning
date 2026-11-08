@@ -1,0 +1,282 @@
+{
+  "id": "CS-24",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "File handling",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "file handling",
+    "open file",
+    "read data",
+    "write data",
+    "close file"
+  ],
+  "examples": [
+    "How do I make sure my program doesn't lose the information?",
+    "What is the difference between reading and writing to a file?",
+    "Why do I need to close the file after I am done?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we will learn about file handling in programming.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "File handling"
+        },
+        {
+          "op": "flow",
+          "items": [
+            "Start program",
+            "Open file connection",
+            "Read or write data",
+            "Close file connection",
+            "End program"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "File Handling: open, read, write, close",
+          "at": "file"
+        }
+      ]
+    },
+    {
+      "say": "First we must open the file before we can do anything with it.",
+      "draw": [
+        {
+          "op": "parts",
+          "center": "open()",
+          "items": [
+            "File Name: The path to the file",
+            "Mode: Read or Write access"
+          ],
+          "at": "file"
+        },
+        {
+          "op": "text",
+          "text": "open: connecting to a file",
+          "at": "open"
+        }
+      ]
+    },
+    {
+      "say": "Next we use the read function to get information from the file.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "File opened",
+            "read() command executed",
+            "Data loaded into memory"
+          ],
+          "at": "file"
+        },
+        {
+          "op": "text",
+          "text": "read(): getting content from file",
+          "at": "read"
+        }
+      ]
+    },
+    {
+      "say": "To save data we use the write function to put information in the file.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Data ready to save",
+            "write() command executed",
+            "Data written to disk"
+          ],
+          "at": "data"
+        },
+        {
+          "op": "text",
+          "text": "write(): saving data to file",
+          "at": "write"
+        }
+      ]
+    },
+    {
+      "say": "It is very important to close the file when you are finished working.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Finished reading/writing",
+            "close() command executed",
+            "System resources freed"
+          ],
+          "at": "finished"
+        },
+        {
+          "op": "text",
+          "text": "close(): releasing the file lock",
+          "at": "close"
+        }
+      ]
+    },
+    {
+      "say": "In real life when you save a document you follow these steps. You open the program, you write your text, and then you save and close the file.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Saving a document: Open -> Write -> Close",
+          "at": "document"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do I need to use the close function?",
+      "a": "Closing the file tells the computer that you are done with it. This prevents data corruption and frees up system resources.",
+      "asks": [
+        "Must I always close files?",
+        "What happens if I forget to close the file?"
+      ]
+    },
+    {
+      "q": "What is the difference between read and write?",
+      "a": "Reading pulls data from the file into your program to be used. Writing pushes data from your program into the file.",
+      "asks": [
+        "Can I read and write at the same time?",
+        "Which function gets data out?"
+      ]
+    },
+    {
+      "q": "What happens if the file I want to open does not exist?",
+      "a": "Most programming languages will give you an error message. You must check if the file exists before trying to open it.",
+      "asks": [
+        "What if the file path is wrong?",
+        "How do I handle missing files?"
+      ]
+    },
+    {
+      "q": "Is the file open automatically when I start the program?",
+      "a": "No, you must explicitly use the open command. This is the first step in the file handling process.",
+      "asks": [
+        "Do I need to call open first?",
+        "Can I skip the open step?"
+      ]
+    },
+    {
+      "q": "Can I read and write to the same file in one program?",
+      "a": "Yes, you can, but you must be careful about the file mode. You might need to read some data then overwrite other parts.",
+      "asks": [
+        "Is it safe to read and write together?",
+        "How do I update a file?"
+      ]
+    }
+  ],
+  "facts": [
+    "Opening a file establishes a connection between the program and the data on the storage device.",
+    "The read function retrieves data from the file into the program's memory for processing.",
+    "The write function sends data from the program's memory out to the file.",
+    "Calling the close function releases the operating system's lock on the file, making it available to others."
+  ],
+  "quiz": [
+    {
+      "say": "Which function must be called first to access file data?",
+      "show": "open()",
+      "options": [
+        {
+          "show": "open()",
+          "say": "open()"
+        },
+        {
+          "show": "read()",
+          "say": "read()"
+        },
+        {
+          "show": "write()",
+          "say": "write()"
+        },
+        {
+          "show": "close()",
+          "say": "close()"
+        }
+      ],
+      "answer": 0,
+      "why": "You must open the file to establish a connection before reading or writing.",
+      "wrong": {
+        "1": "Reading only works if the file is already open and connected.",
+        "2": "Writing data requires an active, open connection to the file.",
+        "3": "Closing the file ends the connection; it does not start one."
+      }
+    },
+    {
+      "say": "If you want to save a new score, which sequence of actions is best?",
+      "show": "open -> write -> close",
+      "options": [
+        {
+          "show": "open -> write -> close",
+          "say": "open -> write -> close"
+        },
+        {
+          "show": "read -> write -> close",
+          "say": "read -> write -> close"
+        },
+        {
+          "show": "open -> close -> write",
+          "say": "open -> close -> write"
+        },
+        {
+          "show": "open -> write -> open",
+          "say": "open -> write -> open"
+        }
+      ],
+      "answer": 0,
+      "why": "This sequence ensures the file is ready, the data is saved, and the connection is properly terminated.",
+      "wrong": {
+        "1": "Reading is not necessary if you are only adding new data.",
+        "2": "You cannot write data if you close the file before writing.",
+        "3": "You only need to open the file once at the beginning."
+      }
+    },
+    {
+      "say": "What is the primary purpose of the close function?",
+      "show": "release resources",
+      "options": [
+        {
+          "show": "To free system resources and prevent data loss.",
+          "say": "To free system resources and prevent data loss."
+        },
+        {
+          "show": "To delete the file permanently.",
+          "say": "To delete the file permanently."
+        },
+        {
+          "show": "To read all the data immediately.",
+          "say": "To read all the data immediately."
+        },
+        {
+          "show": "To change the file name.",
+          "say": "To change the file name."
+        }
+      ],
+      "answer": 0,
+      "why": "Closing the file ensures all buffered data is written correctly and the file lock is released.",
+      "wrong": {
+        "1": "Closing only disconnects; it does not delete the file itself.",
+        "2": "Reading is done with the read function, not the close function.",
+        "3": "Changing the file name requires a separate system command."
+      }
+    }
+  ]
+}

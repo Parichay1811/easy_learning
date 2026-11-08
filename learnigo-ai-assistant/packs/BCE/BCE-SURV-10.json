@@ -1,0 +1,363 @@
+{
+  "id": "BCE-SURV-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "GIS for civil engineers: layers, buffers and weighted overlay",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-SURV — Surveying and geomatics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "GIS",
+    "raster and vector",
+    "buffer analysis",
+    "weighted overlay",
+    "site selection",
+    "coordinate system"
+  ],
+  "examples": [
+    "What is GIS used for in civil engineering?",
+    "What is the difference between raster and vector data?",
+    "How does weighted overlay pick a site?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-layers",
+      "layers": [
+        {
+          "label": "Roads",
+          "note": "Vector lines with names and widths",
+          "size": 0.8
+        },
+        {
+          "label": "Buildings",
+          "note": "Vector shapes: footprints",
+          "size": 0.8
+        },
+        {
+          "label": "Land use",
+          "note": "Farms, parks, housing",
+          "size": 0.8
+        },
+        {
+          "label": "Flood zones",
+          "note": "1-in-100-year flood extent",
+          "size": 0.8,
+          "ask": "What is a buffer in GIS?"
+        },
+        {
+          "label": "Soil type",
+          "note": "From borehole and soil maps",
+          "size": 0.8
+        },
+        {
+          "label": "Elevation grid",
+          "note": "Raster cells, each with a height",
+          "size": 1,
+          "ask": "What is the difference between raster and vector data?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1854 John Snow marked every cholera death in a London district on a map, and they clustered around one water pump. That map changed public health. Today engineers do the same kind of thinking with GIS, geographic information systems: maps as stacked layers of data. Here is a stack for planning a new water treatment plant.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "GIS for civil engineers: layers, buffers and weighted overlay"
+        },
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Roads",
+              "note": "Vector lines with names and widths",
+              "size": 0.8
+            },
+            {
+              "label": "Buildings",
+              "note": "Vector shapes: footprints",
+              "size": 0.8
+            },
+            {
+              "label": "Land use",
+              "note": "Farms, parks, housing",
+              "size": 0.8
+            },
+            {
+              "label": "Flood zones",
+              "note": "1-in-100-year flood extent",
+              "size": 0.8,
+              "ask": "What is a buffer in GIS?"
+            },
+            {
+              "label": "Soil type",
+              "note": "From borehole and soil maps",
+              "size": 0.8
+            },
+            {
+              "label": "Elevation grid",
+              "note": "Raster cells, each with a height",
+              "size": 1,
+              "ask": "What is the difference between raster and vector data?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Each layer holds one kind of information. Some are vector data: points, lines and shapes, like roads and building outlines. Others are raster data: a grid of cells, each holding a value, like the elevation layer at the bottom. Which type would you use for rainfall across a whole region?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Vector",
+            "icon": "pencil",
+            "points": [
+              "Points, lines, shapes",
+              "Pipes, roads, plots",
+              "Sharp edges, small files"
+            ]
+          },
+          "right": {
+            "title": "Raster",
+            "icon": "camera",
+            "points": [
+              "Grid of cells",
+              "Heights, rainfall, images",
+              "Good for smooth surfaces"
+            ]
+          },
+          "verdict": "Use vector for things, raster for fields",
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Raster! The power comes from combining layers. A buffer draws a zone around a feature, say five hundred metres either side of a road. Overlay then keeps only land that is inside the road buffer, outside the flood zone, and gently sloping. Look at the flood zone layer: no treatment plant should sit there.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Roads",
+              "note": "Vector lines with names and widths",
+              "size": 0.8
+            },
+            {
+              "label": "Buildings",
+              "note": "Vector shapes: footprints",
+              "size": 0.8
+            },
+            {
+              "label": "Land use",
+              "note": "Farms, parks, housing",
+              "size": 0.8
+            },
+            {
+              "label": "Flood zones",
+              "note": "1-in-100-year flood extent",
+              "size": 0.8,
+              "ask": "What is a buffer in GIS?"
+            },
+            {
+              "label": "Soil type",
+              "note": "From borehole and soil maps",
+              "size": 0.8
+            },
+            {
+              "label": "Elevation grid",
+              "note": "Raster cells, each with a height",
+              "size": 1,
+              "ask": "What is the difference between raster and vector data?"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "To rank the sites that remain, use weighted overlay. Score each site from one to five on each factor and weight by importance: slope fifty percent, soil thirty, distance to road twenty. Site A scores four, three and five, giving three point nine. Look at the bars: which site wins?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "score out of 5",
+          "items": [
+            {
+              "label": "Site A",
+              "size": 3.9,
+              "icon": "flag"
+            },
+            {
+              "label": "Site B",
+              "size": 3.1,
+              "icon": "flag"
+            },
+            {
+              "label": "Site C",
+              "size": 2.4,
+              "icon": "flag"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Score = 0.5×4 + 0.3×3 + 0.2×5 = 3.9"
+        }
+      ]
+    },
+    {
+      "say": "Site A! Layers only line up if they share a coordinate system, such as WGS 84 or a UTM zone, so always check that first. Cities use GIS to manage every pipe, valve and road. Superb! Challenge: a site scores two for slope, five for soil and four for road access. What is its weighted score?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Roads",
+              "note": "Vector lines with names and widths",
+              "size": 0.8
+            },
+            {
+              "label": "Buildings",
+              "note": "Vector shapes: footprints",
+              "size": 0.8
+            },
+            {
+              "label": "Land use",
+              "note": "Farms, parks, housing",
+              "size": 0.8
+            },
+            {
+              "label": "Flood zones",
+              "note": "1-in-100-year flood extent",
+              "size": 0.8,
+              "ask": "What is a buffer in GIS?"
+            },
+            {
+              "label": "Soil type",
+              "note": "From borehole and soil maps",
+              "size": 0.8
+            },
+            {
+              "label": "Elevation grid",
+              "note": "Raster cells, each with a height",
+              "size": 1,
+              "ask": "What is the difference between raster and vector data?"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is GIS?",
+      "a": "A geographic information system stores, analyses and maps data tied to locations, as layers that can be overlaid, queried and combined, for planning, asset management and analysis.",
+      "asks": [
+        "What is GIS used for in civil engineering?"
+      ]
+    },
+    {
+      "q": "What is the difference between raster and vector data?",
+      "a": "Vector data uses points, lines and polygons for discrete features like pipes and plots. Raster data is a grid of cells with values, suited to continuous surfaces like elevation and rainfall.",
+      "asks": [
+        "Raster vs vector"
+      ]
+    },
+    {
+      "q": "What is a buffer in GIS?",
+      "a": "A zone drawn at a set distance around a feature, such as 500 metres around a road or 50 metres around a river, used to find what lies near it.",
+      "asks": [
+        "Buffer analysis",
+        "Overlay analysis"
+      ]
+    },
+    {
+      "q": "What is weighted overlay analysis?",
+      "a": "Each layer is scored on a common scale and multiplied by a weight for its importance, then the layers are added to rank locations. Weights 0.5, 0.3 and 0.2 on scores 4, 3 and 5 give 3.9.",
+      "asks": [
+        "How does weighted overlay pick a site?",
+        "Multi-criteria site selection"
+      ]
+    },
+    {
+      "q": "Why do coordinate systems matter in GIS?",
+      "a": "Layers in different coordinate systems or datums will not line up, possibly by hundreds of metres. All data must be projected into one system, such as a UTM zone, before analysis.",
+      "asks": [
+        "Map projection",
+        "UTM"
+      ]
+    }
+  ],
+  "facts": [
+    "Roger Tomlinson led the Canada Geographic Information System in the 1960s and is often called the father of GIS.",
+    "The UTM system divides the Earth into 60 zones, each 6° of longitude wide."
+  ],
+  "quiz": [
+    {
+      "say": "The weights are 0.5 for slope, 0.3 for soil and 0.2 for road access. A site scores 2, 5 and 4. What is its weighted score?",
+      "show": "Weights 0.5, 0.3, 0.2; a site scores 2, 5 and 4. Weighted score?",
+      "options": [
+        {
+          "show": "3.3",
+          "say": "3.3"
+        },
+        {
+          "show": "11",
+          "say": "11"
+        },
+        {
+          "show": "3.7",
+          "say": "3.7"
+        }
+      ],
+      "answer": 0,
+      "why": "0.5 × 2 + 0.3 × 5 + 0.2 × 4 = 1 + 1.5 + 0.8 = 3.3.",
+      "wrong": {
+        "1": "That adds the scores without weights.",
+        "2": "That is the plain average of the three scores."
+      }
+    },
+    {
+      "say": "Which data type suits a digital elevation model?",
+      "show": "Which data type suits a digital elevation model?",
+      "options": [
+        {
+          "show": "Raster",
+          "say": "Raster"
+        },
+        {
+          "show": "Vector",
+          "say": "Vector"
+        },
+        {
+          "show": "Neither",
+          "say": "Neither"
+        }
+      ],
+      "answer": 0,
+      "why": "Elevation varies smoothly, so a grid of height cells is natural.",
+      "wrong": {
+        "1": "Vector suits discrete features like pipes and roads.",
+        "2": "Elevation is classic raster data."
+      }
+    }
+  ]
+}

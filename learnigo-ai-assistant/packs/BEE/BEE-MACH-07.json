@@ -1,0 +1,627 @@
+{
+  "id": "BEE-MACH-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Induction motors and slip: why the rotor always lags the field",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "induction motor",
+    "slip",
+    "squirrel-cage rotor",
+    "rotor frequency",
+    "breakdown torque"
+  ],
+  "examples": [
+    "What is slip in an induction motor?",
+    "Why can an induction motor never reach synchronous speed?",
+    "How do you calculate rotor frequency?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sup",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.2,
+          "label": "400 V 50 Hz"
+        },
+        {
+          "id": "stator",
+          "kind": "coil",
+          "x": 0.4,
+          "y": 0.2,
+          "size": 1.2,
+          "label": "Stator field 1500 rpm",
+          "ask": "Why can an induction motor never reach synchronous speed?"
+        },
+        {
+          "id": "rotor",
+          "kind": "wheel",
+          "x": 0.4,
+          "y": 0.65,
+          "size": 1.3,
+          "label": "Cage rotor",
+          "motion": "spin",
+          "ask": "What is a squirrel-cage rotor?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.66,
+          "y": 0.65,
+          "label": "Shaft 1450 rpm",
+          "ask": "What is slip in an induction motor?"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.88,
+          "y": 0.65,
+          "label": "Fan load"
+        }
+      ],
+      "links": [
+        {
+          "from": "sup",
+          "to": "stator",
+          "kind": "power"
+        },
+        {
+          "from": "stator",
+          "to": "rotor",
+          "kind": "energy",
+          "label": "Rotating field"
+        },
+        {
+          "from": "rotor",
+          "to": "shaft",
+          "kind": "force"
+        },
+        {
+          "from": "shaft",
+          "to": "fan",
+          "kind": "force"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Pumps in Nigerian waterworks, fans in Japanese road tunnels, conveyors in German factories: most are driven by induction motors, the workhorses of industry. On the board is a 4-pole motor on 50 hertz. Its stator field spins at 1500 rpm, yet the shaft turns at only 1450. Why the gap?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Induction motors and slip: why the rotor always lags the field"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sup",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.2,
+              "label": "400 V 50 Hz"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.4,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Stator field 1500 rpm",
+              "ask": "Why can an induction motor never reach synchronous speed?"
+            },
+            {
+              "id": "rotor",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.65,
+              "size": 1.3,
+              "label": "Cage rotor",
+              "motion": "spin",
+              "ask": "What is a squirrel-cage rotor?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.66,
+              "y": 0.65,
+              "label": "Shaft 1450 rpm",
+              "ask": "What is slip in an induction motor?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.88,
+              "y": 0.65,
+              "label": "Fan load"
+            }
+          ],
+          "links": [
+            {
+              "from": "sup",
+              "to": "stator",
+              "kind": "power"
+            },
+            {
+              "from": "stator",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Rotating field"
+            },
+            {
+              "from": "rotor",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "fan",
+              "kind": "force"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is an induction motor in 3D. See the squirrel-cage rotor inside the stator? It is just bars and end rings, with no wires going to it, yet it spins, a little slower than the field. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Induction motors and slip: why the rotor always lags the field"
+        },
+        {
+          "op": "image",
+          "render": "induction-motor"
+        }
+      ]
+    },
+    {
+      "say": "Look at the rotor, a cage of aluminium or copper bars joined by end rings, with no wires connected to it at all. The rotating field sweeps past the bars and induces currents in them, just like a transformer secondary. Those currents sit in the field, so they feel a force and the rotor turns. What would happen if the rotor ever caught up with the field?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sup",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.2,
+              "label": "400 V 50 Hz"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.4,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Stator field 1500 rpm",
+              "ask": "Why can an induction motor never reach synchronous speed?"
+            },
+            {
+              "id": "rotor",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.65,
+              "size": 1.3,
+              "label": "Cage rotor",
+              "motion": "spin",
+              "ask": "What is a squirrel-cage rotor?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.66,
+              "y": 0.65,
+              "label": "Shaft 1450 rpm",
+              "ask": "What is slip in an induction motor?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.88,
+              "y": 0.65,
+              "label": "Fan load"
+            }
+          ],
+          "links": [
+            {
+              "from": "sup",
+              "to": "stator",
+              "kind": "power"
+            },
+            {
+              "from": "stator",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Rotating field"
+            },
+            {
+              "from": "rotor",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "fan",
+              "kind": "force"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Field sweeps bars → induced current → force"
+        }
+      ]
+    },
+    {
+      "say": "Nothing would cut the bars, so no current, no force and no torque. The rotor must always lag a little, and that lag is called slip. Here slip is 1500 minus 1450, over 1500: 3.3 percent. Typical motors run at 2 to 6 percent slip at full load. If the load increases, does slip go up or down?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sup",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.2,
+              "label": "400 V 50 Hz"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.4,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Stator field 1500 rpm",
+              "ask": "Why can an induction motor never reach synchronous speed?"
+            },
+            {
+              "id": "rotor",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.65,
+              "size": 1.3,
+              "label": "Cage rotor",
+              "motion": "spin",
+              "ask": "What is a squirrel-cage rotor?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.66,
+              "y": 0.65,
+              "label": "Shaft 1450 rpm",
+              "ask": "What is slip in an induction motor?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.88,
+              "y": 0.65,
+              "label": "Fan load"
+            }
+          ],
+          "links": [
+            {
+              "from": "sup",
+              "to": "stator",
+              "kind": "power"
+            },
+            {
+              "from": "stator",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Rotating field"
+            },
+            {
+              "from": "rotor",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "fan",
+              "kind": "force"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "s = (n_s − n)/n_s = (1500 − 1450)/1500 = 3.3%"
+        }
+      ]
+    },
+    {
+      "say": "Up: the rotor slows a little, so the bars are cut faster and carry more current. Now the torque–speed curve. At standstill, on the left, this motor gives about 150 percent of rated torque. It climbs to a peak, the breakdown torque, about 250 percent, then falls steeply to zero at 1500 rpm. Normal running is on that steep part, near 1450. Why is it so steep there?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (rpm)",
+            "max": 1500
+          },
+          "y": {
+            "label": "Torque (% of rated)",
+            "max": 270
+          },
+          "curves": [
+            {
+              "label": "Motor torque",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  150
+                ],
+                [
+                  300,
+                  140
+                ],
+                [
+                  600,
+                  150
+                ],
+                [
+                  900,
+                  180
+                ],
+                [
+                  1125,
+                  230
+                ],
+                [
+                  1230,
+                  250
+                ],
+                [
+                  1320,
+                  230
+                ],
+                [
+                  1400,
+                  170
+                ],
+                [
+                  1450,
+                  100
+                ],
+                [
+                  1500,
+                  0
+                ]
+              ],
+              "ask": "What is breakdown torque?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Start ≈ 150%"
+            },
+            {
+              "x": 1230,
+              "label": "Breakdown ≈ 250%"
+            },
+            {
+              "x": 1450,
+              "label": "Rated 1450 rpm"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Start ≈ 150%, breakdown ≈ 250% of rated torque"
+        }
+      ]
+    },
+    {
+      "say": "Because a tiny change of speed makes a big change in rotor current, so the speed stays nearly constant from no load to full load. Past the breakdown peak, torque falls as it slows, and it stalls. And the rotor currents alternate slowly, at slip times 50, about 1.7 hertz. Outstanding! Challenge: a 2-pole 60 hertz motor runs at 3492 rpm. What is its slip?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (rpm)",
+            "max": 1500
+          },
+          "y": {
+            "label": "Torque (% of rated)",
+            "max": 270
+          },
+          "curves": [
+            {
+              "label": "Motor torque",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  150
+                ],
+                [
+                  300,
+                  140
+                ],
+                [
+                  600,
+                  150
+                ],
+                [
+                  900,
+                  180
+                ],
+                [
+                  1125,
+                  230
+                ],
+                [
+                  1230,
+                  250
+                ],
+                [
+                  1320,
+                  230
+                ],
+                [
+                  1400,
+                  170
+                ],
+                [
+                  1450,
+                  100
+                ],
+                [
+                  1500,
+                  0
+                ]
+              ],
+              "ask": "What is breakdown torque?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Start ≈ 150%"
+            },
+            {
+              "x": 1230,
+              "label": "Breakdown ≈ 250%"
+            },
+            {
+              "x": 1450,
+              "label": "Rated 1450 rpm"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Rotor frequency f_r = s × f = 0.033 × 50 ≈ 1.7 Hz"
+        },
+        {
+          "op": "note",
+          "text": "Load it past the breakdown torque and the motor stalls"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is slip in an induction motor?",
+      "a": "Slip is how far the rotor lags the rotating field, as a fraction of synchronous speed: synchronous speed minus rotor speed, over synchronous speed. A 4-pole motor at 1450 rpm on 50 hertz has 3.3 percent slip.",
+      "asks": [
+        "How do you calculate slip?"
+      ]
+    },
+    {
+      "q": "Why can an induction motor never reach synchronous speed?",
+      "a": "Torque needs current in the rotor bars, and that current is induced only when the field moves relative to the bars. At synchronous speed there is no relative motion, so no induced current and no torque.",
+      "asks": [
+        "Why does the rotor lag the field?"
+      ]
+    },
+    {
+      "q": "What is a squirrel-cage rotor?",
+      "a": "It is a rotor made of aluminium or copper bars set in a laminated iron core and shorted together by rings at both ends, like a hamster wheel. It needs no brushes or connections, which makes it cheap and tough.",
+      "asks": [
+        "What is inside an induction motor rotor?"
+      ]
+    },
+    {
+      "q": "How do you calculate rotor frequency?",
+      "a": "Rotor frequency equals slip times supply frequency. At 3.3 percent slip on 50 hertz, the rotor currents alternate at about 1.7 hertz.",
+      "asks": [
+        "What frequency are the rotor currents?"
+      ]
+    },
+    {
+      "q": "What is breakdown torque?",
+      "a": "It is the peak of the torque-speed curve, often two to three times rated torque. If the load needs more than this, the motor slows down, loses torque and stalls.",
+      "asks": [
+        "What is the pull-out torque of an induction motor?"
+      ]
+    }
+  ],
+  "facts": [
+    "Electric motor systems use about 45% of the world's electricity, according to the IEA.",
+    "Typical induction motors run at 2–6% slip at full load.",
+    "A squirrel-cage rotor has no electrical connection to the supply; its currents are induced."
+  ],
+  "quiz": [
+    {
+      "say": "A 2-pole 60 hertz induction motor runs at 3492 rpm. What is its slip?",
+      "show": "A 2-pole 60 Hz induction motor runs at 3492 rpm. What is its slip?",
+      "options": [
+        {
+          "show": "3%",
+          "say": "3 percent"
+        },
+        {
+          "show": "0.3%",
+          "say": "0.3 percent"
+        },
+        {
+          "show": "108%",
+          "say": "108 percent"
+        }
+      ],
+      "answer": 0,
+      "why": "Synchronous speed is 120 times 60 over 2, 3600 rpm. Slip is 108 over 3600, which is 3 percent.",
+      "wrong": {
+        "1": "That is ten times too small; check the division.",
+        "2": "108 is the speed difference in rpm, not a percentage."
+      }
+    },
+    {
+      "say": "What happens to slip when the load on an induction motor increases?",
+      "show": "What happens to slip when the load on an induction motor increases?",
+      "options": [
+        {
+          "show": "It increases slightly",
+          "say": "It increases slightly"
+        },
+        {
+          "show": "It decreases",
+          "say": "It decreases"
+        },
+        {
+          "show": "It stays exactly zero",
+          "say": "It stays exactly zero"
+        }
+      ],
+      "answer": 0,
+      "why": "The rotor slows a little so the field cuts the bars faster, inducing more current and torque.",
+      "wrong": {
+        "1": "Less slip would mean less rotor current and less torque, the opposite of what the load needs.",
+        "2": "Slip is never zero under load; with zero slip there is no torque."
+      }
+    }
+  ]
+}

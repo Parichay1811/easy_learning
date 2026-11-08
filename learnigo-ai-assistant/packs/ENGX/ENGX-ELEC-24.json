@@ -1,0 +1,634 @@
+{
+  "id": "ENGX-ELEC-24",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an electric doorbell rings",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "electric bell",
+    "doorbell",
+    "make and break circuit",
+    "bell hammer",
+    "ding-dong chime"
+  ],
+  "examples": [
+    "How does a doorbell work?",
+    "Why does an electric bell keep ringing?",
+    "How does a ding-dong doorbell work?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "btn",
+          "kind": "lever",
+          "x": 0.1,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Bell push",
+          "motion": "swing",
+          "ask": "What happens when you press the doorbell button?"
+        },
+        {
+          "id": "bat",
+          "kind": "battery",
+          "x": 0.1,
+          "y": 0.78,
+          "size": 1,
+          "label": "Battery"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.42,
+          "y": 0.6,
+          "size": 1.1,
+          "label": "Electromagnet",
+          "motion": "pulse",
+          "ask": "What does the electromagnet in a doorbell do?"
+        },
+        {
+          "id": "arm",
+          "kind": "lever",
+          "x": 0.65,
+          "y": 0.38,
+          "size": 1.1,
+          "label": "Iron arm & hammer",
+          "motion": "swing",
+          "ask": "Why does a doorbell hammer keep hitting the gong?"
+        },
+        {
+          "id": "contact",
+          "kind": "spring",
+          "x": 0.42,
+          "y": 0.15,
+          "size": 0.8,
+          "label": "Springy contact",
+          "motion": "slide",
+          "ask": "What is the contact in an electric bell?"
+        },
+        {
+          "id": "gong",
+          "kind": "box",
+          "x": 0.9,
+          "y": 0.25,
+          "size": 1,
+          "label": "Gong",
+          "motion": "pulse",
+          "ask": "How do ding-dong doorbells work?"
+        }
+      ],
+      "links": [
+        {
+          "from": "bat",
+          "to": "btn",
+          "kind": "power"
+        },
+        {
+          "from": "btn",
+          "to": "coil",
+          "kind": "power",
+          "label": "Current"
+        },
+        {
+          "from": "coil",
+          "to": "arm",
+          "kind": "force",
+          "label": "Pulls arm"
+        },
+        {
+          "from": "arm",
+          "to": "gong",
+          "kind": "force",
+          "label": "Strikes"
+        },
+        {
+          "from": "arm",
+          "to": "contact",
+          "kind": "force",
+          "label": "Breaks circuit"
+        },
+        {
+          "from": "contact",
+          "to": "coil",
+          "kind": "power",
+          "label": "Reconnects"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An old-style electric bell rings over and over for as long as you hold the button. The trick is that it keeps switching itself on and off.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an electric doorbell rings"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "btn",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Bell push",
+              "motion": "swing",
+              "ask": "What happens when you press the doorbell button?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.6,
+              "size": 1.1,
+              "label": "Electromagnet",
+              "motion": "pulse",
+              "ask": "What does the electromagnet in a doorbell do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "Iron arm & hammer",
+              "motion": "swing",
+              "ask": "Why does a doorbell hammer keep hitting the gong?"
+            },
+            {
+              "id": "contact",
+              "kind": "spring",
+              "x": 0.42,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Springy contact",
+              "motion": "slide",
+              "ask": "What is the contact in an electric bell?"
+            },
+            {
+              "id": "gong",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gong",
+              "motion": "pulse",
+              "ask": "How do ding-dong doorbells work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "btn",
+              "kind": "power"
+            },
+            {
+              "from": "btn",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls arm"
+            },
+            {
+              "from": "arm",
+              "to": "gong",
+              "kind": "force",
+              "label": "Strikes"
+            },
+            {
+              "from": "arm",
+              "to": "contact",
+              "kind": "force",
+              "label": "Breaks circuit"
+            },
+            {
+              "from": "contact",
+              "to": "coil",
+              "kind": "power",
+              "label": "Reconnects"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Pressing the bell push completes the circuit, so current flows into the electromagnet, which pulls the iron arm and swings the hammer into the gong.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "btn",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Bell push",
+              "motion": "swing",
+              "ask": "What happens when you press the doorbell button?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.6,
+              "size": 1.1,
+              "label": "Electromagnet",
+              "motion": "pulse",
+              "ask": "What does the electromagnet in a doorbell do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "Iron arm & hammer",
+              "motion": "swing",
+              "ask": "Why does a doorbell hammer keep hitting the gong?"
+            },
+            {
+              "id": "contact",
+              "kind": "spring",
+              "x": 0.42,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Springy contact",
+              "motion": "slide",
+              "ask": "What is the contact in an electric bell?"
+            },
+            {
+              "id": "gong",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gong",
+              "motion": "pulse",
+              "ask": "How do ding-dong doorbells work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "btn",
+              "kind": "power"
+            },
+            {
+              "from": "btn",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls arm"
+            },
+            {
+              "from": "arm",
+              "to": "gong",
+              "kind": "force",
+              "label": "Strikes"
+            },
+            {
+              "from": "arm",
+              "to": "contact",
+              "kind": "force",
+              "label": "Breaks circuit"
+            },
+            {
+              "from": "contact",
+              "to": "coil",
+              "kind": "power",
+              "label": "Reconnects"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "But as the arm moves, it pulls away from the contact and breaks the circuit, so the electromagnet switches off and a spring pulls the arm back.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "btn",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Bell push",
+              "motion": "swing",
+              "ask": "What happens when you press the doorbell button?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.6,
+              "size": 1.1,
+              "label": "Electromagnet",
+              "motion": "pulse",
+              "ask": "What does the electromagnet in a doorbell do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "Iron arm & hammer",
+              "motion": "swing",
+              "ask": "Why does a doorbell hammer keep hitting the gong?"
+            },
+            {
+              "id": "contact",
+              "kind": "spring",
+              "x": 0.42,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Springy contact",
+              "motion": "slide",
+              "ask": "What is the contact in an electric bell?"
+            },
+            {
+              "id": "gong",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gong",
+              "motion": "pulse",
+              "ask": "How do ding-dong doorbells work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "btn",
+              "kind": "power"
+            },
+            {
+              "from": "btn",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls arm"
+            },
+            {
+              "from": "arm",
+              "to": "gong",
+              "kind": "force",
+              "label": "Strikes"
+            },
+            {
+              "from": "arm",
+              "to": "contact",
+              "kind": "force",
+              "label": "Breaks circuit"
+            },
+            {
+              "from": "contact",
+              "to": "coil",
+              "kind": "power",
+              "label": "Reconnects"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Back in place, the arm touches the contact again, the magnet switches on and the hammer strikes once more, many times a second: ring, ring, ring.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "btn",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Bell push",
+              "motion": "swing",
+              "ask": "What happens when you press the doorbell button?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.6,
+              "size": 1.1,
+              "label": "Electromagnet",
+              "motion": "pulse",
+              "ask": "What does the electromagnet in a doorbell do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "Iron arm & hammer",
+              "motion": "swing",
+              "ask": "Why does a doorbell hammer keep hitting the gong?"
+            },
+            {
+              "id": "contact",
+              "kind": "spring",
+              "x": 0.42,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Springy contact",
+              "motion": "slide",
+              "ask": "What is the contact in an electric bell?"
+            },
+            {
+              "id": "gong",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gong",
+              "motion": "pulse",
+              "ask": "How do ding-dong doorbells work?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "btn",
+              "kind": "power"
+            },
+            {
+              "from": "btn",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls arm"
+            },
+            {
+              "from": "arm",
+              "to": "gong",
+              "kind": "force",
+              "label": "Strikes"
+            },
+            {
+              "from": "arm",
+              "to": "contact",
+              "kind": "force",
+              "label": "Breaks circuit"
+            },
+            {
+              "from": "contact",
+              "to": "coil",
+              "kind": "power",
+              "label": "Reconnects"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What happens when you press the doorbell button?",
+      "a": "Pressing the button closes a switch and completes the circuit. Current flows from the battery or a small transformer to the electromagnet inside the bell.",
+      "asks": [
+        "What does the bell push do?"
+      ]
+    },
+    {
+      "q": "What does the electromagnet in a doorbell do?",
+      "a": "When current flows, the coil becomes a magnet and pulls the iron arm towards it, swinging the hammer into the gong.",
+      "asks": [
+        "Why is there a magnet in a bell?"
+      ]
+    },
+    {
+      "q": "Why does a doorbell hammer keep hitting the gong?",
+      "a": "As the arm swings in, it pulls away from the contact and breaks the circuit. The magnet switches off, a spring pulls the arm back, the contact closes again, and the cycle repeats many times a second.",
+      "asks": [
+        "Why does an electric bell ring continuously?"
+      ]
+    },
+    {
+      "q": "What is the contact in an electric bell?",
+      "a": "It is the point the springy arm touches to complete the circuit. Each swing of the arm opens and closes this contact, which switches the electromagnet on and off by itself.",
+      "asks": [
+        "What is the contact screw for?"
+      ]
+    },
+    {
+      "q": "How do ding-dong doorbells work?",
+      "a": "A ding-dong chime uses a coil with a sliding iron plunger. Pressing the button shoots the plunger into one metal bar, ding, and releasing it lets a spring throw it back against the other bar, dong.",
+      "asks": [
+        "How does a two-tone chime work?"
+      ]
+    }
+  ],
+  "facts": [
+    "Wired doorbells usually run on low voltage, often 8 to 24 volts from a small transformer.",
+    "Electric bells that interrupt their own current date back to the mid-1800s."
+  ],
+  "quiz": [
+    {
+      "say": "Why does an electric bell's hammer keep moving back and forth?",
+      "show": "Why does an electric bell's hammer keep moving back and forth?",
+      "options": [
+        {
+          "show": "Its own movement breaks and remakes the circuit",
+          "say": "Its own movement breaks and remakes the circuit"
+        },
+        {
+          "show": "The button is pressed many times a second",
+          "say": "The button is pressed many times a second"
+        },
+        {
+          "show": "The gong pushes it back with air",
+          "say": "The gong pushes it back with air"
+        }
+      ],
+      "answer": 0,
+      "why": "Each swing opens the contact, switching the magnet off; the spring returns the arm, which closes the contact and starts again.",
+      "wrong": {
+        "1": "You only hold the button down once; the bell does the switching.",
+        "2": "The gong does not blow air; a spring returns the arm."
+      }
+    }
+  ]
+}

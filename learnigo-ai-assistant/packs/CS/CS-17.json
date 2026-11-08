@@ -1,0 +1,250 @@
+{
+  "id": "CS-17",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "SQL",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "sql",
+    "database",
+    "query",
+    "select",
+    "where",
+    "join"
+  ],
+  "examples": [
+    "How do I select specific columns from a table?",
+    "What is the difference between WHERE and JOIN?",
+    "Can I sort the results after I query the data?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning how to ask questions of databases using SQL.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "SQL"
+        },
+        {
+          "op": "text",
+          "text": "SELECT, WHERE, ORDER BY, JOIN"
+        }
+      ]
+    },
+    {
+      "say": "The SELECT statement tells the database which columns you want to see.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "SELECT column1, column2",
+          "at": "select"
+        }
+      ]
+    },
+    {
+      "say": "The WHERE clause lets you filter records based on specific conditions.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Step 1: Start with the table name",
+            "Step 2: Use WHERE to set a condition",
+            "Step 3: The database returns matching rows"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "SELECT FROM table WHERE condition",
+          "at": "where"
+        }
+      ]
+    },
+    {
+      "say": "The ORDER BY clause lets you sort the final results by a specific column.",
+      "draw": [
+        {
+          "op": "numberline",
+          "items": [
+            "Ascending: A to Z or 1 to 10",
+            "Descending: Z to A or 10 to 1"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "SELECT FROM table ORDER BY column DESC",
+          "at": "order"
+        }
+      ]
+    },
+    {
+      "say": "To combine data from two tables, you use the JOIN keyword.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "SELECT FROM TableA JOIN TableB ON key",
+          "at": "from"
+        }
+      ]
+    },
+    {
+      "say": "Imagine you want to see student names and the class they are in.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "SELECT name, classname FROM Students JOIN Classes ON studentid = classid"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between SELECT and FROM?",
+      "a": "SELECT specifies the columns you want to retrieve. FROM specifies the table that holds those columns.",
+      "asks": [
+        "Do I need both SELECT and FROM?",
+        "Which keyword comes first?"
+      ]
+    },
+    {
+      "q": "When should I use the WHERE clause?",
+      "a": "Use WHERE when you only want to see data that meets certain criteria, like only records from last year.",
+      "asks": [
+        "How do I filter my results?",
+        "Can I put conditions in the SELECT statement?"
+      ]
+    },
+    {
+      "q": "What does JOIN do in SQL?",
+      "a": "JOIN combines rows from two or more tables based on a related column they share.",
+      "asks": [
+        "How do I link two tables together?",
+        "Is JOIN like a cross-reference?"
+      ]
+    },
+    {
+      "q": "Can I sort by multiple columns?",
+      "a": "Yes, you can list multiple columns in the ORDER BY clause, separated by commas.",
+      "asks": [
+        "How do I sort by name then by age?",
+        "Does ORDER BY only work on one column?"
+      ]
+    },
+    {
+      "q": "Do I need to use JOIN every time I write a query?",
+      "a": "No, you only need JOIN when the data you want is spread across multiple related tables.",
+      "asks": [
+        "What if the data is all in one table?",
+        "Is JOIN always necessary?"
+      ]
+    }
+  ],
+  "facts": [
+    "The SELECT statement specifies the columns you want to retrieve.",
+    "The WHERE clause filters records based on specified conditions.",
+    "The JOIN clause combines records from two or more tables.",
+    "ORDER BY sorts the final result set by one or more columns."
+  ],
+  "quiz": [
+    {
+      "say": "To find all student records where the grade is greater than 70, which clause do you use?",
+      "show": "SELECT FROM Students WHERE grade > 70",
+      "options": [
+        {
+          "show": "SELECT",
+          "say": "SELECT"
+        },
+        {
+          "show": "JOIN",
+          "say": "JOIN"
+        },
+        {
+          "show": "ORDER BY",
+          "say": "ORDER BY"
+        },
+        {
+          "show": "WHERE",
+          "say": "WHERE"
+        }
+      ],
+      "answer": 3,
+      "why": "The WHERE clause is specifically designed to filter rows based on conditions like grade greater than 70.",
+      "wrong": {
+        "0": "SELECT tells you what columns to show, not which rows to keep.",
+        "1": "JOIN is used to combine data from different tables, not to filter one table.",
+        "2": "ORDER BY only changes the sequence of the results, it does not filter them."
+      }
+    },
+    {
+      "say": "If you want to see the names and scores, and sort them by score from highest to lowest, what is the correct structure?",
+      "show": "SELECT name, score FROM Scores ORDER BY score DESC",
+      "options": [
+        {
+          "show": "WHERE score > 0",
+          "say": "WHERE score > 0"
+        },
+        {
+          "show": "SELECT score DESC",
+          "say": "SELECT score DESC"
+        },
+        {
+          "show": "JOIN score DESC",
+          "say": "JOIN score DESC"
+        },
+        {
+          "show": "ORDER BY score DESC",
+          "say": "ORDER BY score DESC"
+        }
+      ],
+      "answer": 3,
+      "why": "You must use ORDER BY and specify DESC to sort the results from highest to lowest.",
+      "wrong": {
+        "0": "Using WHERE here would only filter records, it would not change the sorting order.",
+        "1": "DESC is a modifier for ORDER BY, not for the SELECT statement itself.",
+        "2": "JOIN is for linking tables, it has nothing to do with sorting the results."
+      }
+    },
+    {
+      "say": "To get the name from the Students table and the major from the Majors table, using the studentmajorid key, what do you write?",
+      "show": "SELECT S.name, M.major FROM Students S JOIN Majors M ON S.studentmajorid = M.majorid",
+      "options": [
+        {
+          "show": "SELECT ... ORDER BY",
+          "say": "SELECT ... ORDER BY"
+        },
+        {
+          "show": "JOIN ... ON",
+          "say": "JOIN ... ON"
+        },
+        {
+          "show": "SELECT ... WHERE",
+          "say": "SELECT ... WHERE"
+        },
+        {
+          "show": "SELECT ... JOIN",
+          "say": "SELECT ... JOIN"
+        }
+      ],
+      "answer": 1,
+      "why": "You need JOIN to connect the two tables, and ON specifies the matching key between them.",
+      "wrong": {
+        "0": "ORDER BY is for sorting the final output, not for combining the initial data sets.",
+        "2": "Using WHERE here would only filter records, it would not combine the data from both tables.",
+        "3": "You must specify the join condition using ON to tell the database how the tables relate."
+      }
+    }
+  ]
+}

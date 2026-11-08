@@ -1,0 +1,383 @@
+{
+  "id": "BCE-HYD-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Manning's equation: sizing a channel from slope, roughness and shape",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-HYD — Hydraulics and water resources",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Manning's equation",
+    "roughness coefficient",
+    "hydraulic radius",
+    "wetted perimeter",
+    "channel discharge"
+  ],
+  "examples": [
+    "How do you use Manning's equation?",
+    "What is Manning's n for concrete?",
+    "How do you calculate hydraulic radius?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Bed slope (m per km)",
+        "max": 4
+      },
+      "y": {
+        "label": "Velocity (m/s)",
+        "max": 3.5
+      },
+      "curves": [
+        {
+          "label": "Concrete n = 0.015",
+          "type": "power",
+          "a": 1.5,
+          "k": 0.5,
+          "ask": "What is Manning's equation?"
+        },
+        {
+          "label": "Grassy n = 0.030",
+          "type": "power",
+          "a": 0.75,
+          "k": 0.5,
+          "ask": "What is Manning's roughness coefficient n?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 1,
+          "label": "S = 1 in 1000",
+          "ask": "How do you calculate the flow in a channel?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In eighteen eighty nine the Irish engineer Robert Manning presented a simple formula that engineers still use every day to size canals, drains and culverts. It links speed to slope, roughness and shape. On the board, two channels of the same shape: one lined with smooth concrete, one with grass.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Manning's equation: sizing a channel from slope, roughness and shape"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Bed slope (m per km)",
+            "max": 4
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 3.5
+          },
+          "curves": [
+            {
+              "label": "Concrete n = 0.015",
+              "type": "power",
+              "a": 1.5,
+              "k": 0.5,
+              "ask": "What is Manning's equation?"
+            },
+            {
+              "label": "Grassy n = 0.030",
+              "type": "power",
+              "a": 0.75,
+              "k": 0.5,
+              "ask": "What is Manning's roughness coefficient n?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "S = 1 in 1000",
+              "ask": "How do you calculate the flow in a channel?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the concrete curve. Velocity equals one over n, times R to the power two thirds, times the square root of the slope S. Here n is the roughness, about zero point zero one five for concrete. R is the hydraulic radius: the flow area divided by the wetted perimeter, the length of channel the water touches. Steeper slope, faster water, but only as the square root.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Bed slope (m per km)",
+            "max": 4
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 3.5
+          },
+          "curves": [
+            {
+              "label": "Concrete n = 0.015",
+              "type": "power",
+              "a": 1.5,
+              "k": 0.5,
+              "ask": "What is Manning's equation?"
+            },
+            {
+              "label": "Grassy n = 0.030",
+              "type": "power",
+              "a": 0.75,
+              "k": 0.5,
+              "ask": "What is Manning's roughness coefficient n?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "S = 1 in 1000",
+              "ask": "How do you calculate the flow in a channel?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "V = (1/n) R^(2/3) S^(1/2)"
+        }
+      ]
+    },
+    {
+      "say": "Let us try a channel three metres wide with water one metre deep. The area is three square metres; the wetted perimeter is one plus three plus one, five metres; so R is zero point six. At a slope of one in a thousand, V is one over zero point zero one five, times zero point seven one one, times zero point zero three one six: about one point five metres per second.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Bed slope (m per km)",
+            "max": 4
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 3.5
+          },
+          "curves": [
+            {
+              "label": "Concrete n = 0.015",
+              "type": "power",
+              "a": 1.5,
+              "k": 0.5,
+              "ask": "What is Manning's equation?"
+            },
+            {
+              "label": "Grassy n = 0.030",
+              "type": "power",
+              "a": 0.75,
+              "k": 0.5,
+              "ask": "What is Manning's roughness coefficient n?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "S = 1 in 1000",
+              "ask": "How do you calculate the flow in a channel?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "R = A/P = 3/5 = 0.6 m → V = 66.7×0.711×0.0316 ≈ 1.50 m/s"
+        }
+      ]
+    },
+    {
+      "say": "Now the grassy channel, with n of zero point zero three. Twice as rough, so at the same slope it flows at half the speed, about zero point seven five metres per second, and carries half the flow. To carry as much it must be bigger. Which lining would you choose for a city storm drain?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Bed slope (m per km)",
+            "max": 4
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 3.5
+          },
+          "curves": [
+            {
+              "label": "Concrete n = 0.015",
+              "type": "power",
+              "a": 1.5,
+              "k": 0.5,
+              "ask": "What is Manning's equation?"
+            },
+            {
+              "label": "Grassy n = 0.030",
+              "type": "power",
+              "a": 0.75,
+              "k": 0.5,
+              "ask": "What is Manning's roughness coefficient n?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "S = 1 in 1000",
+              "ask": "How do you calculate the flow in a channel?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Concrete: Q = V A = 1.50 × 3 = 4.5 m³/s"
+        },
+        {
+          "op": "note",
+          "text": "Grass: V ≈ 0.75 m/s, so Q ≈ 2.25 m³/s in the same section."
+        }
+      ]
+    },
+    {
+      "say": "Concrete, to move water fast! Choosing n is the art. Smooth pipes are near zero point zero one, clean earth canals near zero point zero two five, weedy rivers zero point zero five, and a wooded floodplain can reach zero point one. Great work! Challenge: if you doubled the slope of the concrete channel, how much faster would it flow?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Typical Manning's n",
+          "groups": [
+            {
+              "label": "Smooth",
+              "icon": "pipe",
+              "items": [
+                "PVC pipe 0.009",
+                "Concrete 0.013"
+              ]
+            },
+            {
+              "label": "Medium",
+              "icon": "sand",
+              "items": [
+                "Earth canal 0.025",
+                "Gravel bed 0.030"
+              ]
+            },
+            {
+              "label": "Rough",
+              "icon": "tree",
+              "items": [
+                "Weedy river 0.050",
+                "Wooded plain 0.10"
+              ]
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Manning's equation?",
+      "a": "It gives the average velocity of uniform flow in a channel: V equals one over n times R to the two thirds times S to the half. Multiply by the flow area to get the discharge.",
+      "asks": [
+        "Manning formula",
+        "V = 1/n R^2/3 S^1/2"
+      ]
+    },
+    {
+      "q": "What is Manning's roughness coefficient n?",
+      "a": "n describes how rough the channel lining is. Smooth PVC is about 0.009, finished concrete about 0.013 to 0.015, earth canals about 0.025 and weedy rivers 0.05 or more.",
+      "asks": [
+        "Manning's n values",
+        "What is n for concrete?"
+      ]
+    },
+    {
+      "q": "What is hydraulic radius?",
+      "a": "Hydraulic radius is the flow area divided by the wetted perimeter. For a channel 3 metres wide and 1 metre deep, it is 3 over 5, which is 0.6 metres.",
+      "asks": [
+        "Define hydraulic radius",
+        "What is wetted perimeter?"
+      ]
+    },
+    {
+      "q": "How do you calculate the flow in a channel?",
+      "a": "Find the area and wetted perimeter, work out R, use Manning to get the velocity, then multiply by the area. Our concrete channel carries 1.5 times 3, about 4.5 cubic metres per second.",
+      "asks": [
+        "Channel discharge calculation"
+      ]
+    },
+    {
+      "q": "Why does doubling the slope not double the speed?",
+      "a": "Velocity depends on the square root of the slope, so doubling the slope multiplies the speed by the square root of 2, about 1.41.",
+      "asks": [
+        "Effect of slope on velocity"
+      ]
+    }
+  ],
+  "facts": [
+    "Robert Manning presented his flow formula to the Institution of Civil Engineers of Ireland in 1889.",
+    "For a wide, shallow channel, the hydraulic radius is close to the flow depth."
+  ],
+  "quiz": [
+    {
+      "say": "A channel has a hydraulic radius of 1 metre, n of 0.02 and a slope of 0.0004. What is the velocity by Manning's equation?",
+      "show": "A channel has R = 1 m, n = 0.02 and S = 0.0004. Velocity by Manning?",
+      "options": [
+        {
+          "show": "1.0 m/s",
+          "say": "1 metre per second"
+        },
+        {
+          "show": "0.02 m/s",
+          "say": "0.02 metres per second"
+        },
+        {
+          "show": "2.0 m/s",
+          "say": "2 metres per second"
+        }
+      ],
+      "answer": 0,
+      "why": "V = (1/0.02) × 1 × √0.0004 = 50 × 0.02 = 1.0 metre per second.",
+      "wrong": {
+        "1": "That leaves out the 1 over n factor of 50.",
+        "2": "That would need n of 0.01, a much smoother channel."
+      }
+    },
+    {
+      "say": "Hydraulic radius is…",
+      "show": "Hydraulic radius is…",
+      "options": [
+        {
+          "show": "Flow area ÷ wetted perimeter",
+          "say": "Flow area ÷ wetted perimeter"
+        },
+        {
+          "show": "Half the channel width",
+          "say": "Half the channel width"
+        },
+        {
+          "show": "Depth × width",
+          "say": "Depth × width"
+        }
+      ],
+      "answer": 0,
+      "why": "R = A / P, the area per unit length of wetted boundary.",
+      "wrong": {
+        "1": "It is not a geometric radius of the channel.",
+        "2": "Depth times width is the flow area for a rectangle, not R."
+      }
+    }
+  ]
+}

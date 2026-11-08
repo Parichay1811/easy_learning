@@ -1,0 +1,772 @@
+{
+  "id": "GK-LIFE-27",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "The journey of water to your tap",
+  "area": "General Knowledge",
+  "group": "GK-LIFE — Everyday Knowledge",
+  "levels": [
+    "P2",
+    "L"
+  ],
+  "keywords": [
+    "tap water",
+    "water supply",
+    "reservoir",
+    "water treatment",
+    "sewage"
+  ],
+  "examples": [
+    "Where does tap water come from?",
+    "How does water get to my house?",
+    "Where does water go after the plughole?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "res",
+          "label": "River or reservoir",
+          "icon": "river",
+          "x": 0.1,
+          "y": 0.3,
+          "ask": "Where does tap water come from?"
+        },
+        {
+          "id": "treat",
+          "label": "Treatment works",
+          "icon": "factory",
+          "x": 0.35,
+          "y": 0.3,
+          "ask": "How is water cleaned before it reaches my tap?"
+        },
+        {
+          "id": "tower",
+          "label": "Water tower",
+          "icon": "tower",
+          "x": 0.6,
+          "y": 0.12,
+          "ask": "Why do towns use water towers?"
+        },
+        {
+          "id": "pipes",
+          "label": "Pipes under streets",
+          "icon": "pipe",
+          "x": 0.62,
+          "y": 0.5
+        },
+        {
+          "id": "home",
+          "label": "Your tap",
+          "icon": "house",
+          "x": 0.88,
+          "y": 0.35
+        },
+        {
+          "id": "sewer",
+          "label": "Sewer",
+          "icon": "pipe",
+          "x": 0.62,
+          "y": 0.88
+        },
+        {
+          "id": "sewage",
+          "label": "Sewage works",
+          "icon": "factory",
+          "x": 0.3,
+          "y": 0.85,
+          "ask": "Where does water go after the plughole?"
+        }
+      ],
+      "links": [
+        {
+          "from": "res",
+          "to": "treat",
+          "kind": "fluid",
+          "label": "pumped"
+        },
+        {
+          "from": "treat",
+          "to": "tower",
+          "kind": "fluid",
+          "label": "pumped up"
+        },
+        {
+          "from": "tower",
+          "to": "pipes",
+          "kind": "fluid",
+          "label": "gravity"
+        },
+        {
+          "from": "pipes",
+          "to": "home",
+          "kind": "fluid",
+          "label": "pressure"
+        },
+        {
+          "from": "home",
+          "to": "sewer",
+          "kind": "fluid",
+          "label": "down the drain"
+        },
+        {
+          "from": "sewer",
+          "to": "sewage",
+          "kind": "fluid"
+        },
+        {
+          "from": "sewage",
+          "to": "res",
+          "kind": "fluid",
+          "label": "cleaned, returned"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Turn on a tap and clean water rushes out. But where was that water yesterday? Let's follow its journey on the board. It starts in a river, a lake, a reservoir, which is a big man-made lake, or deep underground in the rocks.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The journey of water to your tap"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "River or reservoir",
+              "icon": "river",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "Where does tap water come from?"
+            },
+            {
+              "id": "treat",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "How is water cleaned before it reaches my tap?"
+            },
+            {
+              "id": "tower",
+              "label": "Water tower",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "Why do towns use water towers?"
+            },
+            {
+              "id": "pipes",
+              "label": "Pipes under streets",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Your tap",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.35
+            },
+            {
+              "id": "sewer",
+              "label": "Sewer",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.88
+            },
+            {
+              "id": "sewage",
+              "label": "Sewage works",
+              "icon": "factory",
+              "x": 0.3,
+              "y": 0.85,
+              "ask": "Where does water go after the plughole?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "treat",
+              "kind": "fluid",
+              "label": "pumped"
+            },
+            {
+              "from": "treat",
+              "to": "tower",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "tower",
+              "to": "pipes",
+              "kind": "fluid",
+              "label": "gravity"
+            },
+            {
+              "from": "pipes",
+              "to": "home",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "home",
+              "to": "sewer",
+              "kind": "fluid",
+              "label": "down the drain"
+            },
+            {
+              "from": "sewer",
+              "to": "sewage",
+              "kind": "fluid"
+            },
+            {
+              "from": "sewage",
+              "to": "res",
+              "kind": "fluid",
+              "label": "cleaned, returned"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Look at the treatment works. Here the water is cleaned in steps: screens catch leaves and rubbish, sand filters trap tiny bits, and a little chlorine kills germs. Can you guess why we can't just drink river water?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "River or reservoir",
+              "icon": "river",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "Where does tap water come from?"
+            },
+            {
+              "id": "treat",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "How is water cleaned before it reaches my tap?"
+            },
+            {
+              "id": "tower",
+              "label": "Water tower",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "Why do towns use water towers?"
+            },
+            {
+              "id": "pipes",
+              "label": "Pipes under streets",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Your tap",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.35
+            },
+            {
+              "id": "sewer",
+              "label": "Sewer",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.88
+            },
+            {
+              "id": "sewage",
+              "label": "Sewage works",
+              "icon": "factory",
+              "x": 0.3,
+              "y": 0.85,
+              "ask": "Where does water go after the plughole?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "treat",
+              "kind": "fluid",
+              "label": "pumped"
+            },
+            {
+              "from": "treat",
+              "to": "tower",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "tower",
+              "to": "pipes",
+              "kind": "fluid",
+              "label": "gravity"
+            },
+            {
+              "from": "pipes",
+              "to": "home",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "home",
+              "to": "sewer",
+              "kind": "fluid",
+              "label": "down the drain"
+            },
+            {
+              "from": "sewer",
+              "to": "sewage",
+              "kind": "fluid"
+            },
+            {
+              "from": "sewage",
+              "to": "res",
+              "kind": "fluid",
+              "label": "cleaned, returned"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "See the water tower? Pumps push the clean water up high into towers or hilltop tanks. Then gravity pushes it down through the pipes under the streets with enough pressure to shoot out of your tap. Clever, right?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "River or reservoir",
+              "icon": "river",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "Where does tap water come from?"
+            },
+            {
+              "id": "treat",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "How is water cleaned before it reaches my tap?"
+            },
+            {
+              "id": "tower",
+              "label": "Water tower",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "Why do towns use water towers?"
+            },
+            {
+              "id": "pipes",
+              "label": "Pipes under streets",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Your tap",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.35
+            },
+            {
+              "id": "sewer",
+              "label": "Sewer",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.88
+            },
+            {
+              "id": "sewage",
+              "label": "Sewage works",
+              "icon": "factory",
+              "x": 0.3,
+              "y": 0.85,
+              "ask": "Where does water go after the plughole?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "treat",
+              "kind": "fluid",
+              "label": "pumped"
+            },
+            {
+              "from": "treat",
+              "to": "tower",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "tower",
+              "to": "pipes",
+              "kind": "fluid",
+              "label": "gravity"
+            },
+            {
+              "from": "pipes",
+              "to": "home",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "home",
+              "to": "sewer",
+              "kind": "fluid",
+              "label": "down the drain"
+            },
+            {
+              "from": "sewer",
+              "to": "sewage",
+              "kind": "fluid"
+            },
+            {
+              "from": "sewage",
+              "to": "res",
+              "kind": "fluid",
+              "label": "cleaned, returned"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Now look at the sewer. After you wash or flush, the dirty water goes down the plughole into sewer pipes and flows to a sewage works, where it's cleaned again. How many times do you think you use a tap each day?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "River or reservoir",
+              "icon": "river",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "Where does tap water come from?"
+            },
+            {
+              "id": "treat",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "How is water cleaned before it reaches my tap?"
+            },
+            {
+              "id": "tower",
+              "label": "Water tower",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "Why do towns use water towers?"
+            },
+            {
+              "id": "pipes",
+              "label": "Pipes under streets",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Your tap",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.35
+            },
+            {
+              "id": "sewer",
+              "label": "Sewer",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.88
+            },
+            {
+              "id": "sewage",
+              "label": "Sewage works",
+              "icon": "factory",
+              "x": 0.3,
+              "y": 0.85,
+              "ask": "Where does water go after the plughole?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "treat",
+              "kind": "fluid",
+              "label": "pumped"
+            },
+            {
+              "from": "treat",
+              "to": "tower",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "tower",
+              "to": "pipes",
+              "kind": "fluid",
+              "label": "gravity"
+            },
+            {
+              "from": "pipes",
+              "to": "home",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "home",
+              "to": "sewer",
+              "kind": "fluid",
+              "label": "down the drain"
+            },
+            {
+              "from": "sewer",
+              "to": "sewage",
+              "kind": "fluid"
+            },
+            {
+              "from": "sewage",
+              "to": "res",
+              "kind": "fluid",
+              "label": "cleaned, returned"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "Great job! Look: the cleaned water goes back into the river, and the journey can start again. Wow: the water in your glass may once have been drunk by a dinosaur, because Earth keeps reusing the same water! In Singapore, used water is even cleaned so well it can become drinking water again.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "res",
+              "label": "River or reservoir",
+              "icon": "river",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "Where does tap water come from?"
+            },
+            {
+              "id": "treat",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "How is water cleaned before it reaches my tap?"
+            },
+            {
+              "id": "tower",
+              "label": "Water tower",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "Why do towns use water towers?"
+            },
+            {
+              "id": "pipes",
+              "label": "Pipes under streets",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Your tap",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.35
+            },
+            {
+              "id": "sewer",
+              "label": "Sewer",
+              "icon": "pipe",
+              "x": 0.62,
+              "y": 0.88
+            },
+            {
+              "id": "sewage",
+              "label": "Sewage works",
+              "icon": "factory",
+              "x": 0.3,
+              "y": 0.85,
+              "ask": "Where does water go after the plughole?"
+            }
+          ],
+          "links": [
+            {
+              "from": "res",
+              "to": "treat",
+              "kind": "fluid",
+              "label": "pumped"
+            },
+            {
+              "from": "treat",
+              "to": "tower",
+              "kind": "fluid",
+              "label": "pumped up"
+            },
+            {
+              "from": "tower",
+              "to": "pipes",
+              "kind": "fluid",
+              "label": "gravity"
+            },
+            {
+              "from": "pipes",
+              "to": "home",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "home",
+              "to": "sewer",
+              "kind": "fluid",
+              "label": "down the drain"
+            },
+            {
+              "from": "sewer",
+              "to": "sewage",
+              "kind": "fluid"
+            },
+            {
+              "from": "sewage",
+              "to": "res",
+              "kind": "fluid",
+              "label": "cleaned, returned"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Where does tap water come from?",
+      "a": "From rivers, lakes and reservoirs, or from groundwater pumped up from wells and boreholes. Different towns use different sources.",
+      "asks": [
+        "Where does my water come from?"
+      ]
+    },
+    {
+      "q": "How is water cleaned before it reaches my tap?",
+      "a": "At a treatment works, screens remove rubbish, chemicals clump dirt together so it sinks, sand filters catch tiny bits, and a little chlorine or ultraviolet light kills germs.",
+      "asks": [
+        "How is drinking water made safe?"
+      ]
+    },
+    {
+      "q": "Why do towns use water towers?",
+      "a": "Pumps fill a tall tower or hilltop tank, and gravity then pushes the water through the pipes with steady pressure, even while the pumps rest.",
+      "asks": [
+        "What is a water tower for?"
+      ]
+    },
+    {
+      "q": "Where does water go after the plughole?",
+      "a": "Into the sewers, which carry it to a sewage works. There it is cleaned and then released back into a river or the sea.",
+      "asks": [
+        "Where does toilet water go?"
+      ]
+    },
+    {
+      "q": "Is tap water safe to drink everywhere?",
+      "a": "Not everywhere. In many countries it's tested and safe, but in some places it needs boiling or filtering first. Over 2 billion people still lack safely managed drinking water at home.",
+      "asks": [
+        "Can I drink tap water in every country?"
+      ]
+    }
+  ],
+  "facts": [
+    "Small amounts of chlorine are widely used to kill germs in drinking water.",
+    "According to WHO and UNICEF, over 2 billion people lacked safely managed drinking water in 2022."
+  ],
+  "quiz": [
+    {
+      "say": "What pushes water from a water tower to your tap?",
+      "show": "What pushes water from a water tower to your tap?",
+      "options": [
+        {
+          "show": "Gravity",
+          "say": "Gravity"
+        },
+        {
+          "show": "Wind",
+          "say": "Wind"
+        },
+        {
+          "show": "Sunlight",
+          "say": "Sunlight"
+        }
+      ],
+      "answer": 0,
+      "why": "Water high in the tower is pulled down by gravity, giving pressure in the pipes.",
+      "wrong": {
+        "1": "Wind can't push water through underground pipes.",
+        "2": "Sunlight doesn't move water through pipes."
+      }
+    },
+    {
+      "say": "What happens to water after it goes down the plughole?",
+      "show": "What happens to water after it goes down the plughole?",
+      "options": [
+        {
+          "show": "It goes to a sewage works to be cleaned",
+          "say": "It goes to a sewage works to be cleaned"
+        },
+        {
+          "show": "It disappears",
+          "say": "It disappears"
+        },
+        {
+          "show": "It goes straight back to your tap",
+          "say": "It goes straight back to your tap"
+        }
+      ],
+      "answer": 0,
+      "why": "Sewers carry used water to be cleaned before it returns to rivers.",
+      "wrong": {
+        "1": "Water never disappears; it travels on through the sewers.",
+        "2": "Used water must be cleaned first, far away from your tap."
+      }
+    }
+  ]
+}

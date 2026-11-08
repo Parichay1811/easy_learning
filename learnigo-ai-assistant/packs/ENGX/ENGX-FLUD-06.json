@@ -1,0 +1,600 @@
+{
+  "id": "ENGX-FLUD-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a centrifugal pump pushes water",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "centrifugal pump",
+    "impeller",
+    "pump casing",
+    "priming a pump",
+    "water pump"
+  ],
+  "examples": [
+    "How does a water pump work?",
+    "What is an impeller?",
+    "Why does a pump need priming?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.13,
+          "y": 0.5,
+          "size": 0.9,
+          "label": "Electric motor",
+          "motion": "spin"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.33,
+          "y": 0.5,
+          "size": 0.6,
+          "label": "Shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "impeller",
+          "kind": "fan",
+          "x": 0.56,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Impeller",
+          "motion": "spin",
+          "ask": "What is an impeller?"
+        },
+        {
+          "id": "inlet",
+          "kind": "pipe",
+          "x": 0.56,
+          "y": 0.88,
+          "size": 0.8,
+          "label": "Inlet at centre",
+          "motion": "flow",
+          "ask": "Where does water enter a centrifugal pump?"
+        },
+        {
+          "id": "casing",
+          "kind": "tank",
+          "x": 0.82,
+          "y": 0.62,
+          "size": 0.9,
+          "label": "Spiral casing",
+          "motion": "none",
+          "ask": "What does the casing do?"
+        },
+        {
+          "id": "outlet",
+          "kind": "pipe",
+          "x": 0.82,
+          "y": 0.18,
+          "size": 0.8,
+          "label": "Outlet",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "shaft",
+          "kind": "energy",
+          "label": "turning"
+        },
+        {
+          "from": "shaft",
+          "to": "impeller",
+          "kind": "energy"
+        },
+        {
+          "from": "inlet",
+          "to": "impeller",
+          "kind": "fluid",
+          "label": "water in"
+        },
+        {
+          "from": "impeller",
+          "to": "casing",
+          "kind": "fluid",
+          "label": "flung outwards"
+        },
+        {
+          "from": "casing",
+          "to": "outlet",
+          "kind": "fluid",
+          "label": "high pressure"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A centrifugal pump is the most common pump in the world, used in central heating, washing machines and water mains. A motor spins a wheel of curved blades called an impeller.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a centrifugal pump pushes water"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Electric motor",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "impeller",
+              "kind": "fan",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Impeller",
+              "motion": "spin",
+              "ask": "What is an impeller?"
+            },
+            {
+              "id": "inlet",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Inlet at centre",
+              "motion": "flow",
+              "ask": "Where does water enter a centrifugal pump?"
+            },
+            {
+              "id": "casing",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Spiral casing",
+              "motion": "none",
+              "ask": "What does the casing do?"
+            },
+            {
+              "id": "outlet",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Outlet",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "impeller",
+              "kind": "energy"
+            },
+            {
+              "from": "inlet",
+              "to": "impeller",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "impeller",
+              "to": "casing",
+              "kind": "fluid",
+              "label": "flung outwards"
+            },
+            {
+              "from": "casing",
+              "to": "outlet",
+              "kind": "fluid",
+              "label": "high pressure"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Water enters at the very centre of the spinning impeller.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Electric motor",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "impeller",
+              "kind": "fan",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Impeller",
+              "motion": "spin",
+              "ask": "What is an impeller?"
+            },
+            {
+              "id": "inlet",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Inlet at centre",
+              "motion": "flow",
+              "ask": "Where does water enter a centrifugal pump?"
+            },
+            {
+              "id": "casing",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Spiral casing",
+              "motion": "none",
+              "ask": "What does the casing do?"
+            },
+            {
+              "id": "outlet",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Outlet",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "impeller",
+              "kind": "energy"
+            },
+            {
+              "from": "inlet",
+              "to": "impeller",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "impeller",
+              "to": "casing",
+              "kind": "fluid",
+              "label": "flung outwards"
+            },
+            {
+              "from": "casing",
+              "to": "outlet",
+              "kind": "fluid",
+              "label": "high pressure"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The blades whirl the water round and fling it outwards, the way water flies off a spinning umbrella, so it leaves the edge moving fast.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Electric motor",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "impeller",
+              "kind": "fan",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Impeller",
+              "motion": "spin",
+              "ask": "What is an impeller?"
+            },
+            {
+              "id": "inlet",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Inlet at centre",
+              "motion": "flow",
+              "ask": "Where does water enter a centrifugal pump?"
+            },
+            {
+              "id": "casing",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Spiral casing",
+              "motion": "none",
+              "ask": "What does the casing do?"
+            },
+            {
+              "id": "outlet",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Outlet",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "impeller",
+              "kind": "energy"
+            },
+            {
+              "from": "inlet",
+              "to": "impeller",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "impeller",
+              "to": "casing",
+              "kind": "fluid",
+              "label": "flung outwards"
+            },
+            {
+              "from": "casing",
+              "to": "outlet",
+              "kind": "fluid",
+              "label": "high pressure"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The spiral casing gets wider towards the outlet, which slows the fast water and turns its speed into pressure, pushing it along the pipe.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Electric motor",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.33,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "impeller",
+              "kind": "fan",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Impeller",
+              "motion": "spin",
+              "ask": "What is an impeller?"
+            },
+            {
+              "id": "inlet",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Inlet at centre",
+              "motion": "flow",
+              "ask": "Where does water enter a centrifugal pump?"
+            },
+            {
+              "id": "casing",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Spiral casing",
+              "motion": "none",
+              "ask": "What does the casing do?"
+            },
+            {
+              "id": "outlet",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Outlet",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "impeller",
+              "kind": "energy"
+            },
+            {
+              "from": "inlet",
+              "to": "impeller",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "impeller",
+              "to": "casing",
+              "kind": "fluid",
+              "label": "flung outwards"
+            },
+            {
+              "from": "casing",
+              "to": "outlet",
+              "kind": "fluid",
+              "label": "high pressure"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an impeller?",
+      "a": "An impeller is a spinning wheel with curved vanes. It grabs water near its centre and throws it outwards, giving the water speed.",
+      "asks": [
+        "What spins inside a pump?"
+      ]
+    },
+    {
+      "q": "Where does water enter a centrifugal pump?",
+      "a": "At the eye, the centre of the impeller. The spinning flings water away from the centre, which lowers the pressure there and draws more water in.",
+      "asks": [
+        "Why does water come in the middle?"
+      ]
+    },
+    {
+      "q": "What does the casing do?",
+      "a": "The casing, often called a volute, is a spiral that widens towards the outlet. As the fast water slows down in it, its speed turns into pressure.",
+      "asks": [
+        "What is a volute?"
+      ]
+    },
+    {
+      "q": "Why does a pump need priming?",
+      "a": "An impeller spinning in air cannot fling enough to create suction, because air is so light. So many pumps must be filled with water, or primed, before they start.",
+      "asks": [
+        "What does priming a pump mean?"
+      ]
+    },
+    {
+      "q": "Why are centrifugal pumps so common?",
+      "a": "They are simple, with one spinning part, run smoothly without pulsing, and can move large amounts of water steadily.",
+      "asks": [
+        "Where are centrifugal pumps used?"
+      ]
+    }
+  ],
+  "facts": [
+    "A centrifugal pump turns the speed given to water by its impeller into pressure in its widening casing.",
+    "Many centrifugal pumps must be primed with water before starting, because spinning air cannot create enough suction."
+  ],
+  "quiz": [
+    {
+      "say": "Where does water enter a centrifugal pump?",
+      "show": "Where does water enter a centrifugal pump?",
+      "options": [
+        {
+          "show": "At the centre of the impeller",
+          "say": "At the centre of the impeller"
+        },
+        {
+          "show": "At the tip of the blades",
+          "say": "At the tip of the blades"
+        },
+        {
+          "show": "Through the motor",
+          "say": "Through the motor"
+        }
+      ],
+      "answer": 0,
+      "why": "Water enters at the eye, the centre, and is flung outwards by the blades.",
+      "wrong": {
+        "1": "Water leaves at the blade tips; it does not enter there.",
+        "2": "The motor is sealed off from the water."
+      }
+    }
+  ]
+}

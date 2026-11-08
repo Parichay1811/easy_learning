@@ -1,0 +1,385 @@
+{
+  "id": "BME-MFG-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Additive manufacturing for engineers: building parts layer by layer",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MFG — Materials and manufacturing",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "additive manufacturing",
+    "3D printing",
+    "fused deposition modelling",
+    "selective laser melting",
+    "layer height",
+    "anisotropy"
+  ],
+  "examples": [
+    "How does 3D printing work?",
+    "What are the main types of additive manufacturing?",
+    "When should I use 3D printing instead of machining?"
+  ],
+  "figure": [
+    {
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "CAD model",
+          "icon": "computer",
+          "note": "Solid 3D design"
+        },
+        {
+          "label": "Slice into layers",
+          "icon": "scissors",
+          "note": "50 mm tall ÷ 0.2 mm = 250 layers",
+          "ask": "How does layer height affect a print?"
+        },
+        {
+          "label": "Print layer by layer",
+          "icon": "robot",
+          "note": "Melt, cure or bind each layer"
+        },
+        {
+          "label": "Remove supports",
+          "icon": "hand",
+          "note": "Snap or cut away props under overhangs"
+        },
+        {
+          "label": "Post-process",
+          "icon": "fire",
+          "note": "Heat treat, machine, polish"
+        }
+      ],
+      "loop": false,
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "GE Aviation once made a jet engine fuel nozzle tip from about 20 separate parts brazed together. Now it prints it in one piece from metal powder, about a quarter lighter. That is additive manufacturing: building a part by adding material layer upon layer instead of cutting it away. Look at the steps.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Additive manufacturing for engineers: building parts layer by layer"
+        },
+        {
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "CAD model",
+              "icon": "computer",
+              "note": "Solid 3D design"
+            },
+            {
+              "label": "Slice into layers",
+              "icon": "scissors",
+              "note": "50 mm tall ÷ 0.2 mm = 250 layers",
+              "ask": "How does layer height affect a print?"
+            },
+            {
+              "label": "Print layer by layer",
+              "icon": "robot",
+              "note": "Melt, cure or bind each layer"
+            },
+            {
+              "label": "Remove supports",
+              "icon": "hand",
+              "note": "Snap or cut away props under overhangs"
+            },
+            {
+              "label": "Post-process",
+              "icon": "fire",
+              "note": "Heat treat, machine, polish"
+            }
+          ],
+          "loop": false,
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Additive: add material layer by layer; machining removes it"
+        }
+      ]
+    },
+    {
+      "say": "Software slices the 3D model into thin layers. Our part is 50 millimetres tall, sliced at 0.2 millimetres, so it needs 250 layers. If each layer takes 30 seconds, the print takes 125 minutes. Thinner layers give a smoother finish but take longer. What happens to print time if you halve the layer height?",
+      "draw": [
+        {
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "CAD model",
+              "icon": "computer",
+              "note": "Solid 3D design"
+            },
+            {
+              "label": "Slice into layers",
+              "icon": "scissors",
+              "note": "50 mm tall ÷ 0.2 mm = 250 layers",
+              "ask": "How does layer height affect a print?"
+            },
+            {
+              "label": "Print layer by layer",
+              "icon": "robot",
+              "note": "Melt, cure or bind each layer"
+            },
+            {
+              "label": "Remove supports",
+              "icon": "hand",
+              "note": "Snap or cut away props under overhangs"
+            },
+            {
+              "label": "Post-process",
+              "icon": "fire",
+              "note": "Heat treat, machine, polish"
+            }
+          ],
+          "loop": false,
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Layers = 50 / 0.2 = 250; 250 × 30 s ≈ 2.1 h"
+        }
+      ]
+    },
+    {
+      "say": "It roughly doubles! The machine adds each layer in one of seven process families. See the groups? Desktop FDM printers squeeze melted plastic through a nozzle. SLA cures liquid resin with light. Powder bed fusion melts powder with a laser: nylon for prototypes, titanium and nickel alloys for aerospace and medical implants.",
+      "draw": [
+        {
+          "name": "x-sort",
+          "question": "Which process family?",
+          "groups": [
+            {
+              "label": "Material extrusion",
+              "icon": "pipe",
+              "items": [
+                "FDM plastic",
+                "Concrete printing"
+              ]
+            },
+            {
+              "label": "Vat photopolymer",
+              "icon": "light",
+              "items": [
+                "SLA resin",
+                "DLP resin"
+              ]
+            },
+            {
+              "label": "Powder bed fusion",
+              "icon": "fire",
+              "items": [
+                "SLS nylon",
+                "Laser metal (SLM)"
+              ]
+            },
+            {
+              "label": "Others",
+              "icon": "puzzle",
+              "items": [
+                "Binder jetting",
+                "Material jetting",
+                "Directed energy"
+              ]
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "ISO/ASTM 52900 names seven process categories"
+        }
+      ]
+    },
+    {
+      "say": "Printed parts have quirks. Layers bond less strongly than the material inside a layer, so an FDM part is often weakest when pulled along the build direction. This is anisotropy. Overhangs need supports, and metal parts often need heat treatment to relieve stress. How should you orient a printed hook?",
+      "draw": [
+        {
+          "name": "x-sort",
+          "question": "Which process family?",
+          "groups": [
+            {
+              "label": "Material extrusion",
+              "icon": "pipe",
+              "items": [
+                "FDM plastic",
+                "Concrete printing"
+              ]
+            },
+            {
+              "label": "Vat photopolymer",
+              "icon": "light",
+              "items": [
+                "SLA resin",
+                "DLP resin"
+              ]
+            },
+            {
+              "label": "Powder bed fusion",
+              "icon": "fire",
+              "items": [
+                "SLS nylon",
+                "Laser metal (SLM)"
+              ]
+            },
+            {
+              "label": "Others",
+              "icon": "puzzle",
+              "items": [
+                "Binder jetting",
+                "Material jetting",
+                "Directed energy"
+              ]
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Anisotropy: strength depends on direction; weakest across layers"
+        }
+      ]
+    },
+    {
+      "say": "So the load runs along the layers, not across them! Fantastic. When should you print? See the comparison: print complex, light or one-off parts; machine simple parts in volume. Exam tip: design for additive by merging parts and using lattices, not just by copying a machined design.",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Additive",
+            "icon": "robot",
+            "points": [
+              "Complex shapes, lattices",
+              "Little waste",
+              "No tooling: one-offs",
+              "Slow, weaker across layers"
+            ]
+          },
+          "right": {
+            "title": "Machining",
+            "icon": "gear",
+            "points": [
+              "Simple to medium shapes",
+              "Chips are waste",
+              "Fast and accurate",
+              "Full material strength"
+            ]
+          },
+          "verdict": "Print the complex and few; machine the simple and many",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Part consolidation: many parts become one"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does 3D printing work?",
+      "a": "A 3D model is sliced into thin layers, and a machine builds the part one layer at a time by melting, curing or binding material where the slice says, until the full shape is complete.",
+      "asks": [
+        "how does additive manufacturing work"
+      ]
+    },
+    {
+      "q": "How does layer height affect a print?",
+      "a": "Thinner layers give smoother surfaces and finer detail but need more layers, so print time rises roughly in proportion. A 50 millimetre part at 0.2 millimetre layers needs 250 layers.",
+      "asks": [
+        "layer height vs print time",
+        "slicing"
+      ]
+    },
+    {
+      "q": "What are the main types of additive manufacturing?",
+      "a": "The standard groups seven families: material extrusion, vat photopolymerisation, powder bed fusion, material jetting, binder jetting, directed energy deposition and sheet lamination.",
+      "asks": [
+        "types of 3D printing"
+      ]
+    },
+    {
+      "q": "Why are 3D printed parts weaker in one direction?",
+      "a": "The bond between layers is weaker than the material within each layer, so parts are usually weakest when loaded across the layers. This is called anisotropy.",
+      "asks": [
+        "anisotropy in 3D printing"
+      ]
+    },
+    {
+      "q": "When should I use 3D printing instead of machining?",
+      "a": "Choose printing for complex shapes, internal channels, lattices, part consolidation and small numbers. Choose machining for simple shapes, tight tolerances, full material strength and larger volumes.",
+      "asks": [
+        "additive vs subtractive manufacturing"
+      ]
+    }
+  ],
+  "facts": [
+    "ISO/ASTM 52900 groups additive manufacturing into seven process categories.",
+    "GE's printed LEAP fuel nozzle tip replaced about 20 parts with one and is about 25 % lighter."
+  ],
+  "quiz": [
+    {
+      "say": "A part 30 millimetres tall is printed at a layer height of 0.15 millimetres. How many layers is that?",
+      "show": "Part 30 mm tall, layer height 0.15 mm. Number of layers?",
+      "options": [
+        {
+          "show": "200",
+          "say": "200"
+        },
+        {
+          "show": "20",
+          "say": "20"
+        },
+        {
+          "show": "4.5",
+          "say": "4.5"
+        }
+      ],
+      "answer": 0,
+      "why": "30 / 0.15 = 200 layers.",
+      "wrong": {
+        "1": "A factor of ten went missing in the division.",
+        "2": "That multiplies instead of dividing."
+      }
+    },
+    {
+      "say": "An FDM printed bracket is weakest when the load does what?",
+      "show": "An FDM part is usually weakest when loaded…",
+      "options": [
+        {
+          "show": "Across the layers, pulling them apart",
+          "say": "Across the layers, pulling them apart"
+        },
+        {
+          "show": "Along the layers",
+          "say": "Along the layers"
+        },
+        {
+          "show": "Equally in all directions",
+          "say": "Equally in all directions"
+        }
+      ],
+      "answer": 0,
+      "why": "Layer-to-layer bonds are weaker than the extruded material, so tension across the layers splits them.",
+      "wrong": {
+        "1": "Along the layers the continuous strands carry the load well.",
+        "2": "Printed parts are anisotropic, not equal in all directions."
+      }
+    }
+  ]
+}

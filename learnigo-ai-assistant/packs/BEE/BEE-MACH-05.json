@@ -1,0 +1,447 @@
+{
+  "id": "BEE-MACH-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The torque–speed curve of a DC motor: stall torque, no-load speed and peak power",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "torque-speed curve",
+    "stall torque",
+    "no-load speed",
+    "operating point",
+    "maximum power point"
+  ],
+  "examples": [
+    "What does a DC motor torque-speed curve look like?",
+    "At what speed does a DC motor give maximum power?",
+    "How do you find the operating point of a motor and load?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Speed ω (rad/s)",
+        "max": 50
+      },
+      "y": {
+        "label": "Torque (N·m)",
+        "max": 30
+      },
+      "curves": [
+        {
+          "label": "Motor torque",
+          "type": "line",
+          "c": 24,
+          "k": -0.5,
+          "ask": "What does a DC motor torque-speed curve look like?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0,
+          "label": "Stall 24 N·m"
+        },
+        {
+          "x": 48,
+          "label": "No load 48 rad/s"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Lean on a cordless drill and you feel it slow down while it twists harder. That trade-off is the motor's torque–speed curve. On the board is our 24 volt motor, with k phi of 0.5 and 0.5 ohms of armature resistance. Its torque falls in a straight line, from stall on the left to no-load speed on the right.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The torque–speed curve of a DC motor: stall torque, no-load speed and peak power"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed ω (rad/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Torque (N·m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "Motor torque",
+              "type": "line",
+              "c": 24,
+              "k": -0.5,
+              "ask": "What does a DC motor torque-speed curve look like?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Stall 24 N·m"
+            },
+            {
+              "x": 48,
+              "label": "No load 48 rad/s"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First, the real machine in 3D: a DC motor with its field magnets, armature and commutator. Its torque and speed are what the curve in this lesson is about. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The torque–speed curve of a DC motor: stall torque, no-load speed and peak power"
+        },
+        {
+          "op": "image",
+          "render": "dc-motor"
+        }
+      ]
+    },
+    {
+      "say": "Why a straight line? Torque is k phi times current, and current is supply minus back EMF, over resistance. Back EMF grows steadily with speed, so torque falls steadily. At zero speed you get stall torque: 0.5 times 48 amps, 24 newton metres. At 48 radians per second the back EMF equals 24 volts, so torque is zero: no-load speed. What is the torque at 20 radians per second?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed ω (rad/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Torque (N·m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "Motor torque",
+              "type": "line",
+              "c": 24,
+              "k": -0.5,
+              "ask": "What does a DC motor torque-speed curve look like?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Stall 24 N·m"
+            },
+            {
+              "x": 48,
+              "label": "No load 48 rad/s"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "T = kΦ(V − kΦω)/R = 24 − 0.5ω"
+        }
+      ]
+    },
+    {
+      "say": "Fourteen newton metres. Now add a load that needs a steady 8 newton metres: the flat line. The motor settles where the two lines cross, the operating point. Solve 24 minus 0.5 omega equals 8 and you get 32 radians per second, about 306 revolutions per minute. If the load got heavier, which way would the crossing move?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed ω (rad/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Torque (N·m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "Motor torque",
+              "type": "line",
+              "c": 24,
+              "k": -0.5,
+              "ask": "What does a DC motor torque-speed curve look like?"
+            },
+            {
+              "label": "Load 8 N·m",
+              "type": "line",
+              "c": 8,
+              "k": 0,
+              "ask": "How do you find the operating point of a motor and load?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 32,
+              "label": "Operating point"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "24 − 0.5ω = 8  →  ω = 32 rad/s ≈ 306 rpm"
+        }
+      ]
+    },
+    {
+      "say": "Left, to a lower speed. Now multiply torque by speed to get output power, the hump on the board. It is zero at stall, because nothing turns, and zero at no load, because there is no torque. The peak sits exactly halfway, at 24 radians per second, where 12 newton metres times 24 gives 288 watts. Why don't motors normally run at that peak?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed ω (rad/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Power (W)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Output power",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  4,
+                  88
+                ],
+                [
+                  8,
+                  160
+                ],
+                [
+                  12,
+                  216
+                ],
+                [
+                  16,
+                  256
+                ],
+                [
+                  20,
+                  280
+                ],
+                [
+                  24,
+                  288
+                ],
+                [
+                  28,
+                  280
+                ],
+                [
+                  32,
+                  256
+                ],
+                [
+                  36,
+                  216
+                ],
+                [
+                  40,
+                  160
+                ],
+                [
+                  44,
+                  88
+                ],
+                [
+                  48,
+                  0
+                ]
+              ],
+              "ask": "At what speed does a DC motor give maximum power?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 24,
+              "label": "Peak 288 W"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P = Tω = (24 − 0.5ω)ω, peak at ω = 24: 12 × 24 = 288 W"
+        }
+      ]
+    },
+    {
+      "say": "At peak power half the input is lost as heat in the armature, only 50 percent efficiency, so motors are rated further right. Last, halve the supply to 12 volts and the whole line slides down in parallel, so with the same load the speed drops to 8 radians per second. Great job! Challenge: at what speed would the 12 volt line give its peak power?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed ω (rad/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Torque (N·m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "Motor at 24 V",
+              "type": "line",
+              "c": 24,
+              "k": -0.5,
+              "ask": "What does a DC motor torque-speed curve look like?"
+            },
+            {
+              "label": "Motor at 12 V",
+              "type": "line",
+              "c": 12,
+              "k": -0.5,
+              "ask": "How does supply voltage change the curve?"
+            },
+            {
+              "label": "Load 8 N·m",
+              "type": "line",
+              "c": 8,
+              "k": 0,
+              "ask": "How do you find the operating point of a motor and load?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 8,
+              "label": "12 V: 8 rad/s"
+            },
+            {
+              "x": 32,
+              "label": "24 V: 32 rad/s"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "12 V: T = 12 − 0.5ω; with the load, ω = 8 rad/s"
+        },
+        {
+          "op": "note",
+          "text": "Lower voltage shifts the line down in parallel: simple speed control"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does a DC motor torque-speed curve look like?",
+      "a": "For a permanent-magnet or separately excited DC motor it is a straight line falling from stall torque at zero speed to zero torque at no-load speed. Here it runs from 24 newton metres down to zero at 48 radians per second.",
+      "asks": [
+        "Why is the torque-speed line straight?"
+      ]
+    },
+    {
+      "q": "What is stall torque?",
+      "a": "Stall torque is the torque the motor makes when held still. There is no back EMF, so the current is supply voltage over armature resistance, 48 amps here, and the torque is k phi times that, 24 newton metres.",
+      "asks": [
+        "What happens when a motor stalls?"
+      ]
+    },
+    {
+      "q": "At what speed does a DC motor give maximum power?",
+      "a": "At half the no-load speed, where the torque is half the stall torque. For this motor that is 24 radians per second and 12 newton metres, giving 288 watts.",
+      "asks": [
+        "When is DC motor output power maximum?"
+      ]
+    },
+    {
+      "q": "How do you find the operating point of a motor and load?",
+      "a": "Draw the load's torque-speed line on the same axes as the motor's. The steady speed is where they cross, because there the motor torque exactly balances the load torque and the speed stops changing.",
+      "asks": [
+        "Where does a motor settle with a load?"
+      ]
+    },
+    {
+      "q": "How does supply voltage change the curve?",
+      "a": "Lowering the voltage shifts the line down in parallel: the slope stays the same, but stall torque and no-load speed both fall in proportion. That is the basis of simple DC motor speed control.",
+      "asks": [
+        "How do you control DC motor speed?"
+      ]
+    }
+  ],
+  "facts": [
+    "For a permanent-magnet DC motor, peak mechanical power occurs at half the no-load speed.",
+    "1 rad/s is about 9.55 revolutions per minute.",
+    "At the peak-power point, half the input power is lost in the armature resistance."
+  ],
+  "quiz": [
+    {
+      "say": "A DC motor has a stall torque of 24 newton metres and a no-load speed of 48 radians per second. What torque does it give at 20 radians per second?",
+      "show": "A DC motor has stall torque 24 N·m and no-load speed 48 rad/s. What torque does it give at 20 rad/s?",
+      "options": [
+        {
+          "show": "14 N·m",
+          "say": "14 newton metres"
+        },
+        {
+          "show": "10 N·m",
+          "say": "10 newton metres"
+        },
+        {
+          "show": "24 N·m",
+          "say": "24 newton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "The line loses 0.5 newton metres for each radian per second: 24 minus 0.5 times 20 is 14 newton metres.",
+      "wrong": {
+        "1": "That is the drop, 0.5 times 20, not what is left.",
+        "2": "24 newton metres is the stall torque, reached only at zero speed."
+      }
+    },
+    {
+      "say": "Where on a DC motor curve is output power highest?",
+      "show": "Where on a DC motor curve is output power highest?",
+      "options": [
+        {
+          "show": "At half the no-load speed",
+          "say": "At half the no-load speed"
+        },
+        {
+          "show": "At stall",
+          "say": "At stall"
+        },
+        {
+          "show": "At no-load speed",
+          "say": "At no-load speed"
+        }
+      ],
+      "answer": 0,
+      "why": "Power is torque times speed, and with a straight falling line the product peaks halfway.",
+      "wrong": {
+        "1": "At stall the speed is zero, so the power is zero.",
+        "2": "At no load the torque is zero, so the power is zero."
+      }
+    }
+  ]
+}

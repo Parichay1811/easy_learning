@@ -1,0 +1,424 @@
+{
+  "id": "BME-THERM-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The second law and entropy: why heat only flows downhill by itself",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-THERM — Thermodynamics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "second law of thermodynamics",
+    "entropy",
+    "Kelvin-Planck statement",
+    "Clausius statement",
+    "irreversibility"
+  ],
+  "examples": [
+    "What is entropy in simple words?",
+    "What does the second law of thermodynamics say?",
+    "How do I calculate entropy change for heat transfer?"
+  ],
+  "figure": [
+    {
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "hot",
+          "label": "Hot source 500 K",
+          "icon": "fire",
+          "x": 0.15,
+          "y": 0.2,
+          "ask": "Why does heat flow from hot to cold?"
+        },
+        {
+          "id": "eng",
+          "label": "Heat engine",
+          "icon": "engine",
+          "x": 0.5,
+          "y": 0.5,
+          "ask": "Why can no engine turn all its heat into work?"
+        },
+        {
+          "id": "work",
+          "label": "Work out",
+          "icon": "gear",
+          "x": 0.85,
+          "y": 0.5
+        },
+        {
+          "id": "cold",
+          "label": "Cold sink 300 K",
+          "icon": "ice",
+          "x": 0.15,
+          "y": 0.8
+        }
+      ],
+      "links": [
+        {
+          "from": "hot",
+          "to": "eng",
+          "kind": "heat",
+          "label": "Q in"
+        },
+        {
+          "from": "eng",
+          "to": "work",
+          "kind": "energy",
+          "label": "W"
+        },
+        {
+          "from": "eng",
+          "to": "cold",
+          "kind": "heat",
+          "label": "Q out"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A hot cup of chai on the table always cools down; it never gets hotter by drawing heat from the cooler room. Energy would be conserved either way, so the first law cannot explain this. We need a second law. In 1865 Rudolf Clausius named the quantity that decides: entropy. Look at heat flowing from hot to cold.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The second law and entropy: why heat only flows downhill by itself"
+        },
+        {
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "hot",
+              "label": "Hot source 500 K",
+              "icon": "fire",
+              "x": 0.15,
+              "y": 0.2,
+              "ask": "Why does heat flow from hot to cold?"
+            },
+            {
+              "id": "eng",
+              "label": "Heat engine",
+              "icon": "engine",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "Why can no engine turn all its heat into work?"
+            },
+            {
+              "id": "work",
+              "label": "Work out",
+              "icon": "gear",
+              "x": 0.85,
+              "y": 0.5
+            },
+            {
+              "id": "cold",
+              "label": "Cold sink 300 K",
+              "icon": "ice",
+              "x": 0.15,
+              "y": 0.8
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "eng",
+              "kind": "heat",
+              "label": "Q in"
+            },
+            {
+              "from": "eng",
+              "to": "work",
+              "kind": "energy",
+              "label": "W"
+            },
+            {
+              "from": "eng",
+              "to": "cold",
+              "kind": "heat",
+              "label": "Q out"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Heat flows by itself only from hot to cold"
+        }
+      ]
+    },
+    {
+      "say": "Entropy is a measure of how spread out energy is. Watch the particles mix: they spread out by themselves and never gather back on their own. Energy behaves the same way. The second law says the total entropy of an isolated system never decreases. Have you ever seen spilled milk unmix?",
+      "draw": [
+        {
+          "name": "x-particles",
+          "state": "diffusion",
+          "label": "Energy spreads out",
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Second law: ΔS_total ≥ 0 for an isolated system"
+        }
+      ]
+    },
+    {
+      "say": "Never! Let us measure it. For heat Q at temperature T, the entropy change is Q over T. Let 1000 kilojoules flow from 500 kelvin to 300 kelvin. The hot side loses 1000 over 500, which is 2 kilojoules per kelvin. The cold side gains 1000 over 300, about 3.33. See the two bars? Is the total up or down?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "kJ/K",
+          "items": [
+            {
+              "label": "Hot side loses 2.00",
+              "size": 2,
+              "icon": "fire"
+            },
+            {
+              "label": "Cold side gains 3.33",
+              "size": 3.33,
+              "icon": "ice"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "ΔS = −1000/500 + 1000/300 = +1.33 kJ/K"
+        }
+      ]
+    },
+    {
+      "say": "Up, by 1.33 kilojoules per kelvin, so the flow happens by itself. Run it backwards and the total would fall, which is forbidden. The same law limits engines: the Kelvin–Planck statement says no engine can turn all its heat into work. Some must be dumped to a cold sink. See the engine, with heat out at the bottom?",
+      "draw": [
+        {
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "hot",
+              "label": "Hot source 500 K",
+              "icon": "fire",
+              "x": 0.15,
+              "y": 0.2,
+              "ask": "Why does heat flow from hot to cold?"
+            },
+            {
+              "id": "eng",
+              "label": "Heat engine",
+              "icon": "engine",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "Why can no engine turn all its heat into work?"
+            },
+            {
+              "id": "work",
+              "label": "Work out",
+              "icon": "gear",
+              "x": 0.85,
+              "y": 0.5
+            },
+            {
+              "id": "cold",
+              "label": "Cold sink 300 K",
+              "icon": "ice",
+              "x": 0.15,
+              "y": 0.8
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "eng",
+              "kind": "heat",
+              "label": "Q in"
+            },
+            {
+              "from": "eng",
+              "to": "work",
+              "kind": "energy",
+              "label": "W"
+            },
+            {
+              "from": "eng",
+              "to": "cold",
+              "kind": "heat",
+              "label": "Q out"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Kelvin–Planck: no engine turns all heat into work"
+        }
+      ]
+    },
+    {
+      "say": "That waste heat is why power stations have cooling towers. Fantastic work! Exam tip: entropy change Q over T is exact only for reversible heat transfer; real processes always create extra entropy. Wow fact: entropy is the reason time seems to have a direction. Challenge: what is the entropy change if the cold side were 400 kelvin?",
+      "draw": [
+        {
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "hot",
+              "label": "Hot source 500 K",
+              "icon": "fire",
+              "x": 0.15,
+              "y": 0.2,
+              "ask": "Why does heat flow from hot to cold?"
+            },
+            {
+              "id": "eng",
+              "label": "Heat engine",
+              "icon": "engine",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "Why can no engine turn all its heat into work?"
+            },
+            {
+              "id": "work",
+              "label": "Work out",
+              "icon": "gear",
+              "x": 0.85,
+              "y": 0.5
+            },
+            {
+              "id": "cold",
+              "label": "Cold sink 300 K",
+              "icon": "ice",
+              "x": 0.15,
+              "y": 0.8
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "eng",
+              "kind": "heat",
+              "label": "Q in"
+            },
+            {
+              "from": "eng",
+              "to": "work",
+              "kind": "energy",
+              "label": "W"
+            },
+            {
+              "from": "eng",
+              "to": "cold",
+              "kind": "heat",
+              "label": "Q out"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Real processes always create entropy"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does heat flow from hot to cold?",
+      "a": "Heat flowing from hot to cold increases the total entropy, because the cold body gains more entropy than the hot body loses. The reverse would decrease entropy, which the second law forbids without outside work.",
+      "asks": [
+        "why does heat not flow from cold to hot"
+      ]
+    },
+    {
+      "q": "What is entropy in simple words?",
+      "a": "Entropy measures how spread out, or disordered, energy is. Left alone, energy spreads out, so the entropy of an isolated system rises or stays the same.",
+      "asks": [
+        "entropy meaning",
+        "define entropy"
+      ]
+    },
+    {
+      "q": "What does the second law of thermodynamics say?",
+      "a": "The total entropy of an isolated system never decreases. Equivalent forms: heat does not flow from cold to hot by itself (Clausius), and no engine turns all its heat into work (Kelvin–Planck).",
+      "asks": [
+        "second law statements"
+      ]
+    },
+    {
+      "q": "Why can no engine turn all its heat into work?",
+      "a": "Taking heat from a hot source lowers its entropy. To keep the total entropy from falling, the engine must dump some heat into a cold sink, raising the sink's entropy.",
+      "asks": [
+        "Kelvin Planck statement explained"
+      ]
+    },
+    {
+      "q": "How do I calculate entropy change for heat transfer?",
+      "a": "For heat Q at a constant temperature T in kelvin, the entropy change is Q over T. Add the changes for every body involved to get the total.",
+      "asks": [
+        "entropy change formula Q over T"
+      ]
+    }
+  ],
+  "facts": [
+    "Rudolf Clausius introduced the word entropy in 1865.",
+    "For reversible heat transfer at constant temperature, the entropy change is Q divided by the absolute temperature."
+  ],
+  "quiz": [
+    {
+      "say": "Six hundred kilojoules of heat flow from a body at 600 kelvin to one at 300 kelvin. What is the total entropy change?",
+      "show": "600 kJ flows from 600 K to 300 K. Total entropy change?",
+      "options": [
+        {
+          "show": "+1 kJ/K",
+          "say": "plus 1 kilojoule per kelvin"
+        },
+        {
+          "show": "−1 kJ/K",
+          "say": "minus 1 kilojoule per kelvin"
+        },
+        {
+          "show": "+3 kJ/K",
+          "say": "plus 3 kilojoules per kelvin"
+        }
+      ],
+      "answer": 0,
+      "why": "ΔS = −600/600 + 600/300 = −1 + 2 = +1 kJ/K.",
+      "wrong": {
+        "1": "That has the signs swapped; the hot body loses entropy and the cold one gains more.",
+        "2": "That adds both changes as gains instead of subtracting the hot body's loss."
+      }
+    },
+    {
+      "say": "Which statement does the second law forbid?",
+      "show": "Which does the second law forbid?",
+      "options": [
+        {
+          "show": "An engine that turns all its heat input into work",
+          "say": "An engine that turns all its heat input into work"
+        },
+        {
+          "show": "A fridge that moves heat from cold to hot using work",
+          "say": "A fridge that moves heat from cold to hot using work"
+        },
+        {
+          "show": "Heat flowing from a hot pan to a cold plate",
+          "say": "Heat flowing from a hot pan to a cold plate"
+        }
+      ],
+      "answer": 0,
+      "why": "Kelvin–Planck: a cycle must reject some heat to a cold sink.",
+      "wrong": {
+        "1": "That is allowed because work is supplied; it is how every fridge works.",
+        "2": "Hot to cold flow raises entropy, so it happens naturally."
+      }
+    }
+  ]
+}

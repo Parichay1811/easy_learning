@@ -1,0 +1,555 @@
+{
+  "id": "SCH-CMP-12",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "How a photo travels across the internet in packets",
+  "area": "School Explainers",
+  "group": "SCH-CMP — Computing (class 1–12)",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "data packets",
+    "internet routing",
+    "router",
+    "IP address",
+    "undersea cables"
+  ],
+  "examples": [
+    "How does data travel on the internet?",
+    "What is a packet?",
+    "What does a router do?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "you",
+          "label": "Your phone",
+          "icon": "phone",
+          "x": 0.08,
+          "y": 0.5
+        },
+        {
+          "id": "home",
+          "label": "Home router",
+          "icon": "antenna",
+          "x": 0.27,
+          "y": 0.5,
+          "ask": "What does a router do?"
+        },
+        {
+          "id": "a",
+          "label": "Router A",
+          "icon": "tower",
+          "x": 0.5,
+          "y": 0.2
+        },
+        {
+          "id": "b",
+          "label": "Router B",
+          "icon": "tower",
+          "x": 0.5,
+          "y": 0.8
+        },
+        {
+          "id": "c",
+          "label": "Router C",
+          "icon": "tower",
+          "x": 0.73,
+          "y": 0.5
+        },
+        {
+          "id": "friend",
+          "label": "Friend in Tokyo",
+          "icon": "computer",
+          "x": 0.92,
+          "y": 0.5
+        }
+      ],
+      "links": [
+        {
+          "from": "you",
+          "to": "home",
+          "kind": "data",
+          "label": "Wi-Fi"
+        },
+        {
+          "from": "home",
+          "to": "a",
+          "kind": "data"
+        },
+        {
+          "from": "home",
+          "to": "b",
+          "kind": "data"
+        },
+        {
+          "from": "a",
+          "to": "c",
+          "kind": "data"
+        },
+        {
+          "from": "b",
+          "to": "c",
+          "kind": "data"
+        },
+        {
+          "from": "c",
+          "to": "friend",
+          "kind": "data",
+          "label": "Undersea cable"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Imagine you send a photo of your birthday cake from your phone in Nairobi to a friend in Tokyo, and it arrives in a second. How? Look at the board: on the left is your phone, on the right is your friend's computer, and in between is a web of routers.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a photo travels across the internet in packets"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "you",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Home router",
+              "icon": "antenna",
+              "x": 0.27,
+              "y": 0.5,
+              "ask": "What does a router do?"
+            },
+            {
+              "id": "a",
+              "label": "Router A",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.2
+            },
+            {
+              "id": "b",
+              "label": "Router B",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.8
+            },
+            {
+              "id": "c",
+              "label": "Router C",
+              "icon": "tower",
+              "x": 0.73,
+              "y": 0.5
+            },
+            {
+              "id": "friend",
+              "label": "Friend in Tokyo",
+              "icon": "computer",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "you",
+              "to": "home",
+              "kind": "data",
+              "label": "Wi-Fi"
+            },
+            {
+              "from": "home",
+              "to": "a",
+              "kind": "data"
+            },
+            {
+              "from": "home",
+              "to": "b",
+              "kind": "data"
+            },
+            {
+              "from": "a",
+              "to": "c",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "data"
+            },
+            {
+              "from": "c",
+              "to": "friend",
+              "kind": "data",
+              "label": "Undersea cable"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "First, your phone cuts the photo into thousands of small pieces called packets. Each packet gets a label, like an envelope with an address and a number. Look at the first box. Why do you think the pieces need numbers?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Split into packets",
+              "icon": "puzzle",
+              "note": "Your photo is cut into small pieces",
+              "ask": "What is a packet?"
+            },
+            {
+              "label": "Label each one",
+              "icon": "mail",
+              "note": "Each gets an address and a number"
+            },
+            {
+              "label": "Separate routes",
+              "icon": "map",
+              "note": "Packets may take different roads"
+            },
+            {
+              "label": "Put back in order",
+              "icon": "computer",
+              "note": "The numbers show the right order",
+              "ask": "What if a packet gets lost?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Now look at Router A. A router is a computer that reads each packet's address and sends it on, one hop closer. If one road is busy, packets can go a different way, through Router B. Can you trace two different paths to Tokyo?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "you",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Home router",
+              "icon": "antenna",
+              "x": 0.27,
+              "y": 0.5,
+              "ask": "What does a router do?"
+            },
+            {
+              "id": "a",
+              "label": "Router A",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.2
+            },
+            {
+              "id": "b",
+              "label": "Router B",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.8
+            },
+            {
+              "id": "c",
+              "label": "Router C",
+              "icon": "tower",
+              "x": 0.73,
+              "y": 0.5
+            },
+            {
+              "id": "friend",
+              "label": "Friend in Tokyo",
+              "icon": "computer",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "you",
+              "to": "home",
+              "kind": "data",
+              "label": "Wi-Fi"
+            },
+            {
+              "from": "home",
+              "to": "a",
+              "kind": "data"
+            },
+            {
+              "from": "home",
+              "to": "b",
+              "kind": "data"
+            },
+            {
+              "from": "a",
+              "to": "c",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "data"
+            },
+            {
+              "from": "c",
+              "to": "friend",
+              "kind": "data",
+              "label": "Undersea cable"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "At the other end, your friend's computer uses the numbers to put the packets back in order. If one goes missing, it simply asks for that one again. Look at the last box. What would the photo look like with a piece missing?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Split into packets",
+              "icon": "puzzle",
+              "note": "Your photo is cut into small pieces",
+              "ask": "What is a packet?"
+            },
+            {
+              "label": "Label each one",
+              "icon": "mail",
+              "note": "Each gets an address and a number"
+            },
+            {
+              "label": "Separate routes",
+              "icon": "map",
+              "note": "Packets may take different roads"
+            },
+            {
+              "label": "Put back in order",
+              "icon": "computer",
+              "note": "The numbers show the right order",
+              "ask": "What if a packet gets lost?"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Well done, network explorer! Wow fact: almost all the internet traffic between continents travels through cables lying on the seabed, more than a million kilometres of them. Look at the last link: your cake photo may have crossed an ocean floor!",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "you",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "id": "home",
+              "label": "Home router",
+              "icon": "antenna",
+              "x": 0.27,
+              "y": 0.5,
+              "ask": "What does a router do?"
+            },
+            {
+              "id": "a",
+              "label": "Router A",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.2
+            },
+            {
+              "id": "b",
+              "label": "Router B",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.8
+            },
+            {
+              "id": "c",
+              "label": "Router C",
+              "icon": "tower",
+              "x": 0.73,
+              "y": 0.5
+            },
+            {
+              "id": "friend",
+              "label": "Friend in Tokyo",
+              "icon": "computer",
+              "x": 0.92,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "you",
+              "to": "home",
+              "kind": "data",
+              "label": "Wi-Fi"
+            },
+            {
+              "from": "home",
+              "to": "a",
+              "kind": "data"
+            },
+            {
+              "from": "home",
+              "to": "b",
+              "kind": "data"
+            },
+            {
+              "from": "a",
+              "to": "c",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "c",
+              "kind": "data"
+            },
+            {
+              "from": "c",
+              "to": "friend",
+              "kind": "data",
+              "label": "Undersea cable"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a packet?",
+      "a": "A packet is a small piece of data sent across a network. Big files are split into many packets, each labelled with where it is going, where it came from and its number in the order.",
+      "asks": [
+        "What is packet switching?",
+        "Why is data split into packets?"
+      ]
+    },
+    {
+      "q": "What does a router do?",
+      "a": "A router reads the address on each packet and sends it along the best path towards its destination. Your home router links your devices to the internet; big routers pass traffic between networks.",
+      "asks": [
+        "What is a router for?",
+        "How does a router know where to send data?"
+      ]
+    },
+    {
+      "q": "What if a packet gets lost?",
+      "a": "The receiving computer notices the missing number and asks for that packet to be sent again. This is why downloads arrive complete even when the network is busy.",
+      "asks": [
+        "What happens to lost packets?",
+        "Why do files not arrive broken?"
+      ]
+    },
+    {
+      "q": "How does data travel on the internet?",
+      "a": "Data is split into packets, each sent hop by hop through routers along cables, fibre optics and radio links, and then put back together in order at the other end.",
+      "asks": [
+        "How does the internet work?",
+        "How does a message reach another country?"
+      ]
+    },
+    {
+      "q": "What is an IP address?",
+      "a": "An IP address is a number that identifies a device on the internet, like a postal address for computers. Routers use it to deliver packets to the right place.",
+      "asks": [
+        "What does IP stand for?",
+        "Does my phone have an address?"
+      ]
+    }
+  ],
+  "facts": [
+    "Packet switching, sending data in small labelled pieces, was developed in the 1960s by Paul Baran and Donald Davies.",
+    "Submarine cables carry the vast majority of data travelling between continents."
+  ],
+  "quiz": [
+    {
+      "say": "Why is a big photo split into packets?",
+      "show": "Data is split into packets so that…",
+      "options": [
+        {
+          "show": "Pieces can travel by different routes and be resent if lost",
+          "say": "Pieces can travel by different routes and be resent if lost"
+        },
+        {
+          "show": "It looks smaller on screen",
+          "say": "It looks smaller on screen"
+        },
+        {
+          "show": "Only routers can see it",
+          "say": "Only routers can see it"
+        }
+      ],
+      "answer": 0,
+      "why": "Small packets share the network fairly, can take any free route, and only the lost ones need resending.",
+      "wrong": {
+        "1": "Splitting does not change how the photo looks once rebuilt.",
+        "2": "Routers read the address labels, but splitting is about moving data well."
+      }
+    },
+    {
+      "say": "How does the receiving computer rebuild the photo in the right order?",
+      "show": "Packets are put back in order using…",
+      "options": [
+        {
+          "show": "The number on each packet",
+          "say": "The number on each packet"
+        },
+        {
+          "show": "The time of day",
+          "say": "The time of day"
+        },
+        {
+          "show": "Their colour",
+          "say": "Their colour"
+        }
+      ],
+      "answer": 0,
+      "why": "Each packet carries a sequence number, so they can be sorted back into order.",
+      "wrong": {
+        "1": "Packets can arrive out of order, so the time is not enough.",
+        "2": "Packets are data, not coloured objects."
+      }
+    }
+  ]
+}

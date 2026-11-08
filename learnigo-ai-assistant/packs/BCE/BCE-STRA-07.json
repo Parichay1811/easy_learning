@@ -1,0 +1,407 @@
+{
+  "id": "BCE-STRA-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Overhanging beams: hogging moments and the point of contraflexure",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "overhanging beam",
+    "hogging moment",
+    "point of contraflexure",
+    "negative moment",
+    "top reinforcement"
+  ],
+  "examples": [
+    "How do you analyse an overhanging beam?",
+    "What is a point of contraflexure?",
+    "Why is there a negative moment over the support?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 8,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "How do you find reactions for an overhanging beam?"
+        },
+        {
+          "kind": "roller",
+          "at": 0.75,
+          "ask": "What is a hogging moment?"
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 0.75,
+          "size": 10,
+          "label": "10 kN/m",
+          "ask": "Why does an overhang reduce the sagging moment?"
+        },
+        {
+          "kind": "point",
+          "at": 1,
+          "size": 15,
+          "label": "15 kN at tip",
+          "ask": "What is an overhanging beam?"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Look at a stadium roof or a bridge deck that sticks out past its last pier. Part of the beam hangs beyond a support: an overhanging beam. Here an eight metre beam sits on supports at zero and six metres, with ten kilonewtons per metre on the main span and fifteen kilonewtons at the tip of the two metre overhang.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Overhanging beams: hogging moments and the point of contraflexure"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find reactions for an overhanging beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 0.75,
+              "ask": "What is a hogging moment?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.75,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does an overhang reduce the sagging moment?"
+            },
+            {
+              "kind": "point",
+              "at": 1,
+              "size": 15,
+              "label": "15 kN at tip",
+              "ask": "What is an overhanging beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First the reactions. Take moments about the left pin: the spread load is sixty kilonewtons acting at three metres, and the tip load fifteen at eight metres. So the right support pushes up fifty kilonewtons and the left only twenty five. The overhang load actually takes load off the far support. Can you see why?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find reactions for an overhanging beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 0.75,
+              "ask": "What is a hogging moment?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.75,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does an overhang reduce the sagging moment?"
+            },
+            {
+              "kind": "point",
+              "at": 1,
+              "size": 15,
+              "label": "15 kN at tip",
+              "ask": "What is an overhanging beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "R_B × 6 = 60×3 + 15×8 = 300 → R_B = 50 kN"
+        },
+        {
+          "op": "note",
+          "text": "R_A = 60 + 15 − 50 = 25 kN"
+        }
+      ]
+    },
+    {
+      "say": "It acts like a seesaw over the right support. Now look above that support. The tip load bends the beam the other way, a frown called hogging. The moment there is fifteen times two, minus thirty kilonewton metres, with tension on top, so the beam needs steel at the top here. Can you see the curve dip below zero?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find reactions for an overhanging beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 0.75,
+              "ask": "What is a hogging moment?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.75,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does an overhang reduce the sagging moment?"
+            },
+            {
+              "kind": "point",
+              "at": 1,
+              "size": 15,
+              "label": "15 kN at tip",
+              "ask": "What is an overhanging beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "M_B = −15 × 2 = −30 kN·m (hogging)"
+        }
+      ]
+    },
+    {
+      "say": "In the main span the beam still sags. The peak, where the shear is zero two and a half metres in, is thirty one point two five kilonewton metres. Then at five metres the moment crosses zero: the point of contraflexure, where the curve changes from a smile to a frown.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find reactions for an overhanging beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 0.75,
+              "ask": "What is a hogging moment?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.75,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does an overhang reduce the sagging moment?"
+            },
+            {
+              "kind": "point",
+              "at": 1,
+              "size": 15,
+              "label": "15 kN at tip",
+              "ask": "What is an overhanging beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M(x) = 25x − 5x² → peak 31.25 kN·m at 2.5 m"
+        },
+        {
+          "op": "note",
+          "text": "Contraflexure: 25x − 5x² = 0 → x = 5 m"
+        }
+      ]
+    },
+    {
+      "say": "Brilliant. Overhangs are clever: a little hogging over the support trims the sagging in the span. Site tip: bar laps are best placed near the point of contraflexure, where bending is small. Challenge: if the tip load grows to thirty kilonewtons, what happens to the left reaction?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find reactions for an overhanging beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 0.75,
+              "ask": "What is a hogging moment?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.75,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does an overhang reduce the sagging moment?"
+            },
+            {
+              "kind": "point",
+              "at": 1,
+              "size": 15,
+              "label": "15 kN at tip",
+              "ask": "What is an overhanging beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an overhanging beam?",
+      "a": "A beam that extends past one or both of its supports, so part of it acts like a cantilever. Overhangs create hogging moments over the support.",
+      "asks": [
+        "Define overhanging beam"
+      ]
+    },
+    {
+      "q": "What is a hogging moment?",
+      "a": "A hogging moment bends a beam into a frown, with tension on top and compression underneath. It appears over supports of overhangs and continuous beams, and in cantilevers.",
+      "asks": [
+        "What is a negative bending moment?"
+      ]
+    },
+    {
+      "q": "What is a point of contraflexure?",
+      "a": "It is where the bending moment changes sign, from sagging to hogging, so the moment there is zero. In our beam it is 5 metres from the left support.",
+      "asks": [
+        "Where does the moment change sign?",
+        "Point of inflection in a beam"
+      ]
+    },
+    {
+      "q": "How do you find reactions for an overhanging beam?",
+      "a": "Take moments about one support, including the loads on the overhang, to find the other reaction. Then use vertical equilibrium for the first. Here R_B is 50 and R_A is 25 kilonewtons.",
+      "asks": [
+        "Reactions of an overhanging beam"
+      ]
+    },
+    {
+      "q": "Why does an overhang reduce the sagging moment?",
+      "a": "The load on the overhang tries to lift the main span like a seesaw, which cancels some of the sagging. That is why overhangs can make beams more efficient.",
+      "asks": [
+        "Do overhangs help the main span?"
+      ]
+    }
+  ],
+  "facts": [
+    "At a point of contraflexure the bending moment is zero and changes sign.",
+    "Balanced cantilever construction builds long concrete bridges outwards from each pier so the two overhangs balance each other."
+  ],
+  "quiz": [
+    {
+      "say": "A six metre beam on supports at zero and four metres carries 20 kilonewtons at its tip. What is the moment over the right support?",
+      "show": "A 6 m beam on supports at 0 and 4 m carries 20 kN at its 6 m tip. Moment over the right support?",
+      "options": [
+        {
+          "show": "−40 kN·m",
+          "say": "minus 40 kilonewton metres"
+        },
+        {
+          "show": "−120 kN·m",
+          "say": "minus 120 kilonewton metres"
+        },
+        {
+          "show": "+40 kN·m",
+          "say": "plus 40 kilonewton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "The tip is 2 metres beyond the support: 20 × 2 = 40, hogging, so minus 40 kilonewton metres.",
+      "wrong": {
+        "1": "That uses the full 6 metres from the left end, not the 2 metre overhang.",
+        "2": "The size is right, but an overhang load causes hogging, which is negative."
+      }
+    },
+    {
+      "say": "At a point of contraflexure the bending moment is…",
+      "show": "At a point of contraflexure the bending moment is…",
+      "options": [
+        {
+          "show": "At its maximum",
+          "say": "At its maximum"
+        },
+        {
+          "show": "Zero",
+          "say": "Zero"
+        },
+        {
+          "show": "Equal to the shear force",
+          "say": "Equal to the shear force"
+        }
+      ],
+      "answer": 1,
+      "why": "Contraflexure is where the moment changes sign, so it passes through zero.",
+      "wrong": {
+        "0": "The maximum is where the shear is zero, a different place.",
+        "2": "Shear and moment have different units and are not equal there."
+      }
+    }
+  ]
+}

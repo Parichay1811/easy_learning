@@ -1,0 +1,611 @@
+{
+  "id": "ENGX-ELEC-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a circuit breaker trips",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "circuit breaker",
+    "tripped breaker",
+    "consumer unit",
+    "magnetic trip",
+    "reset switch"
+  ],
+  "examples": [
+    "Why does my circuit breaker keep tripping?",
+    "How is a circuit breaker different from a fuse?",
+    "What happens inside a breaker when it trips?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "in",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Supply in"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.35,
+          "y": 0.25,
+          "size": 1.1,
+          "label": "Trip coil",
+          "motion": "pulse",
+          "ask": "How does the coil in a circuit breaker work?"
+        },
+        {
+          "id": "latch",
+          "kind": "lever",
+          "x": 0.65,
+          "y": 0.25,
+          "size": 1,
+          "label": "Latch",
+          "motion": "swing",
+          "ask": "What does the latch in a circuit breaker do?"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.65,
+          "y": 0.72,
+          "size": 1,
+          "label": "Spring",
+          "motion": "slide",
+          "ask": "Why is there a spring in a circuit breaker?"
+        },
+        {
+          "id": "contacts",
+          "kind": "box",
+          "x": 0.35,
+          "y": 0.75,
+          "size": 0.9,
+          "label": "Contacts",
+          "ask": "How do I reset a tripped breaker?"
+        },
+        {
+          "id": "out",
+          "kind": "box",
+          "x": 0.9,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "To your sockets"
+        }
+      ],
+      "links": [
+        {
+          "from": "in",
+          "to": "coil",
+          "kind": "power",
+          "label": "Current"
+        },
+        {
+          "from": "coil",
+          "to": "latch",
+          "kind": "force",
+          "label": "Magnetic pull"
+        },
+        {
+          "from": "latch",
+          "to": "spring",
+          "kind": "force",
+          "label": "Releases"
+        },
+        {
+          "from": "spring",
+          "to": "contacts",
+          "kind": "force",
+          "label": "Snaps open"
+        },
+        {
+          "from": "contacts",
+          "to": "out",
+          "kind": "power",
+          "label": "Cut off"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A circuit breaker is a switch that turns itself off when the current gets dangerously big. Unlike a fuse, it can simply be reset.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a circuit breaker trips"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Supply in"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.35,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Trip coil",
+              "motion": "pulse",
+              "ask": "How does the coil in a circuit breaker work?"
+            },
+            {
+              "id": "latch",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.25,
+              "size": 1,
+              "label": "Latch",
+              "motion": "swing",
+              "ask": "What does the latch in a circuit breaker do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.72,
+              "size": 1,
+              "label": "Spring",
+              "motion": "slide",
+              "ask": "Why is there a spring in a circuit breaker?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.35,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Contacts",
+              "ask": "How do I reset a tripped breaker?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "To your sockets"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "latch",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "latch",
+              "to": "spring",
+              "kind": "force",
+              "label": "Releases"
+            },
+            {
+              "from": "spring",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Snaps open"
+            },
+            {
+              "from": "contacts",
+              "to": "out",
+              "kind": "power",
+              "label": "Cut off"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: a simple circuit. Look at the battery, the positive end and the wire. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a circuit breaker trips"
+        },
+        {
+          "op": "image",
+          "render": "circuit"
+        }
+      ]
+    },
+    {
+      "say": "All the current runs through a coil, which becomes an electromagnet. A sudden huge current, like a short circuit, makes it pull hard enough to knock the latch.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Supply in"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.35,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Trip coil",
+              "motion": "pulse",
+              "ask": "How does the coil in a circuit breaker work?"
+            },
+            {
+              "id": "latch",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.25,
+              "size": 1,
+              "label": "Latch",
+              "motion": "swing",
+              "ask": "What does the latch in a circuit breaker do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.72,
+              "size": 1,
+              "label": "Spring",
+              "motion": "slide",
+              "ask": "Why is there a spring in a circuit breaker?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.35,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Contacts",
+              "ask": "How do I reset a tripped breaker?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "To your sockets"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "latch",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "latch",
+              "to": "spring",
+              "kind": "force",
+              "label": "Releases"
+            },
+            {
+              "from": "spring",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Snaps open"
+            },
+            {
+              "from": "contacts",
+              "to": "out",
+              "kind": "power",
+              "label": "Cut off"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The latch was holding back a loaded spring. Released, the spring flings the contacts apart in a few thousandths of a second, cutting the circuit.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Supply in"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.35,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Trip coil",
+              "motion": "pulse",
+              "ask": "How does the coil in a circuit breaker work?"
+            },
+            {
+              "id": "latch",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.25,
+              "size": 1,
+              "label": "Latch",
+              "motion": "swing",
+              "ask": "What does the latch in a circuit breaker do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.72,
+              "size": 1,
+              "label": "Spring",
+              "motion": "slide",
+              "ask": "Why is there a spring in a circuit breaker?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.35,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Contacts",
+              "ask": "How do I reset a tripped breaker?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "To your sockets"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "latch",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "latch",
+              "to": "spring",
+              "kind": "force",
+              "label": "Releases"
+            },
+            {
+              "from": "spring",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Snaps open"
+            },
+            {
+              "from": "contacts",
+              "to": "out",
+              "kind": "power",
+              "label": "Cut off"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The contacts stay apart until you push the switch back up, which reloads the spring. Fix the fault first, or it will just trip again.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Supply in"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.35,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Trip coil",
+              "motion": "pulse",
+              "ask": "How does the coil in a circuit breaker work?"
+            },
+            {
+              "id": "latch",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.25,
+              "size": 1,
+              "label": "Latch",
+              "motion": "swing",
+              "ask": "What does the latch in a circuit breaker do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.72,
+              "size": 1,
+              "label": "Spring",
+              "motion": "slide",
+              "ask": "Why is there a spring in a circuit breaker?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.35,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Contacts",
+              "ask": "How do I reset a tripped breaker?"
+            },
+            {
+              "id": "out",
+              "kind": "box",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "To your sockets"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "coil",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "coil",
+              "to": "latch",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "latch",
+              "to": "spring",
+              "kind": "force",
+              "label": "Releases"
+            },
+            {
+              "from": "spring",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Snaps open"
+            },
+            {
+              "from": "contacts",
+              "to": "out",
+              "kind": "power",
+              "label": "Cut off"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does the coil in a circuit breaker work?",
+      "a": "All the current passes through a small coil, making it an electromagnet. Normal current gives a weak pull, but a sudden big current gives a pull strong enough to yank the latch almost instantly.",
+      "asks": [
+        "What does the magnet in a breaker do?"
+      ]
+    },
+    {
+      "q": "What does the latch in a circuit breaker do?",
+      "a": "The latch holds a loaded spring back while all is normal. When the coil, or a bending bimetal strip, knocks it, it lets go and the spring takes over.",
+      "asks": [
+        "What holds a breaker on?"
+      ]
+    },
+    {
+      "q": "Why is there a spring in a circuit breaker?",
+      "a": "Switching the breaker on loads a spring. When the latch releases, the stored energy flings the contacts apart fast, which keeps sparking to a minimum.",
+      "asks": [
+        "What makes a breaker snap off?"
+      ]
+    },
+    {
+      "q": "How do I reset a tripped breaker?",
+      "a": "Push the switch fully back to on, which closes the contacts and reloads the spring. If it trips again at once, there is still a fault, so unplug things and call an electrician if it keeps happening.",
+      "asks": [
+        "What does it mean when the breaker trips?",
+        "Why does my breaker keep tripping?"
+      ]
+    },
+    {
+      "q": "What is the difference between a fuse and a circuit breaker?",
+      "a": "Both cut the current when it gets too big. A fuse melts and must be replaced, while a breaker is a switch you can reset. Many breakers also have a bimetal strip that bends to catch slower overloads.",
+      "asks": [
+        "Is a breaker better than a fuse?"
+      ]
+    }
+  ],
+  "facts": [
+    "Many circuit breakers combine a magnetic coil for sudden faults with a bimetal strip for slower overloads.",
+    "Breakers are rated in amps, for example 6 amps for lighting circuits and 32 amps for socket circuits in many UK homes."
+  ],
+  "quiz": [
+    {
+      "say": "In a short circuit, what makes the breaker's latch let go?",
+      "show": "In a short circuit, what makes the breaker's latch let go?",
+      "options": [
+        {
+          "show": "The magnetic pull of the trip coil",
+          "say": "The magnetic pull of the trip coil"
+        },
+        {
+          "show": "A fuse wire melting",
+          "say": "A fuse wire melting"
+        },
+        {
+          "show": "The plug falling out",
+          "say": "The plug falling out"
+        }
+      ],
+      "answer": 0,
+      "why": "The huge current turns the coil into a strong electromagnet, which yanks the latch and lets the spring open the contacts.",
+      "wrong": {
+        "1": "A breaker has no fuse wire; that is what makes it resettable.",
+        "2": "Nothing has to come unplugged; the breaker acts by itself."
+      }
+    }
+  ]
+}

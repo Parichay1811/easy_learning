@@ -1,0 +1,435 @@
+{
+  "id": "BME-FLUID-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The continuity equation: why flow speeds up in a narrow pipe",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-FLUID — Fluid mechanics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "continuity equation",
+    "volume flow rate",
+    "mass conservation",
+    "A1V1 = A2V2",
+    "incompressible flow"
+  ],
+  "examples": [
+    "Why does water speed up when a pipe narrows?",
+    "What is the continuity equation?",
+    "How do I find velocity in a smaller pipe?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "pump",
+          "kind": "fan",
+          "x": 0.1,
+          "y": 0.5,
+          "label": "Pump",
+          "ask": "What is the continuity equation?"
+        },
+        {
+          "id": "wide",
+          "kind": "pipe",
+          "x": 0.4,
+          "y": 0.5,
+          "size": 1.4,
+          "label": "Wide pipe 100 mm",
+          "speed": 0.5,
+          "ask": "What is volume flow rate?"
+        },
+        {
+          "id": "narrow",
+          "kind": "pipe",
+          "x": 0.78,
+          "y": 0.5,
+          "size": 0.7,
+          "label": "Narrow pipe 50 mm",
+          "speed": 2,
+          "ask": "Why does water speed up when a pipe narrows?"
+        }
+      ],
+      "links": [
+        {
+          "from": "pump",
+          "to": "wide",
+          "kind": "fluid",
+          "label": "15.7 L/s"
+        },
+        {
+          "from": "wide",
+          "to": "narrow",
+          "kind": "fluid",
+          "label": "Same 15.7 L/s"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Put your thumb over the end of a garden hose and the water shoots out faster. You did not add any water; you just made the exit smaller. That is the continuity equation at work. Look at the pipe: wide, then narrow.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The continuity equation: why flow speeds up in a narrow pipe"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Pump",
+              "ask": "What is the continuity equation?"
+            },
+            {
+              "id": "wide",
+              "kind": "pipe",
+              "x": 0.4,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Wide pipe 100 mm",
+              "speed": 0.5,
+              "ask": "What is volume flow rate?"
+            },
+            {
+              "id": "narrow",
+              "kind": "pipe",
+              "x": 0.78,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Narrow pipe 50 mm",
+              "speed": 2,
+              "ask": "Why does water speed up when a pipe narrows?"
+            }
+          ],
+          "links": [
+            {
+              "from": "pump",
+              "to": "wide",
+              "kind": "fluid",
+              "label": "15.7 L/s"
+            },
+            {
+              "from": "wide",
+              "to": "narrow",
+              "kind": "fluid",
+              "label": "Same 15.7 L/s"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Pump: 0 → wide pipe → narrow pipe"
+        }
+      ]
+    },
+    {
+      "say": "Water is almost incompressible. So whatever volume enters the pipe each second must leave each second. That is the volume flow rate, Q, which equals area times velocity. In the wide pipe, 100 millimetres across at 2 metres per second, Q is pi over 4 times 0.1 squared times 2, which is 15.7 litres per second.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Pump",
+              "ask": "What is the continuity equation?"
+            },
+            {
+              "id": "wide",
+              "kind": "pipe",
+              "x": 0.4,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Wide pipe 100 mm",
+              "speed": 0.5,
+              "ask": "What is volume flow rate?"
+            },
+            {
+              "id": "narrow",
+              "kind": "pipe",
+              "x": 0.78,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Narrow pipe 50 mm",
+              "speed": 2,
+              "ask": "Why does water speed up when a pipe narrows?"
+            }
+          ],
+          "links": [
+            {
+              "from": "pump",
+              "to": "wide",
+              "kind": "fluid",
+              "label": "15.7 L/s"
+            },
+            {
+              "from": "wide",
+              "to": "narrow",
+              "kind": "fluid",
+              "label": "Same 15.7 L/s"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Q = AV = (π/4)(0.1)² × 2 = 0.0157 m³/s"
+        }
+      ]
+    },
+    {
+      "say": "Now the pipe narrows to 50 millimetres. Half the diameter means a quarter of the area. The same 15.7 litres must squeeze through, so the water moves four times faster: 8 metres per second. See the narrow pipe flowing faster? If you halved the diameter again, how fast would it go?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Pump",
+              "ask": "What is the continuity equation?"
+            },
+            {
+              "id": "wide",
+              "kind": "pipe",
+              "x": 0.4,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Wide pipe 100 mm",
+              "speed": 0.5,
+              "ask": "What is volume flow rate?"
+            },
+            {
+              "id": "narrow",
+              "kind": "pipe",
+              "x": 0.78,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Narrow pipe 50 mm",
+              "speed": 2,
+              "ask": "Why does water speed up when a pipe narrows?"
+            }
+          ],
+          "links": [
+            {
+              "from": "pump",
+              "to": "wide",
+              "kind": "fluid",
+              "label": "15.7 L/s"
+            },
+            {
+              "from": "wide",
+              "to": "narrow",
+              "kind": "fluid",
+              "label": "Same 15.7 L/s"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "A₁V₁ = A₂V₂ → V₂ = 2 × (100/50)² = 8 m/s"
+        }
+      ]
+    },
+    {
+      "say": "Thirty-two metres per second! The graph shows why: velocity goes as one over diameter squared, so small pipes get fast very quickly. For gases, which squash, we use mass flow instead: rho times A times V stays constant.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Pipe diameter (mm)",
+            "min": 25,
+            "max": 150
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 35
+          },
+          "curves": [
+            {
+              "label": "Same flow 15.7 L/s",
+              "type": "power",
+              "a": 20000,
+              "k": -2,
+              "ask": "How does velocity depend on pipe diameter?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "100 mm: 2 m/s"
+            },
+            {
+              "x": 50,
+              "label": "50 mm: 8 m/s"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ṁ = ρAV = constant"
+        }
+      ]
+    },
+    {
+      "say": "Great job. Real link: engineers size water mains to keep velocity around 1 to 2 metres per second, because faster flow wastes energy on friction and can cause water hammer. Exam tip: always square the diameter ratio, never use it as it is.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Pipe diameter (mm)",
+            "min": 25,
+            "max": 150
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 35
+          },
+          "curves": [
+            {
+              "label": "Same flow 15.7 L/s",
+              "type": "power",
+              "a": 20000,
+              "k": -2,
+              "ask": "How does velocity depend on pipe diameter?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "100 mm: 2 m/s"
+            },
+            {
+              "x": 50,
+              "label": "50 mm: 8 m/s"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Halve the diameter → four times the velocity"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the continuity equation?",
+      "a": "It says mass is conserved in a flow. For a liquid, the volume flow rate Q equals A times V, and it is the same at every section of a pipe, so A1 V1 equals A2 V2.",
+      "asks": [
+        "conservation of mass in fluids"
+      ]
+    },
+    {
+      "q": "What is volume flow rate?",
+      "a": "Volume flow rate is the volume passing a section each second, Q equals area times mean velocity, in cubic metres per second or litres per second.",
+      "asks": [
+        "how to calculate flow rate"
+      ]
+    },
+    {
+      "q": "Why does water speed up when a pipe narrows?",
+      "a": "The same volume must pass every section each second. A smaller area can only carry it if the water moves faster.",
+      "asks": [
+        "why does a hose spray faster with a thumb over it"
+      ]
+    },
+    {
+      "q": "How does velocity depend on pipe diameter?",
+      "a": "For a fixed flow rate, velocity varies as one over the diameter squared. Halve the diameter and the velocity becomes four times larger.",
+      "asks": [
+        "velocity and diameter relationship"
+      ]
+    },
+    {
+      "q": "Does continuity work for gases?",
+      "a": "Yes, but in mass form: rho A V is constant. Gas density can change, so the volume flow rate is not constant.",
+      "asks": [
+        "continuity equation compressible flow"
+      ]
+    }
+  ],
+  "facts": [
+    "For an incompressible fluid, A₁V₁ = A₂V₂ along a pipe.",
+    "Halving a pipe diameter quarters its area and quadruples the velocity for the same flow."
+  ],
+  "quiz": [
+    {
+      "say": "Water flows at 1.5 metres per second in a 200 millimetre pipe that narrows to 100 millimetres. What is the velocity in the narrow pipe?",
+      "show": "Water at 1.5 m/s in a 200 mm pipe enters a 100 mm pipe. New velocity?",
+      "options": [
+        {
+          "show": "6 m/s",
+          "say": "6 metres per second"
+        },
+        {
+          "show": "3 m/s",
+          "say": "3 metres per second"
+        },
+        {
+          "show": "0.75 m/s",
+          "say": "0.75 metres per second"
+        }
+      ],
+      "answer": 0,
+      "why": "V₂ = 1.5 × (200/100)² = 1.5 × 4 = 6 m/s.",
+      "wrong": {
+        "1": "That uses the diameter ratio without squaring it. Area goes with diameter squared.",
+        "2": "The water speeds up in the smaller pipe, it does not slow down."
+      }
+    },
+    {
+      "say": "In a pipe carrying a liquid, which quantity is the same at every cross-section?",
+      "show": "For a liquid in a pipe, which is the same at every section?",
+      "options": [
+        {
+          "show": "Volume flow rate",
+          "say": "Volume flow rate"
+        },
+        {
+          "show": "Velocity",
+          "say": "Velocity"
+        },
+        {
+          "show": "Cross-sectional area",
+          "say": "Cross-sectional area"
+        }
+      ],
+      "answer": 0,
+      "why": "The liquid cannot pile up or vanish, so the volume flow rate Q is the same everywhere.",
+      "wrong": {
+        "1": "Velocity changes whenever the area changes.",
+        "2": "The area changes along a pipe that narrows or widens."
+      }
+    }
+  ]
+}

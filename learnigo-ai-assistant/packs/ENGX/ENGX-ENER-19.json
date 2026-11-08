@@ -1,0 +1,716 @@
+{
+  "id": "ENGX-ENER-19",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "What is inside a wind turbine's nacelle?",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "nacelle",
+    "wind turbine gearbox",
+    "blade pitch",
+    "yaw system",
+    "direct drive turbine"
+  ],
+  "examples": [
+    "What is inside the top of a wind turbine?",
+    "Why does a wind turbine need a gearbox?",
+    "How does a wind turbine face the wind?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "blades",
+          "kind": "propeller",
+          "x": 0.1,
+          "y": 0.45,
+          "size": 1.5,
+          "label": "Blades",
+          "motion": "spin",
+          "ask": "How do turbine blades catch the wind?"
+        },
+        {
+          "id": "pitch",
+          "kind": "motor",
+          "x": 0.27,
+          "y": 0.15,
+          "size": 0.7,
+          "label": "Pitch motors",
+          "ask": "What does blade pitch do?"
+        },
+        {
+          "id": "main",
+          "kind": "axle",
+          "x": 0.32,
+          "y": 0.5,
+          "label": "Slow main shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "gearbox",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.5,
+          "size": 1.1,
+          "label": "Gearbox",
+          "motion": "spin",
+          "ask": "Why does a wind turbine need a gearbox?"
+        },
+        {
+          "id": "fast",
+          "kind": "axle",
+          "x": 0.66,
+          "y": 0.5,
+          "size": 0.6,
+          "label": "Fast shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "gen",
+          "kind": "coil",
+          "x": 0.84,
+          "y": 0.5,
+          "label": "Generator",
+          "motion": "spin"
+        },
+        {
+          "id": "sensor",
+          "kind": "box",
+          "x": 0.84,
+          "y": 0.15,
+          "size": 0.6,
+          "label": "Wind sensors"
+        },
+        {
+          "id": "yaw",
+          "kind": "motor",
+          "x": 0.5,
+          "y": 0.85,
+          "size": 0.8,
+          "label": "Yaw motors",
+          "ask": "How does a turbine turn to face the wind?"
+        }
+      ],
+      "links": [
+        {
+          "from": "blades",
+          "to": "main",
+          "kind": "force",
+          "label": "torque"
+        },
+        {
+          "from": "main",
+          "to": "gearbox",
+          "kind": "energy",
+          "label": "slow"
+        },
+        {
+          "from": "gearbox",
+          "to": "fast",
+          "kind": "energy",
+          "label": "fast"
+        },
+        {
+          "from": "fast",
+          "to": "gen",
+          "kind": "energy"
+        },
+        {
+          "from": "sensor",
+          "to": "yaw",
+          "kind": "signal",
+          "label": "direction"
+        },
+        {
+          "from": "sensor",
+          "to": "pitch",
+          "kind": "signal",
+          "label": "speed"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "The nacelle is the big box at the top of a wind turbine's tower. The blades catch the wind and turn a thick main shaft slowly, often only 10 to 20 times a minute.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "What is inside a wind turbine's nacelle?"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How do turbine blades catch the wind?"
+            },
+            {
+              "id": "pitch",
+              "kind": "motor",
+              "x": 0.27,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Pitch motors",
+              "ask": "What does blade pitch do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.32,
+              "y": 0.5,
+              "label": "Slow main shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gearbox",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a wind turbine need a gearbox?"
+            },
+            {
+              "id": "fast",
+              "kind": "axle",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Fast shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.84,
+              "y": 0.5,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "sensor",
+              "kind": "box",
+              "x": 0.84,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Wind sensors"
+            },
+            {
+              "id": "yaw",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 0.8,
+              "label": "Yaw motors",
+              "ask": "How does a turbine turn to face the wind?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blades",
+              "to": "main",
+              "kind": "force",
+              "label": "torque"
+            },
+            {
+              "from": "main",
+              "to": "gearbox",
+              "kind": "energy",
+              "label": "slow"
+            },
+            {
+              "from": "gearbox",
+              "to": "fast",
+              "kind": "energy",
+              "label": "fast"
+            },
+            {
+              "from": "fast",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "sensor",
+              "to": "yaw",
+              "kind": "signal",
+              "label": "direction"
+            },
+            {
+              "from": "sensor",
+              "to": "pitch",
+              "kind": "signal",
+              "label": "speed"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: a wind turbine. Look at the blades, the hub and the gearbox. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "What is inside a wind turbine's nacelle?"
+        },
+        {
+          "op": "image",
+          "render": "wind-turbine"
+        }
+      ]
+    },
+    {
+      "say": "Ordinary generators work best spinning fast, so in many turbines a gearbox speeds the rotation up about 100 times. Some turbines skip the gearbox and use a very wide, slow generator instead.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How do turbine blades catch the wind?"
+            },
+            {
+              "id": "pitch",
+              "kind": "motor",
+              "x": 0.27,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Pitch motors",
+              "ask": "What does blade pitch do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.32,
+              "y": 0.5,
+              "label": "Slow main shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gearbox",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a wind turbine need a gearbox?"
+            },
+            {
+              "id": "fast",
+              "kind": "axle",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Fast shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.84,
+              "y": 0.5,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "sensor",
+              "kind": "box",
+              "x": 0.84,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Wind sensors"
+            },
+            {
+              "id": "yaw",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 0.8,
+              "label": "Yaw motors",
+              "ask": "How does a turbine turn to face the wind?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blades",
+              "to": "main",
+              "kind": "force",
+              "label": "torque"
+            },
+            {
+              "from": "main",
+              "to": "gearbox",
+              "kind": "energy",
+              "label": "slow"
+            },
+            {
+              "from": "gearbox",
+              "to": "fast",
+              "kind": "energy",
+              "label": "fast"
+            },
+            {
+              "from": "fast",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "sensor",
+              "to": "yaw",
+              "kind": "signal",
+              "label": "direction"
+            },
+            {
+              "from": "sensor",
+              "to": "pitch",
+              "kind": "signal",
+              "label": "speed"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Motors in the hub twist each blade, called pitching. In light wind they angle the blades to catch more, and in a storm they turn them edge-on so the rotor cannot overspeed.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How do turbine blades catch the wind?"
+            },
+            {
+              "id": "pitch",
+              "kind": "motor",
+              "x": 0.27,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Pitch motors",
+              "ask": "What does blade pitch do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.32,
+              "y": 0.5,
+              "label": "Slow main shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gearbox",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a wind turbine need a gearbox?"
+            },
+            {
+              "id": "fast",
+              "kind": "axle",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Fast shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.84,
+              "y": 0.5,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "sensor",
+              "kind": "box",
+              "x": 0.84,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Wind sensors"
+            },
+            {
+              "id": "yaw",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 0.8,
+              "label": "Yaw motors",
+              "ask": "How does a turbine turn to face the wind?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blades",
+              "to": "main",
+              "kind": "force",
+              "label": "torque"
+            },
+            {
+              "from": "main",
+              "to": "gearbox",
+              "kind": "energy",
+              "label": "slow"
+            },
+            {
+              "from": "gearbox",
+              "to": "fast",
+              "kind": "energy",
+              "label": "fast"
+            },
+            {
+              "from": "fast",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "sensor",
+              "to": "yaw",
+              "kind": "signal",
+              "label": "direction"
+            },
+            {
+              "from": "sensor",
+              "to": "pitch",
+              "kind": "signal",
+              "label": "speed"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Sensors on the roof measure wind speed and direction. Yaw motors then turn the whole nacelle on top of the tower so the blades always face into the wind.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How do turbine blades catch the wind?"
+            },
+            {
+              "id": "pitch",
+              "kind": "motor",
+              "x": 0.27,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Pitch motors",
+              "ask": "What does blade pitch do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.32,
+              "y": 0.5,
+              "label": "Slow main shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gearbox",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a wind turbine need a gearbox?"
+            },
+            {
+              "id": "fast",
+              "kind": "axle",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Fast shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.84,
+              "y": 0.5,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "sensor",
+              "kind": "box",
+              "x": 0.84,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Wind sensors"
+            },
+            {
+              "id": "yaw",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 0.8,
+              "label": "Yaw motors",
+              "ask": "How does a turbine turn to face the wind?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blades",
+              "to": "main",
+              "kind": "force",
+              "label": "torque"
+            },
+            {
+              "from": "main",
+              "to": "gearbox",
+              "kind": "energy",
+              "label": "slow"
+            },
+            {
+              "from": "gearbox",
+              "to": "fast",
+              "kind": "energy",
+              "label": "fast"
+            },
+            {
+              "from": "fast",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "sensor",
+              "to": "yaw",
+              "kind": "signal",
+              "label": "direction"
+            },
+            {
+              "from": "sensor",
+              "to": "pitch",
+              "kind": "signal",
+              "label": "speed"
+            }
+          ],
+          "focus": 7
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do turbine blades catch the wind?",
+      "a": "The blades are shaped like aircraft wings. Wind flowing over them creates lift, which pulls each blade sideways and round, so the tips move much faster than the wind itself.",
+      "asks": [
+        "Why are wind turbine blades twisted?"
+      ]
+    },
+    {
+      "q": "What does blade pitch do?",
+      "a": "Pitch is the angle of a blade to the wind. Motors adjust it to get the most power in gentle wind, keep the power steady in strong wind, and turn the blades edge-on to stop the rotor in a storm.",
+      "asks": [
+        "What happens to a wind turbine in a storm?"
+      ]
+    },
+    {
+      "q": "Why does a wind turbine need a gearbox?",
+      "a": "The rotor turns slowly, but a standard generator needs to spin fast to make electricity at the right frequency. The gearbox raises the speed about 100 times, like riding a bike in its highest gear.",
+      "asks": [
+        "Do all wind turbines have gearboxes?"
+      ]
+    },
+    {
+      "q": "How does a turbine turn to face the wind?",
+      "a": "A wind vane on the nacelle senses the wind direction, and a computer drives yaw motors that rotate the nacelle on a big toothed ring at the top of the tower.",
+      "asks": [
+        "What is yaw on a wind turbine?"
+      ]
+    },
+    {
+      "q": "What is a direct-drive wind turbine?",
+      "a": "It has no gearbox: the rotor turns a very large, slow generator with many magnets around its rim. Fewer moving parts mean less to break, which matters for turbines far out at sea.",
+      "asks": [
+        "What is a gearless wind turbine?"
+      ]
+    }
+  ],
+  "facts": [
+    "Many large wind turbines turn roughly 10 to 20 times a minute, with a gearbox raising the speed for the generator.",
+    "Direct-drive wind turbines use large permanent-magnet generators and have no gearbox."
+  ],
+  "quiz": [
+    {
+      "say": "What do the yaw motors in a wind turbine do?",
+      "show": "Yaw motors…",
+      "options": [
+        {
+          "show": "Turn the nacelle to face the wind",
+          "say": "Turn the nacelle to face the wind"
+        },
+        {
+          "show": "Speed up the shaft for the generator",
+          "say": "Speed up the shaft for the generator"
+        },
+        {
+          "show": "Twist each blade's angle",
+          "say": "Twist each blade's angle"
+        }
+      ],
+      "answer": 0,
+      "why": "Yaw motors rotate the whole nacelle on top of the tower so the rotor points into the wind.",
+      "wrong": {
+        "1": "Speeding up the shaft is the gearbox's job.",
+        "2": "Twisting the blades is the pitch system's job."
+      }
+    }
+  ]
+}

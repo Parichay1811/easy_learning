@@ -1,0 +1,413 @@
+{
+  "id": "BEE-DIG-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Logic gates and truth tables: AND, OR, XOR and the universal NAND",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "logic gate",
+    "truth table",
+    "AND gate",
+    "XOR gate",
+    "NAND universal gate"
+  ],
+  "examples": [
+    "What is the truth table of an XOR gate?",
+    "Why is NAND called a universal gate?",
+    "How do switches make an AND gate?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Supply",
+          "value": "5 V"
+        },
+        {
+          "kind": "switch",
+          "label": "Input A",
+          "value": "A = 1",
+          "ask": "How do switches make an AND gate?"
+        },
+        {
+          "kind": "switch",
+          "label": "Input B",
+          "value": "B = 1",
+          "open": false,
+          "ask": "How do switches make an AND gate?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Resistor",
+          "value": "330 Ω"
+        },
+        {
+          "kind": "led",
+          "label": "Output Y",
+          "value": "Y = 1",
+          "note": "Lights only when A and B are both closed",
+          "ask": "What is a truth table?"
+        }
+      ],
+      "readouts": [
+        "A = 1, B = 1 → Y = 1",
+        "I = (5 − 2)/330 ≈ 9 mA"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every app on your phone ends up as billions of tiny switches deciding yes or no. Here is the simplest decision, built from real parts: two switches in series with an LED. The LED is the output Y, and it lights only when switch A and switch B are both closed. That is an AND gate. Watch the dots flow round the loop.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Logic gates and truth tables: AND, OR, XOR and the universal NAND"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "5 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Input A",
+              "value": "A = 1",
+              "ask": "How do switches make an AND gate?"
+            },
+            {
+              "kind": "switch",
+              "label": "Input B",
+              "value": "B = 1",
+              "open": false,
+              "ask": "How do switches make an AND gate?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "330 Ω"
+            },
+            {
+              "kind": "led",
+              "label": "Output Y",
+              "value": "Y = 1",
+              "note": "Lights only when A and B are both closed",
+              "ask": "What is a truth table?"
+            }
+          ],
+          "readouts": [
+            "A = 1, B = 1 → Y = 1",
+            "I = (5 − 2)/330 ≈ 9 mA"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a circuit board. Logic gates live inside chips like the black IC in the middle, joined by copper traces. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Logic gates and truth tables: AND, OR, XOR and the universal NAND"
+        },
+        {
+          "op": "image",
+          "render": "circuit-board"
+        }
+      ]
+    },
+    {
+      "say": "Now open switch B. See the dots stop and the LED go dark? Call closed 1 and open 0, and you get the AND truth table: Y is 1 only when A is 1 and B is 1. A truth table is just a list of every input combination and its output, and two inputs give 4 rows. How many rows would three inputs give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "5 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Input A",
+              "value": "A = 1",
+              "ask": "How do switches make an AND gate?"
+            },
+            {
+              "kind": "switch",
+              "label": "Input B",
+              "value": "B = 0",
+              "open": true,
+              "ask": "How do switches make an AND gate?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "330 Ω"
+            },
+            {
+              "kind": "led",
+              "label": "Output Y",
+              "value": "Y = 0",
+              "note": "Lights only when A and B are both closed",
+              "ask": "What is a truth table?"
+            }
+          ],
+          "readouts": [
+            "A = 1, B = 0 → Y = 0",
+            "I = 0"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "AND: Y = A · B"
+        }
+      ]
+    },
+    {
+      "say": "Now put the switches side by side, in parallel. Switch B is still open, yet the LED shines, because current can go through A. That is an OR gate: Y is 1 if A or B, or both, are 1. In a real chip, transistors play the part of these switches, and in logic the plus sign means OR. What happens if you open A too?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "5 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Input A",
+              "value": "A = 1",
+              "branch": 1,
+              "ask": "What is the difference between OR and XOR?"
+            },
+            {
+              "kind": "switch",
+              "label": "Input B",
+              "value": "B = 0",
+              "open": true,
+              "branch": 2,
+              "ask": "What is the difference between OR and XOR?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "330 Ω"
+            },
+            {
+              "kind": "led",
+              "label": "Output Y",
+              "value": "Y = 1",
+              "note": "Lights when A or B is closed"
+            }
+          ],
+          "readouts": [
+            "A = 1, B = 0 → Y = 1",
+            "I ≈ 9 mA through A"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "OR: Y = A + B"
+        }
+      ]
+    },
+    {
+      "say": "Here is a gate with a twist, exclusive OR, or XOR. Look at the two groups: Y is 1 only when the inputs are different. So XOR asks one question, are A and B different? It is the heart of binary adding, because one plus one gives a sum bit of 0. Which group holds A equals 1, B equals 1?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "XOR: when is the output Y = 1?",
+          "groups": [
+            {
+              "label": "Y = 1",
+              "icon": "bulb",
+              "items": [
+                "A=0, B=1",
+                "A=1, B=0"
+              ],
+              "ask": "What is the truth table of an XOR gate?"
+            },
+            {
+              "label": "Y = 0",
+              "icon": "switch",
+              "items": [
+                "A=0, B=0",
+                "A=1, B=1"
+              ],
+              "ask": "What is the difference between OR and XOR?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "XOR: Y = A ⊕ B = A'B + AB'"
+        }
+      ]
+    },
+    {
+      "say": "Last, NAND, which means NOT AND. Follow the chain: tie its inputs together and you get NOT, add another and you get AND, and three make OR. So any circuit at all can be built from NAND gates alone, which is why it is called universal. Brilliant work! Challenge: which gate gives 1 only when both inputs are 0?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "NAND gate",
+              "icon": "chip",
+              "note": "Y = NOT (A AND B): 0 only when both are 1",
+              "ask": "Why is NAND called a universal gate?"
+            },
+            {
+              "label": "NOT from NAND",
+              "icon": "switch",
+              "note": "Tie both inputs together: Y = NOT A"
+            },
+            {
+              "label": "AND from 2 NANDs",
+              "icon": "puzzle",
+              "note": "A NAND, then a NAND wired as NOT"
+            },
+            {
+              "label": "OR from 3 NANDs",
+              "icon": "puzzle",
+              "note": "Invert A and B first, then NAND them"
+            },
+            {
+              "label": "Any logic circuit",
+              "icon": "computer",
+              "note": "So a whole chip can be built from NAND"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "NOT A = A NAND A"
+        },
+        {
+          "op": "note",
+          "text": "A CMOS NAND gate needs just four transistors"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do switches make an AND gate?",
+      "a": "Put two switches in series with a lamp. Current can only flow if both are closed, so the lamp, the output, is on only when A and B are both 1. In chips, transistors act as the switches.",
+      "asks": [
+        "How is an AND gate made from switches?"
+      ]
+    },
+    {
+      "q": "What is a truth table?",
+      "a": "A truth table lists every possible combination of inputs and the output for each one. Two inputs give 4 rows, three give 8, and n inputs give 2 to the power n rows.",
+      "asks": [
+        "How many rows does a truth table have?"
+      ]
+    },
+    {
+      "q": "What is the truth table of an XOR gate?",
+      "a": "XOR gives 1 when its inputs are different and 0 when they are the same: 0 0 gives 0, 0 1 gives 1, 1 0 gives 1 and 1 1 gives 0.",
+      "asks": [
+        "When is the XOR output 1?"
+      ]
+    },
+    {
+      "q": "Why is NAND called a universal gate?",
+      "a": "Because every other gate can be made from NAND gates alone. Tying the inputs together gives NOT, NAND followed by NOT gives AND, and NOT on both inputs followed by NAND gives OR.",
+      "asks": [
+        "Can you build any circuit from NAND gates?"
+      ]
+    },
+    {
+      "q": "What is the difference between OR and XOR?",
+      "a": "OR gives 1 when at least one input is 1, including when both are. XOR gives 1 only when exactly one input is 1, so for 1 and 1, OR gives 1 but XOR gives 0.",
+      "asks": [
+        "Is XOR the same as OR?"
+      ]
+    }
+  ],
+  "facts": [
+    "The 7400 chip, introduced by Texas Instruments in the 1960s, holds four 2-input NAND gates.",
+    "A CMOS NAND gate uses four transistors.",
+    "The Apollo Guidance Computer's logic was built almost entirely from NOR gates."
+  ],
+  "quiz": [
+    {
+      "say": "Switch A is closed and switch B is open, in series with an LED. What is Y?",
+      "show": "Switch A is closed and switch B is open, in series with an LED. What is Y?",
+      "options": [
+        {
+          "show": "0, the LED is off",
+          "say": "0, the LED is off"
+        },
+        {
+          "show": "1, the LED is on",
+          "say": "1, the LED is on"
+        },
+        {
+          "show": "It depends on the resistor",
+          "say": "It depends on the resistor"
+        }
+      ],
+      "answer": 0,
+      "why": "In series both switches must be closed for current to flow. That is AND, and 1 AND 0 is 0.",
+      "wrong": {
+        "1": "That would be true if the switches were in parallel, which is an OR gate.",
+        "2": "The resistor only sets how much current flows when the loop is complete; an open switch stops all of it."
+      }
+    },
+    {
+      "say": "With 5 volts, a 2 volt LED and a 330 ohm resistor, about how much current flows when the LED is on?",
+      "show": "With 5 V, a 2 V LED and a 330 Ω resistor, about how much current flows when the LED is on?",
+      "options": [
+        {
+          "show": "9 mA",
+          "say": "about 9 milliamps"
+        },
+        {
+          "show": "15 mA",
+          "say": "about 15 milliamps"
+        },
+        {
+          "show": "6 mA",
+          "say": "about 6 milliamps"
+        }
+      ],
+      "answer": 0,
+      "why": "The resistor gets 5 minus 2, which is 3 volts. I equals V over R, 3 over 330, about 9 milliamps.",
+      "wrong": {
+        "1": "That is 5 volts over 330 ohms; it forgets the 2 volts the LED takes.",
+        "2": "That is 2 volts over 330 ohms; the resistor's voltage is 3 volts, not 2."
+      }
+    }
+  ]
+}

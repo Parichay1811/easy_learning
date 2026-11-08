@@ -1,0 +1,377 @@
+{
+  "id": "BCE-CONC-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Prestressed concrete: squeezing a beam before the load arrives",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONC — Concrete and steel design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "prestressed concrete",
+    "pre-tensioning",
+    "post-tensioning",
+    "tendon eccentricity",
+    "prestress losses"
+  ],
+  "examples": [
+    "How does prestressed concrete work?",
+    "What is the difference between pre-tensioning and post-tensioning?",
+    "Why is prestressed concrete used for long spans?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 20,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "Why does prestressed concrete not crack?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 10,
+          "label": "10 kN/m",
+          "ask": "Why does prestressed concrete not crack?"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Lift a row of books by pressing hard on the two end books, and the whole row rises as one. That squeeze is the idea behind prestressed concrete: engineers pre-squeeze a beam with stretched steel tendons so it never goes into tension. Here a twenty metre bridge girder carries ten kilonewtons per metre.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Prestressed concrete: squeezing a beam before the load arrives"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 20,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why does prestressed concrete not crack?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does prestressed concrete not crack?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The load causes a peak moment of five hundred kilonewton metres. For a girder four hundred millimetres wide and one metre deep, the section modulus is about zero point zero six seven cubic metres, so the bottom would be pulled at seven and a half megapascals. Plain concrete cracks at just a few. What could cancel that pull?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 20,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why does prestressed concrete not crack?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does prestressed concrete not crack?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "σ = M/Z = 500 / 0.0667 ≈ 7 500 kPa = 7.5 MPa"
+        },
+        {
+          "op": "note",
+          "text": "Z = bh²/6 = 0.4 × 1² / 6 ≈ 0.0667 m³"
+        }
+      ]
+    },
+    {
+      "say": "A squeeze from inside! In pre-tensioning, a hydraulic jack stretches steel tendons between anchor blocks, concrete is cast around them, and once it hardens the tendons are cut loose. They try to spring back, gripping and squeezing the concrete. In post-tensioning, used on many metro viaducts, tendons run in ducts and are stretched after casting.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "a",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Anchor block"
+            },
+            {
+              "id": "t",
+              "kind": "spring",
+              "x": 0.36,
+              "y": 0.5,
+              "label": "Steel tendon",
+              "ask": "What is the difference between pre-tensioning and post-tensioning?"
+            },
+            {
+              "id": "b",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Concrete beam",
+              "ask": "Why does prestressed concrete not crack?"
+            },
+            {
+              "id": "j",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.5,
+              "label": "Hydraulic jack",
+              "motion": "slide",
+              "ask": "What is the difference between pre-tensioning and post-tensioning?"
+            }
+          ],
+          "links": [
+            {
+              "from": "j",
+              "to": "t",
+              "kind": "force",
+              "label": "Stretch"
+            },
+            {
+              "from": "t",
+              "to": "b",
+              "kind": "force",
+              "label": "Squeeze"
+            },
+            {
+              "from": "a",
+              "to": "t",
+              "kind": "force"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Now the numbers. A tendon force of three thousand kilonewtons, placed three hundred millimetres below the centre, squeezes the bottom by seven and a half megapascals evenly plus thirteen and a half from being off-centre. The load's pull of seven and a half only cancels part of that. Top and bottom both stay in compression, so no cracks!",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 20,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why does prestressed concrete not crack?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does prestressed concrete not crack?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "σ_bot = P/A + Pe/Z − M/Z = 7.5 + 13.5 − 7.5 = 13.5 MPa"
+        },
+        {
+          "op": "note",
+          "text": "Top: 7.5 − 13.5 + 7.5 = 1.5 MPa, still squeezed. (A = 0.4 m², e = 0.3 m)"
+        }
+      ]
+    },
+    {
+      "say": "That is why prestressing wins for long spans: slimmer girders, no cracks, less sag, even a slight upward camber before loading. Bridges, metro viaducts and hollow-core floor planks all use it. Superb! Exam tip: also check the stresses at transfer, when the prestress acts with almost no load on the beam.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Reinforced concrete",
+            "icon": "house",
+            "points": [
+              "Cracks in the tension zone",
+              "Economical for short spans",
+              "Steel is passive"
+            ]
+          },
+          "right": {
+            "title": "Prestressed concrete",
+            "icon": "bridge",
+            "ask": "What is prestressed concrete?",
+            "points": [
+              "Stays crack-free in service",
+              "Long, slim girders",
+              "High-strength tendons",
+              "Upward camber at transfer"
+            ]
+          },
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is prestressed concrete?",
+      "a": "Concrete that is squeezed by stretched high-strength steel tendons before it carries load. The built-in compression cancels the tension the loads would cause, so the concrete does not crack.",
+      "asks": [
+        "How does prestressing work?",
+        "Define prestressed concrete"
+      ]
+    },
+    {
+      "q": "What is the difference between pre-tensioning and post-tensioning?",
+      "a": "In pre-tensioning the tendons are stretched before the concrete is cast and released once it hardens, common in factory-made planks and girders. In post-tensioning the tendons sit in ducts and are stretched and anchored after the concrete has hardened, common on site.",
+      "asks": [
+        "Pre-tensioned vs post-tensioned"
+      ]
+    },
+    {
+      "q": "Why does prestressed concrete not crack?",
+      "a": "The prestress puts the whole section in compression first. Under service loads the bending tension only reduces that squeeze, so the concrete never goes into significant tension.",
+      "asks": [
+        "How does prestress prevent cracks?"
+      ]
+    },
+    {
+      "q": "Why are tendons placed below the centre of the beam?",
+      "a": "An off-centre force squeezes the bottom more than the top, exactly where the loads will cause tension. Here the eccentricity adds 13.5 megapascals of compression at the bottom.",
+      "asks": [
+        "What is tendon eccentricity?"
+      ]
+    },
+    {
+      "q": "What are prestress losses?",
+      "a": "Part of the tendon force is lost over time through elastic shortening, creep and shrinkage of the concrete, steel relaxation, friction and anchor slip. Designers often allow for losses of around 15 to 25 percent.",
+      "asks": [
+        "Why does prestress force drop?"
+      ]
+    }
+  ],
+  "facts": [
+    "Eugène Freyssinet patented prestressed concrete in France in 1928.",
+    "Prestressing strand typically has a tensile strength of about 1860 MPa, more than three times the yield strength of ordinary rebar."
+  ],
+  "quiz": [
+    {
+      "say": "A prestress of 2000 kilonewtons acts on a section of area 0.5 square metres. What is the average squeeze, P over A?",
+      "show": "A prestress of P = 2000 kN acts on a section of area 0.5 m². Average squeeze P/A?",
+      "options": [
+        {
+          "show": "4 MPa",
+          "say": "4 megapascals"
+        },
+        {
+          "show": "1 MPa",
+          "say": "1 megapascal"
+        },
+        {
+          "show": "40 MPa",
+          "say": "40 megapascals"
+        }
+      ],
+      "answer": 0,
+      "why": "2000 ÷ 0.5 = 4000 kilonewtons per square metre, which is 4 megapascals.",
+      "wrong": {
+        "1": "That multiplies by the area instead of dividing.",
+        "2": "That slips a factor of ten in the units."
+      }
+    },
+    {
+      "say": "Why are tendons usually below the centre of a simply supported girder?",
+      "show": "Why are tendons usually below the centre of a simply supported girder?",
+      "options": [
+        {
+          "show": "To squeeze the bottom, where load causes tension",
+          "say": "To squeeze the bottom, where load causes tension"
+        },
+        {
+          "show": "To make the top flange stronger",
+          "say": "To make the top flange stronger"
+        },
+        {
+          "show": "To protect them from fire",
+          "say": "To protect them from fire"
+        }
+      ],
+      "answer": 0,
+      "why": "The off-centre force puts extra compression exactly where bending would pull.",
+      "wrong": {
+        "1": "An eccentric tendon actually reduces the squeeze at the top.",
+        "2": "Cover protects from fire; the position is chosen for bending."
+      }
+    }
+  ]
+}

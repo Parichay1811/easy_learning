@@ -1,0 +1,694 @@
+{
+  "id": "GK-LIFE-36",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "What happens when you tap a bank card to pay",
+  "area": "General Knowledge",
+  "group": "GK-LIFE — Everyday Knowledge",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "contactless payment",
+    "card network",
+    "bank card",
+    "NFC",
+    "payment approval"
+  ],
+  "examples": [
+    "How does contactless payment work?",
+    "What happens when I tap my card?",
+    "What do Visa and Mastercard do?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "card",
+          "label": "Your card or phone",
+          "icon": "phone",
+          "x": 0.08,
+          "y": 0.5,
+          "ask": "How does a contactless card talk to the reader?"
+        },
+        {
+          "id": "reader",
+          "label": "Card reader",
+          "icon": "antenna",
+          "x": 0.3,
+          "y": 0.5
+        },
+        {
+          "id": "acq",
+          "label": "Shop's bank",
+          "icon": "coin",
+          "x": 0.5,
+          "y": 0.15,
+          "ask": "Does the money move straight away?"
+        },
+        {
+          "id": "net",
+          "label": "Card network",
+          "icon": "globe",
+          "x": 0.72,
+          "y": 0.5,
+          "ask": "What is a card network?"
+        },
+        {
+          "id": "bank",
+          "label": "Your bank",
+          "icon": "computer",
+          "x": 0.9,
+          "y": 0.15,
+          "ask": "How does my bank decide to approve a payment?"
+        },
+        {
+          "id": "ok",
+          "label": "Approved!",
+          "icon": "smile",
+          "x": 0.55,
+          "y": 0.88
+        }
+      ],
+      "links": [
+        {
+          "from": "card",
+          "to": "reader",
+          "kind": "data",
+          "label": "radio signal"
+        },
+        {
+          "from": "reader",
+          "to": "acq",
+          "kind": "data",
+          "label": "request"
+        },
+        {
+          "from": "acq",
+          "to": "net",
+          "kind": "data"
+        },
+        {
+          "from": "net",
+          "to": "bank",
+          "kind": "data",
+          "label": "enough money?"
+        },
+        {
+          "from": "bank",
+          "to": "ok",
+          "kind": "data",
+          "label": "yes"
+        },
+        {
+          "from": "ok",
+          "to": "reader",
+          "kind": "signal",
+          "label": "beep"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Tap, beep, done! Paying with a card or phone takes about two seconds. But in those two seconds a message zooms out and back again. Look at the board. Inside your card is a tiny chip and an antenna, a thin coil of wire.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "What happens when you tap a bank card to pay"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "card",
+              "label": "Your card or phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "How does a contactless card talk to the reader?"
+            },
+            {
+              "id": "reader",
+              "label": "Card reader",
+              "icon": "antenna",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "acq",
+              "label": "Shop's bank",
+              "icon": "coin",
+              "x": 0.5,
+              "y": 0.15,
+              "ask": "Does the money move straight away?"
+            },
+            {
+              "id": "net",
+              "label": "Card network",
+              "icon": "globe",
+              "x": 0.72,
+              "y": 0.5,
+              "ask": "What is a card network?"
+            },
+            {
+              "id": "bank",
+              "label": "Your bank",
+              "icon": "computer",
+              "x": 0.9,
+              "y": 0.15,
+              "ask": "How does my bank decide to approve a payment?"
+            },
+            {
+              "id": "ok",
+              "label": "Approved!",
+              "icon": "smile",
+              "x": 0.55,
+              "y": 0.88
+            }
+          ],
+          "links": [
+            {
+              "from": "card",
+              "to": "reader",
+              "kind": "data",
+              "label": "radio signal"
+            },
+            {
+              "from": "reader",
+              "to": "acq",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "acq",
+              "to": "net",
+              "kind": "data"
+            },
+            {
+              "from": "net",
+              "to": "bank",
+              "kind": "data",
+              "label": "enough money?"
+            },
+            {
+              "from": "bank",
+              "to": "ok",
+              "kind": "data",
+              "label": "yes"
+            },
+            {
+              "from": "ok",
+              "to": "reader",
+              "kind": "signal",
+              "label": "beep"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "See the card reader? It sends out a weak radio field. When your card comes within about 4 centimetres, the field powers the chip, with no battery needed, and the chip sends back a secret, one-time code. Why do you think the card must be so close?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "card",
+              "label": "Your card or phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "How does a contactless card talk to the reader?"
+            },
+            {
+              "id": "reader",
+              "label": "Card reader",
+              "icon": "antenna",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "acq",
+              "label": "Shop's bank",
+              "icon": "coin",
+              "x": 0.5,
+              "y": 0.15,
+              "ask": "Does the money move straight away?"
+            },
+            {
+              "id": "net",
+              "label": "Card network",
+              "icon": "globe",
+              "x": 0.72,
+              "y": 0.5,
+              "ask": "What is a card network?"
+            },
+            {
+              "id": "bank",
+              "label": "Your bank",
+              "icon": "computer",
+              "x": 0.9,
+              "y": 0.15,
+              "ask": "How does my bank decide to approve a payment?"
+            },
+            {
+              "id": "ok",
+              "label": "Approved!",
+              "icon": "smile",
+              "x": 0.55,
+              "y": 0.88
+            }
+          ],
+          "links": [
+            {
+              "from": "card",
+              "to": "reader",
+              "kind": "data",
+              "label": "radio signal"
+            },
+            {
+              "from": "reader",
+              "to": "acq",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "acq",
+              "to": "net",
+              "kind": "data"
+            },
+            {
+              "from": "net",
+              "to": "bank",
+              "kind": "data",
+              "label": "enough money?"
+            },
+            {
+              "from": "bank",
+              "to": "ok",
+              "kind": "data",
+              "label": "yes"
+            },
+            {
+              "from": "ok",
+              "to": "reader",
+              "kind": "signal",
+              "label": "beep"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Now follow the lines. The request goes to the shop's bank, then to a card network, like Visa, Mastercard, or RuPay in India, which knows which bank gave you the card. See the globe? It passes the message on to your bank.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "card",
+              "label": "Your card or phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "How does a contactless card talk to the reader?"
+            },
+            {
+              "id": "reader",
+              "label": "Card reader",
+              "icon": "antenna",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "acq",
+              "label": "Shop's bank",
+              "icon": "coin",
+              "x": 0.5,
+              "y": 0.15,
+              "ask": "Does the money move straight away?"
+            },
+            {
+              "id": "net",
+              "label": "Card network",
+              "icon": "globe",
+              "x": 0.72,
+              "y": 0.5,
+              "ask": "What is a card network?"
+            },
+            {
+              "id": "bank",
+              "label": "Your bank",
+              "icon": "computer",
+              "x": 0.9,
+              "y": 0.15,
+              "ask": "How does my bank decide to approve a payment?"
+            },
+            {
+              "id": "ok",
+              "label": "Approved!",
+              "icon": "smile",
+              "x": 0.55,
+              "y": 0.88
+            }
+          ],
+          "links": [
+            {
+              "from": "card",
+              "to": "reader",
+              "kind": "data",
+              "label": "radio signal"
+            },
+            {
+              "from": "reader",
+              "to": "acq",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "acq",
+              "to": "net",
+              "kind": "data"
+            },
+            {
+              "from": "net",
+              "to": "bank",
+              "kind": "data",
+              "label": "enough money?"
+            },
+            {
+              "from": "bank",
+              "to": "ok",
+              "kind": "data",
+              "label": "yes"
+            },
+            {
+              "from": "ok",
+              "to": "reader",
+              "kind": "signal",
+              "label": "beep"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Look at your bank. In a split second, its computer checks: is the card real, is there enough money, and does this look like a normal purchase for you? If yes, it sends back approved. Beep! Can you count how many places the message visited?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "card",
+              "label": "Your card or phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "How does a contactless card talk to the reader?"
+            },
+            {
+              "id": "reader",
+              "label": "Card reader",
+              "icon": "antenna",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "acq",
+              "label": "Shop's bank",
+              "icon": "coin",
+              "x": 0.5,
+              "y": 0.15,
+              "ask": "Does the money move straight away?"
+            },
+            {
+              "id": "net",
+              "label": "Card network",
+              "icon": "globe",
+              "x": 0.72,
+              "y": 0.5,
+              "ask": "What is a card network?"
+            },
+            {
+              "id": "bank",
+              "label": "Your bank",
+              "icon": "computer",
+              "x": 0.9,
+              "y": 0.15,
+              "ask": "How does my bank decide to approve a payment?"
+            },
+            {
+              "id": "ok",
+              "label": "Approved!",
+              "icon": "smile",
+              "x": 0.55,
+              "y": 0.88
+            }
+          ],
+          "links": [
+            {
+              "from": "card",
+              "to": "reader",
+              "kind": "data",
+              "label": "radio signal"
+            },
+            {
+              "from": "reader",
+              "to": "acq",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "acq",
+              "to": "net",
+              "kind": "data"
+            },
+            {
+              "from": "net",
+              "to": "bank",
+              "kind": "data",
+              "label": "enough money?"
+            },
+            {
+              "from": "bank",
+              "to": "ok",
+              "kind": "data",
+              "label": "yes"
+            },
+            {
+              "from": "ok",
+              "to": "reader",
+              "kind": "signal",
+              "label": "beep"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Well done! Here's a twist: the money doesn't actually move during the beep. The banks settle up later, usually within a day or two. Wow: the secret code changes on every tap, so even if someone copied it, they couldn't use it again!",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "card",
+              "label": "Your card or phone",
+              "icon": "phone",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "How does a contactless card talk to the reader?"
+            },
+            {
+              "id": "reader",
+              "label": "Card reader",
+              "icon": "antenna",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "acq",
+              "label": "Shop's bank",
+              "icon": "coin",
+              "x": 0.5,
+              "y": 0.15,
+              "ask": "Does the money move straight away?"
+            },
+            {
+              "id": "net",
+              "label": "Card network",
+              "icon": "globe",
+              "x": 0.72,
+              "y": 0.5,
+              "ask": "What is a card network?"
+            },
+            {
+              "id": "bank",
+              "label": "Your bank",
+              "icon": "computer",
+              "x": 0.9,
+              "y": 0.15,
+              "ask": "How does my bank decide to approve a payment?"
+            },
+            {
+              "id": "ok",
+              "label": "Approved!",
+              "icon": "smile",
+              "x": 0.55,
+              "y": 0.88
+            }
+          ],
+          "links": [
+            {
+              "from": "card",
+              "to": "reader",
+              "kind": "data",
+              "label": "radio signal"
+            },
+            {
+              "from": "reader",
+              "to": "acq",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "acq",
+              "to": "net",
+              "kind": "data"
+            },
+            {
+              "from": "net",
+              "to": "bank",
+              "kind": "data",
+              "label": "enough money?"
+            },
+            {
+              "from": "bank",
+              "to": "ok",
+              "kind": "data",
+              "label": "yes"
+            },
+            {
+              "from": "ok",
+              "to": "reader",
+              "kind": "signal",
+              "label": "beep"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a contactless card talk to the reader?",
+      "a": "The reader makes a weak radio field. Within a few centimetres, the field powers the card's chip through a tiny wire antenna, and the chip sends back payment details and a one-time code.",
+      "asks": [
+        "How does contactless work?"
+      ]
+    },
+    {
+      "q": "What is a card network?",
+      "a": "A company, like Visa, Mastercard, UnionPay or RuPay, that passes payment messages between the shop's bank and your bank and sets the rules for card payments.",
+      "asks": [
+        "What do Visa and Mastercard do?"
+      ]
+    },
+    {
+      "q": "How does my bank decide to approve a payment?",
+      "a": "Its computers check that the card and code are real, that there is enough money or credit, and that the purchase doesn't look like fraud. This takes under a second.",
+      "asks": [
+        "Why was my card declined?"
+      ]
+    },
+    {
+      "q": "Does the money move straight away?",
+      "a": "Not quite. The approval sets the money aside, and the banks settle the actual transfer later, usually within a day or two.",
+      "asks": [
+        "When does the shop get the money?"
+      ]
+    },
+    {
+      "q": "Why does contactless need a PIN sometimes?",
+      "a": "For safety, larger payments, or several taps in a row, may ask for your PIN to prove it's really you.",
+      "asks": [
+        "Why did the card machine ask for my PIN?"
+      ]
+    }
+  ],
+  "facts": [
+    "Contactless payments use near-field communication, which works only over a few centimetres.",
+    "RuPay is India's domestic card network, launched by the National Payments Corporation of India."
+  ],
+  "quiz": [
+    {
+      "say": "What powers the chip in a contactless card?",
+      "show": "What powers the chip in a contactless card?",
+      "options": [
+        {
+          "show": "The reader's radio field",
+          "say": "The reader's radio field"
+        },
+        {
+          "show": "A tiny battery",
+          "say": "A tiny battery"
+        },
+        {
+          "show": "Sunlight",
+          "say": "Sunlight"
+        }
+      ],
+      "answer": 0,
+      "why": "The reader's field gives the chip just enough energy to reply.",
+      "wrong": {
+        "1": "Contactless cards have no battery.",
+        "2": "Cards work in dark pockets and shops, so not sunlight."
+      }
+    },
+    {
+      "say": "Who checks whether you have enough money?",
+      "show": "Who checks whether you have enough money?",
+      "options": [
+        {
+          "show": "Your bank",
+          "say": "Your bank"
+        },
+        {
+          "show": "The shop assistant",
+          "say": "The shop assistant"
+        },
+        {
+          "show": "The card reader by itself",
+          "say": "The card reader by itself"
+        }
+      ],
+      "answer": 0,
+      "why": "Your bank holds your account, so it approves or declines.",
+      "wrong": {
+        "1": "The shop assistant can't see your bank account.",
+        "2": "The reader only passes the message on."
+      }
+    }
+  ]
+}

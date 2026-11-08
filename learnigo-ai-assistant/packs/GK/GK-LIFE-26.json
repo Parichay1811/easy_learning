@@ -1,0 +1,736 @@
+{
+  "id": "GK-LIFE-26",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "How herd immunity protects people who can't have vaccines",
+  "area": "General Knowledge",
+  "group": "GK-LIFE — Everyday Knowledge",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "herd immunity",
+    "community immunity",
+    "vaccination",
+    "measles",
+    "spread of germs"
+  ],
+  "examples": [
+    "What is herd immunity?",
+    "How do vaccines protect babies?",
+    "How many people need to be immune for herd immunity?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "sick",
+          "label": "Sick person",
+          "icon": "germ",
+          "x": 0.12,
+          "y": 0.5,
+          "ask": "How does a germ spread from person to person?"
+        },
+        {
+          "id": "v1",
+          "label": "Vaccinated friend",
+          "icon": "person",
+          "x": 0.4,
+          "y": 0.18,
+          "ask": "How do vaccines protect a person?"
+        },
+        {
+          "id": "v2",
+          "label": "Vaccinated teacher",
+          "icon": "person",
+          "x": 0.4,
+          "y": 0.82
+        },
+        {
+          "id": "v3",
+          "label": "Vaccinated parent",
+          "icon": "family",
+          "x": 0.6,
+          "y": 0.5,
+          "ask": "What is herd immunity?"
+        },
+        {
+          "id": "baby",
+          "label": "Newborn baby",
+          "icon": "baby",
+          "x": 0.88,
+          "y": 0.25,
+          "ask": "Who can't have some vaccines?"
+        },
+        {
+          "id": "gran",
+          "label": "Weak immune system",
+          "icon": "person",
+          "x": 0.88,
+          "y": 0.75
+        }
+      ],
+      "links": [
+        {
+          "from": "sick",
+          "to": "v1",
+          "kind": "signal",
+          "label": "germ blocked"
+        },
+        {
+          "from": "sick",
+          "to": "v2",
+          "kind": "signal",
+          "label": "germ blocked"
+        },
+        {
+          "from": "sick",
+          "to": "v3",
+          "kind": "signal",
+          "label": "germ blocked"
+        },
+        {
+          "from": "v1",
+          "to": "baby",
+          "kind": "force",
+          "label": "shield"
+        },
+        {
+          "from": "v3",
+          "to": "baby",
+          "kind": "force",
+          "label": "shield"
+        },
+        {
+          "from": "v3",
+          "to": "gran",
+          "kind": "force",
+          "label": "shield"
+        },
+        {
+          "from": "v2",
+          "to": "gran",
+          "kind": "force",
+          "label": "shield"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Imagine a germ trying to travel through your school, jumping from person to person like a ball being passed. Look at the network on the board. The sick person on the left has a germ that spreads when they cough, sneeze or touch things.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How herd immunity protects people who can't have vaccines"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sick",
+              "label": "Sick person",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "How does a germ spread from person to person?"
+            },
+            {
+              "id": "v1",
+              "label": "Vaccinated friend",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.18,
+              "ask": "How do vaccines protect a person?"
+            },
+            {
+              "id": "v2",
+              "label": "Vaccinated teacher",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.82
+            },
+            {
+              "id": "v3",
+              "label": "Vaccinated parent",
+              "icon": "family",
+              "x": 0.6,
+              "y": 0.5,
+              "ask": "What is herd immunity?"
+            },
+            {
+              "id": "baby",
+              "label": "Newborn baby",
+              "icon": "baby",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "Who can't have some vaccines?"
+            },
+            {
+              "id": "gran",
+              "label": "Weak immune system",
+              "icon": "person",
+              "x": 0.88,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sick",
+              "to": "v1",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v2",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v3",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "v1",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v2",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "See the vaccinated friend? A vaccine has already trained their body to fight this germ, so when it arrives, it gets stopped. The germ's path is blocked! Can you spot the other blocked paths?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sick",
+              "label": "Sick person",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "How does a germ spread from person to person?"
+            },
+            {
+              "id": "v1",
+              "label": "Vaccinated friend",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.18,
+              "ask": "How do vaccines protect a person?"
+            },
+            {
+              "id": "v2",
+              "label": "Vaccinated teacher",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.82
+            },
+            {
+              "id": "v3",
+              "label": "Vaccinated parent",
+              "icon": "family",
+              "x": 0.6,
+              "y": 0.5,
+              "ask": "What is herd immunity?"
+            },
+            {
+              "id": "baby",
+              "label": "Newborn baby",
+              "icon": "baby",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "Who can't have some vaccines?"
+            },
+            {
+              "id": "gran",
+              "label": "Weak immune system",
+              "icon": "person",
+              "x": 0.88,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sick",
+              "to": "v1",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v2",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v3",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "v1",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v2",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Now look at the newborn baby. Some people can't have certain vaccines yet: very young babies, or people whose body defences, called the immune system, are weak because of an illness or its treatment. On their own, they could catch the germ.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sick",
+              "label": "Sick person",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "How does a germ spread from person to person?"
+            },
+            {
+              "id": "v1",
+              "label": "Vaccinated friend",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.18,
+              "ask": "How do vaccines protect a person?"
+            },
+            {
+              "id": "v2",
+              "label": "Vaccinated teacher",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.82
+            },
+            {
+              "id": "v3",
+              "label": "Vaccinated parent",
+              "icon": "family",
+              "x": 0.6,
+              "y": 0.5,
+              "ask": "What is herd immunity?"
+            },
+            {
+              "id": "baby",
+              "label": "Newborn baby",
+              "icon": "baby",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "Who can't have some vaccines?"
+            },
+            {
+              "id": "gran",
+              "label": "Weak immune system",
+              "icon": "person",
+              "x": 0.88,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sick",
+              "to": "v1",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v2",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v3",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "v1",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v2",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "But see how vaccinated people stand all around them? When most people are protected, the germ can't find a path to reach the baby. This is called herd immunity, or community protection, like a wall of shields. Can you count the shields on the board?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sick",
+              "label": "Sick person",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "How does a germ spread from person to person?"
+            },
+            {
+              "id": "v1",
+              "label": "Vaccinated friend",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.18,
+              "ask": "How do vaccines protect a person?"
+            },
+            {
+              "id": "v2",
+              "label": "Vaccinated teacher",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.82
+            },
+            {
+              "id": "v3",
+              "label": "Vaccinated parent",
+              "icon": "family",
+              "x": 0.6,
+              "y": 0.5,
+              "ask": "What is herd immunity?"
+            },
+            {
+              "id": "baby",
+              "label": "Newborn baby",
+              "icon": "baby",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "Who can't have some vaccines?"
+            },
+            {
+              "id": "gran",
+              "label": "Weak immune system",
+              "icon": "person",
+              "x": 0.88,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sick",
+              "to": "v1",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v2",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v3",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "v1",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v2",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Brilliant! Here's a wow: for a very catchy germ like measles, about 95 out of every 100 people need to be protected for herd immunity to work. So each protected person helps keep others safe too. That's teamwork you can't even see!",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "sick",
+              "label": "Sick person",
+              "icon": "germ",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "How does a germ spread from person to person?"
+            },
+            {
+              "id": "v1",
+              "label": "Vaccinated friend",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.18,
+              "ask": "How do vaccines protect a person?"
+            },
+            {
+              "id": "v2",
+              "label": "Vaccinated teacher",
+              "icon": "person",
+              "x": 0.4,
+              "y": 0.82
+            },
+            {
+              "id": "v3",
+              "label": "Vaccinated parent",
+              "icon": "family",
+              "x": 0.6,
+              "y": 0.5,
+              "ask": "What is herd immunity?"
+            },
+            {
+              "id": "baby",
+              "label": "Newborn baby",
+              "icon": "baby",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "Who can't have some vaccines?"
+            },
+            {
+              "id": "gran",
+              "label": "Weak immune system",
+              "icon": "person",
+              "x": 0.88,
+              "y": 0.75
+            }
+          ],
+          "links": [
+            {
+              "from": "sick",
+              "to": "v1",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v2",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "sick",
+              "to": "v3",
+              "kind": "signal",
+              "label": "germ blocked"
+            },
+            {
+              "from": "v1",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "baby",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v3",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            },
+            {
+              "from": "v2",
+              "to": "gran",
+              "kind": "force",
+              "label": "shield"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is herd immunity?",
+      "a": "When enough people in a community are immune to a germ, it can't spread easily, so people who aren't immune are protected too. It's also called community immunity.",
+      "asks": [
+        "What does herd immunity mean?"
+      ]
+    },
+    {
+      "q": "How does a germ spread from person to person?",
+      "a": "Many germs spread in tiny droplets when people cough, sneeze or breathe, or on hands and surfaces. Each sick person can pass the germ on to others.",
+      "asks": [
+        "How do germs spread?"
+      ]
+    },
+    {
+      "q": "Who can't have some vaccines?",
+      "a": "Very young babies before they reach the age for a vaccine, and some people whose immune systems are weakened by illness or treatment. Herd immunity helps protect them.",
+      "asks": [
+        "Why can't everyone be vaccinated?"
+      ]
+    },
+    {
+      "q": "How many people need to be immune for herd immunity?",
+      "a": "It depends on how catchy the germ is. For measles, one of the catchiest, about 95 percent of people need to be immune.",
+      "asks": [
+        "What percent is needed for herd immunity?"
+      ]
+    },
+    {
+      "q": "How do vaccines protect a person?",
+      "a": "A vaccine shows the immune system a harmless piece or weakened form of a germ, so it learns to recognise it and can fight the real germ quickly later.",
+      "asks": [
+        "How does a vaccine work?"
+      ]
+    }
+  ],
+  "facts": [
+    "For measles, about 95% of a population needs to be immune for herd immunity.",
+    "Herd immunity helps protect people who cannot be vaccinated, such as very young babies."
+  ],
+  "quiz": [
+    {
+      "say": "What is herd immunity?",
+      "show": "What is herd immunity?",
+      "options": [
+        {
+          "show": "When so many people are immune that a germ can't spread easily",
+          "say": "When so many people are immune that a germ can't spread easily"
+        },
+        {
+          "show": "When only animals get vaccines",
+          "say": "When only animals get vaccines"
+        },
+        {
+          "show": "When one person never gets ill",
+          "say": "When one person never gets ill"
+        }
+      ],
+      "answer": 0,
+      "why": "With most people immune, the germ runs out of paths to spread.",
+      "wrong": {
+        "1": "Herd here means a whole group of people, not animals.",
+        "2": "It is about a whole community, not one person."
+      }
+    },
+    {
+      "say": "Who is especially helped by herd immunity?",
+      "show": "Who is especially helped by herd immunity?",
+      "options": [
+        {
+          "show": "Newborn babies too young for some vaccines",
+          "say": "Newborn babies too young for some vaccines"
+        },
+        {
+          "show": "People who are already immune",
+          "say": "People who are already immune"
+        },
+        {
+          "show": "Nobody",
+          "say": "Nobody"
+        }
+      ],
+      "answer": 0,
+      "why": "People who can't be vaccinated rely on those around them being immune.",
+      "wrong": {
+        "1": "Immune people are already protected themselves.",
+        "2": "It protects many people who can't protect themselves."
+      }
+    }
+  ]
+}

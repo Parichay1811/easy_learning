@@ -1,0 +1,507 @@
+{
+  "id": "BEE-EMAG-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Faraday's law of induction: how a changing magnetic flux makes a voltage",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-EMAG — Electromagnetics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Faraday's law",
+    "electromagnetic induction",
+    "magnetic flux",
+    "induced EMF",
+    "weber"
+  ],
+  "examples": [
+    "What is Faraday's law of induction?",
+    "Why does a moving magnet make a voltage in a coil?",
+    "How do I calculate induced EMF?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "mag",
+          "kind": "magnet",
+          "x": 0.18,
+          "y": 0.5,
+          "label": "Moving magnet",
+          "motion": "slide",
+          "ask": "Why does a still magnet induce no voltage?"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.52,
+          "y": 0.5,
+          "size": 1.3,
+          "label": "Coil, 100 turns",
+          "ask": "How can I increase the induced EMF?"
+        },
+        {
+          "id": "bulb",
+          "kind": "bulb",
+          "x": 0.86,
+          "y": 0.5,
+          "label": "Bulb"
+        }
+      ],
+      "links": [
+        {
+          "from": "mag",
+          "to": "coil",
+          "kind": "force",
+          "label": "Changing flux"
+        },
+        {
+          "from": "coil",
+          "to": "bulb",
+          "kind": "power",
+          "label": "Induced current"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "On 29 August 1831, Michael Faraday wound two coils on an iron ring and saw a meter needle flick, but only at the moment he switched a current on or off. Change is what matters. On the board, a magnet moves towards a coil of 100 turns, and a bulb lights. Nothing touches. Let's see where the voltage comes from.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Faraday's law of induction: how a changing magnetic flux makes a voltage"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mag",
+              "kind": "magnet",
+              "x": 0.18,
+              "y": 0.5,
+              "label": "Moving magnet",
+              "motion": "slide",
+              "ask": "Why does a still magnet induce no voltage?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.52,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Coil, 100 turns",
+              "ask": "How can I increase the induced EMF?"
+            },
+            {
+              "id": "bulb",
+              "kind": "bulb",
+              "x": 0.86,
+              "y": 0.5,
+              "label": "Bulb"
+            }
+          ],
+          "links": [
+            {
+              "from": "mag",
+              "to": "coil",
+              "kind": "force",
+              "label": "Changing flux"
+            },
+            {
+              "from": "coil",
+              "to": "bulb",
+              "kind": "power",
+              "label": "Induced current"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First, picture the field you are going to move, in 3D: a bar magnet and its field lines. Push it into a coil and the flux through the coil changes, which is exactly what Faraday's law is about. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Faraday's law of induction: how a changing magnetic flux makes a voltage"
+        },
+        {
+          "op": "image",
+          "render": "bar-magnet"
+        }
+      ]
+    },
+    {
+      "say": "Watch the magnet slide in. The magnetic field threading through the coil grows. We measure it as magnetic flux, Phi, the field times the area it passes through, in webers. Here the field rises from zero to 0.5 tesla over the coil's 0.01 square metres, so the flux grows to 5 milliwebers. If the magnet stopped moving, would the bulb stay lit?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mag",
+              "kind": "magnet",
+              "x": 0.18,
+              "y": 0.5,
+              "label": "Moving magnet",
+              "motion": "slide",
+              "ask": "Why does a still magnet induce no voltage?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.52,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Coil, 100 turns",
+              "ask": "How can I increase the induced EMF?"
+            },
+            {
+              "id": "bulb",
+              "kind": "bulb",
+              "x": 0.86,
+              "y": 0.5,
+              "label": "Bulb"
+            }
+          ],
+          "links": [
+            {
+              "from": "mag",
+              "to": "coil",
+              "kind": "force",
+              "label": "Changing flux"
+            },
+            {
+              "from": "coil",
+              "to": "bulb",
+              "kind": "power",
+              "label": "Induced current"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Φ = B × A = 0.5 T × 0.01 m² = 5 mWb"
+        }
+      ]
+    },
+    {
+      "say": "No! Faraday's law says the induced voltage, called EMF, equals the number of turns times the rate of change of flux. A steady flux, however big, makes nothing. Our flux rises by 5 milliwebers in 0.1 seconds, through 100 turns: 100 times 0.005 over 0.1 gives 5 volts. What would happen if you pushed the magnet in twice as fast?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mag",
+              "kind": "magnet",
+              "x": 0.18,
+              "y": 0.5,
+              "label": "Moving magnet",
+              "motion": "slide",
+              "ask": "Why does a still magnet induce no voltage?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.52,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Coil, 100 turns",
+              "ask": "How can I increase the induced EMF?"
+            },
+            {
+              "id": "bulb",
+              "kind": "bulb",
+              "x": 0.86,
+              "y": 0.5,
+              "label": "Bulb"
+            }
+          ],
+          "links": [
+            {
+              "from": "mag",
+              "to": "coil",
+              "kind": "force",
+              "label": "Changing flux"
+            },
+            {
+              "from": "coil",
+              "to": "bulb",
+              "kind": "power",
+              "label": "Induced current"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "EMF = N ΔΦ/Δt = 100 × 0.005 / 0.1 = 5 V"
+        }
+      ]
+    },
+    {
+      "say": "10 volts, since the same change happens in half the time. Now the graph. While the flux climbs, the EMF holds steady at 5 volts in size. While the flux sits still, the EMF is zero. When the magnet pulls out and the flux falls, the EMF flips sign. The minus sign in Faraday's law, from Lenz, means the induced current always fights the change. When is the EMF zero?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 0.4
+          },
+          "y": {
+            "label": "Flux mWb, EMF V",
+            "min": -6,
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "Flux (mWb)",
+              "type": "points",
+              "ask": "What is magnetic flux?",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.1,
+                  5
+                ],
+                [
+                  0.2,
+                  5
+                ],
+                [
+                  0.3,
+                  0
+                ],
+                [
+                  0.4,
+                  0
+                ]
+              ]
+            },
+            {
+              "label": "EMF (V)",
+              "type": "points",
+              "ask": "What is Faraday's law of induction?",
+              "points": [
+                [
+                  0,
+                  -5
+                ],
+                [
+                  0.1,
+                  -5
+                ],
+                [
+                  0.1,
+                  0
+                ],
+                [
+                  0.2,
+                  0
+                ],
+                [
+                  0.2,
+                  5
+                ],
+                [
+                  0.3,
+                  5
+                ],
+                [
+                  0.3,
+                  0
+                ],
+                [
+                  0.4,
+                  0
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.05,
+              "label": "Flux rising: −5 V"
+            },
+            {
+              "x": 0.25,
+              "label": "Flux falling: +5 V"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "EMF = −N dΦ/dt"
+        }
+      ]
+    },
+    {
+      "say": "Whenever the flux is not changing. Brilliant! This one law runs nearly all the world's electricity: every power-station generator spins a magnet past coils, and wireless phone chargers pass a changing flux from a pad coil to a phone coil. Challenge: a 200-turn coil sees its flux fall by 2 milliwebers in 0.01 seconds. What EMF is induced?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mag",
+              "kind": "magnet",
+              "x": 0.18,
+              "y": 0.5,
+              "label": "Moving magnet",
+              "motion": "slide",
+              "ask": "Why does a still magnet induce no voltage?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.52,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Coil, 100 turns",
+              "ask": "How can I increase the induced EMF?"
+            },
+            {
+              "id": "bulb",
+              "kind": "bulb",
+              "x": 0.86,
+              "y": 0.5,
+              "label": "Bulb"
+            }
+          ],
+          "links": [
+            {
+              "from": "mag",
+              "to": "coil",
+              "kind": "force",
+              "label": "Changing flux"
+            },
+            {
+              "from": "coil",
+              "to": "bulb",
+              "kind": "power",
+              "label": "Induced current"
+            }
+          ]
+        },
+        {
+          "op": "note",
+          "text": "Generators, transformers and wireless chargers all run on induction."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Faraday's law of induction?",
+      "a": "The EMF induced in a coil equals the number of turns times the rate of change of magnetic flux through it. The minus sign, Lenz's law, says the EMF opposes the change.",
+      "asks": [
+        "State Faraday's law",
+        "Faraday's law formula"
+      ]
+    },
+    {
+      "q": "What is magnetic flux?",
+      "a": "Magnetic flux is the magnetic field passing through an area: B times the area at right angles to it. It is measured in webers; one weber is one tesla square metre.",
+      "asks": [
+        "What is a weber?",
+        "Define magnetic flux"
+      ]
+    },
+    {
+      "q": "Why does a still magnet induce no voltage?",
+      "a": "Induction needs a changing flux. A magnet at rest gives a steady flux, so its rate of change, and therefore the EMF, is zero.",
+      "asks": [
+        "Why must the magnet move?"
+      ]
+    },
+    {
+      "q": "How can I increase the induced EMF?",
+      "a": "Use more turns, a stronger magnet or a bigger coil area, or make the change faster. Each one raises N times the rate of change of flux.",
+      "asks": [
+        "How do you increase induced voltage?"
+      ]
+    },
+    {
+      "q": "Where is Faraday's law used?",
+      "a": "In generators, transformers, induction cooktops, guitar pickups, wireless chargers and many electricity meters.",
+      "asks": [
+        "Applications of electromagnetic induction"
+      ]
+    }
+  ],
+  "facts": [
+    "Michael Faraday discovered electromagnetic induction in 1831.",
+    "Flux changing at one weber per second through a single turn induces one volt."
+  ],
+  "quiz": [
+    {
+      "say": "A 50-turn coil's flux rises by 4 milliwebers in 0.02 seconds. What EMF is induced?",
+      "show": "A 50-turn coil's flux rises by 4 mWb in 0.02 s. What EMF is induced?",
+      "options": [
+        {
+          "show": "10 V",
+          "say": "10 volts"
+        },
+        {
+          "show": "4 V",
+          "say": "4 volts"
+        },
+        {
+          "show": "0.2 V",
+          "say": "0.2 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "EMF is N times the change over the time: 50 times 0.004 over 0.02, which is 10 volts.",
+      "wrong": {
+        "1": "That just reads the flux number as volts.",
+        "2": "That is the EMF for a single turn; multiply by 50 turns."
+      }
+    },
+    {
+      "say": "A magnet rests, not moving, inside a coil. What is the induced EMF?",
+      "show": "A magnet rests, not moving, inside a coil. The induced EMF is...",
+      "options": [
+        {
+          "show": "Zero",
+          "say": "Zero"
+        },
+        {
+          "show": "At its maximum",
+          "say": "At its maximum"
+        },
+        {
+          "show": "Steady but small",
+          "say": "Steady but small"
+        }
+      ],
+      "answer": 0,
+      "why": "The flux is not changing, and only a changing flux induces an EMF.",
+      "wrong": {
+        "1": "A big steady flux still induces nothing; only change counts.",
+        "2": "Any steady flux, large or small, induces exactly zero."
+      }
+    }
+  ]
+}

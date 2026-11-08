@@ -1,0 +1,313 @@
+{
+  "id": "BCE-CONC-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Steel connections: sizing bolts and fillet welds",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONC — Concrete and steel design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "bolted connection",
+    "bolt shear capacity",
+    "fillet weld",
+    "weld throat",
+    "bearing failure"
+  ],
+  "examples": [
+    "How do you calculate the shear capacity of a bolt?",
+    "How long should a fillet weld be?",
+    "Bolts or welds: which is better for steel connections?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "scissors",
+      "objectAsk": "How do you calculate the shear capacity of a bolt?",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Top plate 300 kN",
+          "dir": "right",
+          "size": 4,
+          "ask": "What is bolt shear?"
+        },
+        {
+          "label": "Bottom plate 300 kN",
+          "dir": "left",
+          "size": 4,
+          "ask": "What is bearing failure in a bolted joint?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A steel frame is only as strong as its joints. The Sydney Harbour Bridge holds about six million rivets; today we use bolts and welds. On the board, two plates pull on a bolt with three hundred kilonewtons in opposite directions, trying to slice it like a pair of scissors. That slicing is called shear.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Steel connections: sizing bolts and fillet welds"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "scissors",
+          "objectAsk": "How do you calculate the shear capacity of a bolt?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Top plate 300 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "What is bolt shear?"
+            },
+            {
+              "label": "Bottom plate 300 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What is bearing failure in a bolted joint?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "How much can one bolt take? For an M20 bolt, twenty millimetres across, in grade eight point eight steel, Eurocode 3 gives zero point six times its ultimate strength times its stress area, divided by a safety factor of one point two five. That is about ninety four kilonewtons for each plane it is sliced across.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "scissors",
+          "objectAsk": "How do you calculate the shear capacity of a bolt?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Top plate 300 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "What is bolt shear?"
+            },
+            {
+              "label": "Bottom plate 300 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What is bearing failure in a bolted joint?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F_v = 0.6 × 800 × 245 / 1.25 ≈ 94 kN per bolt"
+        },
+        {
+          "op": "note",
+          "text": "Grade 8.8: ultimate 800 MPa. M20 stress area 245 mm²."
+        }
+      ]
+    },
+    {
+      "say": "So three hundred over ninety four is three point two, and we round up to four bolts. Now compare the two ways to join steel. Bolts are quick on site and easy to check; welds make neat, continuous joints with no holes, but are best done in a workshop. Which would you choose high up on a windy building site?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Bolts",
+            "icon": "key",
+            "ask": "Bolts or welds: which is better?",
+            "points": [
+              "Quick to fit on site",
+              "Easy to inspect and undo",
+              "Holes reduce plate area"
+            ]
+          },
+          "right": {
+            "title": "Welds",
+            "icon": "fire",
+            "ask": "What is a fillet weld?",
+            "points": [
+              "Neat, continuous, no holes",
+              "Best done in the workshop",
+              "Needs skilled welders, tests"
+            ]
+          },
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "n = 300 / 94 = 3.2 → use 4 bolts"
+        }
+      ]
+    },
+    {
+      "say": "Bolts, mostly! Now the weld. A six millimetre fillet weld, the triangular bead in a corner, has a throat of about four point two millimetres. For S275 plate, each millimetre of such a weld resists about zero point nine four kilonewtons, so three hundred kilonewtons needs about three hundred and twenty millimetres of weld.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Bolts",
+            "icon": "key",
+            "ask": "Bolts or welds: which is better?",
+            "points": [
+              "Quick to fit on site",
+              "Easy to inspect and undo",
+              "Holes reduce plate area"
+            ]
+          },
+          "right": {
+            "title": "Welds",
+            "icon": "fire",
+            "ask": "What is a fillet weld?",
+            "points": [
+              "Neat, continuous, no holes",
+              "Best done in the workshop",
+              "Needs skilled welders, tests"
+            ]
+          },
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Throat a = 0.7 × 6 = 4.2 mm → 0.94 kN per mm"
+        },
+        {
+          "op": "note",
+          "text": "Weld length = 300 / 0.94 ≈ 320 mm"
+        }
+      ]
+    },
+    {
+      "say": "Joints fail in surprising ways: bolts shear, plates tear between holes, or the plate crushes against the bolt, called bearing. A good designer checks every path. Excellent work! Challenge: if each bolt were in double shear, with plates on both sides, how many bolts would you need?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "scissors",
+          "objectAsk": "How do you calculate the shear capacity of a bolt?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Top plate 300 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "What is bolt shear?"
+            },
+            {
+              "label": "Bottom plate 300 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What is bearing failure in a bolted joint?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is bolt shear?",
+      "a": "Bolt shear is when the plates of a joint slide in opposite directions and try to slice the bolt across. Each plane where the bolt could be cut is a shear plane.",
+      "asks": [
+        "What is single shear?",
+        "Why do bolts fail in shear?"
+      ]
+    },
+    {
+      "q": "How do you calculate the shear capacity of a bolt?",
+      "a": "In Eurocode 3, multiply 0.6 by the bolt's ultimate strength and its stress area, then divide by 1.25. An M20 grade 8.8 bolt gives about 94 kilonewtons per shear plane.",
+      "asks": [
+        "Bolt shear resistance formula",
+        "Capacity of an M20 bolt"
+      ]
+    },
+    {
+      "q": "What is a fillet weld?",
+      "a": "A fillet weld is a triangular bead of weld metal laid in the corner between two plates. Its strength depends on its throat, about 0.7 times its leg length, and its length.",
+      "asks": [
+        "What is a weld throat?"
+      ]
+    },
+    {
+      "q": "Bolts or welds: which is better?",
+      "a": "Bolts are quick to install and inspect on site and can be undone. Welds give neat, stiff joints without holes but need skilled welders and checks, so they are usually done in the fabrication shop.",
+      "asks": [
+        "Bolted vs welded connections"
+      ]
+    },
+    {
+      "q": "What is bearing failure in a bolted joint?",
+      "a": "Bearing failure is when the bolt crushes or tears the edge of the hole in the plate. It is checked alongside bolt shear, and the smaller capacity governs.",
+      "asks": [
+        "What is plate bearing?"
+      ]
+    }
+  ],
+  "facts": [
+    "Grade 8.8 bolts have a nominal ultimate strength of 800 MPa and a yield strength of 640 MPa.",
+    "The throat of an equal-leg fillet weld is about 0.7 times its leg length.",
+    "The Sydney Harbour Bridge, opened in 1932, used about six million rivets."
+  ],
+  "quiz": [
+    {
+      "say": "A joint must carry 450 kilonewtons and each bolt resists 94 kilonewtons. What is the minimum number of bolts?",
+      "show": "A joint carries 450 kN and each bolt resists 94 kN. Minimum number of bolts?",
+      "options": [
+        {
+          "show": "4",
+          "say": "4"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        },
+        {
+          "show": "6",
+          "say": "6"
+        }
+      ],
+      "answer": 1,
+      "why": "450 ÷ 94 ≈ 4.8, and you always round up, so 5 bolts.",
+      "wrong": {
+        "0": "Four bolts give only 376 kilonewtons, too little.",
+        "2": "Six works but is more than the minimum."
+      }
+    },
+    {
+      "say": "What does 'double shear' mean for a bolt?",
+      "show": "What does 'double shear' mean for a bolt?",
+      "options": [
+        {
+          "show": "Two bolts share the load",
+          "say": "Two bolts share the load"
+        },
+        {
+          "show": "The bolt is cut across two planes, doubling capacity",
+          "say": "The bolt is cut across two planes, doubling capacity"
+        },
+        {
+          "show": "The bolt is in tension and shear at once",
+          "say": "The bolt is in tension and shear at once"
+        }
+      ],
+      "answer": 1,
+      "why": "With plates on both sides, the bolt must be sliced in two places, so it carries twice the load.",
+      "wrong": {
+        "0": "Sharing between bolts is about the bolt count, not shear planes.",
+        "2": "Combined tension and shear is a different check."
+      }
+    }
+  ]
+}

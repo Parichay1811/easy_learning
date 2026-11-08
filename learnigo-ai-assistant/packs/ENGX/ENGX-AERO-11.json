@@ -1,0 +1,609 @@
+{
+  "id": "ENGX-AERO-11",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a pressurised plane cabin works",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "cabin pressure",
+    "pressurised cabin",
+    "bleed air",
+    "outflow valve",
+    "cabin altitude"
+  ],
+  "examples": [
+    "Why are plane cabins pressurised?",
+    "Where does the air in a plane come from?",
+    "Why do my ears pop on a plane?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "comp",
+          "kind": "fan",
+          "x": 0.1,
+          "y": 0.55,
+          "label": "Engine compressor",
+          "motion": "spin",
+          "ask": "Where does cabin air come from?"
+        },
+        {
+          "id": "pack",
+          "kind": "box",
+          "x": 0.32,
+          "y": 0.55,
+          "label": "Air-con packs",
+          "motion": "pulse",
+          "ask": "What do air conditioning packs do?"
+        },
+        {
+          "id": "cabin",
+          "kind": "tank",
+          "x": 0.58,
+          "y": 0.55,
+          "label": "Cabin",
+          "size": 1.4,
+          "motion": "none",
+          "ask": "Why are planes pressurised?"
+        },
+        {
+          "id": "filt",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.12,
+          "label": "HEPA filters",
+          "motion": "flow"
+        },
+        {
+          "id": "ctrl",
+          "kind": "box",
+          "x": 0.85,
+          "y": 0.15,
+          "label": "Pressure controller",
+          "motion": "pulse"
+        },
+        {
+          "id": "valve",
+          "kind": "valve",
+          "x": 0.88,
+          "y": 0.7,
+          "label": "Outflow valve",
+          "motion": "pulse",
+          "ask": "What is the outflow valve?"
+        }
+      ],
+      "links": [
+        {
+          "from": "comp",
+          "to": "pack",
+          "kind": "fluid",
+          "label": "hot air"
+        },
+        {
+          "from": "pack",
+          "to": "cabin",
+          "kind": "fluid",
+          "label": "cooled air"
+        },
+        {
+          "from": "cabin",
+          "to": "filt",
+          "kind": "fluid",
+          "label": "recirculated"
+        },
+        {
+          "from": "filt",
+          "to": "cabin",
+          "kind": "fluid"
+        },
+        {
+          "from": "ctrl",
+          "to": "valve",
+          "kind": "signal",
+          "label": "open or close"
+        },
+        {
+          "from": "cabin",
+          "to": "valve",
+          "kind": "fluid",
+          "label": "air out"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "At cruising height the air outside is far too thin to breathe. So the cabin is a sealed tube that is pumped full of air, keeping the pressure like that on a mountain no higher than about 2,400 metres.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a pressurised plane cabin works"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Engine compressor",
+              "motion": "spin",
+              "ask": "Where does cabin air come from?"
+            },
+            {
+              "id": "pack",
+              "kind": "box",
+              "x": 0.32,
+              "y": 0.55,
+              "label": "Air-con packs",
+              "motion": "pulse",
+              "ask": "What do air conditioning packs do?"
+            },
+            {
+              "id": "cabin",
+              "kind": "tank",
+              "x": 0.58,
+              "y": 0.55,
+              "label": "Cabin",
+              "size": 1.4,
+              "motion": "none",
+              "ask": "Why are planes pressurised?"
+            },
+            {
+              "id": "filt",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.12,
+              "label": "HEPA filters",
+              "motion": "flow"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Pressure controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.7,
+              "label": "Outflow valve",
+              "motion": "pulse",
+              "ask": "What is the outflow valve?"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "pack",
+              "kind": "fluid",
+              "label": "hot air"
+            },
+            {
+              "from": "pack",
+              "to": "cabin",
+              "kind": "fluid",
+              "label": "cooled air"
+            },
+            {
+              "from": "cabin",
+              "to": "filt",
+              "kind": "fluid",
+              "label": "recirculated"
+            },
+            {
+              "from": "filt",
+              "to": "cabin",
+              "kind": "fluid"
+            },
+            {
+              "from": "ctrl",
+              "to": "valve",
+              "kind": "signal",
+              "label": "open or close"
+            },
+            {
+              "from": "cabin",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "air out"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Air is taken from the engines' compressors, or from electric compressors on some planes. It is very hot, so air-conditioning packs cool it before it flows into the cabin.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Engine compressor",
+              "motion": "spin",
+              "ask": "Where does cabin air come from?"
+            },
+            {
+              "id": "pack",
+              "kind": "box",
+              "x": 0.32,
+              "y": 0.55,
+              "label": "Air-con packs",
+              "motion": "pulse",
+              "ask": "What do air conditioning packs do?"
+            },
+            {
+              "id": "cabin",
+              "kind": "tank",
+              "x": 0.58,
+              "y": 0.55,
+              "label": "Cabin",
+              "size": 1.4,
+              "motion": "none",
+              "ask": "Why are planes pressurised?"
+            },
+            {
+              "id": "filt",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.12,
+              "label": "HEPA filters",
+              "motion": "flow"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Pressure controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.7,
+              "label": "Outflow valve",
+              "motion": "pulse",
+              "ask": "What is the outflow valve?"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "pack",
+              "kind": "fluid",
+              "label": "hot air"
+            },
+            {
+              "from": "pack",
+              "to": "cabin",
+              "kind": "fluid",
+              "label": "cooled air"
+            },
+            {
+              "from": "cabin",
+              "to": "filt",
+              "kind": "fluid",
+              "label": "recirculated"
+            },
+            {
+              "from": "filt",
+              "to": "cabin",
+              "kind": "fluid"
+            },
+            {
+              "from": "ctrl",
+              "to": "valve",
+              "kind": "signal",
+              "label": "open or close"
+            },
+            {
+              "from": "cabin",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "air out"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Fresh air is pumped in all the time, and about half the cabin air is cleaned through hospital-grade filters and reused. It is a constant flow, not stale air sealed in.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Engine compressor",
+              "motion": "spin",
+              "ask": "Where does cabin air come from?"
+            },
+            {
+              "id": "pack",
+              "kind": "box",
+              "x": 0.32,
+              "y": 0.55,
+              "label": "Air-con packs",
+              "motion": "pulse",
+              "ask": "What do air conditioning packs do?"
+            },
+            {
+              "id": "cabin",
+              "kind": "tank",
+              "x": 0.58,
+              "y": 0.55,
+              "label": "Cabin",
+              "size": 1.4,
+              "motion": "none",
+              "ask": "Why are planes pressurised?"
+            },
+            {
+              "id": "filt",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.12,
+              "label": "HEPA filters",
+              "motion": "flow"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Pressure controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.7,
+              "label": "Outflow valve",
+              "motion": "pulse",
+              "ask": "What is the outflow valve?"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "pack",
+              "kind": "fluid",
+              "label": "hot air"
+            },
+            {
+              "from": "pack",
+              "to": "cabin",
+              "kind": "fluid",
+              "label": "cooled air"
+            },
+            {
+              "from": "cabin",
+              "to": "filt",
+              "kind": "fluid",
+              "label": "recirculated"
+            },
+            {
+              "from": "filt",
+              "to": "cabin",
+              "kind": "fluid"
+            },
+            {
+              "from": "ctrl",
+              "to": "valve",
+              "kind": "signal",
+              "label": "open or close"
+            },
+            {
+              "from": "cabin",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "air out"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The pressure is set by an outflow valve near the tail. A controller opens it to let more air out or closes it to hold more in, so the cabin pressure changes slowly during climb and descent.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.55,
+              "label": "Engine compressor",
+              "motion": "spin",
+              "ask": "Where does cabin air come from?"
+            },
+            {
+              "id": "pack",
+              "kind": "box",
+              "x": 0.32,
+              "y": 0.55,
+              "label": "Air-con packs",
+              "motion": "pulse",
+              "ask": "What do air conditioning packs do?"
+            },
+            {
+              "id": "cabin",
+              "kind": "tank",
+              "x": 0.58,
+              "y": 0.55,
+              "label": "Cabin",
+              "size": 1.4,
+              "motion": "none",
+              "ask": "Why are planes pressurised?"
+            },
+            {
+              "id": "filt",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.12,
+              "label": "HEPA filters",
+              "motion": "flow"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Pressure controller",
+              "motion": "pulse"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.7,
+              "label": "Outflow valve",
+              "motion": "pulse",
+              "ask": "What is the outflow valve?"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "pack",
+              "kind": "fluid",
+              "label": "hot air"
+            },
+            {
+              "from": "pack",
+              "to": "cabin",
+              "kind": "fluid",
+              "label": "cooled air"
+            },
+            {
+              "from": "cabin",
+              "to": "filt",
+              "kind": "fluid",
+              "label": "recirculated"
+            },
+            {
+              "from": "filt",
+              "to": "cabin",
+              "kind": "fluid"
+            },
+            {
+              "from": "ctrl",
+              "to": "valve",
+              "kind": "signal",
+              "label": "open or close"
+            },
+            {
+              "from": "cabin",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "air out"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why are planes pressurised?",
+      "a": "At about 11 kilometres the air is so thin that people would pass out within a minute or so. Pumping the cabin up to the pressure found about 2,000 metres up lets everyone breathe normally.",
+      "asks": [
+        "Why do planes need cabin pressure?"
+      ]
+    },
+    {
+      "q": "Where does cabin air come from?",
+      "a": "On most airliners it is bled from the engines' compressors, then cooled and cleaned. The Boeing 787 instead uses electric compressors that draw in outside air.",
+      "asks": [
+        "What is bleed air?"
+      ]
+    },
+    {
+      "q": "What is the outflow valve?",
+      "a": "It is a door-like valve in the fuselage that lets air leave the cabin. By opening and closing it, a controller sets how much air stays inside, and so the cabin pressure.",
+      "asks": [
+        "How is cabin pressure controlled?"
+      ]
+    },
+    {
+      "q": "What do air conditioning packs do?",
+      "a": "Air from the compressors can be over 200 degrees Celsius. The packs cool it, by passing it through heat exchangers and expanding it through a small turbine, before it enters the cabin.",
+      "asks": [
+        "Why is plane air so dry?"
+      ]
+    },
+    {
+      "q": "Why do my ears pop on a plane?",
+      "a": "As the plane climbs and descends, cabin pressure changes slowly. Air behind your eardrum evens out through a small tube to your throat, and the pop is that tube opening.",
+      "asks": [
+        "Why do ears hurt when landing?"
+      ]
+    }
+  ],
+  "facts": [
+    "Rules generally require cabin pressure equal to an altitude of no more than 8,000 feet, about 2,400 metres.",
+    "On many airliners roughly half the cabin air is recirculated through HEPA filters and the rest is fresh outside air."
+  ],
+  "quiz": [
+    {
+      "say": "Which part sets how much air stays in the cabin, and so the cabin pressure?",
+      "show": "Which part sets the cabin pressure?",
+      "options": [
+        {
+          "show": "The outflow valve",
+          "say": "The outflow valve"
+        },
+        {
+          "show": "The wing flaps",
+          "say": "The wing flaps"
+        },
+        {
+          "show": "The landing gear",
+          "say": "The landing gear"
+        }
+      ],
+      "answer": 0,
+      "why": "A controller opens and closes the outflow valve to let more or less air escape.",
+      "wrong": {
+        "1": "Flaps change the wing's lift, not the cabin.",
+        "2": "The landing gear is outside the pressurised cabin."
+      }
+    }
+  ]
+}

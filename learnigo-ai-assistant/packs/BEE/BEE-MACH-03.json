@@ -1,0 +1,688 @@
+{
+  "id": "BEE-MACH-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "How a DC motor makes torque: the force on a current in a magnetic field",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "DC motor",
+    "force on a conductor F = BIL",
+    "armature",
+    "commutator",
+    "motor torque constant",
+    "Fleming's left-hand rule"
+  ],
+  "examples": [
+    "How does a DC motor produce torque?",
+    "What does the commutator do in a DC motor?",
+    "How do you calculate the force on a wire in a magnetic field?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "n",
+          "kind": "magnet",
+          "x": 0.15,
+          "y": 0.42,
+          "size": 1.2,
+          "label": "North pole",
+          "ask": "What is Fleming's left-hand rule?"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.5,
+          "y": 0.42,
+          "size": 1.3,
+          "label": "Armature coil",
+          "motion": "spin",
+          "ask": "How does a DC motor produce torque?"
+        },
+        {
+          "id": "s",
+          "kind": "magnet",
+          "x": 0.85,
+          "y": 0.42,
+          "size": 1.2,
+          "label": "South pole"
+        },
+        {
+          "id": "comm",
+          "kind": "wheel",
+          "x": 0.5,
+          "y": 0.82,
+          "size": 0.6,
+          "label": "Commutator",
+          "ask": "What does the commutator do in a DC motor?"
+        },
+        {
+          "id": "bat",
+          "kind": "battery",
+          "x": 0.15,
+          "y": 0.85,
+          "label": "24 V supply"
+        },
+        {
+          "id": "axle",
+          "kind": "axle",
+          "x": 0.85,
+          "y": 0.85,
+          "label": "Shaft 5 N·m",
+          "ask": "What is the motor torque constant?"
+        }
+      ],
+      "links": [
+        {
+          "from": "bat",
+          "to": "comm",
+          "kind": "power",
+          "label": "10 A"
+        },
+        {
+          "from": "comm",
+          "to": "coil",
+          "kind": "power"
+        },
+        {
+          "from": "n",
+          "to": "coil",
+          "kind": "force",
+          "label": "Field 0.5 T"
+        },
+        {
+          "from": "coil",
+          "to": "axle",
+          "kind": "force",
+          "label": "Torque"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A cordless drill, a car's wipers and a toy train all rely on one push: a wire carrying current in a magnetic field feels a force. On the board, an armature coil sits between a north and a south pole and is fed from a 24 volt supply through a commutator. Watch the shaft turn.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a DC motor makes torque: the force on a current in a magnetic field"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "n",
+              "kind": "magnet",
+              "x": 0.15,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "North pole",
+              "ask": "What is Fleming's left-hand rule?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Armature coil",
+              "motion": "spin",
+              "ask": "How does a DC motor produce torque?"
+            },
+            {
+              "id": "s",
+              "kind": "magnet",
+              "x": 0.85,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "South pole"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Commutator",
+              "ask": "What does the commutator do in a DC motor?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "24 V supply"
+            },
+            {
+              "id": "axle",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Shaft 5 N·m",
+              "ask": "What is the motor torque constant?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "10 A"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "n",
+              "to": "coil",
+              "kind": "force",
+              "label": "Field 0.5 T"
+            },
+            {
+              "from": "coil",
+              "to": "axle",
+              "kind": "force",
+              "label": "Torque"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you a real DC motor in 3D. Look at the north and south field magnets, the armature winding between them, and the commutator with its carbon brushes. Watch it turn. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a DC motor makes torque: the force on a current in a magnetic field"
+        },
+        {
+          "op": "image",
+          "render": "dc-motor"
+        }
+      ]
+    },
+    {
+      "say": "Look at the coil. Each wire in it carries current through the magnetic field, and the field pushes it sideways with a force F equals B I L: flux density times current times length. With 0.5 tesla, 10 amps and 20 centimetres of wire in the field, each wire feels 1 newton. Fleming's left-hand rule gives the direction. Which way is the other side of the coil pushed?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "n",
+              "kind": "magnet",
+              "x": 0.15,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "North pole",
+              "ask": "What is Fleming's left-hand rule?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Armature coil",
+              "motion": "spin",
+              "ask": "How does a DC motor produce torque?"
+            },
+            {
+              "id": "s",
+              "kind": "magnet",
+              "x": 0.85,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "South pole"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Commutator",
+              "ask": "What does the commutator do in a DC motor?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "24 V supply"
+            },
+            {
+              "id": "axle",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Shaft 5 N·m",
+              "ask": "What is the motor torque constant?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "10 A"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "n",
+              "to": "coil",
+              "kind": "force",
+              "label": "Field 0.5 T"
+            },
+            {
+              "from": "coil",
+              "to": "axle",
+              "kind": "force",
+              "label": "Torque"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "F = BIL = 0.5 T × 10 A × 0.2 m = 1 N"
+        }
+      ]
+    },
+    {
+      "say": "The opposite way, because its current flows back the other way. One side goes up, the other down, and that couple twists the coil. With 50 turns, two sides and a radius of 5 centimetres, the torque is 2 times 50 times 1 newton times 0.05 metres: 5 newton metres. How would doubling the current change the torque?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "n",
+              "kind": "magnet",
+              "x": 0.15,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "North pole",
+              "ask": "What is Fleming's left-hand rule?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Armature coil",
+              "motion": "spin",
+              "ask": "How does a DC motor produce torque?"
+            },
+            {
+              "id": "s",
+              "kind": "magnet",
+              "x": 0.85,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "South pole"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Commutator",
+              "ask": "What does the commutator do in a DC motor?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "24 V supply"
+            },
+            {
+              "id": "axle",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Shaft 5 N·m",
+              "ask": "What is the motor torque constant?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "10 A"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "n",
+              "to": "coil",
+              "kind": "force",
+              "label": "Field 0.5 T"
+            },
+            {
+              "from": "coil",
+              "to": "axle",
+              "kind": "force",
+              "label": "Torque"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "T = 2 sides × 50 turns × 1 N × 0.05 m = 5 N·m"
+        }
+      ]
+    },
+    {
+      "say": "Doubling the current doubles the torque. But there is a snag: after half a turn, each side would be pushed back the way it came. Look at the commutator, a split copper ring that carbon brushes press on. Every half turn it swaps the coil's connections, so the current reverses and the torque keeps the same direction. Which part wears out first in a brushed motor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "n",
+              "kind": "magnet",
+              "x": 0.15,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "North pole",
+              "ask": "What is Fleming's left-hand rule?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Armature coil",
+              "motion": "spin",
+              "ask": "How does a DC motor produce torque?"
+            },
+            {
+              "id": "s",
+              "kind": "magnet",
+              "x": 0.85,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "South pole"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Commutator",
+              "ask": "What does the commutator do in a DC motor?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "24 V supply"
+            },
+            {
+              "id": "axle",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Shaft 5 N·m",
+              "ask": "What is the motor torque constant?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "10 A"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "n",
+              "to": "coil",
+              "kind": "force",
+              "label": "Field 0.5 T"
+            },
+            {
+              "from": "coil",
+              "to": "axle",
+              "kind": "force",
+              "label": "Torque"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "The commutator reverses the coil current every half turn"
+        }
+      ]
+    },
+    {
+      "say": "The brushes, which rub all the time. Now the engineer's shortcut: for a given motor, torque is simply a constant times current, T equals k phi I. Here k phi is 0.5 newton metres per amp, so 10 amps gives 5 newton metres. Brilliant! Challenge: what current does this motor need to make 8 newton metres?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "n",
+              "kind": "magnet",
+              "x": 0.15,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "North pole",
+              "ask": "What is Fleming's left-hand rule?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Armature coil",
+              "motion": "spin",
+              "ask": "How does a DC motor produce torque?"
+            },
+            {
+              "id": "s",
+              "kind": "magnet",
+              "x": 0.85,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "South pole"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Commutator",
+              "ask": "What does the commutator do in a DC motor?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "24 V supply"
+            },
+            {
+              "id": "axle",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Shaft 5 N·m",
+              "ask": "What is the motor torque constant?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "10 A"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "n",
+              "to": "coil",
+              "kind": "force",
+              "label": "Field 0.5 T"
+            },
+            {
+              "from": "coil",
+              "to": "axle",
+              "kind": "force",
+              "label": "Torque"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "T = kΦ × I = 0.5 N·m/A × 10 A = 5 N·m"
+        },
+        {
+          "op": "note",
+          "text": "kΦ, the torque constant, is fixed by the magnets and windings"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a DC motor produce torque?",
+      "a": "Current in the armature wires sits in the field of the magnets, and each wire feels a force F equals B I L. The forces on opposite sides of the coil point opposite ways, so they make a turning couple, the torque.",
+      "asks": [
+        "What makes a DC motor turn?"
+      ]
+    },
+    {
+      "q": "How do you calculate the force on a wire in a magnetic field?",
+      "a": "Multiply flux density, current and the length of wire inside the field: F equals B I L, when the wire is at right angles to the field. For 0.5 tesla, 10 amps and 0.2 metres, F is 1 newton.",
+      "asks": [
+        "What is F = BIL?"
+      ]
+    },
+    {
+      "q": "What does the commutator do in a DC motor?",
+      "a": "It is a split ring on the shaft, touched by brushes. Every half turn it reverses the current in the coil, so the force on each side keeps turning the rotor the same way instead of rocking it back.",
+      "asks": [
+        "Why does a DC motor need a commutator?"
+      ]
+    },
+    {
+      "q": "What is the motor torque constant?",
+      "a": "It is the torque per amp of armature current, written k phi. Torque equals k phi times current, so a motor with k phi of 0.5 newton metres per amp makes 5 newton metres at 10 amps.",
+      "asks": [
+        "What is k phi in a DC motor?"
+      ]
+    },
+    {
+      "q": "What is Fleming's left-hand rule?",
+      "a": "Hold your thumb, first finger and second finger at right angles. Point the first finger along the field, north to south, and the second finger along the current; your thumb then shows the direction of the force and motion.",
+      "asks": [
+        "How do I find the direction of the force on a wire?"
+      ]
+    }
+  ],
+  "facts": [
+    "The force on a current-carrying wire at right angles to a magnetic field is F = BIL.",
+    "Brushed DC motors use carbon brushes pressing on a copper commutator.",
+    "In 1821 Michael Faraday demonstrated electromagnetic rotation, the first electric motor effect."
+  ],
+  "quiz": [
+    {
+      "say": "A wire 0.3 metres long carries 4 amps at right angles to a 0.5 tesla field. What force acts on it?",
+      "show": "A wire 0.3 m long carries 4 A at right angles to a 0.5 T field. What force acts on it?",
+      "options": [
+        {
+          "show": "0.6 N",
+          "say": "0.6 newtons"
+        },
+        {
+          "show": "6 N",
+          "say": "6 newtons"
+        },
+        {
+          "show": "2.4 N",
+          "say": "2.4 newtons"
+        }
+      ],
+      "answer": 0,
+      "why": "F equals B I L: 0.5 times 4 times 0.3 is 0.6 newtons.",
+      "wrong": {
+        "1": "That is ten times too big; check the decimal point.",
+        "2": "That multiplies 4 by 0.3 by 2, instead of by 0.5."
+      }
+    },
+    {
+      "say": "A DC motor has a torque constant of 0.5 newton metres per amp. What current gives 8 newton metres?",
+      "show": "A DC motor has kΦ = 0.5 N·m/A. What current gives 8 N·m?",
+      "options": [
+        {
+          "show": "16 A",
+          "say": "16 amps"
+        },
+        {
+          "show": "4 A",
+          "say": "4 amps"
+        },
+        {
+          "show": "8 A",
+          "say": "8 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "Current is torque divided by k phi: 8 over 0.5 is 16 amps.",
+      "wrong": {
+        "1": "That multiplies 8 by 0.5 instead of dividing.",
+        "2": "That treats the constant as 1 newton metre per amp."
+      }
+    }
+  ]
+}

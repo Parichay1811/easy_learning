@@ -1,0 +1,396 @@
+{
+  "id": "BME-MACHD-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Bolted joints and preload: why bolts are tightened so hard",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MACHD — Machine design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "bolt preload",
+    "tightening torque",
+    "joint stiffness constant",
+    "proof load",
+    "joint separation"
+  ],
+  "examples": [
+    "Why are bolts tightened to a preload?",
+    "How do I find bolt tightening torque?",
+    "How much of an external load does a bolt feel?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "External load P (kN)",
+        "max": 50
+      },
+      "y": {
+        "label": "Force (kN)",
+        "min": -5,
+        "max": 50
+      },
+      "curves": [
+        {
+          "label": "Bolt tension",
+          "type": "line",
+          "c": 36.7,
+          "k": 0.25,
+          "ask": "How much of an external load does a bolt feel?"
+        },
+        {
+          "label": "Clamp on plates",
+          "type": "line",
+          "c": 36.7,
+          "k": -0.75,
+          "ask": "What happens to the clamp force when the joint is loaded?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 10,
+          "label": "P = 10 kN"
+        },
+        {
+          "x": 48.9,
+          "label": "Plates separate"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A car wheel is held on by just five bolts, yet it carries a tonne of car round corners. The secret is preload: the bolts are tightened until they stretch like stiff springs and squeeze the parts together. Look at the reasons on the board.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Bolted joints and preload: why bolts are tightened so hard"
+        },
+        {
+          "name": "x-why",
+          "question": "Why tighten a bolt so hard?",
+          "because": [
+            {
+              "label": "Clamps the joint",
+              "icon": "key",
+              "note": "The plates stay pressed together"
+            },
+            {
+              "label": "Bolt feels little",
+              "icon": "spring",
+              "note": "Most extra load just eases the clamp"
+            },
+            {
+              "label": "Fights fatigue",
+              "icon": "timer",
+              "note": "Small swings in bolt stress"
+            },
+            {
+              "label": "Resists loosening",
+              "icon": "wave",
+              "note": "High friction under vibration"
+            }
+          ],
+          "answer": "A tight joint is strong, stiff and long-lasting",
+          "ask": 0,
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Preload: the tension put into a bolt when it is tightened"
+        }
+      ]
+    },
+    {
+      "say": "Take an M12 bolt of grade 8.8. Its proof load, the most it can take without permanent stretch, is about 49 kilonewtons. Designers often preload to 75 percent of that: about 36.7 kilonewtons. The wrench torque is roughly 0.2 times preload times diameter: about 88 newton metres. Why not tighten it to the limit?",
+      "draw": [
+        {
+          "name": "x-why",
+          "question": "Why tighten a bolt so hard?",
+          "because": [
+            {
+              "label": "Clamps the joint",
+              "icon": "key",
+              "note": "The plates stay pressed together"
+            },
+            {
+              "label": "Bolt feels little",
+              "icon": "spring",
+              "note": "Most extra load just eases the clamp"
+            },
+            {
+              "label": "Fights fatigue",
+              "icon": "timer",
+              "note": "Small swings in bolt stress"
+            },
+            {
+              "label": "Resists loosening",
+              "icon": "wave",
+              "note": "High friction under vibration"
+            }
+          ],
+          "answer": "A tight joint is strong, stiff and long-lasting",
+          "ask": 0,
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "T ≈ K F_i d = 0.2 × 36 700 × 0.012 ≈ 88 N·m"
+        }
+      ]
+    },
+    {
+      "say": "You need some margin for the working load. Now the clever part. When an external load P pulls the joint apart, the bolt and the clamped plates share it according to their stiffness. Plates are usually much stiffer, so the bolt feels only a fraction C, here 25 percent. See the gently rising line? That is the bolt.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "External load P (kN)",
+            "max": 50
+          },
+          "y": {
+            "label": "Force (kN)",
+            "min": -5,
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Bolt tension",
+              "type": "line",
+              "c": 36.7,
+              "k": 0.25,
+              "ask": "How much of an external load does a bolt feel?"
+            },
+            {
+              "label": "Clamp on plates",
+              "type": "line",
+              "c": 36.7,
+              "k": -0.75,
+              "ask": "What happens to the clamp force when the joint is loaded?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "P = 10 kN"
+            },
+            {
+              "x": 48.9,
+              "label": "Plates separate"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F_bolt = F_i + CP = 36.7 + 0.25 × 10 = 39.2 kN"
+        }
+      ]
+    },
+    {
+      "say": "The other 75 percent just reduces the clamp force between the plates. See the falling line? At 10 kilonewtons of load, the clamp drops from 36.7 to 29.2 kilonewtons, while the bolt only rises by 2.5. The joint stays shut until the clamp reaches zero. At what load does that happen?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "External load P (kN)",
+            "max": 50
+          },
+          "y": {
+            "label": "Force (kN)",
+            "min": -5,
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Bolt tension",
+              "type": "line",
+              "c": 36.7,
+              "k": 0.25,
+              "ask": "How much of an external load does a bolt feel?"
+            },
+            {
+              "label": "Clamp on plates",
+              "type": "line",
+              "c": 36.7,
+              "k": -0.75,
+              "ask": "What happens to the clamp force when the joint is loaded?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "P = 10 kN"
+            },
+            {
+              "x": 48.9,
+              "label": "Plates separate"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "F_clamp = F_i − (1 − C)P = 36.7 − 7.5 = 29.2 kN"
+        }
+      ]
+    },
+    {
+      "say": "At 36.7 over 0.75, about 49 kilonewtons: where the line crosses zero. Then the bolt takes everything and the joint gapes. Great work! Real link: wind turbine tower bolts are tightened with hydraulic tensioners and checked regularly. Exam tip: the bolt sees only C times any fluctuating load, which is why preload helps fatigue.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "External load P (kN)",
+            "max": 50
+          },
+          "y": {
+            "label": "Force (kN)",
+            "min": -5,
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Bolt tension",
+              "type": "line",
+              "c": 36.7,
+              "k": 0.25,
+              "ask": "How much of an external load does a bolt feel?"
+            },
+            {
+              "label": "Clamp on plates",
+              "type": "line",
+              "c": 36.7,
+              "k": -0.75,
+              "ask": "What happens to the clamp force when the joint is loaded?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "P = 10 kN"
+            },
+            {
+              "x": 48.9,
+              "label": "Plates separate"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Separation load = F_i / (1 − C) ≈ 48.9 kN"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why tighten a bolt so hard?",
+      "a": "Preload clamps the parts together so the joint is stiff, the bolt sees only a small part of any extra load, fatigue stress swings are small, and friction resists loosening.",
+      "asks": [
+        "why are bolts tightened to a preload",
+        "why preload a bolt"
+      ]
+    },
+    {
+      "q": "How much of an external load does a bolt feel?",
+      "a": "Only a fraction C, the joint stiffness constant, which is the bolt stiffness divided by bolt plus member stiffness. Often C is around 0.2 to 0.3.",
+      "asks": [
+        "joint stiffness constant",
+        "bolt load share"
+      ]
+    },
+    {
+      "q": "What happens to the clamp force when the joint is loaded?",
+      "a": "It falls by 1 minus C times the external load. When it reaches zero the plates separate and the bolt carries the whole load.",
+      "asks": [
+        "joint separation"
+      ]
+    },
+    {
+      "q": "How do I find bolt tightening torque?",
+      "a": "A common estimate is T equals K times F i times d, with the nut factor K about 0.2 for dry steel threads.",
+      "asks": [
+        "bolt torque formula",
+        "nut factor"
+      ]
+    },
+    {
+      "q": "What is the proof load of a bolt?",
+      "a": "The largest tension a bolt can carry without permanent stretch: proof strength times tensile stress area. For an M12 grade 8.8 bolt it is about 49 kilonewtons.",
+      "asks": [
+        "bolt proof strength"
+      ]
+    }
+  ],
+  "facts": [
+    "An M12 coarse thread has a tensile stress area of about 84.3 mm².",
+    "Bolts are commonly preloaded to about 75 % of proof load for reusable joints."
+  ],
+  "quiz": [
+    {
+      "say": "A bolt has a preload of 20 kilonewtons and a joint constant C of 0.2. An external load of 10 kilonewtons is applied. What is the bolt tension?",
+      "show": "Preload 20 kN, C = 0.2, external load 10 kN. Bolt tension?",
+      "options": [
+        {
+          "show": "22 kN",
+          "say": "22 kilonewtons"
+        },
+        {
+          "show": "30 kN",
+          "say": "30 kilonewtons"
+        },
+        {
+          "show": "12 kN",
+          "say": "12 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "F_bolt = F_i + CP = 20 + 0.2 × 10 = 22 kN.",
+      "wrong": {
+        "1": "That assumes the bolt takes the whole external load; the stiff plates take most of it.",
+        "2": "That is the clamp force, 20 − 0.8 × 10, not the bolt tension."
+      }
+    },
+    {
+      "say": "Why does preload improve the fatigue life of a bolt?",
+      "show": "Why does preload improve bolt fatigue life?",
+      "options": [
+        {
+          "show": "The bolt feels only a small part of the load swings",
+          "say": "The bolt feels only a small part of the load swings"
+        },
+        {
+          "show": "It makes the bolt material stronger",
+          "say": "It makes the bolt material stronger"
+        },
+        {
+          "show": "It removes all stress from the bolt",
+          "say": "It removes all stress from the bolt"
+        }
+      ],
+      "answer": 0,
+      "why": "With the joint clamped, only C times the fluctuating load reaches the bolt, so its stress swings are small.",
+      "wrong": {
+        "1": "Tightening does not change the strength of the steel.",
+        "2": "A preloaded bolt is always under high tension."
+      }
+    }
+  ]
+}

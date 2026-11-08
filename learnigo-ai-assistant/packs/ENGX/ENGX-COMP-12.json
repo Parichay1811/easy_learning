@@ -1,0 +1,560 @@
+{
+  "id": "ENGX-COMP-12",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a router sends packets the right way",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "router",
+    "data packets",
+    "IP address",
+    "routing table",
+    "packet switching"
+  ],
+  "examples": [
+    "What does a router actually do?",
+    "How does data find its way across the internet?",
+    "What is a data packet?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "laptop",
+          "label": "Your laptop",
+          "icon": "computer",
+          "x": 0.08,
+          "y": 0.5,
+          "ask": "What is a data packet?"
+        },
+        {
+          "id": "home",
+          "label": "Home router",
+          "icon": "antenna",
+          "x": 0.28,
+          "y": 0.5,
+          "ask": "What does a router do?"
+        },
+        {
+          "id": "ra",
+          "label": "Router A",
+          "icon": "tower",
+          "x": 0.5,
+          "y": 0.2,
+          "ask": "What is a routing table?"
+        },
+        {
+          "id": "rb",
+          "label": "Router B",
+          "icon": "tower",
+          "x": 0.5,
+          "y": 0.8,
+          "ask": "What happens if a router breaks?"
+        },
+        {
+          "id": "rc",
+          "label": "Router C",
+          "icon": "tower",
+          "x": 0.72,
+          "y": 0.5
+        },
+        {
+          "id": "server",
+          "label": "Website server",
+          "icon": "computer",
+          "x": 0.92,
+          "y": 0.5,
+          "ask": "What is an IP address?"
+        }
+      ],
+      "links": [
+        {
+          "from": "laptop",
+          "to": "home",
+          "kind": "data",
+          "label": "packet"
+        },
+        {
+          "from": "home",
+          "to": "ra",
+          "kind": "data"
+        },
+        {
+          "from": "home",
+          "to": "rb",
+          "kind": "data"
+        },
+        {
+          "from": "ra",
+          "to": "rc",
+          "kind": "data"
+        },
+        {
+          "from": "rb",
+          "to": "rc",
+          "kind": "data"
+        },
+        {
+          "from": "rc",
+          "to": "server",
+          "kind": "data"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Everything you send online is chopped into small packets. Each one carries a label with the address it is going to, called an IP address, like a letter in an envelope.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a router sends packets the right way"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "laptop",
+              "label": "Your laptop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "What is a data packet?"
+            },
+            {
+              "id": "home",
+              "label": "Home router",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.5,
+              "ask": "What does a router do?"
+            },
+            {
+              "id": "ra",
+              "label": "Router A",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.2,
+              "ask": "What is a routing table?"
+            },
+            {
+              "id": "rb",
+              "label": "Router B",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.8,
+              "ask": "What happens if a router breaks?"
+            },
+            {
+              "id": "rc",
+              "label": "Router C",
+              "icon": "tower",
+              "x": 0.72,
+              "y": 0.5
+            },
+            {
+              "id": "server",
+              "label": "Website server",
+              "icon": "computer",
+              "x": 0.92,
+              "y": 0.5,
+              "ask": "What is an IP address?"
+            }
+          ],
+          "links": [
+            {
+              "from": "laptop",
+              "to": "home",
+              "kind": "data",
+              "label": "packet"
+            },
+            {
+              "from": "home",
+              "to": "ra",
+              "kind": "data"
+            },
+            {
+              "from": "home",
+              "to": "rb",
+              "kind": "data"
+            },
+            {
+              "from": "ra",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rb",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rc",
+              "to": "server",
+              "kind": "data"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Your home router is the first stop. It joins all the devices in your home and forwards their packets to your internet provider's network.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "laptop",
+              "label": "Your laptop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "What is a data packet?"
+            },
+            {
+              "id": "home",
+              "label": "Home router",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.5,
+              "ask": "What does a router do?"
+            },
+            {
+              "id": "ra",
+              "label": "Router A",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.2,
+              "ask": "What is a routing table?"
+            },
+            {
+              "id": "rb",
+              "label": "Router B",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.8,
+              "ask": "What happens if a router breaks?"
+            },
+            {
+              "id": "rc",
+              "label": "Router C",
+              "icon": "tower",
+              "x": 0.72,
+              "y": 0.5
+            },
+            {
+              "id": "server",
+              "label": "Website server",
+              "icon": "computer",
+              "x": 0.92,
+              "y": 0.5,
+              "ask": "What is an IP address?"
+            }
+          ],
+          "links": [
+            {
+              "from": "laptop",
+              "to": "home",
+              "kind": "data",
+              "label": "packet"
+            },
+            {
+              "from": "home",
+              "to": "ra",
+              "kind": "data"
+            },
+            {
+              "from": "home",
+              "to": "rb",
+              "kind": "data"
+            },
+            {
+              "from": "ra",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rb",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rc",
+              "to": "server",
+              "kind": "data"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Each router reads a packet's destination address and looks it up in its routing table, a list saying which neighbouring router is the best next hop towards that address. It passes the packet on in millionths of a second.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "laptop",
+              "label": "Your laptop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "What is a data packet?"
+            },
+            {
+              "id": "home",
+              "label": "Home router",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.5,
+              "ask": "What does a router do?"
+            },
+            {
+              "id": "ra",
+              "label": "Router A",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.2,
+              "ask": "What is a routing table?"
+            },
+            {
+              "id": "rb",
+              "label": "Router B",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.8,
+              "ask": "What happens if a router breaks?"
+            },
+            {
+              "id": "rc",
+              "label": "Router C",
+              "icon": "tower",
+              "x": 0.72,
+              "y": 0.5
+            },
+            {
+              "id": "server",
+              "label": "Website server",
+              "icon": "computer",
+              "x": 0.92,
+              "y": 0.5,
+              "ask": "What is an IP address?"
+            }
+          ],
+          "links": [
+            {
+              "from": "laptop",
+              "to": "home",
+              "kind": "data",
+              "label": "packet"
+            },
+            {
+              "from": "home",
+              "to": "ra",
+              "kind": "data"
+            },
+            {
+              "from": "home",
+              "to": "rb",
+              "kind": "data"
+            },
+            {
+              "from": "ra",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rb",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rc",
+              "to": "server",
+              "kind": "data"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Routers keep sharing news about which links are busy or broken. If one fails, packets simply take another path, and the computer at the far end puts them back in order.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "laptop",
+              "label": "Your laptop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "What is a data packet?"
+            },
+            {
+              "id": "home",
+              "label": "Home router",
+              "icon": "antenna",
+              "x": 0.28,
+              "y": 0.5,
+              "ask": "What does a router do?"
+            },
+            {
+              "id": "ra",
+              "label": "Router A",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.2,
+              "ask": "What is a routing table?"
+            },
+            {
+              "id": "rb",
+              "label": "Router B",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.8,
+              "ask": "What happens if a router breaks?"
+            },
+            {
+              "id": "rc",
+              "label": "Router C",
+              "icon": "tower",
+              "x": 0.72,
+              "y": 0.5
+            },
+            {
+              "id": "server",
+              "label": "Website server",
+              "icon": "computer",
+              "x": 0.92,
+              "y": 0.5,
+              "ask": "What is an IP address?"
+            }
+          ],
+          "links": [
+            {
+              "from": "laptop",
+              "to": "home",
+              "kind": "data",
+              "label": "packet"
+            },
+            {
+              "from": "home",
+              "to": "ra",
+              "kind": "data"
+            },
+            {
+              "from": "home",
+              "to": "rb",
+              "kind": "data"
+            },
+            {
+              "from": "ra",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rb",
+              "to": "rc",
+              "kind": "data"
+            },
+            {
+              "from": "rc",
+              "to": "server",
+              "kind": "data"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a data packet?",
+      "a": "A packet is a small chunk of data, often around 1,500 bytes, with a header that says where it came from, where it is going and its place in the sequence. Big files are split into thousands of packets.",
+      "asks": [
+        "Why is data split into packets?"
+      ]
+    },
+    {
+      "q": "What does a router do?",
+      "a": "A router connects networks together and forwards each packet towards its destination. Your home router links your devices to your internet provider and also usually gives you Wi-Fi.",
+      "asks": [
+        "What is a router for?"
+      ]
+    },
+    {
+      "q": "What is a routing table?",
+      "a": "A routing table is a router's list of destinations and the next router to send each one to. Routers build and update these tables by swapping information with their neighbours.",
+      "asks": [
+        "How does a router know where to send data?"
+      ]
+    },
+    {
+      "q": "What happens if a router breaks?",
+      "a": "Neighbouring routers notice it has stopped answering and update their routing tables, so packets flow around it on other paths. This is why the internet keeps working when parts fail.",
+      "asks": [
+        "Why does the internet not break when one part fails?"
+      ]
+    },
+    {
+      "q": "What is an IP address?",
+      "a": "An IP address is a number that identifies a device on a network, like a postal address for computers. The older IPv4 kind looks like four numbers separated by dots, such as 192.168.1.1.",
+      "asks": [
+        "What does IP stand for?"
+      ]
+    }
+  ],
+  "facts": [
+    "An IPv4 address is 32 bits long, allowing about 4.3 billion addresses; IPv6 addresses are 128 bits long.",
+    "Packets from the same file can travel by different routes and are reassembled in order at the destination."
+  ],
+  "quiz": [
+    {
+      "say": "How does a router decide where to send a packet next?",
+      "show": "A router chooses the next hop by…",
+      "options": [
+        {
+          "show": "Picking a random neighbour",
+          "say": "Picking a random neighbour"
+        },
+        {
+          "show": "Looking up the destination in its routing table",
+          "say": "Looking up the destination in its routing table"
+        },
+        {
+          "show": "Asking the packet's sender each time",
+          "say": "Asking the packet's sender each time"
+        }
+      ],
+      "answer": 1,
+      "why": "The routing table lists the best next router for each destination address.",
+      "wrong": {
+        "0": "Random choices would lose packets; routers follow their tables.",
+        "2": "The sender is not asked; the destination address in the packet is enough."
+      }
+    }
+  ]
+}

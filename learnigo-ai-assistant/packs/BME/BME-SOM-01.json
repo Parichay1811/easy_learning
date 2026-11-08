@@ -1,0 +1,297 @@
+{
+  "id": "BME-SOM-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Normal stress and strain: how hard a steel tie rod is being pulled",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-SOM — Mechanics of materials",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "normal stress",
+    "normal strain",
+    "axial load",
+    "cross-sectional area",
+    "megapascal"
+  ],
+  "examples": [
+    "What is normal stress?",
+    "How do I calculate stress in a rod?",
+    "What is the difference between stress and strain?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "wire",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Pull 50 kN",
+          "dir": "left",
+          "size": 4,
+          "ask": "What is normal stress?"
+        },
+        {
+          "label": "Pull 50 kN",
+          "dir": "right",
+          "size": 4,
+          "ask": "What is normal stress?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A steel tie rod holds up a balcony, pulled at both ends by 50 kilonewtons. Is that safe? Force alone cannot tell you: a thick bar shrugs off a pull that would snap a thin one. Engineers compare stress instead, the force shared over each square millimetre of the cross-section. Look at the two equal pulls.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Normal stress and strain: how hard a steel tie rod is being pulled"
+        },
+        {
+          "name": "x-forces",
+          "object": "wire",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Pull 50 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What is normal stress?"
+            },
+            {
+              "label": "Pull 50 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "What is normal stress?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Rod: 20 mm diameter, 2 m long, pulled by 50 kN"
+        }
+      ]
+    },
+    {
+      "say": "Normal stress, sigma, is force divided by area, with the force at right angles to the cut. Our rod is 20 millimetres across, so its area is pi times 10 squared, about 314 square millimetres. See the pull on each end? What do you think the stress is?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "wire",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Pull 50 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What is normal stress?"
+            },
+            {
+              "label": "Pull 50 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "What is normal stress?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "A = πd²/4 = π × 20² / 4 = 314 mm²"
+        }
+      ]
+    },
+    {
+      "say": "Fifty thousand newtons over 314 square millimetres is about 159 newtons per square millimetre, which is 159 megapascals. One megapascal is one newton per square millimetre, a handy unit. Mild steel yields at about 250, so this rod is fine. Would a 10 millimetre rod be safe?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "wire",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Pull 50 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What is normal stress?"
+            },
+            {
+              "label": "Pull 50 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "What is normal stress?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "σ = F / A = 50 000 N / 314 mm² = 159 MPa"
+        }
+      ]
+    },
+    {
+      "say": "No: a quarter of the area means four times the stress, 637 megapascals! Now strain: the stretch divided by the original length. It has no units. Steel at 159 megapascals stretches by about 0.0008, so this 2 metre rod grows by about 1.6 millimetres. If both pulls reverse and push inwards, what do we call the stress?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "wire",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Pull 50 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What is normal stress?"
+            },
+            {
+              "label": "Pull 50 kN",
+              "dir": "right",
+              "size": 4,
+              "ask": "What is normal stress?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ε = δ / L = 1.59 mm / 2000 mm = 0.0008"
+        }
+      ]
+    },
+    {
+      "say": "Compressive stress, the opposite of tensile. Well done! Real link: every bolt, cable and column is sized this way, from the cables of a Ganges bridge to the bolts in an engine. Exam tip: work in newtons and millimetres and your stress comes out straight in megapascals. Challenge: what diameter keeps the stress at 100 megapascals?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "wire",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Push 50 kN",
+              "dir": "right",
+              "size": 4
+            },
+            {
+              "label": "Push 50 kN",
+              "dir": "left",
+              "size": 4
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Pushing inwards gives compressive stress"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is normal stress?",
+      "a": "It is the internal force per unit area acting at right angles to a cut through the material: sigma equals F over A. Pulling gives tensile stress, pushing gives compressive stress.",
+      "asks": [
+        "define normal stress",
+        "how do I calculate stress in a rod"
+      ]
+    },
+    {
+      "q": "Why do engineers use stress instead of force?",
+      "a": "Stress lets you compare parts of different sizes. A material fails at roughly the same stress whatever the size of the bar, so you can check any part against the material's strength.",
+      "asks": [
+        "why stress matters"
+      ]
+    },
+    {
+      "q": "What is a megapascal?",
+      "a": "One megapascal is a million pascals, which equals one newton per square millimetre. It is the usual unit for stresses in metals.",
+      "asks": [
+        "MPa to N/mm2"
+      ]
+    },
+    {
+      "q": "What is strain?",
+      "a": "Strain is the change in length divided by the original length. It is a ratio, so it has no units; it is often written as a percentage or in microstrain.",
+      "asks": [
+        "define strain",
+        "difference between stress and strain"
+      ]
+    },
+    {
+      "q": "Is compressive stress negative?",
+      "a": "By the usual sign convention, tensile stress is positive and compressive stress is negative.",
+      "asks": [
+        "sign convention for stress"
+      ]
+    }
+  ],
+  "facts": [
+    "One megapascal equals one newton per square millimetre.",
+    "Strain is the change in length divided by the original length and has no units."
+  ],
+  "quiz": [
+    {
+      "say": "A bar with a cross-section of 200 square millimetres carries a pull of 30 kilonewtons. What is the stress?",
+      "show": "A 200 mm² bar carries 30 kN in tension. Stress?",
+      "options": [
+        {
+          "show": "150 MPa",
+          "say": "150 megapascals"
+        },
+        {
+          "show": "6 MPa",
+          "say": "6 megapascals"
+        },
+        {
+          "show": "0.15 MPa",
+          "say": "0.15 megapascals"
+        }
+      ],
+      "answer": 0,
+      "why": "σ = 30 000 N / 200 mm² = 150 N/mm² = 150 MPa.",
+      "wrong": {
+        "1": "That divides area by force, upside down, and mixes units.",
+        "2": "That forgets to convert kilonewtons into newtons."
+      }
+    },
+    {
+      "say": "A 4 metre wire stretches by 2 millimetres. What is its strain?",
+      "show": "A 4 m wire stretches by 2 mm. Strain?",
+      "options": [
+        {
+          "show": "0.0005",
+          "say": "0.0005"
+        },
+        {
+          "show": "0.5",
+          "say": "0.5"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        }
+      ],
+      "answer": 0,
+      "why": "ε = 2 mm / 4000 mm = 0.0005.",
+      "wrong": {
+        "1": "That divides 2 by 4 without changing metres to millimetres.",
+        "2": "That is the stretch in millimetres, not the strain."
+      }
+    }
+  ]
+}

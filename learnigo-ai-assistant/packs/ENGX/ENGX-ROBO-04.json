@@ -1,0 +1,585 @@
+{
+  "id": "ENGX-ROBO-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How PID control steers a machine to its target",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "PID controller",
+    "proportional integral derivative",
+    "control tuning",
+    "overshoot",
+    "feedback controller"
+  ],
+  "examples": [
+    "What is PID control?",
+    "What do P, I and D mean in PID?",
+    "Why does my drone wobble?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "tgt",
+          "label": "Target",
+          "icon": "arrow",
+          "x": 0.08,
+          "y": 0.5
+        },
+        {
+          "id": "err",
+          "label": "Error",
+          "icon": "scale",
+          "x": 0.28,
+          "y": 0.5,
+          "ask": "What is the error in PID?"
+        },
+        {
+          "id": "p",
+          "label": "P: how far off",
+          "icon": "ruler",
+          "x": 0.52,
+          "y": 0.15,
+          "ask": "What does the P in PID do?"
+        },
+        {
+          "id": "i",
+          "label": "I: how long off",
+          "icon": "clock",
+          "x": 0.52,
+          "y": 0.5,
+          "ask": "What does the I in PID do?"
+        },
+        {
+          "id": "d",
+          "label": "D: how fast changing",
+          "icon": "arrow",
+          "x": 0.52,
+          "y": 0.85,
+          "ask": "What does the D in PID do?"
+        },
+        {
+          "id": "mot",
+          "label": "Motor",
+          "icon": "motor",
+          "x": 0.8,
+          "y": 0.4
+        },
+        {
+          "id": "sen",
+          "label": "Sensor",
+          "icon": "sensor",
+          "x": 0.88,
+          "y": 0.85
+        }
+      ],
+      "links": [
+        {
+          "from": "tgt",
+          "to": "err",
+          "kind": "data"
+        },
+        {
+          "from": "err",
+          "to": "p",
+          "kind": "data"
+        },
+        {
+          "from": "err",
+          "to": "i",
+          "kind": "data"
+        },
+        {
+          "from": "err",
+          "to": "d",
+          "kind": "data"
+        },
+        {
+          "from": "p",
+          "to": "mot",
+          "kind": "signal"
+        },
+        {
+          "from": "i",
+          "to": "mot",
+          "kind": "signal"
+        },
+        {
+          "from": "d",
+          "to": "mot",
+          "kind": "signal"
+        },
+        {
+          "from": "mot",
+          "to": "sen",
+          "kind": "force",
+          "label": "moves"
+        },
+        {
+          "from": "sen",
+          "to": "err",
+          "kind": "data",
+          "label": "measured"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "PID is the most common recipe a controller uses to reach a target, from drone motors to factory ovens. It looks at the error, the gap between target and reality, in three ways and adds them up.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How PID control steers a machine to its target"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "tgt",
+              "label": "Target",
+              "icon": "arrow",
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "id": "err",
+              "label": "Error",
+              "icon": "scale",
+              "x": 0.28,
+              "y": 0.5,
+              "ask": "What is the error in PID?"
+            },
+            {
+              "id": "p",
+              "label": "P: how far off",
+              "icon": "ruler",
+              "x": 0.52,
+              "y": 0.15,
+              "ask": "What does the P in PID do?"
+            },
+            {
+              "id": "i",
+              "label": "I: how long off",
+              "icon": "clock",
+              "x": 0.52,
+              "y": 0.5,
+              "ask": "What does the I in PID do?"
+            },
+            {
+              "id": "d",
+              "label": "D: how fast changing",
+              "icon": "arrow",
+              "x": 0.52,
+              "y": 0.85,
+              "ask": "What does the D in PID do?"
+            },
+            {
+              "id": "mot",
+              "label": "Motor",
+              "icon": "motor",
+              "x": 0.8,
+              "y": 0.4
+            },
+            {
+              "id": "sen",
+              "label": "Sensor",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "tgt",
+              "to": "err",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "p",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "i",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "d",
+              "kind": "data"
+            },
+            {
+              "from": "p",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "i",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "d",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "mot",
+              "to": "sen",
+              "kind": "force",
+              "label": "moves"
+            },
+            {
+              "from": "sen",
+              "to": "err",
+              "kind": "data",
+              "label": "measured"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "P, for proportional, pushes in proportion to how far off you are right now: a big gap gets a big push. On its own it often leaves a small gap, or overshoots.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "tgt",
+              "label": "Target",
+              "icon": "arrow",
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "id": "err",
+              "label": "Error",
+              "icon": "scale",
+              "x": 0.28,
+              "y": 0.5,
+              "ask": "What is the error in PID?"
+            },
+            {
+              "id": "p",
+              "label": "P: how far off",
+              "icon": "ruler",
+              "x": 0.52,
+              "y": 0.15,
+              "ask": "What does the P in PID do?"
+            },
+            {
+              "id": "i",
+              "label": "I: how long off",
+              "icon": "clock",
+              "x": 0.52,
+              "y": 0.5,
+              "ask": "What does the I in PID do?"
+            },
+            {
+              "id": "d",
+              "label": "D: how fast changing",
+              "icon": "arrow",
+              "x": 0.52,
+              "y": 0.85,
+              "ask": "What does the D in PID do?"
+            },
+            {
+              "id": "mot",
+              "label": "Motor",
+              "icon": "motor",
+              "x": 0.8,
+              "y": 0.4
+            },
+            {
+              "id": "sen",
+              "label": "Sensor",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "tgt",
+              "to": "err",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "p",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "i",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "d",
+              "kind": "data"
+            },
+            {
+              "from": "p",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "i",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "d",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "mot",
+              "to": "sen",
+              "kind": "force",
+              "label": "moves"
+            },
+            {
+              "from": "sen",
+              "to": "err",
+              "kind": "data",
+              "label": "measured"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "I, for integral, adds up how long the error has lasted, so a stubborn small gap keeps growing the push until it closes. D, for derivative, watches how fast the error is changing and eases off early, like braking before a stop.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "tgt",
+              "label": "Target",
+              "icon": "arrow",
+              "x": 0.08,
+              "y": 0.5
+            },
+            {
+              "id": "err",
+              "label": "Error",
+              "icon": "scale",
+              "x": 0.28,
+              "y": 0.5,
+              "ask": "What is the error in PID?"
+            },
+            {
+              "id": "p",
+              "label": "P: how far off",
+              "icon": "ruler",
+              "x": 0.52,
+              "y": 0.15,
+              "ask": "What does the P in PID do?"
+            },
+            {
+              "id": "i",
+              "label": "I: how long off",
+              "icon": "clock",
+              "x": 0.52,
+              "y": 0.5,
+              "ask": "What does the I in PID do?"
+            },
+            {
+              "id": "d",
+              "label": "D: how fast changing",
+              "icon": "arrow",
+              "x": 0.52,
+              "y": 0.85,
+              "ask": "What does the D in PID do?"
+            },
+            {
+              "id": "mot",
+              "label": "Motor",
+              "icon": "motor",
+              "x": 0.8,
+              "y": 0.4
+            },
+            {
+              "id": "sen",
+              "label": "Sensor",
+              "icon": "sensor",
+              "x": 0.88,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "tgt",
+              "to": "err",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "p",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "i",
+              "kind": "data"
+            },
+            {
+              "from": "err",
+              "to": "d",
+              "kind": "data"
+            },
+            {
+              "from": "p",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "i",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "d",
+              "to": "mot",
+              "kind": "signal"
+            },
+            {
+              "from": "mot",
+              "to": "sen",
+              "kind": "force",
+              "label": "moves"
+            },
+            {
+              "from": "sen",
+              "to": "err",
+              "kind": "data",
+              "label": "measured"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Tuned well, the three together bring a machine to its target quickly and smoothly, with little overshoot.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Time"
+          },
+          "y": {
+            "label": "Position"
+          },
+          "shape": "s-curve",
+          "marks": [
+            {
+              "at": 0.15,
+              "label": "Fast start (P)"
+            },
+            {
+              "at": 0.55,
+              "label": "Smooth arrival (D)"
+            },
+            {
+              "at": 0.9,
+              "label": "No gap left (I)"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the P in PID do?",
+      "a": "P stands for proportional. It pushes harder the bigger the error is right now, like steering more sharply the further you have drifted from the middle of the lane.",
+      "asks": [
+        "What is proportional control?"
+      ]
+    },
+    {
+      "q": "What does the I in PID do?",
+      "a": "I stands for integral. It adds up the error over time, so even a small error that will not go away builds a bigger and bigger correction until it is gone.",
+      "asks": [
+        "What is integral control?"
+      ]
+    },
+    {
+      "q": "What does the D in PID do?",
+      "a": "D stands for derivative. It reacts to how fast the error is changing, easing off as the target gets close so the machine does not overshoot, a bit like braking gently before a stop sign.",
+      "asks": [
+        "What is derivative control?"
+      ]
+    },
+    {
+      "q": "What is the error in PID?",
+      "a": "The error is the target minus the measured value. If a drone should be level but is tilted 5 degrees, the error is 5 degrees, and the controller works to make it zero.",
+      "asks": [
+        "How is the error calculated?"
+      ]
+    },
+    {
+      "q": "What is PID tuning?",
+      "a": "Tuning means choosing how strong each of the P, I and D parts should be. Too strong and the machine wobbles or overshoots; too weak and it is slow to reach the target.",
+      "asks": [
+        "Why does my drone wobble?"
+      ]
+    }
+  ],
+  "facts": [
+    "PID controllers are the most widely used feedback controllers in industry.",
+    "Nicolas Minorsky published an analysis of PID-style control for automatic ship steering in 1922."
+  ],
+  "quiz": [
+    {
+      "say": "A heater's controller always leaves the room 1 degree too cold. Which part of PID fixes a small gap that won't go away?",
+      "show": "Which part removes a steady small gap?",
+      "options": [
+        {
+          "show": "Integral (I)",
+          "say": "Integral (I)"
+        },
+        {
+          "show": "Derivative (D)",
+          "say": "Derivative (D)"
+        },
+        {
+          "show": "Proportional alone",
+          "say": "Proportional alone"
+        }
+      ],
+      "answer": 0,
+      "why": "The integral keeps adding up the lasting error, so its push grows until the gap is closed.",
+      "wrong": {
+        "1": "D reacts to how fast the error changes, and a steady gap is not changing.",
+        "2": "Proportional control alone is usually what leaves that steady gap."
+      }
+    }
+  ]
+}

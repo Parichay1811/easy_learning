@@ -1,0 +1,390 @@
+{
+  "id": "BEE-ACC-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "RC circuit charging: what the time constant tells you",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "RC circuit",
+    "time constant",
+    "capacitor charging",
+    "exponential rise",
+    "63 percent"
+  ],
+  "examples": [
+    "What is the time constant of an RC circuit?",
+    "How long does a capacitor take to charge?",
+    "Why does a capacitor charge exponentially?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Battery",
+          "value": "9 V"
+        },
+        {
+          "kind": "switch",
+          "label": "Switch",
+          "ask": "What does the switch do?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R",
+          "value": "10 kΩ",
+          "ask": "What does the resistor do in an RC circuit?"
+        },
+        {
+          "kind": "capacitor",
+          "label": "C",
+          "value": "100 µF",
+          "ask": "Why does an empty capacitor act like a wire at first?"
+        }
+      ],
+      "readouts": [
+        "τ = RC = 1 s",
+        "At t = τ: V_C = 5.7 V",
+        "I starts at 0.9 mA"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A camera flash whines for a few seconds before it is ready. That wait is a capacitor charging through a resistor. On the board, a 9 volt battery will charge a 100 microfarad capacitor through a 10 kilohm resistor. The switch is still open. Let's close it and watch the charge build up.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "RC circuit charging: what the time constant tells you"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "9 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch",
+              "ask": "What does the switch do?",
+              "open": true
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "10 kΩ",
+              "ask": "What does the resistor do in an RC circuit?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "C",
+              "value": "100 µF",
+              "ask": "Why does an empty capacitor act like a wire at first?"
+            }
+          ],
+          "readouts": [
+            "τ = RC = 1 s",
+            "At t = τ: V_C = 5.7 V",
+            "I starts at 0.9 mA"
+          ],
+          "flow": false
+        }
+      ]
+    },
+    {
+      "say": "The switch closes. At that very instant the capacitor is empty, so it has no voltage and behaves like a plain wire. All 9 volts sit across the resistor, and the current is 9 volts over 10 kilohms, 0.9 milliamps, the biggest it will ever be. As charge piles up on the capacitor, what happens to the voltage left for the resistor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "9 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch",
+              "ask": "What does the switch do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "10 kΩ",
+              "ask": "What does the resistor do in an RC circuit?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "C",
+              "value": "100 µF",
+              "ask": "Why does an empty capacitor act like a wire at first?"
+            }
+          ],
+          "readouts": [
+            "τ = RC = 1 s",
+            "At t = τ: V_C = 5.7 V",
+            "I starts at 0.9 mA"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "I(0) = 9 V / 10 kΩ = 0.9 mA"
+        }
+      ]
+    },
+    {
+      "say": "It shrinks, so the current slows down. That gives the curve on the board: the capacitor voltage rises quickly at first, then more and more gently, creeping towards 9 volts. The pace is set by the time constant, tau, equal to R times C: 10 kilohms times 100 microfarads is exactly 1 second. What fraction is reached after one tau?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 5
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Capacitor voltage",
+              "type": "rise",
+              "a": 9,
+              "k": 1,
+              "ask": "What is the time constant of an RC circuit?"
+            },
+            {
+              "label": "Resistor voltage",
+              "type": "decay",
+              "a": 9,
+              "k": 1,
+              "ask": "Why 63 percent after one time constant?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "τ = 1 s: 63 %"
+            },
+            {
+              "x": 5,
+              "label": "5τ: 99 %"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "V_C = 9(1 − e^(−t/RC)),   τ = RC = 1 s"
+        }
+      ]
+    },
+    {
+      "say": "About 63 percent, so 5.7 volts after 1 second. The resistor's voltage, the falling curve, does the mirror image, decaying from 9 volts. At every moment the two add up to 9 volts, which is Kirchhoff's voltage law at work. Where do the two curves cross?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 5
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Capacitor voltage",
+              "type": "rise",
+              "a": 9,
+              "k": 1,
+              "ask": "What is the time constant of an RC circuit?"
+            },
+            {
+              "label": "Resistor voltage",
+              "type": "decay",
+              "a": 9,
+              "k": 1,
+              "ask": "Why 63 percent after one time constant?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "τ = 1 s: 63 %"
+            },
+            {
+              "x": 5,
+              "label": "5τ: 99 %"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V_R + V_C = 9 V at every instant"
+        }
+      ]
+    },
+    {
+      "say": "At 4.5 volts each, after about 0.69 seconds, which is tau times the natural log of 2. Fantastic! Rule of thumb: after 5 tau, here 5 seconds, the capacitor is over 99 percent full, so engineers call it charged. Defibrillators and flash units rely on exactly this. Challenge: what is tau with a 20 kilohm resistor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 5
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Capacitor voltage",
+              "type": "rise",
+              "a": 9,
+              "k": 1,
+              "ask": "What is the time constant of an RC circuit?"
+            },
+            {
+              "label": "Resistor voltage",
+              "type": "decay",
+              "a": 9,
+              "k": 1,
+              "ask": "Why 63 percent after one time constant?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "τ = 1 s: 63 %"
+            },
+            {
+              "x": 5,
+              "label": "5τ: 99 %"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "After 5τ = 5 s:  V_C ≈ 0.993 × 9 ≈ 8.94 V"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the time constant of an RC circuit?",
+      "a": "Tau equals R times C, in seconds. After one tau a charging capacitor reaches about 63 percent of its final voltage; after five tau it is practically full.",
+      "asks": [
+        "What is tau in RC?",
+        "RC time constant formula"
+      ]
+    },
+    {
+      "q": "Why does an empty capacitor act like a wire at first?",
+      "a": "An empty capacitor has no voltage across it, so at the first instant it does not oppose the current at all. As charge builds, its voltage rises and it pushes back.",
+      "asks": [
+        "Why is the current biggest at t = 0 in an RC circuit?"
+      ]
+    },
+    {
+      "q": "What does the resistor do in an RC circuit?",
+      "a": "It limits the charging current, and together with C it sets the time constant. A bigger resistor means a smaller current and slower charging.",
+      "asks": [
+        "Why does a bigger R slow charging?"
+      ]
+    },
+    {
+      "q": "Why 63 percent after one time constant?",
+      "a": "The capacitor voltage is the final voltage times 1 minus e to the minus t over tau. At t equals tau that is 1 minus 1 over e, about 0.632.",
+      "asks": [
+        "Where does 63 percent come from?"
+      ]
+    },
+    {
+      "q": "What does the switch do?",
+      "a": "Closing it starts the charging at time zero. Opening it again stops the current, and an ideal capacitor would then hold its voltage.",
+      "asks": [
+        "What happens when the switch opens?"
+      ]
+    }
+  ],
+  "facts": [
+    "After five time constants a charging capacitor is within 1 percent of its final voltage.",
+    "One farad is one coulomb of charge stored per volt."
+  ],
+  "quiz": [
+    {
+      "say": "R is 47 kilohms and C is 10 microfarads. What is the time constant?",
+      "show": "R = 47 kΩ and C = 10 µF. What is the time constant?",
+      "options": [
+        {
+          "show": "0.47 s",
+          "say": "0.47 seconds"
+        },
+        {
+          "show": "4.7 s",
+          "say": "4.7 seconds"
+        },
+        {
+          "show": "47 ms",
+          "say": "47 milliseconds"
+        }
+      ],
+      "answer": 0,
+      "why": "Tau is R times C: 47,000 times 0.00001, which is 0.47 seconds.",
+      "wrong": {
+        "1": "That is ten times too big; check the powers of ten.",
+        "2": "That is ten times too small; 47 milliseconds is 0.047 seconds."
+      }
+    },
+    {
+      "say": "After one time constant, a charging capacitor has reached about what fraction of the supply voltage?",
+      "show": "After one time constant, a charging capacitor has reached about what fraction of the supply voltage?",
+      "options": [
+        {
+          "show": "63%",
+          "say": "63 percent"
+        },
+        {
+          "show": "50%",
+          "say": "50 percent"
+        },
+        {
+          "show": "37%",
+          "say": "37 percent"
+        }
+      ],
+      "answer": 0,
+      "why": "One minus 1 over e is about 0.632, so roughly 63 percent.",
+      "wrong": {
+        "1": "Half is reached a little earlier, at about 0.69 tau.",
+        "2": "About 37 percent is what remains to go, or what a discharging capacitor keeps."
+      }
+    }
+  ]
+}

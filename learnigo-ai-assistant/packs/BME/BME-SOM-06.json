@@ -1,0 +1,434 @@
+{
+  "id": "BME-SOM-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Torsion of circular shafts: shear stress and twist from τ = Tr/J",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-SOM — Mechanics of materials",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "torsion",
+    "polar moment of inertia",
+    "shear stress in shafts",
+    "angle of twist",
+    "hollow shaft"
+  ],
+  "examples": [
+    "How do I calculate shear stress in a shaft?",
+    "Why are hollow shafts used?",
+    "How do I find the angle of twist of a shaft?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.15,
+          "y": 0.5,
+          "size": 0.9,
+          "label": "Motor 1500 rpm"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.5,
+          "y": 0.5,
+          "size": 1.4,
+          "label": "Shaft 50 mm",
+          "ask": "What does torsion do to a shaft?"
+        },
+        {
+          "id": "pump",
+          "kind": "fan",
+          "x": 0.85,
+          "y": 0.5,
+          "size": 0.9,
+          "label": "Pump impeller"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "shaft",
+          "kind": "power",
+          "label": "2 kN·m"
+        },
+        {
+          "from": "shaft",
+          "to": "pump",
+          "kind": "power"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every car has a drive shaft, and every ship a propeller shaft, carrying power by twisting. Twisting is called torsion. Here a motor turns a pump through a 50 millimetre steel shaft with a torque of 2 kilonewton metres. How hard is the steel working, and how far does it twist?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Torsion of circular shafts: shear stress and twist from τ = Tr/J"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Motor 1500 rpm"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Shaft 50 mm",
+              "ask": "What does torsion do to a shaft?"
+            },
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Pump impeller"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power",
+              "label": "2 kN·m"
+            },
+            {
+              "from": "shaft",
+              "to": "pump",
+              "kind": "power"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Torque T = 2 kN·m, solid shaft d = 50 mm, 1 m long"
+        }
+      ]
+    },
+    {
+      "say": "When a shaft twists, each thin slice turns a little relative to the next, so the steel is sheared. The shear is zero at the centre and largest at the outer surface. See the straight line on the graph, rising from the centre? Where do you think a shaft would start to crack?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Radius (mm)",
+            "max": 25
+          },
+          "y": {
+            "label": "Shear stress (MPa)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "Solid shaft",
+              "type": "line",
+              "k": 3.26,
+              "ask": "How do I calculate shear stress in a shaft?"
+            },
+            {
+              "label": "Hollow, 30 mm bore",
+              "type": "points",
+              "points": [
+                [
+                  15,
+                  56.2
+                ],
+                [
+                  25,
+                  93.6
+                ]
+              ],
+              "ask": "Why are hollow shafts used?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 25,
+              "label": "Outer surface"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Shear stress grows in proportion to the radius"
+        }
+      ]
+    },
+    {
+      "say": "At the surface! The formula is tau equals T r over J, where J is the polar moment of inertia, pi d to the fourth over 32. For our shaft, J is about 614 thousand millimetres to the fourth. So the surface stress is 2 million times 25 over 614 thousand, about 81.5 megapascals. Is the middle of the shaft doing much work?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Radius (mm)",
+            "max": 25
+          },
+          "y": {
+            "label": "Shear stress (MPa)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "Solid shaft",
+              "type": "line",
+              "k": 3.26,
+              "ask": "How do I calculate shear stress in a shaft?"
+            },
+            {
+              "label": "Hollow, 30 mm bore",
+              "type": "points",
+              "points": [
+                [
+                  15,
+                  56.2
+                ],
+                [
+                  25,
+                  93.6
+                ]
+              ],
+              "ask": "Why are hollow shafts used?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 25,
+              "label": "Outer surface"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "τ = Tr/J = 2×10⁶ × 25 / 613 592 = 81.5 MPa"
+        }
+      ]
+    },
+    {
+      "say": "Not much, so we can remove it! Bore out a 30 millimetre hole: the stress rises only to about 93.6 megapascals, but you save 36 percent of the steel. See the hollow shaft's short line, from the bore to the surface? The twist over 1 metre is T L over G J: about 0.041 radians, or 2.3 degrees, for the solid shaft. Is that a lot?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Radius (mm)",
+            "max": 25
+          },
+          "y": {
+            "label": "Shear stress (MPa)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "Solid shaft",
+              "type": "line",
+              "k": 3.26,
+              "ask": "How do I calculate shear stress in a shaft?"
+            },
+            {
+              "label": "Hollow, 30 mm bore",
+              "type": "points",
+              "points": [
+                [
+                  15,
+                  56.2
+                ],
+                [
+                  25,
+                  93.6
+                ]
+              ],
+              "ask": "Why are hollow shafts used?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 25,
+              "label": "Outer surface"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "θ = TL/GJ = 2×10⁶ × 1000 / (80 000 × 613 592) = 2.3°"
+        }
+      ]
+    },
+    {
+      "say": "It is noticeable, so long shafts are often sized for stiffness, not strength. Brilliant! The power carried is torque times angular speed: 2 kilonewton metres at 1500 revolutions per minute is about 314 kilowatts. Exam tip: always convert rpm to radians per second, times 2 pi over 60. Challenge: what torque carries 314 kilowatts at 3000 rpm?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Motor 1500 rpm"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Shaft 50 mm",
+              "ask": "What does torsion do to a shaft?"
+            },
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Pump impeller"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power",
+              "label": "2 kN·m"
+            },
+            {
+              "from": "shaft",
+              "to": "pump",
+              "kind": "power"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "P = Tω = 2000 × (1500 × 2π/60) = 314 kW"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does torsion do to a shaft?",
+      "a": "Torsion twists the shaft, so each cross-section rotates slightly relative to its neighbour. This creates shear stress in the material, largest at the outer surface.",
+      "asks": [
+        "what is torsion"
+      ]
+    },
+    {
+      "q": "How do I calculate shear stress in a shaft?",
+      "a": "Use tau equals T r over J. For a solid circular shaft, J equals pi d to the fourth over 32, so the surface stress is 16 T over pi d cubed.",
+      "asks": [
+        "torsion formula",
+        "max shear stress in solid shaft"
+      ]
+    },
+    {
+      "q": "How do I find the angle of twist of a shaft?",
+      "a": "Theta equals T L over G J, in radians, where G is the shear modulus, about 80 gigapascals for steel. Multiply by 180 over pi to get degrees.",
+      "asks": [
+        "angle of twist formula"
+      ]
+    },
+    {
+      "q": "Why are hollow shafts used?",
+      "a": "The material near the centre carries little stress. Removing it saves weight with only a small rise in the surface stress, so hollow shafts are stronger for their weight.",
+      "asks": [
+        "hollow vs solid shaft"
+      ]
+    },
+    {
+      "q": "How is shaft power related to torque?",
+      "a": "Power equals torque times angular speed in radians per second. At a fixed power, a slower shaft must carry more torque, so it must be thicker.",
+      "asks": [
+        "power torque speed formula"
+      ]
+    }
+  ],
+  "facts": [
+    "In a circular shaft under torque, shear stress varies linearly from zero at the centre to a maximum at the surface.",
+    "The polar moment of inertia of a solid circular shaft is pi d to the fourth over 32."
+  ],
+  "quiz": [
+    {
+      "say": "A shaft carries a torque of 500 newton metres. J is 200 thousand millimetres to the fourth and the outer radius is 20 millimetres. What is the surface shear stress?",
+      "show": "T = 500 N·m, J = 200 000 mm⁴, r = 20 mm. Surface shear stress?",
+      "options": [
+        {
+          "show": "50 MPa",
+          "say": "50 megapascals"
+        },
+        {
+          "show": "0.05 MPa",
+          "say": "0.05 megapascals"
+        },
+        {
+          "show": "5 MPa",
+          "say": "5 megapascals"
+        }
+      ],
+      "answer": 0,
+      "why": "τ = Tr/J = 500 000 N·mm × 20 / 200 000 = 50 MPa.",
+      "wrong": {
+        "1": "That leaves the torque in newton metres; convert to newton millimetres first.",
+        "2": "That is ten times too small; check the arithmetic."
+      }
+    },
+    {
+      "say": "Where is the shear stress zero in a solid shaft under torsion?",
+      "show": "In a solid shaft under torsion, shear stress is zero…",
+      "options": [
+        {
+          "show": "At the centre",
+          "say": "At the centre"
+        },
+        {
+          "show": "At the outer surface",
+          "say": "At the outer surface"
+        },
+        {
+          "show": "Halfway out",
+          "say": "Halfway out"
+        }
+      ],
+      "answer": 0,
+      "why": "Stress is proportional to radius, so it is zero on the axis.",
+      "wrong": {
+        "1": "The surface carries the largest stress.",
+        "2": "Halfway out it carries half the surface stress, not zero."
+      }
+    }
+  ]
+}

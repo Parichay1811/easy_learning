@@ -1,0 +1,263 @@
+{
+  "id": "CS-10",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Recursion",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "recursion",
+    "base case",
+    "call stack",
+    "recursive function",
+    "self-reference"
+  ],
+  "examples": [
+    "When does a recursive function stop running?",
+    "How does the call stack help us see recursion?",
+    "Can you show me an example of recursion in Python?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we explore recursion in programming. It means a function calling itself. Think of it like a mirror looking at another mirror.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Recursion"
+        },
+        {
+          "op": "text",
+          "text": "Recursion: Function calling itself",
+          "at": "recursion"
+        }
+      ]
+    },
+    {
+      "say": "Every recursive function needs a base case. This is the condition that stops the function from calling itself forever.",
+      "draw": [
+        {
+          "op": "bullets",
+          "items": [
+            "The base case provides an answer directly.",
+            "It prevents infinite loops in the code.",
+            "When reached, the function returns a final value."
+          ],
+          "at": "base"
+        },
+        {
+          "op": "text",
+          "text": "Base Case: The stopping condition",
+          "at": "base"
+        }
+      ]
+    },
+    {
+      "say": "Let us look at calculating factorials using recursion. Factorial of five is five times four factorial. This shows the self-reference.",
+      "draw": [
+        {
+          "op": "line",
+          "items": [
+            "n=1: 1",
+            "n=2: 2",
+            "n=3: 6",
+            "n=4: 24"
+          ],
+          "label": "Factorial values"
+        },
+        {
+          "op": "text",
+          "text": "Factorial(n) = n Factorial(n-1)"
+        }
+      ]
+    },
+    {
+      "say": "The call stack manages these self-calls. Each call is placed on the stack like a stack of plates. When it finishes, it is popped off.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Call 1: Pushed onto stack",
+            "Call 2: Pushed onto stack",
+            "Base Case Reached: Pops off stack",
+            "Final Result: Remaining calls resolve"
+          ],
+          "at": "call"
+        },
+        {
+          "op": "text",
+          "text": "Call Stack: Managing function calls",
+          "at": "call"
+        }
+      ]
+    },
+    {
+      "say": "Consider finding the sum of a list of numbers recursively. You add the first number to the sum of the rest of the list.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Sum(list) = first + Sum(rest)",
+          "at": "first"
+        }
+      ]
+    },
+    {
+      "say": "In real life, recursion helps us process nested structures. Think about navigating a file system directory structure on a computer.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "File System Navigation",
+          "at": "file"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between recursion and iteration?",
+      "a": "Iteration uses loops like for or while to repeat code blocks. Recursion solves problems by having a function call itself repeatedly until a base case is met.",
+      "asks": [
+        "Should I use a loop or recursion?",
+        "What is the loop-based alternative to recursion?"
+      ]
+    },
+    {
+      "q": "If I forget the base case, what happens?",
+      "a": "The function will call itself indefinitely. This usually causes a stack overflow error because the call stack runs out of memory.",
+      "asks": [
+        "What is a stack overflow error?",
+        "Why does forgetting the base case cause an error?"
+      ]
+    },
+    {
+      "q": "How does the call stack work in simple terms?",
+      "a": "Imagine stacking plates. Each time the function calls itself, a new 'plate' (a stack frame) is placed on top. When it returns, the top plate is removed.",
+      "asks": [
+        "What is a stack frame?",
+        "Does the call stack track everything?"
+      ]
+    },
+    {
+      "q": "Does every problem require recursion?",
+      "a": "No, many problems can be solved using simple loops. Recursion is a powerful technique, but iteration might be more efficient for some tasks.",
+      "asks": [
+        "Is recursion always better than loops?",
+        "When should I avoid recursion?"
+      ]
+    },
+    {
+      "q": "What is the time complexity of a recursive function?",
+      "a": "The time complexity often depends on the problem structure, but it is related to the depth of the recursion, often expressed using Big O notation.",
+      "asks": [
+        "How do I analyze recursive efficiency?",
+        "Does recursion always mean O(n) time?"
+      ]
+    }
+  ],
+  "facts": [
+    "Recursion solves problems by breaking them into smaller, identical subproblems.",
+    "The base case is the non-recursive condition that terminates the function.",
+    "The call stack keeps track of the state of each active function call.",
+    "Factorials are a classic example used to teach recursion."
+  ],
+  "quiz": [
+    {
+      "say": "What is the primary purpose of the base case in a recursive function?",
+      "show": "Stops infinite recursion",
+      "options": [
+        {
+          "show": "Stops infinite recursion",
+          "say": "Stops infinite recursion"
+        },
+        {
+          "show": "Returns the final answer immediately",
+          "say": "Returns the final answer immediately"
+        },
+        {
+          "show": "Increases the depth of the call stack",
+          "say": "Increases the depth of the call stack"
+        },
+        {
+          "show": "Calculates the first step of the problem",
+          "say": "Calculates the first step of the problem"
+        }
+      ],
+      "answer": 0,
+      "why": "The base case provides the necessary stopping point so the function does not run forever.",
+      "wrong": {
+        "1": "This is what happens after the base case is hit, but it is not the purpose of setting it.",
+        "2": "A base case must reduce the depth or stop adding new frames to the stack.",
+        "3": "The first step is usually handled by the initial call, not the stopping condition."
+      }
+    },
+    {
+      "say": "When a function calls itself, what data structure manages these calls?",
+      "show": "Call Stack",
+      "options": [
+        {
+          "show": "Call Stack",
+          "say": "Call Stack"
+        },
+        {
+          "show": "Queue",
+          "say": "Queue"
+        },
+        {
+          "show": "Linked List",
+          "say": "Linked List"
+        },
+        {
+          "show": "Heap",
+          "say": "Heap"
+        }
+      ],
+      "answer": 0,
+      "why": "The call stack uses LIFO (Last-In, First-Out) principles to manage function execution context.",
+      "wrong": {
+        "1": "A queue uses FIFO (First-In, First-Out) order, which is different from function call management.",
+        "2": "While it can store data, the specific mechanism for tracking execution order is the stack.",
+        "3": "A heap is used for priority ordering, not sequential function tracking."
+      }
+    },
+    {
+      "say": "If calculating the sum of numbers from one to N, what is the correct recursive step?",
+      "show": "Sum(N) = N + Sum(N-1)",
+      "options": [
+        {
+          "show": "Sum(N) = Sum(N-1) + 1",
+          "say": "Sum(N) = Sum(N-1) + 1"
+        },
+        {
+          "show": "Sum(N) = N Sum(N-1)",
+          "say": "Sum(N) = N Sum(N-1)"
+        },
+        {
+          "show": "Sum(N) = N + (N-1)",
+          "say": "Sum(N) = N + (N-1)"
+        },
+        {
+          "show": "Sum(N) = N + Sum(N-1)",
+          "say": "Sum(N) = N + Sum(N-1)"
+        }
+      ],
+      "answer": 3,
+      "why": "This correctly defines the problem in terms of a smaller version of itself, plus the current value N.",
+      "wrong": {
+        "0": "This formula would incorrectly calculate the count of numbers, not their sum.",
+        "1": "This structure resembles factorial calculation, not simple addition.",
+        "2": "This only adds the last two numbers and does not handle the entire sequence recursively."
+      }
+    }
+  ]
+}

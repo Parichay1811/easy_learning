@@ -1,0 +1,547 @@
+{
+  "id": "BME-MFG-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Machining: turning, milling and drilling with cutting speed and feed",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MFG — Materials and manufacturing",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "turning",
+    "milling",
+    "drilling",
+    "cutting speed",
+    "material removal rate",
+    "Taylor tool life"
+  ],
+  "examples": [
+    "How do I calculate spindle speed for turning?",
+    "What is the difference between turning and milling?",
+    "What is Taylor's tool life equation?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.1,
+          "y": 0.3,
+          "label": "Motor"
+        },
+        {
+          "id": "spindle",
+          "kind": "axle",
+          "x": 0.3,
+          "y": 0.5,
+          "label": "Spindle 955 rpm"
+        },
+        {
+          "id": "chuck",
+          "kind": "wheel",
+          "x": 0.45,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Chuck",
+          "ask": "What does the chuck do on a lathe?"
+        },
+        {
+          "id": "work",
+          "kind": "axle",
+          "x": 0.68,
+          "y": 0.5,
+          "size": 1.3,
+          "label": "Workpiece Ø50 mm"
+        },
+        {
+          "id": "tool",
+          "kind": "box",
+          "x": 0.7,
+          "y": 0.8,
+          "size": 0.6,
+          "label": "Cutting tool",
+          "motion": "slide",
+          "ask": "How do I calculate spindle speed for turning?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "spindle",
+          "kind": "power",
+          "label": "Belt"
+        },
+        {
+          "from": "spindle",
+          "to": "chuck",
+          "kind": "power"
+        },
+        {
+          "from": "chuck",
+          "to": "work",
+          "kind": "power"
+        },
+        {
+          "from": "tool",
+          "to": "work",
+          "kind": "force",
+          "label": "Cuts a chip"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Almost every precise metal part, from a bicycle axle to a jet engine shaft, is finished by machining: cutting away chips with a hard tool. Look at the lathe. The motor spins the chuck and the workpiece, a 50 millimetre steel bar, while the cutting tool slides along and peels off a chip.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Machining: turning, milling and drilling with cutting speed and feed"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.3,
+              "label": "Motor"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Spindle 955 rpm"
+            },
+            {
+              "id": "chuck",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Chuck",
+              "ask": "What does the chuck do on a lathe?"
+            },
+            {
+              "id": "work",
+              "kind": "axle",
+              "x": 0.68,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Workpiece Ø50 mm"
+            },
+            {
+              "id": "tool",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.8,
+              "size": 0.6,
+              "label": "Cutting tool",
+              "motion": "slide",
+              "ask": "How do I calculate spindle speed for turning?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "spindle",
+              "kind": "power",
+              "label": "Belt"
+            },
+            {
+              "from": "spindle",
+              "to": "chuck",
+              "kind": "power"
+            },
+            {
+              "from": "chuck",
+              "to": "work",
+              "kind": "power"
+            },
+            {
+              "from": "tool",
+              "to": "work",
+              "kind": "force",
+              "label": "Cuts a chip"
+            }
+          ],
+          "op": "sim",
+          "focus": 4
+        },
+        {
+          "op": "note",
+          "text": "Turning: the work spins, the tool feeds"
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a lathe. The chuck spins the workpiece, and the cutting tool on the carriage peels off a thin ribbon of metal. That is turning. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Machining: turning, milling and drilling with cutting speed and feed"
+        },
+        {
+          "op": "image",
+          "render": "lathe"
+        }
+      ]
+    },
+    {
+      "say": "The key number is cutting speed: how fast the surface passes the tool. A carbide tool on mild steel likes about 150 metres per minute. Speed equals pi D N, so the spindle speed N is 1000 times 150 over pi times 50: about 955 rpm. What happens to N for a thinner bar?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.3,
+              "label": "Motor"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Spindle 955 rpm"
+            },
+            {
+              "id": "chuck",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Chuck",
+              "ask": "What does the chuck do on a lathe?"
+            },
+            {
+              "id": "work",
+              "kind": "axle",
+              "x": 0.68,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Workpiece Ø50 mm"
+            },
+            {
+              "id": "tool",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.8,
+              "size": 0.6,
+              "label": "Cutting tool",
+              "motion": "slide",
+              "ask": "How do I calculate spindle speed for turning?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "spindle",
+              "kind": "power",
+              "label": "Belt"
+            },
+            {
+              "from": "spindle",
+              "to": "chuck",
+              "kind": "power"
+            },
+            {
+              "from": "chuck",
+              "to": "work",
+              "kind": "power"
+            },
+            {
+              "from": "tool",
+              "to": "work",
+              "kind": "force",
+              "label": "Cuts a chip"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "N = 1000V/(πD) = 1000 × 150/(π × 50) ≈ 955 rpm"
+        }
+      ]
+    },
+    {
+      "say": "It must spin faster to keep the same surface speed. Now how much metal comes off: the material removal rate is cutting speed times feed times depth of cut. With 0.2 millimetres per revolution and a 2 millimetre cut, that is 60 cubic centimetres per minute. The cutting force is about 800 newtons, so the power is 800 times 2.5 metres per second, 2 kilowatts.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.3,
+              "label": "Motor"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Spindle 955 rpm"
+            },
+            {
+              "id": "chuck",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Chuck",
+              "ask": "What does the chuck do on a lathe?"
+            },
+            {
+              "id": "work",
+              "kind": "axle",
+              "x": 0.68,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Workpiece Ø50 mm"
+            },
+            {
+              "id": "tool",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.8,
+              "size": 0.6,
+              "label": "Cutting tool",
+              "motion": "slide",
+              "ask": "How do I calculate spindle speed for turning?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "spindle",
+              "kind": "power",
+              "label": "Belt"
+            },
+            {
+              "from": "spindle",
+              "to": "chuck",
+              "kind": "power"
+            },
+            {
+              "from": "chuck",
+              "to": "work",
+              "kind": "power"
+            },
+            {
+              "from": "tool",
+              "to": "work",
+              "kind": "force",
+              "label": "Cuts a chip"
+            }
+          ],
+          "op": "sim",
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "MRR = V f d = 150 000 × 0.2 × 2 = 60 cm³/min"
+        }
+      ]
+    },
+    {
+      "say": "Turning is just one process. See the groups? In milling a toothed cutter spins and the work moves under it, making flat faces and slots. In drilling the drill spins and feeds into the work. Same rules: cutting speed sets the spindle speed. Which process would make a flat face on a block?",
+      "draw": [
+        {
+          "name": "x-sort",
+          "question": "What moves in each process?",
+          "groups": [
+            {
+              "label": "Turning",
+              "icon": "wheel",
+              "items": [
+                "Work spins",
+                "Tool feeds along",
+                "Shafts, threads"
+              ]
+            },
+            {
+              "label": "Milling",
+              "icon": "gear",
+              "items": [
+                "Cutter spins",
+                "Table moves work",
+                "Flat faces, slots"
+              ]
+            },
+            {
+              "label": "Drilling",
+              "icon": "arrow",
+              "items": [
+                "Drill spins",
+                "Drill feeds down",
+                "Round holes"
+              ]
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Milling and drilling: the tool spins; the work is held still or fed"
+        }
+      ]
+    },
+    {
+      "say": "Milling! One last trade-off. Cut faster and the tool wears out sooner. Taylor found that V times T to the n is constant. With n 0.25 and C 400, a tool lasts 51 minutes at 150 metres per minute but only 16 at 200. See the steep curve? Superb work. Exam tip: mind the 1000 when converting metres to millimetres.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Cutting speed (m/min)",
+            "min": 100,
+            "max": 250
+          },
+          "y": {
+            "label": "Tool life (min)",
+            "max": 260
+          },
+          "curves": [
+            {
+              "label": "Carbide, n 0.25, C 400",
+              "type": "power",
+              "a": 25600000000,
+              "k": -4,
+              "ask": "What is Taylor's tool life equation?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 150,
+              "label": "150 m/min: 51 min"
+            },
+            {
+              "x": 200,
+              "label": "200 m/min: 16 min"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "VTⁿ = C → T = (400/150)⁴ ≈ 51 min"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the chuck do on a lathe?",
+      "a": "The chuck grips the workpiece and spins it with the spindle, so the tool can cut a round shape as it feeds along.",
+      "asks": [
+        "lathe chuck"
+      ]
+    },
+    {
+      "q": "How do I calculate spindle speed for turning?",
+      "a": "N equals 1000 times the cutting speed in metres per minute divided by pi times the diameter in millimetres. For 150 metres per minute on a 50 millimetre bar, that is about 955 rpm.",
+      "asks": [
+        "cutting speed formula",
+        "what does the cutting tool do"
+      ]
+    },
+    {
+      "q": "What is Taylor's tool life equation?",
+      "a": "V times T to the power n equals C, where V is cutting speed, T tool life, and n and C depend on the tool and work materials. For carbide, n is often about 0.25.",
+      "asks": [
+        "tool life vs cutting speed"
+      ]
+    },
+    {
+      "q": "What is the difference between turning and milling?",
+      "a": "In turning the workpiece spins and a single-point tool feeds along it, making round parts. In milling a multi-tooth cutter spins and the workpiece moves, making flat faces, slots and pockets.",
+      "asks": [
+        "turning vs milling vs drilling"
+      ]
+    },
+    {
+      "q": "What is material removal rate?",
+      "a": "The volume of metal cut away per minute: cutting speed times feed times depth of cut. Cutting power is roughly the removal rate times the specific cutting energy of the material.",
+      "asks": [
+        "MRR formula"
+      ]
+    }
+  ],
+  "facts": [
+    "Cutting speed V = πDN; with D in mm and V in m/min, N = 1000V/(πD).",
+    "F. W. Taylor published his tool life equation in 1907."
+  ],
+  "quiz": [
+    {
+      "say": "You turn a 100 millimetre bar at a cutting speed of 157 metres per minute. What spindle speed do you set?",
+      "show": "Bar Ø100 mm, cutting speed 157 m/min. Spindle speed?",
+      "options": [
+        {
+          "show": "500 rpm",
+          "say": "500 rpm"
+        },
+        {
+          "show": "5 rpm",
+          "say": "5 rpm"
+        },
+        {
+          "show": "1570 rpm",
+          "say": "1570 rpm"
+        }
+      ],
+      "answer": 0,
+      "why": "N = 1000 × 157/(π × 100) = 157 000/314.2 ≈ 500 rpm.",
+      "wrong": {
+        "1": "That forgets the factor of 1000 between metres and millimetres.",
+        "2": "That multiplies by 10 instead of dividing by π × 100 / 1000."
+      }
+    },
+    {
+      "say": "By Taylor's equation with n equal to 0.25, if you double the cutting speed, the tool life becomes…",
+      "show": "Taylor's equation, n = 0.25. Double the cutting speed: tool life becomes…",
+      "options": [
+        {
+          "show": "One sixteenth",
+          "say": "One sixteenth"
+        },
+        {
+          "show": "One half",
+          "say": "One half"
+        },
+        {
+          "show": "One quarter",
+          "say": "One quarter"
+        }
+      ],
+      "answer": 0,
+      "why": "T ∝ V^(−1/n) = V⁻⁴, and 2⁻⁴ = 1/16.",
+      "wrong": {
+        "1": "Tool life is far more sensitive to speed than that.",
+        "2": "That would need n = 0.5."
+      }
+    }
+  ]
+}

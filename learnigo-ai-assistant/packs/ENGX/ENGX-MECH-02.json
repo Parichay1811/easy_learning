@@ -1,0 +1,495 @@
+{
+  "id": "ENGX-MECH-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "What does an idler gear do?",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "idler gear",
+    "gear train",
+    "direction of rotation",
+    "three gears",
+    "compound motion"
+  ],
+  "examples": [
+    "Why put a gear between two other gears?",
+    "Does an idler gear change the speed?",
+    "How do you make two gears turn the same way?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "crank",
+          "kind": "lever",
+          "x": 0.15,
+          "y": 0.18,
+          "size": 0.6,
+          "label": "Hand crank",
+          "motion": "spin"
+        },
+        {
+          "id": "driver",
+          "kind": "gear",
+          "x": 0.2,
+          "y": 0.55,
+          "size": 1,
+          "label": "Driver gear",
+          "motion": "spin",
+          "ask": "What turns the driver gear?"
+        },
+        {
+          "id": "idler",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.55,
+          "size": 0.7,
+          "label": "Idler gear",
+          "motion": "spin",
+          "ask": "What is an idler gear for?"
+        },
+        {
+          "id": "driven",
+          "kind": "gear",
+          "x": 0.8,
+          "y": 0.55,
+          "size": 1,
+          "label": "Driven gear",
+          "motion": "spin",
+          "ask": "Which way does the driven gear turn?"
+        }
+      ],
+      "links": [
+        {
+          "from": "crank",
+          "to": "driver",
+          "kind": "energy",
+          "label": "your turn"
+        },
+        {
+          "from": "driver",
+          "to": "idler",
+          "kind": "force",
+          "label": "teeth push"
+        },
+        {
+          "from": "idler",
+          "to": "driven",
+          "kind": "force",
+          "label": "teeth push"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An idler gear is a gear placed between two others. It does not change the speed of the last gear; it changes which way it turns, or fills a gap.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "What does an idler gear do?"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "crank",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Hand crank",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driver gear",
+              "motion": "spin",
+              "ask": "What turns the driver gear?"
+            },
+            {
+              "id": "idler",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Idler gear",
+              "motion": "spin",
+              "ask": "What is an idler gear for?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driven gear",
+              "motion": "spin",
+              "ask": "Which way does the driven gear turn?"
+            }
+          ],
+          "links": [
+            {
+              "from": "crank",
+              "to": "driver",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "driver",
+              "to": "idler",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "idler",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: gears. Look at the driver gear, the small gear and the third gear. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "What does an idler gear do?"
+        },
+        {
+          "op": "image",
+          "render": "gear-train"
+        }
+      ]
+    },
+    {
+      "say": "Turn the crank and the driver gear turns clockwise. Meshing gears always turn opposite ways, so the driver pushes the idler round anticlockwise.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "crank",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Hand crank",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driver gear",
+              "motion": "spin",
+              "ask": "What turns the driver gear?"
+            },
+            {
+              "id": "idler",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Idler gear",
+              "motion": "spin",
+              "ask": "What is an idler gear for?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driven gear",
+              "motion": "spin",
+              "ask": "Which way does the driven gear turn?"
+            }
+          ],
+          "links": [
+            {
+              "from": "crank",
+              "to": "driver",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "driver",
+              "to": "idler",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "idler",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The idler then pushes the driven gear, which turns opposite to the idler, so clockwise again: the same way as the driver.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "crank",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Hand crank",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driver gear",
+              "motion": "spin",
+              "ask": "What turns the driver gear?"
+            },
+            {
+              "id": "idler",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Idler gear",
+              "motion": "spin",
+              "ask": "What is an idler gear for?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driven gear",
+              "motion": "spin",
+              "ask": "Which way does the driven gear turn?"
+            }
+          ],
+          "links": [
+            {
+              "from": "crank",
+              "to": "driver",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "driver",
+              "to": "idler",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "idler",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The driven gear's speed depends only on the teeth of the driver and the driven gear, whatever size the idler is. Idlers are used in clocks, printers and toys to set direction and bridge spaces.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "crank",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Hand crank",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driver gear",
+              "motion": "spin",
+              "ask": "What turns the driver gear?"
+            },
+            {
+              "id": "idler",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Idler gear",
+              "motion": "spin",
+              "ask": "What is an idler gear for?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.55,
+              "size": 1,
+              "label": "Driven gear",
+              "motion": "spin",
+              "ask": "Which way does the driven gear turn?"
+            }
+          ],
+          "links": [
+            {
+              "from": "crank",
+              "to": "driver",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "driver",
+              "to": "idler",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "idler",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an idler gear for?",
+      "a": "An idler gear sits between the driver and the driven gear. It makes the driven gear turn the same way as the driver, and it can bridge a gap between gears that are far apart.",
+      "asks": [
+        "Why add a middle gear?",
+        "What does the middle gear do?"
+      ]
+    },
+    {
+      "q": "Does an idler gear change the speed?",
+      "a": "No. Every tooth the driver moves passes through the idler unchanged, so the final speed depends only on the driver and driven gears. A big or small idler gives the same result.",
+      "asks": [
+        "Does the size of the idler matter?"
+      ]
+    },
+    {
+      "q": "Which way does the driven gear turn?",
+      "a": "With one idler in between, the driven gear turns the same way as the driver. With no idler, or with two idlers, it turns the opposite way.",
+      "asks": [
+        "Why does the last gear turn the same way?"
+      ]
+    },
+    {
+      "q": "What turns the driver gear?",
+      "a": "Something outside the gear train turns the driver: here a hand crank, but often a motor or a spring. Every other gear is pushed round by teeth.",
+      "asks": [
+        "Where does the motion come from?"
+      ]
+    },
+    {
+      "q": "How can I tell which way the last gear turns?",
+      "a": "Count the gears. In a single line of meshing gears, odd-numbered gears turn the same way as the first and even-numbered gears turn the opposite way.",
+      "asks": [
+        "How do you work out gear direction?"
+      ]
+    }
+  ],
+  "facts": [
+    "In a simple gear train, an idler gear does not change the overall gear ratio.",
+    "In a line of meshing gears, the first, third and fifth gears all turn the same way."
+  ],
+  "quiz": [
+    {
+      "say": "A line has four meshing gears. The first turns clockwise. Which way does the fourth turn?",
+      "show": "A line has four meshing gears. The first turns clockwise. Which way does the fourth turn?",
+      "options": [
+        {
+          "show": "Clockwise",
+          "say": "Clockwise"
+        },
+        {
+          "show": "Anticlockwise",
+          "say": "Anticlockwise"
+        },
+        {
+          "show": "It cannot turn",
+          "say": "It cannot turn"
+        }
+      ],
+      "answer": 1,
+      "why": "Directions alternate: clockwise, anticlockwise, clockwise, anticlockwise. Even-numbered gears turn opposite to the first.",
+      "wrong": {
+        "0": "Only odd-numbered gears turn the same way as the first.",
+        "2": "A single line of gears turns freely; only a closed loop of an odd number of gears would jam."
+      }
+    },
+    {
+      "say": "You swap a small idler for a big one. What happens to the speed of the driven gear?",
+      "show": "You swap a small idler for a big one. What happens to the speed of the driven gear?",
+      "options": [
+        {
+          "show": "It goes up",
+          "say": "It goes up"
+        },
+        {
+          "show": "It goes down",
+          "say": "It goes down"
+        },
+        {
+          "show": "It stays the same",
+          "say": "It stays the same"
+        }
+      ],
+      "answer": 2,
+      "why": "The idler passes every tooth along unchanged, so only the driver and driven gears set the speed.",
+      "wrong": {
+        "0": "The idler cannot add speed.",
+        "1": "A bigger idler turns slower itself, but the driven gear speed is unchanged."
+      }
+    }
+  ]
+}

@@ -1,0 +1,412 @@
+{
+  "id": "BME-MACHD-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Shaft design for combined torque and bending",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MACHD — Machine design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "shaft design",
+    "torsion",
+    "bending moment",
+    "equivalent torque",
+    "maximum shear stress theory"
+  ],
+  "examples": [
+    "How do I size a shaft for torque and bending?",
+    "What is equivalent torque?",
+    "How do I find the torque from power and speed?"
+  ],
+  "figure": [
+    {
+      "name": "x-beam",
+      "length": 1,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "point",
+          "at": 0.5,
+          "size": 4,
+          "label": "Gear load 4 kN"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A shaft in a gearbox has two jobs at once: it twists to carry torque, and it bends under the gear push. Get the diameter wrong and it snaps. Look at our machine: a 10 kilowatt motor turns a shaft at 300 rpm, with a gear in the middle between two bearings a metre apart.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Shaft design for combined torque and bending"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Motor 10 kW"
+            },
+            {
+              "id": "b1",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.62,
+              "size": 0.6,
+              "label": "Bearing A",
+              "motion": "none"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Shaft 300 rpm",
+              "ask": "How do I find the torque from power and speed?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Gear (4 kN push)",
+              "ask": "Why does a gear bend a shaft?"
+            },
+            {
+              "id": "b2",
+              "kind": "box",
+              "x": 0.75,
+              "y": 0.62,
+              "size": 0.6,
+              "label": "Bearing B",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power",
+              "label": "Torque 318 N·m"
+            },
+            {
+              "from": "gear",
+              "to": "shaft",
+              "kind": "force",
+              "label": "Bends shaft"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Power 10 kW at 300 rpm; gear force 4 kN at mid-span"
+        }
+      ]
+    },
+    {
+      "say": "First the twist. Torque is power over angular speed. 300 rpm is 31.4 radians per second, so T is 10,000 over 31.4, about 318 newton metres. Twisting makes a shear stress at the surface, 16 T over pi d cubed. Which part of the shaft carries the most shear?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Motor 10 kW"
+            },
+            {
+              "id": "b1",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.62,
+              "size": 0.6,
+              "label": "Bearing A",
+              "motion": "none"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Shaft 300 rpm",
+              "ask": "How do I find the torque from power and speed?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Gear (4 kN push)",
+              "ask": "Why does a gear bend a shaft?"
+            },
+            {
+              "id": "b2",
+              "kind": "box",
+              "x": 0.75,
+              "y": 0.62,
+              "size": 0.6,
+              "label": "Bearing B",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power",
+              "label": "Torque 318 N·m"
+            },
+            {
+              "from": "gear",
+              "to": "shaft",
+              "kind": "force",
+              "label": "Bends shaft"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "T = P/ω = 10 000 / 31.4 = 318 N·m"
+        }
+      ]
+    },
+    {
+      "say": "The outer surface. Now the bending. Treat the shaft as a beam on two supports with the 4 kilonewton gear load at mid-span. Each bearing pushes up 2 kilonewtons, and the bending moment peaks under the gear: 4 times 1 over 4, which is 1 kilonewton metre. See the triangle on the moment diagram?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 1,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 4,
+              "label": "Gear load 4 kN"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M = PL/4 = 4 × 1/4 = 1.0 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "Both stresses peak at the same spot, so we combine them. The maximum shear stress theory gives an equivalent torque: the square root of M squared plus T squared. Root of 1000 squared plus 318 squared is about 1049 newton metres. Bigger than either alone. Why does bending dominate here?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 1,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 4,
+              "label": "Gear load 4 kN"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "T_e = √(M² + T²) = √(1000² + 318²) = 1049 N·m"
+        }
+      ]
+    },
+    {
+      "say": "Because the moment is three times the torque. Now size it: with an allowed shear stress of 40 megapascals, d cubed equals 16 T e over pi times 40 million, so d is 51 millimetres. Pick a standard 55. Brilliant work! Exam tip: keyways and shoulders raise stress, so real designs add a fatigue factor.",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 1,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 4,
+              "label": "Gear load 4 kN"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "d = ∛(16 T_e/(π τ)) = ∛(16 × 1049/(π × 40×10⁶)) = 51 mm"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I find the torque from power and speed?",
+      "a": "Torque equals power divided by angular speed in radians per second. For 10 kilowatts at 300 rpm, omega is 31.4, so torque is about 318 newton metres.",
+      "asks": [
+        "torque from power formula",
+        "shaft torque"
+      ]
+    },
+    {
+      "q": "Why does a gear bend a shaft?",
+      "a": "The tooth force on the gear pushes sideways on the shaft between its bearings, just like a load on a simply supported beam, creating a bending moment.",
+      "asks": [
+        "gear force on shaft"
+      ]
+    },
+    {
+      "q": "What is equivalent torque?",
+      "a": "A single torque that gives the same maximum shear stress as the actual combination of bending and twisting: the square root of M squared plus T squared.",
+      "asks": [
+        "equivalent twisting moment"
+      ]
+    },
+    {
+      "q": "How do I size a shaft for torque and bending?",
+      "a": "Find the largest bending moment M and the torque T at the same section, work out the equivalent torque, then set 16 T e over pi d cubed equal to the allowable shear stress and solve for d.",
+      "asks": [
+        "shaft diameter formula"
+      ]
+    },
+    {
+      "q": "What is the maximum shear stress theory?",
+      "a": "Also called Tresca, it says a ductile part yields when the maximum shear stress reaches the shear stress at yield in a simple tensile test. For shafts it gives the square root of M squared plus T squared.",
+      "asks": [
+        "Tresca criterion"
+      ]
+    }
+  ],
+  "facts": [
+    "Shaft power P = Tω, with ω in radians per second.",
+    "Shear stress from torsion in a solid round shaft is 16T/(πd³) at the surface."
+  ],
+  "quiz": [
+    {
+      "say": "A shaft carries 15 kilowatts at 1000 rpm. What is the torque?",
+      "show": "Shaft: 15 kW at 1000 rpm. Torque?",
+      "options": [
+        {
+          "show": "143 N·m",
+          "say": "143 newton metres"
+        },
+        {
+          "show": "15 N·m",
+          "say": "15 newton metres"
+        },
+        {
+          "show": "900 N·m",
+          "say": "900 newton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "ω = 2π × 1000/60 = 104.7 rad/s; T = 15 000/104.7 ≈ 143 N·m.",
+      "wrong": {
+        "1": "That divides by 1000 rpm directly instead of converting to radians per second.",
+        "2": "That multiplies by 60 without dividing by 2π."
+      }
+    },
+    {
+      "say": "A shaft has a bending moment of 400 newton metres and a torque of 300 newton metres at the same section. What is the equivalent torque?",
+      "show": "M = 400 N·m, T = 300 N·m. Equivalent torque √(M² + T²)?",
+      "options": [
+        {
+          "show": "500 N·m",
+          "say": "500 newton metres"
+        },
+        {
+          "show": "700 N·m",
+          "say": "700 newton metres"
+        },
+        {
+          "show": "100 N·m",
+          "say": "100 newton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "√(400² + 300²) = √250 000 = 500 N·m.",
+      "wrong": {
+        "1": "That simply adds them; the stresses combine by the square root rule.",
+        "2": "That subtracts them."
+      }
+    }
+  ]
+}

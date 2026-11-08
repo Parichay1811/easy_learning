@@ -1,0 +1,388 @@
+{
+  "id": "BEE-DIG-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Karnaugh maps: circling 1s to find the simplest logic",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Karnaugh map",
+    "K-map",
+    "minterms",
+    "Gray code order",
+    "prime implicant",
+    "sum of products"
+  ],
+  "examples": [
+    "How do you simplify with a Karnaugh map?",
+    "Why are K-map columns in Gray code order?",
+    "Can K-map groups wrap around the edges?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "Truth table",
+          "icon": "book",
+          "note": "List the rows where the output F is 1",
+          "ask": "What is a minterm?"
+        },
+        {
+          "label": "Fill the map",
+          "icon": "map",
+          "note": "Columns go 00, 01, 11, 10 (Gray code)",
+          "ask": "Why are K-map columns in Gray code order?"
+        },
+        {
+          "label": "Loop the 1s",
+          "icon": "puzzle",
+          "note": "Groups of 1, 2, 4 or 8, as big as possible",
+          "ask": "How do you simplify with a Karnaugh map?"
+        },
+        {
+          "label": "Read each loop",
+          "icon": "pencil",
+          "note": "Keep only the inputs that stay the same"
+        },
+        {
+          "label": "Simplest SOP",
+          "icon": "chip",
+          "note": "OR the loop terms together"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Before software did it, engineers simplified logic by hand with a clever picture, invented by Maurice Karnaugh at Bell Labs in 1953. A Karnaugh map, or K-map, lays out a truth table so that neighbouring cells differ in only one input. Then you simply circle the 1s. Follow the chain of steps on the board.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Karnaugh maps: circling 1s to find the simplest logic"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Truth table",
+              "icon": "book",
+              "note": "List the rows where the output F is 1",
+              "ask": "What is a minterm?"
+            },
+            {
+              "label": "Fill the map",
+              "icon": "map",
+              "note": "Columns go 00, 01, 11, 10 (Gray code)",
+              "ask": "Why are K-map columns in Gray code order?"
+            },
+            {
+              "label": "Loop the 1s",
+              "icon": "puzzle",
+              "note": "Groups of 1, 2, 4 or 8, as big as possible",
+              "ask": "How do you simplify with a Karnaugh map?"
+            },
+            {
+              "label": "Read each loop",
+              "icon": "pencil",
+              "note": "Keep only the inputs that stay the same"
+            },
+            {
+              "label": "Simplest SOP",
+              "icon": "chip",
+              "note": "OR the loop terms together"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at step two. For three inputs A, B and C, the map has 2 rows for A and 4 columns for B and C. The columns go 00, 01, 11, 10, not in counting order. This is Gray code: only one bit changes between neighbours, even from the last column back round to the first. Why would that help when grouping?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Truth table",
+              "icon": "book",
+              "note": "List the rows where the output F is 1",
+              "ask": "What is a minterm?"
+            },
+            {
+              "label": "Fill the map",
+              "icon": "map",
+              "note": "Columns go 00, 01, 11, 10 (Gray code)",
+              "ask": "Why are K-map columns in Gray code order?"
+            },
+            {
+              "label": "Loop the 1s",
+              "icon": "puzzle",
+              "note": "Groups of 1, 2, 4 or 8, as big as possible",
+              "ask": "How do you simplify with a Karnaugh map?"
+            },
+            {
+              "label": "Read each loop",
+              "icon": "pencil",
+              "note": "Keep only the inputs that stay the same"
+            },
+            {
+              "label": "Simplest SOP",
+              "icon": "chip",
+              "note": "OR the loop terms together"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Columns BC: 00, 01, 11, 10"
+        }
+      ]
+    },
+    {
+      "say": "Here is a real function: F is 1 for minterms 0, 2, 4, 5 and 6. A minterm is just the row number of a 1 in the truth table. Look at the first group. Cells 0, 2, 4 and 6 sit in the four corners, and because the map wraps round, they make one loop of four. In all four, C is 0, so that loop is simply NOT C. Do you see A and B change inside it?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "F = Σm(0,2,4,5,6): which loop covers it?",
+          "groups": [
+            {
+              "label": "Quad: C'",
+              "icon": "puzzle",
+              "items": [
+                "m0 = 000",
+                "m2 = 010",
+                "m4 = 100",
+                "m6 = 110"
+              ],
+              "ask": "Can K-map groups wrap around the edges?"
+            },
+            {
+              "label": "Pair: AB'",
+              "icon": "key",
+              "items": [
+                "m4 = 100",
+                "m5 = 101"
+              ],
+              "ask": "Can a 1 be in more than one loop?"
+            },
+            {
+              "label": "Zeros: skip",
+              "icon": "scissors",
+              "items": [
+                "m1 = 001",
+                "m3 = 011",
+                "m7 = 111"
+              ]
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F = Σm(0,2,4,5,6)"
+        }
+      ]
+    },
+    {
+      "say": "Now the second loop, cells 4 and 5. Inside it A stays 1 and B stays 0, while C changes, so C drops out and the loop reads A NOT B. Cell 4 is used twice, and that is fine: loops may overlap. The zeros group just shows the cells we leave alone. Why not loop cell 5 on its own?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "F = Σm(0,2,4,5,6): which loop covers it?",
+          "groups": [
+            {
+              "label": "Quad: C'",
+              "icon": "puzzle",
+              "items": [
+                "m0 = 000",
+                "m2 = 010",
+                "m4 = 100",
+                "m6 = 110"
+              ],
+              "ask": "Can K-map groups wrap around the edges?"
+            },
+            {
+              "label": "Pair: AB'",
+              "icon": "key",
+              "items": [
+                "m4 = 100",
+                "m5 = 101"
+              ],
+              "ask": "Can a 1 be in more than one loop?"
+            },
+            {
+              "label": "Zeros: skip",
+              "icon": "scissors",
+              "items": [
+                "m1 = 001",
+                "m3 = 011",
+                "m7 = 111"
+              ]
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Loop m4, m5: A = 1, B = 0 → AB'"
+        }
+      ]
+    },
+    {
+      "say": "Join the loops with OR: F equals NOT C or A NOT B. The raw truth table needed five three-input terms, and now you have two small ones. Fantastic! Exam tip: always check the corners and edges for wrap-round loops. Challenge: if cell 7 were also a 1, what would the simplest answer be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Truth table",
+              "icon": "book",
+              "note": "List the rows where the output F is 1",
+              "ask": "What is a minterm?"
+            },
+            {
+              "label": "Fill the map",
+              "icon": "map",
+              "note": "Columns go 00, 01, 11, 10 (Gray code)",
+              "ask": "Why are K-map columns in Gray code order?"
+            },
+            {
+              "label": "Loop the 1s",
+              "icon": "puzzle",
+              "note": "Groups of 1, 2, 4 or 8, as big as possible",
+              "ask": "How do you simplify with a Karnaugh map?"
+            },
+            {
+              "label": "Read each loop",
+              "icon": "pencil",
+              "note": "Keep only the inputs that stay the same"
+            },
+            {
+              "label": "Simplest SOP",
+              "icon": "chip",
+              "note": "OR the loop terms together"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "F = C' + AB'"
+        },
+        {
+          "op": "note",
+          "text": "Loops of 1, 2, 4 or 8 cells: as big and as few as possible"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you simplify with a Karnaugh map?",
+      "a": "Put each 1 of the truth table in its cell, then draw loops around groups of 1, 2, 4 or 8 neighbouring 1s, as large as you can. Each loop gives one AND term made of the inputs that stay constant inside it, and you OR the terms together.",
+      "asks": [
+        "How do I use a K-map?"
+      ]
+    },
+    {
+      "q": "Why are K-map columns in Gray code order?",
+      "a": "Gray code order, 00, 01, 11, 10, makes neighbouring cells differ in exactly one input. That is what lets two adjacent 1s merge: the input that changes drops out.",
+      "asks": [
+        "Why is it 00 01 11 10 and not 00 01 10 11?"
+      ]
+    },
+    {
+      "q": "Can K-map groups wrap around the edges?",
+      "a": "Yes. The left and right edges touch, and so do the top and bottom, as if the map were drawn on a doughnut. That is why the four corner cells of a three or four input map can form one group.",
+      "asks": [
+        "Do the corners of a Karnaugh map count as neighbours?"
+      ]
+    },
+    {
+      "q": "What is a minterm?",
+      "a": "A minterm is one row of the truth table written as an AND of all the inputs, plain or inverted. For three inputs, minterm 5 is binary 101, which is A NOT B C.",
+      "asks": [
+        "What does sigma m mean in a K-map?"
+      ]
+    },
+    {
+      "q": "Can a 1 be in more than one loop?",
+      "a": "Yes. Overlapping is allowed and often makes loops bigger, which gives simpler terms. Just make sure every 1 is covered and no loop includes a 0.",
+      "asks": [
+        "Can K-map loops overlap?"
+      ]
+    }
+  ],
+  "facts": [
+    "Maurice Karnaugh introduced the map method at Bell Labs in 1953.",
+    "K-maps are practical up to about four to six inputs; bigger problems use the Quine–McCluskey method or software.",
+    "A loop of 2ᵏ cells removes k inputs from its term."
+  ],
+  "quiz": [
+    {
+      "say": "In a three-input K-map, a loop of four cells gives a term with how many inputs?",
+      "show": "In a 3-input K-map, a loop of four cells gives a term with how many inputs?",
+      "options": [
+        {
+          "show": "1",
+          "say": "1"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        },
+        {
+          "show": "3",
+          "say": "3"
+        }
+      ],
+      "answer": 0,
+      "why": "A loop of 4 cells is 2 squared, so 2 inputs drop out and 1 input is left, like NOT C.",
+      "wrong": {
+        "1": "That is a loop of two cells, which removes only one input.",
+        "2": "A single cell keeps all three inputs; bigger loops remove more."
+      }
+    },
+    {
+      "say": "In a K-map with columns 00, 01, 11, 10, which two columns are neighbours?",
+      "show": "In a K-map with columns 00, 01, 11, 10, which two columns are neighbours?",
+      "options": [
+        {
+          "show": "10 and 00",
+          "say": "10 and 00, by wrapping round"
+        },
+        {
+          "show": "01 and 10",
+          "say": "01 and 10"
+        },
+        {
+          "show": "00 and 11",
+          "say": "00 and 11"
+        }
+      ],
+      "answer": 0,
+      "why": "10 and 00 differ in one bit, and the map wraps from the last column to the first, so they are neighbours.",
+      "wrong": {
+        "1": "01 and 10 differ in two bits, so they cannot merge.",
+        "2": "00 and 11 also differ in two bits."
+      }
+    }
+  ]
+}

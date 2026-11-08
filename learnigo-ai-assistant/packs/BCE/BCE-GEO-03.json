@@ -1,0 +1,385 @@
+{
+  "id": "BCE-GEO-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Permeability and Darcy's law: how fast water seeps through soil",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-GEO — Geotechnical engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Darcy's law",
+    "permeability",
+    "hydraulic gradient",
+    "coefficient of permeability",
+    "seepage"
+  ],
+  "examples": [
+    "What is Darcy's law?",
+    "How do you calculate flow through soil?",
+    "Which soils have high permeability?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-layers",
+      "layers": [
+        {
+          "label": "Water above (head)",
+          "size": 1,
+          "note": "Head drop of 0.5 m drives the flow",
+          "color": "#5dade2",
+          "ask": "What is hydraulic gradient?"
+        },
+        {
+          "label": "Sand sample 0.25 m",
+          "size": 1.2,
+          "note": "k = 1 × 10⁻⁴ m/s (fine sand)",
+          "color": "#e0c48c",
+          "ask": "What is the coefficient of permeability?"
+        },
+        {
+          "label": "Mesh and filter",
+          "size": 0.4,
+          "note": "Holds the sand, lets water through",
+          "color": "#95a5a6"
+        },
+        {
+          "label": "Outflow measured",
+          "size": 0.8,
+          "note": "Q collected in a jar and timed",
+          "color": "#aed6f1",
+          "ask": "How is permeability measured?"
+        }
+      ],
+      "flow": {
+        "label": "Seepage",
+        "from": 0,
+        "to": 3
+      }
+    }
+  ],
+  "explain": [
+    {
+      "say": "In eighteen fifty six Henry Darcy, building the water supply for the fountains of Dijon in France, pushed water through columns of sand and found a beautifully simple law. On the board is his set-up: water above a sand sample, seeping down through it into a jar. How fast it flows tells us the soil's permeability.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Permeability and Darcy's law: how fast water seeps through soil"
+        },
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Water above (head)",
+              "size": 1,
+              "note": "Head drop of 0.5 m drives the flow",
+              "color": "#5dade2",
+              "ask": "What is hydraulic gradient?"
+            },
+            {
+              "label": "Sand sample 0.25 m",
+              "size": 1.2,
+              "note": "k = 1 × 10⁻⁴ m/s (fine sand)",
+              "color": "#e0c48c",
+              "ask": "What is the coefficient of permeability?"
+            },
+            {
+              "label": "Mesh and filter",
+              "size": 0.4,
+              "note": "Holds the sand, lets water through",
+              "color": "#95a5a6"
+            },
+            {
+              "label": "Outflow measured",
+              "size": 0.8,
+              "note": "Q collected in a jar and timed",
+              "color": "#aed6f1",
+              "ask": "How is permeability measured?"
+            }
+          ],
+          "flow": {
+            "label": "Seepage",
+            "from": 0,
+            "to": 3
+          }
+        }
+      ]
+    },
+    {
+      "say": "Look at the water above the sand. What drives the flow is not the depth itself but the drop in head, the energy level of the water, across the sample. Half a metre of head lost over a quarter metre of sand gives a hydraulic gradient of two. Steeper gradient, faster flow. What would happen with no head drop at all?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Water above (head)",
+              "size": 1,
+              "note": "Head drop of 0.5 m drives the flow",
+              "color": "#5dade2",
+              "ask": "What is hydraulic gradient?"
+            },
+            {
+              "label": "Sand sample 0.25 m",
+              "size": 1.2,
+              "note": "k = 1 × 10⁻⁴ m/s (fine sand)",
+              "color": "#e0c48c",
+              "ask": "What is the coefficient of permeability?"
+            },
+            {
+              "label": "Mesh and filter",
+              "size": 0.4,
+              "note": "Holds the sand, lets water through",
+              "color": "#95a5a6"
+            },
+            {
+              "label": "Outflow measured",
+              "size": 0.8,
+              "note": "Q collected in a jar and timed",
+              "color": "#aed6f1",
+              "ask": "How is permeability measured?"
+            }
+          ],
+          "flow": {
+            "label": "Seepage",
+            "from": 0,
+            "to": 3
+          },
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "i = Δh / L = 0.5 / 0.25 = 2"
+        }
+      ]
+    },
+    {
+      "say": "No flow! Darcy found that velocity rises in a straight line with gradient. The slope of that line is the permeability k, here zero point one millimetres per second for a fine sand. At a gradient of two, water moves through at zero point two millimetres per second. Double the gradient, double the speed.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Hydraulic gradient i",
+            "max": 4
+          },
+          "y": {
+            "label": "Flow velocity (mm/s)",
+            "max": 0.5
+          },
+          "curves": [
+            {
+              "label": "Fine sand k = 0.1 mm/s",
+              "type": "line",
+              "k": 0.1,
+              "ask": "What is Darcy's law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 2,
+              "label": "i = 2",
+              "ask": "What is hydraulic gradient?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "v = k i = 0.1 mm/s × 2 = 0.2 mm/s"
+        }
+      ]
+    },
+    {
+      "say": "Now the flow rate. Multiply by the sample's area, one hundredth of a square metre. Q equals k i A: two millionths of a cubic metre per second, or two millilitres every second. Measure Q in the jar and you can work backwards to find k for any soil.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Water above (head)",
+              "size": 1,
+              "note": "Head drop of 0.5 m drives the flow",
+              "color": "#5dade2",
+              "ask": "What is hydraulic gradient?"
+            },
+            {
+              "label": "Sand sample 0.25 m",
+              "size": 1.2,
+              "note": "k = 1 × 10⁻⁴ m/s (fine sand)",
+              "color": "#e0c48c",
+              "ask": "What is the coefficient of permeability?"
+            },
+            {
+              "label": "Mesh and filter",
+              "size": 0.4,
+              "note": "Holds the sand, lets water through",
+              "color": "#95a5a6"
+            },
+            {
+              "label": "Outflow measured",
+              "size": 0.8,
+              "note": "Q collected in a jar and timed",
+              "color": "#aed6f1",
+              "ask": "How is permeability measured?"
+            }
+          ],
+          "flow": {
+            "label": "Seepage",
+            "from": 0,
+            "to": 3
+          },
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Q = k i A = 10⁻⁴ × 2 × 0.01 = 2 × 10⁻⁶ m³/s"
+        },
+        {
+          "op": "note",
+          "text": "That is 2 millilitres every second."
+        }
+      ]
+    },
+    {
+      "say": "Permeability varies more than almost any number in engineering: gravel drains about ten million times faster than clay. That is why clay forms the watertight core of an earth dam, and gravel the drains around a basement. Great job! Challenge: why does a clay site take years to settle, while a sand site settles almost at once?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "How fast does water pass through?",
+          "groups": [
+            {
+              "label": "Fast",
+              "icon": "drop",
+              "items": [
+                "Gravel ~10⁻² m/s",
+                "Coarse sand"
+              ]
+            },
+            {
+              "label": "Medium",
+              "icon": "sand",
+              "items": [
+                "Fine sand ~10⁻⁴",
+                "Silty sand"
+              ]
+            },
+            {
+              "label": "Very slow",
+              "icon": "soil",
+              "items": [
+                "Silt ~10⁻⁷ m/s",
+                "Clay ~10⁻⁹ m/s"
+              ]
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Darcy's law?",
+      "a": "Darcy's law says the flow through soil is proportional to the hydraulic gradient: v = k i, and Q = k i A. It holds for the slow, smooth seepage found in most soils.",
+      "asks": [
+        "Darcy law formula",
+        "Q = kiA"
+      ]
+    },
+    {
+      "q": "What is hydraulic gradient?",
+      "a": "Hydraulic gradient is the head lost divided by the length of the flow path. Half a metre of head over 0.25 metres of soil gives a gradient of 2.",
+      "asks": [
+        "Define hydraulic gradient"
+      ]
+    },
+    {
+      "q": "What is the coefficient of permeability?",
+      "a": "The coefficient of permeability k, or hydraulic conductivity, is the flow velocity at a gradient of 1, in metres per second. It ranges from about 10 to the minus 2 for gravel to below 10 to the minus 9 for clay.",
+      "asks": [
+        "What is hydraulic conductivity?"
+      ]
+    },
+    {
+      "q": "How is permeability measured?",
+      "a": "In the lab, a constant head test suits sands and gravels and a falling head test suits silts and clays. On site, pumping tests in wells measure it at a larger scale.",
+      "asks": [
+        "Constant head vs falling head test"
+      ]
+    },
+    {
+      "q": "Why is clay used in dam cores?",
+      "a": "Clay has extremely low permeability, so it stops water seeping through an earth dam. The core is surrounded by filters and coarser shells for stability.",
+      "asks": [
+        "Why are earth dams built with clay?"
+      ]
+    }
+  ],
+  "facts": [
+    "Henry Darcy published his law in 1856 from experiments for the public fountains of Dijon.",
+    "Soil permeability ranges from about 10⁻² m/s for clean gravel to below 10⁻⁹ m/s for clay."
+  ],
+  "quiz": [
+    {
+      "say": "Permeability is 2 times 10 to the minus 5 metres per second, the gradient is 0.5 and the area 10 square metres. What is the flow rate?",
+      "show": "k = 2 × 10⁻⁵ m/s, i = 0.5, A = 10 m². Flow rate Q?",
+      "options": [
+        {
+          "show": "1 × 10⁻⁴ m³/s",
+          "say": "1 times 10 to the minus 4 cubic metres per second"
+        },
+        {
+          "show": "4 × 10⁻⁴ m³/s",
+          "say": "4 times 10 to the minus 4 cubic metres per second"
+        },
+        {
+          "show": "1 × 10⁻⁵ m³/s",
+          "say": "1 times 10 to the minus 5 cubic metres per second"
+        }
+      ],
+      "answer": 0,
+      "why": "Q = k i A = 2 × 10⁻⁵ × 0.5 × 10 = 1 × 10⁻⁴ cubic metres per second.",
+      "wrong": {
+        "1": "That divides by the gradient instead of multiplying.",
+        "2": "That forgets to multiply by the area."
+      }
+    },
+    {
+      "say": "Which soil has the lowest permeability?",
+      "show": "Which soil has the lowest permeability?",
+      "options": [
+        {
+          "show": "Gravel",
+          "say": "Gravel"
+        },
+        {
+          "show": "Sand",
+          "say": "Sand"
+        },
+        {
+          "show": "Clay",
+          "say": "Clay"
+        }
+      ],
+      "answer": 2,
+      "why": "Clay's tiny pores make it almost watertight.",
+      "wrong": {
+        "0": "Gravel has the largest pores and drains fastest.",
+        "1": "Sand drains far faster than clay."
+      }
+    }
+  ]
+}

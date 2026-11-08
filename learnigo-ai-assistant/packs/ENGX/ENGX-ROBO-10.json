@@ -1,0 +1,620 @@
+{
+  "id": "ENGX-ROBO-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a line-following robot stays on the line",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "line-following robot",
+    "infrared reflectance sensor",
+    "differential drive",
+    "line tracker",
+    "automated guided vehicle"
+  ],
+  "examples": [
+    "How does a line-following robot work?",
+    "How does a line follower see the line?",
+    "How does a robot turn without a steering wheel?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sl",
+          "kind": "bulb",
+          "x": 0.28,
+          "y": 0.12,
+          "label": "Left light sensor",
+          "motion": "pulse",
+          "ask": "How does a line-following robot see the line?"
+        },
+        {
+          "id": "sr",
+          "kind": "bulb",
+          "x": 0.72,
+          "y": 0.12,
+          "label": "Right light sensor",
+          "motion": "pulse",
+          "ask": "How does a line-following robot see the line?"
+        },
+        {
+          "id": "ctrl",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.45,
+          "label": "Controller",
+          "motion": "pulse",
+          "ask": "How does a line follower decide which way to turn?"
+        },
+        {
+          "id": "ml",
+          "kind": "motor",
+          "x": 0.18,
+          "y": 0.65,
+          "label": "Left motor",
+          "motion": "spin",
+          "ask": "How does a robot with no steering wheel turn?"
+        },
+        {
+          "id": "mr",
+          "kind": "motor",
+          "x": 0.82,
+          "y": 0.65,
+          "label": "Right motor",
+          "motion": "spin"
+        },
+        {
+          "id": "wl",
+          "kind": "wheel",
+          "x": 0.18,
+          "y": 0.9,
+          "label": "Left wheel",
+          "motion": "spin"
+        },
+        {
+          "id": "wr",
+          "kind": "wheel",
+          "x": 0.82,
+          "y": 0.9,
+          "label": "Right wheel",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "sl",
+          "to": "ctrl",
+          "kind": "signal"
+        },
+        {
+          "from": "sr",
+          "to": "ctrl",
+          "kind": "signal"
+        },
+        {
+          "from": "ctrl",
+          "to": "ml",
+          "kind": "power"
+        },
+        {
+          "from": "ctrl",
+          "to": "mr",
+          "kind": "power"
+        },
+        {
+          "from": "ml",
+          "to": "wl",
+          "kind": "force"
+        },
+        {
+          "from": "mr",
+          "to": "wr",
+          "kind": "force"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A line-following robot drives along a dark line on a light floor. Underneath it, sensors shine infrared light down and measure how much bounces back: lots from the white floor, little from the black line.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a line-following robot stays on the line"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sl",
+              "kind": "bulb",
+              "x": 0.28,
+              "y": 0.12,
+              "label": "Left light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "sr",
+              "kind": "bulb",
+              "x": 0.72,
+              "y": 0.12,
+              "label": "Right light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.45,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a line follower decide which way to turn?"
+            },
+            {
+              "id": "ml",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.65,
+              "label": "Left motor",
+              "motion": "spin",
+              "ask": "How does a robot with no steering wheel turn?"
+            },
+            {
+              "id": "mr",
+              "kind": "motor",
+              "x": 0.82,
+              "y": 0.65,
+              "label": "Right motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wl",
+              "kind": "wheel",
+              "x": 0.18,
+              "y": 0.9,
+              "label": "Left wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "wr",
+              "kind": "wheel",
+              "x": 0.82,
+              "y": 0.9,
+              "label": "Right wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "sl",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "sr",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "ml",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "mr",
+              "kind": "power"
+            },
+            {
+              "from": "ml",
+              "to": "wl",
+              "kind": "force"
+            },
+            {
+              "from": "mr",
+              "to": "wr",
+              "kind": "force"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "With one sensor just left of the line and one just right, both see white while the robot is centred. If the robot drifts, one sensor slides over the black line.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sl",
+              "kind": "bulb",
+              "x": 0.28,
+              "y": 0.12,
+              "label": "Left light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "sr",
+              "kind": "bulb",
+              "x": 0.72,
+              "y": 0.12,
+              "label": "Right light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.45,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a line follower decide which way to turn?"
+            },
+            {
+              "id": "ml",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.65,
+              "label": "Left motor",
+              "motion": "spin",
+              "ask": "How does a robot with no steering wheel turn?"
+            },
+            {
+              "id": "mr",
+              "kind": "motor",
+              "x": 0.82,
+              "y": 0.65,
+              "label": "Right motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wl",
+              "kind": "wheel",
+              "x": 0.18,
+              "y": 0.9,
+              "label": "Left wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "wr",
+              "kind": "wheel",
+              "x": 0.82,
+              "y": 0.9,
+              "label": "Right wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "sl",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "sr",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "ml",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "mr",
+              "kind": "power"
+            },
+            {
+              "from": "ml",
+              "to": "wl",
+              "kind": "force"
+            },
+            {
+              "from": "mr",
+              "to": "wr",
+              "kind": "force"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "If the left sensor sees black, the line has moved left, so the controller slows the left wheel and speeds up the right, turning the robot back. The right sensor works the same way.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sl",
+              "kind": "bulb",
+              "x": 0.28,
+              "y": 0.12,
+              "label": "Left light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "sr",
+              "kind": "bulb",
+              "x": 0.72,
+              "y": 0.12,
+              "label": "Right light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.45,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a line follower decide which way to turn?"
+            },
+            {
+              "id": "ml",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.65,
+              "label": "Left motor",
+              "motion": "spin",
+              "ask": "How does a robot with no steering wheel turn?"
+            },
+            {
+              "id": "mr",
+              "kind": "motor",
+              "x": 0.82,
+              "y": 0.65,
+              "label": "Right motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wl",
+              "kind": "wheel",
+              "x": 0.18,
+              "y": 0.9,
+              "label": "Left wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "wr",
+              "kind": "wheel",
+              "x": 0.82,
+              "y": 0.9,
+              "label": "Right wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "sl",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "sr",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "ml",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "mr",
+              "kind": "power"
+            },
+            {
+              "from": "ml",
+              "to": "wl",
+              "kind": "force"
+            },
+            {
+              "from": "mr",
+              "to": "wr",
+              "kind": "force"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Each motor drives one wheel, so the robot steers just by changing wheel speeds, called differential drive. Factories use the same idea to guide carts along taped or painted routes.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sl",
+              "kind": "bulb",
+              "x": 0.28,
+              "y": 0.12,
+              "label": "Left light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "sr",
+              "kind": "bulb",
+              "x": 0.72,
+              "y": 0.12,
+              "label": "Right light sensor",
+              "motion": "pulse",
+              "ask": "How does a line-following robot see the line?"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.45,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a line follower decide which way to turn?"
+            },
+            {
+              "id": "ml",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.65,
+              "label": "Left motor",
+              "motion": "spin",
+              "ask": "How does a robot with no steering wheel turn?"
+            },
+            {
+              "id": "mr",
+              "kind": "motor",
+              "x": 0.82,
+              "y": 0.65,
+              "label": "Right motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wl",
+              "kind": "wheel",
+              "x": 0.18,
+              "y": 0.9,
+              "label": "Left wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "wr",
+              "kind": "wheel",
+              "x": 0.82,
+              "y": 0.9,
+              "label": "Right wheel",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "sl",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "sr",
+              "to": "ctrl",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "ml",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "mr",
+              "kind": "power"
+            },
+            {
+              "from": "ml",
+              "to": "wl",
+              "kind": "force"
+            },
+            {
+              "from": "mr",
+              "to": "wr",
+              "kind": "force"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a line-following robot see the line?",
+      "a": "It uses infrared sensors that shine light at the floor and measure the reflection. A light floor reflects a lot and a dark line reflects little, so the robot can tell them apart.",
+      "asks": [
+        "What sensors does a line follower use?"
+      ]
+    },
+    {
+      "q": "How does a line follower decide which way to turn?",
+      "a": "If the left sensor sees the line, it turns left by slowing the left wheel; if the right sensor sees it, it turns right. The robot keeps correcting towards the line.",
+      "asks": [
+        "What does a line follower do when it drifts?"
+      ]
+    },
+    {
+      "q": "How does a robot with no steering wheel turn?",
+      "a": "It spins its left and right wheels at different speeds. The faster wheel travels further, swinging the robot round towards the slower side. This is differential drive.",
+      "asks": [
+        "What is differential drive?"
+      ]
+    },
+    {
+      "q": "Why do line followers wobble?",
+      "a": "Simple on-off steering overcorrects one way, then the other. Using more sensors and PID control lets the robot steer gently and follow smoothly.",
+      "asks": [
+        "How do you make a line follower smoother?"
+      ]
+    },
+    {
+      "q": "Where are line-following robots used?",
+      "a": "Automated guided carts in factories, warehouses and hospitals follow lines, magnetic tape or floor markers to carry parts and supplies along fixed routes.",
+      "asks": [
+        "Are line-following robots used in real life?"
+      ]
+    }
+  ],
+  "facts": [
+    "Most line-following robots use infrared reflectance sensors that tell dark surfaces from light ones.",
+    "Automated guided vehicles have carried parts in factories since the 1950s."
+  ],
+  "quiz": [
+    {
+      "say": "A line follower's right sensor sees the black line. What should the robot do?",
+      "show": "The right sensor sees the line. The robot…",
+      "options": [
+        {
+          "show": "Turns right, back towards the line",
+          "say": "Turns right, back towards the line"
+        },
+        {
+          "show": "Turns left, away from it",
+          "say": "Turns left, away from it"
+        },
+        {
+          "show": "Stops for good",
+          "say": "Stops for good"
+        }
+      ],
+      "answer": 0,
+      "why": "The line has moved to the right, so turning right puts the robot back over it.",
+      "wrong": {
+        "1": "Turning away would lose the line completely.",
+        "2": "A small turn is all it needs; stopping is unnecessary."
+      }
+    }
+  ]
+}

@@ -1,0 +1,595 @@
+{
+  "id": "BODA-HUM-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a cough clears your airways",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "coughing",
+    "cough reflex",
+    "glottis",
+    "airways",
+    "mucus"
+  ],
+  "examples": [
+    "How does a cough work?",
+    "Why do we cough?",
+    "What happens in your chest when you cough?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sensor",
+          "kind": "bulb",
+          "x": 0.2,
+          "y": 0.12,
+          "size": 0.6,
+          "label": "Airway sensors",
+          "motion": "pulse",
+          "ask": "What sets off a cough?"
+        },
+        {
+          "id": "glottis",
+          "kind": "valve",
+          "x": 0.5,
+          "y": 0.18,
+          "size": 0.8,
+          "label": "Glottis",
+          "motion": "pulse",
+          "ask": "What is the glottis?"
+        },
+        {
+          "id": "wind",
+          "kind": "pipe",
+          "x": 0.5,
+          "y": 0.38,
+          "size": 0.9,
+          "label": "Windpipe",
+          "motion": "flow"
+        },
+        {
+          "id": "lungs",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.6,
+          "size": 1.4,
+          "label": "Lungs full of air",
+          "motion": "pulse"
+        },
+        {
+          "id": "belly",
+          "kind": "spring",
+          "x": 0.18,
+          "y": 0.82,
+          "size": 0.9,
+          "label": "Belly muscles",
+          "motion": "pulse"
+        },
+        {
+          "id": "dia",
+          "kind": "piston",
+          "x": 0.62,
+          "y": 0.86,
+          "size": 1.1,
+          "label": "Diaphragm",
+          "motion": "slide"
+        }
+      ],
+      "links": [
+        {
+          "from": "sensor",
+          "to": "glottis",
+          "kind": "signal",
+          "label": "reflex"
+        },
+        {
+          "from": "lungs",
+          "to": "wind",
+          "kind": "fluid",
+          "label": "air blast"
+        },
+        {
+          "from": "wind",
+          "to": "glottis",
+          "kind": "fluid"
+        },
+        {
+          "from": "belly",
+          "to": "lungs",
+          "kind": "force",
+          "label": "squeeze"
+        },
+        {
+          "from": "dia",
+          "to": "lungs",
+          "kind": "force",
+          "label": "push up"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A cough works like a pressure cannon. Air is trapped behind a closed valve, squeezed hard, then released all at once.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a cough clears your airways"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sensor",
+              "kind": "bulb",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.6,
+              "label": "Airway sensors",
+              "motion": "pulse",
+              "ask": "What sets off a cough?"
+            },
+            {
+              "id": "glottis",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Glottis",
+              "motion": "pulse",
+              "ask": "What is the glottis?"
+            },
+            {
+              "id": "wind",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 0.9,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungs",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Lungs full of air",
+              "motion": "pulse"
+            },
+            {
+              "id": "belly",
+              "kind": "spring",
+              "x": 0.18,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Belly muscles",
+              "motion": "pulse"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.62,
+              "y": 0.86,
+              "size": 1.1,
+              "label": "Diaphragm",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "sensor",
+              "to": "glottis",
+              "kind": "signal",
+              "label": "reflex"
+            },
+            {
+              "from": "lungs",
+              "to": "wind",
+              "kind": "fluid",
+              "label": "air blast"
+            },
+            {
+              "from": "wind",
+              "to": "glottis",
+              "kind": "fluid"
+            },
+            {
+              "from": "belly",
+              "to": "lungs",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "dia",
+              "to": "lungs",
+              "kind": "force",
+              "label": "push up"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "It starts when sensors in the lining of your throat or airways detect something, such as mucus, dust or a crumb. They send a signal to the brainstem, which starts the reflex with a deep breath in.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sensor",
+              "kind": "bulb",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.6,
+              "label": "Airway sensors",
+              "motion": "pulse",
+              "ask": "What sets off a cough?"
+            },
+            {
+              "id": "glottis",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Glottis",
+              "motion": "pulse",
+              "ask": "What is the glottis?"
+            },
+            {
+              "id": "wind",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 0.9,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungs",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Lungs full of air",
+              "motion": "pulse"
+            },
+            {
+              "id": "belly",
+              "kind": "spring",
+              "x": 0.18,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Belly muscles",
+              "motion": "pulse"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.62,
+              "y": 0.86,
+              "size": 1.1,
+              "label": "Diaphragm",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "sensor",
+              "to": "glottis",
+              "kind": "signal",
+              "label": "reflex"
+            },
+            {
+              "from": "lungs",
+              "to": "wind",
+              "kind": "fluid",
+              "label": "air blast"
+            },
+            {
+              "from": "wind",
+              "to": "glottis",
+              "kind": "fluid"
+            },
+            {
+              "from": "belly",
+              "to": "lungs",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "dia",
+              "to": "lungs",
+              "kind": "force",
+              "label": "push up"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Then the glottis, the gap between the vocal cords, shuts tight. Belly and rib muscles squeeze hard and push the diaphragm up, so pressure in the lungs climbs high.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sensor",
+              "kind": "bulb",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.6,
+              "label": "Airway sensors",
+              "motion": "pulse",
+              "ask": "What sets off a cough?"
+            },
+            {
+              "id": "glottis",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Glottis",
+              "motion": "pulse",
+              "ask": "What is the glottis?"
+            },
+            {
+              "id": "wind",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 0.9,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungs",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Lungs full of air",
+              "motion": "pulse"
+            },
+            {
+              "id": "belly",
+              "kind": "spring",
+              "x": 0.18,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Belly muscles",
+              "motion": "pulse"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.62,
+              "y": 0.86,
+              "size": 1.1,
+              "label": "Diaphragm",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "sensor",
+              "to": "glottis",
+              "kind": "signal",
+              "label": "reflex"
+            },
+            {
+              "from": "lungs",
+              "to": "wind",
+              "kind": "fluid",
+              "label": "air blast"
+            },
+            {
+              "from": "wind",
+              "to": "glottis",
+              "kind": "fluid"
+            },
+            {
+              "from": "belly",
+              "to": "lungs",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "dia",
+              "to": "lungs",
+              "kind": "force",
+              "label": "push up"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The glottis flies open and air rushes up the windpipe very fast, dragging mucus and particles with it so you can spit or swallow them.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sensor",
+              "kind": "bulb",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.6,
+              "label": "Airway sensors",
+              "motion": "pulse",
+              "ask": "What sets off a cough?"
+            },
+            {
+              "id": "glottis",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Glottis",
+              "motion": "pulse",
+              "ask": "What is the glottis?"
+            },
+            {
+              "id": "wind",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 0.9,
+              "label": "Windpipe",
+              "motion": "flow"
+            },
+            {
+              "id": "lungs",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Lungs full of air",
+              "motion": "pulse"
+            },
+            {
+              "id": "belly",
+              "kind": "spring",
+              "x": 0.18,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Belly muscles",
+              "motion": "pulse"
+            },
+            {
+              "id": "dia",
+              "kind": "piston",
+              "x": 0.62,
+              "y": 0.86,
+              "size": 1.1,
+              "label": "Diaphragm",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "sensor",
+              "to": "glottis",
+              "kind": "signal",
+              "label": "reflex"
+            },
+            {
+              "from": "lungs",
+              "to": "wind",
+              "kind": "fluid",
+              "label": "air blast"
+            },
+            {
+              "from": "wind",
+              "to": "glottis",
+              "kind": "fluid"
+            },
+            {
+              "from": "belly",
+              "to": "lungs",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "dia",
+              "to": "lungs",
+              "kind": "force",
+              "label": "push up"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do we cough?",
+      "a": "Coughing is a reflex that clears mucus, dust, crumbs or germs from your throat and airways, keeping the path to your lungs open.",
+      "asks": [
+        "What is a cough for?"
+      ]
+    },
+    {
+      "q": "What sets off a cough?",
+      "a": "Nerve sensors in the lining of the throat, windpipe and bronchi detect irritation, such as mucus, smoke or a crumb going the wrong way. They signal the brainstem to start the cough reflex.",
+      "asks": [
+        "Tell me about the airway sensors"
+      ]
+    },
+    {
+      "q": "What is the glottis?",
+      "a": "The glottis is the gap between your vocal cords in the voice box. It can close tight, which lets pressure build up in the chest before a cough or when you lift something heavy.",
+      "asks": [
+        "Tell me about the glottis"
+      ]
+    },
+    {
+      "q": "How fast is the air in a cough?",
+      "a": "The air in a cough can briefly reach many metres per second, fast enough to drag sticky mucus up the airways.",
+      "asks": [
+        "How strong is a cough?"
+      ]
+    },
+    {
+      "q": "Can you cough on purpose?",
+      "a": "Yes. You can cough by choice, but the cough reflex can also happen without you deciding, when the airways are irritated.",
+      "asks": [
+        "Is coughing voluntary?"
+      ]
+    }
+  ],
+  "facts": [
+    "A cough has three phases: a deep breath in, a compression phase with the glottis closed, and an explosive breath out.",
+    "The cough reflex is coordinated in the brainstem."
+  ],
+  "quiz": [
+    {
+      "say": "Why does the glottis close for a moment during a cough?",
+      "show": "Why does the glottis close for a moment during a cough?",
+      "options": [
+        {
+          "show": "To let pressure build up in the lungs",
+          "say": "To let pressure build up in the lungs"
+        },
+        {
+          "show": "To stop the heart",
+          "say": "To stop the heart"
+        },
+        {
+          "show": "To swallow the mucus",
+          "say": "To swallow the mucus"
+        }
+      ],
+      "answer": 0,
+      "why": "With the glottis shut, squeezing muscles raise the pressure, so the air bursts out fast when it opens.",
+      "wrong": {
+        "1": "The heart keeps beating; the glottis is in the airway.",
+        "2": "Closing the glottis traps air; swallowing is a separate action."
+      }
+    }
+  ]
+}

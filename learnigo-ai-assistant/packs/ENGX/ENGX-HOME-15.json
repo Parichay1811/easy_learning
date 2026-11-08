@@ -1,0 +1,595 @@
+{
+  "id": "ENGX-HOME-15",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a smart lock opens with your phone",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "smart lock",
+    "Bluetooth lock",
+    "keyless entry",
+    "door lock motor",
+    "encryption"
+  ],
+  "examples": [
+    "How does a smart lock work?",
+    "Can a smart lock be hacked?",
+    "What happens to a smart lock if the battery dies?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "phone",
+          "label": "Your phone",
+          "icon": "phone",
+          "x": 0.12,
+          "y": 0.3,
+          "ask": "How does a smart lock know it is my phone?"
+        },
+        {
+          "id": "cloud",
+          "label": "App server",
+          "icon": "computer",
+          "x": 0.12,
+          "y": 0.78
+        },
+        {
+          "id": "chip",
+          "label": "Lock chip",
+          "icon": "chip",
+          "x": 0.45,
+          "y": 0.5,
+          "ask": "How does a smart lock work?"
+        },
+        {
+          "id": "motor",
+          "label": "Motor",
+          "icon": "motor",
+          "x": 0.7,
+          "y": 0.25
+        },
+        {
+          "id": "bolt",
+          "label": "Bolt",
+          "icon": "lever",
+          "x": 0.9,
+          "y": 0.5
+        },
+        {
+          "id": "battery",
+          "label": "Batteries",
+          "icon": "battery",
+          "x": 0.7,
+          "y": 0.82,
+          "ask": "What happens to a smart lock if the battery dies?"
+        }
+      ],
+      "links": [
+        {
+          "from": "phone",
+          "to": "chip",
+          "kind": "data",
+          "label": "coded signal"
+        },
+        {
+          "from": "phone",
+          "to": "cloud",
+          "kind": "data",
+          "label": "from far away"
+        },
+        {
+          "from": "cloud",
+          "to": "chip",
+          "kind": "data",
+          "label": "via home wifi"
+        },
+        {
+          "from": "chip",
+          "to": "motor",
+          "kind": "signal",
+          "label": "unlock"
+        },
+        {
+          "from": "motor",
+          "to": "bolt",
+          "kind": "force",
+          "label": "slides bolt"
+        },
+        {
+          "from": "battery",
+          "to": "motor",
+          "kind": "power"
+        },
+        {
+          "from": "battery",
+          "to": "chip",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A smart lock is a normal bolt moved by a small motor, controlled by a tiny computer chip that can talk to your phone.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a smart lock opens with your phone"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.12,
+              "y": 0.3,
+              "ask": "How does a smart lock know it is my phone?"
+            },
+            {
+              "id": "cloud",
+              "label": "App server",
+              "icon": "computer",
+              "x": 0.12,
+              "y": 0.78
+            },
+            {
+              "id": "chip",
+              "label": "Lock chip",
+              "icon": "chip",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does a smart lock work?"
+            },
+            {
+              "id": "motor",
+              "label": "Motor",
+              "icon": "motor",
+              "x": 0.7,
+              "y": 0.25
+            },
+            {
+              "id": "bolt",
+              "label": "Bolt",
+              "icon": "lever",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "battery",
+              "label": "Batteries",
+              "icon": "battery",
+              "x": 0.7,
+              "y": 0.82,
+              "ask": "What happens to a smart lock if the battery dies?"
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "chip",
+              "kind": "data",
+              "label": "coded signal"
+            },
+            {
+              "from": "phone",
+              "to": "cloud",
+              "kind": "data",
+              "label": "from far away"
+            },
+            {
+              "from": "cloud",
+              "to": "chip",
+              "kind": "data",
+              "label": "via home wifi"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "unlock"
+            },
+            {
+              "from": "motor",
+              "to": "bolt",
+              "kind": "force",
+              "label": "slides bolt"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "battery",
+              "to": "chip",
+              "kind": "power"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "When you come near or tap the app, your phone sends a coded message by Bluetooth. The chip checks the secret code and only accepts phones it has been paired with.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.12,
+              "y": 0.3,
+              "ask": "How does a smart lock know it is my phone?"
+            },
+            {
+              "id": "cloud",
+              "label": "App server",
+              "icon": "computer",
+              "x": 0.12,
+              "y": 0.78
+            },
+            {
+              "id": "chip",
+              "label": "Lock chip",
+              "icon": "chip",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does a smart lock work?"
+            },
+            {
+              "id": "motor",
+              "label": "Motor",
+              "icon": "motor",
+              "x": 0.7,
+              "y": 0.25
+            },
+            {
+              "id": "bolt",
+              "label": "Bolt",
+              "icon": "lever",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "battery",
+              "label": "Batteries",
+              "icon": "battery",
+              "x": 0.7,
+              "y": 0.82,
+              "ask": "What happens to a smart lock if the battery dies?"
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "chip",
+              "kind": "data",
+              "label": "coded signal"
+            },
+            {
+              "from": "phone",
+              "to": "cloud",
+              "kind": "data",
+              "label": "from far away"
+            },
+            {
+              "from": "cloud",
+              "to": "chip",
+              "kind": "data",
+              "label": "via home wifi"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "unlock"
+            },
+            {
+              "from": "motor",
+              "to": "bolt",
+              "kind": "force",
+              "label": "slides bolt"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "battery",
+              "to": "chip",
+              "kind": "power"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "If the code is right, the chip switches on the motor, which turns gears that slide the bolt back, and the door unlocks. Away from home, the message can travel through the app server and your home wifi.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.12,
+              "y": 0.3,
+              "ask": "How does a smart lock know it is my phone?"
+            },
+            {
+              "id": "cloud",
+              "label": "App server",
+              "icon": "computer",
+              "x": 0.12,
+              "y": 0.78
+            },
+            {
+              "id": "chip",
+              "label": "Lock chip",
+              "icon": "chip",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does a smart lock work?"
+            },
+            {
+              "id": "motor",
+              "label": "Motor",
+              "icon": "motor",
+              "x": 0.7,
+              "y": 0.25
+            },
+            {
+              "id": "bolt",
+              "label": "Bolt",
+              "icon": "lever",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "battery",
+              "label": "Batteries",
+              "icon": "battery",
+              "x": 0.7,
+              "y": 0.82,
+              "ask": "What happens to a smart lock if the battery dies?"
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "chip",
+              "kind": "data",
+              "label": "coded signal"
+            },
+            {
+              "from": "phone",
+              "to": "cloud",
+              "kind": "data",
+              "label": "from far away"
+            },
+            {
+              "from": "cloud",
+              "to": "chip",
+              "kind": "data",
+              "label": "via home wifi"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "unlock"
+            },
+            {
+              "from": "motor",
+              "to": "bolt",
+              "kind": "force",
+              "label": "slides bolt"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "battery",
+              "to": "chip",
+              "kind": "power"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Everything runs on batteries. The lock warns you when they are low, and most smart locks also keep a key or keypad as a backup.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "phone",
+              "label": "Your phone",
+              "icon": "phone",
+              "x": 0.12,
+              "y": 0.3,
+              "ask": "How does a smart lock know it is my phone?"
+            },
+            {
+              "id": "cloud",
+              "label": "App server",
+              "icon": "computer",
+              "x": 0.12,
+              "y": 0.78
+            },
+            {
+              "id": "chip",
+              "label": "Lock chip",
+              "icon": "chip",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "How does a smart lock work?"
+            },
+            {
+              "id": "motor",
+              "label": "Motor",
+              "icon": "motor",
+              "x": 0.7,
+              "y": 0.25
+            },
+            {
+              "id": "bolt",
+              "label": "Bolt",
+              "icon": "lever",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "battery",
+              "label": "Batteries",
+              "icon": "battery",
+              "x": 0.7,
+              "y": 0.82,
+              "ask": "What happens to a smart lock if the battery dies?"
+            }
+          ],
+          "links": [
+            {
+              "from": "phone",
+              "to": "chip",
+              "kind": "data",
+              "label": "coded signal"
+            },
+            {
+              "from": "phone",
+              "to": "cloud",
+              "kind": "data",
+              "label": "from far away"
+            },
+            {
+              "from": "cloud",
+              "to": "chip",
+              "kind": "data",
+              "label": "via home wifi"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "unlock"
+            },
+            {
+              "from": "motor",
+              "to": "bolt",
+              "kind": "force",
+              "label": "slides bolt"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "battery",
+              "to": "chip",
+              "kind": "power"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a smart lock work?",
+      "a": "A small motor slides the bolt, and a chip decides when to run it. The chip listens for a coded message from your phone, a keypad or an app server and unlocks only if the code checks out.",
+      "asks": [
+        "What is inside a smart lock?"
+      ]
+    },
+    {
+      "q": "How does a smart lock know it is my phone?",
+      "a": "When you set it up, the lock and your phone share secret keys. Each unlock message is encrypted with those keys, so the lock can tell it is genuine and not copied.",
+      "asks": [
+        "Can a smart lock be hacked?"
+      ]
+    },
+    {
+      "q": "What happens to a smart lock if the battery dies?",
+      "a": "The lock warns you weeks ahead. If the battery dies anyway, most locks have a backup key or let you touch a battery to contacts outside to power it briefly.",
+      "asks": [
+        "Will I be locked out if the battery runs out?"
+      ]
+    },
+    {
+      "q": "Can a smart lock be hacked?",
+      "a": "Good smart locks use strong encryption, which is very hard to break, but cheap ones have had security flaws. Keeping the app updated and using a strong password helps.",
+      "asks": [
+        "Are smart locks safe?"
+      ]
+    },
+    {
+      "q": "How does a smart lock unlock when I arrive?",
+      "a": "Some use your phone’s location to notice you are near home, then unlock over Bluetooth when you are right at the door.",
+      "asks": [
+        "What is auto-unlock?"
+      ]
+    }
+  ],
+  "facts": [
+    "Bluetooth used by smart locks typically works over a range of about 10 metres.",
+    "Smart locks run on batteries that usually last several months, and warn the owner when they are low."
+  ],
+  "quiz": [
+    {
+      "say": "What actually moves the bolt in a smart lock?",
+      "show": "What actually moves the bolt in a smart lock?",
+      "options": [
+        {
+          "show": "A small electric motor",
+          "say": "A small electric motor"
+        },
+        {
+          "show": "The phone’s magnet",
+          "say": "The phone’s magnet"
+        },
+        {
+          "show": "The wifi signal",
+          "say": "The wifi signal"
+        }
+      ],
+      "answer": 0,
+      "why": "The chip switches on a battery-powered motor that slides the bolt.",
+      "wrong": {
+        "1": "Phones do not move the bolt with magnets.",
+        "2": "The signal only carries the instruction; the motor does the work."
+      }
+    }
+  ]
+}

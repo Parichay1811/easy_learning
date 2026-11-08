@@ -1,0 +1,606 @@
+{
+  "id": "ENGX-FLUD-11",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a central heating loop warms a house",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "central heating",
+    "heating loop",
+    "circulating pump",
+    "room thermostat",
+    "radiator valve",
+    "flow and return"
+  ],
+  "examples": [
+    "How does central heating work?",
+    "What does the room thermostat do?",
+    "Why are some radiator pipes hot and some cooler?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "boiler",
+          "label": "Boiler",
+          "icon": "fire",
+          "x": 0.14,
+          "y": 0.62,
+          "ask": "What does the boiler do in central heating?"
+        },
+        {
+          "id": "pump",
+          "label": "Circulating pump",
+          "icon": "pump",
+          "x": 0.36,
+          "y": 0.25,
+          "ask": "Why does central heating need a pump?"
+        },
+        {
+          "id": "rad1",
+          "label": "Living room radiator",
+          "icon": "thermometer",
+          "x": 0.66,
+          "y": 0.18
+        },
+        {
+          "id": "rad2",
+          "label": "Bedroom radiator",
+          "icon": "thermometer",
+          "x": 0.86,
+          "y": 0.5
+        },
+        {
+          "id": "trv",
+          "label": "Radiator valve",
+          "icon": "valve",
+          "x": 0.66,
+          "y": 0.84,
+          "ask": "What does a radiator valve do?"
+        },
+        {
+          "id": "stat",
+          "label": "Room thermostat",
+          "icon": "sensor",
+          "x": 0.36,
+          "y": 0.84,
+          "ask": "What does the room thermostat do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "boiler",
+          "to": "pump",
+          "kind": "fluid",
+          "label": "hot flow"
+        },
+        {
+          "from": "pump",
+          "to": "rad1",
+          "kind": "fluid",
+          "label": "about 70 °C"
+        },
+        {
+          "from": "rad1",
+          "to": "rad2",
+          "kind": "fluid"
+        },
+        {
+          "from": "rad2",
+          "to": "trv",
+          "kind": "fluid",
+          "label": "cooler return"
+        },
+        {
+          "from": "trv",
+          "to": "boiler",
+          "kind": "fluid",
+          "label": "back to reheat"
+        },
+        {
+          "from": "stat",
+          "to": "boiler",
+          "kind": "signal",
+          "label": "on or off"
+        },
+        {
+          "from": "rad1",
+          "to": "stat",
+          "kind": "heat",
+          "label": "warms the room"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Central heating is a closed loop of water. The boiler heats the water, and the same water goes round and round the house, never coming out of a tap.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a central heating loop warms a house"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "boiler",
+              "label": "Boiler",
+              "icon": "fire",
+              "x": 0.14,
+              "y": 0.62,
+              "ask": "What does the boiler do in central heating?"
+            },
+            {
+              "id": "pump",
+              "label": "Circulating pump",
+              "icon": "pump",
+              "x": 0.36,
+              "y": 0.25,
+              "ask": "Why does central heating need a pump?"
+            },
+            {
+              "id": "rad1",
+              "label": "Living room radiator",
+              "icon": "thermometer",
+              "x": 0.66,
+              "y": 0.18
+            },
+            {
+              "id": "rad2",
+              "label": "Bedroom radiator",
+              "icon": "thermometer",
+              "x": 0.86,
+              "y": 0.5
+            },
+            {
+              "id": "trv",
+              "label": "Radiator valve",
+              "icon": "valve",
+              "x": 0.66,
+              "y": 0.84,
+              "ask": "What does a radiator valve do?"
+            },
+            {
+              "id": "stat",
+              "label": "Room thermostat",
+              "icon": "sensor",
+              "x": 0.36,
+              "y": 0.84,
+              "ask": "What does the room thermostat do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "hot flow"
+            },
+            {
+              "from": "pump",
+              "to": "rad1",
+              "kind": "fluid",
+              "label": "about 70 °C"
+            },
+            {
+              "from": "rad1",
+              "to": "rad2",
+              "kind": "fluid"
+            },
+            {
+              "from": "rad2",
+              "to": "trv",
+              "kind": "fluid",
+              "label": "cooler return"
+            },
+            {
+              "from": "trv",
+              "to": "boiler",
+              "kind": "fluid",
+              "label": "back to reheat"
+            },
+            {
+              "from": "stat",
+              "to": "boiler",
+              "kind": "signal",
+              "label": "on or off"
+            },
+            {
+              "from": "rad1",
+              "to": "stat",
+              "kind": "heat",
+              "label": "warms the room"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "A circulating pump pushes the hot water along the flow pipe to each radiator in turn.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "boiler",
+              "label": "Boiler",
+              "icon": "fire",
+              "x": 0.14,
+              "y": 0.62,
+              "ask": "What does the boiler do in central heating?"
+            },
+            {
+              "id": "pump",
+              "label": "Circulating pump",
+              "icon": "pump",
+              "x": 0.36,
+              "y": 0.25,
+              "ask": "Why does central heating need a pump?"
+            },
+            {
+              "id": "rad1",
+              "label": "Living room radiator",
+              "icon": "thermometer",
+              "x": 0.66,
+              "y": 0.18
+            },
+            {
+              "id": "rad2",
+              "label": "Bedroom radiator",
+              "icon": "thermometer",
+              "x": 0.86,
+              "y": 0.5
+            },
+            {
+              "id": "trv",
+              "label": "Radiator valve",
+              "icon": "valve",
+              "x": 0.66,
+              "y": 0.84,
+              "ask": "What does a radiator valve do?"
+            },
+            {
+              "id": "stat",
+              "label": "Room thermostat",
+              "icon": "sensor",
+              "x": 0.36,
+              "y": 0.84,
+              "ask": "What does the room thermostat do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "hot flow"
+            },
+            {
+              "from": "pump",
+              "to": "rad1",
+              "kind": "fluid",
+              "label": "about 70 °C"
+            },
+            {
+              "from": "rad1",
+              "to": "rad2",
+              "kind": "fluid"
+            },
+            {
+              "from": "rad2",
+              "to": "trv",
+              "kind": "fluid",
+              "label": "cooler return"
+            },
+            {
+              "from": "trv",
+              "to": "boiler",
+              "kind": "fluid",
+              "label": "back to reheat"
+            },
+            {
+              "from": "stat",
+              "to": "boiler",
+              "kind": "signal",
+              "label": "on or off"
+            },
+            {
+              "from": "rad1",
+              "to": "stat",
+              "kind": "heat",
+              "label": "warms the room"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Each radiator passes heat to its room, so the water leaving it is cooler. The return pipe carries the cooled water back to the boiler to be heated again.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "boiler",
+              "label": "Boiler",
+              "icon": "fire",
+              "x": 0.14,
+              "y": 0.62,
+              "ask": "What does the boiler do in central heating?"
+            },
+            {
+              "id": "pump",
+              "label": "Circulating pump",
+              "icon": "pump",
+              "x": 0.36,
+              "y": 0.25,
+              "ask": "Why does central heating need a pump?"
+            },
+            {
+              "id": "rad1",
+              "label": "Living room radiator",
+              "icon": "thermometer",
+              "x": 0.66,
+              "y": 0.18
+            },
+            {
+              "id": "rad2",
+              "label": "Bedroom radiator",
+              "icon": "thermometer",
+              "x": 0.86,
+              "y": 0.5
+            },
+            {
+              "id": "trv",
+              "label": "Radiator valve",
+              "icon": "valve",
+              "x": 0.66,
+              "y": 0.84,
+              "ask": "What does a radiator valve do?"
+            },
+            {
+              "id": "stat",
+              "label": "Room thermostat",
+              "icon": "sensor",
+              "x": 0.36,
+              "y": 0.84,
+              "ask": "What does the room thermostat do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "hot flow"
+            },
+            {
+              "from": "pump",
+              "to": "rad1",
+              "kind": "fluid",
+              "label": "about 70 °C"
+            },
+            {
+              "from": "rad1",
+              "to": "rad2",
+              "kind": "fluid"
+            },
+            {
+              "from": "rad2",
+              "to": "trv",
+              "kind": "fluid",
+              "label": "cooler return"
+            },
+            {
+              "from": "trv",
+              "to": "boiler",
+              "kind": "fluid",
+              "label": "back to reheat"
+            },
+            {
+              "from": "stat",
+              "to": "boiler",
+              "kind": "signal",
+              "label": "on or off"
+            },
+            {
+              "from": "rad1",
+              "to": "stat",
+              "kind": "heat",
+              "label": "warms the room"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "A room thermostat feels the air temperature and switches the boiler and pump on when it is cold and off when it is warm enough, while valves on each radiator fine-tune each room.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "boiler",
+              "label": "Boiler",
+              "icon": "fire",
+              "x": 0.14,
+              "y": 0.62,
+              "ask": "What does the boiler do in central heating?"
+            },
+            {
+              "id": "pump",
+              "label": "Circulating pump",
+              "icon": "pump",
+              "x": 0.36,
+              "y": 0.25,
+              "ask": "Why does central heating need a pump?"
+            },
+            {
+              "id": "rad1",
+              "label": "Living room radiator",
+              "icon": "thermometer",
+              "x": 0.66,
+              "y": 0.18
+            },
+            {
+              "id": "rad2",
+              "label": "Bedroom radiator",
+              "icon": "thermometer",
+              "x": 0.86,
+              "y": 0.5
+            },
+            {
+              "id": "trv",
+              "label": "Radiator valve",
+              "icon": "valve",
+              "x": 0.66,
+              "y": 0.84,
+              "ask": "What does a radiator valve do?"
+            },
+            {
+              "id": "stat",
+              "label": "Room thermostat",
+              "icon": "sensor",
+              "x": 0.36,
+              "y": 0.84,
+              "ask": "What does the room thermostat do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "boiler",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "hot flow"
+            },
+            {
+              "from": "pump",
+              "to": "rad1",
+              "kind": "fluid",
+              "label": "about 70 °C"
+            },
+            {
+              "from": "rad1",
+              "to": "rad2",
+              "kind": "fluid"
+            },
+            {
+              "from": "rad2",
+              "to": "trv",
+              "kind": "fluid",
+              "label": "cooler return"
+            },
+            {
+              "from": "trv",
+              "to": "boiler",
+              "kind": "fluid",
+              "label": "back to reheat"
+            },
+            {
+              "from": "stat",
+              "to": "boiler",
+              "kind": "signal",
+              "label": "on or off"
+            },
+            {
+              "from": "rad1",
+              "to": "stat",
+              "kind": "heat",
+              "label": "warms the room"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the boiler do in central heating?",
+      "a": "It burns gas, or uses electricity, to heat the water in the loop. The hot water then carries that heat to the radiators.",
+      "asks": [
+        "How does central heating work?"
+      ]
+    },
+    {
+      "q": "Why does central heating need a pump?",
+      "a": "Water would barely move round the pipes on its own, so an electric pump pushes it steadily through the boiler and every radiator.",
+      "asks": [
+        "What moves the water round the radiators?"
+      ]
+    },
+    {
+      "q": "What does the room thermostat do?",
+      "a": "It measures the air temperature in one room. When the room drops below the setting it turns the heating on, and when the room is warm enough it turns it off.",
+      "asks": [
+        "How does a thermostat control the heating?"
+      ]
+    },
+    {
+      "q": "What does a radiator valve do?",
+      "a": "A thermostatic radiator valve has a wax or liquid capsule that expands when the room is warm, closing the valve to let less hot water into that radiator.",
+      "asks": [
+        "What are the numbers on a radiator valve?"
+      ]
+    },
+    {
+      "q": "Why are some radiator pipes hot and some cooler?",
+      "a": "One pipe is the flow, carrying hot water in, and the other is the return, carrying water out after it has given away some of its heat.",
+      "asks": [
+        "Why is one radiator pipe colder?"
+      ]
+    }
+  ],
+  "facts": [
+    "Wet central heating is a closed loop: the same water circulates between the boiler and radiators.",
+    "Thermostatic radiator valves use an expanding wax or liquid capsule to reduce flow when a room is warm."
+  ],
+  "quiz": [
+    {
+      "say": "Why is the return pipe of a radiator cooler than the flow pipe?",
+      "show": "Why is the return pipe of a radiator cooler than the flow pipe?",
+      "options": [
+        {
+          "show": "The water has given heat to the room",
+          "say": "The water has given heat to the room"
+        },
+        {
+          "show": "Cold mains water is added",
+          "say": "Cold mains water is added"
+        },
+        {
+          "show": "The pump cools it",
+          "say": "The pump cools it"
+        }
+      ],
+      "answer": 0,
+      "why": "The water passes heat into the radiator and the room, so it leaves cooler and goes back to the boiler.",
+      "wrong": {
+        "1": "Central heating is a closed loop; no fresh cold water is mixed in.",
+        "2": "The pump moves the water but does not cool it."
+      }
+    }
+  ]
+}

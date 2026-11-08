@@ -1,0 +1,354 @@
+{
+  "id": "BEE-EMAG-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Coulomb's law and the electric field: forces between charges, worked through",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-EMAG — Electromagnetics",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "Coulomb's law",
+    "electric field",
+    "inverse-square law",
+    "superposition",
+    "point charge"
+  ],
+  "examples": [
+    "What is the force between two 1 microcoulomb charges 10 cm apart?",
+    "What is an electric field?",
+    "Why does electric force fall with distance squared?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Separation r (cm)",
+        "min": 5,
+        "max": 30
+      },
+      "y": {
+        "label": "Force (N)",
+        "max": 4
+      },
+      "curves": [
+        {
+          "label": "F between 1 µC charges",
+          "type": "power",
+          "a": 90,
+          "k": -2,
+          "ask": "What is Coulomb's law?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 10,
+          "label": "0.9 N at 10 cm"
+        },
+        {
+          "x": 20,
+          "label": "0.225 N at 20 cm"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Rub a balloon on your hair and it lifts the strands without touching them. In 1785 Charles-Augustin de Coulomb measured that invisible push with a delicate torsion balance. On the board is his law in action: the force between two charges of 1 microcoulomb each, plotted against their distance apart.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Coulomb's law and the electric field: forces between charges, worked through"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Separation r (cm)",
+            "min": 5,
+            "max": 30
+          },
+          "y": {
+            "label": "Force (N)",
+            "max": 4
+          },
+          "curves": [
+            {
+              "label": "F between 1 µC charges",
+              "type": "power",
+              "a": 90,
+              "k": -2,
+              "ask": "What is Coulomb's law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "0.9 N at 10 cm"
+            },
+            {
+              "x": 20,
+              "label": "0.225 N at 20 cm"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Coulomb's law: the force equals k times the two charges multiplied, divided by the distance squared, where k is about 9 billion in SI units. For two 1 microcoulomb charges 10 centimetres apart, that works out to 0.9 newtons, about the weight of a small apple. Like charges repel, unlike charges attract. What happens if you double the distance?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Separation r (cm)",
+            "min": 5,
+            "max": 30
+          },
+          "y": {
+            "label": "Force (N)",
+            "max": 4
+          },
+          "curves": [
+            {
+              "label": "F between 1 µC charges",
+              "type": "power",
+              "a": 90,
+              "k": -2,
+              "ask": "What is Coulomb's law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "0.9 N at 10 cm"
+            },
+            {
+              "x": 20,
+              "label": "0.225 N at 20 cm"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F = kq₁q₂/r² = 9×10⁹ × (10⁻⁶)² / 0.1² = 0.9 N"
+        }
+      ]
+    },
+    {
+      "say": "The force drops to a quarter, 0.225 newtons at 20 centimetres. That's the inverse-square law, the same shape as gravity, and you can see the curve plunge as the charges move apart. Halve the distance to 5 centimetres and the force jumps to 3.6 newtons. How many times bigger is that than at 10 centimetres?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Separation r (cm)",
+            "min": 5,
+            "max": 30
+          },
+          "y": {
+            "label": "Force (N)",
+            "max": 4
+          },
+          "curves": [
+            {
+              "label": "F between 1 µC charges",
+              "type": "power",
+              "a": 90,
+              "k": -2,
+              "ask": "What is Coulomb's law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "0.9 N at 10 cm"
+            },
+            {
+              "x": 20,
+              "label": "0.225 N at 20 cm"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Double r  ⇒  F falls to a quarter"
+        }
+      ]
+    },
+    {
+      "say": "Four times. Now the electric field, E, the force per coulomb that a tiny test charge would feel. At 10 centimetres from a 1 microcoulomb charge, E is k Q over r squared, 900 thousand newtons per coulomb. With several charges, you add the fields as arrows. Here two charges push a test charge, and their up and down parts cancel, leaving a net push to the right. Why did they cancel?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "atom",
+          "motion": "right",
+          "forces": [
+            {
+              "label": "Push from Q1",
+              "dir": -30,
+              "size": 2,
+              "ask": "What is an electric field?"
+            },
+            {
+              "label": "Push from Q2",
+              "dir": 30,
+              "size": 2
+            },
+            {
+              "label": "Net force",
+              "dir": 0,
+              "size": 3.5,
+              "ask": "What is the superposition principle?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "E = kQ/r² = 9×10⁹ × 10⁻⁶ / 0.01 = 9×10⁵ N/C"
+        }
+      ]
+    },
+    {
+      "say": "Because the two charges sit symmetrically, one above and one below. Adding arrows like this is called superposition. Wonderful work! Real-world link: laser printers and photocopiers put toner exactly where an electric field pulls it. Challenge: two 2 microcoulomb charges sit 10 centimetres apart. What is the force between them?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "atom",
+          "motion": "right",
+          "forces": [
+            {
+              "label": "Push from Q1",
+              "dir": -30,
+              "size": 2,
+              "ask": "What is an electric field?"
+            },
+            {
+              "label": "Push from Q2",
+              "dir": 30,
+              "size": 2
+            },
+            {
+              "label": "Net force",
+              "dir": 0,
+              "size": 3.5,
+              "ask": "What is the superposition principle?"
+            }
+          ]
+        },
+        {
+          "op": "note",
+          "text": "Superposition: the total field is the vector sum of every charge's field."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Coulomb's law?",
+      "a": "The force between two point charges is k times the product of the charges divided by the square of their distance, with k about 9 times 10 to the 9. Like charges repel and unlike charges attract.",
+      "asks": [
+        "State Coulomb's law",
+        "Coulomb's law formula"
+      ]
+    },
+    {
+      "q": "What is the inverse-square law?",
+      "a": "A quantity that falls with the square of distance: double the distance and it drops to a quarter. Electric force, gravity and the light from a point source all follow it.",
+      "asks": [
+        "Why does force fall with distance squared?"
+      ]
+    },
+    {
+      "q": "What is an electric field?",
+      "a": "The electric field at a point is the force a small positive test charge would feel there, per coulomb of its charge. It is measured in newtons per coulomb, or volts per metre.",
+      "asks": [
+        "Define electric field",
+        "What is N/C?"
+      ]
+    },
+    {
+      "q": "What is the superposition principle?",
+      "a": "With several charges, the total force or field is the vector sum of the contributions from each charge on its own.",
+      "asks": [
+        "How do you add electric fields?"
+      ]
+    },
+    {
+      "q": "What is the constant k in Coulomb's law?",
+      "a": "k equals 1 over 4 pi epsilon nought, about 8.99 times 10 to the 9 newton square metres per coulomb squared. Epsilon nought is the permittivity of free space.",
+      "asks": [
+        "What is epsilon nought?"
+      ]
+    }
+  ],
+  "facts": [
+    "Charles-Augustin de Coulomb published his law of electric force in 1785.",
+    "The constant k in Coulomb's law is about 8.99 billion newton square metres per coulomb squared."
+  ],
+  "quiz": [
+    {
+      "say": "Two charges 3 metres apart feel a force of 4 newtons. What is the force when they are 6 metres apart?",
+      "show": "Two charges 3 m apart feel a force of 4 N. What is the force when they are 6 m apart?",
+      "options": [
+        {
+          "show": "1 N",
+          "say": "1 newton"
+        },
+        {
+          "show": "2 N",
+          "say": "2 newtons"
+        },
+        {
+          "show": "8 N",
+          "say": "8 newtons"
+        }
+      ],
+      "answer": 0,
+      "why": "Doubling the distance divides the force by 2 squared, which is 4, so 4 newtons becomes 1 newton.",
+      "wrong": {
+        "1": "Halving would be a one over r law; Coulomb's law is one over r squared.",
+        "2": "Moving apart weakens the force, it never strengthens it."
+      }
+    },
+    {
+      "say": "Two negative charges are placed near each other. What do they do?",
+      "show": "Two negative charges are placed near each other. They...",
+      "options": [
+        {
+          "show": "Repel each other",
+          "say": "Repel each other"
+        },
+        {
+          "show": "Attract each other",
+          "say": "Attract each other"
+        },
+        {
+          "show": "Feel no force",
+          "say": "Feel no force"
+        }
+      ],
+      "answer": 0,
+      "why": "Like charges, both negative here, repel.",
+      "wrong": {
+        "1": "Attraction happens only between opposite charges.",
+        "2": "Any two charges exert a force on each other."
+      }
+    }
+  ]
+}

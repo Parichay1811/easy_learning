@@ -1,0 +1,375 @@
+{
+  "id": "BEE-ACC-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "RL circuits: why current rises slowly in a coil",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "RL circuit",
+    "inductor",
+    "L over R time constant",
+    "back EMF",
+    "flyback diode"
+  ],
+  "examples": [
+    "Why does current rise slowly in an inductor?",
+    "What is the time constant of an RL circuit?",
+    "Why does a relay coil spark when switched off?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Battery",
+          "value": "12 V"
+        },
+        {
+          "kind": "switch",
+          "label": "Switch",
+          "ask": "Why is there a spark when the switch opens?"
+        },
+        {
+          "kind": "inductor",
+          "label": "Coil L",
+          "value": "2 H",
+          "ask": "Why does current rise slowly in an inductor?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R",
+          "value": "10 Ω",
+          "ask": "What sets the final current in an RL circuit?"
+        }
+      ],
+      "readouts": [
+        "τ = L/R = 0.2 s",
+        "Final I = 12/10 = 1.2 A",
+        "Start: di/dt = 6 A/s"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Ever seen a spark jump when someone unplugs a running vacuum cleaner? A coil is to blame: it hates changes in current. On the board, a 12 volt battery, a switch, a 2 henry coil and a 10 ohm resistor. A henry is the unit of inductance, how strongly a coil resists change. Let's close the switch.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "RL circuits: why current rises slowly in a coil"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch",
+              "ask": "Why is there a spark when the switch opens?",
+              "open": true
+            },
+            {
+              "kind": "inductor",
+              "label": "Coil L",
+              "value": "2 H",
+              "ask": "Why does current rise slowly in an inductor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "10 Ω",
+              "ask": "What sets the final current in an RL circuit?"
+            }
+          ],
+          "readouts": [
+            "τ = L/R = 0.2 s",
+            "Final I = 12/10 = 1.2 A",
+            "Start: di/dt = 6 A/s"
+          ],
+          "flow": false
+        }
+      ]
+    },
+    {
+      "say": "Switch closed. You might expect 12 over 10, which is 1.2 amps, at once. But the coil makes a back voltage, L times the rate of change of current, that fights the rise. At the first instant the current is zero, so all 12 volts sit across the coil, and the current starts growing at 12 over 2, which is 6 amps per second. Will it keep growing at that rate?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch",
+              "ask": "Why is there a spark when the switch opens?"
+            },
+            {
+              "kind": "inductor",
+              "label": "Coil L",
+              "value": "2 H",
+              "ask": "Why does current rise slowly in an inductor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "10 Ω",
+              "ask": "What sets the final current in an RL circuit?"
+            }
+          ],
+          "readouts": [
+            "τ = L/R = 0.2 s",
+            "Final I = 12/10 = 1.2 A",
+            "Start: di/dt = 6 A/s"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "v_L = L di/dt,  so di/dt = 12/2 = 6 A/s"
+        }
+      ]
+    },
+    {
+      "say": "No. As current builds, the resistor takes more of the voltage, the coil gets less, and the growth slows. That gives the curve on the board, rising towards 1.2 amps, the value set by the resistor alone. Its time constant is L over R: 2 over 10, which is 0.2 seconds. How much current flows after one time constant?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Current (A)",
+            "max": 1.5
+          },
+          "curves": [
+            {
+              "label": "Coil current",
+              "type": "rise",
+              "a": 1.2,
+              "k": 0.2,
+              "ask": "What is the time constant of an RL circuit?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.2,
+              "label": "τ = 0.2 s: 0.76 A"
+            },
+            {
+              "x": 1,
+              "label": "5τ: 1.19 A"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "i = 1.2(1 − e^(−t/0.2)) A,   τ = L/R = 0.2 s"
+        }
+      ]
+    },
+    {
+      "say": "63 percent of 1.2, about 0.76 amps, just like a capacitor's voltage. After 5 tau, one second, it reaches 1.19 amps, practically all of it. Here's a mirror image to remember: a capacitor resists sudden changes in voltage, an inductor resists sudden changes in current. Which one would you use to smooth a current?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Current (A)",
+            "max": 1.5
+          },
+          "curves": [
+            {
+              "label": "Coil current",
+              "type": "rise",
+              "a": 1.2,
+              "k": 0.2,
+              "ask": "What is the time constant of an RL circuit?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.2,
+              "label": "τ = 0.2 s: 0.76 A"
+            },
+            {
+              "x": 1,
+              "label": "5τ: 1.19 A"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "At t = τ:  i ≈ 0.632 × 1.2 ≈ 0.76 A"
+        }
+      ]
+    },
+    {
+      "say": "The inductor. Now open the switch. The coil tries to keep 1.2 amps flowing, and with nowhere to go its voltage leaps up, which is the spark. It is dumping its stored energy, half L I squared: half of 2 times 1.44, which is 1.44 joules. Great work! That's why relay coils get a flyback diode across them. Challenge: what is tau if R becomes 20 ohms?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch",
+              "ask": "Why is there a spark when the switch opens?",
+              "open": true
+            },
+            {
+              "kind": "inductor",
+              "label": "Coil L",
+              "value": "2 H",
+              "ask": "Why does current rise slowly in an inductor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "10 Ω",
+              "ask": "What sets the final current in an RL circuit?"
+            }
+          ],
+          "readouts": [
+            "Switch opened",
+            "Stored E = 1.44 J",
+            "Fix: a flyback diode"
+          ],
+          "flow": false,
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "E = ½LI² = ½ × 2 × 1.2² = 1.44 J"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the time constant of an RL circuit?",
+      "a": "Tau equals L over R, in seconds. After one tau the current reaches about 63 percent of its final value, and after five tau it is practically steady.",
+      "asks": [
+        "RL time constant formula",
+        "What is L over R?"
+      ]
+    },
+    {
+      "q": "Why does current rise slowly in an inductor?",
+      "a": "A changing current changes the coil's magnetic field, which induces a back voltage opposing the change. The current can only grow as fast as that back voltage allows.",
+      "asks": [
+        "What is back EMF in a coil?",
+        "Why can't inductor current change instantly?"
+      ]
+    },
+    {
+      "q": "What sets the final current in an RL circuit?",
+      "a": "Once the current is steady, the coil has no back voltage and acts like a plain wire, so only the resistor limits the current: V over R.",
+      "asks": [
+        "Steady-state current in an RL circuit"
+      ]
+    },
+    {
+      "q": "Why is there a spark when the switch opens?",
+      "a": "The coil tries to keep its current flowing. Breaking the circuit makes the current fall very fast, so L times the rate of change becomes huge, and the high voltage jumps the gap.",
+      "asks": [
+        "Why does a relay coil spark?",
+        "What is inductive kick?"
+      ]
+    },
+    {
+      "q": "What is a flyback diode?",
+      "a": "A diode placed across a coil, pointing against the supply. When the switch opens it gives the coil's current a safe path, so the energy fades away without a voltage spike.",
+      "asks": [
+        "Why put a diode across a relay coil?"
+      ]
+    }
+  ],
+  "facts": [
+    "The voltage across an inductor equals its inductance times the rate of change of its current.",
+    "One henry is the inductance in which a current changing at one amp per second induces one volt."
+  ],
+  "quiz": [
+    {
+      "say": "L is 0.5 henry and R is 25 ohms. What is the time constant?",
+      "show": "L = 0.5 H and R = 25 Ω. What is the time constant?",
+      "options": [
+        {
+          "show": "20 ms",
+          "say": "20 milliseconds"
+        },
+        {
+          "show": "12.5 s",
+          "say": "12.5 seconds"
+        },
+        {
+          "show": "50 ms",
+          "say": "50 milliseconds"
+        }
+      ],
+      "answer": 0,
+      "why": "Tau is L over R: 0.5 over 25 is 0.02 seconds, which is 20 milliseconds.",
+      "wrong": {
+        "1": "That multiplies L by R; the time constant is L over R.",
+        "2": "That turns the fraction upside down, R over L is 50."
+      }
+    },
+    {
+      "say": "Right after the switch closes in an RL circuit, what is the current?",
+      "show": "Right after the switch closes in an RL circuit, the current is...",
+      "options": [
+        {
+          "show": "Zero",
+          "say": "Zero"
+        },
+        {
+          "show": "V over R",
+          "say": "V over R"
+        },
+        {
+          "show": "Infinite",
+          "say": "Infinite"
+        }
+      ],
+      "answer": 0,
+      "why": "An inductor cannot change its current instantly, so it starts from zero and rises.",
+      "wrong": {
+        "1": "V over R is only reached after about five time constants.",
+        "2": "The coil does the opposite: it holds the current back."
+      }
+    }
+  ]
+}

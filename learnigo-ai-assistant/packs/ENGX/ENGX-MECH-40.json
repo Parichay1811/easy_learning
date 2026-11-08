@@ -1,0 +1,684 @@
+{
+  "id": "ENGX-MECH-40",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a hand winch pulls heavy loads",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "winch",
+    "drum",
+    "crank handle",
+    "gear reduction",
+    "ratchet"
+  ],
+  "examples": [
+    "How can I pull a boat with a hand winch?",
+    "Why does a winch have gears?",
+    "What stops the winch unwinding?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "handle",
+          "kind": "lever",
+          "x": 0.1,
+          "y": 0.3,
+          "size": 0.9,
+          "label": "Crank handle",
+          "motion": "spin",
+          "ask": "Why does a winch have a long handle?"
+        },
+        {
+          "id": "small",
+          "kind": "gear",
+          "x": 0.3,
+          "y": 0.3,
+          "size": 0.6,
+          "label": "Small gear",
+          "motion": "spin"
+        },
+        {
+          "id": "big",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.4,
+          "size": 1.4,
+          "label": "Big gear",
+          "motion": "spin",
+          "ask": "Why does a winch have gears?"
+        },
+        {
+          "id": "ratchet",
+          "kind": "gear",
+          "x": 0.3,
+          "y": 0.75,
+          "size": 0.6,
+          "label": "Ratchet and pawl",
+          "motion": "none",
+          "ask": "What stops the winch unwinding?"
+        },
+        {
+          "id": "drum",
+          "kind": "wheel",
+          "x": 0.74,
+          "y": 0.4,
+          "size": 1,
+          "label": "Drum",
+          "motion": "spin",
+          "ask": "What does the drum do?"
+        },
+        {
+          "id": "rope",
+          "kind": "belt",
+          "x": 0.74,
+          "y": 0.75,
+          "size": 0.8,
+          "label": "Rope",
+          "motion": "flow"
+        },
+        {
+          "id": "load",
+          "kind": "weight",
+          "x": 0.93,
+          "y": 0.9,
+          "size": 0.8,
+          "label": "Boat (load)",
+          "motion": "slide"
+        }
+      ],
+      "links": [
+        {
+          "from": "handle",
+          "to": "small",
+          "kind": "energy",
+          "label": "your turn"
+        },
+        {
+          "from": "small",
+          "to": "big",
+          "kind": "force",
+          "label": "4 to 1"
+        },
+        {
+          "from": "big",
+          "to": "drum",
+          "kind": "energy",
+          "label": "slow, strong"
+        },
+        {
+          "from": "drum",
+          "to": "rope",
+          "kind": "force",
+          "label": "winds in"
+        },
+        {
+          "from": "rope",
+          "to": "load",
+          "kind": "force",
+          "label": "pulls"
+        },
+        {
+          "from": "ratchet",
+          "to": "big",
+          "kind": "force",
+          "label": "blocks backward"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A hand winch winds rope onto a drum to pull a heavy load, like a boat onto a trailer. It multiplies your force in two ways.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a hand winch pulls heavy loads"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why does a winch have a long handle?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Small gear",
+              "motion": "spin"
+            },
+            {
+              "id": "big",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.4,
+              "size": 1.4,
+              "label": "Big gear",
+              "motion": "spin",
+              "ask": "Why does a winch have gears?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.6,
+              "label": "Ratchet and pawl",
+              "motion": "none",
+              "ask": "What stops the winch unwinding?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.4,
+              "size": 1,
+              "label": "Drum",
+              "motion": "spin",
+              "ask": "What does the drum do?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.74,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Rope",
+              "motion": "flow"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.93,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Boat (load)",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "small",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "small",
+              "to": "big",
+              "kind": "force",
+              "label": "4 to 1"
+            },
+            {
+              "from": "big",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "rope",
+              "kind": "force",
+              "label": "winds in"
+            },
+            {
+              "from": "rope",
+              "to": "load",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "ratchet",
+              "to": "big",
+              "kind": "force",
+              "label": "blocks backward"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First, the crank handle is a lever: your hand moves round a big circle while the drum is much smaller. A handle 30 centimetres long winding a drum of 5 centimetres radius gives about 6 times the force.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why does a winch have a long handle?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Small gear",
+              "motion": "spin"
+            },
+            {
+              "id": "big",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.4,
+              "size": 1.4,
+              "label": "Big gear",
+              "motion": "spin",
+              "ask": "Why does a winch have gears?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.6,
+              "label": "Ratchet and pawl",
+              "motion": "none",
+              "ask": "What stops the winch unwinding?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.4,
+              "size": 1,
+              "label": "Drum",
+              "motion": "spin",
+              "ask": "What does the drum do?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.74,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Rope",
+              "motion": "flow"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.93,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Boat (load)",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "small",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "small",
+              "to": "big",
+              "kind": "force",
+              "label": "4 to 1"
+            },
+            {
+              "from": "big",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "rope",
+              "kind": "force",
+              "label": "winds in"
+            },
+            {
+              "from": "rope",
+              "to": "load",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "ratchet",
+              "to": "big",
+              "kind": "force",
+              "label": "blocks backward"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Second, a small gear on the handle turns a big gear on the drum, 4 to 1. Together, 6 times 4 gives about 24 times your pull, though you must turn the handle many times.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why does a winch have a long handle?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Small gear",
+              "motion": "spin"
+            },
+            {
+              "id": "big",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.4,
+              "size": 1.4,
+              "label": "Big gear",
+              "motion": "spin",
+              "ask": "Why does a winch have gears?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.6,
+              "label": "Ratchet and pawl",
+              "motion": "none",
+              "ask": "What stops the winch unwinding?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.4,
+              "size": 1,
+              "label": "Drum",
+              "motion": "spin",
+              "ask": "What does the drum do?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.74,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Rope",
+              "motion": "flow"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.93,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Boat (load)",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "small",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "small",
+              "to": "big",
+              "kind": "force",
+              "label": "4 to 1"
+            },
+            {
+              "from": "big",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "rope",
+              "kind": "force",
+              "label": "winds in"
+            },
+            {
+              "from": "rope",
+              "to": "load",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "ratchet",
+              "to": "big",
+              "kind": "force",
+              "label": "blocks backward"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "A ratchet and pawl clicks as you wind and stops the drum running backwards, so the load stays put when you rest. Release the pawl to let it out again.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Crank handle",
+              "motion": "spin",
+              "ask": "Why does a winch have a long handle?"
+            },
+            {
+              "id": "small",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Small gear",
+              "motion": "spin"
+            },
+            {
+              "id": "big",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.4,
+              "size": 1.4,
+              "label": "Big gear",
+              "motion": "spin",
+              "ask": "Why does a winch have gears?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.75,
+              "size": 0.6,
+              "label": "Ratchet and pawl",
+              "motion": "none",
+              "ask": "What stops the winch unwinding?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.74,
+              "y": 0.4,
+              "size": 1,
+              "label": "Drum",
+              "motion": "spin",
+              "ask": "What does the drum do?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.74,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Rope",
+              "motion": "flow"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.93,
+              "y": 0.9,
+              "size": 0.8,
+              "label": "Boat (load)",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "small",
+              "kind": "energy",
+              "label": "your turn"
+            },
+            {
+              "from": "small",
+              "to": "big",
+              "kind": "force",
+              "label": "4 to 1"
+            },
+            {
+              "from": "big",
+              "to": "drum",
+              "kind": "energy",
+              "label": "slow, strong"
+            },
+            {
+              "from": "drum",
+              "to": "rope",
+              "kind": "force",
+              "label": "winds in"
+            },
+            {
+              "from": "rope",
+              "to": "load",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "ratchet",
+              "to": "big",
+              "kind": "force",
+              "label": "blocks backward"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does a winch have a long handle?",
+      "a": "The handle is a lever. The further your hand is from the axle compared with the drum's radius, the more your force is multiplied.",
+      "asks": [
+        "How does the crank handle help?"
+      ]
+    },
+    {
+      "q": "Why does a winch have gears?",
+      "a": "A small gear driving a big gear slows the drum down and multiplies the turning force. Combined with the handle, a winch can multiply your pull 20 times or more.",
+      "asks": [
+        "What do the gears in a winch do?"
+      ]
+    },
+    {
+      "q": "What does the drum do?",
+      "a": "The drum is the cylinder the rope winds onto. A small drum gives more pulling force but winds in less rope per turn.",
+      "asks": [
+        "Why is the winch drum small?"
+      ]
+    },
+    {
+      "q": "What stops the winch unwinding?",
+      "a": "A ratchet wheel and a spring-loaded pawl let the drum turn only one way. The pawl catches the teeth if the load pulls back.",
+      "asks": [
+        "Why does a winch click?"
+      ]
+    },
+    {
+      "q": "How do you work out a winch's mechanical advantage?",
+      "a": "Multiply the handle radius divided by the drum radius by the gear ratio. A 30 cm handle, a 5 cm drum radius and 4 to 1 gears give 6 times 4, which is 24, before friction.",
+      "asks": [
+        "How much does a winch multiply force?"
+      ]
+    }
+  ],
+  "facts": [
+    "A winch combines a wheel and axle with gears, so their mechanical advantages multiply.",
+    "Sailing boats use winches to pull in sails against the force of the wind."
+  ],
+  "quiz": [
+    {
+      "say": "A winch handle gives 5 times the force and its gears give 3 times. What is the total, ignoring friction?",
+      "show": "A winch handle gives 5 times the force and its gears give 3 times. What is the total, ignoring friction?",
+      "options": [
+        {
+          "show": "8 times",
+          "say": "8 times"
+        },
+        {
+          "show": "15 times",
+          "say": "15 times"
+        },
+        {
+          "show": "2 times",
+          "say": "2 times"
+        }
+      ],
+      "answer": 1,
+      "why": "Mechanical advantages in a chain multiply: 5 times 3 is 15.",
+      "wrong": {
+        "0": "They multiply; they do not add.",
+        "2": "Subtracting has no meaning here."
+      }
+    }
+  ]
+}

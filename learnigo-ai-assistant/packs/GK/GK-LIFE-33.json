@@ -1,0 +1,808 @@
+{
+  "id": "GK-LIFE-33",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "How parcel tracking knows where your package is",
+  "area": "General Knowledge",
+  "group": "GK-LIFE — Everyday Knowledge",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "parcel tracking",
+    "tracking number",
+    "barcode",
+    "delivery",
+    "sorting hub"
+  ],
+  "examples": [
+    "How does parcel tracking work?",
+    "Is there GPS in my parcel?",
+    "Why hasn't my tracking updated?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "shop",
+          "label": "Online shop",
+          "icon": "computer",
+          "x": 0.08,
+          "y": 0.3,
+          "ask": "How does parcel tracking work?"
+        },
+        {
+          "id": "label",
+          "label": "Barcode label",
+          "icon": "gift",
+          "x": 0.24,
+          "y": 0.65,
+          "ask": "What is on a parcel's barcode label?"
+        },
+        {
+          "id": "hub",
+          "label": "Sorting hub",
+          "icon": "factory",
+          "x": 0.42,
+          "y": 0.3
+        },
+        {
+          "id": "truck",
+          "label": "Lorry or plane",
+          "icon": "plane",
+          "x": 0.6,
+          "y": 0.65
+        },
+        {
+          "id": "depot",
+          "label": "Local depot",
+          "icon": "house",
+          "x": 0.76,
+          "y": 0.3
+        },
+        {
+          "id": "van",
+          "label": "Driver's van",
+          "icon": "car",
+          "x": 0.92,
+          "y": 0.65,
+          "ask": "How does the driver prove delivery?"
+        },
+        {
+          "id": "track",
+          "label": "Your tracking page",
+          "icon": "phone",
+          "x": 0.5,
+          "y": 0.92,
+          "ask": "Does a tracked parcel have GPS inside?"
+        }
+      ],
+      "links": [
+        {
+          "from": "shop",
+          "to": "label",
+          "kind": "data",
+          "label": "prints"
+        },
+        {
+          "from": "label",
+          "to": "hub",
+          "kind": "force",
+          "label": "scanned"
+        },
+        {
+          "from": "hub",
+          "to": "truck",
+          "kind": "force",
+          "label": "scanned"
+        },
+        {
+          "from": "truck",
+          "to": "depot",
+          "kind": "force"
+        },
+        {
+          "from": "depot",
+          "to": "van",
+          "kind": "force",
+          "label": "scanned"
+        },
+        {
+          "from": "hub",
+          "to": "track",
+          "kind": "data",
+          "label": "update"
+        },
+        {
+          "from": "depot",
+          "to": "track",
+          "kind": "data",
+          "label": "update"
+        },
+        {
+          "from": "van",
+          "to": "track",
+          "kind": "data",
+          "label": "delivered"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "You order a book online, type in a tracking number, and the website says: out for delivery! How does it know? Look at the network. When you buy, the shop's computer creates a record for your parcel and prints a label.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How parcel tracking knows where your package is"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "shop",
+              "label": "Online shop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.3,
+              "ask": "How does parcel tracking work?"
+            },
+            {
+              "id": "label",
+              "label": "Barcode label",
+              "icon": "gift",
+              "x": 0.24,
+              "y": 0.65,
+              "ask": "What is on a parcel's barcode label?"
+            },
+            {
+              "id": "hub",
+              "label": "Sorting hub",
+              "icon": "factory",
+              "x": 0.42,
+              "y": 0.3
+            },
+            {
+              "id": "truck",
+              "label": "Lorry or plane",
+              "icon": "plane",
+              "x": 0.6,
+              "y": 0.65
+            },
+            {
+              "id": "depot",
+              "label": "Local depot",
+              "icon": "house",
+              "x": 0.76,
+              "y": 0.3
+            },
+            {
+              "id": "van",
+              "label": "Driver's van",
+              "icon": "car",
+              "x": 0.92,
+              "y": 0.65,
+              "ask": "How does the driver prove delivery?"
+            },
+            {
+              "id": "track",
+              "label": "Your tracking page",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.92,
+              "ask": "Does a tracked parcel have GPS inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shop",
+              "to": "label",
+              "kind": "data",
+              "label": "prints"
+            },
+            {
+              "from": "label",
+              "to": "hub",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "truck",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "truck",
+              "to": "depot",
+              "kind": "force"
+            },
+            {
+              "from": "depot",
+              "to": "van",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "depot",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "van",
+              "to": "track",
+              "kind": "data",
+              "label": "delivered"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "See the barcode label? It holds a unique number, like a name tag no other parcel in the world has. Each time someone scans it with a beam of light, a computer records where the parcel is and the time. Can you find a barcode at home?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "shop",
+              "label": "Online shop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.3,
+              "ask": "How does parcel tracking work?"
+            },
+            {
+              "id": "label",
+              "label": "Barcode label",
+              "icon": "gift",
+              "x": 0.24,
+              "y": 0.65,
+              "ask": "What is on a parcel's barcode label?"
+            },
+            {
+              "id": "hub",
+              "label": "Sorting hub",
+              "icon": "factory",
+              "x": 0.42,
+              "y": 0.3
+            },
+            {
+              "id": "truck",
+              "label": "Lorry or plane",
+              "icon": "plane",
+              "x": 0.6,
+              "y": 0.65
+            },
+            {
+              "id": "depot",
+              "label": "Local depot",
+              "icon": "house",
+              "x": 0.76,
+              "y": 0.3
+            },
+            {
+              "id": "van",
+              "label": "Driver's van",
+              "icon": "car",
+              "x": 0.92,
+              "y": 0.65,
+              "ask": "How does the driver prove delivery?"
+            },
+            {
+              "id": "track",
+              "label": "Your tracking page",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.92,
+              "ask": "Does a tracked parcel have GPS inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shop",
+              "to": "label",
+              "kind": "data",
+              "label": "prints"
+            },
+            {
+              "from": "label",
+              "to": "hub",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "truck",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "truck",
+              "to": "depot",
+              "kind": "force"
+            },
+            {
+              "from": "depot",
+              "to": "van",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "depot",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "van",
+              "to": "track",
+              "kind": "data",
+              "label": "delivered"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Look at the sorting hub. Huge conveyor belts carry parcels past scanners, which read the barcode and push each parcel down the right chute for where it's going. Each scan sends an update, see the line to your tracking page?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "shop",
+              "label": "Online shop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.3,
+              "ask": "How does parcel tracking work?"
+            },
+            {
+              "id": "label",
+              "label": "Barcode label",
+              "icon": "gift",
+              "x": 0.24,
+              "y": 0.65,
+              "ask": "What is on a parcel's barcode label?"
+            },
+            {
+              "id": "hub",
+              "label": "Sorting hub",
+              "icon": "factory",
+              "x": 0.42,
+              "y": 0.3
+            },
+            {
+              "id": "truck",
+              "label": "Lorry or plane",
+              "icon": "plane",
+              "x": 0.6,
+              "y": 0.65
+            },
+            {
+              "id": "depot",
+              "label": "Local depot",
+              "icon": "house",
+              "x": 0.76,
+              "y": 0.3
+            },
+            {
+              "id": "van",
+              "label": "Driver's van",
+              "icon": "car",
+              "x": 0.92,
+              "y": 0.65,
+              "ask": "How does the driver prove delivery?"
+            },
+            {
+              "id": "track",
+              "label": "Your tracking page",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.92,
+              "ask": "Does a tracked parcel have GPS inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shop",
+              "to": "label",
+              "kind": "data",
+              "label": "prints"
+            },
+            {
+              "from": "label",
+              "to": "hub",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "truck",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "truck",
+              "to": "depot",
+              "kind": "force"
+            },
+            {
+              "from": "depot",
+              "to": "van",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "depot",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "van",
+              "to": "track",
+              "kind": "data",
+              "label": "delivered"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Now the parcel travels by lorry or plane to the local depot near you. Scan! Then it's loaded onto the driver's van. Scan again, and your page says out for delivery. Why do you think scanning so often helps if a parcel goes missing?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "shop",
+              "label": "Online shop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.3,
+              "ask": "How does parcel tracking work?"
+            },
+            {
+              "id": "label",
+              "label": "Barcode label",
+              "icon": "gift",
+              "x": 0.24,
+              "y": 0.65,
+              "ask": "What is on a parcel's barcode label?"
+            },
+            {
+              "id": "hub",
+              "label": "Sorting hub",
+              "icon": "factory",
+              "x": 0.42,
+              "y": 0.3
+            },
+            {
+              "id": "truck",
+              "label": "Lorry or plane",
+              "icon": "plane",
+              "x": 0.6,
+              "y": 0.65
+            },
+            {
+              "id": "depot",
+              "label": "Local depot",
+              "icon": "house",
+              "x": 0.76,
+              "y": 0.3
+            },
+            {
+              "id": "van",
+              "label": "Driver's van",
+              "icon": "car",
+              "x": 0.92,
+              "y": 0.65,
+              "ask": "How does the driver prove delivery?"
+            },
+            {
+              "id": "track",
+              "label": "Your tracking page",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.92,
+              "ask": "Does a tracked parcel have GPS inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shop",
+              "to": "label",
+              "kind": "data",
+              "label": "prints"
+            },
+            {
+              "from": "label",
+              "to": "hub",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "truck",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "truck",
+              "to": "depot",
+              "kind": "force"
+            },
+            {
+              "from": "depot",
+              "to": "van",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "depot",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "van",
+              "to": "track",
+              "kind": "data",
+              "label": "delivered"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "At your door, the driver scans one last time, maybe snaps a photo, and your page says delivered! Well done! Wow: the first barcode ever scanned at a shop till was on a packet of chewing gum, in Ohio, USA, in 1974. Now billions of parcels carry their own little stripes.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "shop",
+              "label": "Online shop",
+              "icon": "computer",
+              "x": 0.08,
+              "y": 0.3,
+              "ask": "How does parcel tracking work?"
+            },
+            {
+              "id": "label",
+              "label": "Barcode label",
+              "icon": "gift",
+              "x": 0.24,
+              "y": 0.65,
+              "ask": "What is on a parcel's barcode label?"
+            },
+            {
+              "id": "hub",
+              "label": "Sorting hub",
+              "icon": "factory",
+              "x": 0.42,
+              "y": 0.3
+            },
+            {
+              "id": "truck",
+              "label": "Lorry or plane",
+              "icon": "plane",
+              "x": 0.6,
+              "y": 0.65
+            },
+            {
+              "id": "depot",
+              "label": "Local depot",
+              "icon": "house",
+              "x": 0.76,
+              "y": 0.3
+            },
+            {
+              "id": "van",
+              "label": "Driver's van",
+              "icon": "car",
+              "x": 0.92,
+              "y": 0.65,
+              "ask": "How does the driver prove delivery?"
+            },
+            {
+              "id": "track",
+              "label": "Your tracking page",
+              "icon": "phone",
+              "x": 0.5,
+              "y": 0.92,
+              "ask": "Does a tracked parcel have GPS inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "shop",
+              "to": "label",
+              "kind": "data",
+              "label": "prints"
+            },
+            {
+              "from": "label",
+              "to": "hub",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "truck",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "truck",
+              "to": "depot",
+              "kind": "force"
+            },
+            {
+              "from": "depot",
+              "to": "van",
+              "kind": "force",
+              "label": "scanned"
+            },
+            {
+              "from": "hub",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "depot",
+              "to": "track",
+              "kind": "data",
+              "label": "update"
+            },
+            {
+              "from": "van",
+              "to": "track",
+              "kind": "data",
+              "label": "delivered"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does parcel tracking work?",
+      "a": "Each parcel has a barcode with a unique number. Every time it is scanned at a hub, depot or van, the place and time are saved to a computer, which updates your tracking page.",
+      "asks": [
+        "How do they know where my parcel is?"
+      ]
+    },
+    {
+      "q": "What is on a parcel's barcode label?",
+      "a": "A unique tracking number, plus the delivery address and type of service. The barcode lets machines read the number in a split second.",
+      "asks": [
+        "What does a tracking number mean?"
+      ]
+    },
+    {
+      "q": "How does the driver prove delivery?",
+      "a": "The driver scans the parcel at your door and may take a photo or a signature. This last scan marks it as delivered.",
+      "asks": [
+        "Why did the driver take a photo of my parcel?"
+      ]
+    },
+    {
+      "q": "Does a tracked parcel have GPS inside?",
+      "a": "Usually not. Tracking comes from barcode scans along the way. Some delivery vans have GPS, so a few services can show the van moving on a map.",
+      "asks": [
+        "Is there a GPS tracker in my parcel?"
+      ]
+    },
+    {
+      "q": "Why does my parcel stay in one place for days?",
+      "a": "Tracking only updates at each scan. While a parcel travels a long way, by ship or plane, there may be no scans for a while.",
+      "asks": [
+        "Why hasn't my tracking updated?"
+      ]
+    }
+  ],
+  "facts": [
+    "The first product scanned with a barcode at a shop checkout was a pack of chewing gum in Ohio in 1974.",
+    "Parcel tracking updates come from scans of the parcel's barcode at each stage of its journey."
+  ],
+  "quiz": [
+    {
+      "say": "What makes your tracking page update?",
+      "show": "What makes your tracking page update?",
+      "options": [
+        {
+          "show": "A scan of the parcel's barcode",
+          "say": "A scan of the parcel's barcode"
+        },
+        {
+          "show": "The parcel phoning home",
+          "say": "The parcel phoning home"
+        },
+        {
+          "show": "The weather",
+          "say": "The weather"
+        }
+      ],
+      "answer": 0,
+      "why": "Every barcode scan records the parcel's place and time.",
+      "wrong": {
+        "1": "Ordinary parcels have no phone or GPS inside.",
+        "2": "Weather can delay a parcel but doesn't update tracking."
+      }
+    },
+    {
+      "say": "Why might tracking not update for several days?",
+      "show": "Why might tracking not update for several days?",
+      "options": [
+        {
+          "show": "The parcel is travelling with no scans",
+          "say": "The parcel is travelling with no scans"
+        },
+        {
+          "show": "The parcel is always lost",
+          "say": "The parcel is always lost"
+        },
+        {
+          "show": "The barcode is asleep",
+          "say": "The barcode is asleep"
+        }
+      ],
+      "answer": 0,
+      "why": "Long journeys can have no scanning points for a while.",
+      "wrong": {
+        "1": "Most parcels with slow updates arrive fine.",
+        "2": "Barcodes are printed stripes; they don't sleep."
+      }
+    }
+  ]
+}

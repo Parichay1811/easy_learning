@@ -1,0 +1,620 @@
+{
+  "id": "ENGX-TRAN-29",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How railway signals keep trains apart",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "railway signals",
+    "block section",
+    "track circuit",
+    "red yellow green signal",
+    "train detection"
+  ],
+  "examples": [
+    "What do railway signal colours mean?",
+    "How does the railway know where trains are?",
+    "Why do trains wait at red signals?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "back",
+          "label": "Following train",
+          "icon": "train",
+          "x": 0.06,
+          "y": 0.5
+        },
+        {
+          "id": "green",
+          "label": "Green signal",
+          "icon": "light",
+          "x": 0.24,
+          "y": 0.22,
+          "ask": "What does a green railway signal mean?"
+        },
+        {
+          "id": "yellow",
+          "label": "Yellow signal",
+          "icon": "light",
+          "x": 0.45,
+          "y": 0.22,
+          "ask": "What does a yellow railway signal mean?"
+        },
+        {
+          "id": "red",
+          "label": "Red signal",
+          "icon": "light",
+          "x": 0.66,
+          "y": 0.22,
+          "ask": "What does a red railway signal mean?"
+        },
+        {
+          "id": "front",
+          "label": "Train ahead",
+          "icon": "train",
+          "x": 0.88,
+          "y": 0.5
+        },
+        {
+          "id": "ctrl",
+          "label": "Control centre",
+          "icon": "computer",
+          "x": 0.45,
+          "y": 0.82,
+          "ask": "Who controls railway signals?"
+        },
+        {
+          "id": "sensor",
+          "label": "Track circuit",
+          "icon": "sensor",
+          "x": 0.82,
+          "y": 0.84,
+          "ask": "How does the railway know where a train is?"
+        }
+      ],
+      "links": [
+        {
+          "from": "front",
+          "to": "sensor",
+          "kind": "signal",
+          "label": "block occupied"
+        },
+        {
+          "from": "sensor",
+          "to": "ctrl",
+          "kind": "data",
+          "label": "block busy"
+        },
+        {
+          "from": "ctrl",
+          "to": "red",
+          "kind": "signal",
+          "label": "set red"
+        },
+        {
+          "from": "ctrl",
+          "to": "yellow",
+          "kind": "signal",
+          "label": "set yellow"
+        },
+        {
+          "from": "ctrl",
+          "to": "green",
+          "kind": "signal",
+          "label": "set green"
+        },
+        {
+          "from": "green",
+          "to": "back",
+          "kind": "signal",
+          "label": "proceed"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Trains are heavy and need a long way to stop, so drivers cannot rely on seeing the train ahead. Instead the line is divided into sections called blocks, and only one train is allowed in each block at a time.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How railway signals keep trains apart"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "back",
+              "label": "Following train",
+              "icon": "train",
+              "x": 0.06,
+              "y": 0.5
+            },
+            {
+              "id": "green",
+              "label": "Green signal",
+              "icon": "light",
+              "x": 0.24,
+              "y": 0.22,
+              "ask": "What does a green railway signal mean?"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow signal",
+              "icon": "light",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What does a yellow railway signal mean?"
+            },
+            {
+              "id": "red",
+              "label": "Red signal",
+              "icon": "light",
+              "x": 0.66,
+              "y": 0.22,
+              "ask": "What does a red railway signal mean?"
+            },
+            {
+              "id": "front",
+              "label": "Train ahead",
+              "icon": "train",
+              "x": 0.88,
+              "y": 0.5
+            },
+            {
+              "id": "ctrl",
+              "label": "Control centre",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.82,
+              "ask": "Who controls railway signals?"
+            },
+            {
+              "id": "sensor",
+              "label": "Track circuit",
+              "icon": "sensor",
+              "x": 0.82,
+              "y": 0.84,
+              "ask": "How does the railway know where a train is?"
+            }
+          ],
+          "links": [
+            {
+              "from": "front",
+              "to": "sensor",
+              "kind": "signal",
+              "label": "block occupied"
+            },
+            {
+              "from": "sensor",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "block busy"
+            },
+            {
+              "from": "ctrl",
+              "to": "red",
+              "kind": "signal",
+              "label": "set red"
+            },
+            {
+              "from": "ctrl",
+              "to": "yellow",
+              "kind": "signal",
+              "label": "set yellow"
+            },
+            {
+              "from": "ctrl",
+              "to": "green",
+              "kind": "signal",
+              "label": "set green"
+            },
+            {
+              "from": "green",
+              "to": "back",
+              "kind": "signal",
+              "label": "proceed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Sensors called track circuits or axle counters detect which blocks have a train in them. A train's metal wheels and axles connect the two rails, telling the control centre the block is occupied.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "back",
+              "label": "Following train",
+              "icon": "train",
+              "x": 0.06,
+              "y": 0.5
+            },
+            {
+              "id": "green",
+              "label": "Green signal",
+              "icon": "light",
+              "x": 0.24,
+              "y": 0.22,
+              "ask": "What does a green railway signal mean?"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow signal",
+              "icon": "light",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What does a yellow railway signal mean?"
+            },
+            {
+              "id": "red",
+              "label": "Red signal",
+              "icon": "light",
+              "x": 0.66,
+              "y": 0.22,
+              "ask": "What does a red railway signal mean?"
+            },
+            {
+              "id": "front",
+              "label": "Train ahead",
+              "icon": "train",
+              "x": 0.88,
+              "y": 0.5
+            },
+            {
+              "id": "ctrl",
+              "label": "Control centre",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.82,
+              "ask": "Who controls railway signals?"
+            },
+            {
+              "id": "sensor",
+              "label": "Track circuit",
+              "icon": "sensor",
+              "x": 0.82,
+              "y": 0.84,
+              "ask": "How does the railway know where a train is?"
+            }
+          ],
+          "links": [
+            {
+              "from": "front",
+              "to": "sensor",
+              "kind": "signal",
+              "label": "block occupied"
+            },
+            {
+              "from": "sensor",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "block busy"
+            },
+            {
+              "from": "ctrl",
+              "to": "red",
+              "kind": "signal",
+              "label": "set red"
+            },
+            {
+              "from": "ctrl",
+              "to": "yellow",
+              "kind": "signal",
+              "label": "set yellow"
+            },
+            {
+              "from": "ctrl",
+              "to": "green",
+              "kind": "signal",
+              "label": "set green"
+            },
+            {
+              "from": "green",
+              "to": "back",
+              "kind": "signal",
+              "label": "proceed"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    },
+    {
+      "say": "The signal at the entrance to an occupied block shows red, so no other train may enter. The signal before it shows yellow, warning the driver to be ready to stop at the next one.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "back",
+              "label": "Following train",
+              "icon": "train",
+              "x": 0.06,
+              "y": 0.5
+            },
+            {
+              "id": "green",
+              "label": "Green signal",
+              "icon": "light",
+              "x": 0.24,
+              "y": 0.22,
+              "ask": "What does a green railway signal mean?"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow signal",
+              "icon": "light",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What does a yellow railway signal mean?"
+            },
+            {
+              "id": "red",
+              "label": "Red signal",
+              "icon": "light",
+              "x": 0.66,
+              "y": 0.22,
+              "ask": "What does a red railway signal mean?"
+            },
+            {
+              "id": "front",
+              "label": "Train ahead",
+              "icon": "train",
+              "x": 0.88,
+              "y": 0.5
+            },
+            {
+              "id": "ctrl",
+              "label": "Control centre",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.82,
+              "ask": "Who controls railway signals?"
+            },
+            {
+              "id": "sensor",
+              "label": "Track circuit",
+              "icon": "sensor",
+              "x": 0.82,
+              "y": 0.84,
+              "ask": "How does the railway know where a train is?"
+            }
+          ],
+          "links": [
+            {
+              "from": "front",
+              "to": "sensor",
+              "kind": "signal",
+              "label": "block occupied"
+            },
+            {
+              "from": "sensor",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "block busy"
+            },
+            {
+              "from": "ctrl",
+              "to": "red",
+              "kind": "signal",
+              "label": "set red"
+            },
+            {
+              "from": "ctrl",
+              "to": "yellow",
+              "kind": "signal",
+              "label": "set yellow"
+            },
+            {
+              "from": "ctrl",
+              "to": "green",
+              "kind": "signal",
+              "label": "set green"
+            },
+            {
+              "from": "green",
+              "to": "back",
+              "kind": "signal",
+              "label": "proceed"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Further back, signals show green, meaning the line is clear for at least two blocks. As the front train moves on, each signal behind it steps up automatically, from red to yellow to green.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "back",
+              "label": "Following train",
+              "icon": "train",
+              "x": 0.06,
+              "y": 0.5
+            },
+            {
+              "id": "green",
+              "label": "Green signal",
+              "icon": "light",
+              "x": 0.24,
+              "y": 0.22,
+              "ask": "What does a green railway signal mean?"
+            },
+            {
+              "id": "yellow",
+              "label": "Yellow signal",
+              "icon": "light",
+              "x": 0.45,
+              "y": 0.22,
+              "ask": "What does a yellow railway signal mean?"
+            },
+            {
+              "id": "red",
+              "label": "Red signal",
+              "icon": "light",
+              "x": 0.66,
+              "y": 0.22,
+              "ask": "What does a red railway signal mean?"
+            },
+            {
+              "id": "front",
+              "label": "Train ahead",
+              "icon": "train",
+              "x": 0.88,
+              "y": 0.5
+            },
+            {
+              "id": "ctrl",
+              "label": "Control centre",
+              "icon": "computer",
+              "x": 0.45,
+              "y": 0.82,
+              "ask": "Who controls railway signals?"
+            },
+            {
+              "id": "sensor",
+              "label": "Track circuit",
+              "icon": "sensor",
+              "x": 0.82,
+              "y": 0.84,
+              "ask": "How does the railway know where a train is?"
+            }
+          ],
+          "links": [
+            {
+              "from": "front",
+              "to": "sensor",
+              "kind": "signal",
+              "label": "block occupied"
+            },
+            {
+              "from": "sensor",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "block busy"
+            },
+            {
+              "from": "ctrl",
+              "to": "red",
+              "kind": "signal",
+              "label": "set red"
+            },
+            {
+              "from": "ctrl",
+              "to": "yellow",
+              "kind": "signal",
+              "label": "set yellow"
+            },
+            {
+              "from": "ctrl",
+              "to": "green",
+              "kind": "signal",
+              "label": "set green"
+            },
+            {
+              "from": "green",
+              "to": "back",
+              "kind": "signal",
+              "label": "proceed"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does a green railway signal mean?",
+      "a": "Green means the line ahead is clear for at least the next two blocks, so the driver can run at the normal speed for that line.",
+      "asks": [
+        "Can a train go at full speed on green?"
+      ]
+    },
+    {
+      "q": "What does a yellow railway signal mean?",
+      "a": "A single yellow means go on but be ready to stop at the next signal, which is showing red. On busy lines a double yellow gives an earlier warning.",
+      "asks": [
+        "What does a double yellow mean?"
+      ]
+    },
+    {
+      "q": "What does a red railway signal mean?",
+      "a": "Red means stop: the block ahead may have a train in it. Passing a red signal is a serious event, and most lines have systems that automatically brake a train that does.",
+      "asks": [
+        "What happens if a train passes a red signal?"
+      ]
+    },
+    {
+      "q": "Who controls railway signals?",
+      "a": "Many signals change automatically as trains pass. Signallers in control centres set routes at junctions, and computer interlocking stops them setting routes that clash.",
+      "asks": [
+        "Are railway signals automatic?"
+      ]
+    },
+    {
+      "q": "How does the railway know where a train is?",
+      "a": "Track circuits pass a small current through the rails; a train's wheels and axles short it out, showing the block is occupied. Axle counters instead count wheels into and out of each block.",
+      "asks": [
+        "What is a track circuit?"
+      ]
+    }
+  ],
+  "facts": [
+    "Railways divide lines into blocks so that only one train is in each block at a time.",
+    "Many UK main lines use four-aspect signals: red, single yellow, double yellow and green.",
+    "Track circuits detect trains because the wheels and axles connect the two rails electrically."
+  ],
+  "quiz": [
+    {
+      "say": "A driver sees a single yellow signal. What does it mean?",
+      "show": "A driver sees a single yellow signal. What does it mean?",
+      "options": [
+        {
+          "show": "Be ready to stop at the next signal",
+          "say": "Be ready to stop at the next signal"
+        },
+        {
+          "show": "Stop immediately",
+          "say": "Stop immediately"
+        },
+        {
+          "show": "The line is clear for miles",
+          "say": "The line is clear for miles"
+        }
+      ],
+      "answer": 0,
+      "why": "Single yellow warns that the next signal is red, so the driver must slow to be able to stop there.",
+      "wrong": {
+        "1": "Stop is shown by red.",
+        "2": "A clear line is shown by green."
+      }
+    }
+  ]
+}

@@ -1,0 +1,715 @@
+{
+  "id": "ENGX-TRAN-49",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a sat-nav finds the fastest route",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "sat-nav routing",
+    "route planning",
+    "dijkstra's algorithm",
+    "live traffic",
+    "road network"
+  ],
+  "examples": [
+    "How does a sat-nav choose the route?",
+    "Why does my sat-nav take a longer way?",
+    "How does a sat-nav know about traffic jams?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "home",
+          "label": "Home",
+          "icon": "house",
+          "x": 0.06,
+          "y": 0.5,
+          "ask": "How does a sat-nav know where I am?"
+        },
+        {
+          "id": "a",
+          "label": "Town A",
+          "icon": "tower",
+          "x": 0.3,
+          "y": 0.18
+        },
+        {
+          "id": "b",
+          "label": "Junction B",
+          "icon": "car",
+          "x": 0.3,
+          "y": 0.82
+        },
+        {
+          "id": "c",
+          "label": "Town C",
+          "icon": "tower",
+          "x": 0.6,
+          "y": 0.18
+        },
+        {
+          "id": "d",
+          "label": "Motorway D",
+          "icon": "car",
+          "x": 0.6,
+          "y": 0.72,
+          "ask": "How does a sat-nav choose between routes?"
+        },
+        {
+          "id": "dest",
+          "label": "Destination",
+          "icon": "star",
+          "x": 0.92,
+          "y": 0.45,
+          "ask": "Why doesn't the sat-nav pick the shortest route?"
+        },
+        {
+          "id": "gps",
+          "label": "GPS satellites",
+          "icon": "satellite",
+          "x": 0.9,
+          "y": 0.08,
+          "ask": "Does a sat-nav send signals to satellites?"
+        },
+        {
+          "id": "traffic",
+          "label": "Live traffic data",
+          "icon": "phone",
+          "x": 0.92,
+          "y": 0.9,
+          "ask": "How does a sat-nav know about traffic jams?"
+        }
+      ],
+      "links": [
+        {
+          "from": "home",
+          "to": "a",
+          "kind": "data",
+          "label": "8 min"
+        },
+        {
+          "from": "home",
+          "to": "b",
+          "kind": "data",
+          "label": "5 min"
+        },
+        {
+          "from": "a",
+          "to": "c",
+          "kind": "data",
+          "label": "10 min"
+        },
+        {
+          "from": "b",
+          "to": "d",
+          "kind": "data",
+          "label": "4 min"
+        },
+        {
+          "from": "c",
+          "to": "dest",
+          "kind": "data",
+          "label": "6 min"
+        },
+        {
+          "from": "d",
+          "to": "dest",
+          "kind": "data",
+          "label": "7 min"
+        },
+        {
+          "from": "gps",
+          "to": "home",
+          "kind": "signal",
+          "label": "position"
+        },
+        {
+          "from": "traffic",
+          "to": "d",
+          "kind": "data",
+          "label": "jam info"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A sat-nav stores a map as a network: junctions are points, and roads are links between them, each tagged with its length and typical travel time.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a sat-nav finds the fastest route"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "home",
+              "label": "Home",
+              "icon": "house",
+              "x": 0.06,
+              "y": 0.5,
+              "ask": "How does a sat-nav know where I am?"
+            },
+            {
+              "id": "a",
+              "label": "Town A",
+              "icon": "tower",
+              "x": 0.3,
+              "y": 0.18
+            },
+            {
+              "id": "b",
+              "label": "Junction B",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.82
+            },
+            {
+              "id": "c",
+              "label": "Town C",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.18
+            },
+            {
+              "id": "d",
+              "label": "Motorway D",
+              "icon": "car",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "How does a sat-nav choose between routes?"
+            },
+            {
+              "id": "dest",
+              "label": "Destination",
+              "icon": "star",
+              "x": 0.92,
+              "y": 0.45,
+              "ask": "Why doesn't the sat-nav pick the shortest route?"
+            },
+            {
+              "id": "gps",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.08,
+              "ask": "Does a sat-nav send signals to satellites?"
+            },
+            {
+              "id": "traffic",
+              "label": "Live traffic data",
+              "icon": "phone",
+              "x": 0.92,
+              "y": 0.9,
+              "ask": "How does a sat-nav know about traffic jams?"
+            }
+          ],
+          "links": [
+            {
+              "from": "home",
+              "to": "a",
+              "kind": "data",
+              "label": "8 min"
+            },
+            {
+              "from": "home",
+              "to": "b",
+              "kind": "data",
+              "label": "5 min"
+            },
+            {
+              "from": "a",
+              "to": "c",
+              "kind": "data",
+              "label": "10 min"
+            },
+            {
+              "from": "b",
+              "to": "d",
+              "kind": "data",
+              "label": "4 min"
+            },
+            {
+              "from": "c",
+              "to": "dest",
+              "kind": "data",
+              "label": "6 min"
+            },
+            {
+              "from": "d",
+              "to": "dest",
+              "kind": "data",
+              "label": "7 min"
+            },
+            {
+              "from": "gps",
+              "to": "home",
+              "kind": "signal",
+              "label": "position"
+            },
+            {
+              "from": "traffic",
+              "to": "d",
+              "kind": "data",
+              "label": "jam info"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First it needs to know where you are. It listens to signals from GPS satellites, works out its position from how long each signal took to arrive, then matches that to the nearest road.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "home",
+              "label": "Home",
+              "icon": "house",
+              "x": 0.06,
+              "y": 0.5,
+              "ask": "How does a sat-nav know where I am?"
+            },
+            {
+              "id": "a",
+              "label": "Town A",
+              "icon": "tower",
+              "x": 0.3,
+              "y": 0.18
+            },
+            {
+              "id": "b",
+              "label": "Junction B",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.82
+            },
+            {
+              "id": "c",
+              "label": "Town C",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.18
+            },
+            {
+              "id": "d",
+              "label": "Motorway D",
+              "icon": "car",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "How does a sat-nav choose between routes?"
+            },
+            {
+              "id": "dest",
+              "label": "Destination",
+              "icon": "star",
+              "x": 0.92,
+              "y": 0.45,
+              "ask": "Why doesn't the sat-nav pick the shortest route?"
+            },
+            {
+              "id": "gps",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.08,
+              "ask": "Does a sat-nav send signals to satellites?"
+            },
+            {
+              "id": "traffic",
+              "label": "Live traffic data",
+              "icon": "phone",
+              "x": 0.92,
+              "y": 0.9,
+              "ask": "How does a sat-nav know about traffic jams?"
+            }
+          ],
+          "links": [
+            {
+              "from": "home",
+              "to": "a",
+              "kind": "data",
+              "label": "8 min"
+            },
+            {
+              "from": "home",
+              "to": "b",
+              "kind": "data",
+              "label": "5 min"
+            },
+            {
+              "from": "a",
+              "to": "c",
+              "kind": "data",
+              "label": "10 min"
+            },
+            {
+              "from": "b",
+              "to": "d",
+              "kind": "data",
+              "label": "4 min"
+            },
+            {
+              "from": "c",
+              "to": "dest",
+              "kind": "data",
+              "label": "6 min"
+            },
+            {
+              "from": "d",
+              "to": "dest",
+              "kind": "data",
+              "label": "7 min"
+            },
+            {
+              "from": "gps",
+              "to": "home",
+              "kind": "signal",
+              "label": "position"
+            },
+            {
+              "from": "traffic",
+              "to": "d",
+              "kind": "data",
+              "label": "jam info"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    },
+    {
+      "say": "To plan a route it uses a search method like Dijkstra's algorithm, working outward from your start and always extending the quickest route found so far. Here, going via junction B and the motorway takes 16 minutes, beating 24 through the towns.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "home",
+              "label": "Home",
+              "icon": "house",
+              "x": 0.06,
+              "y": 0.5,
+              "ask": "How does a sat-nav know where I am?"
+            },
+            {
+              "id": "a",
+              "label": "Town A",
+              "icon": "tower",
+              "x": 0.3,
+              "y": 0.18
+            },
+            {
+              "id": "b",
+              "label": "Junction B",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.82
+            },
+            {
+              "id": "c",
+              "label": "Town C",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.18
+            },
+            {
+              "id": "d",
+              "label": "Motorway D",
+              "icon": "car",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "How does a sat-nav choose between routes?"
+            },
+            {
+              "id": "dest",
+              "label": "Destination",
+              "icon": "star",
+              "x": 0.92,
+              "y": 0.45,
+              "ask": "Why doesn't the sat-nav pick the shortest route?"
+            },
+            {
+              "id": "gps",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.08,
+              "ask": "Does a sat-nav send signals to satellites?"
+            },
+            {
+              "id": "traffic",
+              "label": "Live traffic data",
+              "icon": "phone",
+              "x": 0.92,
+              "y": 0.9,
+              "ask": "How does a sat-nav know about traffic jams?"
+            }
+          ],
+          "links": [
+            {
+              "from": "home",
+              "to": "a",
+              "kind": "data",
+              "label": "8 min"
+            },
+            {
+              "from": "home",
+              "to": "b",
+              "kind": "data",
+              "label": "5 min"
+            },
+            {
+              "from": "a",
+              "to": "c",
+              "kind": "data",
+              "label": "10 min"
+            },
+            {
+              "from": "b",
+              "to": "d",
+              "kind": "data",
+              "label": "4 min"
+            },
+            {
+              "from": "c",
+              "to": "dest",
+              "kind": "data",
+              "label": "6 min"
+            },
+            {
+              "from": "d",
+              "to": "dest",
+              "kind": "data",
+              "label": "7 min"
+            },
+            {
+              "from": "gps",
+              "to": "home",
+              "kind": "signal",
+              "label": "position"
+            },
+            {
+              "from": "traffic",
+              "to": "d",
+              "kind": "data",
+              "label": "jam info"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Modern sat-navs also get live traffic data from phones and road sensors. If the motorway jams, the travel time on that link goes up, the sums are redone, and you are sent a new fastest route.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "home",
+              "label": "Home",
+              "icon": "house",
+              "x": 0.06,
+              "y": 0.5,
+              "ask": "How does a sat-nav know where I am?"
+            },
+            {
+              "id": "a",
+              "label": "Town A",
+              "icon": "tower",
+              "x": 0.3,
+              "y": 0.18
+            },
+            {
+              "id": "b",
+              "label": "Junction B",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.82
+            },
+            {
+              "id": "c",
+              "label": "Town C",
+              "icon": "tower",
+              "x": 0.6,
+              "y": 0.18
+            },
+            {
+              "id": "d",
+              "label": "Motorway D",
+              "icon": "car",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "How does a sat-nav choose between routes?"
+            },
+            {
+              "id": "dest",
+              "label": "Destination",
+              "icon": "star",
+              "x": 0.92,
+              "y": 0.45,
+              "ask": "Why doesn't the sat-nav pick the shortest route?"
+            },
+            {
+              "id": "gps",
+              "label": "GPS satellites",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.08,
+              "ask": "Does a sat-nav send signals to satellites?"
+            },
+            {
+              "id": "traffic",
+              "label": "Live traffic data",
+              "icon": "phone",
+              "x": 0.92,
+              "y": 0.9,
+              "ask": "How does a sat-nav know about traffic jams?"
+            }
+          ],
+          "links": [
+            {
+              "from": "home",
+              "to": "a",
+              "kind": "data",
+              "label": "8 min"
+            },
+            {
+              "from": "home",
+              "to": "b",
+              "kind": "data",
+              "label": "5 min"
+            },
+            {
+              "from": "a",
+              "to": "c",
+              "kind": "data",
+              "label": "10 min"
+            },
+            {
+              "from": "b",
+              "to": "d",
+              "kind": "data",
+              "label": "4 min"
+            },
+            {
+              "from": "c",
+              "to": "dest",
+              "kind": "data",
+              "label": "6 min"
+            },
+            {
+              "from": "d",
+              "to": "dest",
+              "kind": "data",
+              "label": "7 min"
+            },
+            {
+              "from": "gps",
+              "to": "home",
+              "kind": "signal",
+              "label": "position"
+            },
+            {
+              "from": "traffic",
+              "to": "d",
+              "kind": "data",
+              "label": "jam info"
+            }
+          ],
+          "focus": 7
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a sat-nav know where I am?",
+      "a": "It receives signals from several GPS satellites, each saying when it was sent. From the time each takes to arrive, it works out its distance to each satellite and so its position.",
+      "asks": [
+        "How does GPS find my location?"
+      ]
+    },
+    {
+      "q": "Why doesn't the sat-nav pick the shortest route?",
+      "a": "The shortest route by distance can be slow on narrow, busy roads. Sat-navs usually add up travel times instead, so a longer route on fast roads can win.",
+      "asks": [
+        "Why does my sat-nav take a longer way?"
+      ]
+    },
+    {
+      "q": "How does a sat-nav choose between routes?",
+      "a": "It treats roads as links with travel times and searches outward from the start, always extending the quickest route found so far, until it reaches the destination. This is the idea behind Dijkstra's algorithm.",
+      "asks": [
+        "What is Dijkstra's algorithm?"
+      ]
+    },
+    {
+      "q": "Does a sat-nav send signals to satellites?",
+      "a": "No. GPS satellites only broadcast; your sat-nav just listens. Live traffic and map updates come separately, over the mobile network.",
+      "asks": [
+        "Can satellites track my sat-nav?"
+      ]
+    },
+    {
+      "q": "How does a sat-nav know about traffic jams?",
+      "a": "Many sat-navs and phone apps share anonymous speed data from other users, plus road sensors and reports. Slow speeds on a road raise its travel time, and the route is recalculated.",
+      "asks": [
+        "How does live traffic work?"
+      ]
+    }
+  ],
+  "facts": [
+    "Edsger Dijkstra devised his shortest-path algorithm in 1956.",
+    "A GPS receiver needs signals from at least four satellites to fix its position and the time.",
+    "GPS satellites orbit about 20,000 kilometres above the Earth."
+  ],
+  "quiz": [
+    {
+      "say": "Route 1 takes 8 + 10 + 6 minutes; route 2 takes 5 + 4 + 7 minutes. Which does a sat-nav choose?",
+      "show": "Route 1 takes 8 + 10 + 6 minutes; route 2 takes 5 + 4 + 7 minutes. Which does a sat-nav choose?",
+      "options": [
+        {
+          "show": "Route 2, 16 minutes",
+          "say": "Route 2, 16 minutes"
+        },
+        {
+          "show": "Route 1, 24 minutes",
+          "say": "Route 1, 24 minutes"
+        },
+        {
+          "show": "Whichever has fewer roads",
+          "say": "Whichever has fewer roads"
+        }
+      ],
+      "answer": 0,
+      "why": "Adding the travel times gives 16 minutes for route 2 against 24 for route 1, so route 2 is fastest.",
+      "wrong": {
+        "1": "Route 1 adds up to more minutes.",
+        "2": "Both routes have three roads; the sat-nav compares total time."
+      }
+    }
+  ]
+}

@@ -1,0 +1,344 @@
+{
+  "id": "BCE-STRA-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Simply supported beam or cantilever: same load, very different bending",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "simply supported beam",
+    "cantilever",
+    "hogging moment",
+    "tip deflection",
+    "wL²/2"
+  ],
+  "examples": [
+    "What is the difference between a cantilever and a simply supported beam?",
+    "Why does a cantilever bend more?",
+    "Where is the maximum moment in a cantilever?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 4,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "What is a simply supported beam?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 5,
+          "label": "5 kN/m",
+          "ask": "Why does a cantilever have a bigger bending moment?"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment",
+        "deflection"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A diving board and a garden bench plank can both be four metres long, yet they behave very differently. The plank rests on two supports: it is simply supported. The diving board is clamped at one end only: a cantilever. Let us put the same five kilonewtons per metre on both and compare.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Simply supported beam or cantilever: same load, very different bending"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a simply supported beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "Why does a cantilever have a bigger bending moment?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment",
+            "deflection"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First the simply supported beam. Its moment peaks at midspan: w L squared over eight, five times sixteen over eight, ten kilonewton metres, sagging. It dips gently in the middle while both ends stay put. Where would you expect it to crack first?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a simply supported beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "Why does a cantilever have a bigger bending moment?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment",
+            "deflection"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Simple: M = 5 × 4² / 8 = 10 kN·m (sagging)"
+        }
+      ]
+    },
+    {
+      "say": "At the bottom of midspan. Now the cantilever. All the load must travel back to one wall, so the moment there is w L squared over two: five times sixteen over two, forty kilonewton metres, and it is hogging, putting the top in tension. Four times the moment of the simple beam!",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "fixed",
+              "at": 0,
+              "ask": "What is a cantilever?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "Why does a cantilever have a bigger bending moment?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment",
+            "deflection"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Cantilever: M = 5 × 4² / 2 = 40 kN·m (hogging)"
+        }
+      ]
+    },
+    {
+      "say": "Look at the deflected line. The free tip droops a long way: for the same load and section, about nine and a half times more than the middle of the simple beam. So cantilevers need deeper sections or a shorter reach. In a concrete cantilever, should the steel go near the top or the bottom?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "fixed",
+              "at": 0,
+              "ask": "What is a cantilever?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "Why does a cantilever have a bigger bending moment?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment",
+            "deflection"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ_cant ÷ δ_simple = (wL⁴/8EI) ÷ (5wL⁴/384EI) = 9.6"
+        }
+      ]
+    },
+    {
+      "say": "Near the top, where the tension is. Well done! You see cantilevers everywhere: balconies, stadium roofs, airport canopies and the Forth Bridge in Scotland, built from huge balanced cantilevers. Challenge: why is a balcony slab thicker where it meets the building?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "fixed",
+              "at": 0,
+              "ask": "What is a cantilever?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "Why does a cantilever have a bigger bending moment?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment",
+            "deflection"
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a simply supported beam?",
+      "a": "A beam resting on two supports, a pin and a roller, that let it rotate at the ends. The moment is zero at the supports and largest near midspan.",
+      "asks": [
+        "Define simply supported beam"
+      ]
+    },
+    {
+      "q": "What is a cantilever?",
+      "a": "A cantilever is a beam fixed at one end and free at the other, like a diving board or a balcony. The fixed end resists both force and moment.",
+      "asks": [
+        "What is a cantilever beam?"
+      ]
+    },
+    {
+      "q": "Why does a cantilever have a bigger bending moment?",
+      "a": "All the load has to be carried back to one support, over a long lever arm. For a uniform load the wall moment is w L squared over two, four times the simple beam value.",
+      "asks": [
+        "Why do cantilevers bend so much?"
+      ]
+    },
+    {
+      "q": "Where does the steel go in a concrete cantilever?",
+      "a": "Near the top surface, because hogging puts the top in tension. Concrete is weak in tension, so the steel must sit where the stretching is.",
+      "asks": [
+        "Top steel in a balcony slab"
+      ]
+    },
+    {
+      "q": "How much more does a cantilever deflect?",
+      "a": "For the same uniform load, span and section, the tip of a cantilever drops 9.6 times as far as the middle of a simply supported beam.",
+      "asks": [
+        "Cantilever deflection compared"
+      ]
+    }
+  ],
+  "facts": [
+    "The Forth Bridge in Scotland, opened in 1890, is a famous cantilever bridge and a UNESCO World Heritage Site.",
+    "For a uniform load, a cantilever tip deflects wL⁴/8EI, which is 9.6 times the midspan deflection 5wL⁴/384EI of a simply supported beam."
+  ],
+  "quiz": [
+    {
+      "say": "A three metre cantilever carries 4 kilonewtons per metre. What is the bending moment at the wall?",
+      "show": "A 3 m cantilever carries 4 kN/m. Bending moment at the wall?",
+      "options": [
+        {
+          "show": "18 kN·m",
+          "say": "18 kilonewton metres"
+        },
+        {
+          "show": "4.5 kN·m",
+          "say": "4.5 kilonewton metres"
+        },
+        {
+          "show": "36 kN·m",
+          "say": "36 kilonewton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "w L squared over two: 4 × 9 / 2 = 18 kilonewton metres, hogging.",
+      "wrong": {
+        "1": "That is w L squared over eight, the simply supported formula.",
+        "2": "That forgets to halve: the load acts at the middle of the span, 1.5 metres from the wall."
+      }
+    },
+    {
+      "say": "In a cantilever under downward load, which face is in tension?",
+      "show": "In a cantilever under downward load, which face is in tension?",
+      "options": [
+        {
+          "show": "The top face",
+          "say": "The top face"
+        },
+        {
+          "show": "The bottom face",
+          "say": "The bottom face"
+        },
+        {
+          "show": "Neither face",
+          "say": "Neither face"
+        }
+      ],
+      "answer": 0,
+      "why": "A cantilever hogs, curving like a frown, so the top stretches.",
+      "wrong": {
+        "1": "The bottom is squashed in a cantilever; it is the simple beam that has bottom tension.",
+        "2": "Any bent beam has one face in tension and one in compression."
+      }
+    }
+  ]
+}

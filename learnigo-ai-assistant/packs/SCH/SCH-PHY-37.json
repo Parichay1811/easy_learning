@@ -1,0 +1,501 @@
+{
+  "id": "SCH-PHY-37",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "Transformer turns ratio: working out the output voltage",
+  "area": "School Explainers",
+  "group": "SCH-PHY — Physics (class 6–12)",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "transformer",
+    "turns ratio",
+    "step-down",
+    "step-up",
+    "primary and secondary coil"
+  ],
+  "examples": [
+    "How do you calculate transformer output voltage?",
+    "What is a step-down transformer?",
+    "Why do transformers only work with AC?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "p",
+          "kind": "coil",
+          "x": 0.22,
+          "y": 0.5,
+          "label": "230 V in: 2300 turns",
+          "ask": "What is the transformer equation?"
+        },
+        {
+          "id": "core",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.2,
+          "label": "Iron core",
+          "ask": "What does the iron core do?"
+        },
+        {
+          "id": "s",
+          "kind": "coil",
+          "x": 0.72,
+          "y": 0.5,
+          "label": "Secondary: 50 turns",
+          "ask": "What is a step-down transformer?"
+        },
+        {
+          "id": "out",
+          "kind": "bulb",
+          "x": 0.92,
+          "y": 0.8,
+          "label": "5 V out"
+        }
+      ],
+      "links": [
+        {
+          "from": "p",
+          "to": "core",
+          "kind": "signal",
+          "label": "Changing field"
+        },
+        {
+          "from": "core",
+          "to": "s",
+          "kind": "signal",
+          "label": "Changing field"
+        },
+        {
+          "from": "s",
+          "to": "out",
+          "kind": "power",
+          "label": "5 V AC"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your phone needs about 5 volts, but the socket gives 230 volts. Plug it straight in and it would fry! Inside the charger is a transformer, a device that changes voltage. Let us see how it does the sum.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Transformer turns ratio: working out the output voltage"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.22,
+              "y": 0.5,
+              "label": "230 V in: 2300 turns",
+              "ask": "What is the transformer equation?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Iron core",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.5,
+              "label": "Secondary: 50 turns",
+              "ask": "What is a step-down transformer?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.8,
+              "label": "5 V out"
+            }
+          ],
+          "links": [
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "5 V AC"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the coil on the left, the primary coil. It has 2300 turns and gets 230 volts of AC, current that keeps flipping direction. That makes a changing magnetic field in the iron core. Why must the current keep changing?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.22,
+              "y": 0.5,
+              "label": "230 V in: 2300 turns",
+              "ask": "What is the transformer equation?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Iron core",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.5,
+              "label": "Secondary: 50 turns",
+              "ask": "What is a step-down transformer?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.8,
+              "label": "5 V out"
+            }
+          ],
+          "links": [
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "5 V AC"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Because only a changing field can make a voltage, great! Look at the iron core: it carries the changing field across to the secondary coil on the right. The two coils are not even wired together. The field links them. Are the coils touching?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.22,
+              "y": 0.5,
+              "label": "230 V in: 2300 turns",
+              "ask": "What is the transformer equation?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Iron core",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.5,
+              "label": "Secondary: 50 turns",
+              "ask": "What is a step-down transformer?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.8,
+              "label": "5 V out"
+            }
+          ],
+          "links": [
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "5 V AC"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "No, they are not! Now the sum. Voltage out over voltage in equals turns out over turns in. The secondary has 50 turns, and 50 out of 2300 is one forty-sixth. So 230 volts becomes 5 volts. Fewer turns means less voltage: a step-down transformer. What would more turns do?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.22,
+              "y": 0.5,
+              "label": "230 V in: 2300 turns",
+              "ask": "What is the transformer equation?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Iron core",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.5,
+              "label": "Secondary: 50 turns",
+              "ask": "What is a step-down transformer?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.8,
+              "label": "5 V out"
+            }
+          ],
+          "links": [
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "5 V AC"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Raise the voltage: a step-up transformer, well done! Power stations step voltage up to hundreds of thousands of volts so less energy is lost in cables, then step it down near homes. Wow fact: some lines in China carry 1.1 million volts! Challenge: 100 turns to 400 turns, 12 volts in. What comes out?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.22,
+              "y": 0.5,
+              "label": "230 V in: 2300 turns",
+              "ask": "What is the transformer equation?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Iron core",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.5,
+              "label": "Secondary: 50 turns",
+              "ask": "What is a step-down transformer?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.8,
+              "label": "5 V out"
+            }
+          ],
+          "links": [
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "signal",
+              "label": "Changing field"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "5 V AC"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the transformer equation?",
+      "a": "Secondary voltage over primary voltage equals secondary turns over primary turns: Vs over Vp equals Ns over Np.",
+      "asks": [
+        "How do you calculate transformer output voltage?"
+      ]
+    },
+    {
+      "q": "What does the iron core do?",
+      "a": "It carries the changing magnetic field from the primary coil to the secondary coil, so very little is lost.",
+      "asks": [
+        "Why do transformers have an iron core?"
+      ]
+    },
+    {
+      "q": "What is a step-down transformer?",
+      "a": "One with fewer turns on the secondary coil than the primary, so the output voltage is lower than the input.",
+      "asks": [
+        "step-up vs step-down transformer"
+      ]
+    },
+    {
+      "q": "Why do transformers only work with AC?",
+      "a": "They need a changing magnetic field to induce a voltage. Direct current gives a steady field, so nothing is induced.",
+      "asks": [
+        "Can a transformer work on DC?"
+      ]
+    },
+    {
+      "q": "Why is electricity sent at high voltage?",
+      "a": "For the same power, higher voltage means lower current, and lower current wastes much less energy heating the cables.",
+      "asks": [
+        "Why do power lines use high voltage?"
+      ]
+    }
+  ],
+  "facts": [
+    "Vs / Vp = Ns / Np for an ideal transformer.",
+    "China operates ultra-high-voltage lines at up to 1100 kV."
+  ],
+  "quiz": [
+    {
+      "say": "A transformer has 100 primary turns and 400 secondary turns. 12 V goes in. What comes out?",
+      "show": "A transformer has 100 primary turns and 400 secondary turns. 12 V goes in. What comes out?",
+      "options": [
+        {
+          "show": "3 V",
+          "say": "3 volts"
+        },
+        {
+          "show": "48 V",
+          "say": "48 volts"
+        },
+        {
+          "show": "12 V",
+          "say": "12 volts"
+        }
+      ],
+      "answer": 1,
+      "why": "400 ÷ 100 = 4, so 12 × 4 = 48 volts: a step-up transformer.",
+      "wrong": {
+        "0": "That divides; more secondary turns raise the voltage.",
+        "2": "Different turn numbers change the voltage."
+      }
+    },
+    {
+      "say": "Why will a transformer not work on a battery?",
+      "show": "Why will a transformer not work on a battery?",
+      "options": [
+        {
+          "show": "Batteries are too weak",
+          "say": "Batteries are too weak"
+        },
+        {
+          "show": "The iron core blocks it",
+          "say": "The iron core blocks it"
+        },
+        {
+          "show": "Battery current is DC",
+          "say": "Battery current is DC"
+        }
+      ],
+      "answer": 2,
+      "why": "Transformers need alternating current to make a changing magnetic field.",
+      "wrong": {
+        "0": "Even a strong DC supply will not work; it needs a changing current.",
+        "1": "The core carries the field; the problem is that DC makes no changing field."
+      }
+    }
+  ]
+}

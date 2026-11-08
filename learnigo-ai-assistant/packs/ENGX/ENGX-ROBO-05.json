@@ -1,0 +1,599 @@
+{
+  "id": "ENGX-ROBO-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a servo motor holds an exact angle",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "servo motor",
+    "hobby servo",
+    "potentiometer feedback",
+    "pulse width signal",
+    "servo gearbox"
+  ],
+  "examples": [
+    "How does a servo motor work?",
+    "How does a servo know its position?",
+    "What signal controls a servo?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sig",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.25,
+          "label": "Control signal",
+          "motion": "pulse",
+          "ask": "How do you tell a servo what angle to go to?"
+        },
+        {
+          "id": "circ",
+          "kind": "box",
+          "x": 0.38,
+          "y": 0.25,
+          "label": "Control circuit",
+          "motion": "pulse",
+          "ask": "What is the difference between a servo and a normal motor?"
+        },
+        {
+          "id": "mot",
+          "kind": "motor",
+          "x": 0.3,
+          "y": 0.75,
+          "label": "Small DC motor",
+          "motion": "spin"
+        },
+        {
+          "id": "gear",
+          "kind": "gear",
+          "x": 0.58,
+          "y": 0.75,
+          "label": "Gearbox",
+          "motion": "spin",
+          "ask": "Why does a servo have gears?"
+        },
+        {
+          "id": "arm",
+          "kind": "axle",
+          "x": 0.86,
+          "y": 0.75,
+          "label": "Output arm",
+          "motion": "swing",
+          "ask": "How far can a hobby servo turn?"
+        },
+        {
+          "id": "pot",
+          "kind": "box",
+          "x": 0.75,
+          "y": 0.25,
+          "label": "Position sensor",
+          "motion": "pulse",
+          "ask": "How does a servo know its position?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sig",
+          "to": "circ",
+          "kind": "signal",
+          "label": "pulse width"
+        },
+        {
+          "from": "circ",
+          "to": "mot",
+          "kind": "power"
+        },
+        {
+          "from": "mot",
+          "to": "gear",
+          "kind": "force"
+        },
+        {
+          "from": "gear",
+          "to": "arm",
+          "kind": "force"
+        },
+        {
+          "from": "arm",
+          "to": "pot",
+          "kind": "force",
+          "label": "turns"
+        },
+        {
+          "from": "pot",
+          "to": "circ",
+          "kind": "signal",
+          "label": "actual angle"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A hobby servo is a small box that turns its arm to an exact angle and holds it there. Servos move model plane controls, robot joints and camera mounts.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a servo motor holds an exact angle"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sig",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Control signal",
+              "motion": "pulse",
+              "ask": "How do you tell a servo what angle to go to?"
+            },
+            {
+              "id": "circ",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.25,
+              "label": "Control circuit",
+              "motion": "pulse",
+              "ask": "What is the difference between a servo and a normal motor?"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.75,
+              "label": "Small DC motor",
+              "motion": "spin"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.58,
+              "y": 0.75,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a servo have gears?"
+            },
+            {
+              "id": "arm",
+              "kind": "axle",
+              "x": 0.86,
+              "y": 0.75,
+              "label": "Output arm",
+              "motion": "swing",
+              "ask": "How far can a hobby servo turn?"
+            },
+            {
+              "id": "pot",
+              "kind": "box",
+              "x": 0.75,
+              "y": 0.25,
+              "label": "Position sensor",
+              "motion": "pulse",
+              "ask": "How does a servo know its position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sig",
+              "to": "circ",
+              "kind": "signal",
+              "label": "pulse width"
+            },
+            {
+              "from": "circ",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "arm",
+              "kind": "force"
+            },
+            {
+              "from": "arm",
+              "to": "pot",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "pot",
+              "to": "circ",
+              "kind": "signal",
+              "label": "actual angle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Inside is a little electric motor and a set of gears. The gears slow the fast-spinning motor and multiply its turning force, so the arm turns slowly but strongly.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sig",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Control signal",
+              "motion": "pulse",
+              "ask": "How do you tell a servo what angle to go to?"
+            },
+            {
+              "id": "circ",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.25,
+              "label": "Control circuit",
+              "motion": "pulse",
+              "ask": "What is the difference between a servo and a normal motor?"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.75,
+              "label": "Small DC motor",
+              "motion": "spin"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.58,
+              "y": 0.75,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a servo have gears?"
+            },
+            {
+              "id": "arm",
+              "kind": "axle",
+              "x": 0.86,
+              "y": 0.75,
+              "label": "Output arm",
+              "motion": "swing",
+              "ask": "How far can a hobby servo turn?"
+            },
+            {
+              "id": "pot",
+              "kind": "box",
+              "x": 0.75,
+              "y": 0.25,
+              "label": "Position sensor",
+              "motion": "pulse",
+              "ask": "How does a servo know its position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sig",
+              "to": "circ",
+              "kind": "signal",
+              "label": "pulse width"
+            },
+            {
+              "from": "circ",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "arm",
+              "kind": "force"
+            },
+            {
+              "from": "arm",
+              "to": "pot",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "pot",
+              "to": "circ",
+              "kind": "signal",
+              "label": "actual angle"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The controller sends a pulse about fifty times a second, and the length of each pulse sets the angle: about 1 millisecond for one end, 2 for the other.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sig",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Control signal",
+              "motion": "pulse",
+              "ask": "How do you tell a servo what angle to go to?"
+            },
+            {
+              "id": "circ",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.25,
+              "label": "Control circuit",
+              "motion": "pulse",
+              "ask": "What is the difference between a servo and a normal motor?"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.75,
+              "label": "Small DC motor",
+              "motion": "spin"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.58,
+              "y": 0.75,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a servo have gears?"
+            },
+            {
+              "id": "arm",
+              "kind": "axle",
+              "x": 0.86,
+              "y": 0.75,
+              "label": "Output arm",
+              "motion": "swing",
+              "ask": "How far can a hobby servo turn?"
+            },
+            {
+              "id": "pot",
+              "kind": "box",
+              "x": 0.75,
+              "y": 0.25,
+              "label": "Position sensor",
+              "motion": "pulse",
+              "ask": "How does a servo know its position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sig",
+              "to": "circ",
+              "kind": "signal",
+              "label": "pulse width"
+            },
+            {
+              "from": "circ",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "arm",
+              "kind": "force"
+            },
+            {
+              "from": "arm",
+              "to": "pot",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "pot",
+              "to": "circ",
+              "kind": "signal",
+              "label": "actual angle"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "A position sensor, often a potentiometer, measures where the arm really is. The circuit compares it with the target and drives the motor until they match, and pushes back if something forces the arm away.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sig",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Control signal",
+              "motion": "pulse",
+              "ask": "How do you tell a servo what angle to go to?"
+            },
+            {
+              "id": "circ",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.25,
+              "label": "Control circuit",
+              "motion": "pulse",
+              "ask": "What is the difference between a servo and a normal motor?"
+            },
+            {
+              "id": "mot",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.75,
+              "label": "Small DC motor",
+              "motion": "spin"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.58,
+              "y": 0.75,
+              "label": "Gearbox",
+              "motion": "spin",
+              "ask": "Why does a servo have gears?"
+            },
+            {
+              "id": "arm",
+              "kind": "axle",
+              "x": 0.86,
+              "y": 0.75,
+              "label": "Output arm",
+              "motion": "swing",
+              "ask": "How far can a hobby servo turn?"
+            },
+            {
+              "id": "pot",
+              "kind": "box",
+              "x": 0.75,
+              "y": 0.25,
+              "label": "Position sensor",
+              "motion": "pulse",
+              "ask": "How does a servo know its position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sig",
+              "to": "circ",
+              "kind": "signal",
+              "label": "pulse width"
+            },
+            {
+              "from": "circ",
+              "to": "mot",
+              "kind": "power"
+            },
+            {
+              "from": "mot",
+              "to": "gear",
+              "kind": "force"
+            },
+            {
+              "from": "gear",
+              "to": "arm",
+              "kind": "force"
+            },
+            {
+              "from": "arm",
+              "to": "pot",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "pot",
+              "to": "circ",
+              "kind": "signal",
+              "label": "actual angle"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a servo know its position?",
+      "a": "A sensor, usually a potentiometer, a variable resistor turned by the output shaft, measures the real angle. The circuit keeps comparing it with the target angle.",
+      "asks": [
+        "What is inside a servo?"
+      ]
+    },
+    {
+      "q": "How do you tell a servo what angle to go to?",
+      "a": "You send it a pulse about every 20 milliseconds. A pulse of around 1.5 milliseconds puts it in the middle, and shorter or longer pulses swing it towards each end.",
+      "asks": [
+        "What is a PWM signal for a servo?"
+      ]
+    },
+    {
+      "q": "Why does a servo have gears?",
+      "a": "The small motor spins fast but weakly. Gears trade that speed for turning force, called torque, so the arm can move a real load and hold it steady.",
+      "asks": [
+        "What does the gearbox in a servo do?"
+      ]
+    },
+    {
+      "q": "What is the difference between a servo and a normal motor?",
+      "a": "A normal motor just spins when powered. A servo has a sensor and control circuit built in, so it moves to and holds a commanded position, which is closed-loop control.",
+      "asks": [
+        "Servo versus DC motor?"
+      ]
+    },
+    {
+      "q": "How far can a hobby servo turn?",
+      "a": "Most standard hobby servos turn through about 180 degrees. Continuous-rotation servos spin all the way round, and the signal sets their speed instead.",
+      "asks": [
+        "Can a servo spin all the way round?"
+      ]
+    }
+  ],
+  "facts": [
+    "Standard hobby servos expect a pulse every 20 milliseconds, about 50 times a second.",
+    "A pulse of about 1.5 milliseconds usually puts a hobby servo at its centre position."
+  ],
+  "quiz": [
+    {
+      "say": "What tells a servo that its arm has reached the right angle?",
+      "show": "A servo knows its arm is in place because of…",
+      "options": [
+        {
+          "show": "Its position sensor",
+          "say": "Its position sensor"
+        },
+        {
+          "show": "A timer",
+          "say": "A timer"
+        },
+        {
+          "show": "The battery voltage",
+          "say": "The battery voltage"
+        }
+      ],
+      "answer": 0,
+      "why": "The position sensor reports the real angle, and the circuit stops driving when it matches the target.",
+      "wrong": {
+        "1": "A timer cannot know if the arm was blocked or pushed.",
+        "2": "Battery voltage says nothing about the arm's angle."
+      }
+    }
+  ]
+}

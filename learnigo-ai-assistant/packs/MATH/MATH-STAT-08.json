@@ -1,0 +1,238 @@
+{
+  "id": "MATH-STAT-08",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Normal distribution",
+  "area": "Mathematics",
+  "group": "MATH-STAT — Statistics",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "normal distribution",
+    "standard deviation",
+    "z-score",
+    "empirical rule",
+    "inverse normal"
+  ],
+  "examples": [
+    "How do I find the mean if I only know the standard deviation and a probability?",
+    "What does the z-score actually tell me about a data point?",
+    "Can I use this rule for data that is not normally distributed?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn about the normal distribution curve. This curve shows how data often clusters around the average value. The shape is always a perfect bell shape.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Normal distribution"
+        },
+        {
+          "op": "text",
+          "text": "Normal Distribution: Bell Curve",
+          "at": "normal"
+        }
+      ]
+    },
+    {
+      "say": "First, we must standardise our data using the z-score. The z-score tells us how many standard deviations a value is from the mean. The formula is z equals the value minus the mean, all divided by the standard deviation.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start with a value (x)",
+            "Calculate z-score: (x - μ) / σ",
+            "Result is the z-score"
+          ],
+          "at": "value"
+        },
+        {
+          "op": "text",
+          "text": "z = (x - μ) / σ"
+        }
+      ]
+    },
+    {
+      "say": "Next, we use the empirical rule for quick estimates. About sixty-eight percent of data falls within one standard deviation of the mean. Ninety-five percent falls within two standard deviations. Finally, ninety-nine point seven percent falls within three standard deviations.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start with probability (P)",
+            "Use Inverse Normal Function",
+            "Get z-score",
+            "Convert z-score back to raw score"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "68% in 1σ, 95% in 2σ, 99.7% in 3σ"
+        }
+      ]
+    },
+    {
+      "say": "To find the raw score from a probability, we use the inverse normal function. This function takes a probability and gives us the corresponding z-score. We then convert that z-score back to the original data scale.",
+      "draw": [
+        {
+          "op": "bullets",
+          "items": [
+            "68% within 1 standard deviation",
+            "95% within 2 standard deviations",
+            "99.7% within 3 standard deviations"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Inverse Normal: P -> z",
+          "at": "inverse"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the z-score really measuring?",
+      "a": "The z-score measures how far a specific data point is from the mean in terms of standard deviations. It standardises the data so we can compare different sets.",
+      "asks": [
+        "How many standard deviations away is this point?",
+        "What does standardising mean for a data point?"
+      ]
+    },
+    {
+      "q": "Does the empirical rule always work?",
+      "a": "The empirical rule only accurately applies when the data truly follows a normal distribution. If the data is skewed, the rule will give inaccurate estimates.",
+      "asks": [
+        "Is this rule only for bell curves?",
+        "When can I use the 68-95-99.7 rule?"
+      ]
+    },
+    {
+      "q": "How do I find the mean if I know the standard deviation and a probability?",
+      "a": "You must first use the inverse normal function on the given probability to find the z-score. Then, you use the z-score formula rearranged to solve for the mean.",
+      "asks": [
+        "Can I work backwards from a probability?",
+        "What if I need to find μ from a tail probability?"
+      ]
+    },
+    {
+      "q": "What is the difference between the z-score and the t-score?",
+      "a": "The z-score is used when the population standard deviation is known. The t-score is used when the population standard deviation is unknown and must be estimated from the sample.",
+      "asks": [
+        "When do I use t instead of z?",
+        "Are they interchangeable in any situation?"
+      ]
+    },
+    {
+      "q": "If the standard deviation is zero, what happens to the z-score?",
+      "a": "If the standard deviation is zero, all data points are exactly equal to the mean. The z-score calculation would involve division by zero, which is undefined.",
+      "asks": [
+        "What if σ equals zero?",
+        "Can the standard deviation ever be zero?"
+      ]
+    }
+  ],
+  "facts": [
+    "The normal distribution is symmetrical around its mean, median, and mode.",
+    "The mean, median, and mode are all equal in a perfect normal distribution.",
+    "The z-score calculation standardises any normal variable.",
+    "The empirical rule provides approximate percentages for data spread."
+  ],
+  "quiz": [
+    {
+      "say": "A test score is normally distributed with a mean of 70 and a standard deviation of 10. What is the z-score for a raw score of 85?",
+      "show": "z = (85 - 70) / 10 = 1.5",
+      "options": [
+        {
+          "show": "1.5",
+          "say": "1.5"
+        },
+        {
+          "show": "15",
+          "say": "15"
+        },
+        {
+          "show": "0.15",
+          "say": "0.15"
+        },
+        {
+          "show": "1.5 x 10",
+          "say": "1.5 x 10"
+        }
+      ],
+      "answer": 0,
+      "why": "The z-score tells you exactly how many standard deviations 85 is from the mean of 70.",
+      "wrong": {
+        "1": "This mistake happens if you forget to divide by the standard deviation, treating the standard deviation as one.",
+        "2": "This mistake occurs if you incorrectly subtract the standard deviation from the raw score before dividing.",
+        "3": "This mistake suggests multiplying the result by the standard deviation instead of using it as a direct measure."
+      }
+    },
+    {
+      "say": "Using the empirical rule, approximately what percentage of data falls between 80 and 100, given a mean of 90 and a standard deviation of 10?",
+      "show": "Range: 80 to 100",
+      "options": [
+        {
+          "show": "68%",
+          "say": "68%"
+        },
+        {
+          "show": "95%",
+          "say": "95%"
+        },
+        {
+          "show": "99.7%",
+          "say": "99.7%"
+        },
+        {
+          "show": "50%",
+          "say": "50%"
+        }
+      ],
+      "answer": 0,
+      "why": "The range from 80 to 100 represents exactly one standard deviation below and one standard deviation above the mean.",
+      "wrong": {
+        "1": "This is tempting because 95 percent covers two standard deviations, but the range given is only one standard deviation wide.",
+        "2": "This is incorrect because 99.7 percent covers three standard deviations, which is much wider than the given range.",
+        "3": "This mistake might happen if you only consider the area within one standard deviation of the mean, ignoring the other side."
+      }
+    },
+    {
+      "say": "If the probability of a value being less than x is 0.975, what is the approximate value of x, given μ=50 and σ=5?",
+      "show": "P(X < x) = 0.975",
+      "options": [
+        {
+          "show": "60",
+          "say": "60"
+        },
+        {
+          "show": "50",
+          "say": "50"
+        },
+        {
+          "show": "55",
+          "say": "55"
+        },
+        {
+          "show": "100",
+          "say": "100"
+        }
+      ],
+      "answer": 0,
+      "why": "A cumulative probability of 0.975 corresponds to a z-score of 1.96, which means x is 1.96 times the standard deviation above the mean.",
+      "wrong": {
+        "1": "This assumes the probability of 0.975 means the value is exactly at the mean, ignoring the standard deviation.",
+        "2": "This mistake might result from incorrectly using the 68 percent rule, which corresponds to a z-score of one.",
+        "3": "This is too high, possibly confusing the probability value with the actual data value on the scale."
+      }
+    }
+  ]
+}

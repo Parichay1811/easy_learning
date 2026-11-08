@@ -1,0 +1,649 @@
+{
+  "id": "BCE-SURV-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "GNSS surveying: satellites, clocks and centimetre RTK",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-SURV — Surveying and geomatics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "GNSS",
+    "GPS",
+    "RTK",
+    "satellite ranging",
+    "receiver clock error",
+    "base station"
+  ],
+  "examples": [
+    "How does GPS work out your position?",
+    "Why do you need four satellites for GPS?",
+    "How does RTK GPS get centimetre accuracy?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "s1",
+          "label": "GPS satellite",
+          "icon": "satellite",
+          "x": 0.1,
+          "y": 0.12
+        },
+        {
+          "id": "s2",
+          "label": "Galileo satellite",
+          "icon": "satellite",
+          "x": 0.37,
+          "y": 0.06
+        },
+        {
+          "id": "s3",
+          "label": "BeiDou satellite",
+          "icon": "satellite",
+          "x": 0.63,
+          "y": 0.06
+        },
+        {
+          "id": "s4",
+          "label": "GLONASS satellite",
+          "icon": "satellite",
+          "x": 0.9,
+          "y": 0.12,
+          "ask": "What is the difference between GPS and GNSS?"
+        },
+        {
+          "id": "base",
+          "label": "Base station",
+          "icon": "antenna",
+          "x": 0.25,
+          "y": 0.82,
+          "ask": "What is RTK GPS?"
+        },
+        {
+          "id": "rover",
+          "label": "Rover receiver",
+          "icon": "person",
+          "x": 0.72,
+          "y": 0.82,
+          "ask": "How does GPS find your position?"
+        }
+      ],
+      "links": [
+        {
+          "from": "s1",
+          "to": "rover",
+          "kind": "signal"
+        },
+        {
+          "from": "s2",
+          "to": "rover",
+          "kind": "signal"
+        },
+        {
+          "from": "s3",
+          "to": "rover",
+          "kind": "signal"
+        },
+        {
+          "from": "s4",
+          "to": "rover",
+          "kind": "signal"
+        },
+        {
+          "from": "s1",
+          "to": "base",
+          "kind": "signal"
+        },
+        {
+          "from": "s2",
+          "to": "base",
+          "kind": "signal"
+        },
+        {
+          "from": "base",
+          "to": "rover",
+          "kind": "data",
+          "label": "Corrections"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Right now dozens of satellites are flying about twenty thousand kilometres above you, each carrying atomic clocks and broadcasting the time. Your phone listens and works out where it is. Surveyors do the same, but to the centimetre. On the board: satellites from four systems, a base station and a surveyor's rover.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "GNSS surveying: satellites, clocks and centimetre RTK"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "GPS satellite",
+              "icon": "satellite",
+              "x": 0.1,
+              "y": 0.12
+            },
+            {
+              "id": "s2",
+              "label": "Galileo satellite",
+              "icon": "satellite",
+              "x": 0.37,
+              "y": 0.06
+            },
+            {
+              "id": "s3",
+              "label": "BeiDou satellite",
+              "icon": "satellite",
+              "x": 0.63,
+              "y": 0.06
+            },
+            {
+              "id": "s4",
+              "label": "GLONASS satellite",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.12,
+              "ask": "What is the difference between GPS and GNSS?"
+            },
+            {
+              "id": "base",
+              "label": "Base station",
+              "icon": "antenna",
+              "x": 0.25,
+              "y": 0.82,
+              "ask": "What is RTK GPS?"
+            },
+            {
+              "id": "rover",
+              "label": "Rover receiver",
+              "icon": "person",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does GPS find your position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "s1",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s3",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s4",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s1",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "rover",
+              "kind": "data",
+              "label": "Corrections"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Each signal says when it left the satellite. Multiply the travel time by the speed of light and you get the distance. A signal from twenty thousand two hundred kilometres takes about sixty seven thousandths of a second. Three distances fix a point in space, so why does the rover need four satellites?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "GPS satellite",
+              "icon": "satellite",
+              "x": 0.1,
+              "y": 0.12
+            },
+            {
+              "id": "s2",
+              "label": "Galileo satellite",
+              "icon": "satellite",
+              "x": 0.37,
+              "y": 0.06
+            },
+            {
+              "id": "s3",
+              "label": "BeiDou satellite",
+              "icon": "satellite",
+              "x": 0.63,
+              "y": 0.06
+            },
+            {
+              "id": "s4",
+              "label": "GLONASS satellite",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.12,
+              "ask": "What is the difference between GPS and GNSS?"
+            },
+            {
+              "id": "base",
+              "label": "Base station",
+              "icon": "antenna",
+              "x": 0.25,
+              "y": 0.82,
+              "ask": "What is RTK GPS?"
+            },
+            {
+              "id": "rover",
+              "label": "Rover receiver",
+              "icon": "person",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does GPS find your position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "s1",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s3",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s4",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s1",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "rover",
+              "kind": "data",
+              "label": "Corrections"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "d = c t = 299,792 km/s × 0.0674 s ≈ 20,200 km"
+        }
+      ]
+    },
+    {
+      "say": "Because of its clock! The rover's cheap clock is not atomic, and light travels thirty centimetres in a billionth of a second. Look at the line: ten nanoseconds of clock error means three metres of error in every range. So the fourth satellite lets the receiver solve for its own clock error as well as east, north and height.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Clock error (ns)",
+            "max": 100
+          },
+          "y": {
+            "label": "Range error (m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "0.3 m per nanosecond",
+              "type": "line",
+              "c": 0,
+              "k": 0.3,
+              "ask": "Why do you need four satellites?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "10 ns: 3 m"
+            },
+            {
+              "x": 100,
+              "label": "100 ns: 30 m"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Range error = c × Δt = 0.3 m/ns × 10 ns = 3 m"
+        }
+      ]
+    },
+    {
+      "say": "A phone gets a few metres. For centimetres, surveyors use RTK, real-time kinematic. Look at the base station: it sits on a known point, works out the errors in each satellite signal, and radios corrections to the rover. The rover also tracks the carrier wave itself, only nineteen centimetres long, to split it finely.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "GPS satellite",
+              "icon": "satellite",
+              "x": 0.1,
+              "y": 0.12
+            },
+            {
+              "id": "s2",
+              "label": "Galileo satellite",
+              "icon": "satellite",
+              "x": 0.37,
+              "y": 0.06
+            },
+            {
+              "id": "s3",
+              "label": "BeiDou satellite",
+              "icon": "satellite",
+              "x": 0.63,
+              "y": 0.06
+            },
+            {
+              "id": "s4",
+              "label": "GLONASS satellite",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.12,
+              "ask": "What is the difference between GPS and GNSS?"
+            },
+            {
+              "id": "base",
+              "label": "Base station",
+              "icon": "antenna",
+              "x": 0.25,
+              "y": 0.82,
+              "ask": "What is RTK GPS?"
+            },
+            {
+              "id": "rover",
+              "label": "Rover receiver",
+              "icon": "person",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does GPS find your position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "s1",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s3",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s4",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s1",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "rover",
+              "kind": "data",
+              "label": "Corrections"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "note",
+          "text": "RTK accuracy is typically about 1–2 cm across, a little more in height."
+        }
+      ]
+    },
+    {
+      "say": "GNSS means all the systems together: America's GPS, Russia's GLONASS, Europe's Galileo and China's BeiDou, with regional ones like India's NavIC and Japan's QZSS. More satellites, better fixes in city streets. Superb! Challenge: how big is the range error from fifty nanoseconds of clock error?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "s1",
+              "label": "GPS satellite",
+              "icon": "satellite",
+              "x": 0.1,
+              "y": 0.12
+            },
+            {
+              "id": "s2",
+              "label": "Galileo satellite",
+              "icon": "satellite",
+              "x": 0.37,
+              "y": 0.06
+            },
+            {
+              "id": "s3",
+              "label": "BeiDou satellite",
+              "icon": "satellite",
+              "x": 0.63,
+              "y": 0.06
+            },
+            {
+              "id": "s4",
+              "label": "GLONASS satellite",
+              "icon": "satellite",
+              "x": 0.9,
+              "y": 0.12,
+              "ask": "What is the difference between GPS and GNSS?"
+            },
+            {
+              "id": "base",
+              "label": "Base station",
+              "icon": "antenna",
+              "x": 0.25,
+              "y": 0.82,
+              "ask": "What is RTK GPS?"
+            },
+            {
+              "id": "rover",
+              "label": "Rover receiver",
+              "icon": "person",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does GPS find your position?"
+            }
+          ],
+          "links": [
+            {
+              "from": "s1",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s3",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s4",
+              "to": "rover",
+              "kind": "signal"
+            },
+            {
+              "from": "s1",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "s2",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "rover",
+              "kind": "data",
+              "label": "Corrections"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does GPS find your position?",
+      "a": "Each satellite broadcasts its position and the exact time. The receiver measures how long each signal took, turns that into distances, and finds the one point that fits them all.",
+      "asks": [
+        "How does GNSS work?",
+        "Satellite ranging"
+      ]
+    },
+    {
+      "q": "Why do you need four satellites?",
+      "a": "Three distances would fix a position if the receiver clock were perfect. A fourth lets the receiver solve for its own clock error as well as the three coordinates.",
+      "asks": [
+        "Why four satellites for GPS?"
+      ]
+    },
+    {
+      "q": "What is RTK GPS?",
+      "a": "Real-time kinematic positioning: a base station on a known point sends corrections to a rover, which also uses carrier phase measurements, giving positions to about 1 to 2 centimetres in real time.",
+      "asks": [
+        "How does RTK work?",
+        "Base and rover GPS"
+      ]
+    },
+    {
+      "q": "How accurate is GNSS surveying?",
+      "a": "A phone or handheld gets a few metres. RTK reaches 1 to 2 centimetres, and long static sessions with post-processing can reach millimetres.",
+      "asks": [
+        "GPS accuracy"
+      ]
+    },
+    {
+      "q": "What is the difference between GPS and GNSS?",
+      "a": "GPS is the American system. GNSS, global navigation satellite systems, covers all of them: GPS, GLONASS, Galileo and BeiDou, plus regional systems such as NavIC and QZSS.",
+      "asks": [
+        "GPS vs GNSS"
+      ]
+    }
+  ],
+  "facts": [
+    "GPS satellites orbit at an altitude of about 20,200 km.",
+    "The GPS L1 carrier at 1575.42 MHz has a wavelength of about 19 cm."
+  ],
+  "quiz": [
+    {
+      "say": "A satellite signal takes 0.07 seconds to arrive. Light travels about 300,000 kilometres per second. How far away is the satellite?",
+      "show": "A satellite signal takes 0.07 s to arrive (c ≈ 300,000 km/s). Distance?",
+      "options": [
+        {
+          "show": "About 21,000 km",
+          "say": "about 21,000 kilometres"
+        },
+        {
+          "show": "About 4.3 million km",
+          "say": "about 4.3 million kilometres"
+        },
+        {
+          "show": "About 2,100 km",
+          "say": "about 2,100 kilometres"
+        }
+      ],
+      "answer": 0,
+      "why": "300,000 × 0.07 = 21,000 km.",
+      "wrong": {
+        "1": "That divides by the time instead of multiplying.",
+        "2": "That slips a factor of ten."
+      }
+    },
+    {
+      "say": "Why does a receiver need a fourth satellite?",
+      "show": "Why does a receiver need a fourth satellite?",
+      "options": [
+        {
+          "show": "To solve for its own clock error",
+          "say": "To solve for its own clock error"
+        },
+        {
+          "show": "To measure temperature",
+          "say": "To measure temperature"
+        },
+        {
+          "show": "To power the receiver",
+          "say": "To power the receiver"
+        }
+      ],
+      "answer": 0,
+      "why": "Four ranges give four unknowns: three coordinates and the receiver clock offset.",
+      "wrong": {
+        "1": "Satellites do not measure ground temperature for positioning.",
+        "2": "Receivers run on batteries, not satellite power."
+      }
+    }
+  ]
+}

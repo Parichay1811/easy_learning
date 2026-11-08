@@ -1,0 +1,1073 @@
+{
+  "id": "BME-DYN-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Forced vibration and resonance: why shaking at the natural frequency is dangerous",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-DYN — Dynamics and vibration",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "resonance",
+    "forced vibration",
+    "frequency ratio",
+    "magnification factor",
+    "vibration isolation"
+  ],
+  "examples": [
+    "What is resonance in engineering?",
+    "Why does a washing machine shake at one speed?",
+    "How does damping reduce resonance?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Frequency ratio r",
+        "max": 3
+      },
+      "y": {
+        "label": "Amplitude ratio",
+        "max": 6
+      },
+      "curves": [
+        {
+          "label": "ζ = 0.1",
+          "type": "points",
+          "points": [
+            [
+              0,
+              1
+            ],
+            [
+              0.4,
+              1.19
+            ],
+            [
+              0.6,
+              1.54
+            ],
+            [
+              0.75,
+              2.16
+            ],
+            [
+              0.85,
+              3.07
+            ],
+            [
+              0.92,
+              4.17
+            ],
+            [
+              0.97,
+              4.93
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1.03,
+              4.66
+            ],
+            [
+              1.08,
+              3.67
+            ],
+            [
+              1.15,
+              2.52
+            ],
+            [
+              1.25,
+              1.62
+            ],
+            [
+              1.414,
+              0.96
+            ],
+            [
+              1.8,
+              0.44
+            ],
+            [
+              2.4,
+              0.21
+            ],
+            [
+              3,
+              0.12
+            ]
+          ],
+          "smooth": true,
+          "ask": "What does the amplitude ratio graph show?"
+        },
+        {
+          "label": "ζ = 0.3",
+          "type": "points",
+          "points": [
+            [
+              0,
+              1
+            ],
+            [
+              0.4,
+              1.14
+            ],
+            [
+              0.6,
+              1.36
+            ],
+            [
+              0.75,
+              1.59
+            ],
+            [
+              0.85,
+              1.72
+            ],
+            [
+              0.92,
+              1.75
+            ],
+            [
+              0.97,
+              1.71
+            ],
+            [
+              1,
+              1.67
+            ],
+            [
+              1.03,
+              1.61
+            ],
+            [
+              1.08,
+              1.49
+            ],
+            [
+              1.15,
+              1.31
+            ],
+            [
+              1.25,
+              1.07
+            ],
+            [
+              1.414,
+              0.76
+            ],
+            [
+              1.8,
+              0.4
+            ],
+            [
+              2.4,
+              0.2
+            ],
+            [
+              3,
+              0.12
+            ]
+          ],
+          "smooth": true,
+          "ask": "How does damping reduce resonance?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 1,
+          "label": "Resonance"
+        },
+        {
+          "x": 1.414,
+          "label": "r = 1.41"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "In June 2000, London's new Millennium Bridge began to sway sideways under crowds of walkers and closed for repairs. The footsteps were pushing at close to the bridge's own natural frequency. That is resonance. You may have felt it at home too: a washing machine that shakes hard at one spin speed.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Forced vibration and resonance: why shaking at the natural frequency is dangerous"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "drum",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Spinning drum",
+              "ask": "Why does a washing machine shake at one speed?"
+            },
+            {
+              "id": "sl",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.7,
+              "label": "Spring"
+            },
+            {
+              "id": "sr",
+              "kind": "spring",
+              "x": 0.7,
+              "y": 0.7,
+              "label": "Spring"
+            },
+            {
+              "id": "damp",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.72,
+              "label": "Damper",
+              "ask": "How does damping reduce resonance?"
+            }
+          ],
+          "links": [
+            {
+              "from": "drum",
+              "to": "sl",
+              "kind": "force"
+            },
+            {
+              "from": "drum",
+              "to": "sr",
+              "kind": "force"
+            },
+            {
+              "from": "drum",
+              "to": "damp",
+              "kind": "force"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "A wobbly drum on springs is a forced spring-mass system"
+        }
+      ]
+    },
+    {
+      "say": "An unbalanced drum pushes the machine at its spin frequency. Compare that with the natural frequency using the frequency ratio, r: forcing frequency over natural frequency. The graph shows how many times bigger the vibration is than a slow, steady push would give. See the zeta 0.1 curve shoot up near r equals 1?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency ratio r",
+            "max": 3
+          },
+          "y": {
+            "label": "Amplitude ratio",
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "ζ = 0.1",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.19
+                ],
+                [
+                  0.6,
+                  1.54
+                ],
+                [
+                  0.75,
+                  2.16
+                ],
+                [
+                  0.85,
+                  3.07
+                ],
+                [
+                  0.92,
+                  4.17
+                ],
+                [
+                  0.97,
+                  4.93
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1.03,
+                  4.66
+                ],
+                [
+                  1.08,
+                  3.67
+                ],
+                [
+                  1.15,
+                  2.52
+                ],
+                [
+                  1.25,
+                  1.62
+                ],
+                [
+                  1.414,
+                  0.96
+                ],
+                [
+                  1.8,
+                  0.44
+                ],
+                [
+                  2.4,
+                  0.21
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the amplitude ratio graph show?"
+            },
+            {
+              "label": "ζ = 0.3",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.14
+                ],
+                [
+                  0.6,
+                  1.36
+                ],
+                [
+                  0.75,
+                  1.59
+                ],
+                [
+                  0.85,
+                  1.72
+                ],
+                [
+                  0.92,
+                  1.75
+                ],
+                [
+                  0.97,
+                  1.71
+                ],
+                [
+                  1,
+                  1.67
+                ],
+                [
+                  1.03,
+                  1.61
+                ],
+                [
+                  1.08,
+                  1.49
+                ],
+                [
+                  1.15,
+                  1.31
+                ],
+                [
+                  1.25,
+                  1.07
+                ],
+                [
+                  1.414,
+                  0.76
+                ],
+                [
+                  1.8,
+                  0.4
+                ],
+                [
+                  2.4,
+                  0.2
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "How does damping reduce resonance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Resonance"
+            },
+            {
+              "x": 1.414,
+              "label": "r = 1.41"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "r = ω / ωn; X / X_static = 1 / √((1−r²)² + (2ζr)²)"
+        }
+      ]
+    },
+    {
+      "say": "At r equals 1, each push arrives just as the mass swings the same way, so energy piles up. With light damping, zeta equals 0.1, the vibration is 1 over 2 zeta, five times the static value. Only damping limits it. Now look at the second curve, with zeta equals 0.3. How high is its peak?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency ratio r",
+            "max": 3
+          },
+          "y": {
+            "label": "Amplitude ratio",
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "ζ = 0.1",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.19
+                ],
+                [
+                  0.6,
+                  1.54
+                ],
+                [
+                  0.75,
+                  2.16
+                ],
+                [
+                  0.85,
+                  3.07
+                ],
+                [
+                  0.92,
+                  4.17
+                ],
+                [
+                  0.97,
+                  4.93
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1.03,
+                  4.66
+                ],
+                [
+                  1.08,
+                  3.67
+                ],
+                [
+                  1.15,
+                  2.52
+                ],
+                [
+                  1.25,
+                  1.62
+                ],
+                [
+                  1.414,
+                  0.96
+                ],
+                [
+                  1.8,
+                  0.44
+                ],
+                [
+                  2.4,
+                  0.21
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the amplitude ratio graph show?"
+            },
+            {
+              "label": "ζ = 0.3",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.14
+                ],
+                [
+                  0.6,
+                  1.36
+                ],
+                [
+                  0.75,
+                  1.59
+                ],
+                [
+                  0.85,
+                  1.72
+                ],
+                [
+                  0.92,
+                  1.75
+                ],
+                [
+                  0.97,
+                  1.71
+                ],
+                [
+                  1,
+                  1.67
+                ],
+                [
+                  1.03,
+                  1.61
+                ],
+                [
+                  1.08,
+                  1.49
+                ],
+                [
+                  1.15,
+                  1.31
+                ],
+                [
+                  1.25,
+                  1.07
+                ],
+                [
+                  1.414,
+                  0.76
+                ],
+                [
+                  1.8,
+                  0.4
+                ],
+                [
+                  2.4,
+                  0.2
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "How does damping reduce resonance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Resonance"
+            },
+            {
+              "x": 1.414,
+              "label": "r = 1.41"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "At r = 1: X / X_static = 1 / (2ζ) = 1 / 0.2 = 5"
+        }
+      ]
+    },
+    {
+      "say": "About 1.7 times, much tamer. More damping always lowers the resonant peak. Now look right of the second dashed line, where r is above 1.41, the square root of 2. Both curves drop below 1: the springs now shield the floor from the shaking. Why does the washing machine shake only briefly during spin-up?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency ratio r",
+            "max": 3
+          },
+          "y": {
+            "label": "Amplitude ratio",
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "ζ = 0.1",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.19
+                ],
+                [
+                  0.6,
+                  1.54
+                ],
+                [
+                  0.75,
+                  2.16
+                ],
+                [
+                  0.85,
+                  3.07
+                ],
+                [
+                  0.92,
+                  4.17
+                ],
+                [
+                  0.97,
+                  4.93
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1.03,
+                  4.66
+                ],
+                [
+                  1.08,
+                  3.67
+                ],
+                [
+                  1.15,
+                  2.52
+                ],
+                [
+                  1.25,
+                  1.62
+                ],
+                [
+                  1.414,
+                  0.96
+                ],
+                [
+                  1.8,
+                  0.44
+                ],
+                [
+                  2.4,
+                  0.21
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the amplitude ratio graph show?"
+            },
+            {
+              "label": "ζ = 0.3",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.14
+                ],
+                [
+                  0.6,
+                  1.36
+                ],
+                [
+                  0.75,
+                  1.59
+                ],
+                [
+                  0.85,
+                  1.72
+                ],
+                [
+                  0.92,
+                  1.75
+                ],
+                [
+                  0.97,
+                  1.71
+                ],
+                [
+                  1,
+                  1.67
+                ],
+                [
+                  1.03,
+                  1.61
+                ],
+                [
+                  1.08,
+                  1.49
+                ],
+                [
+                  1.15,
+                  1.31
+                ],
+                [
+                  1.25,
+                  1.07
+                ],
+                [
+                  1.414,
+                  0.76
+                ],
+                [
+                  1.8,
+                  0.4
+                ],
+                [
+                  2.4,
+                  0.2
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "How does damping reduce resonance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Resonance"
+            },
+            {
+              "x": 1.414,
+              "label": "r = 1.41"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "ζ = 0.3: peak = 1 / 0.6 ≈ 1.7"
+        }
+      ]
+    },
+    {
+      "say": "Because it passes quickly through resonance on the way to a high spin speed, far above it. Amazing work! Engineers keep machines well away from r equals 1, or rush through it, and mount them on soft springs so r is above 1.41. The Millennium Bridge was fixed by adding dampers. Challenge: what spin speed is resonant if the natural frequency is 5 hertz?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency ratio r",
+            "max": 3
+          },
+          "y": {
+            "label": "Amplitude ratio",
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "ζ = 0.1",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.19
+                ],
+                [
+                  0.6,
+                  1.54
+                ],
+                [
+                  0.75,
+                  2.16
+                ],
+                [
+                  0.85,
+                  3.07
+                ],
+                [
+                  0.92,
+                  4.17
+                ],
+                [
+                  0.97,
+                  4.93
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1.03,
+                  4.66
+                ],
+                [
+                  1.08,
+                  3.67
+                ],
+                [
+                  1.15,
+                  2.52
+                ],
+                [
+                  1.25,
+                  1.62
+                ],
+                [
+                  1.414,
+                  0.96
+                ],
+                [
+                  1.8,
+                  0.44
+                ],
+                [
+                  2.4,
+                  0.21
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the amplitude ratio graph show?"
+            },
+            {
+              "label": "ζ = 0.3",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.4,
+                  1.14
+                ],
+                [
+                  0.6,
+                  1.36
+                ],
+                [
+                  0.75,
+                  1.59
+                ],
+                [
+                  0.85,
+                  1.72
+                ],
+                [
+                  0.92,
+                  1.75
+                ],
+                [
+                  0.97,
+                  1.71
+                ],
+                [
+                  1,
+                  1.67
+                ],
+                [
+                  1.03,
+                  1.61
+                ],
+                [
+                  1.08,
+                  1.49
+                ],
+                [
+                  1.15,
+                  1.31
+                ],
+                [
+                  1.25,
+                  1.07
+                ],
+                [
+                  1.414,
+                  0.76
+                ],
+                [
+                  1.8,
+                  0.4
+                ],
+                [
+                  2.4,
+                  0.2
+                ],
+                [
+                  3,
+                  0.12
+                ]
+              ],
+              "smooth": true,
+              "ask": "How does damping reduce resonance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Resonance"
+            },
+            {
+              "x": 1.414,
+              "label": "r = 1.41"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Isolation needs r > √2: soft mounts, fast machines"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is resonance in engineering?",
+      "a": "Resonance happens when a system is pushed at its own natural frequency. Each push adds energy in step with the motion, so the vibration grows until damping balances it.",
+      "asks": [
+        "what causes resonance"
+      ]
+    },
+    {
+      "q": "What does the amplitude ratio graph show?",
+      "a": "It shows how many times bigger the steady vibration is than the deflection a slow, steady force of the same size would cause, plotted against the ratio of forcing frequency to natural frequency.",
+      "asks": [
+        "magnification factor curve",
+        "frequency response curve"
+      ]
+    },
+    {
+      "q": "How does damping reduce resonance?",
+      "a": "Damping takes energy out every cycle. At resonance the amplitude ratio is one over 2 zeta, so more damping gives a lower peak.",
+      "asks": [
+        "effect of damping on resonance"
+      ]
+    },
+    {
+      "q": "What is vibration isolation?",
+      "a": "Mounting a machine on soft springs so that its running frequency is more than the square root of 2 times the natural frequency. Then less force reaches the floor than the machine produces.",
+      "asks": [
+        "how to isolate vibration"
+      ]
+    },
+    {
+      "q": "Why does a washing machine shake at one speed?",
+      "a": "Clothes bunched on one side make the drum unbalanced. As the spin speed rises, it passes through the natural frequency of the drum on its springs, and the machine shakes hard for a moment.",
+      "asks": [
+        "washing machine resonance"
+      ]
+    }
+  ],
+  "facts": [
+    "At resonance, the steady amplitude of a damped spring-mass system is 1 over 2 zeta times the static deflection.",
+    "Vibration isolation needs the forcing frequency to be more than the square root of 2 times the natural frequency."
+  ],
+  "quiz": [
+    {
+      "say": "A machine on springs has damping ratio 0.05. At resonance, how many times bigger is the vibration than the static deflection?",
+      "show": "Damping ratio ζ = 0.05. Amplitude ratio at resonance?",
+      "options": [
+        {
+          "show": "10",
+          "say": "10"
+        },
+        {
+          "show": "20",
+          "say": "20"
+        },
+        {
+          "show": "0.1",
+          "say": "0.1"
+        }
+      ],
+      "answer": 0,
+      "why": "At r = 1 the ratio is 1 / (2ζ) = 1 / 0.1 = 10.",
+      "wrong": {
+        "1": "That is 1 over zeta, forgetting the factor of 2.",
+        "2": "That is 2 zeta itself; the ratio is its reciprocal."
+      }
+    },
+    {
+      "say": "To isolate a machine running at 30 hertz, the natural frequency of its mounts should be…",
+      "show": "To isolate a machine running at 30 Hz, the mount natural frequency should be…",
+      "options": [
+        {
+          "show": "Below about 21 Hz",
+          "say": "below about 21 hertz"
+        },
+        {
+          "show": "Exactly 30 Hz",
+          "say": "exactly 30 hertz"
+        },
+        {
+          "show": "Above 42 Hz",
+          "say": "above 42 hertz"
+        }
+      ],
+      "answer": 0,
+      "why": "Isolation needs r > √2, so the natural frequency must be below 30 / 1.41 ≈ 21 Hz; in practice much lower.",
+      "wrong": {
+        "1": "That is resonance, the worst possible choice.",
+        "2": "Stiff mounts with r below 1 pass the force straight through, or amplify it."
+      }
+    }
+  ]
+}

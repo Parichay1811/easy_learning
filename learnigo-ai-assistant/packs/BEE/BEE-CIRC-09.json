@@ -1,0 +1,389 @@
+{
+  "id": "BEE-CIRC-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Norton's theorem and source transformation: the current-source twin of Thevenin",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Norton's theorem",
+    "Norton equivalent",
+    "short-circuit current",
+    "source transformation",
+    "current source"
+  ],
+  "examples": [
+    "How do I find a Norton equivalent?",
+    "How do you convert a voltage source to a current source?",
+    "Is the Norton resistance the same as Rth?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Source",
+          "value": "12 V",
+          "ask": "What is Norton's theorem?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "3 Ω"
+        },
+        {
+          "kind": "resistor",
+          "label": "R2",
+          "value": "6 Ω",
+          "branch": 1
+        },
+        {
+          "kind": "resistor",
+          "label": "R3",
+          "value": "2 Ω",
+          "branch": 2,
+          "ask": "Is the Norton resistance the same as the Thevenin resistance?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Short-circuit A",
+          "value": "2 A",
+          "branch": 2,
+          "ask": "How do I find the Norton current?"
+        }
+      ],
+      "readouts": [
+        "Load terminals shorted",
+        "I_N = 2 A"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Thevenin gave us a battery plus a resistor. In 1926 Edward Norton at Bell Labs described the twin: a current source with a resistor beside it. A current source is a supply that pushes a fixed current whatever the load. We'll use the same network as before, with the load terminals joined by an ammeter.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Norton's theorem and source transformation: the current-source twin of Thevenin"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "What is Norton's theorem?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "Is the Norton resistance the same as the Thevenin resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Short-circuit A",
+              "value": "2 A",
+              "branch": 2,
+              "ask": "How do I find the Norton current?"
+            }
+          ],
+          "readouts": [
+            "Load terminals shorted",
+            "I_N = 2 A"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Step one: short the load terminals and measure the current. That is the Norton current. Now R3 sits in parallel with R2: 2 and 6 ohms make 1.5 ohms, plus R1 gives 4.5 ohms. The source pushes about 2.67 amps, which puts 4 volts across the pair, so R3 carries 4 over 2, which is 2 amps. Which resistor's current were we after?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "What is Norton's theorem?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "Is the Norton resistance the same as the Thevenin resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Short-circuit A",
+              "value": "2 A",
+              "branch": 2,
+              "ask": "How do I find the Norton current?"
+            }
+          ],
+          "readouts": [
+            "Load terminals shorted",
+            "I_N = 2 A"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "I_N = 4 V / 2 Ω = 2 A"
+        }
+      ]
+    },
+    {
+      "say": "R3's, the short-circuit current. Step two: the Norton resistance is found exactly like the Thevenin one, sources off and looking back in, so it is the same 4 ohms. There's a lovely shortcut too: the open-circuit voltage divided by the short-circuit current. 8 volts over 2 amps gives 4 ohms. Do Thevenin and Norton always share the same resistance?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "What is Norton's theorem?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "Is the Norton resistance the same as the Thevenin resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Short-circuit A",
+              "value": "2 A",
+              "branch": 2,
+              "ask": "How do I find the Norton current?"
+            }
+          ],
+          "readouts": [
+            "Load terminals shorted",
+            "I_N = 2 A"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "R_N = R_th = V_oc / I_sc = 8 V / 2 A = 4 Ω"
+        }
+      ]
+    },
+    {
+      "say": "Yes, always. Here are the twins side by side. Thevenin: 8 volts in series with 4 ohms. Norton: 2 amps in parallel with 4 ohms. Open the terminals and the Norton source's 2 amps all flows through the 4 ohms, making 8 volts. Short them and 2 amps comes out. Same in every test. Which form looks handier for loads in parallel?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Thevenin form",
+            "icon": "battery",
+            "points": [
+              "8 V source",
+              "4 Ω in series",
+              "Open circuit: 8 V",
+              "Short circuit: 2 A"
+            ]
+          },
+          "right": {
+            "title": "Norton form",
+            "icon": "wire",
+            "points": [
+              "2 A current source",
+              "4 Ω in parallel",
+              "Open: 2 A × 4 Ω = 8 V",
+              "Short circuit: 2 A"
+            ]
+          },
+          "verdict": "Same terminals, same behaviour"
+        },
+        {
+          "op": "formula",
+          "text": "V_th = I_N × R_N = 2 A × 4 Ω = 8 V"
+        }
+      ]
+    },
+    {
+      "say": "The Norton form, since its resistor is already in parallel. Swapping between them is called source transformation: a voltage source V with series R becomes a current source V over R with the same R in parallel, and back again. Well done! Exam tip: a chain of source transformations can shrink a ladder network without writing a single equation.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Thevenin form",
+            "icon": "battery",
+            "points": [
+              "8 V source",
+              "4 Ω in series",
+              "Open circuit: 8 V",
+              "Short circuit: 2 A"
+            ]
+          },
+          "right": {
+            "title": "Norton form",
+            "icon": "wire",
+            "points": [
+              "2 A current source",
+              "4 Ω in parallel",
+              "Open: 2 A × 4 Ω = 8 V",
+              "Short circuit: 2 A"
+            ]
+          },
+          "verdict": "Same terminals, same behaviour",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V in series with R  ⇄  V/R in parallel with R"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Norton's theorem?",
+      "a": "Any linear two-terminal network can be replaced by a current source I N in parallel with a resistance R N. I N is the short-circuit current and R N equals the Thevenin resistance.",
+      "asks": [
+        "State Norton's theorem",
+        "What is a Norton equivalent?"
+      ]
+    },
+    {
+      "q": "How do I find the Norton current?",
+      "a": "Short the output terminals with a wire and work out the current through that short. Here it is 2 amps.",
+      "asks": [
+        "What is short-circuit current?",
+        "How to calculate IN"
+      ]
+    },
+    {
+      "q": "Is the Norton resistance the same as the Thevenin resistance?",
+      "a": "Yes. Both are found by switching off the sources and looking back in, and both equal the open-circuit voltage divided by the short-circuit current.",
+      "asks": [
+        "Is RN equal to Rth?"
+      ]
+    },
+    {
+      "q": "What is source transformation?",
+      "a": "Replacing a voltage source V in series with R by a current source V over R in parallel with the same R, or the reverse. The two look identical from outside.",
+      "asks": [
+        "How do you convert a voltage source to a current source?"
+      ]
+    },
+    {
+      "q": "What is a current source?",
+      "a": "An ideal current source pushes a fixed current whatever voltage that needs. A transistor in its active region behaves close to one.",
+      "asks": [
+        "What does a current source do?"
+      ]
+    }
+  ],
+  "facts": [
+    "Edward Lawry Norton described his equivalent circuit in a 1926 Bell Labs memorandum.",
+    "Hans Ferdinand Mayer of Siemens found the same result independently in 1926."
+  ],
+  "quiz": [
+    {
+      "say": "A circuit has an open-circuit voltage of 15 volts and a short-circuit current of 3 amps. What is its Norton resistance?",
+      "show": "A circuit has V_oc = 15 V and I_sc = 3 A. What is its Norton resistance?",
+      "options": [
+        {
+          "show": "5 Ω",
+          "say": "5 ohms"
+        },
+        {
+          "show": "45 Ω",
+          "say": "45 ohms"
+        },
+        {
+          "show": "0.2 Ω",
+          "say": "0.2 ohms"
+        }
+      ],
+      "answer": 0,
+      "why": "R N is V oc over I sc: 15 over 3 gives 5 ohms.",
+      "wrong": {
+        "1": "That multiplies instead of dividing.",
+        "2": "That divides the current by the voltage, upside down."
+      }
+    },
+    {
+      "say": "Convert a 20 volt source in series with 4 ohms into a Norton source.",
+      "show": "Convert 20 V in series with 4 Ω into a Norton source.",
+      "options": [
+        {
+          "show": "5 A ∥ 4 Ω",
+          "say": "5 amps with 4 ohms in parallel"
+        },
+        {
+          "show": "80 A ∥ 4 Ω",
+          "say": "80 amps with 4 ohms in parallel"
+        },
+        {
+          "show": "5 A ∥ 20 Ω",
+          "say": "5 amps with 20 ohms in parallel"
+        }
+      ],
+      "answer": 0,
+      "why": "The current is V over R, 20 over 4, which is 5 amps, and the same 4 ohms goes in parallel.",
+      "wrong": {
+        "1": "That multiplies V by R instead of dividing.",
+        "2": "The resistance stays 4 ohms; it does not become the voltage number."
+      }
+    }
+  ]
+}

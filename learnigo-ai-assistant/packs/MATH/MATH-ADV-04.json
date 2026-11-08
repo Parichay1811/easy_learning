@@ -1,0 +1,271 @@
+{
+  "id": "MATH-ADV-04",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Newton–Raphson",
+  "area": "Mathematics",
+  "group": "MATH-ADV — Advanced & Further Topics",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "newton-raphson",
+    "root finding",
+    "iteration",
+    "approximation"
+  ],
+  "examples": [
+    "How many times do I need to repeat the process?",
+    "What happens if my starting guess is bad?",
+    "Is this better than bisection method?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we will learn about the Newton-Raphson method. It helps us find roots of functions. A root is where the function equals zero. We need a starting guess to begin this process.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Newton–Raphson"
+        },
+        {
+          "op": "flow",
+          "items": [
+            "Start with an initial guess",
+            "Apply the formula: x{n+1} = xn - f(xn)/f'(xn)",
+            "Get a new, improved guess"
+          ],
+          "at": "guess"
+        },
+        {
+          "op": "text",
+          "text": "Newton-Raphson Method: $x{n+1} = xn - f(xn)/f'(xn)$",
+          "at": "newtonraphson"
+        }
+      ]
+    },
+    {
+      "say": "The core idea is an iteration formula. You use your current guess to find a better next guess. This process repeats until the answer is accurate enough.",
+      "draw": [
+        {
+          "op": "cycle",
+          "items": [
+            "Start with a guess (xn)",
+            "Calculate the next guess (x{n+1})",
+            "Check if the difference is small enough",
+            "Repeat if not accurate enough"
+          ],
+          "at": "guess"
+        },
+        {
+          "op": "text",
+          "text": "Iteration Formula: $x{n+1} = xn - f(xn)/f'(xn)$",
+          "at": "iteration"
+        }
+      ]
+    },
+    {
+      "say": "Let us try an example. Suppose we want to find the root of $f(x)$ at $x=1$. We start with $x0 = 1.5$.",
+      "draw": [
+        {
+          "op": "bars",
+          "items": [
+            "Initial guess: 1.5",
+            "Target root: 1"
+          ],
+          "label": "Example: $f(x) = x^2 - 2$"
+        },
+        {
+          "op": "text",
+          "text": "Example: $f(x) = x^2 - 2$ at $x0 = 1.5$",
+          "at": "example"
+        }
+      ]
+    },
+    {
+      "say": "First, we find the derivative, $f'(x)$. For $x$ squared minus two, the derivative is simply two times $x$. Next, we plug $x0$ into the formula to get $x1$.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Find the derivative: f'(x) = 2x",
+            "Calculate x1 using x0 = 1.5"
+          ],
+          "at": "find"
+        },
+        {
+          "op": "text",
+          "text": "Step 1: $f'(x) = 2x$. Step 2: Calculate $x1$."
+        }
+      ]
+    },
+    {
+      "say": "After calculating $x1$, we repeat the process using $x1$ as our new guess. This continues until the difference between $xn$ and $x{n+1}$ is very small. This shows convergence.",
+      "draw": [
+        {
+          "op": "cycle",
+          "items": [
+            "Use xn as the guess",
+            "Calculate x{n+1}",
+            "Repeat until |x{n+1} - xn| is small"
+          ],
+          "at": "guess"
+        },
+        {
+          "op": "text",
+          "text": "Repeat until $|x{n+1} - xn| < ext{tolerance}",
+          "at": "repeat"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the derivative $f'(x)$ for this method?",
+      "a": "You must calculate the derivative of the function $f(x)$. This derivative tells us the slope of the tangent line at any point. You can also ask for the slope or what the derivative represents.",
+      "asks": [
+        "Do I need the derivative?",
+        "How do I find the slope for this?",
+        "What is the derivative of the function?"
+      ]
+    },
+    {
+      "q": "What happens if the derivative is zero?",
+      "a": "If the derivative $f'(xn)$ is zero, the formula involves division by zero. This causes the method to fail immediately. You should choose a different starting point.",
+      "asks": [
+        "Can I divide by zero?",
+        "What if the slope is zero?",
+        "What if $f'(x)$ equals zero?"
+      ]
+    },
+    {
+      "q": "Does the starting guess always work?",
+      "a": "No, the starting guess $x0$ is very important. If $x0$ is too far from the actual root, the method might fail or converge to a different root. You might ask about initial values or starting points.",
+      "asks": [
+        "Is the starting point important?",
+        "What if my first guess is wrong?",
+        "Does $x0$ affect the answer?"
+      ]
+    },
+    {
+      "q": "How do I know when to stop iterating?",
+      "a": "You stop when the change between successive approximations is smaller than a set tolerance. This means the values are not changing much anymore. We check if the absolute difference is small.",
+      "asks": [
+        "When is the answer good enough?",
+        "What is the stopping condition?",
+        "How accurate do I need to be?"
+      ]
+    },
+    {
+      "q": "Is this method always faster than others?",
+      "a": "Newton-Raphson is very fast when it works well. However, it can fail completely if the function is complex or the initial guess is poor. Other methods might be more reliable sometimes.",
+      "asks": [
+        "Is this the best way to find roots?",
+        "Are there other methods?",
+        "When is this method unreliable?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Newton-Raphson method uses the tangent line approximation.",
+    "The formula requires both the function $f(x)$ and its derivative $f'(x)$.",
+    "If $f'(xn)$ is zero, the iteration formula cannot be used.",
+    "The method converges quickly if the starting guess is close to the root."
+  ],
+  "quiz": [
+    {
+      "say": "If $f(x) = x^2 - 4$ and $xn = 3$, what is $f'(xn)$?",
+      "show": "If $f(x) = x^2 - 4$ and $xn = 3$, what is $f'(xn)$?",
+      "options": [
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        },
+        {
+          "show": "6",
+          "say": "6"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        }
+      ],
+      "answer": 2,
+      "why": "The derivative of $x$ squared minus four is two times $x$, so at $x$ equals three, the value is two times three, which is six.",
+      "wrong": {
+        "0": "This incorrectly uses the value of $x$ without multiplying by two.",
+        "1": "This is an incorrect calculation for the derivative.",
+        "3": "This is only the coefficient of $x$ in the derivative."
+      }
+    },
+    {
+      "say": "To find a root of $f(x) = rac{1}{x}$ using Newton-Raphson, what is the derivative $f'(x)$?",
+      "show": "Derivative of $1/x$ is $-1/x^2$.",
+      "options": [
+        {
+          "show": "x/x^2",
+          "say": "x/x^2"
+        },
+        {
+          "show": "-1/x squared",
+          "say": "-1/x squared"
+        },
+        {
+          "show": "1/x squared",
+          "say": "1/x squared"
+        },
+        {
+          "show": "1/x",
+          "say": "1/x"
+        }
+      ],
+      "answer": 1,
+      "why": "The derivative of one over $x$ is negative one over $x$ squared, which is the correct form for the next step.",
+      "wrong": {
+        "0": "This is an incorrect algebraic simplification of the derivative.",
+        "2": "This forgets the negative sign required by the power rule.",
+        "3": "This incorrectly assumes the derivative is the same as the function."
+      }
+    },
+    {
+      "say": "If the iteration formula results in $x{n+1} = xn$, what does this suggest about the root?",
+      "show": "If $x{n+1} = xn$, the root is found.",
+      "options": [
+        {
+          "show": "The process must stop immediately.",
+          "say": "The process must stop immediately."
+        },
+        {
+          "show": "The current value is a good approximation of the root.",
+          "say": "The current value is a good approximation of the root."
+        },
+        {
+          "show": "The function is linear.",
+          "say": "The function is linear."
+        },
+        {
+          "show": "The derivative is zero.",
+          "say": "The derivative is zero."
+        }
+      ],
+      "answer": 1,
+      "why": "When the next guess is the same as the current guess, the process has stabilized, indicating convergence to a root.",
+      "wrong": {
+        "0": "While it suggests stopping, the reason is the stability, not just an arbitrary stop condition.",
+        "2": "This describes the function shape, not the convergence state.",
+        "3": "A zero derivative causes failure, not convergence."
+      }
+    }
+  ]
+}

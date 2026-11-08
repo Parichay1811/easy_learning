@@ -1,0 +1,761 @@
+{
+  "id": "BCE-ENV-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Activated sludge: F/M ratio, retention time and sludge age",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-ENV — Environmental engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "activated sludge",
+    "F/M ratio",
+    "hydraulic retention time",
+    "sludge age",
+    "MLSS",
+    "return activated sludge"
+  ],
+  "examples": [
+    "How does the activated sludge process work?",
+    "How do you calculate the F/M ratio?",
+    "What is sludge age in activated sludge?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "in",
+          "label": "Settled sewage",
+          "icon": "pipe",
+          "x": 0.06,
+          "y": 0.45
+        },
+        {
+          "id": "air",
+          "label": "Blowers",
+          "icon": "fan",
+          "x": 0.33,
+          "y": 0.12
+        },
+        {
+          "id": "tank",
+          "label": "Aeration tank",
+          "icon": "germ",
+          "x": 0.33,
+          "y": 0.45,
+          "ask": "What is activated sludge?"
+        },
+        {
+          "id": "clar",
+          "label": "Clarifier",
+          "icon": "drop",
+          "x": 0.66,
+          "y": 0.45
+        },
+        {
+          "id": "out",
+          "label": "Clean effluent",
+          "icon": "river",
+          "x": 0.94,
+          "y": 0.45
+        },
+        {
+          "id": "ras",
+          "label": "Return sludge",
+          "icon": "pump",
+          "x": 0.5,
+          "y": 0.85,
+          "ask": "Why is sludge returned to the aeration tank?"
+        },
+        {
+          "id": "was",
+          "label": "Waste sludge",
+          "icon": "soil",
+          "x": 0.82,
+          "y": 0.85,
+          "ask": "What is sludge age?"
+        }
+      ],
+      "links": [
+        {
+          "from": "in",
+          "to": "tank",
+          "kind": "fluid"
+        },
+        {
+          "from": "air",
+          "to": "tank",
+          "kind": "energy",
+          "label": "Oxygen"
+        },
+        {
+          "from": "tank",
+          "to": "clar",
+          "kind": "fluid",
+          "label": "Mixed liquor"
+        },
+        {
+          "from": "clar",
+          "to": "out",
+          "kind": "fluid"
+        },
+        {
+          "from": "clar",
+          "to": "ras",
+          "kind": "fluid"
+        },
+        {
+          "from": "ras",
+          "to": "tank",
+          "kind": "fluid",
+          "label": "RAS"
+        },
+        {
+          "from": "ras",
+          "to": "was",
+          "kind": "fluid"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1914 two chemists in Manchester, Edward Ardern and William Lockett, blew air through sewage for weeks. A brown sludge formed, and when they kept it and added fresh sewage, it cleaned the water in hours. They called it activated sludge, and most cities still use it. On the board, the whole loop.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Activated sludge: F/M ratio, retention time and sludge age"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "in",
+              "label": "Settled sewage",
+              "icon": "pipe",
+              "x": 0.06,
+              "y": 0.45
+            },
+            {
+              "id": "air",
+              "label": "Blowers",
+              "icon": "fan",
+              "x": 0.33,
+              "y": 0.12
+            },
+            {
+              "id": "tank",
+              "label": "Aeration tank",
+              "icon": "germ",
+              "x": 0.33,
+              "y": 0.45,
+              "ask": "What is activated sludge?"
+            },
+            {
+              "id": "clar",
+              "label": "Clarifier",
+              "icon": "drop",
+              "x": 0.66,
+              "y": 0.45
+            },
+            {
+              "id": "out",
+              "label": "Clean effluent",
+              "icon": "river",
+              "x": 0.94,
+              "y": 0.45
+            },
+            {
+              "id": "ras",
+              "label": "Return sludge",
+              "icon": "pump",
+              "x": 0.5,
+              "y": 0.85,
+              "ask": "Why is sludge returned to the aeration tank?"
+            },
+            {
+              "id": "was",
+              "label": "Waste sludge",
+              "icon": "soil",
+              "x": 0.82,
+              "y": 0.85,
+              "ask": "What is sludge age?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "tank",
+              "kind": "fluid"
+            },
+            {
+              "from": "air",
+              "to": "tank",
+              "kind": "energy",
+              "label": "Oxygen"
+            },
+            {
+              "from": "tank",
+              "to": "clar",
+              "kind": "fluid",
+              "label": "Mixed liquor"
+            },
+            {
+              "from": "clar",
+              "to": "out",
+              "kind": "fluid"
+            },
+            {
+              "from": "clar",
+              "to": "ras",
+              "kind": "fluid"
+            },
+            {
+              "from": "ras",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "RAS"
+            },
+            {
+              "from": "ras",
+              "to": "was",
+              "kind": "fluid"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the aeration tank. Billions of bacteria eat the dissolved dirt, and they need oxygen, which the blowers bubble in. That air often uses about half the plant's electricity. With a five thousand cubic metre tank and twenty thousand cubic metres a day flowing in, the water stays six hours: the hydraulic retention time.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "in",
+              "label": "Settled sewage",
+              "icon": "pipe",
+              "x": 0.06,
+              "y": 0.45
+            },
+            {
+              "id": "air",
+              "label": "Blowers",
+              "icon": "fan",
+              "x": 0.33,
+              "y": 0.12
+            },
+            {
+              "id": "tank",
+              "label": "Aeration tank",
+              "icon": "germ",
+              "x": 0.33,
+              "y": 0.45,
+              "ask": "What is activated sludge?"
+            },
+            {
+              "id": "clar",
+              "label": "Clarifier",
+              "icon": "drop",
+              "x": 0.66,
+              "y": 0.45
+            },
+            {
+              "id": "out",
+              "label": "Clean effluent",
+              "icon": "river",
+              "x": 0.94,
+              "y": 0.45
+            },
+            {
+              "id": "ras",
+              "label": "Return sludge",
+              "icon": "pump",
+              "x": 0.5,
+              "y": 0.85,
+              "ask": "Why is sludge returned to the aeration tank?"
+            },
+            {
+              "id": "was",
+              "label": "Waste sludge",
+              "icon": "soil",
+              "x": 0.82,
+              "y": 0.85,
+              "ask": "What is sludge age?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "tank",
+              "kind": "fluid"
+            },
+            {
+              "from": "air",
+              "to": "tank",
+              "kind": "energy",
+              "label": "Oxygen"
+            },
+            {
+              "from": "tank",
+              "to": "clar",
+              "kind": "fluid",
+              "label": "Mixed liquor"
+            },
+            {
+              "from": "clar",
+              "to": "out",
+              "kind": "fluid"
+            },
+            {
+              "from": "clar",
+              "to": "ras",
+              "kind": "fluid"
+            },
+            {
+              "from": "ras",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "RAS"
+            },
+            {
+              "from": "ras",
+              "to": "was",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "HRT = V / Q = 5,000 / 20,000 = 0.25 day = 6 h"
+        }
+      ]
+    },
+    {
+      "say": "Now the clarifier. The microbe flocs settle, and most are pumped back as return sludge, so the tank stays thick with them, about two thousand five hundred milligrams per litre. The balance of food to microbes, the F over M ratio, comes to about zero point three per day here. Too much food, or too few microbes?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "in",
+              "label": "Settled sewage",
+              "icon": "pipe",
+              "x": 0.06,
+              "y": 0.45
+            },
+            {
+              "id": "air",
+              "label": "Blowers",
+              "icon": "fan",
+              "x": 0.33,
+              "y": 0.12
+            },
+            {
+              "id": "tank",
+              "label": "Aeration tank",
+              "icon": "germ",
+              "x": 0.33,
+              "y": 0.45,
+              "ask": "What is activated sludge?"
+            },
+            {
+              "id": "clar",
+              "label": "Clarifier",
+              "icon": "drop",
+              "x": 0.66,
+              "y": 0.45
+            },
+            {
+              "id": "out",
+              "label": "Clean effluent",
+              "icon": "river",
+              "x": 0.94,
+              "y": 0.45
+            },
+            {
+              "id": "ras",
+              "label": "Return sludge",
+              "icon": "pump",
+              "x": 0.5,
+              "y": 0.85,
+              "ask": "Why is sludge returned to the aeration tank?"
+            },
+            {
+              "id": "was",
+              "label": "Waste sludge",
+              "icon": "soil",
+              "x": 0.82,
+              "y": 0.85,
+              "ask": "What is sludge age?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "tank",
+              "kind": "fluid"
+            },
+            {
+              "from": "air",
+              "to": "tank",
+              "kind": "energy",
+              "label": "Oxygen"
+            },
+            {
+              "from": "tank",
+              "to": "clar",
+              "kind": "fluid",
+              "label": "Mixed liquor"
+            },
+            {
+              "from": "clar",
+              "to": "out",
+              "kind": "fluid"
+            },
+            {
+              "from": "clar",
+              "to": "ras",
+              "kind": "fluid"
+            },
+            {
+              "from": "ras",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "RAS"
+            },
+            {
+              "from": "ras",
+              "to": "was",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "F/M = Q·S₀ / (V·X) = 20,000×200 / (5,000×2,500) = 0.32 /d"
+        }
+      ]
+    },
+    {
+      "say": "That is a healthy balance! The microbes keep multiplying, so some must leave as waste sludge. How long a microbe stays in the system on average is the sludge age. Waste a hundred and ninety five cubic metres a day of thick sludge at eight thousand milligrams per litre, and the sludge age is about eight days.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "in",
+              "label": "Settled sewage",
+              "icon": "pipe",
+              "x": 0.06,
+              "y": 0.45
+            },
+            {
+              "id": "air",
+              "label": "Blowers",
+              "icon": "fan",
+              "x": 0.33,
+              "y": 0.12
+            },
+            {
+              "id": "tank",
+              "label": "Aeration tank",
+              "icon": "germ",
+              "x": 0.33,
+              "y": 0.45,
+              "ask": "What is activated sludge?"
+            },
+            {
+              "id": "clar",
+              "label": "Clarifier",
+              "icon": "drop",
+              "x": 0.66,
+              "y": 0.45
+            },
+            {
+              "id": "out",
+              "label": "Clean effluent",
+              "icon": "river",
+              "x": 0.94,
+              "y": 0.45
+            },
+            {
+              "id": "ras",
+              "label": "Return sludge",
+              "icon": "pump",
+              "x": 0.5,
+              "y": 0.85,
+              "ask": "Why is sludge returned to the aeration tank?"
+            },
+            {
+              "id": "was",
+              "label": "Waste sludge",
+              "icon": "soil",
+              "x": 0.82,
+              "y": 0.85,
+              "ask": "What is sludge age?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "tank",
+              "kind": "fluid"
+            },
+            {
+              "from": "air",
+              "to": "tank",
+              "kind": "energy",
+              "label": "Oxygen"
+            },
+            {
+              "from": "tank",
+              "to": "clar",
+              "kind": "fluid",
+              "label": "Mixed liquor"
+            },
+            {
+              "from": "clar",
+              "to": "out",
+              "kind": "fluid"
+            },
+            {
+              "from": "clar",
+              "to": "ras",
+              "kind": "fluid"
+            },
+            {
+              "from": "ras",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "RAS"
+            },
+            {
+              "from": "ras",
+              "to": "was",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 6
+        },
+        {
+          "op": "formula",
+          "text": "SRT = V·X / (Q_w·X_r) = 5,000×2,500 / (195×8,000) ≈ 8 d"
+        }
+      ]
+    },
+    {
+      "say": "Operators steer the plant with exactly these numbers: F over M, sludge age and oxygen. Modern cousins include sequencing batch reactors and membrane bioreactors. Great job! Challenge: if the microbe concentration in the tank doubled, what would the F over M ratio become?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "in",
+              "label": "Settled sewage",
+              "icon": "pipe",
+              "x": 0.06,
+              "y": 0.45
+            },
+            {
+              "id": "air",
+              "label": "Blowers",
+              "icon": "fan",
+              "x": 0.33,
+              "y": 0.12
+            },
+            {
+              "id": "tank",
+              "label": "Aeration tank",
+              "icon": "germ",
+              "x": 0.33,
+              "y": 0.45,
+              "ask": "What is activated sludge?"
+            },
+            {
+              "id": "clar",
+              "label": "Clarifier",
+              "icon": "drop",
+              "x": 0.66,
+              "y": 0.45
+            },
+            {
+              "id": "out",
+              "label": "Clean effluent",
+              "icon": "river",
+              "x": 0.94,
+              "y": 0.45
+            },
+            {
+              "id": "ras",
+              "label": "Return sludge",
+              "icon": "pump",
+              "x": 0.5,
+              "y": 0.85,
+              "ask": "Why is sludge returned to the aeration tank?"
+            },
+            {
+              "id": "was",
+              "label": "Waste sludge",
+              "icon": "soil",
+              "x": 0.82,
+              "y": 0.85,
+              "ask": "What is sludge age?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "tank",
+              "kind": "fluid"
+            },
+            {
+              "from": "air",
+              "to": "tank",
+              "kind": "energy",
+              "label": "Oxygen"
+            },
+            {
+              "from": "tank",
+              "to": "clar",
+              "kind": "fluid",
+              "label": "Mixed liquor"
+            },
+            {
+              "from": "clar",
+              "to": "out",
+              "kind": "fluid"
+            },
+            {
+              "from": "clar",
+              "to": "ras",
+              "kind": "fluid"
+            },
+            {
+              "from": "ras",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "RAS"
+            },
+            {
+              "from": "ras",
+              "to": "was",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is activated sludge?",
+      "a": "A secondary treatment process in which sewage is mixed with a thick, aerated suspension of microbes that eat the organic matter; the microbes settle in a clarifier and most are returned to the tank.",
+      "asks": [
+        "How does the activated sludge process work?"
+      ]
+    },
+    {
+      "q": "What is the food to microorganism ratio?",
+      "a": "F/M is the BOD load per day divided by the mass of microbes in the tank: Q times S0 over V times X. Here 20,000 times 200 over 5,000 times 2,500 gives 0.32 per day.",
+      "asks": [
+        "How do you calculate F/M?",
+        "F/M ratio"
+      ]
+    },
+    {
+      "q": "What is hydraulic retention time?",
+      "a": "The average time water spends in a tank: volume divided by flow. A 5,000 cubic metre tank fed 20,000 cubic metres a day has an HRT of 6 hours.",
+      "asks": [
+        "HRT formula"
+      ]
+    },
+    {
+      "q": "Why is sludge returned to the aeration tank?",
+      "a": "Returning settled sludge keeps a high concentration of hungry microbes in the tank, so the treatment is fast. Without it the microbes would wash out with the water.",
+      "asks": [
+        "What is return activated sludge?"
+      ]
+    },
+    {
+      "q": "What is sludge age?",
+      "a": "Sludge age, or solids retention time, is the average time microbes stay in the system: the mass of sludge in the tank divided by the mass wasted per day. About 5 to 15 days is common.",
+      "asks": [
+        "Solids retention time",
+        "SRT"
+      ]
+    }
+  ],
+  "facts": [
+    "Edward Ardern and William Lockett announced the activated sludge process in Manchester in 1914.",
+    "Aeration is usually the largest energy user in an activated sludge plant, often around half of its electricity."
+  ],
+  "quiz": [
+    {
+      "say": "An aeration tank of 3,000 cubic metres receives 12,000 cubic metres a day. What is the hydraulic retention time?",
+      "show": "An aeration tank of 3,000 m³ receives 12,000 m³/day. HRT?",
+      "options": [
+        {
+          "show": "6 hours",
+          "say": "6 hours"
+        },
+        {
+          "show": "4 hours",
+          "say": "4 hours"
+        },
+        {
+          "show": "4 days",
+          "say": "4 days"
+        }
+      ],
+      "answer": 0,
+      "why": "HRT = 3,000 / 12,000 = 0.25 day = 6 hours.",
+      "wrong": {
+        "1": "That divides 12,000 by 3,000 and reads it as hours.",
+        "2": "That turns the ratio upside down."
+      }
+    },
+    {
+      "say": "Why is settled sludge pumped back to the aeration tank?",
+      "show": "Why is settled sludge pumped back to the aeration tank?",
+      "options": [
+        {
+          "show": "To keep many microbes in the tank",
+          "say": "To keep many microbes in the tank"
+        },
+        {
+          "show": "To add oxygen",
+          "say": "To add oxygen"
+        },
+        {
+          "show": "To remove grit",
+          "say": "To remove grit"
+        }
+      ],
+      "answer": 0,
+      "why": "Return sludge keeps the microbe concentration high so treatment is quick.",
+      "wrong": {
+        "1": "Blowers supply the oxygen.",
+        "2": "Grit is removed at the very start of the works."
+      }
+    }
+  ]
+}

@@ -1,0 +1,365 @@
+{
+  "id": "BME-THERM-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Vapour-compression refrigeration: how a fridge moves heat and what COP means",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-THERM — Thermodynamics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "vapour-compression cycle",
+    "coefficient of performance",
+    "refrigerant",
+    "evaporator",
+    "heat pump"
+  ],
+  "examples": [
+    "How does a refrigerator work?",
+    "What is the coefficient of performance?",
+    "Why can COP be greater than 1?"
+  ],
+  "figure": [
+    {
+      "name": "x-cycle",
+      "stages": [
+        {
+          "label": "Compressor",
+          "icon": "pump",
+          "note": "Work in: 36 kJ/kg, gas gets hot",
+          "ask": "What does the compressor do?"
+        },
+        {
+          "label": "Condenser",
+          "icon": "fire",
+          "note": "Gives out 180 kJ/kg to the room",
+          "ask": "What does the condenser do?"
+        },
+        {
+          "label": "Expansion valve",
+          "icon": "valve",
+          "note": "Pressure drops, liquid gets very cold",
+          "ask": "What does the expansion valve do?"
+        },
+        {
+          "label": "Evaporator",
+          "icon": "ice",
+          "note": "Takes 144 kJ/kg from the food",
+          "ask": "What does the evaporator do?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Put your hand behind a fridge: it is warm. The fridge does not make cold; it pumps heat out of the food box and dumps it into your kitchen. It does this with a refrigerant, a fluid that boils at very low temperatures, going round a loop of four parts. Look at the loop.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Vapour-compression refrigeration: how a fridge moves heat and what COP means"
+        },
+        {
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Compressor",
+              "icon": "pump",
+              "note": "Work in: 36 kJ/kg, gas gets hot",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "label": "Condenser",
+              "icon": "fire",
+              "note": "Gives out 180 kJ/kg to the room",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "label": "Expansion valve",
+              "icon": "valve",
+              "note": "Pressure drops, liquid gets very cold",
+              "ask": "What does the expansion valve do?"
+            },
+            {
+              "label": "Evaporator",
+              "icon": "ice",
+              "note": "Takes 144 kJ/kg from the food",
+              "ask": "What does the evaporator do?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Refrigerant boils at about −10 °C inside, condenses at about 40 °C outside"
+        }
+      ]
+    },
+    {
+      "say": "Here is the fridge cycle in 3D. The compressor squeezes the refrigerant, the condenser coil dumps heat, the expansion valve drops the pressure, and the evaporator coil soaks up heat from inside. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Vapour-compression refrigeration: how a fridge moves heat and what COP means"
+        },
+        {
+          "op": "image",
+          "render": "refrigeration-cycle"
+        }
+      ]
+    },
+    {
+      "say": "Start at the evaporator, the cold pipes inside the fridge. The refrigerant arrives as a very cold liquid and boils, soaking up heat from the food: about 144 kilojoules for every kilogram. See the evaporator? Why is boiling such a good way to soak up heat?",
+      "draw": [
+        {
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Compressor",
+              "icon": "pump",
+              "note": "Work in: 36 kJ/kg, gas gets hot",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "label": "Condenser",
+              "icon": "fire",
+              "note": "Gives out 180 kJ/kg to the room",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "label": "Expansion valve",
+              "icon": "valve",
+              "note": "Pressure drops, liquid gets very cold",
+              "ask": "What does the expansion valve do?"
+            },
+            {
+              "label": "Evaporator",
+              "icon": "ice",
+              "note": "Takes 144 kJ/kg from the food",
+              "ask": "What does the evaporator do?"
+            }
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "Boiling absorbs lots of latent heat at a steady temperature"
+        }
+      ]
+    },
+    {
+      "say": "Boiling absorbs a lot of energy without warming up. Next, the compressor squeezes the vapour, adding about 36 kilojoules per kilogram of work and making it hotter than the kitchen. Then in the condenser, the black grille at the back, it gives out heat and turns to liquid: 144 plus 36, which is 180. See the energy balance?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "kJ/kg",
+          "items": [
+            {
+              "label": "Work in",
+              "size": 36,
+              "icon": "plug"
+            },
+            {
+              "label": "Heat removed",
+              "size": 144,
+              "icon": "ice"
+            },
+            {
+              "label": "Heat rejected",
+              "size": 180,
+              "icon": "fire"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "q_H = q_L + w = 144 + 36 = 180 kJ/kg"
+        }
+      ]
+    },
+    {
+      "say": "Finally, the expansion valve drops the pressure suddenly, and the liquid flashes to a cold mist, ready to boil again. How good is the fridge? Its coefficient of performance, COP, is the heat removed divided by the work in: 144 over 36, which is 4. See the expansion valve? Can a COP of 4 really be right?",
+      "draw": [
+        {
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Compressor",
+              "icon": "pump",
+              "note": "Work in: 36 kJ/kg, gas gets hot",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "label": "Condenser",
+              "icon": "fire",
+              "note": "Gives out 180 kJ/kg to the room",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "label": "Expansion valve",
+              "icon": "valve",
+              "note": "Pressure drops, liquid gets very cold",
+              "ask": "What does the expansion valve do?"
+            },
+            {
+              "label": "Evaporator",
+              "icon": "ice",
+              "note": "Takes 144 kJ/kg from the food",
+              "ask": "What does the evaporator do?"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "COP_R = q_L / w = 144 / 36 = 4.0"
+        }
+      ]
+    },
+    {
+      "say": "Yes! The fridge moves heat; it does not create it, so moving 4 joules for every 1 joule of work breaks no law. The Carnot limit between minus 10 and 40 degrees Celsius is 263 over 50, about 5.3. Brilliant! Real link: a heat pump is the same loop used to warm a house, with COP equal to 180 over 36, which is 5. Challenge: why is that bigger?",
+      "draw": [
+        {
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Compressor",
+              "icon": "pump",
+              "note": "Work in: 36 kJ/kg, gas gets hot",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "label": "Condenser",
+              "icon": "fire",
+              "note": "Gives out 180 kJ/kg to the room",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "label": "Expansion valve",
+              "icon": "valve",
+              "note": "Pressure drops, liquid gets very cold",
+              "ask": "What does the expansion valve do?"
+            },
+            {
+              "label": "Evaporator",
+              "icon": "ice",
+              "note": "Takes 144 kJ/kg from the food",
+              "ask": "What does the evaporator do?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "COP_Carnot = T_L / (T_H − T_L) = 263 / 50 = 5.3"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a refrigerator work?",
+      "a": "A refrigerant boils in the evaporator inside the fridge, absorbing heat from the food. The compressor raises its pressure and temperature, the condenser releases the heat to the room, and the expansion valve drops the pressure to start again.",
+      "asks": [
+        "vapour compression cycle explained"
+      ]
+    },
+    {
+      "q": "What does the compressor do?",
+      "a": "It raises the pressure of the refrigerant vapour, which also raises its temperature above the room's, so it can give heat away in the condenser. It is the only part that needs electrical work.",
+      "asks": [
+        "role of compressor in fridge"
+      ]
+    },
+    {
+      "q": "What does the condenser do?",
+      "a": "It is the warm coil at the back or bottom of a fridge. The hot refrigerant gives heat to the room and condenses into a liquid. It rejects the heat removed plus the compressor work.",
+      "asks": [
+        "why is the back of a fridge warm"
+      ]
+    },
+    {
+      "q": "What does the expansion valve do?",
+      "a": "It throttles the liquid refrigerant from high to low pressure. The sudden pressure drop makes part of it flash into vapour and cools it far below the food temperature.",
+      "asks": [
+        "throttling valve refrigeration"
+      ]
+    },
+    {
+      "q": "What does the evaporator do?",
+      "a": "It is the cold coil inside the fridge. The low-pressure refrigerant boils there, absorbing heat from the air and food.",
+      "asks": [
+        "evaporator function"
+      ]
+    }
+  ],
+  "facts": [
+    "The coefficient of performance of a refrigerator is the heat removed from the cold space divided by the work input.",
+    "For the same cycle, the COP of a heat pump equals the COP of the refrigerator plus one."
+  ],
+  "quiz": [
+    {
+      "say": "A fridge removes 300 watts of heat from its cold space while its compressor uses 100 watts. What is its COP?",
+      "show": "A fridge removes 300 W of heat using 100 W of work. COP?",
+      "options": [
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "4",
+          "say": "4"
+        },
+        {
+          "show": "0.33",
+          "say": "0.33"
+        }
+      ],
+      "answer": 0,
+      "why": "COP_R = Q_L / W = 300 / 100 = 3.",
+      "wrong": {
+        "1": "That is the heat pump COP, using the 400 W rejected.",
+        "2": "That is work over heat, upside down."
+      }
+    },
+    {
+      "say": "Where does the refrigerant absorb heat from the food?",
+      "show": "Where does the refrigerant absorb heat from the food?",
+      "options": [
+        {
+          "show": "Evaporator",
+          "say": "Evaporator"
+        },
+        {
+          "show": "Condenser",
+          "say": "Condenser"
+        },
+        {
+          "show": "Compressor",
+          "say": "Compressor"
+        }
+      ],
+      "answer": 0,
+      "why": "In the evaporator the cold refrigerant boils, absorbing heat from inside the fridge.",
+      "wrong": {
+        "1": "The condenser releases heat to the room.",
+        "2": "The compressor adds work; it does not take heat from the food."
+      }
+    }
+  ]
+}

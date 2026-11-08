@@ -1,0 +1,336 @@
+{
+  "id": "BME-STAT-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Equilibrium of a particle and a rigid body: forces and moments add to zero",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "static equilibrium",
+    "sum of forces",
+    "sum of moments",
+    "support reactions",
+    "rigid body"
+  ],
+  "examples": [
+    "What are the conditions for equilibrium?",
+    "How do I find the tension in two cables holding a weight?",
+    "How do I find support reactions on a beam?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "light",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Cable A 196 N",
+          "dir": 150,
+          "size": 3,
+          "ask": "Why are cable tensions bigger when the cables are flatter?"
+        },
+        {
+          "label": "Cable B 196 N",
+          "dir": 30,
+          "size": 3,
+          "ask": "Why are cable tensions bigger when the cables are flatter?"
+        },
+        {
+          "label": "Weight 196 N",
+          "dir": "down",
+          "size": 3
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Look up at a traffic light hanging over a busy road in Lagos or Mumbai. It hangs perfectly still from two cables. Still means equilibrium, a state where all the forces cancel out. Let us find how hard each cable pulls on this 20 kilogram light.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Equilibrium of a particle and a rigid body: forces and moments add to zero"
+        },
+        {
+          "name": "x-forces",
+          "object": "light",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Cable A 196 N",
+              "dir": 150,
+              "size": 3,
+              "ask": "Why are cable tensions bigger when the cables are flatter?"
+            },
+            {
+              "label": "Cable B 196 N",
+              "dir": 30,
+              "size": 3,
+              "ask": "Why are cable tensions bigger when the cables are flatter?"
+            },
+            {
+              "label": "Weight 196 N",
+              "dir": "down",
+              "size": 3
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Light: 20 kg, so weight = 20 × 9.81 = 196 N"
+        }
+      ]
+    },
+    {
+      "say": "Treat the light as a particle, a point where all forces meet. The upward parts must cancel the weight. Each cable rises at 30 degrees, so two times T times sin 30 equals 196 newtons. That gives T equals 196 newtons in each cable! See the two slanted arrows? Why are they so big?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "light",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Cable A 196 N",
+              "dir": 150,
+              "size": 3,
+              "ask": "Why are cable tensions bigger when the cables are flatter?"
+            },
+            {
+              "label": "Cable B 196 N",
+              "dir": 30,
+              "size": 3,
+              "ask": "Why are cable tensions bigger when the cables are flatter?"
+            },
+            {
+              "label": "Weight 196 N",
+              "dir": "down",
+              "size": 3
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "2T sin 30° = 196 N, so T = 196 N"
+        }
+      ]
+    },
+    {
+      "say": "Because shallow cables need big pulls to make small upward parts. The sideways parts, T times cos 30 each way, cancel each other. Now a real beam is not a point; it can also turn. Here is a 4 metre beam with a 10 kilonewton load 1 metre from the left. What else must balance?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find support reactions on a beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find support reactions on a beam?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 10,
+              "label": "Load 10 kN",
+              "ask": "What is the difference between a particle and a rigid body?"
+            }
+          ],
+          "show": "beam",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Rigid body: ΣFx = 0, ΣFy = 0 and ΣM = 0"
+        }
+      ]
+    },
+    {
+      "say": "The turning! Take moments about the left pin: the right reaction times 4 metres equals 10 kilonewtons times 1 metre, so it is 2.5 kilonewtons. Then the forces add up: the left pin takes 10 minus 2.5, which is 7.5 kilonewtons. See the two reaction arrows? Which support is closer to the load?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find support reactions on a beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find support reactions on a beam?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 10,
+              "label": "Load 10 kN",
+              "ask": "What is the difference between a particle and a rigid body?"
+            }
+          ],
+          "show": "beam",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "R_B × 4 = 10 × 1, so R_B = 2.5 kN, R_A = 7.5 kN"
+        }
+      ]
+    },
+    {
+      "say": "The left one, so it carries more. Great job! Exam tip: take moments about a point where an unknown force acts, and that unknown drops out of the equation. Challenge: slide the load to the middle. What does each support carry now?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find support reactions on a beam?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find support reactions on a beam?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 10,
+              "label": "Load 10 kN",
+              "ask": "What is the difference between a particle and a rigid body?"
+            }
+          ],
+          "show": "beam",
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Tip: take moments about an unknown support"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What are the conditions for equilibrium?",
+      "a": "For a particle, the forces in every direction add to zero. For a rigid body in a plane, the forces in x and y add to zero and the moments about any point add to zero too: three equations.",
+      "asks": [
+        "equations of equilibrium",
+        "what does equilibrium mean in statics"
+      ]
+    },
+    {
+      "q": "Why are cable tensions bigger when the cables are flatter?",
+      "a": "Only the vertical part of each tension holds up the weight. A flatter cable has a smaller sine of its angle, so the tension must grow to give the same upward part.",
+      "asks": [
+        "why do flat cables have high tension"
+      ]
+    },
+    {
+      "q": "What is the difference between a particle and a rigid body?",
+      "a": "A particle is a model where all forces pass through one point, so it cannot rotate. A rigid body has size, so forces at different points can turn it, and moments must balance too.",
+      "asks": [
+        "particle vs rigid body"
+      ]
+    },
+    {
+      "q": "How do I find support reactions on a beam?",
+      "a": "Take moments about one support to find the other reaction, then add up the vertical forces to find the first. Check by taking moments about a different point.",
+      "asks": [
+        "how to calculate reactions",
+        "beam reaction forces"
+      ]
+    },
+    {
+      "q": "What is a two-force member?",
+      "a": "A body with forces at only two points. For equilibrium the two forces must be equal, opposite and along the line joining the points, like a truss bar or a link.",
+      "asks": [
+        "two force member definition"
+      ]
+    }
+  ],
+  "facts": [
+    "A rigid body in a plane has three independent equilibrium equations: two force sums and one moment sum.",
+    "A pin support can push in any direction in the plane; a roller pushes only at right angles to its surface."
+  ],
+  "quiz": [
+    {
+      "say": "A 6 metre beam on two end supports carries 12 kilonewtons at 2 metres from the left end. What is the right-hand reaction?",
+      "show": "A 6 m beam on end supports carries 12 kN at 2 m from the left. Right reaction?",
+      "options": [
+        {
+          "show": "4 kN",
+          "say": "4 kilonewtons"
+        },
+        {
+          "show": "8 kN",
+          "say": "8 kilonewtons"
+        },
+        {
+          "show": "6 kN",
+          "say": "6 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "Moments about the left support: R × 6 = 12 × 2, so R = 4 kN.",
+      "wrong": {
+        "1": "That is the left reaction, which is nearer the load.",
+        "2": "Splitting equally only works when the load is in the middle."
+      }
+    },
+    {
+      "say": "How many independent equilibrium equations does a rigid body in a plane have?",
+      "show": "Independent equilibrium equations for a 2D rigid body?",
+      "options": [
+        {
+          "show": "Two",
+          "say": "Two"
+        },
+        {
+          "show": "Three",
+          "say": "Three"
+        },
+        {
+          "show": "Six",
+          "say": "Six"
+        }
+      ],
+      "answer": 1,
+      "why": "Sum of x forces, sum of y forces and sum of moments: three.",
+      "wrong": {
+        "0": "Two is enough for a particle, which cannot rotate.",
+        "2": "Six is for a rigid body in three dimensions."
+      }
+    }
+  ]
+}

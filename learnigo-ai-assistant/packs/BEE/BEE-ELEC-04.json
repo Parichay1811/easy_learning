@@ -1,0 +1,557 @@
+{
+  "id": "BEE-ELEC-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Smoothing capacitors and ripple: from bumpy DC to steady DC",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "smoothing capacitor",
+    "ripple voltage",
+    "reservoir capacitor",
+    "power supply",
+    "ripple formula"
+  ],
+  "examples": [
+    "How does a smoothing capacitor work?",
+    "How do I calculate ripple voltage?",
+    "Why does my power supply hum?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Transformer",
+          "value": "12 V rms"
+        },
+        {
+          "kind": "block",
+          "label": "Diode bridge",
+          "value": "4 diodes"
+        },
+        {
+          "kind": "capacitor",
+          "label": "Smoothing C",
+          "value": "1000 µF",
+          "branch": 1,
+          "ask": "What does a smoothing capacitor do?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Load",
+          "value": "156 Ω",
+          "branch": 2,
+          "ask": "How do I calculate ripple voltage?"
+        }
+      ],
+      "readouts": [
+        "I_load ≈ 0.1 A",
+        "Ripple ≈ 1 V",
+        "DC ≈ 15.1 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Feed bumpy rectified DC to an amplifier and you hear a nasty hum. The cure is a big capacitor, called a smoothing or reservoir capacitor. On the board, a bridge rectifier from 12 volts RMS feeds a 1000 microfarad capacitor and a 156 ohm load that draws about 0.1 amps.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Smoothing capacitors and ripple: from bumpy DC to steady DC"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Transformer",
+              "value": "12 V rms"
+            },
+            {
+              "kind": "block",
+              "label": "Diode bridge",
+              "value": "4 diodes"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Smoothing C",
+              "value": "1000 µF",
+              "branch": 1,
+              "ask": "What does a smoothing capacitor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "156 Ω",
+              "branch": 2,
+              "ask": "How do I calculate ripple voltage?"
+            }
+          ],
+          "readouts": [
+            "I_load ≈ 0.1 A",
+            "Ripple ≈ 1 V",
+            "DC ≈ 15.1 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Think of the capacitor as a water tank on a roof. Near each peak of the rectified wave, the diodes conduct and top the tank up to 15.6 volts. Between peaks the diodes switch off and the tank alone feeds the load, its voltage sinking slowly as it drains. So when do the diodes actually conduct?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Transformer",
+              "value": "12 V rms"
+            },
+            {
+              "kind": "block",
+              "label": "Diode bridge",
+              "value": "4 diodes"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Smoothing C",
+              "value": "1000 µF",
+              "branch": 1,
+              "ask": "What does a smoothing capacitor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "156 Ω",
+              "branch": 2,
+              "ask": "How do I calculate ripple voltage?"
+            }
+          ],
+          "readouts": [
+            "I_load ≈ 0.1 A",
+            "Ripple ≈ 1 V",
+            "DC ≈ 15.1 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Diodes conduct only briefly, near each peak, to top the capacitor up."
+        }
+      ]
+    },
+    {
+      "say": "Only for a short moment near each peak. Look at the second curve: up to 15.6 volts, a gentle slope down to about 14.6, then topped up again. That leftover wobble is called ripple. Compare it with the bare bumps, which fall all the way to zero. Which would you rather power an amplifier from?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 30
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "max": 18
+          },
+          "curves": [
+            {
+              "label": "Rectified, no C",
+              "type": "points",
+              "smooth": true,
+              "ask": "How can I reduce ripple?",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2.5,
+                  10.6
+                ],
+                [
+                  5,
+                  15.6
+                ],
+                [
+                  7.5,
+                  10.6
+                ],
+                [
+                  10,
+                  0
+                ],
+                [
+                  12.5,
+                  10.6
+                ],
+                [
+                  15,
+                  15.6
+                ],
+                [
+                  17.5,
+                  10.6
+                ],
+                [
+                  20,
+                  0
+                ],
+                [
+                  22.5,
+                  10.6
+                ],
+                [
+                  25,
+                  15.6
+                ],
+                [
+                  27.5,
+                  10.6
+                ],
+                [
+                  30,
+                  0
+                ]
+              ]
+            },
+            {
+              "label": "With 1000 µF",
+              "type": "points",
+              "ask": "What is ripple voltage?",
+              "points": [
+                [
+                  0,
+                  15.04
+                ],
+                [
+                  3.9,
+                  14.6
+                ],
+                [
+                  5,
+                  15.6
+                ],
+                [
+                  13.9,
+                  14.6
+                ],
+                [
+                  15,
+                  15.6
+                ],
+                [
+                  23.9,
+                  14.6
+                ],
+                [
+                  25,
+                  15.6
+                ],
+                [
+                  30,
+                  15.04
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Peak 15.6 V"
+            },
+            {
+              "x": 13.9,
+              "label": "Dip 14.6 V"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The smooth one! The ripple size follows from Q equals C V: between top-ups the load drains its current for one bump period, so the dip is I over f C, where f is the bump rate, 100 hertz for full-wave. Here: 0.1 amps over 100 times 0.001 farads, which is 1 volt. A bigger capacitor or a lighter load means less ripple. What ripple would 2200 microfarads give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 30
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "max": 18
+          },
+          "curves": [
+            {
+              "label": "Rectified, no C",
+              "type": "points",
+              "smooth": true,
+              "ask": "How can I reduce ripple?",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2.5,
+                  10.6
+                ],
+                [
+                  5,
+                  15.6
+                ],
+                [
+                  7.5,
+                  10.6
+                ],
+                [
+                  10,
+                  0
+                ],
+                [
+                  12.5,
+                  10.6
+                ],
+                [
+                  15,
+                  15.6
+                ],
+                [
+                  17.5,
+                  10.6
+                ],
+                [
+                  20,
+                  0
+                ],
+                [
+                  22.5,
+                  10.6
+                ],
+                [
+                  25,
+                  15.6
+                ],
+                [
+                  27.5,
+                  10.6
+                ],
+                [
+                  30,
+                  0
+                ]
+              ]
+            },
+            {
+              "label": "With 1000 µF",
+              "type": "points",
+              "ask": "What is ripple voltage?",
+              "points": [
+                [
+                  0,
+                  15.04
+                ],
+                [
+                  3.9,
+                  14.6
+                ],
+                [
+                  5,
+                  15.6
+                ],
+                [
+                  13.9,
+                  14.6
+                ],
+                [
+                  15,
+                  15.6
+                ],
+                [
+                  23.9,
+                  14.6
+                ],
+                [
+                  25,
+                  15.6
+                ],
+                [
+                  30,
+                  15.04
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Peak 15.6 V"
+            },
+            {
+              "x": 13.9,
+              "label": "Dip 14.6 V"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V_ripple ≈ I/(f C) = 0.1/(100 × 1000 µF) = 1 V"
+        }
+      ]
+    },
+    {
+      "say": "About 0.45 volts. Brilliant! Real supplies then add a voltage regulator to trim the ripple away and leave a rock-steady output; the simplest, the Zener, is next. Take care, though: big smoothing capacitors can hold a dangerous charge after the power is off. Challenge: with a half-wave rectifier the bumps come at 50 hertz. What ripple would the same capacitor give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Transformer",
+              "value": "12 V rms"
+            },
+            {
+              "kind": "block",
+              "label": "Diode bridge",
+              "value": "4 diodes"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Smoothing C",
+              "value": "1000 µF",
+              "branch": 1,
+              "ask": "What does a smoothing capacitor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "156 Ω",
+              "branch": 2,
+              "ask": "How do I calculate ripple voltage?"
+            }
+          ],
+          "readouts": [
+            "I_load ≈ 0.1 A",
+            "Ripple ≈ 1 V",
+            "DC ≈ 15.1 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Half-wave: f = 50 Hz, so the ripple doubles to 2 V"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does a smoothing capacitor do?",
+      "a": "It charges up near each peak of the rectified wave and then supplies the load between peaks, filling in the gaps so the output is close to steady DC.",
+      "asks": [
+        "Why put a capacitor after a rectifier?",
+        "How does a reservoir capacitor work?"
+      ]
+    },
+    {
+      "q": "What is ripple voltage?",
+      "a": "The small up-and-down variation left on a smoothed DC output, as the capacitor discharges between top-ups and recharges near each peak.",
+      "asks": [
+        "Define ripple"
+      ]
+    },
+    {
+      "q": "How do I calculate ripple voltage?",
+      "a": "Approximately V ripple equals I over f C, where I is the load current, C the capacitance and f the bump rate: twice the supply frequency for full-wave.",
+      "asks": [
+        "Ripple voltage formula"
+      ]
+    },
+    {
+      "q": "How can I reduce ripple?",
+      "a": "Use a bigger capacitor, draw less load current, use full-wave instead of half-wave rectification, or add a regulator after the capacitor.",
+      "asks": [
+        "Why is my power supply humming?"
+      ]
+    },
+    {
+      "q": "Why are smoothing capacitors dangerous?",
+      "a": "A large capacitor charged to a high voltage can keep its charge after the supply is unplugged and give a shock. Bleeder resistors are often fitted to drain it safely.",
+      "asks": [
+        "Do capacitors hold charge after switch off?"
+      ]
+    }
+  ],
+  "facts": [
+    "With full-wave rectification on a 50 hertz supply the ripple frequency is 100 hertz.",
+    "Doubling the smoothing capacitance roughly halves the ripple voltage."
+  ],
+  "quiz": [
+    {
+      "say": "A full-wave supply with 100 hertz bumps feeds 0.5 amps from a 2200 microfarad capacitor. What is the ripple?",
+      "show": "A full-wave supply (100 Hz bumps) feeds 0.5 A from a 2200 µF capacitor. What is the ripple?",
+      "options": [
+        {
+          "show": "2.3 V",
+          "say": "2.3 volts"
+        },
+        {
+          "show": "4.5 V",
+          "say": "4.5 volts"
+        },
+        {
+          "show": "0.23 V",
+          "say": "0.23 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "Ripple is I over f C: 0.5 over 100 times 0.0022, which is about 2.3 volts.",
+      "wrong": {
+        "1": "That would be the ripple with 50 hertz bumps, from a half-wave rectifier.",
+        "2": "That slips a power of ten in the capacitance."
+      }
+    },
+    {
+      "say": "In a capacitor-smoothed rectifier, when do the diodes conduct?",
+      "show": "In a capacitor-smoothed rectifier, the diodes conduct...",
+      "options": [
+        {
+          "show": "Briefly, near each peak",
+          "say": "Briefly, near each peak"
+        },
+        {
+          "show": "All the time",
+          "say": "All the time"
+        },
+        {
+          "show": "Only at the zero crossings",
+          "say": "Only at the zero crossings"
+        }
+      ],
+      "answer": 0,
+      "why": "The diodes only conduct when the input rises above the capacitor voltage, which happens just before each peak.",
+      "wrong": {
+        "1": "Between peaks the capacitor voltage is higher than the input, so the diodes are reverse biased.",
+        "2": "At the zero crossings the input is far below the capacitor voltage."
+      }
+    }
+  ]
+}

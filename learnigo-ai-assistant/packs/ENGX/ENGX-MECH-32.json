@@ -1,0 +1,614 @@
+{
+  "id": "ENGX-MECH-32",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a block and tackle lifts heavy loads",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "block and tackle",
+    "pulley system",
+    "rope strands",
+    "movable pulley",
+    "mechanical advantage"
+  ],
+  "examples": [
+    "How can pulleys lift something four times heavier than my pull?",
+    "What is a block and tackle?",
+    "Why do I pull so much rope with a pulley system?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "beam",
+          "kind": "box",
+          "x": 0.4,
+          "y": 0.06,
+          "size": 1.2,
+          "label": "Support beam",
+          "motion": "none"
+        },
+        {
+          "id": "top",
+          "kind": "wheel",
+          "x": 0.4,
+          "y": 0.26,
+          "size": 1,
+          "label": "Top pulley block",
+          "motion": "spin",
+          "ask": "What is a block and tackle?"
+        },
+        {
+          "id": "rope",
+          "kind": "belt",
+          "x": 0.4,
+          "y": 0.46,
+          "size": 1,
+          "label": "Rope, 4 strands",
+          "motion": "flow",
+          "ask": "Why do more rope strands make it easier?"
+        },
+        {
+          "id": "bottom",
+          "kind": "wheel",
+          "x": 0.4,
+          "y": 0.66,
+          "size": 1,
+          "label": "Bottom pulley block",
+          "motion": "spin"
+        },
+        {
+          "id": "load",
+          "kind": "weight",
+          "x": 0.4,
+          "y": 0.88,
+          "size": 1,
+          "label": "Load 400 N",
+          "motion": "slide"
+        },
+        {
+          "id": "hand",
+          "kind": "piston",
+          "x": 0.85,
+          "y": 0.5,
+          "size": 0.7,
+          "label": "Your pull 100 N",
+          "motion": "slide",
+          "ask": "Why do I pull so much rope with a pulley system?"
+        }
+      ],
+      "links": [
+        {
+          "from": "beam",
+          "to": "top",
+          "kind": "force",
+          "label": "holds"
+        },
+        {
+          "from": "hand",
+          "to": "rope",
+          "kind": "force",
+          "label": "pull 4 m of rope"
+        },
+        {
+          "from": "rope",
+          "to": "bottom",
+          "kind": "force",
+          "label": "4 strands lift"
+        },
+        {
+          "from": "bottom",
+          "to": "load",
+          "kind": "force",
+          "label": "rises 1 m"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A block and tackle is a set of pulleys in two blocks: one hung from a beam, and one hooked to the load. A single rope weaves back and forth between their wheels.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a block and tackle lifts heavy loads"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "beam",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.06,
+              "size": 1.2,
+              "label": "Support beam",
+              "motion": "none"
+            },
+            {
+              "id": "top",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.26,
+              "size": 1,
+              "label": "Top pulley block",
+              "motion": "spin",
+              "ask": "What is a block and tackle?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.4,
+              "y": 0.46,
+              "size": 1,
+              "label": "Rope, 4 strands",
+              "motion": "flow",
+              "ask": "Why do more rope strands make it easier?"
+            },
+            {
+              "id": "bottom",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.66,
+              "size": 1,
+              "label": "Bottom pulley block",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 1,
+              "label": "Load 400 N",
+              "motion": "slide"
+            },
+            {
+              "id": "hand",
+              "kind": "piston",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Your pull 100 N",
+              "motion": "slide",
+              "ask": "Why do I pull so much rope with a pulley system?"
+            }
+          ],
+          "links": [
+            {
+              "from": "beam",
+              "to": "top",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "hand",
+              "to": "rope",
+              "kind": "force",
+              "label": "pull 4 m of rope"
+            },
+            {
+              "from": "rope",
+              "to": "bottom",
+              "kind": "force",
+              "label": "4 strands lift"
+            },
+            {
+              "from": "bottom",
+              "to": "load",
+              "kind": "force",
+              "label": "rises 1 m"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: pulleys. Look at the fixed pulley, the movable pulley and the rope. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a block and tackle lifts heavy loads"
+        },
+        {
+          "op": "image",
+          "render": "pulley"
+        }
+      ]
+    },
+    {
+      "say": "Here four strands of rope run between the blocks and hold up the bottom block. The tension is the same all along the rope, so each strand carries a quarter of the load.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "beam",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.06,
+              "size": 1.2,
+              "label": "Support beam",
+              "motion": "none"
+            },
+            {
+              "id": "top",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.26,
+              "size": 1,
+              "label": "Top pulley block",
+              "motion": "spin",
+              "ask": "What is a block and tackle?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.4,
+              "y": 0.46,
+              "size": 1,
+              "label": "Rope, 4 strands",
+              "motion": "flow",
+              "ask": "Why do more rope strands make it easier?"
+            },
+            {
+              "id": "bottom",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.66,
+              "size": 1,
+              "label": "Bottom pulley block",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 1,
+              "label": "Load 400 N",
+              "motion": "slide"
+            },
+            {
+              "id": "hand",
+              "kind": "piston",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Your pull 100 N",
+              "motion": "slide",
+              "ask": "Why do I pull so much rope with a pulley system?"
+            }
+          ],
+          "links": [
+            {
+              "from": "beam",
+              "to": "top",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "hand",
+              "to": "rope",
+              "kind": "force",
+              "label": "pull 4 m of rope"
+            },
+            {
+              "from": "rope",
+              "to": "bottom",
+              "kind": "force",
+              "label": "4 strands lift"
+            },
+            {
+              "from": "bottom",
+              "to": "load",
+              "kind": "force",
+              "label": "rises 1 m"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "That means a 400 newton load needs a pull of only about 100 newtons, plus a bit for friction. The ideal mechanical advantage equals the number of strands holding the bottom block.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "beam",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.06,
+              "size": 1.2,
+              "label": "Support beam",
+              "motion": "none"
+            },
+            {
+              "id": "top",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.26,
+              "size": 1,
+              "label": "Top pulley block",
+              "motion": "spin",
+              "ask": "What is a block and tackle?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.4,
+              "y": 0.46,
+              "size": 1,
+              "label": "Rope, 4 strands",
+              "motion": "flow",
+              "ask": "Why do more rope strands make it easier?"
+            },
+            {
+              "id": "bottom",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.66,
+              "size": 1,
+              "label": "Bottom pulley block",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 1,
+              "label": "Load 400 N",
+              "motion": "slide"
+            },
+            {
+              "id": "hand",
+              "kind": "piston",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Your pull 100 N",
+              "motion": "slide",
+              "ask": "Why do I pull so much rope with a pulley system?"
+            }
+          ],
+          "links": [
+            {
+              "from": "beam",
+              "to": "top",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "hand",
+              "to": "rope",
+              "kind": "force",
+              "label": "pull 4 m of rope"
+            },
+            {
+              "from": "rope",
+              "to": "bottom",
+              "kind": "force",
+              "label": "4 strands lift"
+            },
+            {
+              "from": "bottom",
+              "to": "load",
+              "kind": "force",
+              "label": "rises 1 m"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The catch is distance: to lift the load 1 metre, all four strands must shorten by 1 metre, so you pull 4 metres of rope. Cranes and sailing ships use this trick.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "beam",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.06,
+              "size": 1.2,
+              "label": "Support beam",
+              "motion": "none"
+            },
+            {
+              "id": "top",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.26,
+              "size": 1,
+              "label": "Top pulley block",
+              "motion": "spin",
+              "ask": "What is a block and tackle?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.4,
+              "y": 0.46,
+              "size": 1,
+              "label": "Rope, 4 strands",
+              "motion": "flow",
+              "ask": "Why do more rope strands make it easier?"
+            },
+            {
+              "id": "bottom",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.66,
+              "size": 1,
+              "label": "Bottom pulley block",
+              "motion": "spin"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.88,
+              "size": 1,
+              "label": "Load 400 N",
+              "motion": "slide"
+            },
+            {
+              "id": "hand",
+              "kind": "piston",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Your pull 100 N",
+              "motion": "slide",
+              "ask": "Why do I pull so much rope with a pulley system?"
+            }
+          ],
+          "links": [
+            {
+              "from": "beam",
+              "to": "top",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "hand",
+              "to": "rope",
+              "kind": "force",
+              "label": "pull 4 m of rope"
+            },
+            {
+              "from": "rope",
+              "to": "bottom",
+              "kind": "force",
+              "label": "4 strands lift"
+            },
+            {
+              "from": "bottom",
+              "to": "load",
+              "kind": "force",
+              "label": "rises 1 m"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a block and tackle?",
+      "a": "It is a pulley system with two blocks, each holding one or more wheels, and a rope threaded between them. The bottom block moves with the load.",
+      "asks": [
+        "What is a pulley block?"
+      ]
+    },
+    {
+      "q": "Why do more rope strands make it easier?",
+      "a": "The load hangs on all the strands that support the bottom block, and each carries the same tension. With four strands, each carries a quarter of the load, so you pull a quarter as hard.",
+      "asks": [
+        "How do you count the strands?"
+      ]
+    },
+    {
+      "q": "Why do I pull so much rope with a pulley system?",
+      "a": "Work in equals work out. If your force is a quarter of the load, you must pull four times as far: 4 metres of rope to lift the load 1 metre.",
+      "asks": [
+        "Why does a pulley system need lots of rope?"
+      ]
+    },
+    {
+      "q": "Is the real force exactly a quarter?",
+      "a": "No. Friction in the wheels and the weight of the bottom block mean you pull a bit more. The real mechanical advantage is always a little less than the number of strands.",
+      "asks": [
+        "Why is a pulley system not perfect?"
+      ]
+    },
+    {
+      "q": "Where are blocks and tackles used?",
+      "a": "On cranes, sailing ships, in theatres, car workshops, rescue teams and gyms. Archimedes is said to have pulled a whole ship with a compound pulley.",
+      "asks": [
+        "Who uses pulley systems?"
+      ]
+    }
+  ],
+  "facts": [
+    "The ideal mechanical advantage of a block and tackle equals the number of rope strands supporting the moving block.",
+    "With a mechanical advantage of 4, you pull 4 metres of rope to lift the load 1 metre."
+  ],
+  "quiz": [
+    {
+      "say": "A block and tackle has 3 strands holding the bottom block. Ideally, what pull lifts a 600 N load?",
+      "show": "A block and tackle has 3 strands holding the bottom block. Ideally, what pull lifts a 600 N load?",
+      "options": [
+        {
+          "show": "200 N",
+          "say": "200 N"
+        },
+        {
+          "show": "600 N",
+          "say": "600 N"
+        },
+        {
+          "show": "1,800 N",
+          "say": "1,800 N"
+        }
+      ],
+      "answer": 0,
+      "why": "The load is shared by 3 strands: 600 divided by 3 is 200 N.",
+      "wrong": {
+        "1": "That would be a single fixed pulley with no advantage.",
+        "2": "Multiplying is the wrong way round; the strands share the load."
+      }
+    },
+    {
+      "say": "To lift a load 2 m with 4 supporting strands, how much rope do you pull?",
+      "show": "To lift a load 2 m with 4 supporting strands, how much rope do you pull?",
+      "options": [
+        {
+          "show": "2 m",
+          "say": "2 m"
+        },
+        {
+          "show": "4 m",
+          "say": "4 m"
+        },
+        {
+          "show": "8 m",
+          "say": "8 m"
+        }
+      ],
+      "answer": 2,
+      "why": "Each of the 4 strands shortens by 2 m, so you pull 4 times 2, which is 8 m.",
+      "wrong": {
+        "0": "That would be true only with one strand.",
+        "1": "That is the number of strands, not the length of rope."
+      }
+    }
+  ]
+}

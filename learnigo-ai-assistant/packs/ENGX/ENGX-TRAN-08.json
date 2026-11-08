@@ -1,0 +1,640 @@
+{
+  "id": "ENGX-TRAN-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a car's hydraulic brakes work",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "hydraulic brakes",
+    "master cylinder",
+    "brake fluid",
+    "brake caliper",
+    "brake booster"
+  ],
+  "examples": [
+    "What happens when you press the brake pedal?",
+    "Why do car brakes use fluid?",
+    "How does a small push stop a heavy car?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "pedal",
+          "kind": "lever",
+          "x": 0.1,
+          "y": 0.3,
+          "size": 1,
+          "label": "Brake pedal",
+          "motion": "swing",
+          "ask": "Why is the brake pedal a lever?"
+        },
+        {
+          "id": "servo",
+          "kind": "box",
+          "x": 0.28,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Brake booster",
+          "motion": "pulse",
+          "ask": "What does the brake booster do?"
+        },
+        {
+          "id": "master",
+          "kind": "piston",
+          "x": 0.46,
+          "y": 0.3,
+          "size": 0.9,
+          "label": "Master cylinder",
+          "motion": "slide",
+          "ask": "What is the master cylinder?"
+        },
+        {
+          "id": "pipe",
+          "kind": "pipe",
+          "x": 0.6,
+          "y": 0.6,
+          "size": 1.2,
+          "label": "Brake fluid pipe",
+          "motion": "flow",
+          "ask": "Why do brakes use fluid instead of rods?"
+        },
+        {
+          "id": "caliper",
+          "kind": "piston",
+          "x": 0.82,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Caliper piston",
+          "motion": "slide",
+          "ask": "How do the caliper pistons multiply force?"
+        },
+        {
+          "id": "disc",
+          "kind": "wheel",
+          "x": 0.84,
+          "y": 0.74,
+          "size": 1.3,
+          "label": "Brake disc",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "pedal",
+          "to": "servo",
+          "kind": "force",
+          "label": "foot push"
+        },
+        {
+          "from": "servo",
+          "to": "master",
+          "kind": "force",
+          "label": "boosted"
+        },
+        {
+          "from": "master",
+          "to": "pipe",
+          "kind": "fluid",
+          "label": "pressure"
+        },
+        {
+          "from": "pipe",
+          "to": "caliper",
+          "kind": "fluid",
+          "label": "pressure"
+        },
+        {
+          "from": "caliper",
+          "to": "disc",
+          "kind": "force",
+          "label": "pads squeeze"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When you press the brake pedal, it acts as a lever, and a booster adds extra force. Together they push a piston into the master cylinder, which is full of brake fluid.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a car's hydraulic brakes work"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 1,
+              "label": "Brake pedal",
+              "motion": "swing",
+              "ask": "Why is the brake pedal a lever?"
+            },
+            {
+              "id": "servo",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Brake booster",
+              "motion": "pulse",
+              "ask": "What does the brake booster do?"
+            },
+            {
+              "id": "master",
+              "kind": "piston",
+              "x": 0.46,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Master cylinder",
+              "motion": "slide",
+              "ask": "What is the master cylinder?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.6,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Brake fluid pipe",
+              "motion": "flow",
+              "ask": "Why do brakes use fluid instead of rods?"
+            },
+            {
+              "id": "caliper",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Caliper piston",
+              "motion": "slide",
+              "ask": "How do the caliper pistons multiply force?"
+            },
+            {
+              "id": "disc",
+              "kind": "wheel",
+              "x": 0.84,
+              "y": 0.74,
+              "size": 1.3,
+              "label": "Brake disc",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "servo",
+              "kind": "force",
+              "label": "foot push"
+            },
+            {
+              "from": "servo",
+              "to": "master",
+              "kind": "force",
+              "label": "boosted"
+            },
+            {
+              "from": "master",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "pipe",
+              "to": "caliper",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "caliper",
+              "to": "disc",
+              "kind": "force",
+              "label": "pads squeeze"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Liquids barely squash, so pushing the piston raises the pressure all through the fluid in the pipes. That pressure reaches every wheel at the same moment.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 1,
+              "label": "Brake pedal",
+              "motion": "swing",
+              "ask": "Why is the brake pedal a lever?"
+            },
+            {
+              "id": "servo",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Brake booster",
+              "motion": "pulse",
+              "ask": "What does the brake booster do?"
+            },
+            {
+              "id": "master",
+              "kind": "piston",
+              "x": 0.46,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Master cylinder",
+              "motion": "slide",
+              "ask": "What is the master cylinder?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.6,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Brake fluid pipe",
+              "motion": "flow",
+              "ask": "Why do brakes use fluid instead of rods?"
+            },
+            {
+              "id": "caliper",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Caliper piston",
+              "motion": "slide",
+              "ask": "How do the caliper pistons multiply force?"
+            },
+            {
+              "id": "disc",
+              "kind": "wheel",
+              "x": 0.84,
+              "y": 0.74,
+              "size": 1.3,
+              "label": "Brake disc",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "servo",
+              "kind": "force",
+              "label": "foot push"
+            },
+            {
+              "from": "servo",
+              "to": "master",
+              "kind": "force",
+              "label": "boosted"
+            },
+            {
+              "from": "master",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "pipe",
+              "to": "caliper",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "caliper",
+              "to": "disc",
+              "kind": "force",
+              "label": "pads squeeze"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "At each wheel the fluid pushes on caliper pistons much wider than the master piston. The same pressure on a bigger area gives a bigger force, so the push is multiplied and the brake pads squeeze hard.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 1,
+              "label": "Brake pedal",
+              "motion": "swing",
+              "ask": "Why is the brake pedal a lever?"
+            },
+            {
+              "id": "servo",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Brake booster",
+              "motion": "pulse",
+              "ask": "What does the brake booster do?"
+            },
+            {
+              "id": "master",
+              "kind": "piston",
+              "x": 0.46,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Master cylinder",
+              "motion": "slide",
+              "ask": "What is the master cylinder?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.6,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Brake fluid pipe",
+              "motion": "flow",
+              "ask": "Why do brakes use fluid instead of rods?"
+            },
+            {
+              "id": "caliper",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Caliper piston",
+              "motion": "slide",
+              "ask": "How do the caliper pistons multiply force?"
+            },
+            {
+              "id": "disc",
+              "kind": "wheel",
+              "x": 0.84,
+              "y": 0.74,
+              "size": 1.3,
+              "label": "Brake disc",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "servo",
+              "kind": "force",
+              "label": "foot push"
+            },
+            {
+              "from": "servo",
+              "to": "master",
+              "kind": "force",
+              "label": "boosted"
+            },
+            {
+              "from": "master",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "pipe",
+              "to": "caliper",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "caliper",
+              "to": "disc",
+              "kind": "force",
+              "label": "pads squeeze"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The pads grip a steel disc that spins with the wheel. Friction turns the car's movement energy into heat, and a disc can glow red after very hard braking.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 1,
+              "label": "Brake pedal",
+              "motion": "swing",
+              "ask": "Why is the brake pedal a lever?"
+            },
+            {
+              "id": "servo",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Brake booster",
+              "motion": "pulse",
+              "ask": "What does the brake booster do?"
+            },
+            {
+              "id": "master",
+              "kind": "piston",
+              "x": 0.46,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Master cylinder",
+              "motion": "slide",
+              "ask": "What is the master cylinder?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.6,
+              "y": 0.6,
+              "size": 1.2,
+              "label": "Brake fluid pipe",
+              "motion": "flow",
+              "ask": "Why do brakes use fluid instead of rods?"
+            },
+            {
+              "id": "caliper",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Caliper piston",
+              "motion": "slide",
+              "ask": "How do the caliper pistons multiply force?"
+            },
+            {
+              "id": "disc",
+              "kind": "wheel",
+              "x": 0.84,
+              "y": 0.74,
+              "size": 1.3,
+              "label": "Brake disc",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "pedal",
+              "to": "servo",
+              "kind": "force",
+              "label": "foot push"
+            },
+            {
+              "from": "servo",
+              "to": "master",
+              "kind": "force",
+              "label": "boosted"
+            },
+            {
+              "from": "master",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "pipe",
+              "to": "caliper",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "caliper",
+              "to": "disc",
+              "kind": "force",
+              "label": "pads squeeze"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why is the brake pedal a lever?",
+      "a": "The pedal pivots near the top and your foot pushes far from the pivot, so it multiplies your push several times before it reaches the booster and master cylinder.",
+      "asks": [
+        "How does the brake pedal work?"
+      ]
+    },
+    {
+      "q": "What does the brake booster do?",
+      "a": "The brake booster, or servo, uses engine suction or an electric pump to add force to your push. It makes the brakes feel light.",
+      "asks": [
+        "What is a brake servo?"
+      ]
+    },
+    {
+      "q": "What is the master cylinder?",
+      "a": "The master cylinder is a small cylinder full of brake fluid, with a piston pushed by the pedal. It turns your push into fluid pressure that travels to all four wheels.",
+      "asks": [
+        "What does the brake master cylinder do?"
+      ]
+    },
+    {
+      "q": "Why do brakes use fluid instead of rods?",
+      "a": "Liquid can't be squashed and its pressure spreads equally in all directions, so a thin pipe can carry force round corners to every wheel at once. If air gets in, it squashes and the pedal feels spongy.",
+      "asks": [
+        "Why is brake fluid used?",
+        "What happens if air gets in the brakes?"
+      ]
+    },
+    {
+      "q": "How do the caliper pistons multiply force?",
+      "a": "The caliper pistons have a much bigger area than the master piston. The same pressure on a bigger area gives a bigger force, so a gentle push becomes a strong squeeze on the pads.",
+      "asks": [
+        "How do hydraulic brakes multiply force?"
+      ]
+    }
+  ],
+  "facts": [
+    "Pressure in a trapped liquid is passed on equally throughout it, an idea called Pascal's principle.",
+    "Cars have two separate brake circuits, so if one leaks the other can still stop the car.",
+    "Brake fluid slowly absorbs water, which lowers its boiling point, so it is replaced every few years."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a gentle push on the pedal become a strong squeeze at the wheel?",
+      "show": "Why does a gentle push on the pedal become a strong squeeze at the wheel?",
+      "options": [
+        {
+          "show": "The caliper pistons are wider than the master piston",
+          "say": "The caliper pistons are wider than the master piston"
+        },
+        {
+          "show": "The fluid gets hotter",
+          "say": "The fluid gets hotter"
+        },
+        {
+          "show": "The pipes are very long",
+          "say": "The pipes are very long"
+        }
+      ],
+      "answer": 0,
+      "why": "Pressure is the same everywhere in the fluid, so a wider piston at the wheel feels a bigger force.",
+      "wrong": {
+        "1": "Heat does not multiply force; hot fluid can actually make brakes worse.",
+        "2": "Pipe length makes no difference to the force."
+      }
+    },
+    {
+      "say": "What happens if air gets into the brake pipes?",
+      "show": "What happens if air gets into the brake pipes?",
+      "options": [
+        {
+          "show": "The pedal feels spongy because air squashes",
+          "say": "The pedal feels spongy because air squashes"
+        },
+        {
+          "show": "The brakes get stronger",
+          "say": "The brakes get stronger"
+        },
+        {
+          "show": "Nothing changes",
+          "say": "Nothing changes"
+        }
+      ],
+      "answer": 0,
+      "why": "Air can be squashed, so pressing the pedal squeezes the air instead of pushing the pads.",
+      "wrong": {
+        "1": "Air weakens the brakes, it never strengthens them.",
+        "2": "Air in the pipes is dangerous and must be bled out."
+      }
+    }
+  ]
+}

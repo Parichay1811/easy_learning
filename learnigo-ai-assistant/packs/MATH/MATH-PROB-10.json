@@ -1,0 +1,239 @@
+{
+  "id": "MATH-PROB-10",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Bayes' theorem",
+  "area": "Mathematics",
+  "group": "MATH-PROB — Probability",
+  "levels": [
+    "U",
+    "E"
+  ],
+  "keywords": [
+    "bayes' theorem",
+    "conditional probability",
+    "reverse probability",
+    "tree diagram"
+  ],
+  "examples": [
+    "How do I use this if I don't know the prior probabilities?",
+    "Can I use this method for more than two events?",
+    "Is there a simpler way than drawing a tree diagram?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn about Bayes' theorem. It helps us find reverse conditional probabilities. We use it when we know the result and want to know the cause. Consider a simple test for a rare disease. The test is positive, and we want the probability of having the disease. This is the reverse probability we seek.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Bayes' theorem"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Finds reverse conditional probabilities",
+            "Known result → Unknown cause",
+            "Example: Positive test → Disease probability"
+          ],
+          "at": "reverse"
+        },
+        {
+          "op": "text",
+          "text": "P(A|B) vs P(B|A)"
+        }
+      ]
+    },
+    {
+      "say": "Let us use the tree method first. We start with the initial probabilities on the branches. Suppose a machine produces parts from two sources. Source A makes parts 60 percent of the time. Source B makes the remaining 40 percent. We can map this out using a tree diagram.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Tree Method Setup",
+          "at": "tree"
+        }
+      ]
+    },
+    {
+      "say": "Next, we calculate the probability of the evidence. If the part is faulty, it might come from either source. We multiply the probabilities along each path in the tree. For example, the probability of a faulty part from Source A is 0 point 4 times 0 point 6. We add these up for the total probability of a fault.",
+      "draw": [
+        {
+          "op": "parts",
+          "center": "Total Probability of a Fault",
+          "items": [
+            "Faulty part probability from A: 0.4 0.6",
+            "Faulty part probability from B: 0.4 0.6"
+          ],
+          "at": "faulty"
+        },
+        {
+          "op": "text",
+          "text": "P(Fault) = P(Fault|A)P(A) + P(Fault|B)P(B)"
+        }
+      ]
+    },
+    {
+      "say": "Finally, we apply Bayes' theorem. We want the probability it came from Source A given it is faulty. We divide the probability of the specific path by the total probability of the evidence. So, P(A|Fault) equals the path probability divided by the total fault probability.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start: P(A) and P(B)",
+            "Calculate: P(Fault|A)P(A) and P(Fault|B)P(B)",
+            "Sum: P(Fault) = Sum of paths",
+            "End: P(A|Fault) = Path Probability / P(Fault)"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "P(A|Fault) = P(Fault|A)P(A) / P(Fault)",
+          "at": "pafault"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between conditional and reverse conditional probability?",
+      "a": "Conditional probability is finding P(A given B). Reverse conditional is finding P(B given A), which requires Bayes' theorem. You might also ask, \"How do I flip the condition?\" or \"What is the inverse probability?\"",
+      "asks": [
+        "How do I flip the condition?",
+        "What is the inverse probability?"
+      ]
+    },
+    {
+      "q": "Do I always have to use a tree diagram for Bayes' theorem?",
+      "a": "No, a tree diagram is a helpful visual aid. You can use the direct formula if you are comfortable with the notation. Students might also ask, \"Is the formula enough?\" or \"Can I skip the drawing part?\"",
+      "asks": [
+        "Is the formula enough?",
+        "Can I skip the drawing part?"
+      ]
+    },
+    {
+      "q": "What do the prior probabilities represent in this theorem?",
+      "a": "The prior probabilities are your initial beliefs before seeing any evidence. They are the probabilities of the causes before you test for the result. You might hear this phrased as, \"What is the starting chance?\" or \"What are the initial odds?\"",
+      "asks": [
+        "What is the starting chance?",
+        "What are the initial odds?"
+      ]
+    },
+    {
+      "q": "If the evidence is impossible, what happens to the calculation?",
+      "a": "If the evidence has zero probability, the calculation involves division by zero. This means the scenario described is impossible under the given assumptions. You might ask, \"What if the denominator is zero?\" or \"Can this happen in a real problem?\"",
+      "asks": [
+        "What if the denominator is zero?",
+        "Can this happen in a real problem?"
+      ]
+    },
+    {
+      "q": "Can I use this theorem if the events are not mutually exclusive?",
+      "a": "Bayes' theorem is designed for conditional relationships. If events overlap, you must correctly calculate the total probability of the evidence using the addition rule first. Students might also ask, \"What if the causes overlap?\" or \"Does this require separate outcomes?\"",
+      "asks": [
+        "What if the causes overlap?",
+        "Does this require separate outcomes?"
+      ]
+    }
+  ],
+  "facts": [
+    "Bayes' theorem relates conditional probabilities in reverse.",
+    "The prior probability is the initial probability before new data is seen.",
+    "The total probability of the evidence is found by summing over all possible causes.",
+    "The formula helps update beliefs based on new evidence."
+  ],
+  "quiz": [
+    {
+      "say": "A factory has two machines, one producing 70 percent of items and another producing 30 percent. The defect rate for the first machine is 2 percent, and for the second machine it is 5 percent. If a random item is found to be defective, what is the probability it came from the first machine?",
+      "show": "P(M1|D) = ? / P(D)",
+      "options": [
+        {
+          "show": "0.35",
+          "say": "0.35"
+        },
+        {
+          "show": "0.65",
+          "say": "0.65"
+        },
+        {
+          "show": "0.20",
+          "say": "0.20"
+        },
+        {
+          "show": "0.70",
+          "say": "0.70"
+        }
+      ],
+      "answer": 1,
+      "why": "The probability is calculated by finding the probability of a defect from Machine 1 divided by the total probability of any defect.",
+      "wrong": {
+        "0": "This incorrectly multiplies the proportions of the machines together.",
+        "2": "This incorrectly assumes the probability is just the defect rate of the first machine.",
+        "3": "This incorrectly ignores the defect rate entirely and only uses the machine's proportion."
+      }
+    },
+    {
+      "say": "A student passes a test either by studying or by being naturally gifted. The probability of being gifted is 0 point 1. If the student passes, what is the probability they were gifted, given the passing rate for gifted students is 0 point 95 and for non-gifted students is 0 point 6?",
+      "show": "P(G|Pass) = ? / P(Pass)",
+      "options": [
+        {
+          "show": "0.05",
+          "say": "0.05"
+        },
+        {
+          "show": "0.60",
+          "say": "0.60"
+        },
+        {
+          "show": "0.95",
+          "say": "0.95"
+        },
+        {
+          "show": "0.10",
+          "say": "0.10"
+        }
+      ],
+      "answer": 1,
+      "why": "We use Bayes' theorem to find the probability of being gifted given the passing result, using the total probability of passing in the denominator.",
+      "wrong": {
+        "0": "This incorrectly calculates the probability of being non-gifted and passing.",
+        "2": "This incorrectly uses the passing rate of gifted students as the final answer.",
+        "3": "This incorrectly uses the prior probability of being gifted as the final answer."
+      }
+    },
+    {
+      "say": "Using a tree diagram, if P(A) = 0 point 05 and P(B) = 0 point 02, and P(A|B) = 0 point 08, what is P(B|A)?",
+      "show": "P(B|A) = P(A|B)P(B) / P(A)",
+      "options": [
+        {
+          "show": "0.032",
+          "say": "0.032"
+        },
+        {
+          "show": "0.0016",
+          "say": "0.0016"
+        },
+        {
+          "show": "0.08",
+          "say": "0.08"
+        },
+        {
+          "show": "0.01",
+          "say": "0.01"
+        }
+      ],
+      "answer": 0,
+      "why": "We apply the formula by multiplying the known conditional probabilities and dividing by the prior probability of A.",
+      "wrong": {
+        "1": "This incorrectly multiplies all three given probabilities together.",
+        "2": "This incorrectly assumes the conditional probability is equal to the reverse conditional probability.",
+        "3": "This incorrectly calculates the product of the two prior probabilities."
+      }
+    }
+  ]
+}

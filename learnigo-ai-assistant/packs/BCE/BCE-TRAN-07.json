@@ -1,0 +1,417 @@
+{
+  "id": "BCE-TRAN-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Traffic signal timing with Webster's formula: cycles, phases and green splits",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-TRAN — Transportation engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Webster's formula",
+    "cycle length",
+    "saturation flow",
+    "lost time",
+    "conflict points",
+    "signal phasing"
+  ],
+  "examples": [
+    "How do you calculate the optimum cycle length of a traffic signal?",
+    "How many conflict points does a crossroads have?",
+    "How is green time split between phases?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-sizes",
+      "unit": "conflict points",
+      "items": [
+        {
+          "label": "Crossroads",
+          "size": 32,
+          "icon": "car",
+          "ask": "What is a conflict point?"
+        },
+        {
+          "label": "T-junction",
+          "size": 9,
+          "icon": "arrow"
+        },
+        {
+          "label": "Roundabout",
+          "size": 8,
+          "icon": "wheel"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "The first traffic signal stood outside the Houses of Parliament in London in 1868, a gas lamp turned by a policeman. It exploded within weeks. Today's signals are timed by formulas. But first, why do busy junctions need signals at all? Count the places where paths cross.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Traffic signal timing with Webster's formula: cycles, phases and green splits"
+        },
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "conflict points",
+          "items": [
+            {
+              "label": "Crossroads",
+              "size": 32,
+              "icon": "car",
+              "ask": "What is a conflict point?"
+            },
+            {
+              "label": "T-junction",
+              "size": 9,
+              "icon": "arrow"
+            },
+            {
+              "label": "Roundabout",
+              "size": 8,
+              "icon": "wheel"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the sizes. An ordinary crossroads has thirty two conflict points, places where two vehicle paths cross, merge or split. A T-junction has nine, a roundabout only eight, and none of them head-on. Signals solve the crossroads another way: they give each stream its own slice of time. How many conflict points does the roundabout have?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "conflict points",
+          "items": [
+            {
+              "label": "Crossroads",
+              "size": 32,
+              "icon": "car",
+              "ask": "What is a conflict point?"
+            },
+            {
+              "label": "T-junction",
+              "size": 9,
+              "icon": "arrow"
+            },
+            {
+              "label": "Roundabout",
+              "size": 8,
+              "icon": "wheel"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Eight! Now follow the signal cycle. North–south gets green, then amber, then a short all-red so the box can empty, then east–west takes its turn. Every change wastes a few seconds while drivers stop and start: the lost time, here five seconds per phase, ten in all.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "North–south green",
+              "icon": "light",
+              "note": "Phase 1 moves"
+            },
+            {
+              "label": "Amber",
+              "icon": "timer",
+              "note": "About 3 seconds to clear"
+            },
+            {
+              "label": "All red",
+              "icon": "switch",
+              "note": "A moment for the box to empty",
+              "ask": "What is lost time at a signal?"
+            },
+            {
+              "label": "East–west green",
+              "icon": "light",
+              "note": "Phase 2 moves"
+            },
+            {
+              "label": "Amber again",
+              "icon": "timer",
+              "note": "Then all red, and repeat"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Webster's formula finds the best cycle. For each phase, the flow ratio is the busiest flow over the saturation flow, the most a green can pass, say eighteen hundred an hour. Six hundred and thirty over eighteen hundred is zero point three five; five forty over eighteen hundred, zero point three. They add to Y of zero point six five, giving a cycle of fifty seven seconds.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Sum of flow ratios Y",
+            "min": 0.3,
+            "max": 0.9
+          },
+          "y": {
+            "label": "Cycle length (s)",
+            "max": 200
+          },
+          "curves": [
+            {
+              "label": "Webster C₀, L = 10 s",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0.3,
+                  28.6
+                ],
+                [
+                  0.4,
+                  33.3
+                ],
+                [
+                  0.5,
+                  40
+                ],
+                [
+                  0.6,
+                  50
+                ],
+                [
+                  0.65,
+                  57.1
+                ],
+                [
+                  0.7,
+                  66.7
+                ],
+                [
+                  0.75,
+                  80
+                ],
+                [
+                  0.8,
+                  100
+                ],
+                [
+                  0.85,
+                  133.3
+                ],
+                [
+                  0.9,
+                  200
+                ]
+              ],
+              "ask": "How do you calculate the optimum signal cycle length?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.65,
+              "label": "Y 0.65: C₀ 57 s",
+              "ask": "How do you calculate the optimum signal cycle length?"
+            },
+            {
+              "x": 0.85,
+              "label": "Y 0.85: 133 s"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "C₀ = (1.5L + 5) / (1 − Y) = (15 + 5) / 0.35 ≈ 57 s"
+        }
+      ]
+    },
+    {
+      "say": "Share the forty seven seconds of real green in proportion to the flow ratios: about twenty five seconds and twenty two. And look at the curve: as Y nears one, the cycle shoots up, because the junction is close to full. Excellent! Challenge: what cycle does Webster give if Y is zero point seven five?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Sum of flow ratios Y",
+            "min": 0.3,
+            "max": 0.9
+          },
+          "y": {
+            "label": "Cycle length (s)",
+            "max": 200
+          },
+          "curves": [
+            {
+              "label": "Webster C₀, L = 10 s",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0.3,
+                  28.6
+                ],
+                [
+                  0.4,
+                  33.3
+                ],
+                [
+                  0.5,
+                  40
+                ],
+                [
+                  0.6,
+                  50
+                ],
+                [
+                  0.65,
+                  57.1
+                ],
+                [
+                  0.7,
+                  66.7
+                ],
+                [
+                  0.75,
+                  80
+                ],
+                [
+                  0.8,
+                  100
+                ],
+                [
+                  0.85,
+                  133.3
+                ],
+                [
+                  0.9,
+                  200
+                ]
+              ],
+              "ask": "How do you calculate the optimum signal cycle length?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.65,
+              "label": "Y 0.65: C₀ 57 s",
+              "ask": "How do you calculate the optimum signal cycle length?"
+            },
+            {
+              "x": 0.85,
+              "label": "Y 0.85: 133 s"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "g₁ = (C₀ − L) y₁ / Y = 47.1 × 0.35 / 0.65 ≈ 25 s"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you calculate the optimum signal cycle length?",
+      "a": "With Webster's formula: C0 equals 1.5 L plus 5, over 1 minus Y, where L is the total lost time and Y the sum of the critical flow ratios. With L of 10 seconds and Y of 0.65 it gives about 57 seconds.",
+      "asks": [
+        "Webster's formula",
+        "Optimum cycle length"
+      ]
+    },
+    {
+      "q": "What is a conflict point?",
+      "a": "A place where two vehicle paths cross, merge or diverge. A four-leg crossroads has 32, a T-junction 9 and a single-lane roundabout 8.",
+      "asks": [
+        "How many conflict points does a crossroads have?"
+      ]
+    },
+    {
+      "q": "What is saturation flow?",
+      "a": "The maximum flow that can cross the stop line during green when a queue is moving steadily, often about 1,800 vehicles per hour per lane. The flow ratio is the actual flow divided by it.",
+      "asks": [
+        "Flow ratio y = q/s"
+      ]
+    },
+    {
+      "q": "What is lost time at a signal?",
+      "a": "Time in each phase when the junction is not used efficiently: the start-up delay as the queue gets moving and the clearance during amber and all-red. Often around 4 to 5 seconds per phase.",
+      "asks": [
+        "All red interval"
+      ]
+    },
+    {
+      "q": "How is green time split between phases?",
+      "a": "The effective green, the cycle minus lost time, is shared in proportion to each phase's critical flow ratio. Here 47.1 seconds split 0.35 to 0.30 gives about 25 and 22 seconds.",
+      "asks": [
+        "Green split calculation"
+      ]
+    }
+  ],
+  "facts": [
+    "F. V. Webster published his signal timing method at Britain's Road Research Laboratory in 1958.",
+    "The first traffic signal, gas-lit and hand-operated, was installed near the Houses of Parliament in London in 1868."
+  ],
+  "quiz": [
+    {
+      "say": "A junction has a total lost time of 12 seconds and Y of 0.6. What optimum cycle does Webster give?",
+      "show": "Lost time L = 12 s and Y = 0.6. Optimum cycle by Webster?",
+      "options": [
+        {
+          "show": "57.5 s",
+          "say": "57.5 seconds"
+        },
+        {
+          "show": "30 s",
+          "say": "30 seconds"
+        },
+        {
+          "show": "38.3 s",
+          "say": "38.3 seconds"
+        }
+      ],
+      "answer": 0,
+      "why": "C₀ = (1.5 × 12 + 5) / (1 − 0.6) = 23 / 0.4 = 57.5 s.",
+      "wrong": {
+        "1": "That leaves out the plus 5 and the 1.5 factor.",
+        "2": "That divides by 0.6 instead of by 1 minus 0.6."
+      }
+    },
+    {
+      "say": "How many conflict points does a single-lane roundabout have?",
+      "show": "How many conflict points does a single-lane roundabout have?",
+      "options": [
+        {
+          "show": "8",
+          "say": "8"
+        },
+        {
+          "show": "32",
+          "say": "32"
+        },
+        {
+          "show": "0",
+          "say": "0"
+        }
+      ],
+      "answer": 0,
+      "why": "A roundabout has 4 merging and 4 diverging points and no crossing ones.",
+      "wrong": {
+        "1": "That is a four-leg crossroads.",
+        "2": "Vehicles still merge and diverge at a roundabout."
+      }
+    }
+  ]
+}

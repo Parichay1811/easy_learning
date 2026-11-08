@@ -1,0 +1,44 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Render library</title>
+<style>
+  body { margin: 0; background: #05070f; color: #e9eeff; font: 14px Lexend, system-ui, sans-serif; }
+  .wrap { display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 10px; padding: 10px; }
+  canvas { width: 100%; aspect-ratio: 16 / 9; display: block; background: linear-gradient(160deg, #141e40, #080c1c); border-radius: 12px; }
+  nav { max-height: calc(100vh - 20px); overflow: auto; }
+  nav a { display: flex; gap: 8px; align-items: center; color: #93a0c4; text-decoration: none; padding: 3px; border-radius: 6px; }
+  nav a.on, nav a:hover { background: rgba(140,170,255,0.15); color: #e9eeff; }
+  nav img { width: 64px; aspect-ratio: 8 / 7; border-radius: 4px; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: 1fr; } nav { max-height: 260px; } }
+  #said { padding: 8px 2px; color: #22d3ee; min-height: 20px; }
+</style>
+<div class="wrap">
+  <div><canvas id="c"></canvas><div id="said">Tap a pin or a tag.</div><div id="info"></div></div>
+  <nav id="nav"></nav>
+</div>
+<script type="module">
+// A development page: one render from shared/renders.js on the real board,
+// with its pins and tags, and the list of all renders.
+//   /dev/renders.html?render=heart&focus=2
+import { Board } from '../board.js';
+import { RENDERS } from '/shared/renders.js';
+const q = new URLSearchParams(location.search);
+const name = q.get('render') || Object.keys(RENDERS)[0];
+const nav = document.getElementById('nav');
+for (const [k, r] of Object.entries(RENDERS)) {
+  const a = document.createElement('a');
+  a.href = `?render=${k}`;
+  a.className = k === name ? 'on' : '';
+  a.innerHTML = `<img src="${r.src}" alt=""><span>${r.title}${r.loop ? ' ▶' : ''}</span>`;
+  nav.append(a);
+}
+const said = document.getElementById('said');
+const board = new Board(document.getElementById('c'), { onChip: (s) => { said.textContent = `Asks: ${s}`; } });
+const op = { op: 'image', render: name };
+if (q.has('focus')) op.focus = Number(q.get('focus'));
+board.add({ op: 'title', text: RENDERS[name]?.title || name }, 0);
+board.add(op, 0);
+const r = RENDERS[name];
+document.getElementById('info').textContent = r ? `${r.parts.length} parts · ${r.tags.join(', ')}` : 'unknown render';
+</script>

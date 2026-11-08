@@ -1,0 +1,359 @@
+{
+  "id": "BME-MACHD-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Welded joints: butt and fillet welds and the throat stress",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MACHD — Machine design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "fillet weld",
+    "butt weld",
+    "weld throat",
+    "leg length",
+    "weld shear stress"
+  ],
+  "examples": [
+    "How do I calculate the strength of a fillet weld?",
+    "What is the throat of a weld?",
+    "What is the difference between butt and fillet welds?"
+  ],
+  "figure": [
+    {
+      "name": "x-compare",
+      "left": {
+        "title": "Butt weld",
+        "icon": "fire",
+        "points": [
+          "Plates edge to edge",
+          "Weld fills a V groove",
+          "Strong as the plate",
+          "Pipes, tanks, ships"
+        ]
+      },
+      "right": {
+        "title": "Fillet weld",
+        "icon": "fire",
+        "points": [
+          "Plates overlap or form T",
+          "Triangle in the corner",
+          "Weak plane is throat",
+          "Brackets, frames, lugs"
+        ]
+      },
+      "verdict": "Fillet welds are the most common in machines",
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Ships, bridges, car chassis and cranes are held together by welds: metal melted and fused into one piece. Look at the two main kinds. A butt weld joins plates edge to edge; a fillet weld fills the corner where plates meet, like a triangular bead.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Welded joints: butt and fillet welds and the throat stress"
+        },
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Butt weld",
+            "icon": "fire",
+            "points": [
+              "Plates edge to edge",
+              "Weld fills a V groove",
+              "Strong as the plate",
+              "Pipes, tanks, ships"
+            ]
+          },
+          "right": {
+            "title": "Fillet weld",
+            "icon": "fire",
+            "points": [
+              "Plates overlap or form T",
+              "Triangle in the corner",
+              "Weak plane is throat",
+              "Brackets, frames, lugs"
+            ]
+          },
+          "verdict": "Fillet welds are the most common in machines",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Fillet weld size is given by its leg length h"
+        }
+      ]
+    },
+    {
+      "say": "A fillet weld breaks along its weakest plane: the throat, the shortest line from the corner to the face of the triangle. For an equal-leg fillet, the throat is 0.707 times the leg, because the triangle has 45 degree angles. Why do you think 0.707 appears?",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Butt weld",
+            "icon": "fire",
+            "points": [
+              "Plates edge to edge",
+              "Weld fills a V groove",
+              "Strong as the plate",
+              "Pipes, tanks, ships"
+            ]
+          },
+          "right": {
+            "title": "Fillet weld",
+            "icon": "fire",
+            "points": [
+              "Plates overlap or form T",
+              "Triangle in the corner",
+              "Weak plane is throat",
+              "Brackets, frames, lugs"
+            ]
+          },
+          "verdict": "Fillet welds are the most common in machines",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "t = h cos 45° = 0.707 h"
+        }
+      ]
+    },
+    {
+      "say": "It is one over root two, the cosine of 45 degrees. Now a worked example. A bracket carries 50 kilonewtons on two 100 millimetre fillet welds with 6 millimetre legs. Throat area is 0.707 times 6 times 200: about 848 square millimetres. Shear stress is 50,000 over 848, about 59 megapascals.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Leg size h (mm)",
+            "min": 3,
+            "max": 12
+          },
+          "y": {
+            "label": "Throat stress (MPa)",
+            "max": 160
+          },
+          "curves": [
+            {
+              "label": "50 kN on 200 mm weld",
+              "type": "power",
+              "a": 353.6,
+              "k": -1,
+              "ask": "How do I calculate the strength of a fillet weld?"
+            },
+            {
+              "label": "Allowable 145 MPa",
+              "type": "line",
+              "c": 145,
+              "k": 0,
+              "ask": "What is the allowable stress for a weld?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 6,
+              "label": "h = 6 mm: 59 MPa"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "τ = F/(0.707 h L) = 50 000 / 848 = 58.9 MPa"
+        }
+      ]
+    },
+    {
+      "say": "See the falling curve? A bigger leg spreads the load over a thicker throat. The flat line is a typical allowable shear stress for a common electrode, about 145 megapascals. Our weld sits well below, a factor of safety near 2.5. Could we use a smaller 3 millimetre weld?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Leg size h (mm)",
+            "min": 3,
+            "max": 12
+          },
+          "y": {
+            "label": "Throat stress (MPa)",
+            "max": 160
+          },
+          "curves": [
+            {
+              "label": "50 kN on 200 mm weld",
+              "type": "power",
+              "a": 353.6,
+              "k": -1,
+              "ask": "How do I calculate the strength of a fillet weld?"
+            },
+            {
+              "label": "Allowable 145 MPa",
+              "type": "line",
+              "c": 145,
+              "k": 0,
+              "ask": "What is the allowable stress for a weld?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 6,
+              "label": "h = 6 mm: 59 MPa"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Allowable ≈ 0.3 × electrode tensile strength (about 482 MPa)"
+        }
+      ]
+    },
+    {
+      "say": "At 3 millimetres the stress doubles to 118, still under 145, so yes for static load. Brilliant! But welds have a hidden weakness: the heat-affected zone and the weld toe are stress raisers, so welds under repeated loads need much lower stresses. Exam tip: weld length counts only where the weld is full size.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Leg size h (mm)",
+            "min": 3,
+            "max": 12
+          },
+          "y": {
+            "label": "Throat stress (MPa)",
+            "max": 160
+          },
+          "curves": [
+            {
+              "label": "50 kN on 200 mm weld",
+              "type": "power",
+              "a": 353.6,
+              "k": -1,
+              "ask": "How do I calculate the strength of a fillet weld?"
+            },
+            {
+              "label": "Allowable 145 MPa",
+              "type": "line",
+              "c": 145,
+              "k": 0,
+              "ask": "What is the allowable stress for a weld?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 6,
+              "label": "h = 6 mm: 59 MPa"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Fatigue: welded joints are graded by detail category"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between butt and fillet welds?",
+      "a": "A butt weld joins parts edge to edge, usually in a prepared groove, and can be as strong as the plate. A fillet weld is a triangular bead in a corner or lap joint, and its strength depends on its throat.",
+      "asks": [
+        "types of welded joints"
+      ]
+    },
+    {
+      "q": "How do I calculate the strength of a fillet weld?",
+      "a": "Divide the load by the throat area: 0.707 times leg size times weld length. Compare that shear stress with the allowable stress for the electrode.",
+      "asks": [
+        "fillet weld stress formula"
+      ]
+    },
+    {
+      "q": "What is the allowable stress for a weld?",
+      "a": "A common rule for fillet welds under static load allows about 0.3 times the electrode tensile strength in shear, about 145 megapascals for a 482 megapascal electrode. Design codes set the exact value.",
+      "asks": [
+        "weld allowable shear stress"
+      ]
+    },
+    {
+      "q": "What is the throat of a weld?",
+      "a": "The shortest distance from the root of a fillet weld to its face. For an equal-leg fillet it is 0.707 times the leg length, and it is where failure usually happens.",
+      "asks": [
+        "weld throat thickness"
+      ]
+    },
+    {
+      "q": "Why are welds weak in fatigue?",
+      "a": "The weld toe has a sharp change of shape, and welding leaves residual stresses and small defects, so cracks start there easily under repeated loads.",
+      "asks": [
+        "weld fatigue"
+      ]
+    }
+  ],
+  "facts": [
+    "The throat of an equal-leg fillet weld is 0.707 times its leg length.",
+    "Welded joints usually have much lower fatigue strength than the plain parent metal."
+  ],
+  "quiz": [
+    {
+      "say": "A fillet weld has 8 millimetre legs and a total length of 100 millimetres. It carries 28 kilonewtons. What is the throat shear stress?",
+      "show": "Fillet weld: h = 8 mm, L = 100 mm, load 28 kN. Throat stress?",
+      "options": [
+        {
+          "show": "49.5 MPa",
+          "say": "49.5 megapascals"
+        },
+        {
+          "show": "35 MPa",
+          "say": "35 megapascals"
+        },
+        {
+          "show": "350 MPa",
+          "say": "350 megapascals"
+        }
+      ],
+      "answer": 0,
+      "why": "A = 0.707 × 8 × 100 = 565.6 mm²; τ = 28 000/565.6 = 49.5 MPa.",
+      "wrong": {
+        "1": "That uses the leg, 8 mm, instead of the throat, 5.66 mm.",
+        "2": "That treats 28 kN as 280 kN or mixes up units."
+      }
+    },
+    {
+      "say": "Along which plane does a fillet weld usually fail?",
+      "show": "A fillet weld usually fails along…",
+      "options": [
+        {
+          "show": "The throat",
+          "say": "The throat"
+        },
+        {
+          "show": "The leg on the vertical plate",
+          "say": "The leg on the vertical plate"
+        },
+        {
+          "show": "Through the middle of the base plate",
+          "say": "Through the middle of the base plate"
+        }
+      ],
+      "answer": 0,
+      "why": "The throat is the smallest section through the weld, so it carries the highest stress.",
+      "wrong": {
+        "1": "The leg plane has more area than the throat.",
+        "2": "A correctly sized weld fails before the plate does."
+      }
+    }
+  ]
+}

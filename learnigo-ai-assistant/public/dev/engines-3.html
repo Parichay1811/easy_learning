@@ -1,0 +1,88 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Engineering explainers</title>
+<style>
+  body { margin: 0; background: #05070f; color: #e9eeff; font: 14px Lexend, system-ui, sans-serif; }
+  .grid { display: grid; grid-template-columns: repeat(var(--cols, 3), 1fr); gap: 6px; padding: 6px; }
+  figure { margin: 0; background: linear-gradient(160deg, rgba(20,30,64,0.9), rgba(8,12,28,0.94)); border: 1px solid rgba(140,170,255,0.3); border-radius: 10px; }
+  canvas { width: 100%; aspect-ratio: 800 / 700; display: block; }
+  figcaption { padding: 2px 8px 4px; color: #93a0c4; }
+</style>
+<div class="grid" id="grid"></div>
+<script type="module">
+// A development page for x-circuit, x-beam and x-plot: a handful of ops of
+// each, drawn side by side and running.
+//   /dev/engines-3.html?only=circuit&cols=2&t=6&hits=1&focus=1
+//   /dev/engines-3.html?op=<base64 JSON op>&cols=1
+import { KIT } from '../board.js';
+import { explainSims } from '../sims-explain.js';
+const q = new URLSearchParams(location.search);
+const at = Number(q.get('t') || 6);
+const only = q.get('only') || '';
+const showHits = q.get('hits') === '1';
+document.documentElement.style.setProperty('--cols', q.get('cols') || 3);
+const P = (kind, label, value, more = {}) => ({ kind, label, ...(value ? { value } : {}), ...more });
+const OPS = [
+  ['circuit series', { name: 'x-circuit', title: 'A simple series circuit', parts: [P('cell', 'Battery', '6 V'), P('switch', 'Switch'), P('resistor', 'Resistor', '2 Ω', { note: 'It limits the current to 6 ÷ 3 = 2 A.' }), P('bulb', 'Bulb', '1 Ω'), P('ammeter', 'Ammeter', '2 A')], readouts: ['R = 2 + 1 = 3 Ω', 'I = 6 ÷ 3 = 2 A'] }],
+  ['circuit parallel 2', { name: 'x-circuit', title: 'Two resistors in parallel', parts: [P('cell', 'Battery', '12 V'), P('switch', 'Switch'), P('ammeter', 'Total current', '9 A'), P('resistor', 'Resistor 1', '4 Ω', { branch: 1 }), P('resistor', 'Resistor 2', '2 Ω', { branch: 2 })], readouts: ['I₁ = 12 ÷ 4 = 3 A', 'I₂ = 12 ÷ 2 = 6 A', 'I = 3 + 6 = 9 A'] }],
+  ['circuit parallel 3 open', { name: 'x-circuit', title: 'Three lamps, one switched off', parts: [P('cell', 'Supply', '12 V'), P('fuse', 'Fuse', '5 A'), P('bulb', 'Lamp 1', '12 Ω', { branch: 1 }), P('bulb', 'Lamp 2', '6 Ω', { branch: 2 }), P('ammeter', 'A2', '2 A', { branch: 2 }), P('switch', 'Switch 3', '', { branch: 3, open: true }), P('bulb', 'Lamp 3', '6 Ω', { branch: 3 })], readouts: ['I₁ = 1 A', 'I₂ = 2 A', 'I₃ = 0 A'] }],
+  ['circuit open main', { name: 'x-circuit', title: 'Open switch: no current', parts: [P('cell', 'Cell', '1.5 V'), P('switch', 'Switch', '', { open: true }), P('bulb', 'Bulb'), P('motor', 'Motor')] }],
+  ['circuit ac cap', { name: 'x-circuit', title: 'AC through a capacitor', parts: [P('ac', 'AC supply', '230 V'), P('capacitor', 'Capacitor', '10 µF'), P('resistor', 'Resistor', '1 kΩ'), P('voltmeter', 'Voltmeter', '72 V'), P('ammeter', 'Ammeter')], readouts: ['f = 50 Hz', 'Xc = 318 Ω'] }],
+  ['circuit rc dc', { name: 'x-circuit', title: 'Charging a capacitor', parts: [P('cell', 'Battery', '9 V'), P('voltmeter', 'V supply'), P('resistor', 'R', '10 kΩ'), P('capacitor', 'C', '100 µF', { note: 'Charge builds up, so the current dies away.' }), P('led', 'Red LED')], readouts: ['τ = RC = 1 s'] }],
+  ['circuit half wave', { name: 'x-circuit', title: 'A half-wave rectifier', parts: [P('ac', 'Transformer', '12 V'), P('diode', 'Diode'), P('block', 'Smoothing filter'), P('resistor', 'Load', '100 Ω')] }],
+  ['circuit 8 parts', { name: 'x-circuit', parts: [P('cell', 'Battery pack', '24 V'), P('fuse', 'Main fuse', '10 A'), P('switch', 'Key switch'), P('ammeter', 'Ammeter'), P('motor', 'Fan motor', '8 Ω', { branch: 1 }), P('inductor', 'Choke', '2 mH', { branch: 1 }), P('led', 'Green LED', '', { branch: 2 }), P('resistor', 'Series resistor', '1 kΩ', { branch: 2 })] }],
+  ['stage inverting', { name: 'x-circuit', title: 'The inverting amplifier', layout: 'inverting', parts: [P('cell', 'Input', '0.5 V'), P('resistor', 'R_in', '10 kΩ'), P('resistor', 'R_f (feedback)', '100 kΩ'), P('opamp', 'Op-amp', 'gain 10⁵+')], readouts: ['I_in = 50 µA', 'V− ≈ 0 V (virtual earth)', 'V_out = −5 V'] }],
+  ['stage inverting ac load', { name: 'x-circuit', layout: 'inverting', parts: [P('ac', 'Signal', '1 V'), P('resistor', 'R_in', '4.7 kΩ'), P('resistor', 'R_f', '47 kΩ'), P('opamp', '741'), P('resistor', 'Load', '10 kΩ')] }],
+  ['stage non-inverting', { name: 'x-circuit', title: 'The non-inverting amplifier', layout: 'non-inverting', parts: [P('cell', 'Input to + pin', '0.5 V'), P('resistor', 'R1', '10 kΩ'), P('resistor', 'R_f', '90 kΩ'), P('opamp', 'Op-amp'), P('resistor', 'Load', '1 kΩ')], readouts: ['V− = V+ = 0.5 V', 'Gain = 1 + 90/10 = 10', 'V_out = 5 V'] }],
+  ['stage follower', { name: 'x-circuit', title: 'The voltage follower', layout: 'follower', parts: [P('cell', 'Sensor', '0.5 V'), P('opamp', 'Op-amp follower', '×1'), P('resistor', 'Load', '1 kΩ')] }],
+  ['stage bjt', { name: 'x-circuit', title: 'A small base current controls a big one', layout: 'transistor', parts: [P('cell', 'Supply', '9 V'), P('resistor', 'R_C', '2 kΩ'), P('npn', 'NPN transistor', 'β = 100', { note: 'Base current 20 µA, collector current 2 mA.' }), P('resistor', 'R_B', '100 kΩ'), P('cell', 'Base drive', '2.7 V'), P('ammeter', 'Collector current', '2 mA')], readouts: ['I_B = 20 µA', 'I_C = βI_B = 2 mA', 'V_CE = 9 − 4 = 5 V'] }],
+  ['stage mosfet on', { name: 'x-circuit', title: 'A MOSFET switching an LED strip', layout: 'transistor', parts: [P('cell', 'Supply', '12 V'), P('led', 'LED strip', '12 W'), P('nmos', 'N-channel MOSFET', 'V_th = 2 V'), P('resistor', 'Gate resistor', '100 Ω'), P('cell', 'Gate drive', '5 V'), P('ammeter', 'Ammeter', '1 A')], readouts: ['Gate 5 V: ON', 'R_DS(on) = 0.05 Ω'] }],
+  ['stage mosfet off', { name: 'x-circuit', title: 'Gate at 0 V: off', layout: 'transistor', parts: [P('cell', 'Supply', '12 V'), P('led', 'LED strip', '12 W'), P('nmos', 'N-channel MOSFET'), P('resistor', 'Gate resistor', '100 Ω'), P('cell', 'Gate drive', '0 V')], readouts: ['Gate 0 V: OFF'] }],
+  ['stage bjt switch', { name: 'x-circuit', layout: 'transistor', parts: [P('cell', 'Battery', '6 V'), P('bulb', 'Lamp'), P('npn', 'BC547'), P('resistor', 'R_B', '10 kΩ'), P('switch', 'Push switch')] }],
+  ['stage common-emitter', { name: 'x-circuit', title: 'The common-emitter amplifier', layout: 'common-emitter', parts: [P('cell', 'Vcc', '12 V'), P('resistor', 'R1', '33 kΩ'), P('resistor', 'R2', '10 kΩ'), P('resistor', 'R_C', '2.7 kΩ'), P('npn', 'NPN, β = 100'), P('resistor', 'R_E', '1 kΩ')], readouts: ['V_B = 2.8 V, V_E = 2.1 V', 'I_C ≈ 2.1 mA', 'V_C ≈ 6.4 V'] }],
+  ['stage ce input', { name: 'x-circuit', layout: 'common-emitter', parts: [P('cell', 'Vcc', '12 V'), P('resistor', 'R1', '33 kΩ'), P('resistor', 'R2', '10 kΩ'), P('resistor', 'R_C', '2.7 kΩ'), P('npn', 'NPN', 'β = 100'), P('resistor', 'R_E', '1 kΩ'), P('ac', 'Mic', '10 mV')] }],
+  ['beam simple', { name: 'x-beam', title: 'A simply supported beam', length: 6, supports: [{ kind: 'pin', at: 0 }, { kind: 'roller', at: 1 }], loads: [{ kind: 'point', at: 0.5, size: 10 }], show: ['beam', 'shear', 'moment'] }],
+  ['beam udl+point 3 diags', { name: 'x-beam', title: 'Spread load and a point load', length: 8, supports: [{ kind: 'pin', at: 0 }, { kind: 'roller', at: 1 }], loads: [{ kind: 'udl', at: 0, to: 1, size: 5 }, { kind: 'point', at: 0.25, size: 20, label: 'Wheel' }], show: ['shear', 'moment', 'deflection'] }],
+  ['beam overhang', { name: 'x-beam', title: 'A beam with an overhang', length: 10, supports: [{ kind: 'pin', at: 0 }, { kind: 'roller', at: 0.7 }], loads: [{ kind: 'udl', at: 0, to: 0.7, size: 4 }, { kind: 'point', at: 1, size: 8 }], show: ['shear', 'moment'] }],
+  ['cantilever left', { name: 'x-beam', title: 'A cantilever with an end load', length: 3, supports: [{ kind: 'fixed', at: 0 }], loads: [{ kind: 'point', at: 1, size: 10 }], show: ['moment', 'deflection'] }],
+  ['cantilever right', { name: 'x-beam', title: 'A cantilever, wall on the right', length: 4, supports: [{ kind: 'fixed', at: 1 }], loads: [{ kind: 'udl', at: 0, to: 1, size: 6 }, { kind: 'point', at: 0, size: 5 }], show: ['shear', 'moment', 'deflection'] }],
+  ['beam only', { name: 'x-beam', length: 5, supports: [{ kind: 'roller', at: 0.1 }, { kind: 'pin', at: 0.9 }], loads: [{ kind: 'point', at: 0.4, size: 7.5 }, { kind: 'point', at: 0.45, size: 12 }, { kind: 'udl', at: 0.6, to: 0.9, size: 3 }], show: 'beam' }],
+  ['plot rc', { name: 'x-plot', title: 'A capacitor charging and discharging', x: { label: 'Time (s)', max: 5 }, y: { label: 'Voltage (V)', max: 12 }, curves: [{ label: 'Charging', type: 'rise', a: 12, k: 1 }, { label: 'Discharging', type: 'decay', a: 12, k: 1 }], marks: [{ x: 1, label: 'One time constant' }] }],
+  ['plot sine phase', { name: 'x-plot', title: 'Voltage and current in an inductor', x: { label: 'Time (ms)', max: 40 }, y: { label: 'Value', max: 12, min: -12 }, curves: [{ label: 'Voltage (V)', type: 'sine', a: 10, k: 0.05 }, { label: 'Current (A)', type: 'sine', a: 6, k: 0.05, phase: -90 }], marks: [{ x: 5, label: 'V peak' }, { x: 10, label: 'I peak' }] }],
+  ['plot pv', { name: 'x-plot', title: 'Work done in one cycle', x: { label: 'Volume (m³)', max: 0.5 }, y: { label: 'Pressure (kPa)', max: 600 }, curves: [{ label: 'Gas cycle', type: 'points', points: [[0.1, 500], [0.4, 500], [0.4, 150], [0.1, 150]], closed: true }] }],
+  ['plot points neg', { name: 'x-plot', title: 'Stress and strain', x: { label: 'Strain (%)', max: 25, min: -5 }, y: { label: 'Stress (MPa)', max: 450, min: -150 }, curves: [{ label: 'Mild steel', type: 'points', points: [[-5, -120], [0, 0], [0.2, 250], [2, 260], [15, 420], [25, 380]] }, { label: 'Aluminium', type: 'points', points: [[0, 0], [0.4, 280], [12, 310], [18, 300]], smooth: true }], marks: [{ x: 0.2, label: 'Yield point' }, { x: 15, label: 'Ultimate strength' }] }],
+  ['plot damped', { name: 'x-plot', title: 'A damped oscillation', x: { label: 'Time (s)', max: 10 }, y: { label: 'Displacement (mm)', max: 10, min: -10 }, curves: [{ label: 'Damped', type: 'damped', a: 9, k: 0.8, tau: 3 }, { label: 'Envelope', type: 'decay', a: 9, k: 3 }, { label: 'Line', type: 'line', k: -0.5, c: 2 }], marks: [{ x: 3, label: 'τ' }] }],
+  ['plot mohr', { name: 'x-plot', title: "Mohr's circle", equal: true, x: { label: 'Normal stress (MPa)', max: 80, min: 0 }, y: { label: 'Shear stress (MPa)', max: 40, min: -40 }, curves: [{ label: 'Mohr circle', type: 'points', closed: true, smooth: true, points: Array.from({ length: 16 }, (_, i) => [+(40 + 30 * Math.cos((i * Math.PI) / 8)).toFixed(2), +(30 * Math.sin((i * Math.PI) / 8)).toFixed(2)]) }], marks: [{ x: 10, label: 'σ min' }, { x: 70, label: 'σ max' }] }],
+];
+const sims = explainSims(KIT);
+const grid = document.getElementById('grid');
+// ?op=<base64 of a JSON op> draws one op from a pack instead
+if (q.get('op')) OPS.splice(0, OPS.length, ['op', JSON.parse(decodeURIComponent(escape(atob(q.get('op')))))]);
+const items = OPS.filter(([name]) => !only || name.includes(only)).map(([name, op]) => {
+  const fig = document.createElement('figure');
+  const c = document.createElement('canvas');
+  c.width = 800; c.height = 700;
+  const cap = document.createElement('figcaption');
+  cap.textContent = name;
+  fig.append(c, cap);
+  grid.append(fig);
+  const it = { op: 'sim', ...op };
+  if (q.get('focus') != null) it.focus = Number(q.get('focus'));
+  return { name, ctx: c.getContext('2d'), it };
+});
+window.__hits = {};
+const t0 = performance.now();
+function frame(now) {
+  const t = at + (q.get('still') === '1' ? 0 : (now - t0) / 1000);
+  for (const s of items) {
+    const b = { clock: t, hits: [] };
+    s.ctx.setTransform(1, 0, 0, 1, -KIT.FIG.x, -KIT.FIG.y);
+    s.ctx.clearRect(KIT.FIG.x, KIT.FIG.y, 800, 700);
+    try { sims[s.it.name](b, s.ctx, s.it, t); } catch (e) { s.ctx.fillStyle = 'red'; s.ctx.fillText(String(e.message), KIT.FIG.x + 20, KIT.FIG.y + 40); }
+    if (showHits) { s.ctx.strokeStyle = 'rgba(255,0,255,0.6)'; s.ctx.lineWidth = 1; for (const h of b.hits) s.ctx.strokeRect(h.x, h.y, h.w, h.h); }
+    window.__hits[s.name] = b.hits;
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>

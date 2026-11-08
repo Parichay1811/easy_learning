@@ -1,0 +1,49 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Sims contact sheet</title>
+<style>
+  body { margin: 0; background: #05070f; color: #e9eeff; font: 14px Lexend, system-ui, sans-serif; }
+  .grid { display: grid; grid-template-columns: repeat(var(--cols, 4), 1fr); gap: 6px; padding: 6px; }
+  figure { margin: 0; background: linear-gradient(160deg, rgba(20,30,64,0.9), rgba(8,12,28,0.94)); border: 1px solid rgba(140,170,255,0.3); border-radius: 10px; }
+  canvas { width: 100%; aspect-ratio: 800 / 700; display: block; }
+  figcaption { padding: 2px 8px 4px; color: #93a0c4; }
+</style>
+<div class="grid" id="grid"></div>
+<script type="module">
+// A development page: every simulation of a file drawn side by side at the
+// same moment, to check them by eye. /dev/sims.html?file=sims-maths.js&page=0&t=4
+import { KIT } from '../board.js';
+const q = new URLSearchParams(location.search);
+const file = q.get('file') || 'sims-maths.js';
+const per = Number(q.get('per') || 12);
+const page = Number(q.get('page') || 0);
+const at = Number(q.get('t') || 4);
+document.documentElement.style.setProperty('--cols', q.get('cols') || 4);
+const mod = await import(`../${file}`);
+const make = Object.values(mod).find((v) => typeof v === 'function');
+const meta = Object.values(mod).find((v) => v && typeof v === 'object');
+const sims = make(KIT);
+const names = Object.keys(sims).slice(page * per, page * per + per);
+const grid = document.getElementById('grid');
+const items = names.map((name) => {
+  const fig = document.createElement('figure');
+  const c = document.createElement('canvas');
+  c.width = 800; c.height = 700;
+  const cap = document.createElement('figcaption');
+  cap.textContent = name;
+  fig.append(c, cap);
+  grid.append(fig);
+  return { name, ctx: c.getContext('2d'), it: { op: 'sim', name, ...(meta?.[name]?.example || {}) } };
+});
+const t0 = performance.now();
+function frame(now) {
+  const t = at + (now - t0) / 1000;
+  for (const s of items) {
+    s.ctx.setTransform(1, 0, 0, 1, -KIT.FIG.x, -KIT.FIG.y);
+    s.ctx.clearRect(KIT.FIG.x, KIT.FIG.y, 800, 700);
+    try { sims[s.name]({ clock: t }, s.ctx, s.it, t); } catch (e) { s.ctx.fillStyle = 'red'; s.ctx.fillText(String(e.message), KIT.FIG.x + 20, KIT.FIG.y + 40); }
+  }
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>

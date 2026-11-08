@@ -1,0 +1,685 @@
+{
+  "id": "ENGX-TRAN-34",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a cable car is pulled up a mountain",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "cable car",
+    "gondola lift",
+    "bull wheel",
+    "haul rope",
+    "aerial ropeway"
+  ],
+  "examples": [
+    "How do cable cars work?",
+    "Do cable cars have engines?",
+    "What happens if a cable car rope breaks?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.8,
+          "size": 1,
+          "label": "Drive motor",
+          "motion": "spin",
+          "ask": "Where is the engine of a cable car?"
+        },
+        {
+          "id": "bull",
+          "kind": "wheel",
+          "x": 0.12,
+          "y": 0.45,
+          "size": 1.2,
+          "label": "Bull wheel",
+          "motion": "spin",
+          "ask": "What is a bull wheel?"
+        },
+        {
+          "id": "rope",
+          "kind": "belt",
+          "x": 0.5,
+          "y": 0.25,
+          "size": 1.5,
+          "label": "Haul rope",
+          "motion": "flow",
+          "ask": "How strong is a cable car rope?"
+        },
+        {
+          "id": "cabin",
+          "kind": "box",
+          "x": 0.56,
+          "y": 0.56,
+          "size": 0.9,
+          "label": "Cabin",
+          "motion": "slide",
+          "ask": "How do cabins attach to the rope?"
+        },
+        {
+          "id": "tower",
+          "kind": "axle",
+          "x": 0.34,
+          "y": 0.8,
+          "size": 0.8,
+          "label": "Tower and sheaves",
+          "motion": "spin"
+        },
+        {
+          "id": "ret",
+          "kind": "wheel",
+          "x": 0.88,
+          "y": 0.2,
+          "size": 1,
+          "label": "Return wheel",
+          "motion": "spin"
+        },
+        {
+          "id": "tension",
+          "kind": "weight",
+          "x": 0.88,
+          "y": 0.62,
+          "size": 0.9,
+          "label": "Tension weight",
+          "motion": "none",
+          "ask": "Why does a cable car need a tension weight?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "bull",
+          "kind": "energy"
+        },
+        {
+          "from": "bull",
+          "to": "rope",
+          "kind": "force",
+          "label": "pulls"
+        },
+        {
+          "from": "rope",
+          "to": "cabin",
+          "kind": "force",
+          "label": "grip"
+        },
+        {
+          "from": "rope",
+          "to": "ret",
+          "kind": "force",
+          "label": "loops round"
+        },
+        {
+          "from": "tension",
+          "to": "ret",
+          "kind": "force",
+          "label": "keeps tight"
+        },
+        {
+          "from": "tower",
+          "to": "rope",
+          "kind": "force",
+          "label": "holds up"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A cable car hangs from a steel rope stretched between stations, high above the slope. The cabins have no engines; a powerful motor in one of the stations does all the work.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a cable car is pulled up a mountain"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 1,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "Where is the engine of a cable car?"
+            },
+            {
+              "id": "bull",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Bull wheel",
+              "motion": "spin",
+              "ask": "What is a bull wheel?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Haul rope",
+              "motion": "flow",
+              "ask": "How strong is a cable car rope?"
+            },
+            {
+              "id": "cabin",
+              "kind": "box",
+              "x": 0.56,
+              "y": 0.56,
+              "size": 0.9,
+              "label": "Cabin",
+              "motion": "slide",
+              "ask": "How do cabins attach to the rope?"
+            },
+            {
+              "id": "tower",
+              "kind": "axle",
+              "x": 0.34,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Tower and sheaves",
+              "motion": "spin"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.88,
+              "y": 0.2,
+              "size": 1,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "tension",
+              "kind": "weight",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Tension weight",
+              "motion": "none",
+              "ask": "Why does a cable car need a tension weight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "bull",
+              "kind": "energy"
+            },
+            {
+              "from": "bull",
+              "to": "rope",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "rope",
+              "to": "cabin",
+              "kind": "force",
+              "label": "grip"
+            },
+            {
+              "from": "rope",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "tension",
+              "to": "ret",
+              "kind": "force",
+              "label": "keeps tight"
+            },
+            {
+              "from": "tower",
+              "to": "rope",
+              "kind": "force",
+              "label": "holds up"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The motor turns a huge wheel called the bull wheel. The haul rope wraps around it and runs in a giant loop up the mountain to a return wheel at the other end, so turning the bull wheel drags the whole loop.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 1,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "Where is the engine of a cable car?"
+            },
+            {
+              "id": "bull",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Bull wheel",
+              "motion": "spin",
+              "ask": "What is a bull wheel?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Haul rope",
+              "motion": "flow",
+              "ask": "How strong is a cable car rope?"
+            },
+            {
+              "id": "cabin",
+              "kind": "box",
+              "x": 0.56,
+              "y": 0.56,
+              "size": 0.9,
+              "label": "Cabin",
+              "motion": "slide",
+              "ask": "How do cabins attach to the rope?"
+            },
+            {
+              "id": "tower",
+              "kind": "axle",
+              "x": 0.34,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Tower and sheaves",
+              "motion": "spin"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.88,
+              "y": 0.2,
+              "size": 1,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "tension",
+              "kind": "weight",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Tension weight",
+              "motion": "none",
+              "ask": "Why does a cable car need a tension weight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "bull",
+              "kind": "energy"
+            },
+            {
+              "from": "bull",
+              "to": "rope",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "rope",
+              "to": "cabin",
+              "kind": "force",
+              "label": "grip"
+            },
+            {
+              "from": "rope",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "tension",
+              "to": "ret",
+              "kind": "force",
+              "label": "keeps tight"
+            },
+            {
+              "from": "tower",
+              "to": "rope",
+              "kind": "force",
+              "label": "holds up"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Each cabin clamps onto the moving rope with a strong grip. In many gondolas the grip lets go in the stations so cabins slow to walking pace for boarding, then clamps on again to leave.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 1,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "Where is the engine of a cable car?"
+            },
+            {
+              "id": "bull",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Bull wheel",
+              "motion": "spin",
+              "ask": "What is a bull wheel?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Haul rope",
+              "motion": "flow",
+              "ask": "How strong is a cable car rope?"
+            },
+            {
+              "id": "cabin",
+              "kind": "box",
+              "x": 0.56,
+              "y": 0.56,
+              "size": 0.9,
+              "label": "Cabin",
+              "motion": "slide",
+              "ask": "How do cabins attach to the rope?"
+            },
+            {
+              "id": "tower",
+              "kind": "axle",
+              "x": 0.34,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Tower and sheaves",
+              "motion": "spin"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.88,
+              "y": 0.2,
+              "size": 1,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "tension",
+              "kind": "weight",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Tension weight",
+              "motion": "none",
+              "ask": "Why does a cable car need a tension weight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "bull",
+              "kind": "energy"
+            },
+            {
+              "from": "bull",
+              "to": "rope",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "rope",
+              "to": "cabin",
+              "kind": "force",
+              "label": "grip"
+            },
+            {
+              "from": "rope",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "tension",
+              "to": "ret",
+              "kind": "force",
+              "label": "keeps tight"
+            },
+            {
+              "from": "tower",
+              "to": "rope",
+              "kind": "force",
+              "label": "holds up"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The rope stretches with heat and load, so a heavy tension weight or hydraulic ram keeps it tight. Towers along the way carry the rope on small wheels, and the rope is many times stronger than the heaviest load it carries.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 1,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "Where is the engine of a cable car?"
+            },
+            {
+              "id": "bull",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Bull wheel",
+              "motion": "spin",
+              "ask": "What is a bull wheel?"
+            },
+            {
+              "id": "rope",
+              "kind": "belt",
+              "x": 0.5,
+              "y": 0.25,
+              "size": 1.5,
+              "label": "Haul rope",
+              "motion": "flow",
+              "ask": "How strong is a cable car rope?"
+            },
+            {
+              "id": "cabin",
+              "kind": "box",
+              "x": 0.56,
+              "y": 0.56,
+              "size": 0.9,
+              "label": "Cabin",
+              "motion": "slide",
+              "ask": "How do cabins attach to the rope?"
+            },
+            {
+              "id": "tower",
+              "kind": "axle",
+              "x": 0.34,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Tower and sheaves",
+              "motion": "spin"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.88,
+              "y": 0.2,
+              "size": 1,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "tension",
+              "kind": "weight",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Tension weight",
+              "motion": "none",
+              "ask": "Why does a cable car need a tension weight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "bull",
+              "kind": "energy"
+            },
+            {
+              "from": "bull",
+              "to": "rope",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "rope",
+              "to": "cabin",
+              "kind": "force",
+              "label": "grip"
+            },
+            {
+              "from": "rope",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "tension",
+              "to": "ret",
+              "kind": "force",
+              "label": "keeps tight"
+            },
+            {
+              "from": "tower",
+              "to": "rope",
+              "kind": "force",
+              "label": "holds up"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Where is the engine of a cable car?",
+      "a": "The motor is in one of the stations, not in the cabins. It turns the bull wheel, which drives the rope loop.",
+      "asks": [
+        "Do cable cars have engines?"
+      ]
+    },
+    {
+      "q": "What is a bull wheel?",
+      "a": "The bull wheel is the large wheel in a station that the haul rope wraps around. The motor turns it, and friction between wheel and rope pulls the rope along.",
+      "asks": [
+        "What turns the cable car rope?"
+      ]
+    },
+    {
+      "q": "How strong is a cable car rope?",
+      "a": "Ropes are made of many twisted steel wires and are designed to be several times stronger than the biggest load they ever carry. They are inspected regularly.",
+      "asks": [
+        "What if the rope breaks?"
+      ]
+    },
+    {
+      "q": "How do cabins attach to the rope?",
+      "a": "Each cabin hangs from a grip that clamps onto the rope. On detachable systems the grip opens in the stations so cabins can slow down for people to get on and off.",
+      "asks": [
+        "How do gondolas slow down in the station?"
+      ]
+    },
+    {
+      "q": "Why does a cable car need a tension weight?",
+      "a": "Steel rope stretches with load and temperature. A heavy weight or hydraulic system pulls on the return wheel to keep the rope tight so it does not sag or slip.",
+      "asks": [
+        "How is a cable car rope kept tight?"
+      ]
+    }
+  ],
+  "facts": [
+    "Detachable gondola cabins let go of the moving rope in stations so passengers can board slowly.",
+    "Cable car ropes are made of many steel wires twisted into strands.",
+    "La Paz in Bolivia uses a large cable car network as everyday public transport."
+  ],
+  "quiz": [
+    {
+      "say": "What moves the cabins of a cable car?",
+      "show": "What moves the cabins of a cable car?",
+      "options": [
+        {
+          "show": "A motor in a station turning the rope loop",
+          "say": "A motor in a station turning the rope loop"
+        },
+        {
+          "show": "An engine in each cabin",
+          "say": "An engine in each cabin"
+        },
+        {
+          "show": "The wind",
+          "say": "The wind"
+        }
+      ],
+      "answer": 0,
+      "why": "The station motor turns the bull wheel, which pulls the haul rope and the cabins clamped to it.",
+      "wrong": {
+        "1": "The cabins have no engines; they just grip the moving rope.",
+        "2": "Wind is a problem for cable cars, not their power source."
+      }
+    }
+  ]
+}

@@ -1,0 +1,604 @@
+{
+  "id": "ENGX-MECH-44",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a music box plays a tune",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "music box",
+    "pinned cylinder",
+    "steel comb",
+    "mainspring",
+    "governor"
+  ],
+  "examples": [
+    "How does a music box make music?",
+    "Why do music box notes sound different?",
+    "What keeps a music box playing at the same speed?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "key",
+          "kind": "lever",
+          "x": 0.1,
+          "y": 0.25,
+          "size": 0.7,
+          "label": "Winding key",
+          "motion": "spin"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.3,
+          "y": 0.25,
+          "size": 0.9,
+          "label": "Mainspring",
+          "motion": "pulse",
+          "ask": "What powers a music box?"
+        },
+        {
+          "id": "gears",
+          "kind": "gear",
+          "x": 0.52,
+          "y": 0.25,
+          "size": 1,
+          "label": "Gear train",
+          "motion": "spin"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.8,
+          "y": 0.2,
+          "size": 0.7,
+          "label": "Fan governor",
+          "motion": "spin",
+          "ask": "What keeps a music box playing at the same speed?"
+        },
+        {
+          "id": "cylinder",
+          "kind": "wheel",
+          "x": 0.45,
+          "y": 0.7,
+          "size": 1.4,
+          "label": "Pinned cylinder",
+          "motion": "spin",
+          "ask": "What does the pinned cylinder do?"
+        },
+        {
+          "id": "comb",
+          "kind": "lever",
+          "x": 0.8,
+          "y": 0.7,
+          "size": 1.1,
+          "label": "Steel comb",
+          "motion": "pulse",
+          "ask": "Why do music box notes sound different?"
+        }
+      ],
+      "links": [
+        {
+          "from": "key",
+          "to": "spring",
+          "kind": "energy",
+          "label": "winds"
+        },
+        {
+          "from": "spring",
+          "to": "gears",
+          "kind": "energy"
+        },
+        {
+          "from": "gears",
+          "to": "cylinder",
+          "kind": "energy",
+          "label": "slow turn"
+        },
+        {
+          "from": "gears",
+          "to": "fan",
+          "kind": "energy",
+          "label": "air brake"
+        },
+        {
+          "from": "cylinder",
+          "to": "comb",
+          "kind": "force",
+          "label": "pins pluck teeth"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A music box is a tiny machine that plays a tune by itself. Turning the key winds a mainspring, storing energy that drives a train of gears.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a music box plays a tune"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Winding key",
+              "motion": "spin"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Mainspring",
+              "motion": "pulse",
+              "ask": "What powers a music box?"
+            },
+            {
+              "id": "gears",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.8,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Fan governor",
+              "motion": "spin",
+              "ask": "What keeps a music box playing at the same speed?"
+            },
+            {
+              "id": "cylinder",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Pinned cylinder",
+              "motion": "spin",
+              "ask": "What does the pinned cylinder do?"
+            },
+            {
+              "id": "comb",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.7,
+              "size": 1.1,
+              "label": "Steel comb",
+              "motion": "pulse",
+              "ask": "Why do music box notes sound different?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "spring",
+              "kind": "energy",
+              "label": "winds"
+            },
+            {
+              "from": "spring",
+              "to": "gears",
+              "kind": "energy"
+            },
+            {
+              "from": "gears",
+              "to": "cylinder",
+              "kind": "energy",
+              "label": "slow turn"
+            },
+            {
+              "from": "gears",
+              "to": "fan",
+              "kind": "energy",
+              "label": "air brake"
+            },
+            {
+              "from": "cylinder",
+              "to": "comb",
+              "kind": "force",
+              "label": "pins pluck teeth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The gears slowly turn a brass cylinder covered in tiny pins. Each pin is placed exactly where a note is needed in the tune.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Winding key",
+              "motion": "spin"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Mainspring",
+              "motion": "pulse",
+              "ask": "What powers a music box?"
+            },
+            {
+              "id": "gears",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.8,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Fan governor",
+              "motion": "spin",
+              "ask": "What keeps a music box playing at the same speed?"
+            },
+            {
+              "id": "cylinder",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Pinned cylinder",
+              "motion": "spin",
+              "ask": "What does the pinned cylinder do?"
+            },
+            {
+              "id": "comb",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.7,
+              "size": 1.1,
+              "label": "Steel comb",
+              "motion": "pulse",
+              "ask": "Why do music box notes sound different?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "spring",
+              "kind": "energy",
+              "label": "winds"
+            },
+            {
+              "from": "spring",
+              "to": "gears",
+              "kind": "energy"
+            },
+            {
+              "from": "gears",
+              "to": "cylinder",
+              "kind": "energy",
+              "label": "slow turn"
+            },
+            {
+              "from": "gears",
+              "to": "fan",
+              "kind": "energy",
+              "label": "air brake"
+            },
+            {
+              "from": "cylinder",
+              "to": "comb",
+              "kind": "force",
+              "label": "pins pluck teeth"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "As the cylinder turns, the pins pluck the teeth of a steel comb. Each tooth is a different length: long, heavy teeth vibrate slowly for low notes and short ones vibrate fast for high notes.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Winding key",
+              "motion": "spin"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Mainspring",
+              "motion": "pulse",
+              "ask": "What powers a music box?"
+            },
+            {
+              "id": "gears",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.8,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Fan governor",
+              "motion": "spin",
+              "ask": "What keeps a music box playing at the same speed?"
+            },
+            {
+              "id": "cylinder",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Pinned cylinder",
+              "motion": "spin",
+              "ask": "What does the pinned cylinder do?"
+            },
+            {
+              "id": "comb",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.7,
+              "size": 1.1,
+              "label": "Steel comb",
+              "motion": "pulse",
+              "ask": "Why do music box notes sound different?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "spring",
+              "kind": "energy",
+              "label": "winds"
+            },
+            {
+              "from": "spring",
+              "to": "gears",
+              "kind": "energy"
+            },
+            {
+              "from": "gears",
+              "to": "cylinder",
+              "kind": "energy",
+              "label": "slow turn"
+            },
+            {
+              "from": "gears",
+              "to": "fan",
+              "kind": "energy",
+              "label": "air brake"
+            },
+            {
+              "from": "cylinder",
+              "to": "comb",
+              "kind": "force",
+              "label": "pins pluck teeth"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "To stop the spring racing, the gears also spin a little fan. Air resistance on the fan grows quickly with speed, so it holds the tune at a steady pace until the spring runs down.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Winding key",
+              "motion": "spin"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Mainspring",
+              "motion": "pulse",
+              "ask": "What powers a music box?"
+            },
+            {
+              "id": "gears",
+              "kind": "gear",
+              "x": 0.52,
+              "y": 0.25,
+              "size": 1,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.8,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Fan governor",
+              "motion": "spin",
+              "ask": "What keeps a music box playing at the same speed?"
+            },
+            {
+              "id": "cylinder",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Pinned cylinder",
+              "motion": "spin",
+              "ask": "What does the pinned cylinder do?"
+            },
+            {
+              "id": "comb",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.7,
+              "size": 1.1,
+              "label": "Steel comb",
+              "motion": "pulse",
+              "ask": "Why do music box notes sound different?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "spring",
+              "kind": "energy",
+              "label": "winds"
+            },
+            {
+              "from": "spring",
+              "to": "gears",
+              "kind": "energy"
+            },
+            {
+              "from": "gears",
+              "to": "cylinder",
+              "kind": "energy",
+              "label": "slow turn"
+            },
+            {
+              "from": "gears",
+              "to": "fan",
+              "kind": "energy",
+              "label": "air brake"
+            },
+            {
+              "from": "cylinder",
+              "to": "comb",
+              "kind": "force",
+              "label": "pins pluck teeth"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the pinned cylinder do?",
+      "a": "The cylinder carries the tune. Each pin is set at the right place around it and along it, so it plucks the right comb tooth at the right moment as the cylinder turns.",
+      "asks": [
+        "How is the tune stored in a music box?"
+      ]
+    },
+    {
+      "q": "Why do music box notes sound different?",
+      "a": "Each tooth of the steel comb is tuned to a note. Longer, heavier teeth vibrate more slowly and sound lower; shorter teeth vibrate faster and sound higher.",
+      "asks": [
+        "How does the steel comb make notes?"
+      ]
+    },
+    {
+      "q": "What keeps a music box playing at the same speed?",
+      "a": "A small fan called a governor spins fast as the music plays. The faster it spins, the more air pushes against it, so it stops the spring from speeding the tune up.",
+      "asks": [
+        "What is the fan in a music box for?"
+      ]
+    },
+    {
+      "q": "What powers a music box?",
+      "a": "A coiled steel mainspring. Winding the key tightens it, storing elastic energy that drives the gears as it slowly unwinds.",
+      "asks": [
+        "Why do you wind a music box?"
+      ]
+    },
+    {
+      "q": "Who invented the music box?",
+      "a": "The music box with a tuned steel comb was invented by the Swiss watchmaker Antoine Favre in Geneva in 1796.",
+      "asks": [
+        "When were music boxes invented?"
+      ]
+    }
+  ],
+  "facts": [
+    "Antoine Favre of Geneva invented the comb-type music box in 1796.",
+    "Shorter comb teeth vibrate faster and make higher notes."
+  ],
+  "quiz": [
+    {
+      "say": "Which comb tooth plays the highest note?",
+      "show": "Which comb tooth plays the highest note?",
+      "options": [
+        {
+          "show": "The shortest tooth",
+          "say": "The shortest tooth"
+        },
+        {
+          "show": "The longest tooth",
+          "say": "The longest tooth"
+        },
+        {
+          "show": "The middle tooth",
+          "say": "The middle tooth"
+        }
+      ],
+      "answer": 0,
+      "why": "Short, light teeth vibrate fastest, and faster vibration means a higher pitch.",
+      "wrong": {
+        "1": "The longest tooth vibrates slowest and plays the lowest note.",
+        "2": "Pitch depends on length, not position."
+      }
+    }
+  ]
+}

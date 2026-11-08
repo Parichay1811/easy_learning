@@ -1,0 +1,349 @@
+{
+  "id": "BCE-CONC-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Steel I-sections: second moment of area, section modulus and stress",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONC — Concrete and steel design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "I-section",
+    "second moment of area",
+    "section modulus",
+    "bending stress",
+    "yield strength"
+  ],
+  "examples": [
+    "Why are steel beams I-shaped?",
+    "How do you calculate bending stress with the section modulus?",
+    "What is the second moment of area of an I-beam?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-layers",
+      "layers": [
+        {
+          "label": "Top flange",
+          "size": 0.8,
+          "note": "200 × 20 mm plate, in compression",
+          "color": "#7f8c8d",
+          "ask": "Why are steel beams I-shaped?"
+        },
+        {
+          "label": "Web",
+          "size": 4,
+          "note": "10 mm thick, holds flanges apart",
+          "color": "#95a5a6",
+          "ask": "What does the web of an I-beam do?"
+        },
+        {
+          "label": "Bottom flange",
+          "size": 0.8,
+          "note": "200 × 20 mm plate, in tension",
+          "color": "#7f8c8d",
+          "ask": "What is the second moment of area?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Look at any steel bridge girder or factory roof beam and you will see the same shape: a capital I. Why not a solid square bar? Because in bending, the material far from the centre does nearly all the work. This I-section is three hundred millimetres deep, with two twenty millimetre flanges and a slim web.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Steel I-sections: second moment of area, section modulus and stress"
+        },
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Top flange",
+              "size": 0.8,
+              "note": "200 × 20 mm plate, in compression",
+              "color": "#7f8c8d",
+              "ask": "Why are steel beams I-shaped?"
+            },
+            {
+              "label": "Web",
+              "size": 4,
+              "note": "10 mm thick, holds flanges apart",
+              "color": "#95a5a6",
+              "ask": "What does the web of an I-beam do?"
+            },
+            {
+              "label": "Bottom flange",
+              "size": 0.8,
+              "note": "200 × 20 mm plate, in tension",
+              "color": "#7f8c8d",
+              "ask": "What is the second moment of area?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is a steel I-beam bending in 3D. Most of its steel sits in the flanges, far from the neutral axis, which is why its second moment of area is so big for its weight. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Steel I-sections: second moment of area, section modulus and stress"
+        },
+        {
+          "op": "image",
+          "render": "i-beam-bending"
+        }
+      ]
+    },
+    {
+      "say": "Look at the flanges, the wide plates at the top and bottom. When the beam bends, they carry most of the squeeze and the pull because they sit farthest from the neutral axis. The bending stiffness, the second moment of area I, grows with distance squared, so steel placed out there pays off hugely.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Top flange",
+              "size": 0.8,
+              "note": "200 × 20 mm plate, in compression",
+              "color": "#7f8c8d",
+              "ask": "Why are steel beams I-shaped?"
+            },
+            {
+              "label": "Web",
+              "size": 4,
+              "note": "10 mm thick, holds flanges apart",
+              "color": "#95a5a6",
+              "ask": "What does the web of an I-beam do?"
+            },
+            {
+              "label": "Bottom flange",
+              "size": 0.8,
+              "note": "200 × 20 mm plate, in tension",
+              "color": "#7f8c8d",
+              "ask": "What is the second moment of area?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "I = (200×300³ − 190×260³)/12 ≈ 172 × 10⁶ mm⁴"
+        }
+      ]
+    },
+    {
+      "say": "Same steel, ten thousand six hundred square millimetres, two shapes. A solid bar fifty by two hundred and twelve millimetres has I of about forty million millimetres to the fourth. Our I-section has about a hundred and seventy two million: over four times stiffer for the same weight. Which would you buy by the tonne?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "× 10⁶ mm⁴",
+          "items": [
+            {
+              "label": "Solid bar 50×212",
+              "size": 39.7,
+              "icon": "ruler"
+            },
+            {
+              "label": "I-section 300 deep",
+              "size": 171.7,
+              "icon": "bridge",
+              "ask": "What is the second moment of area?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Same area 10 600 mm²: I-section ≈ 4.3 × stiffer"
+        }
+      ]
+    },
+    {
+      "say": "The I, of course! Now check stress. The section modulus Z turns moment into stress: sigma equals M over Z. A universal beam with Z of one thousand cubic centimetres, carrying sixty four kilonewtons per metre over five metres, sees two hundred kilonewton metres, so two hundred megapascals. S275 steel yields at two hundred and seventy five, so it is safe.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 5,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is the section modulus?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 64,
+              "label": "64 kN/m",
+              "ask": "What is the section modulus?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "σ = M/Z = 200×10⁶ N·mm / 1.0×10⁶ mm³ = 200 MPa"
+        },
+        {
+          "op": "note",
+          "text": "200 MPa < 275 MPa yield for S275, so the beam is OK."
+        }
+      ]
+    },
+    {
+      "say": "And the web? It holds the flanges apart and carries the shear. Make it too thin and it can buckle, so codes class sections by how slender their plates are. Great job. Remember: flanges for bending, web for shear, Z for stress, I for stiffness. Challenge: why are steel columns often wide H-shapes instead of tall I-shapes?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Top flange",
+              "size": 0.8,
+              "note": "200 × 20 mm plate, in compression",
+              "color": "#7f8c8d",
+              "ask": "Why are steel beams I-shaped?"
+            },
+            {
+              "label": "Web",
+              "size": 4,
+              "note": "10 mm thick, holds flanges apart",
+              "color": "#95a5a6",
+              "ask": "What does the web of an I-beam do?"
+            },
+            {
+              "label": "Bottom flange",
+              "size": 0.8,
+              "note": "200 × 20 mm plate, in tension",
+              "color": "#7f8c8d",
+              "ask": "What is the second moment of area?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why are steel beams I-shaped?",
+      "a": "In bending, stress is largest far from the neutral axis, so the flanges do most of the work. The I puts most steel there and uses a thin web to join them, giving high stiffness for little weight.",
+      "asks": [
+        "Why use an I-beam?",
+        "Why not a solid steel bar?"
+      ]
+    },
+    {
+      "q": "What is the second moment of area?",
+      "a": "It measures how a cross-section's area is spread about the neutral axis, in millimetres to the fourth. The farther the area from the axis, the larger I and the stiffer the beam; for a rectangle it is b h cubed over 12.",
+      "asks": [
+        "What is I in beam formulas?",
+        "Moment of inertia of a section"
+      ]
+    },
+    {
+      "q": "What is the section modulus?",
+      "a": "Z is the second moment of area divided by the distance to the extreme fibre. Bending stress equals moment over Z, so 200 kilonewton metres on a Z of 1000 cubic centimetres gives 200 megapascals.",
+      "asks": [
+        "What is Z in steel design?",
+        "Elastic section modulus"
+      ]
+    },
+    {
+      "q": "What does the web of an I-beam do?",
+      "a": "The web connects the two flanges, keeps them apart and carries most of the shear force. If it is too slender it can buckle, so stiffeners are sometimes added.",
+      "asks": [
+        "Role of the web"
+      ]
+    },
+    {
+      "q": "What does S275 or S355 mean?",
+      "a": "They are European structural steel grades. The number is the nominal yield strength in megapascals for thinner sections: 275 or 355.",
+      "asks": [
+        "Steel grades explained"
+      ]
+    }
+  ],
+  "facts": [
+    "S275 and S355 structural steels have nominal yield strengths of 275 and 355 MPa for thinner sections under EN 10025.",
+    "For a rectangle, I = bh³/12 and the elastic section modulus is Z = bh²/6."
+  ],
+  "quiz": [
+    {
+      "say": "A steel beam has a section modulus of 800 cubic centimetres and a moment of 160 kilonewton metres. What is the bending stress?",
+      "show": "A steel beam has Z = 800 cm³ and M = 160 kN·m. Bending stress?",
+      "options": [
+        {
+          "show": "200 MPa",
+          "say": "200 megapascals"
+        },
+        {
+          "show": "2 MPa",
+          "say": "2 megapascals"
+        },
+        {
+          "show": "128 MPa",
+          "say": "128 megapascals"
+        }
+      ],
+      "answer": 0,
+      "why": "160 × 10⁶ N·mm ÷ 800 × 10³ mm³ = 200 megapascals.",
+      "wrong": {
+        "1": "That mixes up the units; convert both to newtons and millimetres.",
+        "2": "That multiplies instead of dividing."
+      }
+    },
+    {
+      "say": "For the same area of steel, which shape is stiffest in bending?",
+      "show": "For the same area of steel, which shape is stiffest in bending?",
+      "options": [
+        {
+          "show": "A solid square bar",
+          "say": "A solid square bar"
+        },
+        {
+          "show": "A round bar",
+          "say": "A round bar"
+        },
+        {
+          "show": "An I-section",
+          "say": "An I-section"
+        }
+      ],
+      "answer": 2,
+      "why": "The I puts most of its area far from the neutral axis, giving the largest I.",
+      "wrong": {
+        "0": "A square keeps much of its area near the centre.",
+        "1": "A round bar has even more area near the centre than a square."
+      }
+    }
+  ]
+}

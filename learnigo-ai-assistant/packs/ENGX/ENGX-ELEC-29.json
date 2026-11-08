@@ -1,0 +1,549 @@
+{
+  "id": "ENGX-ELEC-29",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a bimetal strip switches a heater on and off",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "bimetal strip",
+    "bimetallic thermostat",
+    "thermal expansion",
+    "thermostat contact",
+    "temperature switch"
+  ],
+  "examples": [
+    "How does a bimetal strip work?",
+    "How does a thermostat switch the heater off?",
+    "Why does my heater keep clicking on and off?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "supply",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Mains supply"
+        },
+        {
+          "id": "strip",
+          "kind": "lever",
+          "x": 0.4,
+          "y": 0.32,
+          "size": 1.2,
+          "label": "Bimetal strip",
+          "motion": "swing",
+          "ask": "What is a bimetal strip?"
+        },
+        {
+          "id": "contact",
+          "kind": "box",
+          "x": 0.64,
+          "y": 0.12,
+          "size": 0.7,
+          "label": "Contact",
+          "ask": "How does the strip switch the heater off?"
+        },
+        {
+          "id": "knob",
+          "kind": "wheel",
+          "x": 0.4,
+          "y": 0.78,
+          "size": 0.8,
+          "label": "Temperature knob",
+          "motion": "spin",
+          "ask": "What does turning the thermostat knob do?"
+        },
+        {
+          "id": "heater",
+          "kind": "coil",
+          "x": 0.85,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Heater",
+          "motion": "pulse",
+          "ask": "Why does the heater keep clicking on and off?"
+        }
+      ],
+      "links": [
+        {
+          "from": "supply",
+          "to": "strip",
+          "kind": "power",
+          "label": "Current"
+        },
+        {
+          "from": "strip",
+          "to": "contact",
+          "kind": "power",
+          "label": "Touching: on"
+        },
+        {
+          "from": "contact",
+          "to": "heater",
+          "kind": "power"
+        },
+        {
+          "from": "heater",
+          "to": "strip",
+          "kind": "heat",
+          "label": "Warms the strip"
+        },
+        {
+          "from": "knob",
+          "to": "contact",
+          "kind": "force",
+          "label": "Sets the gap"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Many simple thermostats use a bimetal strip, a strip that bends when it gets warm, to switch a heater on and off by itself.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a bimetal strip switches a heater on and off"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Mains supply"
+            },
+            {
+              "id": "strip",
+              "kind": "lever",
+              "x": 0.4,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Bimetal strip",
+              "motion": "swing",
+              "ask": "What is a bimetal strip?"
+            },
+            {
+              "id": "contact",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Contact",
+              "ask": "How does the strip switch the heater off?"
+            },
+            {
+              "id": "knob",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Temperature knob",
+              "motion": "spin",
+              "ask": "What does turning the thermostat knob do?"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Heater",
+              "motion": "pulse",
+              "ask": "Why does the heater keep clicking on and off?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "strip",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "strip",
+              "to": "contact",
+              "kind": "power",
+              "label": "Touching: on"
+            },
+            {
+              "from": "contact",
+              "to": "heater",
+              "kind": "power"
+            },
+            {
+              "from": "heater",
+              "to": "strip",
+              "kind": "heat",
+              "label": "Warms the strip"
+            },
+            {
+              "from": "knob",
+              "to": "contact",
+              "kind": "force",
+              "label": "Sets the gap"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The strip is two metals bonded together. Warm it, and one side expands more than the other, so the strip curls.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Mains supply"
+            },
+            {
+              "id": "strip",
+              "kind": "lever",
+              "x": 0.4,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Bimetal strip",
+              "motion": "swing",
+              "ask": "What is a bimetal strip?"
+            },
+            {
+              "id": "contact",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Contact",
+              "ask": "How does the strip switch the heater off?"
+            },
+            {
+              "id": "knob",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Temperature knob",
+              "motion": "spin",
+              "ask": "What does turning the thermostat knob do?"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Heater",
+              "motion": "pulse",
+              "ask": "Why does the heater keep clicking on and off?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "strip",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "strip",
+              "to": "contact",
+              "kind": "power",
+              "label": "Touching: on"
+            },
+            {
+              "from": "contact",
+              "to": "heater",
+              "kind": "power"
+            },
+            {
+              "from": "heater",
+              "to": "strip",
+              "kind": "heat",
+              "label": "Warms the strip"
+            },
+            {
+              "from": "knob",
+              "to": "contact",
+              "kind": "force",
+              "label": "Sets the gap"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "When the strip is cool it touches the contact and the heater is on. As things warm up, it bends away, the circuit opens and the heater switches off.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Mains supply"
+            },
+            {
+              "id": "strip",
+              "kind": "lever",
+              "x": 0.4,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Bimetal strip",
+              "motion": "swing",
+              "ask": "What is a bimetal strip?"
+            },
+            {
+              "id": "contact",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Contact",
+              "ask": "How does the strip switch the heater off?"
+            },
+            {
+              "id": "knob",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Temperature knob",
+              "motion": "spin",
+              "ask": "What does turning the thermostat knob do?"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Heater",
+              "motion": "pulse",
+              "ask": "Why does the heater keep clicking on and off?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "strip",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "strip",
+              "to": "contact",
+              "kind": "power",
+              "label": "Touching: on"
+            },
+            {
+              "from": "contact",
+              "to": "heater",
+              "kind": "power"
+            },
+            {
+              "from": "heater",
+              "to": "strip",
+              "kind": "heat",
+              "label": "Warms the strip"
+            },
+            {
+              "from": "knob",
+              "to": "contact",
+              "kind": "force",
+              "label": "Sets the gap"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "As the room cools, the strip straightens and switches the heater back on. The knob moves the contact, which sets how warm it gets before the click.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Mains supply"
+            },
+            {
+              "id": "strip",
+              "kind": "lever",
+              "x": 0.4,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Bimetal strip",
+              "motion": "swing",
+              "ask": "What is a bimetal strip?"
+            },
+            {
+              "id": "contact",
+              "kind": "box",
+              "x": 0.64,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Contact",
+              "ask": "How does the strip switch the heater off?"
+            },
+            {
+              "id": "knob",
+              "kind": "wheel",
+              "x": 0.4,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Temperature knob",
+              "motion": "spin",
+              "ask": "What does turning the thermostat knob do?"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.85,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Heater",
+              "motion": "pulse",
+              "ask": "Why does the heater keep clicking on and off?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "strip",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "strip",
+              "to": "contact",
+              "kind": "power",
+              "label": "Touching: on"
+            },
+            {
+              "from": "contact",
+              "to": "heater",
+              "kind": "power"
+            },
+            {
+              "from": "heater",
+              "to": "strip",
+              "kind": "heat",
+              "label": "Warms the strip"
+            },
+            {
+              "from": "knob",
+              "to": "contact",
+              "kind": "force",
+              "label": "Sets the gap"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a bimetal strip?",
+      "a": "It is two thin strips of different metals, often brass and steel, bonded together. When it warms, one metal expands more than the other, so the strip bends; when it cools, it straightens again.",
+      "asks": [
+        "Why does a bimetal strip bend?"
+      ]
+    },
+    {
+      "q": "How does the strip switch the heater off?",
+      "a": "The strip is part of the circuit. Cool, it touches the contact and current flows; as it warms, it bends away from the contact, opening the circuit and turning the heater off.",
+      "asks": [
+        "How does a thermostat cut the power?"
+      ]
+    },
+    {
+      "q": "What does turning the thermostat knob do?",
+      "a": "The knob moves the contact, changing how far the strip must bend before it lets go. A setting that needs more bending means it has to get warmer before the heater switches off.",
+      "asks": [
+        "How do you set a bimetal thermostat?"
+      ]
+    },
+    {
+      "q": "Why does the heater keep clicking on and off?",
+      "a": "Once the heater is off, the strip slowly cools and straightens, touches the contact again and switches the heater back on. This loop keeps the temperature close to the setting.",
+      "asks": [
+        "Why does a thermostat click?"
+      ]
+    },
+    {
+      "q": "Do modern thermostats still use bimetal strips?",
+      "a": "Many simple devices still do, like irons, toasters and some heaters. Digital room thermostats usually use an electronic temperature sensor and a chip instead, but the on-off idea is the same.",
+      "asks": [
+        "What is inside a digital thermostat?"
+      ]
+    }
+  ],
+  "facts": [
+    "Brass expands about one and a half times as much as steel for the same rise in temperature.",
+    "Bimetal strips are also used in irons, toasters and many circuit breakers."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a bimetal strip bend when it is heated?",
+      "show": "Why does a bimetal strip bend when it is heated?",
+      "options": [
+        {
+          "show": "Its two metals expand by different amounts",
+          "say": "Its two metals expand by different amounts"
+        },
+        {
+          "show": "It starts to melt",
+          "say": "It starts to melt"
+        },
+        {
+          "show": "Electricity pushes it sideways",
+          "say": "Electricity pushes it sideways"
+        }
+      ],
+      "answer": 0,
+      "why": "One metal grows more than the other, and because they are bonded together the strip has to curl.",
+      "wrong": {
+        "1": "It bends far below any melting point.",
+        "2": "The bending comes from heat, not an electrical push."
+      }
+    }
+  ]
+}

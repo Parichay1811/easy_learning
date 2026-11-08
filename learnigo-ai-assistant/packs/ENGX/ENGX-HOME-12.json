@@ -1,0 +1,595 @@
+{
+  "id": "ENGX-HOME-12",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an electric toothbrush vibrates",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "electric toothbrush",
+    "sonic toothbrush",
+    "oscillating toothbrush",
+    "inductive charging",
+    "toothbrush motor"
+  ],
+  "examples": [
+    "How does an electric toothbrush move?",
+    "How does an electric toothbrush charge without a plug?",
+    "What is a sonic toothbrush?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.15,
+          "y": 0.85,
+          "size": 0.9,
+          "label": "Charging coil",
+          "motion": "pulse",
+          "ask": "How does an electric toothbrush charge without a plug?"
+        },
+        {
+          "id": "battery",
+          "kind": "battery",
+          "x": 0.15,
+          "y": 0.5,
+          "size": 0.9,
+          "label": "Battery",
+          "motion": "none"
+        },
+        {
+          "id": "chip",
+          "kind": "box",
+          "x": 0.38,
+          "y": 0.3,
+          "size": 0.7,
+          "label": "Timer chip",
+          "motion": "pulse",
+          "ask": "Why does my toothbrush buzz every 30 seconds?"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.5,
+          "y": 0.65,
+          "size": 1,
+          "label": "Motor",
+          "motion": "spin"
+        },
+        {
+          "id": "drive",
+          "kind": "gear",
+          "x": 0.72,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Drive mechanism",
+          "motion": "swing",
+          "ask": "How does an electric toothbrush move?"
+        },
+        {
+          "id": "head",
+          "kind": "spring",
+          "x": 0.9,
+          "y": 0.25,
+          "size": 0.9,
+          "label": "Brush head",
+          "motion": "swing"
+        }
+      ],
+      "links": [
+        {
+          "from": "coil",
+          "to": "battery",
+          "kind": "energy",
+          "label": "charges"
+        },
+        {
+          "from": "battery",
+          "to": "motor",
+          "kind": "power"
+        },
+        {
+          "from": "chip",
+          "to": "motor",
+          "kind": "signal",
+          "label": "timing"
+        },
+        {
+          "from": "motor",
+          "to": "drive",
+          "kind": "energy"
+        },
+        {
+          "from": "drive",
+          "to": "head",
+          "kind": "force",
+          "label": "fast wiggle"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Inside the handle are a rechargeable battery, a small motor and a chip. When you switch on, the battery powers the motor.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an electric toothbrush vibrates"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.15,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Charging coil",
+              "motion": "pulse",
+              "ask": "How does an electric toothbrush charge without a plug?"
+            },
+            {
+              "id": "battery",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Battery",
+              "motion": "none"
+            },
+            {
+              "id": "chip",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Timer chip",
+              "motion": "pulse",
+              "ask": "Why does my toothbrush buzz every 30 seconds?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 1,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.72,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Drive mechanism",
+              "motion": "swing",
+              "ask": "How does an electric toothbrush move?"
+            },
+            {
+              "id": "head",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Brush head",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "coil",
+              "to": "battery",
+              "kind": "energy",
+              "label": "charges"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "timing"
+            },
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "head",
+              "kind": "force",
+              "label": "fast wiggle"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "A drive mechanism turns the motor’s spin into a rapid back-and-forth wiggle. Round heads twist to and fro, while sonic brushes buzz side to side tens of thousands of times a minute.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.15,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Charging coil",
+              "motion": "pulse",
+              "ask": "How does an electric toothbrush charge without a plug?"
+            },
+            {
+              "id": "battery",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Battery",
+              "motion": "none"
+            },
+            {
+              "id": "chip",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Timer chip",
+              "motion": "pulse",
+              "ask": "Why does my toothbrush buzz every 30 seconds?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 1,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.72,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Drive mechanism",
+              "motion": "swing",
+              "ask": "How does an electric toothbrush move?"
+            },
+            {
+              "id": "head",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Brush head",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "coil",
+              "to": "battery",
+              "kind": "energy",
+              "label": "charges"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "timing"
+            },
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "head",
+              "kind": "force",
+              "label": "fast wiggle"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "That fast motion scrubs plaque off teeth and stirs up the toothpaste and saliva. The chip buzzes every 30 seconds to tell you to move to the next part of your mouth.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.15,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Charging coil",
+              "motion": "pulse",
+              "ask": "How does an electric toothbrush charge without a plug?"
+            },
+            {
+              "id": "battery",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Battery",
+              "motion": "none"
+            },
+            {
+              "id": "chip",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Timer chip",
+              "motion": "pulse",
+              "ask": "Why does my toothbrush buzz every 30 seconds?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 1,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.72,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Drive mechanism",
+              "motion": "swing",
+              "ask": "How does an electric toothbrush move?"
+            },
+            {
+              "id": "head",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Brush head",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "coil",
+              "to": "battery",
+              "kind": "energy",
+              "label": "charges"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "timing"
+            },
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "head",
+              "kind": "force",
+              "label": "fast wiggle"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "To charge, the handle sits on a base with no metal contacts. A coil in the base makes a changing magnetic field that induces a current in a coil inside the handle, which charges the battery.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.15,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Charging coil",
+              "motion": "pulse",
+              "ask": "How does an electric toothbrush charge without a plug?"
+            },
+            {
+              "id": "battery",
+              "kind": "battery",
+              "x": 0.15,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "Battery",
+              "motion": "none"
+            },
+            {
+              "id": "chip",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Timer chip",
+              "motion": "pulse",
+              "ask": "Why does my toothbrush buzz every 30 seconds?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 1,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.72,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Drive mechanism",
+              "motion": "swing",
+              "ask": "How does an electric toothbrush move?"
+            },
+            {
+              "id": "head",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Brush head",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "coil",
+              "to": "battery",
+              "kind": "energy",
+              "label": "charges"
+            },
+            {
+              "from": "battery",
+              "to": "motor",
+              "kind": "power"
+            },
+            {
+              "from": "chip",
+              "to": "motor",
+              "kind": "signal",
+              "label": "timing"
+            },
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "head",
+              "kind": "force",
+              "label": "fast wiggle"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does an electric toothbrush move?",
+      "a": "A motor drives a mechanism that turns spinning into fast back-and-forth motion. Oscillating brushes rotate a round head to and fro, and sonic brushes vibrate the bristles side to side.",
+      "asks": [
+        "What is a sonic toothbrush?"
+      ]
+    },
+    {
+      "q": "How does an electric toothbrush charge without a plug?",
+      "a": "It uses induction. A coil in the charger makes a changing magnetic field, which makes a current flow in a matching coil inside the sealed handle.",
+      "asks": [
+        "Why does a toothbrush have no metal contacts?"
+      ]
+    },
+    {
+      "q": "Why does my toothbrush buzz every 30 seconds?",
+      "a": "A timer chip pauses the motor briefly every 30 seconds, reminding you to brush each quarter of your mouth for two minutes in total.",
+      "asks": [
+        "What is the toothbrush timer for?"
+      ]
+    },
+    {
+      "q": "Why is the handle sealed?",
+      "a": "Water and toothpaste would damage open electrical contacts. Induction charging means the handle can be completely waterproof.",
+      "asks": [
+        "Can an electric toothbrush get wet?"
+      ]
+    },
+    {
+      "q": "Are electric toothbrushes better?",
+      "a": "Studies suggest powered toothbrushes remove a little more plaque than manual ones on average, but brushing well for two minutes matters most.",
+      "asks": [
+        "Do electric toothbrushes clean better?"
+      ]
+    }
+  ],
+  "facts": [
+    "Most electric toothbrushes charge by induction, so the handle can be sealed against water.",
+    "Dentists recommend brushing for two minutes, which is why many electric brushes have a two-minute timer."
+  ],
+  "quiz": [
+    {
+      "say": "How does energy get from the charging base into a sealed toothbrush?",
+      "show": "How does energy get from the charging base into a sealed toothbrush?",
+      "options": [
+        {
+          "show": "A changing magnetic field induces a current in a coil",
+          "say": "A changing magnetic field induces a current in a coil"
+        },
+        {
+          "show": "Through tiny holes in the handle",
+          "say": "Through tiny holes in the handle"
+        },
+        {
+          "show": "The base heats the battery",
+          "say": "The base heats the battery"
+        }
+      ],
+      "answer": 0,
+      "why": "A coil in the base creates a changing magnetic field that induces a current in a coil in the handle.",
+      "wrong": {
+        "1": "The handle is sealed and has no holes for charging.",
+        "2": "Heat does not charge a battery."
+      }
+    }
+  ]
+}

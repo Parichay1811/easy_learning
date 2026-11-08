@@ -1,0 +1,502 @@
+{
+  "id": "BEE-EMAG-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Transmission lines and reflections: why fast signals need matched cables",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-EMAG — Electromagnetics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "transmission line",
+    "characteristic impedance",
+    "reflection coefficient",
+    "impedance matching",
+    "time-domain reflectometry"
+  ],
+  "examples": [
+    "What is characteristic impedance?",
+    "How do I calculate the reflection coefficient?",
+    "How does a TDR find a cable fault?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Step source",
+          "value": "2 V"
+        },
+        {
+          "kind": "switch",
+          "label": "Switch"
+        },
+        {
+          "kind": "resistor",
+          "label": "Source R",
+          "value": "50 Ω"
+        },
+        {
+          "kind": "block",
+          "label": "Coax line, Z₀ = 50 Ω",
+          "value": "10 m",
+          "ask": "What is characteristic impedance?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Load",
+          "value": "75 Ω",
+          "ask": "What is the reflection coefficient?"
+        }
+      ],
+      "readouts": [
+        "Γ = (75 − 50)/(75 + 50)",
+        "Γ = 0.2",
+        "4 % of power reflected"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When a cable under the sea or under a street breaks, engineers find the fault without digging: they send a pulse down the cable and time its echo, like a bat. On the board, a step source with 50 ohms inside feeds 10 metres of 50 ohm coaxial cable, ending in a 75 ohm load. Let's see why a cable can echo.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Transmission lines and reflections: why fast signals need matched cables"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Step source",
+              "value": "2 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch"
+            },
+            {
+              "kind": "resistor",
+              "label": "Source R",
+              "value": "50 Ω"
+            },
+            {
+              "kind": "block",
+              "label": "Coax line, Z₀ = 50 Ω",
+              "value": "10 m",
+              "ask": "What is characteristic impedance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "75 Ω",
+              "ask": "What is the reflection coefficient?"
+            }
+          ],
+          "readouts": [
+            "Γ = (75 − 50)/(75 + 50)",
+            "Γ = 0.2",
+            "4 % of power reflected"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "At low frequency a cable is just wire. But a signal travels along coax at about two-thirds the speed of light, 20 centimetres per nanosecond, and once the cable is a sizeable fraction of a wavelength it acts as a transmission line. Its inductance and capacitance per metre give it a characteristic impedance, Z nought, here 50 ohms. Is Z nought the resistance of the copper?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Step source",
+              "value": "2 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch"
+            },
+            {
+              "kind": "resistor",
+              "label": "Source R",
+              "value": "50 Ω"
+            },
+            {
+              "kind": "block",
+              "label": "Coax line, Z₀ = 50 Ω",
+              "value": "10 m",
+              "ask": "What is characteristic impedance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "75 Ω",
+              "ask": "What is the reflection coefficient?"
+            }
+          ],
+          "readouts": [
+            "Γ = (75 − 50)/(75 + 50)",
+            "Γ = 0.2",
+            "4 % of power reflected"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "Z₀ = √(L′/C′) ≈ 50 Ω for this coax"
+        }
+      ]
+    },
+    {
+      "say": "No, it is set by the cable's shape and insulation. When the wave reaches the end, any mismatch sends part of it back. The reflection coefficient, gamma, equals the load minus Z nought, over the load plus Z nought. For 75 ohms on a 50 ohm line: 25 over 125, which is 0.2. So 20 percent of the voltage bounces back, 4 percent of the power. What gamma would a 50 ohm load give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Step source",
+              "value": "2 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch"
+            },
+            {
+              "kind": "resistor",
+              "label": "Source R",
+              "value": "50 Ω"
+            },
+            {
+              "kind": "block",
+              "label": "Coax line, Z₀ = 50 Ω",
+              "value": "10 m",
+              "ask": "What is characteristic impedance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "75 Ω",
+              "ask": "What is the reflection coefficient?"
+            }
+          ],
+          "readouts": [
+            "Γ = (75 − 50)/(75 + 50)",
+            "Γ = 0.2",
+            "4 % of power reflected"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "Γ = (Z_L − Z₀)/(Z_L + Z₀) = 25/125 = 0.2"
+        }
+      ]
+    },
+    {
+      "say": "Zero, a perfect match with no echo. Now watch the input voltage over time. The source launches 1 volt down the line. After 100 nanoseconds, the round trip of 20 metres, the echo returns. With an open end, gamma is plus 1 and the voltage doubles to 2. With a short, gamma is minus 1 and it drops to zero. With our 75 ohm load it steps up to 1.2 volts. Can you see all three?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ns)",
+            "max": 200
+          },
+          "y": {
+            "label": "Voltage at input (V)",
+            "max": 2.5
+          },
+          "curves": [
+            {
+              "label": "Open end",
+              "type": "points",
+              "ask": "What happens at an open or shorted end?",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  100,
+                  1
+                ],
+                [
+                  100,
+                  2
+                ],
+                [
+                  200,
+                  2
+                ]
+              ]
+            },
+            {
+              "label": "75 Ω load",
+              "type": "points",
+              "ask": "What is the reflection coefficient?",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  100,
+                  1
+                ],
+                [
+                  100,
+                  1.2
+                ],
+                [
+                  200,
+                  1.2
+                ]
+              ]
+            },
+            {
+              "label": "Shorted end",
+              "type": "points",
+              "ask": "How does time-domain reflectometry find cable faults?",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  100,
+                  1
+                ],
+                [
+                  100,
+                  0
+                ],
+                [
+                  200,
+                  0
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "Echo returns"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Open: Γ = +1    Short: Γ = −1    Matched: Γ = 0"
+        }
+      ]
+    },
+    {
+      "say": "Good eye! That trace is time-domain reflectometry, the fault-finder from the start: the echo's delay gives the distance, and its sign tells you open or short. Brilliant work! Exam tip: radio gear, test equipment and Wi-Fi boards are built around 50 ohms so every joint is matched. Challenge: a short echoes back after 60 nanoseconds. How far away is it?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ns)",
+            "max": 200
+          },
+          "y": {
+            "label": "Voltage at input (V)",
+            "max": 2.5
+          },
+          "curves": [
+            {
+              "label": "Open end",
+              "type": "points",
+              "ask": "What happens at an open or shorted end?",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  100,
+                  1
+                ],
+                [
+                  100,
+                  2
+                ],
+                [
+                  200,
+                  2
+                ]
+              ]
+            },
+            {
+              "label": "75 Ω load",
+              "type": "points",
+              "ask": "What is the reflection coefficient?",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  100,
+                  1
+                ],
+                [
+                  100,
+                  1.2
+                ],
+                [
+                  200,
+                  1.2
+                ]
+              ]
+            },
+            {
+              "label": "Shorted end",
+              "type": "points",
+              "ask": "How does time-domain reflectometry find cable faults?",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  100,
+                  1
+                ],
+                [
+                  100,
+                  0
+                ],
+                [
+                  200,
+                  0
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "Echo returns"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Distance = v t / 2 = 2×10⁸ × 60 ns / 2 = 6 m"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a transmission line?",
+      "a": "A pair of conductors, such as coax or twisted pair, long enough compared with the signal's wavelength that the signal must be treated as a wave travelling along it.",
+      "asks": [
+        "When does a cable act as a transmission line?"
+      ]
+    },
+    {
+      "q": "What is characteristic impedance?",
+      "a": "The ratio of voltage to current for a wave travelling along a line, set by its inductance and capacitance per metre. Common values are 50 ohms for radio coax and 75 ohms for TV cable.",
+      "asks": [
+        "What does 50 ohm cable mean?",
+        "Z0 of coaxial cable"
+      ]
+    },
+    {
+      "q": "What is the reflection coefficient?",
+      "a": "Gamma equals the load impedance minus Z nought, over the load impedance plus Z nought. It is the fraction of the incoming voltage wave that bounces back from the end.",
+      "asks": [
+        "Reflection coefficient formula",
+        "How do you calculate gamma?"
+      ]
+    },
+    {
+      "q": "What happens at an open or shorted end?",
+      "a": "An open end reflects the wave fully with the same sign, gamma equals plus 1. A short reflects it fully with the sign flipped, gamma equals minus 1.",
+      "asks": [
+        "Reflection from an open circuit line"
+      ]
+    },
+    {
+      "q": "How does time-domain reflectometry find cable faults?",
+      "a": "It sends a fast step or pulse down the cable and times the echo. Half the delay times the wave speed gives the distance to the fault, and the echo's sign shows whether it is an open or a short.",
+      "asks": [
+        "What is a TDR?"
+      ]
+    }
+  ],
+  "facts": [
+    "Signals in typical coaxial cable travel at roughly two-thirds of the speed of light.",
+    "Radio-frequency coaxial cable is commonly 50 ohms, while television and satellite cable is commonly 75 ohms."
+  ],
+  "quiz": [
+    {
+      "say": "A 100 ohm load ends a 50 ohm line. What is the reflection coefficient?",
+      "show": "A 100 Ω load ends a 50 Ω line. What is the reflection coefficient?",
+      "options": [
+        {
+          "show": "0.33",
+          "say": "zero point three three"
+        },
+        {
+          "show": "0.5",
+          "say": "zero point five"
+        },
+        {
+          "show": "2",
+          "say": "two"
+        }
+      ],
+      "answer": 0,
+      "why": "Gamma is 100 minus 50, over 100 plus 50: 50 over 150, which is one third.",
+      "wrong": {
+        "1": "That divides the difference by the load alone, not by the sum.",
+        "2": "That is the ratio of the impedances; gamma can never exceed 1 for a passive load."
+      }
+    },
+    {
+      "say": "What reflection coefficient does a short-circuited end give?",
+      "show": "What reflection coefficient does a short-circuited end give?",
+      "options": [
+        {
+          "show": "−1",
+          "say": "minus one"
+        },
+        {
+          "show": "0",
+          "say": "zero"
+        },
+        {
+          "show": "+1",
+          "say": "plus one"
+        }
+      ],
+      "answer": 0,
+      "why": "A short forces zero voltage at the end, so the reflected wave cancels the incoming one: gamma is minus 1.",
+      "wrong": {
+        "1": "Zero means a matched load, with no reflection at all.",
+        "2": "Plus 1 is the open-circuit case."
+      }
+    }
+  ]
+}

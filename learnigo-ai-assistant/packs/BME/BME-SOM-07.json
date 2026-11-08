@@ -1,0 +1,377 @@
+{
+  "id": "BME-SOM-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Bending stress in beams: using σ = My/I on a steel floor beam",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-SOM — Mechanics of materials",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "bending stress",
+    "flexure formula",
+    "neutral axis",
+    "section modulus",
+    "bending moment"
+  ],
+  "examples": [
+    "How do I calculate bending stress?",
+    "Where is bending stress maximum in a beam?",
+    "What is the neutral axis?"
+  ],
+  "figure": [
+    {
+      "name": "x-beam",
+      "length": 4,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 5,
+          "label": "Floor 5 kN/m",
+          "ask": "What load does the floor beam carry?"
+        }
+      ],
+      "show": "beam",
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Bend a thick foam block and look closely: the top gets squashed, the bottom gets stretched, and a line in the middle does neither. Every beam bends like this, from a bookshelf to a bridge girder. Here a 4 metre steel floor beam carries 5 kilonewtons per metre. How much stress does it feel?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Bending stress in beams: using σ = My/I on a steel floor beam"
+        },
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "Floor 5 kN/m",
+              "ask": "What load does the floor beam carry?"
+            }
+          ],
+          "show": "beam",
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Simply supported steel I-beam, 4 m span, 5 kN/m"
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you a beam bending in 3D. The colours show the stress: squashed in compression on top, stretched in tension below, and the neutral axis in between feels nothing. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Bending stress in beams: using σ = My/I on a steel floor beam"
+        },
+        {
+          "op": "image",
+          "render": "i-beam-bending"
+        }
+      ]
+    },
+    {
+      "say": "First the bending moment. For a uniform load on a simple span, the biggest moment is in the middle: w L squared over 8, which is 5 times 16 over 8, 10 kilonewton metres. See the peak of the moment diagram at midspan? Where along the beam will the stress be highest?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "Floor 5 kN/m",
+              "ask": "What load does the floor beam carry?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M_max = wL²/8 = 5 × 4² / 8 = 10 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "At midspan. Now look through the beam's depth. Stress is zero at the neutral axis, through the centroid, and grows in a straight line to the top and bottom. The flexure formula says sigma equals M y over I, where y is the distance from the neutral axis. See the line: negative, squashed, on top; positive, stretched, below?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Height from NA (mm)",
+            "min": -100,
+            "max": 100
+          },
+          "y": {
+            "label": "Stress (MPa)",
+            "min": -50,
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Bending stress",
+              "type": "line",
+              "k": -0.436,
+              "ask": "Where is bending stress maximum in a beam?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "Top: −43.6 MPa"
+            },
+            {
+              "x": -100,
+              "label": "Bottom: +43.6"
+            },
+            {
+              "x": 0,
+              "label": "Neutral axis"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "σ = M y / I"
+        }
+      ]
+    },
+    {
+      "say": "Let us put in numbers. Our 200 millimetre deep I-beam has I of about 22.9 million millimetres to the fourth, so y at the top is 100 millimetres. Sigma equals 10 million times 100 over 22.9 million, about 43.6 megapascals. Steel yields at 250, so we have plenty of margin. Which fibres work hardest?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Height from NA (mm)",
+            "min": -100,
+            "max": 100
+          },
+          "y": {
+            "label": "Stress (MPa)",
+            "min": -50,
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Bending stress",
+              "type": "line",
+              "k": -0.436,
+              "ask": "Where is bending stress maximum in a beam?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "Top: −43.6 MPa"
+            },
+            {
+              "x": -100,
+              "label": "Bottom: +43.6"
+            },
+            {
+              "x": 0,
+              "label": "Neutral axis"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "σ = 10×10⁶ × 100 / 22.93×10⁶ = 43.6 MPa"
+        }
+      ]
+    },
+    {
+      "say": "The top and bottom fibres, furthest from the neutral axis. That is why I-beams put their steel there. Superb! Exam tip: combine I and y into the section modulus, Z equals I over y, so sigma equals M over Z; steel tables list Z directly. Challenge: what uniform load would raise the stress to 165 megapascals?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "Floor 5 kN/m",
+              "ask": "What load does the floor beam carry?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "Z = I / y = 229×10³ mm³; σ = M / Z"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What load does the floor beam carry?",
+      "a": "It carries a uniform load of 5 kilonewtons per metre over its 4 metre span, which gives a maximum bending moment of 10 kilonewton metres at midspan.",
+      "asks": [
+        "beam load in this example"
+      ]
+    },
+    {
+      "q": "How do I calculate bending stress?",
+      "a": "Use the flexure formula: sigma equals M times y over I, where M is the bending moment, y the distance from the neutral axis and I the second moment of area.",
+      "asks": [
+        "flexure formula",
+        "sigma equals My over I"
+      ]
+    },
+    {
+      "q": "Where is bending stress maximum in a beam?",
+      "a": "At the section with the largest bending moment, and at the top and bottom surfaces, the fibres furthest from the neutral axis.",
+      "asks": [
+        "maximum bending stress location",
+        "what does the bending stress line show"
+      ]
+    },
+    {
+      "q": "What is the neutral axis?",
+      "a": "It is the line through the beam's cross-section where bending stress is zero. For a beam of one material it passes through the centroid.",
+      "asks": [
+        "neutral axis definition"
+      ]
+    },
+    {
+      "q": "What is the section modulus?",
+      "a": "Z equals I divided by the distance to the extreme fibre. It lets you find the largest bending stress in one step: sigma equals M over Z.",
+      "asks": [
+        "elastic section modulus"
+      ]
+    }
+  ],
+  "facts": [
+    "In elastic bending, stress varies linearly with distance from the neutral axis.",
+    "The maximum moment in a simply supported beam with a uniform load is w L squared over 8."
+  ],
+  "quiz": [
+    {
+      "say": "A beam section has I equals 8 million millimetres to the fourth and extreme fibres 100 millimetres from the neutral axis. The moment is 12 kilonewton metres. What is the maximum bending stress?",
+      "show": "I = 8×10⁶ mm⁴, y = 100 mm, M = 12 kN·m. Maximum bending stress?",
+      "options": [
+        {
+          "show": "150 MPa",
+          "say": "150 megapascals"
+        },
+        {
+          "show": "1.5 MPa",
+          "say": "1.5 megapascals"
+        },
+        {
+          "show": "96 MPa",
+          "say": "96 megapascals"
+        }
+      ],
+      "answer": 0,
+      "why": "σ = My/I = 12×10⁶ N·mm × 100 / 8×10⁶ = 150 MPa.",
+      "wrong": {
+        "1": "That leaves M in kilonewton metres instead of newton millimetres.",
+        "2": "That multiplies 12 by 8 instead of using the formula."
+      }
+    },
+    {
+      "say": "In a simply supported beam bending under downward load, the bottom fibres are in…",
+      "show": "A simply supported beam sags under load. The bottom fibres are in…",
+      "options": [
+        {
+          "show": "Tension",
+          "say": "Tension"
+        },
+        {
+          "show": "Compression",
+          "say": "Compression"
+        },
+        {
+          "show": "Zero stress",
+          "say": "Zero stress"
+        }
+      ],
+      "answer": 0,
+      "why": "Sagging stretches the bottom and squashes the top.",
+      "wrong": {
+        "1": "Compression is on the top, the inside of the curve.",
+        "2": "Zero stress is only at the neutral axis."
+      }
+    }
+  ]
+}

@@ -1,0 +1,445 @@
+{
+  "id": "BEE-ELEC-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The Zener diode voltage regulator: holding 5.1 V steady",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Zener diode",
+    "voltage regulator",
+    "Zener breakdown",
+    "series resistor",
+    "Zener power"
+  ],
+  "examples": [
+    "How does a Zener diode regulate voltage?",
+    "How do I choose the series resistor for a Zener?",
+    "How much current flows through the Zener?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Unregulated input",
+          "value": "12 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "Series R",
+          "value": "230 Ω",
+          "ask": "Why is a series resistor needed with a Zener?"
+        },
+        {
+          "kind": "diode",
+          "label": "Zener 5.1 V",
+          "branch": 1,
+          "ask": "What is a Zener diode?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Load",
+          "value": "510 Ω",
+          "branch": 2,
+          "ask": "How is current shared between the Zener and the load?"
+        },
+        {
+          "kind": "voltmeter",
+          "label": "V out",
+          "value": "5.1 V",
+          "branch": 3,
+          "ask": "Which way round does a Zener diode go?"
+        }
+      ],
+      "readouts": [
+        "I_R = 6.9/230 = 30 mA",
+        "I_Z 20 mA, I_L 10 mA",
+        "V_out = 5.1 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A microcontroller wants a steady 5 volts, but a battery or a rough supply can wander between 9 and 15 volts. The simplest fix is a Zener diode, a diode built to break down in reverse at one exact voltage. On the board, a 12 volt input feeds a 230 ohm resistor, a 5.1 volt Zener and a 510 ohm load.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The Zener diode voltage regulator: holding 5.1 V steady"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Unregulated input",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Series R",
+              "value": "230 Ω",
+              "ask": "Why is a series resistor needed with a Zener?"
+            },
+            {
+              "kind": "diode",
+              "label": "Zener 5.1 V",
+              "branch": 1,
+              "ask": "What is a Zener diode?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "510 Ω",
+              "branch": 2,
+              "ask": "How is current shared between the Zener and the load?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "5.1 V",
+              "branch": 3,
+              "ask": "Which way round does a Zener diode go?"
+            }
+          ],
+          "readouts": [
+            "I_R = 6.9/230 = 30 mA",
+            "I_Z 20 mA, I_L 10 mA",
+            "V_out = 5.1 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is the Zener's reverse curve. Up to about 5 volts almost nothing flows. Then at 5.1 volts the current soars from a milliamp to over 40 milliamps, while the voltage barely moves. That steep wall is what we want: whatever current flows, the voltage across the Zener stays pinned near 5.1. Which part of the curve holds the voltage steady?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Reverse voltage (V)",
+            "max": 6
+          },
+          "y": {
+            "label": "Reverse current (mA)",
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Zener 5.1 V",
+              "type": "points",
+              "smooth": true,
+              "ask": "What limits a Zener regulator?",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  3,
+                  0
+                ],
+                [
+                  4.5,
+                  0.1
+                ],
+                [
+                  4.9,
+                  1
+                ],
+                [
+                  5.05,
+                  5
+                ],
+                [
+                  5.1,
+                  20
+                ],
+                [
+                  5.13,
+                  33
+                ],
+                [
+                  5.15,
+                  45
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 5.1,
+              "label": "V_Z = 5.1 V"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "In breakdown: V ≈ V_Z = 5.1 V over a wide range of I"
+        }
+      ]
+    },
+    {
+      "say": "The steep wall. Now the circuit. The Zener pins the output at 5.1 volts, so the series resistor takes the rest: 12 minus 5.1, which is 6.9 volts. By Ohm's law it carries 6.9 over 230, which is 30 milliamps. That is the total current from the supply. Where does it go?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Unregulated input",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Series R",
+              "value": "230 Ω",
+              "ask": "Why is a series resistor needed with a Zener?"
+            },
+            {
+              "kind": "diode",
+              "label": "Zener 5.1 V",
+              "branch": 1,
+              "ask": "What is a Zener diode?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "510 Ω",
+              "branch": 2,
+              "ask": "How is current shared between the Zener and the load?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "5.1 V",
+              "branch": 3,
+              "ask": "Which way round does a Zener diode go?"
+            }
+          ],
+          "readouts": [
+            "I_R = 6.9/230 = 30 mA",
+            "I_Z 20 mA, I_L 10 mA",
+            "V_out = 5.1 V"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "I_R = (12 − 5.1)/230 = 6.9/230 = 30 mA"
+        }
+      ]
+    },
+    {
+      "say": "It splits. The load at 5.1 volts takes 5.1 over 510, which is 10 milliamps, and the Zener soaks up the other 20, by Kirchhoff's current law. The Zener is like an overflow drain: it swallows whatever current the load doesn't need. What do you think happens if the input rises to 15 volts?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Unregulated input",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Series R",
+              "value": "230 Ω",
+              "ask": "Why is a series resistor needed with a Zener?"
+            },
+            {
+              "kind": "diode",
+              "label": "Zener 5.1 V",
+              "branch": 1,
+              "ask": "What is a Zener diode?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "510 Ω",
+              "branch": 2,
+              "ask": "How is current shared between the Zener and the load?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "5.1 V",
+              "branch": 3,
+              "ask": "Which way round does a Zener diode go?"
+            }
+          ],
+          "readouts": [
+            "I_R = 6.9/230 = 30 mA",
+            "I_Z 20 mA, I_L 10 mA",
+            "V_out = 5.1 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "I_L = 5.1/510 = 10 mA,   I_Z = 30 − 10 = 20 mA"
+        }
+      ]
+    },
+    {
+      "say": "The resistor now passes 9.9 over 230, about 43 milliamps, the load still takes 10, and the Zener drains 33. The output stays at 5.1 volts. Superb! Exam tip: check the Zener's power, V times I, here 5.1 volts times 33 milliamps, about 170 milliwatts, against its rating. Challenge: what is the lowest input that still leaves the Zener some current?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Unregulated input",
+              "value": "15 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Series R",
+              "value": "230 Ω",
+              "ask": "Why is a series resistor needed with a Zener?"
+            },
+            {
+              "kind": "diode",
+              "label": "Zener 5.1 V",
+              "branch": 1,
+              "ask": "What is a Zener diode?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "510 Ω",
+              "branch": 2,
+              "ask": "How is current shared between the Zener and the load?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "5.1 V",
+              "branch": 3,
+              "ask": "Which way round does a Zener diode go?"
+            }
+          ],
+          "readouts": [
+            "I_R = 9.9/230 = 43 mA",
+            "I_Z 33 mA, I_L 10 mA",
+            "V_out = 5.1 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "P_Z = 5.1 V × 33 mA ≈ 168 mW"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a Zener diode?",
+      "a": "A diode designed to break down safely in reverse at a precise voltage, its Zener voltage. In breakdown its voltage stays nearly constant over a wide range of current.",
+      "asks": [
+        "How does a Zener diode work?",
+        "What is Zener breakdown?"
+      ]
+    },
+    {
+      "q": "Why is a series resistor needed with a Zener?",
+      "a": "It drops the difference between the input and the Zener voltage and limits the current. Without it, the Zener would try to clamp the supply and burn out.",
+      "asks": [
+        "What does the resistor do in a Zener regulator?"
+      ]
+    },
+    {
+      "q": "How is current shared between the Zener and the load?",
+      "a": "The series resistor sets the total current. The load takes what it needs at the Zener voltage, and the Zener carries the rest, by Kirchhoff's current law.",
+      "asks": [
+        "How do I calculate Zener current?"
+      ]
+    },
+    {
+      "q": "What limits a Zener regulator?",
+      "a": "The Zener needs a minimum current to stay in breakdown and must not exceed its power rating. If the load takes too much or the input falls too low, regulation is lost.",
+      "asks": [
+        "When does a Zener regulator stop working?"
+      ]
+    },
+    {
+      "q": "Which way round does a Zener diode go?",
+      "a": "In reverse: its cathode goes to the positive side. It works in its breakdown region, not in forward conduction.",
+      "asks": [
+        "Is a Zener connected forward or reverse?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Zener effect is named after Clarence Zener, who described this kind of electrical breakdown in 1934.",
+    "In Zener diodes rated above about 6 volts, breakdown is mainly due to avalanche multiplication rather than the Zener effect."
+  ],
+  "quiz": [
+    {
+      "say": "A 9 volt input feeds a 100 ohm series resistor and a 5.1 volt Zener. What current flows through the resistor?",
+      "show": "A 9 V input feeds a 100 Ω series resistor and a 5.1 V Zener. What current flows through the resistor?",
+      "options": [
+        {
+          "show": "39 mA",
+          "say": "39 milliamps"
+        },
+        {
+          "show": "90 mA",
+          "say": "90 milliamps"
+        },
+        {
+          "show": "51 mA",
+          "say": "51 milliamps"
+        }
+      ],
+      "answer": 0,
+      "why": "The resistor drops 9 minus 5.1, which is 3.9 volts, and 3.9 over 100 is 39 milliamps.",
+      "wrong": {
+        "1": "That uses the whole 9 volts and forgets the Zener holds 5.1.",
+        "2": "That divides the Zener voltage, not the resistor voltage, by 100."
+      }
+    },
+    {
+      "say": "In a Zener regulator, if the load current falls, what happens to the Zener current?",
+      "show": "In a Zener regulator, if the load current falls, the Zener current...",
+      "options": [
+        {
+          "show": "Rises",
+          "say": "Rises"
+        },
+        {
+          "show": "Falls",
+          "say": "Falls"
+        },
+        {
+          "show": "Stays the same",
+          "say": "Stays the same"
+        }
+      ],
+      "answer": 0,
+      "why": "The series resistor current stays almost fixed, so whatever the load stops taking flows through the Zener instead.",
+      "wrong": {
+        "1": "The two currents share a fixed total, so one falling makes the other rise.",
+        "2": "The total is fixed, so the share must shift to the Zener."
+      }
+    }
+  ]
+}

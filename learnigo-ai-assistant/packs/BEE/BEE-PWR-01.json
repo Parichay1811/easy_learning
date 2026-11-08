@@ -1,0 +1,768 @@
+{
+  "id": "BEE-PWR-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "From power station to plug: generation, transmission and distribution",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "power grid",
+    "transmission line",
+    "substation",
+    "distribution network",
+    "step-up transformer",
+    "grid voltage levels"
+  ],
+  "examples": [
+    "How does electricity get from the power station to my home?",
+    "What voltage are transmission lines?",
+    "What does a substation do?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "gen",
+          "label": "Generator 21 kV",
+          "icon": "factory",
+          "x": 0.07,
+          "y": 0.5
+        },
+        {
+          "id": "su",
+          "label": "Step-up to 400 kV",
+          "icon": "lightning",
+          "x": 0.22,
+          "y": 0.5
+        },
+        {
+          "id": "line",
+          "label": "Transmission 400 kV",
+          "icon": "tower",
+          "x": 0.38,
+          "y": 0.5,
+          "ask": "What voltage are transmission lines?"
+        },
+        {
+          "id": "gsub",
+          "label": "Grid sub 132 kV",
+          "icon": "switch",
+          "x": 0.54,
+          "y": 0.5,
+          "ask": "Why is the grid a mesh rather than a single line?"
+        },
+        {
+          "id": "psub",
+          "label": "Local sub 11 kV",
+          "icon": "switch",
+          "x": 0.7,
+          "y": 0.5,
+          "ask": "What does a substation do?"
+        },
+        {
+          "id": "pole",
+          "label": "Pole transformer",
+          "icon": "plug",
+          "x": 0.87,
+          "y": 0.22
+        },
+        {
+          "id": "home",
+          "label": "Home 230 V",
+          "icon": "house",
+          "x": 0.87,
+          "y": 0.78,
+          "ask": "How does electricity get from the power station to my home?"
+        },
+        {
+          "id": "fact",
+          "label": "Factory 11 kV",
+          "icon": "factory",
+          "x": 0.7,
+          "y": 0.88,
+          "ask": "What is the difference between transmission and distribution?"
+        }
+      ],
+      "links": [
+        {
+          "from": "gen",
+          "to": "su",
+          "kind": "power"
+        },
+        {
+          "from": "su",
+          "to": "line",
+          "kind": "power"
+        },
+        {
+          "from": "line",
+          "to": "gsub",
+          "kind": "power",
+          "label": "400 kV"
+        },
+        {
+          "from": "gsub",
+          "to": "psub",
+          "kind": "power",
+          "label": "132 kV"
+        },
+        {
+          "from": "psub",
+          "to": "pole",
+          "kind": "power",
+          "label": "11 kV"
+        },
+        {
+          "from": "pole",
+          "to": "home",
+          "kind": "power",
+          "label": "230 V"
+        },
+        {
+          "from": "psub",
+          "to": "fact",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Flip a light switch in Lagos, Lucknow or London, and the energy you use left a power station a fraction of a second earlier, perhaps hundreds of kilometres away. On the board is that journey, the grid: generation on the left, transmission across the middle, and distribution down to homes and factories on the right.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "From power station to plug: generation, transmission and distribution"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "gen",
+              "label": "Generator 21 kV",
+              "icon": "factory",
+              "x": 0.07,
+              "y": 0.5
+            },
+            {
+              "id": "su",
+              "label": "Step-up to 400 kV",
+              "icon": "lightning",
+              "x": 0.22,
+              "y": 0.5
+            },
+            {
+              "id": "line",
+              "label": "Transmission 400 kV",
+              "icon": "tower",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What voltage are transmission lines?"
+            },
+            {
+              "id": "gsub",
+              "label": "Grid sub 132 kV",
+              "icon": "switch",
+              "x": 0.54,
+              "y": 0.5,
+              "ask": "Why is the grid a mesh rather than a single line?"
+            },
+            {
+              "id": "psub",
+              "label": "Local sub 11 kV",
+              "icon": "switch",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "What does a substation do?"
+            },
+            {
+              "id": "pole",
+              "label": "Pole transformer",
+              "icon": "plug",
+              "x": 0.87,
+              "y": 0.22
+            },
+            {
+              "id": "home",
+              "label": "Home 230 V",
+              "icon": "house",
+              "x": 0.87,
+              "y": 0.78,
+              "ask": "How does electricity get from the power station to my home?"
+            },
+            {
+              "id": "fact",
+              "label": "Factory 11 kV",
+              "icon": "factory",
+              "x": 0.7,
+              "y": 0.88,
+              "ask": "What is the difference between transmission and distribution?"
+            }
+          ],
+          "links": [
+            {
+              "from": "gen",
+              "to": "su",
+              "kind": "power"
+            },
+            {
+              "from": "su",
+              "to": "line",
+              "kind": "power"
+            },
+            {
+              "from": "line",
+              "to": "gsub",
+              "kind": "power",
+              "label": "400 kV"
+            },
+            {
+              "from": "gsub",
+              "to": "psub",
+              "kind": "power",
+              "label": "132 kV"
+            },
+            {
+              "from": "psub",
+              "to": "pole",
+              "kind": "power",
+              "label": "11 kV"
+            },
+            {
+              "from": "pole",
+              "to": "home",
+              "kind": "power",
+              "label": "230 V"
+            },
+            {
+              "from": "psub",
+              "to": "fact",
+              "kind": "power"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the whole journey in 3D: the power station, the step-up transformer, the pylons and lines, the substation and your home. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "From power station to plug: generation, transmission and distribution"
+        },
+        {
+          "op": "image",
+          "render": "power-grid"
+        }
+      ]
+    },
+    {
+      "say": "Start at the generator. Big generators make about 11 to 25 kilovolts, here 21. A step-up transformer right beside the station raises that to 400 kilovolts, about 19 times higher, so the current needed for the same power is about 19 times smaller. Why would a smaller current be a good thing on a long line?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "gen",
+              "label": "Generator 21 kV",
+              "icon": "factory",
+              "x": 0.07,
+              "y": 0.5
+            },
+            {
+              "id": "su",
+              "label": "Step-up to 400 kV",
+              "icon": "lightning",
+              "x": 0.22,
+              "y": 0.5
+            },
+            {
+              "id": "line",
+              "label": "Transmission 400 kV",
+              "icon": "tower",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What voltage are transmission lines?"
+            },
+            {
+              "id": "gsub",
+              "label": "Grid sub 132 kV",
+              "icon": "switch",
+              "x": 0.54,
+              "y": 0.5,
+              "ask": "Why is the grid a mesh rather than a single line?"
+            },
+            {
+              "id": "psub",
+              "label": "Local sub 11 kV",
+              "icon": "switch",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "What does a substation do?"
+            },
+            {
+              "id": "pole",
+              "label": "Pole transformer",
+              "icon": "plug",
+              "x": 0.87,
+              "y": 0.22
+            },
+            {
+              "id": "home",
+              "label": "Home 230 V",
+              "icon": "house",
+              "x": 0.87,
+              "y": 0.78,
+              "ask": "How does electricity get from the power station to my home?"
+            },
+            {
+              "id": "fact",
+              "label": "Factory 11 kV",
+              "icon": "factory",
+              "x": 0.7,
+              "y": 0.88,
+              "ask": "What is the difference between transmission and distribution?"
+            }
+          ],
+          "links": [
+            {
+              "from": "gen",
+              "to": "su",
+              "kind": "power"
+            },
+            {
+              "from": "su",
+              "to": "line",
+              "kind": "power"
+            },
+            {
+              "from": "line",
+              "to": "gsub",
+              "kind": "power",
+              "label": "400 kV"
+            },
+            {
+              "from": "gsub",
+              "to": "psub",
+              "kind": "power",
+              "label": "132 kV"
+            },
+            {
+              "from": "psub",
+              "to": "pole",
+              "kind": "power",
+              "label": "11 kV"
+            },
+            {
+              "from": "pole",
+              "to": "home",
+              "kind": "power",
+              "label": "230 V"
+            },
+            {
+              "from": "psub",
+              "to": "fact",
+              "kind": "power"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Generator 21 kV → step-up → 400 kV"
+        }
+      ]
+    },
+    {
+      "say": "Less current means far less heating loss in the wires, a story for the next lesson. Look at the transmission lines, the steel pylons striding across the country, linking many power stations into one meshed network. If one line trips, power simply flows round the others. Where does the voltage start coming down?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "gen",
+              "label": "Generator 21 kV",
+              "icon": "factory",
+              "x": 0.07,
+              "y": 0.5
+            },
+            {
+              "id": "su",
+              "label": "Step-up to 400 kV",
+              "icon": "lightning",
+              "x": 0.22,
+              "y": 0.5
+            },
+            {
+              "id": "line",
+              "label": "Transmission 400 kV",
+              "icon": "tower",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What voltage are transmission lines?"
+            },
+            {
+              "id": "gsub",
+              "label": "Grid sub 132 kV",
+              "icon": "switch",
+              "x": 0.54,
+              "y": 0.5,
+              "ask": "Why is the grid a mesh rather than a single line?"
+            },
+            {
+              "id": "psub",
+              "label": "Local sub 11 kV",
+              "icon": "switch",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "What does a substation do?"
+            },
+            {
+              "id": "pole",
+              "label": "Pole transformer",
+              "icon": "plug",
+              "x": 0.87,
+              "y": 0.22
+            },
+            {
+              "id": "home",
+              "label": "Home 230 V",
+              "icon": "house",
+              "x": 0.87,
+              "y": 0.78,
+              "ask": "How does electricity get from the power station to my home?"
+            },
+            {
+              "id": "fact",
+              "label": "Factory 11 kV",
+              "icon": "factory",
+              "x": 0.7,
+              "y": 0.88,
+              "ask": "What is the difference between transmission and distribution?"
+            }
+          ],
+          "links": [
+            {
+              "from": "gen",
+              "to": "su",
+              "kind": "power"
+            },
+            {
+              "from": "su",
+              "to": "line",
+              "kind": "power"
+            },
+            {
+              "from": "line",
+              "to": "gsub",
+              "kind": "power",
+              "label": "400 kV"
+            },
+            {
+              "from": "gsub",
+              "to": "psub",
+              "kind": "power",
+              "label": "132 kV"
+            },
+            {
+              "from": "psub",
+              "to": "pole",
+              "kind": "power",
+              "label": "11 kV"
+            },
+            {
+              "from": "pole",
+              "to": "home",
+              "kind": "power",
+              "label": "230 V"
+            },
+            {
+              "from": "psub",
+              "to": "fact",
+              "kind": "power"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Same power at 19 × the voltage needs 1/19 of the current"
+        }
+      ]
+    },
+    {
+      "say": "At substations. A grid substation steps 400 kilovolts down to 132, then local substations bring it to 11 kilovolts for feeders along the streets. A big factory may take 11 kilovolts directly. Finally a pole or ground-mounted transformer drops it to 400 volts three-phase, 230 volts per phase, for homes. How many transformers did your electricity pass through?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "gen",
+              "label": "Generator 21 kV",
+              "icon": "factory",
+              "x": 0.07,
+              "y": 0.5
+            },
+            {
+              "id": "su",
+              "label": "Step-up to 400 kV",
+              "icon": "lightning",
+              "x": 0.22,
+              "y": 0.5
+            },
+            {
+              "id": "line",
+              "label": "Transmission 400 kV",
+              "icon": "tower",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What voltage are transmission lines?"
+            },
+            {
+              "id": "gsub",
+              "label": "Grid sub 132 kV",
+              "icon": "switch",
+              "x": 0.54,
+              "y": 0.5,
+              "ask": "Why is the grid a mesh rather than a single line?"
+            },
+            {
+              "id": "psub",
+              "label": "Local sub 11 kV",
+              "icon": "switch",
+              "x": 0.7,
+              "y": 0.5,
+              "ask": "What does a substation do?"
+            },
+            {
+              "id": "pole",
+              "label": "Pole transformer",
+              "icon": "plug",
+              "x": 0.87,
+              "y": 0.22
+            },
+            {
+              "id": "home",
+              "label": "Home 230 V",
+              "icon": "house",
+              "x": 0.87,
+              "y": 0.78,
+              "ask": "How does electricity get from the power station to my home?"
+            },
+            {
+              "id": "fact",
+              "label": "Factory 11 kV",
+              "icon": "factory",
+              "x": 0.7,
+              "y": 0.88,
+              "ask": "What is the difference between transmission and distribution?"
+            }
+          ],
+          "links": [
+            {
+              "from": "gen",
+              "to": "su",
+              "kind": "power"
+            },
+            {
+              "from": "su",
+              "to": "line",
+              "kind": "power"
+            },
+            {
+              "from": "line",
+              "to": "gsub",
+              "kind": "power",
+              "label": "400 kV"
+            },
+            {
+              "from": "gsub",
+              "to": "psub",
+              "kind": "power",
+              "label": "132 kV"
+            },
+            {
+              "from": "psub",
+              "to": "pole",
+              "kind": "power",
+              "label": "11 kV"
+            },
+            {
+              "from": "pole",
+              "to": "home",
+              "kind": "power",
+              "label": "230 V"
+            },
+            {
+              "from": "psub",
+              "to": "fact",
+              "kind": "power"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "400 kV → 132 kV → 11 kV → 400 V / 230 V"
+        }
+      ]
+    },
+    {
+      "say": "At least four. Now compare the bars: 400 kilovolts is about 1700 times your 230 volt socket. Wonderful! Challenge: a three-phase line carries 400 megawatts at 400 kilovolts. Using P equals root 3 times V times I, roughly what current flows?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "kV",
+          "items": [
+            {
+              "label": "Generator 21 kV",
+              "size": 21,
+              "icon": "factory"
+            },
+            {
+              "label": "Transmission 400 kV",
+              "size": 400,
+              "icon": "tower"
+            },
+            {
+              "label": "Sub-transmission 132",
+              "size": 132,
+              "icon": "switch"
+            },
+            {
+              "label": "Distribution 11 kV",
+              "size": 11,
+              "icon": "wire"
+            },
+            {
+              "label": "Home 0.23 kV",
+              "size": 0.23,
+              "icon": "house"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "P = √3 × V × I: higher V, lower I for the same P"
+        },
+        {
+          "op": "note",
+          "text": "Levels vary by country: India also uses 765 kV; US homes get 120 V"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does electricity get from the power station to my home?",
+      "a": "Generators make power at about 11 to 25 kilovolts. Transformers step it up to hundreds of kilovolts for transmission, substations step it down to 132, 33 or 11 kilovolts for distribution, and a local transformer brings it to 230 volts for your home.",
+      "asks": [
+        "What is the path of electricity through the grid?"
+      ]
+    },
+    {
+      "q": "What voltage are transmission lines?",
+      "a": "Usually 132 to 765 kilovolts for AC. The UK main grid uses 400 and 275 kilovolts, India uses 400 and 765 kilovolts, and some Chinese DC links run at 1100 kilovolts.",
+      "asks": [
+        "How high is the voltage on pylons?"
+      ]
+    },
+    {
+      "q": "What does a substation do?",
+      "a": "A substation changes voltage between levels with transformers, switches circuits in and out with circuit breakers, and protects the network by isolating faults. It is a junction box of the grid.",
+      "asks": [
+        "What is a substation for?"
+      ]
+    },
+    {
+      "q": "Why is the grid a mesh rather than a single line?",
+      "a": "A meshed network gives every load several paths from many generators. If a line or power station trips, power reroutes through the remaining paths, so customers stay supplied.",
+      "asks": [
+        "Why are power stations linked together?"
+      ]
+    },
+    {
+      "q": "What is the difference between transmission and distribution?",
+      "a": "Transmission moves bulk power at very high voltage over long distances between power stations and grid substations. Distribution delivers it locally at medium and low voltage, from 33 kilovolts down to 230 volts, to homes and businesses.",
+      "asks": [
+        "Transmission vs distribution?"
+      ]
+    }
+  ],
+  "facts": [
+    "The UK transmission network runs mainly at 400 kV and 275 kV.",
+    "India's national grid uses 400 kV and 765 kV AC lines, plus HVDC links.",
+    "Household supply is 230 V at 50 Hz in India and the UK, and 120 V at 60 Hz in the USA."
+  ],
+  "quiz": [
+    {
+      "say": "A three-phase line carries 400 megawatts at 400 kilovolts. Roughly what current flows?",
+      "show": "A three-phase line carries 400 MW at 400 kV. Roughly what current flows?",
+      "options": [
+        {
+          "show": "About 580 A",
+          "say": "about 580 amps"
+        },
+        {
+          "show": "About 1000 A",
+          "say": "about 1000 amps"
+        },
+        {
+          "show": "About 58 A",
+          "say": "about 58 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "I equals P over root 3 times V: 400 million over 1.732 times 400,000 is about 577 amps.",
+      "wrong": {
+        "1": "That is P over V, forgetting the root 3 for three phases.",
+        "2": "That is ten times too small; check the powers of ten."
+      }
+    },
+    {
+      "say": "Where is the voltage stepped up to transmission level?",
+      "show": "Where is the voltage stepped up to transmission level?",
+      "options": [
+        {
+          "show": "At the power station's step-up transformer",
+          "say": "At the power station's step-up transformer"
+        },
+        {
+          "show": "At the pole transformer",
+          "say": "At the pole transformer"
+        },
+        {
+          "show": "Inside your home's fuse box",
+          "say": "Inside your home's fuse box"
+        }
+      ],
+      "answer": 0,
+      "why": "A step-up transformer beside the generator raises its output to hundreds of kilovolts.",
+      "wrong": {
+        "1": "The pole transformer steps down to 230 volts for homes.",
+        "2": "The fuse box only protects and divides your home's circuits."
+      }
+    }
+  ]
+}

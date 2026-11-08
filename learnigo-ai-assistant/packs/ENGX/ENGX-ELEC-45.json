@@ -1,0 +1,559 @@
+{
+  "id": "ENGX-ELEC-45",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a half adder adds two bits",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "half adder",
+    "XOR gate",
+    "carry bit",
+    "sum bit",
+    "binary adder"
+  ],
+  "examples": [
+    "What is a half adder?",
+    "Why does 1 plus 1 make 10 in binary?",
+    "What is the difference between a half adder and a full adder?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "a",
+          "label": "Input A",
+          "icon": "switch",
+          "x": 0.1,
+          "y": 0.25
+        },
+        {
+          "id": "b",
+          "label": "Input B",
+          "icon": "switch",
+          "x": 0.1,
+          "y": 0.75
+        },
+        {
+          "id": "xor",
+          "label": "XOR gate",
+          "icon": "chip",
+          "x": 0.5,
+          "y": 0.25,
+          "ask": "What does the XOR gate do in a half adder?"
+        },
+        {
+          "id": "and",
+          "label": "AND gate",
+          "icon": "chip",
+          "x": 0.5,
+          "y": 0.75,
+          "ask": "What does the AND gate do in a half adder?"
+        },
+        {
+          "id": "sum",
+          "label": "Sum bit",
+          "icon": "bulb",
+          "x": 0.88,
+          "y": 0.25,
+          "ask": "What is the sum bit?"
+        },
+        {
+          "id": "carry",
+          "label": "Carry bit",
+          "icon": "bulb",
+          "x": 0.88,
+          "y": 0.75,
+          "ask": "What is the carry bit?"
+        }
+      ],
+      "links": [
+        {
+          "from": "a",
+          "to": "xor",
+          "kind": "data"
+        },
+        {
+          "from": "a",
+          "to": "and",
+          "kind": "data"
+        },
+        {
+          "from": "b",
+          "to": "xor",
+          "kind": "data"
+        },
+        {
+          "from": "b",
+          "to": "and",
+          "kind": "data"
+        },
+        {
+          "from": "xor",
+          "to": "sum",
+          "kind": "data",
+          "label": "1 if exactly one"
+        },
+        {
+          "from": "and",
+          "to": "carry",
+          "kind": "data",
+          "label": "1 if both"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A half adder is the simplest adding circuit: it adds two single binary digits, A and B, using just two logic gates.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a half adder adds two bits"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "a",
+              "label": "Input A",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.25
+            },
+            {
+              "id": "b",
+              "label": "Input B",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.75
+            },
+            {
+              "id": "xor",
+              "label": "XOR gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.25,
+              "ask": "What does the XOR gate do in a half adder?"
+            },
+            {
+              "id": "and",
+              "label": "AND gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.75,
+              "ask": "What does the AND gate do in a half adder?"
+            },
+            {
+              "id": "sum",
+              "label": "Sum bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is the sum bit?"
+            },
+            {
+              "id": "carry",
+              "label": "Carry bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.75,
+              "ask": "What is the carry bit?"
+            }
+          ],
+          "links": [
+            {
+              "from": "a",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "a",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "xor",
+              "to": "sum",
+              "kind": "data",
+              "label": "1 if exactly one"
+            },
+            {
+              "from": "and",
+              "to": "carry",
+              "kind": "data",
+              "label": "1 if both"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The XOR gate gives 1 when exactly one input is 1. That is the sum digit: 0 plus 1 makes 1, but 1 plus 1 leaves 0 in this column.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "a",
+              "label": "Input A",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.25
+            },
+            {
+              "id": "b",
+              "label": "Input B",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.75
+            },
+            {
+              "id": "xor",
+              "label": "XOR gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.25,
+              "ask": "What does the XOR gate do in a half adder?"
+            },
+            {
+              "id": "and",
+              "label": "AND gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.75,
+              "ask": "What does the AND gate do in a half adder?"
+            },
+            {
+              "id": "sum",
+              "label": "Sum bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is the sum bit?"
+            },
+            {
+              "id": "carry",
+              "label": "Carry bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.75,
+              "ask": "What is the carry bit?"
+            }
+          ],
+          "links": [
+            {
+              "from": "a",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "a",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "xor",
+              "to": "sum",
+              "kind": "data",
+              "label": "1 if exactly one"
+            },
+            {
+              "from": "and",
+              "to": "carry",
+              "kind": "data",
+              "label": "1 if both"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The AND gate gives 1 only when both inputs are 1, which is exactly when you must carry: 1 plus 1 is 10 in binary.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "a",
+              "label": "Input A",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.25
+            },
+            {
+              "id": "b",
+              "label": "Input B",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.75
+            },
+            {
+              "id": "xor",
+              "label": "XOR gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.25,
+              "ask": "What does the XOR gate do in a half adder?"
+            },
+            {
+              "id": "and",
+              "label": "AND gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.75,
+              "ask": "What does the AND gate do in a half adder?"
+            },
+            {
+              "id": "sum",
+              "label": "Sum bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is the sum bit?"
+            },
+            {
+              "id": "carry",
+              "label": "Carry bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.75,
+              "ask": "What is the carry bit?"
+            }
+          ],
+          "links": [
+            {
+              "from": "a",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "a",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "xor",
+              "to": "sum",
+              "kind": "data",
+              "label": "1 if exactly one"
+            },
+            {
+              "from": "and",
+              "to": "carry",
+              "kind": "data",
+              "label": "1 if both"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Join two half adders and an OR gate and you get a full adder, which also takes a carry in. Chain full adders and a chip can add numbers of any length.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "a",
+              "label": "Input A",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.25
+            },
+            {
+              "id": "b",
+              "label": "Input B",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.75
+            },
+            {
+              "id": "xor",
+              "label": "XOR gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.25,
+              "ask": "What does the XOR gate do in a half adder?"
+            },
+            {
+              "id": "and",
+              "label": "AND gate",
+              "icon": "chip",
+              "x": 0.5,
+              "y": 0.75,
+              "ask": "What does the AND gate do in a half adder?"
+            },
+            {
+              "id": "sum",
+              "label": "Sum bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is the sum bit?"
+            },
+            {
+              "id": "carry",
+              "label": "Carry bit",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.75,
+              "ask": "What is the carry bit?"
+            }
+          ],
+          "links": [
+            {
+              "from": "a",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "a",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "xor",
+              "kind": "data"
+            },
+            {
+              "from": "b",
+              "to": "and",
+              "kind": "data"
+            },
+            {
+              "from": "xor",
+              "to": "sum",
+              "kind": "data",
+              "label": "1 if exactly one"
+            },
+            {
+              "from": "and",
+              "to": "carry",
+              "kind": "data",
+              "label": "1 if both"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the XOR gate do in a half adder?",
+      "a": "XOR, exclusive or, outputs 1 when exactly one input is 1. That matches the sum digit: 0 plus 1 is 1, but 1 plus 1 gives 0 in that column.",
+      "asks": [
+        "What is an XOR gate?"
+      ]
+    },
+    {
+      "q": "What does the AND gate do in a half adder?",
+      "a": "The AND gate outputs 1 only when both inputs are 1. That is exactly when you need to carry: 1 plus 1 is 10 in binary, a 0 here and a 1 carried.",
+      "asks": [
+        "Why is there an AND gate in an adder?"
+      ]
+    },
+    {
+      "q": "What is the sum bit?",
+      "a": "It is the digit written in the current column of the answer. For inputs 0 and 0, 0 and 1, 1 and 0, and 1 and 1, it gives 0, 1, 1 and 0.",
+      "asks": [
+        "What does the sum output show?"
+      ]
+    },
+    {
+      "q": "What is the carry bit?",
+      "a": "It is the 1 passed to the next column, just like carrying a ten in ordinary addition. A half adder carries only when both inputs are 1, because 1 plus 1 is 10 in binary.",
+      "asks": [
+        "Why does 1 plus 1 make 10 in binary?"
+      ]
+    },
+    {
+      "q": "What is the difference between a half adder and a full adder?",
+      "a": "A half adder adds two bits. A full adder also adds a carry coming in from the column before, so full adders can be chained to add numbers with many digits.",
+      "asks": [
+        "How do computers add big numbers?"
+      ]
+    }
+  ],
+  "facts": [
+    "In binary, 1 plus 1 equals 10, which means two.",
+    "A full adder can be built from two half adders and an OR gate."
+  ],
+  "quiz": [
+    {
+      "say": "A half adder gets A = 1 and B = 1. What are its outputs?",
+      "show": "A half adder gets A = 1 and B = 1. What are its outputs?",
+      "options": [
+        {
+          "show": "Sum 0, carry 1",
+          "say": "sum 0, carry 1"
+        },
+        {
+          "show": "Sum 1, carry 0",
+          "say": "sum 1, carry 0"
+        },
+        {
+          "show": "Sum 1, carry 1",
+          "say": "sum 1, carry 1"
+        }
+      ],
+      "answer": 0,
+      "why": "1 plus 1 is 10 in binary: XOR gives a sum of 0 and AND gives a carry of 1.",
+      "wrong": {
+        "1": "That is the result when only one input is 1.",
+        "2": "That would be three, which needs a third input, as in a full adder."
+      }
+    }
+  ]
+}

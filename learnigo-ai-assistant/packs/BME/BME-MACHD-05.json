@@ -1,0 +1,405 @@
+{
+  "id": "BME-MACHD-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Helical springs: stiffness, coil stress and the Wahl factor",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MACHD — Machine design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "helical compression spring",
+    "spring rate",
+    "spring index",
+    "Wahl factor",
+    "active coils"
+  ],
+  "examples": [
+    "How do I calculate the stiffness of a coil spring?",
+    "What is the spring index?",
+    "What is the Wahl correction factor?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Deflection (mm)",
+        "max": 50
+      },
+      "y": {
+        "label": "Force (N)",
+        "max": 650
+      },
+      "curves": [
+        {
+          "label": "10 coils: 9.64 N/mm",
+          "type": "line",
+          "k": 9.64,
+          "ask": "How do I calculate the stiffness of a coil spring?"
+        },
+        {
+          "label": "8 coils: 12.05 N/mm",
+          "type": "line",
+          "k": 12.05,
+          "ask": "How do I calculate the stiffness of a coil spring?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 31.1,
+          "label": "300 N: 31.1 mm"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Press a ballpoint pen, sit in a car, close a valve in an engine: a helical spring pushes back each time. Look at the spring: a steel wire 5 millimetres thick, wound into 10 active coils of 40 millimetre mean diameter, with a 300 newton load on top.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Helical springs: stiffness, coil stress and the Wahl factor"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "w",
+              "kind": "weight",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Load 300 N"
+            },
+            {
+              "id": "s",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Spring, 10 coils",
+              "ask": "How does a coil spring carry load?"
+            },
+            {
+              "id": "base",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.88,
+              "label": "Base",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "w",
+              "to": "s",
+              "kind": "force",
+              "label": "Squash"
+            },
+            {
+              "from": "s",
+              "to": "base",
+              "kind": "force"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "d = 5 mm wire, D = 40 mm coil, n = 10 active coils, steel G = 79 GPa"
+        }
+      ]
+    },
+    {
+      "say": "When you squash a coil spring, the wire actually twists. So its stiffness comes from the shear modulus G. The spring rate k is G d to the fourth over 8 D cubed n. Plug in: 79 gigapascals, 5 millimetre wire, 40 millimetre coils, 10 coils, gives 9.64 newtons per millimetre. Which change makes the biggest difference?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "w",
+              "kind": "weight",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Load 300 N"
+            },
+            {
+              "id": "s",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Spring, 10 coils",
+              "ask": "How does a coil spring carry load?"
+            },
+            {
+              "id": "base",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.88,
+              "label": "Base",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "w",
+              "to": "s",
+              "kind": "force",
+              "label": "Squash"
+            },
+            {
+              "from": "s",
+              "to": "base",
+              "kind": "force"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "k = Gd⁴/(8D³n) = 9.64 N/mm"
+        }
+      ]
+    },
+    {
+      "say": "Wire diameter, because it is to the fourth power: a 6 millimetre wire would make the spring twice as stiff. Now the graph. Force is k times deflection, a straight line. Our 300 newtons squashes the spring 31.1 millimetres. See the steeper line? Fewer coils, 8 instead of 10, make it stiffer: 12.05.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Deflection (mm)",
+            "max": 50
+          },
+          "y": {
+            "label": "Force (N)",
+            "max": 650
+          },
+          "curves": [
+            {
+              "label": "10 coils: 9.64 N/mm",
+              "type": "line",
+              "k": 9.64,
+              "ask": "How do I calculate the stiffness of a coil spring?"
+            },
+            {
+              "label": "8 coils: 12.05 N/mm",
+              "type": "line",
+              "k": 12.05,
+              "ask": "How do I calculate the stiffness of a coil spring?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 31.1,
+              "label": "300 N: 31.1 mm"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ = F/k = 300 / 9.64 = 31.1 mm"
+        }
+      ]
+    },
+    {
+      "say": "Now the stress in the wire. The basic twist stress is 8 F D over pi d cubed. But the wire is curved, so the inside of each coil is stressed more. The spring index C, D over d, is 8 here, and the Wahl factor corrects for curvature: 1.18. So the stress is about 289 megapascals. Is that safe for spring steel?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Deflection (mm)",
+            "max": 50
+          },
+          "y": {
+            "label": "Force (N)",
+            "max": 650
+          },
+          "curves": [
+            {
+              "label": "10 coils: 9.64 N/mm",
+              "type": "line",
+              "k": 9.64,
+              "ask": "How do I calculate the stiffness of a coil spring?"
+            },
+            {
+              "label": "8 coils: 12.05 N/mm",
+              "type": "line",
+              "k": 12.05,
+              "ask": "How do I calculate the stiffness of a coil spring?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 31.1,
+              "label": "300 N: 31.1 mm"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "τ = K_w 8FD/(πd³) = 1.184 × 244 MPa ≈ 289 MPa"
+        }
+      ]
+    },
+    {
+      "say": "Yes, spring steel wire is very strong, so this has a good margin. Lovely work! Exam tip: keep the spring index between about 4 and 12. Too low and the wire is hard to coil; too high and the spring buckles and tangles. Challenge: two identical springs in series: what is the combined k?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "w",
+              "kind": "weight",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Load 300 N"
+            },
+            {
+              "id": "s",
+              "kind": "spring",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Spring, 10 coils",
+              "ask": "How does a coil spring carry load?"
+            },
+            {
+              "id": "base",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.88,
+              "label": "Base",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "w",
+              "to": "s",
+              "kind": "force",
+              "label": "Squash"
+            },
+            {
+              "from": "s",
+              "to": "base",
+              "kind": "force"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Springs in series: 1/k = 1/k₁ + 1/k₂; in parallel: k = k₁ + k₂"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a coil spring carry load?",
+      "a": "When you compress a helical spring, each part of the wire twists like a little torsion bar. That is why the shear modulus G sets its stiffness.",
+      "asks": [
+        "why does spring wire twist"
+      ]
+    },
+    {
+      "q": "How do I calculate the stiffness of a coil spring?",
+      "a": "Spring rate k equals G d to the fourth over 8 D cubed n, where d is wire diameter, D the mean coil diameter and n the number of active coils.",
+      "asks": [
+        "spring rate formula",
+        "what does the number of coils do"
+      ]
+    },
+    {
+      "q": "What is the spring index?",
+      "a": "C equals D over d, the mean coil diameter over the wire diameter. Good springs usually have C between about 4 and 12.",
+      "asks": [
+        "spring index meaning"
+      ]
+    },
+    {
+      "q": "What is the Wahl correction factor?",
+      "a": "A factor that raises the calculated shear stress to allow for wire curvature and direct shear: K w equals 4C minus 1 over 4C minus 4, plus 0.615 over C.",
+      "asks": [
+        "Wahl factor formula"
+      ]
+    },
+    {
+      "q": "How do springs combine in series and parallel?",
+      "a": "In parallel the stiffnesses add. In series the reciprocals add, so two identical springs in series have half the stiffness of one.",
+      "asks": [
+        "springs in series"
+      ]
+    }
+  ],
+  "facts": [
+    "Spring stiffness rises with the fourth power of wire diameter.",
+    "Fewer active coils make a spring stiffer: k is inversely proportional to n."
+  ],
+  "quiz": [
+    {
+      "say": "A spring has a rate of 20 newtons per millimetre. How far does a 150 newton load compress it?",
+      "show": "k = 20 N/mm, load 150 N. Compression?",
+      "options": [
+        {
+          "show": "7.5 mm",
+          "say": "7.5 millimetres"
+        },
+        {
+          "show": "3000 mm",
+          "say": "3000 millimetres"
+        },
+        {
+          "show": "0.13 mm",
+          "say": "0.13 millimetres"
+        }
+      ],
+      "answer": 0,
+      "why": "δ = F/k = 150/20 = 7.5 mm.",
+      "wrong": {
+        "1": "That multiplies force by stiffness instead of dividing.",
+        "2": "That divides stiffness by force, upside down."
+      }
+    },
+    {
+      "say": "You cut a spring with 10 active coils down to 5 active coils. What happens to its stiffness?",
+      "show": "A spring is cut from 10 to 5 active coils. Its stiffness…",
+      "options": [
+        {
+          "show": "Doubles",
+          "say": "Doubles"
+        },
+        {
+          "show": "Halves",
+          "say": "Halves"
+        },
+        {
+          "show": "Stays the same",
+          "say": "Stays the same"
+        }
+      ],
+      "answer": 0,
+      "why": "k is inversely proportional to n, so half the coils means twice the stiffness.",
+      "wrong": {
+        "1": "Fewer coils make a spring stiffer, not softer.",
+        "2": "The number of coils appears in the stiffness formula."
+      }
+    }
+  ]
+}
