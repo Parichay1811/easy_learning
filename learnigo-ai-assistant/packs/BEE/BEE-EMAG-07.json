@@ -1,0 +1,364 @@
+{
+  "id": "BEE-EMAG-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Inductance and stored magnetic energy: what a coil holds, ½LI²",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-EMAG — Electromagnetics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "inductance",
+    "henry",
+    "solenoid inductance",
+    "magnetic energy",
+    "relative permeability"
+  ],
+  "examples": [
+    "How much energy does an inductor store?",
+    "How do I calculate the inductance of a coil?",
+    "Why does an iron core increase inductance?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Battery",
+          "value": "12 V"
+        },
+        {
+          "kind": "switch",
+          "label": "Switch"
+        },
+        {
+          "kind": "inductor",
+          "label": "Iron-core coil",
+          "value": "0.314 H",
+          "ask": "What is inductance?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R",
+          "value": "6 Ω",
+          "ask": "How much energy does an inductor store?"
+        }
+      ],
+      "readouts": [
+        "Final I = 12/6 = 2 A",
+        "E = ½LI² ≈ 0.63 J",
+        "Air core: 0.314 mH"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A car's ignition coil turns a 12 volt battery into a spark of thousands of volts, and the secret is energy stored in a magnetic field. On the board, a battery drives current through a coil of 500 turns wound on an iron core, in series with a 6 ohm resistor. How much energy is hiding in that coil?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Inductance and stored magnetic energy: what a coil holds, ½LI²"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch"
+            },
+            {
+              "kind": "inductor",
+              "label": "Iron-core coil",
+              "value": "0.314 H",
+              "ask": "What is inductance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "6 Ω",
+              "ask": "How much energy does an inductor store?"
+            }
+          ],
+          "readouts": [
+            "Final I = 12/6 = 2 A",
+            "E = ½LI² ≈ 0.63 J",
+            "Air core: 0.314 mH"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First, inductance. Current in the coil makes magnetic flux, and every turn links that flux. Inductance, L, is the flux linkage per amp: N times Phi, over I, measured in henries. A coil with high inductance builds a lot of field for each amp, so it fights changes in current strongly. Would more turns raise or lower L?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch"
+            },
+            {
+              "kind": "inductor",
+              "label": "Iron-core coil",
+              "value": "0.314 H",
+              "ask": "What is inductance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "6 Ω",
+              "ask": "How much energy does an inductor store?"
+            }
+          ],
+          "readouts": [
+            "Final I = 12/6 = 2 A",
+            "E = ½LI² ≈ 0.63 J",
+            "Air core: 0.314 mH"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "L = NΦ / I"
+        }
+      ]
+    },
+    {
+      "say": "Raise it, by the square of the turns, because more turns make more flux and each turn also links it. For a long coil, L equals mu nought times N squared times the area, over the length. With 500 turns, 1 square centimetre and 10 centimetres long, an air core gives just 0.314 millihenries. An iron core with relative permeability 1000 makes it 0.314 henries. What does relative permeability measure?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch"
+            },
+            {
+              "kind": "inductor",
+              "label": "Iron-core coil",
+              "value": "0.314 H",
+              "ask": "What is inductance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "6 Ω",
+              "ask": "How much energy does an inductor store?"
+            }
+          ],
+          "readouts": [
+            "Final I = 12/6 = 2 A",
+            "E = ½LI² ≈ 0.63 J",
+            "Air core: 0.314 mH"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "L = μ_r μ₀N²A/l = 1000 × 0.314 mH = 0.314 H"
+        }
+      ]
+    },
+    {
+      "say": "How much more easily a material carries magnetic flux than empty space. Now the energy. Building up the current means pushing against the coil's back voltage, and that work is stored in its field: E equals half L I squared. At 2 amps, half of 0.314 times 4 is about 0.63 joules. See the curve bend upwards? What happens to the energy if the current doubles?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Current I (A)",
+            "max": 3
+          },
+          "y": {
+            "label": "Stored energy (J)",
+            "max": 1.5
+          },
+          "curves": [
+            {
+              "label": "E = ½LI², L = 0.314 H",
+              "type": "power",
+              "a": 0.157,
+              "k": 2,
+              "ask": "How much energy does an inductor store?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 2,
+              "label": "2 A: 0.63 J"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "E = ½LI² = ½ × 0.314 × 2² ≈ 0.63 J"
+        }
+      ]
+    },
+    {
+      "say": "It quadruples, to about 2.5 joules at 4 amps. And where does the energy live? In the magnetic field itself, with an energy density of B squared over 2 mu nought. Open the switch suddenly and the coil dumps that energy in a flash, which is how an ignition coil makes its spark. Great work! Challenge: what inductance stores 1 joule at 1 amp?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch",
+              "open": true
+            },
+            {
+              "kind": "inductor",
+              "label": "Iron-core coil",
+              "value": "0.314 H",
+              "ask": "What is inductance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "6 Ω",
+              "ask": "How much energy does an inductor store?"
+            }
+          ],
+          "readouts": [
+            "Switch opened",
+            "0.63 J released fast",
+            "Spark across the gap"
+          ],
+          "flow": false,
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Energy density u = B² / (2μ₀)"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is inductance?",
+      "a": "Inductance is the magnetic flux linkage a coil produces per amp of current, L equals N Phi over I, measured in henries. It measures how strongly a coil opposes changes in current.",
+      "asks": [
+        "Define inductance",
+        "What is a henry?"
+      ]
+    },
+    {
+      "q": "How do I calculate the inductance of a solenoid?",
+      "a": "L equals mu r times mu nought times N squared times the cross-section area, divided by the length. Doubling the turns makes L four times bigger.",
+      "asks": [
+        "Solenoid inductance formula"
+      ]
+    },
+    {
+      "q": "How much energy does an inductor store?",
+      "a": "Half L I squared, held in its magnetic field. A 0.314 henry coil carrying 2 amps stores about 0.63 joules.",
+      "asks": [
+        "Energy stored in an inductor formula"
+      ]
+    },
+    {
+      "q": "Why does an iron core increase inductance?",
+      "a": "Iron carries magnetic flux hundreds or thousands of times more easily than air, so the same current makes far more flux. That factor is the relative permeability.",
+      "asks": [
+        "What is relative permeability?"
+      ]
+    },
+    {
+      "q": "Where is the energy of an inductor stored?",
+      "a": "In the magnetic field inside and around the coil, with an energy density of B squared over 2 mu nought joules per cubic metre.",
+      "asks": [
+        "Magnetic energy density formula"
+      ]
+    }
+  ],
+  "facts": [
+    "A one henry inductor carrying one amp stores half a joule of energy.",
+    "The inductance of a coil grows with the square of its number of turns."
+  ],
+  "quiz": [
+    {
+      "say": "A 50 millihenry inductor carries 4 amps. What energy does it store?",
+      "show": "A 50 mH inductor carries 4 A. What energy does it store?",
+      "options": [
+        {
+          "show": "0.4 J",
+          "say": "0.4 joules"
+        },
+        {
+          "show": "0.2 J",
+          "say": "0.2 joules"
+        },
+        {
+          "show": "0.8 J",
+          "say": "0.8 joules"
+        }
+      ],
+      "answer": 0,
+      "why": "E is half L I squared: half of 0.05 times 16, which is 0.4 joules.",
+      "wrong": {
+        "1": "That multiplies L by I without squaring the current or halving.",
+        "2": "That forgets the half in half L I squared."
+      }
+    },
+    {
+      "say": "Doubling the turns of a solenoid of the same size multiplies its inductance by how much?",
+      "show": "Doubling the turns of a solenoid of the same size multiplies its inductance by...",
+      "options": [
+        {
+          "show": "4",
+          "say": "4"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        },
+        {
+          "show": "8",
+          "say": "8"
+        }
+      ],
+      "answer": 0,
+      "why": "L grows with N squared, and 2 squared is 4.",
+      "wrong": {
+        "1": "More turns make more flux and each turn links it, so the effect is squared.",
+        "2": "That would need N cubed."
+      }
+    }
+  ]
+}

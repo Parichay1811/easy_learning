@@ -1,0 +1,776 @@
+{
+  "id": "ENGX-TRAN-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a manual gearbox picks a gear",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "manual gearbox",
+    "layshaft",
+    "dog collar",
+    "synchromesh",
+    "gear lever"
+  ],
+  "examples": [
+    "What happens inside a gearbox when you change gear?",
+    "What does synchromesh do?",
+    "How does reverse gear work?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "eng",
+          "kind": "motor",
+          "x": 0.08,
+          "y": 0.45,
+          "size": 1,
+          "label": "Engine",
+          "motion": "spin"
+        },
+        {
+          "id": "clutch",
+          "kind": "wheel",
+          "x": 0.24,
+          "y": 0.45,
+          "size": 0.8,
+          "label": "Clutch",
+          "motion": "spin",
+          "ask": "What does the clutch do when changing gear?"
+        },
+        {
+          "id": "input",
+          "kind": "gear",
+          "x": 0.42,
+          "y": 0.28,
+          "size": 0.6,
+          "label": "Input shaft gear",
+          "motion": "spin"
+        },
+        {
+          "id": "lay",
+          "kind": "gear",
+          "x": 0.42,
+          "y": 0.74,
+          "size": 1,
+          "label": "Layshaft gears",
+          "motion": "spin",
+          "ask": "What is a layshaft?"
+        },
+        {
+          "id": "out",
+          "kind": "gear",
+          "x": 0.66,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Chosen gear",
+          "motion": "spin",
+          "ask": "Why does first gear give more pulling force?"
+        },
+        {
+          "id": "lever",
+          "kind": "lever",
+          "x": 0.62,
+          "y": 0.1,
+          "size": 0.8,
+          "label": "Gear lever",
+          "motion": "swing"
+        },
+        {
+          "id": "collar",
+          "kind": "box",
+          "x": 0.8,
+          "y": 0.26,
+          "size": 0.6,
+          "label": "Dog collar",
+          "motion": "slide",
+          "ask": "How does the gear lever lock a gear?"
+        },
+        {
+          "id": "wheels",
+          "kind": "wheel",
+          "x": 0.92,
+          "y": 0.66,
+          "size": 1.2,
+          "label": "Driven wheels",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "eng",
+          "to": "clutch",
+          "kind": "energy"
+        },
+        {
+          "from": "clutch",
+          "to": "input",
+          "kind": "energy"
+        },
+        {
+          "from": "input",
+          "to": "lay",
+          "kind": "force",
+          "label": "teeth"
+        },
+        {
+          "from": "lay",
+          "to": "out",
+          "kind": "force",
+          "label": "teeth"
+        },
+        {
+          "from": "lever",
+          "to": "collar",
+          "kind": "force",
+          "label": "slides collar"
+        },
+        {
+          "from": "collar",
+          "to": "out",
+          "kind": "force",
+          "label": "locks gear"
+        },
+        {
+          "from": "out",
+          "to": "wheels",
+          "kind": "energy",
+          "label": "to wheels"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A car engine spins fast but with limited turning force, so a gearbox lets the driver choose how fast the wheels turn for each turn of the engine. Pressing the clutch pedal first disconnects the engine so gears can be changed.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a manual gearbox picks a gear"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.08,
+              "y": 0.45,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "clutch",
+              "kind": "wheel",
+              "x": 0.24,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Clutch",
+              "motion": "spin",
+              "ask": "What does the clutch do when changing gear?"
+            },
+            {
+              "id": "input",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Input shaft gear",
+              "motion": "spin"
+            },
+            {
+              "id": "lay",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.74,
+              "size": 1,
+              "label": "Layshaft gears",
+              "motion": "spin",
+              "ask": "What is a layshaft?"
+            },
+            {
+              "id": "out",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Chosen gear",
+              "motion": "spin",
+              "ask": "Why does first gear give more pulling force?"
+            },
+            {
+              "id": "lever",
+              "kind": "lever",
+              "x": 0.62,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Gear lever",
+              "motion": "swing"
+            },
+            {
+              "id": "collar",
+              "kind": "box",
+              "x": 0.8,
+              "y": 0.26,
+              "size": 0.6,
+              "label": "Dog collar",
+              "motion": "slide",
+              "ask": "How does the gear lever lock a gear?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.66,
+              "size": 1.2,
+              "label": "Driven wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "clutch",
+              "kind": "energy"
+            },
+            {
+              "from": "clutch",
+              "to": "input",
+              "kind": "energy"
+            },
+            {
+              "from": "input",
+              "to": "lay",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lay",
+              "to": "out",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lever",
+              "to": "collar",
+              "kind": "force",
+              "label": "slides collar"
+            },
+            {
+              "from": "collar",
+              "to": "out",
+              "kind": "force",
+              "label": "locks gear"
+            },
+            {
+              "from": "out",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "to wheels"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Inside, the engine turns an input gear, which turns a layshaft carrying a row of gears of different sizes. Each one is always meshed with a partner gear on the output shaft, so all the gears spin all the time.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.08,
+              "y": 0.45,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "clutch",
+              "kind": "wheel",
+              "x": 0.24,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Clutch",
+              "motion": "spin",
+              "ask": "What does the clutch do when changing gear?"
+            },
+            {
+              "id": "input",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Input shaft gear",
+              "motion": "spin"
+            },
+            {
+              "id": "lay",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.74,
+              "size": 1,
+              "label": "Layshaft gears",
+              "motion": "spin",
+              "ask": "What is a layshaft?"
+            },
+            {
+              "id": "out",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Chosen gear",
+              "motion": "spin",
+              "ask": "Why does first gear give more pulling force?"
+            },
+            {
+              "id": "lever",
+              "kind": "lever",
+              "x": 0.62,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Gear lever",
+              "motion": "swing"
+            },
+            {
+              "id": "collar",
+              "kind": "box",
+              "x": 0.8,
+              "y": 0.26,
+              "size": 0.6,
+              "label": "Dog collar",
+              "motion": "slide",
+              "ask": "How does the gear lever lock a gear?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.66,
+              "size": 1.2,
+              "label": "Driven wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "clutch",
+              "kind": "energy"
+            },
+            {
+              "from": "clutch",
+              "to": "input",
+              "kind": "energy"
+            },
+            {
+              "from": "input",
+              "to": "lay",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lay",
+              "to": "out",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lever",
+              "to": "collar",
+              "kind": "force",
+              "label": "slides collar"
+            },
+            {
+              "from": "collar",
+              "to": "out",
+              "kind": "force",
+              "label": "locks gear"
+            },
+            {
+              "from": "out",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "to wheels"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The partner gears spin freely until one is locked to the output shaft. Moving the gear lever slides a toothed dog collar against the chosen gear, and a synchromesh ring first matches their speeds so they join smoothly.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.08,
+              "y": 0.45,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "clutch",
+              "kind": "wheel",
+              "x": 0.24,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Clutch",
+              "motion": "spin",
+              "ask": "What does the clutch do when changing gear?"
+            },
+            {
+              "id": "input",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Input shaft gear",
+              "motion": "spin"
+            },
+            {
+              "id": "lay",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.74,
+              "size": 1,
+              "label": "Layshaft gears",
+              "motion": "spin",
+              "ask": "What is a layshaft?"
+            },
+            {
+              "id": "out",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Chosen gear",
+              "motion": "spin",
+              "ask": "Why does first gear give more pulling force?"
+            },
+            {
+              "id": "lever",
+              "kind": "lever",
+              "x": 0.62,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Gear lever",
+              "motion": "swing"
+            },
+            {
+              "id": "collar",
+              "kind": "box",
+              "x": 0.8,
+              "y": 0.26,
+              "size": 0.6,
+              "label": "Dog collar",
+              "motion": "slide",
+              "ask": "How does the gear lever lock a gear?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.66,
+              "size": 1.2,
+              "label": "Driven wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "clutch",
+              "kind": "energy"
+            },
+            {
+              "from": "clutch",
+              "to": "input",
+              "kind": "energy"
+            },
+            {
+              "from": "input",
+              "to": "lay",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lay",
+              "to": "out",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lever",
+              "to": "collar",
+              "kind": "force",
+              "label": "slides collar"
+            },
+            {
+              "from": "collar",
+              "to": "out",
+              "kind": "force",
+              "label": "locks gear"
+            },
+            {
+              "from": "out",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "to wheels"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    },
+    {
+      "say": "In first gear a small gear drives a big one, giving slow wheels with lots of force for pulling away. In top gear the wheels spin fast for cruising. Reverse adds an extra idler gear that turns the wheels backwards.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.08,
+              "y": 0.45,
+              "size": 1,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "clutch",
+              "kind": "wheel",
+              "x": 0.24,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Clutch",
+              "motion": "spin",
+              "ask": "What does the clutch do when changing gear?"
+            },
+            {
+              "id": "input",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Input shaft gear",
+              "motion": "spin"
+            },
+            {
+              "id": "lay",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.74,
+              "size": 1,
+              "label": "Layshaft gears",
+              "motion": "spin",
+              "ask": "What is a layshaft?"
+            },
+            {
+              "id": "out",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Chosen gear",
+              "motion": "spin",
+              "ask": "Why does first gear give more pulling force?"
+            },
+            {
+              "id": "lever",
+              "kind": "lever",
+              "x": 0.62,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Gear lever",
+              "motion": "swing"
+            },
+            {
+              "id": "collar",
+              "kind": "box",
+              "x": 0.8,
+              "y": 0.26,
+              "size": 0.6,
+              "label": "Dog collar",
+              "motion": "slide",
+              "ask": "How does the gear lever lock a gear?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.66,
+              "size": 1.2,
+              "label": "Driven wheels",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "clutch",
+              "kind": "energy"
+            },
+            {
+              "from": "clutch",
+              "to": "input",
+              "kind": "energy"
+            },
+            {
+              "from": "input",
+              "to": "lay",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lay",
+              "to": "out",
+              "kind": "force",
+              "label": "teeth"
+            },
+            {
+              "from": "lever",
+              "to": "collar",
+              "kind": "force",
+              "label": "slides collar"
+            },
+            {
+              "from": "collar",
+              "to": "out",
+              "kind": "force",
+              "label": "locks gear"
+            },
+            {
+              "from": "out",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "to wheels"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the clutch do when changing gear?",
+      "a": "The clutch disconnects the engine from the gearbox while you change gear, so the gears are not being forced round. Letting it out smoothly reconnects the engine to the wheels.",
+      "asks": [
+        "Why press the clutch to change gear?"
+      ]
+    },
+    {
+      "q": "What is a layshaft?",
+      "a": "The layshaft is a shaft inside the gearbox carrying a row of fixed gears of different sizes. The engine turns it, and each of its gears meshes with a partner gear on the output shaft.",
+      "asks": [
+        "What is the countershaft in a gearbox?"
+      ]
+    },
+    {
+      "q": "How does the gear lever lock a gear?",
+      "a": "The gear lever moves a fork that slides a toothed dog collar along the output shaft. The collar locks onto the chosen gear, so that gear turns the shaft and the wheels.",
+      "asks": [
+        "What happens when you move the gear stick?",
+        "What is a dog collar in a gearbox?"
+      ]
+    },
+    {
+      "q": "What does synchromesh do?",
+      "a": "Synchromesh is a cone-shaped ring that rubs against the chosen gear before the collar locks on, matching their speeds. Without it the teeth would clash and grind.",
+      "asks": [
+        "Why do gears grind?",
+        "What is a synchro?"
+      ]
+    },
+    {
+      "q": "Why does first gear give more pulling force?",
+      "a": "In first gear a small gear drives a much bigger one, so the wheels turn slowly but with several times more turning force. That force is needed to get a heavy, still car moving.",
+      "asks": [
+        "Why is first gear slow but strong?"
+      ]
+    }
+  ],
+  "facts": [
+    "In a typical manual gearbox all the forward gears are always meshed; changing gear just locks a different one to the output shaft.",
+    "Reverse gear uses an extra idler gear to make the output shaft turn the opposite way.",
+    "Before synchromesh, drivers matched gear speeds by hand with a trick called double-declutching."
+  ],
+  "quiz": [
+    {
+      "say": "What locks the chosen gear to the output shaft?",
+      "show": "What locks the chosen gear to the output shaft?",
+      "options": [
+        {
+          "show": "A sliding dog collar",
+          "say": "A sliding dog collar"
+        },
+        {
+          "show": "The clutch pedal",
+          "say": "The clutch pedal"
+        },
+        {
+          "show": "The steering column",
+          "say": "The steering column"
+        }
+      ],
+      "answer": 0,
+      "why": "The gear lever slides a toothed dog collar that locks the chosen gear to the output shaft.",
+      "wrong": {
+        "1": "The clutch disconnects the engine but does not choose a gear.",
+        "2": "The steering column is part of the steering, not the gearbox."
+      }
+    },
+    {
+      "say": "How does reverse gear make the wheels turn backwards?",
+      "show": "How does reverse gear make the wheels turn backwards?",
+      "options": [
+        {
+          "show": "An extra idler gear flips the direction",
+          "say": "An extra idler gear flips the direction"
+        },
+        {
+          "show": "The engine runs backwards",
+          "say": "The engine runs backwards"
+        },
+        {
+          "show": "The clutch spins the other way",
+          "say": "The clutch spins the other way"
+        }
+      ],
+      "answer": 0,
+      "why": "An idler gear between two gears makes the output turn the opposite way to every forward gear.",
+      "wrong": {
+        "1": "The engine always turns the same way.",
+        "2": "The clutch only connects and disconnects; it does not reverse."
+      }
+    }
+  ]
+}

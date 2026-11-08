@@ -1,0 +1,510 @@
+{
+  "id": "ENGX-ELEC-40",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an ammeter and a voltmeter measure a circuit",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "ammeter",
+    "voltmeter",
+    "multimeter",
+    "measuring current",
+    "measuring voltage"
+  ],
+  "examples": [
+    "How do you connect an ammeter?",
+    "Why is a voltmeter connected in parallel?",
+    "How do I use a multimeter?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "bat",
+          "label": "Battery",
+          "icon": "battery",
+          "x": 0.12,
+          "y": 0.5
+        },
+        {
+          "id": "amm",
+          "label": "Ammeter (in series)",
+          "icon": "sensor",
+          "x": 0.42,
+          "y": 0.15,
+          "ask": "How do you connect an ammeter?"
+        },
+        {
+          "id": "bulb",
+          "label": "Bulb",
+          "icon": "bulb",
+          "x": 0.75,
+          "y": 0.5,
+          "ask": "What can you work out from the two readings?"
+        },
+        {
+          "id": "volt",
+          "label": "Voltmeter (across)",
+          "icon": "sensor",
+          "x": 0.8,
+          "y": 0.88,
+          "ask": "How do you connect a voltmeter?"
+        },
+        {
+          "id": "sw",
+          "label": "Switch",
+          "icon": "switch",
+          "x": 0.4,
+          "y": 0.85
+        }
+      ],
+      "links": [
+        {
+          "from": "bat",
+          "to": "amm",
+          "kind": "power",
+          "label": "All the current"
+        },
+        {
+          "from": "amm",
+          "to": "bulb",
+          "kind": "power"
+        },
+        {
+          "from": "bulb",
+          "to": "sw",
+          "kind": "power"
+        },
+        {
+          "from": "sw",
+          "to": "bat",
+          "kind": "power"
+        },
+        {
+          "from": "bulb",
+          "to": "volt",
+          "kind": "signal",
+          "label": "Connected across"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "To see what is happening in a circuit, we measure current with an ammeter and voltage with a voltmeter. Each must be connected in its own way.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an ammeter and a voltmeter measure a circuit"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bat",
+              "label": "Battery",
+              "icon": "battery",
+              "x": 0.12,
+              "y": 0.5
+            },
+            {
+              "id": "amm",
+              "label": "Ammeter (in series)",
+              "icon": "sensor",
+              "x": 0.42,
+              "y": 0.15,
+              "ask": "How do you connect an ammeter?"
+            },
+            {
+              "id": "bulb",
+              "label": "Bulb",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.5,
+              "ask": "What can you work out from the two readings?"
+            },
+            {
+              "id": "volt",
+              "label": "Voltmeter (across)",
+              "icon": "sensor",
+              "x": 0.8,
+              "y": 0.88,
+              "ask": "How do you connect a voltmeter?"
+            },
+            {
+              "id": "sw",
+              "label": "Switch",
+              "icon": "switch",
+              "x": 0.4,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "amm",
+              "kind": "power",
+              "label": "All the current"
+            },
+            {
+              "from": "amm",
+              "to": "bulb",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "bat",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "volt",
+              "kind": "signal",
+              "label": "Connected across"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: a simple circuit. Look at the battery, the positive end and the wire. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an ammeter and a voltmeter measure a circuit"
+        },
+        {
+          "op": "image",
+          "render": "circuit"
+        }
+      ]
+    },
+    {
+      "say": "The ammeter goes in series, right in the loop, so all the current flows through it. It has almost no resistance, so it does not slow the current.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bat",
+              "label": "Battery",
+              "icon": "battery",
+              "x": 0.12,
+              "y": 0.5
+            },
+            {
+              "id": "amm",
+              "label": "Ammeter (in series)",
+              "icon": "sensor",
+              "x": 0.42,
+              "y": 0.15,
+              "ask": "How do you connect an ammeter?"
+            },
+            {
+              "id": "bulb",
+              "label": "Bulb",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.5,
+              "ask": "What can you work out from the two readings?"
+            },
+            {
+              "id": "volt",
+              "label": "Voltmeter (across)",
+              "icon": "sensor",
+              "x": 0.8,
+              "y": 0.88,
+              "ask": "How do you connect a voltmeter?"
+            },
+            {
+              "id": "sw",
+              "label": "Switch",
+              "icon": "switch",
+              "x": 0.4,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "amm",
+              "kind": "power",
+              "label": "All the current"
+            },
+            {
+              "from": "amm",
+              "to": "bulb",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "bat",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "volt",
+              "kind": "signal",
+              "label": "Connected across"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The voltmeter goes in parallel, across the bulb, with a lead on each side. It measures how much energy each bit of charge gives up in the bulb.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bat",
+              "label": "Battery",
+              "icon": "battery",
+              "x": 0.12,
+              "y": 0.5
+            },
+            {
+              "id": "amm",
+              "label": "Ammeter (in series)",
+              "icon": "sensor",
+              "x": 0.42,
+              "y": 0.15,
+              "ask": "How do you connect an ammeter?"
+            },
+            {
+              "id": "bulb",
+              "label": "Bulb",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.5,
+              "ask": "What can you work out from the two readings?"
+            },
+            {
+              "id": "volt",
+              "label": "Voltmeter (across)",
+              "icon": "sensor",
+              "x": 0.8,
+              "y": 0.88,
+              "ask": "How do you connect a voltmeter?"
+            },
+            {
+              "id": "sw",
+              "label": "Switch",
+              "icon": "switch",
+              "x": 0.4,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "amm",
+              "kind": "power",
+              "label": "All the current"
+            },
+            {
+              "from": "amm",
+              "to": "bulb",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "bat",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "volt",
+              "kind": "signal",
+              "label": "Connected across"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "With both readings you can find the bulb's power by multiplying volts by amps, or its resistance by dividing volts by amps.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bat",
+              "label": "Battery",
+              "icon": "battery",
+              "x": 0.12,
+              "y": 0.5
+            },
+            {
+              "id": "amm",
+              "label": "Ammeter (in series)",
+              "icon": "sensor",
+              "x": 0.42,
+              "y": 0.15,
+              "ask": "How do you connect an ammeter?"
+            },
+            {
+              "id": "bulb",
+              "label": "Bulb",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.5,
+              "ask": "What can you work out from the two readings?"
+            },
+            {
+              "id": "volt",
+              "label": "Voltmeter (across)",
+              "icon": "sensor",
+              "x": 0.8,
+              "y": 0.88,
+              "ask": "How do you connect a voltmeter?"
+            },
+            {
+              "id": "sw",
+              "label": "Switch",
+              "icon": "switch",
+              "x": 0.4,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "amm",
+              "kind": "power",
+              "label": "All the current"
+            },
+            {
+              "from": "amm",
+              "to": "bulb",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "bat",
+              "kind": "power"
+            },
+            {
+              "from": "bulb",
+              "to": "volt",
+              "kind": "signal",
+              "label": "Connected across"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you connect an ammeter?",
+      "a": "In series, right in the loop, so that all the current has to flow through it. An ammeter has almost no resistance, so it does not slow the current it is measuring.",
+      "asks": [
+        "Why is an ammeter in series?"
+      ]
+    },
+    {
+      "q": "How do you connect a voltmeter?",
+      "a": "In parallel, across the part you are testing, with one lead on each side. It measures the voltage drop, the energy each bit of charge gives up in that part.",
+      "asks": [
+        "Why is a voltmeter in parallel?"
+      ]
+    },
+    {
+      "q": "What can you work out from the two readings?",
+      "a": "Multiply volts by amps to get the power in watts, or divide volts by amps to get the resistance in ohms. With 6 volts and 2 amps, the bulb uses 12 watts and has 3 ohms resistance.",
+      "asks": [
+        "How do you find resistance from a meter?"
+      ]
+    },
+    {
+      "q": "What does a multimeter do?",
+      "a": "A multimeter is one meter that can be switched to measure volts, amps or ohms. You turn the dial and plug the leads into the right sockets for each job.",
+      "asks": [
+        "How do I use a multimeter?"
+      ]
+    },
+    {
+      "q": "What happens if you connect an ammeter across a part?",
+      "a": "An ammeter has almost no resistance, so across a part it makes a short cut for the current. A big current can flow, which may blow the meter's fuse or drain the battery fast.",
+      "asks": [
+        "Why must an ammeter not go in parallel?"
+      ]
+    }
+  ],
+  "facts": [
+    "An ideal ammeter has zero resistance and an ideal voltmeter has infinite resistance.",
+    "Digital multimeters can measure volts, amps and ohms with one instrument."
+  ],
+  "quiz": [
+    {
+      "say": "How should a voltmeter be connected to measure the voltage across a bulb?",
+      "show": "How should a voltmeter be connected to measure the voltage across a bulb?",
+      "options": [
+        {
+          "show": "In parallel, across the bulb",
+          "say": "In parallel, across the bulb"
+        },
+        {
+          "show": "In series, in the loop",
+          "say": "In series, in the loop"
+        },
+        {
+          "show": "It does not need to be connected",
+          "say": "It does not need to be connected"
+        }
+      ],
+      "answer": 0,
+      "why": "A voltmeter compares the two sides of a part, so its leads go on either side of the bulb.",
+      "wrong": {
+        "1": "Series is how an ammeter is connected.",
+        "2": "A meter must be connected to measure anything."
+      }
+    }
+  ]
+}

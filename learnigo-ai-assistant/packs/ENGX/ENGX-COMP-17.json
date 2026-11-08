@@ -1,0 +1,610 @@
+{
+  "id": "ENGX-COMP-17",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an inkjet printer places tiny dots",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "inkjet printer",
+    "print head",
+    "ink cartridge",
+    "CMYK",
+    "thermal inkjet"
+  ],
+  "examples": [
+    "How does an inkjet printer work?",
+    "How does a printer make so many colours from four inks?",
+    "How does a print head fire ink?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "cart",
+          "kind": "tank",
+          "x": 0.3,
+          "y": 0.15,
+          "size": 0.9,
+          "label": "Ink cartridge",
+          "motion": "none",
+          "ask": "What is inside an ink cartridge?"
+        },
+        {
+          "id": "head",
+          "kind": "valve",
+          "x": 0.3,
+          "y": 0.48,
+          "size": 0.7,
+          "label": "Print head nozzles",
+          "motion": "pulse",
+          "ask": "How does an inkjet nozzle fire a drop?"
+        },
+        {
+          "id": "belt",
+          "kind": "belt",
+          "x": 0.62,
+          "y": 0.32,
+          "size": 1.2,
+          "label": "Carriage belt",
+          "motion": "slide"
+        },
+        {
+          "id": "cmotor",
+          "kind": "motor",
+          "x": 0.9,
+          "y": 0.32,
+          "size": 0.7,
+          "label": "Carriage motor",
+          "motion": "spin",
+          "ask": "How does the print head move across the page?"
+        },
+        {
+          "id": "roller",
+          "kind": "wheel",
+          "x": 0.5,
+          "y": 0.82,
+          "size": 0.9,
+          "label": "Paper feed roller",
+          "motion": "spin",
+          "ask": "How does paper move through a printer?"
+        },
+        {
+          "id": "board",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.78,
+          "size": 0.6,
+          "label": "Control board",
+          "motion": "pulse",
+          "ask": "Why does a printer use only four colours of ink?"
+        }
+      ],
+      "links": [
+        {
+          "from": "cart",
+          "to": "head",
+          "kind": "fluid",
+          "label": "ink"
+        },
+        {
+          "from": "cmotor",
+          "to": "belt",
+          "kind": "force"
+        },
+        {
+          "from": "belt",
+          "to": "head",
+          "kind": "force",
+          "label": "moves across"
+        },
+        {
+          "from": "board",
+          "to": "head",
+          "kind": "signal",
+          "label": "fire!"
+        },
+        {
+          "from": "board",
+          "to": "roller",
+          "kind": "signal",
+          "label": "feed"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An inkjet printer builds a picture from millions of tiny ink drops, each smaller than a speck of dust. Ink flows from the cartridge into a print head with hundreds of microscopic nozzles.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an inkjet printer places tiny dots"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cart",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Ink cartridge",
+              "motion": "none",
+              "ask": "What is inside an ink cartridge?"
+            },
+            {
+              "id": "head",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Print head nozzles",
+              "motion": "pulse",
+              "ask": "How does an inkjet nozzle fire a drop?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.62,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Carriage belt",
+              "motion": "slide"
+            },
+            {
+              "id": "cmotor",
+              "kind": "motor",
+              "x": 0.9,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Carriage motor",
+              "motion": "spin",
+              "ask": "How does the print head move across the page?"
+            },
+            {
+              "id": "roller",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Paper feed roller",
+              "motion": "spin",
+              "ask": "How does paper move through a printer?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Control board",
+              "motion": "pulse",
+              "ask": "Why does a printer use only four colours of ink?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cart",
+              "to": "head",
+              "kind": "fluid",
+              "label": "ink"
+            },
+            {
+              "from": "cmotor",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "head",
+              "kind": "force",
+              "label": "moves across"
+            },
+            {
+              "from": "board",
+              "to": "head",
+              "kind": "signal",
+              "label": "fire!"
+            },
+            {
+              "from": "board",
+              "to": "roller",
+              "kind": "signal",
+              "label": "feed"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "In a thermal inkjet, a tiny heater behind each nozzle boils a little ink in a few millionths of a second. The bubble pushes a drop out onto the paper. Other printers squeeze drops out with a vibrating crystal instead.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cart",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Ink cartridge",
+              "motion": "none",
+              "ask": "What is inside an ink cartridge?"
+            },
+            {
+              "id": "head",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Print head nozzles",
+              "motion": "pulse",
+              "ask": "How does an inkjet nozzle fire a drop?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.62,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Carriage belt",
+              "motion": "slide"
+            },
+            {
+              "id": "cmotor",
+              "kind": "motor",
+              "x": 0.9,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Carriage motor",
+              "motion": "spin",
+              "ask": "How does the print head move across the page?"
+            },
+            {
+              "id": "roller",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Paper feed roller",
+              "motion": "spin",
+              "ask": "How does paper move through a printer?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Control board",
+              "motion": "pulse",
+              "ask": "Why does a printer use only four colours of ink?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cart",
+              "to": "head",
+              "kind": "fluid",
+              "label": "ink"
+            },
+            {
+              "from": "cmotor",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "head",
+              "kind": "force",
+              "label": "moves across"
+            },
+            {
+              "from": "board",
+              "to": "head",
+              "kind": "signal",
+              "label": "fire!"
+            },
+            {
+              "from": "board",
+              "to": "roller",
+              "kind": "signal",
+              "label": "feed"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "A motor and belt sweep the print head back and forth across the page while the control board fires exactly the right nozzles. After each pass, a roller feeds the paper forward a little.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cart",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Ink cartridge",
+              "motion": "none",
+              "ask": "What is inside an ink cartridge?"
+            },
+            {
+              "id": "head",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Print head nozzles",
+              "motion": "pulse",
+              "ask": "How does an inkjet nozzle fire a drop?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.62,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Carriage belt",
+              "motion": "slide"
+            },
+            {
+              "id": "cmotor",
+              "kind": "motor",
+              "x": 0.9,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Carriage motor",
+              "motion": "spin",
+              "ask": "How does the print head move across the page?"
+            },
+            {
+              "id": "roller",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Paper feed roller",
+              "motion": "spin",
+              "ask": "How does paper move through a printer?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Control board",
+              "motion": "pulse",
+              "ask": "Why does a printer use only four colours of ink?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cart",
+              "to": "head",
+              "kind": "fluid",
+              "label": "ink"
+            },
+            {
+              "from": "cmotor",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "head",
+              "kind": "force",
+              "label": "moves across"
+            },
+            {
+              "from": "board",
+              "to": "head",
+              "kind": "signal",
+              "label": "fire!"
+            },
+            {
+              "from": "board",
+              "to": "roller",
+              "kind": "signal",
+              "label": "feed"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Most printers use just cyan, magenta, yellow and black ink. Tiny dots of them, in patterns too fine for your eye to separate, blend into every other colour.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cart",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.15,
+              "size": 0.9,
+              "label": "Ink cartridge",
+              "motion": "none",
+              "ask": "What is inside an ink cartridge?"
+            },
+            {
+              "id": "head",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.48,
+              "size": 0.7,
+              "label": "Print head nozzles",
+              "motion": "pulse",
+              "ask": "How does an inkjet nozzle fire a drop?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.62,
+              "y": 0.32,
+              "size": 1.2,
+              "label": "Carriage belt",
+              "motion": "slide"
+            },
+            {
+              "id": "cmotor",
+              "kind": "motor",
+              "x": 0.9,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Carriage motor",
+              "motion": "spin",
+              "ask": "How does the print head move across the page?"
+            },
+            {
+              "id": "roller",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Paper feed roller",
+              "motion": "spin",
+              "ask": "How does paper move through a printer?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Control board",
+              "motion": "pulse",
+              "ask": "Why does a printer use only four colours of ink?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cart",
+              "to": "head",
+              "kind": "fluid",
+              "label": "ink"
+            },
+            {
+              "from": "cmotor",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "head",
+              "kind": "force",
+              "label": "moves across"
+            },
+            {
+              "from": "board",
+              "to": "head",
+              "kind": "signal",
+              "label": "fire!"
+            },
+            {
+              "from": "board",
+              "to": "roller",
+              "kind": "signal",
+              "label": "feed"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is inside an ink cartridge?",
+      "a": "A cartridge holds liquid ink, often soaked in a sponge or kept in a bag so it does not leak. Some cartridges include the print head nozzles themselves, so you get a new head with every refill.",
+      "asks": [
+        "How do ink cartridges work?"
+      ]
+    },
+    {
+      "q": "How does an inkjet nozzle fire a drop?",
+      "a": "In a thermal printer, a tiny resistor heats the ink to boiling in microseconds, making a bubble that shoots a drop out of the nozzle. In a piezo printer, a crystal flexes when voltage is applied and squeezes the drop out.",
+      "asks": [
+        "How does a print head work?"
+      ]
+    },
+    {
+      "q": "How does the print head move across the page?",
+      "a": "The head rides on a rail and is pulled by a toothed belt driven by a motor. A strip with fine markings lets the printer know exactly where the head is, so each drop lands in the right place.",
+      "asks": [
+        "Why does the printer head go back and forth?"
+      ]
+    },
+    {
+      "q": "How does paper move through a printer?",
+      "a": "Rubber rollers grip the paper and a motor turns them by tiny, exact amounts after each pass of the head, so the printed stripes line up with no gaps.",
+      "asks": [
+        "Why does paper get stuck in a printer?"
+      ]
+    },
+    {
+      "q": "Why does a printer use only four colours of ink?",
+      "a": "Cyan, magenta and yellow can be mixed in tiny dot patterns to make almost any colour, and black gives crisp text and deep shadows. Your eye blends the dots, which are too small to see separately.",
+      "asks": [
+        "What does CMYK mean?"
+      ]
+    }
+  ],
+  "facts": [
+    "Thermal inkjet printing was developed independently by Canon, as Bubble Jet, and Hewlett-Packard in the late 1970s and early 1980s.",
+    "Inkjet drops can be just a few picolitres, trillionths of a litre."
+  ],
+  "quiz": [
+    {
+      "say": "How does a printer with only four inks print a green leaf?",
+      "show": "Green comes from…",
+      "options": [
+        {
+          "show": "Tiny dots of cyan and yellow side by side",
+          "say": "Tiny dots of cyan and yellow side by side"
+        },
+        {
+          "show": "A secret green cartridge",
+          "say": "A secret green cartridge"
+        },
+        {
+          "show": "Heating black ink until it turns green",
+          "say": "Heating black ink until it turns green"
+        }
+      ],
+      "answer": 0,
+      "why": "Cyan and yellow dots too small to see separately blend into green in your eye.",
+      "wrong": {
+        "1": "A four-ink printer has no green cartridge; it mixes colours.",
+        "2": "Heat fires the drops but does not change their colour."
+      }
+    }
+  ]
+}

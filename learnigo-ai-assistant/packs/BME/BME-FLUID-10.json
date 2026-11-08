@@ -1,0 +1,371 @@
+{
+  "id": "BME-FLUID-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The boundary layer: the thin slow skin of flow next to a surface",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-FLUID — Fluid mechanics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "boundary layer",
+    "boundary layer thickness",
+    "flow separation",
+    "Prandtl",
+    "transition to turbulence"
+  ],
+  "examples": [
+    "What is a boundary layer?",
+    "How thick is a boundary layer?",
+    "Why does a golf ball have dimples?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Distance x (m)",
+        "max": 0.75
+      },
+      "y": {
+        "label": "Thickness (mm)",
+        "max": 6
+      },
+      "curves": [
+        {
+          "label": "Laminar layer",
+          "type": "power",
+          "a": 6.124,
+          "k": 0.5,
+          "ask": "How thick is a boundary layer?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0.5,
+          "label": "4.3 mm at 0.5 m"
+        },
+        {
+          "x": 0.75,
+          "label": "Turns turbulent"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1904 Ludwig Prandtl solved a puzzle that had stuck fluid mechanics for a century. Viscosity seemed tiny for air, yet drag was real. His answer: all the action happens in a very thin layer next to the surface, the boundary layer. Look at the layers: full speed above, zero at the wall.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The boundary layer: the thin slow skin of flow next to a surface"
+        },
+        {
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Free stream 10 m/s",
+              "note": "Untouched by the plate",
+              "color": "#bcd8f0",
+              "size": 1.4,
+              "ask": "What is a boundary layer?"
+            },
+            {
+              "label": "Outer boundary layer",
+              "note": "Nearly full speed",
+              "color": "#9cc3e6"
+            },
+            {
+              "label": "Inner boundary layer",
+              "note": "Slowed strongly by viscosity",
+              "color": "#6fa3d6"
+            },
+            {
+              "label": "No-slip at the wall",
+              "note": "Air touching the plate is still",
+              "color": "#4a7fb5",
+              "size": 0.5
+            },
+            {
+              "label": "Flat plate",
+              "note": "Smooth surface",
+              "color": "#777777",
+              "size": 0.6
+            }
+          ],
+          "flow": {
+            "label": "Speed falls to zero",
+            "from": 0,
+            "to": 3
+          },
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "No-slip: air at the wall has zero speed"
+        }
+      ]
+    },
+    {
+      "say": "Inside this layer viscosity matters, because the speed changes from zero to full in a tiny distance. Outside it, you can treat air as frictionless and use Bernoulli. The layer is defined to end where the speed reaches 99 percent of the stream. Which part of the layer causes the friction drag?",
+      "draw": [
+        {
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Free stream 10 m/s",
+              "note": "Untouched by the plate",
+              "color": "#bcd8f0",
+              "size": 1.4,
+              "ask": "What is a boundary layer?"
+            },
+            {
+              "label": "Outer boundary layer",
+              "note": "Nearly full speed",
+              "color": "#9cc3e6"
+            },
+            {
+              "label": "Inner boundary layer",
+              "note": "Slowed strongly by viscosity",
+              "color": "#6fa3d6"
+            },
+            {
+              "label": "No-slip at the wall",
+              "note": "Air touching the plate is still",
+              "color": "#4a7fb5",
+              "size": 0.5
+            },
+            {
+              "label": "Flat plate",
+              "note": "Smooth surface",
+              "color": "#777777",
+              "size": 0.6
+            }
+          ],
+          "flow": {
+            "label": "Speed falls to zero",
+            "from": 0,
+            "to": 3
+          },
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Edge of the layer: speed reaches 99 % of the free stream"
+        }
+      ]
+    },
+    {
+      "say": "The part right at the wall, where the speed changes fastest. Now the graph. Air at 10 metres per second flows along a flat plate. The layer grows with distance, as the square root of x. For a laminar layer, delta equals 5 x over root Re x. At half a metre, Re x is 333,000 and delta is just 4.3 millimetres.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Distance x (m)",
+            "max": 0.75
+          },
+          "y": {
+            "label": "Thickness (mm)",
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "Laminar layer",
+              "type": "power",
+              "a": 6.124,
+              "k": 0.5,
+              "ask": "How thick is a boundary layer?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "4.3 mm at 0.5 m"
+            },
+            {
+              "x": 0.75,
+              "label": "Turns turbulent"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ = 5x/√Re_x = 5 × 0.5 / √333 000 = 4.3 mm"
+        }
+      ]
+    },
+    {
+      "say": "At about Re x of half a million, here near 0.75 metres, the layer turns turbulent. A turbulent layer mixes fast air down to the wall, so it can cling to a curved surface longer before it separates, peels away and leaves a wake. That leads to a famous trick. Can you guess it?",
+      "draw": [
+        {
+          "name": "x-why",
+          "question": "Why does a golf ball have dimples?",
+          "because": [
+            {
+              "label": "Dimples trip the layer",
+              "icon": "ball",
+              "note": "The boundary layer turns turbulent early"
+            },
+            {
+              "label": "Turbulent layer clings",
+              "icon": "wind",
+              "note": "Mixing brings energy to the wall"
+            },
+            {
+              "label": "Later separation",
+              "icon": "arrow",
+              "note": "The flow leaves further round the back"
+            }
+          ],
+          "answer": "Smaller wake, about half the drag, longer drives",
+          "ask": 3,
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "x_tr = 5×10⁵ × 1.5×10⁻⁵ / 10 = 0.75 m"
+        }
+      ]
+    },
+    {
+      "say": "Golf ball dimples! They make the layer turbulent, so it separates further back, the wake shrinks and drag roughly halves. Wonderful job. Exam tip: a turbulent layer has more skin friction but delays separation, which on blunt bodies cuts the bigger pressure drag.",
+      "draw": [
+        {
+          "name": "x-why",
+          "question": "Why does a golf ball have dimples?",
+          "because": [
+            {
+              "label": "Dimples trip the layer",
+              "icon": "ball",
+              "note": "The boundary layer turns turbulent early"
+            },
+            {
+              "label": "Turbulent layer clings",
+              "icon": "wind",
+              "note": "Mixing brings energy to the wall"
+            },
+            {
+              "label": "Later separation",
+              "icon": "arrow",
+              "note": "The flow leaves further round the back"
+            }
+          ],
+          "answer": "Smaller wake, about half the drag, longer drives",
+          "ask": 3,
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Blunt bodies: pressure drag from the wake dominates"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a boundary layer?",
+      "a": "The thin region next to a surface where viscosity slows the fluid from the free-stream speed to zero at the wall. Outside it the flow behaves as if it had no viscosity.",
+      "asks": [
+        "boundary layer meaning",
+        "what is the free stream"
+      ]
+    },
+    {
+      "q": "How thick is a boundary layer?",
+      "a": "For a laminar layer on a flat plate, thickness is about 5 x divided by the square root of the local Reynolds number. For air at 10 metres per second, half a metre along, that is about 4.3 millimetres.",
+      "asks": [
+        "boundary layer thickness formula"
+      ]
+    },
+    {
+      "q": "When does a boundary layer become turbulent?",
+      "a": "On a smooth flat plate, transition usually happens at a local Reynolds number of about five hundred thousand.",
+      "asks": [
+        "transition Reynolds number flat plate"
+      ]
+    },
+    {
+      "q": "Why does a golf ball have dimples?",
+      "a": "The dimples make the boundary layer turbulent. A turbulent layer clings to the ball longer, so the wake behind is smaller and the drag is much lower.",
+      "asks": [
+        "golf ball dimples drag"
+      ]
+    },
+    {
+      "q": "What is flow separation?",
+      "a": "When the boundary layer cannot keep moving against rising pressure on the back of a body, it stops and peels off the surface, leaving a wide wake of eddies and high drag.",
+      "asks": [
+        "boundary layer separation",
+        "stall"
+      ]
+    }
+  ],
+  "facts": [
+    "Ludwig Prandtl introduced the boundary layer concept in 1904.",
+    "On a smooth flat plate, transition to turbulence usually occurs near Re_x ≈ 5 × 10⁵."
+  ],
+  "quiz": [
+    {
+      "say": "A laminar boundary layer is 2 millimetres thick at 0.1 metres from the leading edge. Roughly how thick is it at 0.4 metres?",
+      "show": "A laminar layer is 2 mm thick at x = 0.1 m. Thickness at x = 0.4 m?",
+      "options": [
+        {
+          "show": "4 mm",
+          "say": "4 millimetres"
+        },
+        {
+          "show": "8 mm",
+          "say": "8 millimetres"
+        },
+        {
+          "show": "2 mm",
+          "say": "2 millimetres"
+        }
+      ],
+      "answer": 0,
+      "why": "δ grows with √x; x is four times bigger, so δ is √4 = 2 times bigger: 4 mm.",
+      "wrong": {
+        "1": "That assumes δ grows in proportion to x, but it grows with the square root.",
+        "2": "The layer keeps growing along the plate."
+      }
+    },
+    {
+      "say": "Why can a turbulent boundary layer reduce the drag of a sphere?",
+      "show": "How can a turbulent boundary layer reduce drag on a sphere?",
+      "options": [
+        {
+          "show": "It separates later, so the wake is smaller",
+          "say": "It separates later, so the wake is smaller"
+        },
+        {
+          "show": "It has less skin friction",
+          "say": "It has less skin friction"
+        },
+        {
+          "show": "It makes the air less dense",
+          "say": "It makes the air less dense"
+        }
+      ],
+      "answer": 0,
+      "why": "Turbulent mixing feeds energy to the wall, delaying separation and shrinking the high-drag wake.",
+      "wrong": {
+        "1": "Turbulent layers actually have more skin friction; the gain is in pressure drag.",
+        "2": "Density is not changed by the boundary layer."
+      }
+    }
+  ]
+}

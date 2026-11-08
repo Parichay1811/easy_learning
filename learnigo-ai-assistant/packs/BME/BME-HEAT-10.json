@@ -1,0 +1,711 @@
+{
+  "id": "BME-HEAT-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "HVAC basics: heating, cooling, humidity and the dew point",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-HEAT — Heat transfer",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "psychrometrics",
+    "relative humidity",
+    "dew point",
+    "humidity ratio",
+    "air conditioning"
+  ],
+  "examples": [
+    "What is relative humidity?",
+    "What is the dew point?",
+    "How does an air conditioner remove humidity?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Air temp (°C)",
+        "max": 40
+      },
+      "y": {
+        "label": "Water (g per kg air)",
+        "max": 50
+      },
+      "curves": [
+        {
+          "label": "Saturated (100 %)",
+          "type": "points",
+          "points": [
+            [
+              0,
+              3.8
+            ],
+            [
+              5,
+              5.4
+            ],
+            [
+              10,
+              7.6
+            ],
+            [
+              15,
+              10.6
+            ],
+            [
+              20,
+              14.7
+            ],
+            [
+              25,
+              20.1
+            ],
+            [
+              30,
+              27.2
+            ],
+            [
+              35,
+              36.5
+            ],
+            [
+              40,
+              48.8
+            ]
+          ],
+          "smooth": true,
+          "ask": "What is the saturation curve?"
+        },
+        {
+          "label": "50 % humidity",
+          "type": "points",
+          "points": [
+            [
+              0,
+              1.9
+            ],
+            [
+              5,
+              2.7
+            ],
+            [
+              10,
+              3.8
+            ],
+            [
+              15,
+              5.3
+            ],
+            [
+              20,
+              7.3
+            ],
+            [
+              25,
+              9.9
+            ],
+            [
+              30,
+              13.3
+            ],
+            [
+              35,
+              17.7
+            ],
+            [
+              40,
+              23.5
+            ]
+          ],
+          "smooth": true,
+          "ask": "What is relative humidity?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 30,
+          "label": "30 °C, 50 %"
+        },
+        {
+          "x": 18.4,
+          "label": "Dew point 18.4 °C"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "On a muggy day in Mumbai or Lagos, 30 degrees feels awful, not because of heat alone but because of the water in the air. HVAC engineers, who design heating, ventilation and air conditioning, track both. Look at the graph: how much water vapour a kilogram of air holds at each temperature.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "HVAC basics: heating, cooling, humidity and the dew point"
+        },
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Air temp (°C)",
+            "max": 40
+          },
+          "y": {
+            "label": "Water (g per kg air)",
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Saturated (100 %)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  3.8
+                ],
+                [
+                  5,
+                  5.4
+                ],
+                [
+                  10,
+                  7.6
+                ],
+                [
+                  15,
+                  10.6
+                ],
+                [
+                  20,
+                  14.7
+                ],
+                [
+                  25,
+                  20.1
+                ],
+                [
+                  30,
+                  27.2
+                ],
+                [
+                  35,
+                  36.5
+                ],
+                [
+                  40,
+                  48.8
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the saturation curve?"
+            },
+            {
+              "label": "50 % humidity",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1.9
+                ],
+                [
+                  5,
+                  2.7
+                ],
+                [
+                  10,
+                  3.8
+                ],
+                [
+                  15,
+                  5.3
+                ],
+                [
+                  20,
+                  7.3
+                ],
+                [
+                  25,
+                  9.9
+                ],
+                [
+                  30,
+                  13.3
+                ],
+                [
+                  35,
+                  17.7
+                ],
+                [
+                  40,
+                  23.5
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is relative humidity?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 °C, 50 %"
+            },
+            {
+              "x": 18.4,
+              "label": "Dew point 18.4 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "HVAC = heating, ventilation and air conditioning"
+        }
+      ]
+    },
+    {
+      "say": "An air conditioner is a refrigeration cycle, so here it is in 3D: compressor, condenser coil, expansion valve and evaporator coil. Heat goes in at one coil and out at the other. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "HVAC basics: heating, cooling, humidity and the dew point"
+        },
+        {
+          "op": "image",
+          "render": "refrigeration-cycle"
+        }
+      ]
+    },
+    {
+      "say": "The top curve is saturation: the most water air can hold. Warm air holds much more: about 27 grams per kilogram at 30 degrees, under 4 at 0. Relative humidity is how full the air is compared with that limit. See the lower curve? At 30 degrees and 50 percent, the air holds about 13.3 grams per kilogram.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Air temp (°C)",
+            "max": 40
+          },
+          "y": {
+            "label": "Water (g per kg air)",
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Saturated (100 %)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  3.8
+                ],
+                [
+                  5,
+                  5.4
+                ],
+                [
+                  10,
+                  7.6
+                ],
+                [
+                  15,
+                  10.6
+                ],
+                [
+                  20,
+                  14.7
+                ],
+                [
+                  25,
+                  20.1
+                ],
+                [
+                  30,
+                  27.2
+                ],
+                [
+                  35,
+                  36.5
+                ],
+                [
+                  40,
+                  48.8
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the saturation curve?"
+            },
+            {
+              "label": "50 % humidity",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1.9
+                ],
+                [
+                  5,
+                  2.7
+                ],
+                [
+                  10,
+                  3.8
+                ],
+                [
+                  15,
+                  5.3
+                ],
+                [
+                  20,
+                  7.3
+                ],
+                [
+                  25,
+                  9.9
+                ],
+                [
+                  30,
+                  13.3
+                ],
+                [
+                  35,
+                  17.7
+                ],
+                [
+                  40,
+                  23.5
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is relative humidity?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 °C, 50 %"
+            },
+            {
+              "x": 18.4,
+              "label": "Dew point 18.4 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "RH = p_v / p_sat; ω = 0.622 p_v/(p − p_v)"
+        }
+      ]
+    },
+    {
+      "say": "Now cool that air without changing its water. It slides left at 13.3 grams until it touches the saturation curve, at about 18.4 degrees. That is the dew point: cool any further and water condenses. See the second mark? Why does a cold drink can sweat on a humid day?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Air temp (°C)",
+            "max": 40
+          },
+          "y": {
+            "label": "Water (g per kg air)",
+            "max": 50
+          },
+          "curves": [
+            {
+              "label": "Saturated (100 %)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  3.8
+                ],
+                [
+                  5,
+                  5.4
+                ],
+                [
+                  10,
+                  7.6
+                ],
+                [
+                  15,
+                  10.6
+                ],
+                [
+                  20,
+                  14.7
+                ],
+                [
+                  25,
+                  20.1
+                ],
+                [
+                  30,
+                  27.2
+                ],
+                [
+                  35,
+                  36.5
+                ],
+                [
+                  40,
+                  48.8
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the saturation curve?"
+            },
+            {
+              "label": "50 % humidity",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1.9
+                ],
+                [
+                  5,
+                  2.7
+                ],
+                [
+                  10,
+                  3.8
+                ],
+                [
+                  15,
+                  5.3
+                ],
+                [
+                  20,
+                  7.3
+                ],
+                [
+                  25,
+                  9.9
+                ],
+                [
+                  30,
+                  13.3
+                ],
+                [
+                  35,
+                  17.7
+                ],
+                [
+                  40,
+                  23.5
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is relative humidity?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30 °C, 50 %"
+            },
+            {
+              "x": 18.4,
+              "label": "Dew point 18.4 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Dew point of 30 °C, 50 % air ≈ 18.4 °C"
+        }
+      ]
+    },
+    {
+      "say": "Its surface is below the dew point of the air! An air conditioner uses the same trick. Its cooling coil chills the air to about 14 degrees, below the dew point, so water drips out and the air leaves holding only about 10 grams per kilogram. Follow the chain on the board.",
+      "draw": [
+        {
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Warm humid air",
+              "icon": "wind",
+              "note": "30 °C, 50 %: 13.3 g of water per kg"
+            },
+            {
+              "label": "Filter",
+              "icon": "fan",
+              "note": "Removes dust"
+            },
+            {
+              "label": "Cooling coil",
+              "icon": "ice",
+              "note": "Cooled to 14 °C, below the dew point",
+              "ask": "How does an air conditioner remove humidity?"
+            },
+            {
+              "label": "Water drips out",
+              "icon": "drop",
+              "note": "Down to 10 g per kg"
+            },
+            {
+              "label": "Cool dry room",
+              "icon": "house",
+              "note": "Comfortable air"
+            }
+          ],
+          "loop": false,
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Sensible cooling: 1.2 × 1.005 × (30 − 14) ≈ 19 kJ/m³"
+        }
+      ]
+    },
+    {
+      "say": "Wonderful. That is why an air conditioner has a drain pipe. Real link: in cold countries heating dries the air, so humidifiers are added. Exam tip: cooling below the dew point removes both sensible heat and latent heat, and the latent part can be a third or more of the load in the tropics.",
+      "draw": [
+        {
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Warm humid air",
+              "icon": "wind",
+              "note": "30 °C, 50 %: 13.3 g of water per kg"
+            },
+            {
+              "label": "Filter",
+              "icon": "fan",
+              "note": "Removes dust"
+            },
+            {
+              "label": "Cooling coil",
+              "icon": "ice",
+              "note": "Cooled to 14 °C, below the dew point",
+              "ask": "How does an air conditioner remove humidity?"
+            },
+            {
+              "label": "Water drips out",
+              "icon": "drop",
+              "note": "Down to 10 g per kg"
+            },
+            {
+              "label": "Cool dry room",
+              "icon": "house",
+              "note": "Comfortable air"
+            }
+          ],
+          "loop": false,
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "Latent load: the energy to condense water out of the air"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is relative humidity?",
+      "a": "Relative humidity is the water vapour pressure in the air divided by the most it could hold at that temperature, given as a percentage.",
+      "asks": [
+        "RH meaning"
+      ]
+    },
+    {
+      "q": "What is the saturation curve?",
+      "a": "The curve on a psychrometric chart showing the most water vapour air can hold at each temperature. Air on it is at 100 percent relative humidity.",
+      "asks": [
+        "psychrometric chart saturation line"
+      ]
+    },
+    {
+      "q": "How does an air conditioner remove humidity?",
+      "a": "Its cooling coil chills the air below its dew point, so some water vapour condenses on the coil and drains away. The air leaves cooler and drier.",
+      "asks": [
+        "dehumidification",
+        "cooling coil"
+      ]
+    },
+    {
+      "q": "What is the dew point?",
+      "a": "The temperature at which air becomes saturated if cooled without changing its water content. Below it, water condenses as dew or mist.",
+      "asks": [
+        "dew point meaning"
+      ]
+    },
+    {
+      "q": "What is the humidity ratio?",
+      "a": "The mass of water vapour per kilogram of dry air, often given in grams per kilogram. It stays the same when air is heated or cooled without condensation.",
+      "asks": [
+        "specific humidity",
+        "moisture content"
+      ]
+    }
+  ],
+  "facts": [
+    "Air at 30 °C can hold about 27 g of water vapour per kg of dry air; at 0 °C under 4 g.",
+    "Cooling air below its dew point makes water condense out of it."
+  ],
+  "quiz": [
+    {
+      "say": "Air at 25 degrees has a dew point of 15 degrees. A glass of iced water at 5 degrees is placed in the room. What happens?",
+      "show": "Room air at 25 °C, dew point 15 °C. A glass at 5 °C…",
+      "options": [
+        {
+          "show": "Water condenses on the glass",
+          "say": "Water condenses on the glass"
+        },
+        {
+          "show": "The glass stays dry",
+          "say": "The glass stays dry"
+        },
+        {
+          "show": "The room air becomes saturated everywhere",
+          "say": "The room air becomes saturated everywhere"
+        }
+      ],
+      "answer": 0,
+      "why": "The glass surface is below the dew point, so air touching it cools past saturation and water condenses.",
+      "wrong": {
+        "1": "It would stay dry only if its surface were above 15 °C.",
+        "2": "Only the thin layer of air touching the glass is cooled that far."
+      }
+    },
+    {
+      "say": "You heat air from 10 to 25 degrees without adding water. What happens to its relative humidity?",
+      "show": "Air heated from 10 °C to 25 °C, no water added. Relative humidity…",
+      "options": [
+        {
+          "show": "It falls",
+          "say": "It falls"
+        },
+        {
+          "show": "It rises",
+          "say": "It rises"
+        },
+        {
+          "show": "It stays the same",
+          "say": "It stays the same"
+        }
+      ],
+      "answer": 0,
+      "why": "The water content stays the same but warm air can hold more, so the air is less full: RH falls.",
+      "wrong": {
+        "1": "RH would rise only if the air were cooled or water were added.",
+        "2": "The humidity ratio stays the same, but relative humidity does not."
+      }
+    }
+  ]
+}

@@ -1,0 +1,508 @@
+{
+  "id": "BEE-SIG-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Stability: poles, gain margin and why some feedback loops oscillate",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "stability",
+    "poles in the s-plane",
+    "gain margin",
+    "phase crossover frequency",
+    "marginal stability",
+    "audio feedback howl"
+  ],
+  "examples": [
+    "How do poles tell you if a system is stable?",
+    "What is gain margin?",
+    "Why does a microphone howl near a speaker?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (s)",
+        "max": 8
+      },
+      "y": {
+        "label": "Response",
+        "min": -5,
+        "max": 5
+      },
+      "curves": [
+        {
+          "label": "Poles in left half",
+          "type": "damped",
+          "a": 1,
+          "k": 0.5,
+          "tau": 2,
+          "ask": "How do poles tell you if a system is stable?"
+        },
+        {
+          "label": "Poles on the axis",
+          "type": "sine",
+          "a": 1,
+          "k": 0.5,
+          "phase": 90,
+          "ask": "What is marginal stability?"
+        },
+        {
+          "label": "Poles in right half",
+          "type": "damped",
+          "a": 1,
+          "k": 0.5,
+          "tau": -5,
+          "ask": "Why does a microphone howl near a speaker?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Hold a microphone near its own loudspeaker and you get a rising howl. The sound goes round the loop, louder each time: an unstable feedback system. On the board are three responses to the same small kick. One dies away, one rings for ever, and one grows without limit. What decides which one you get? Where the system's poles are.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Stability: poles, gain margin and why some feedback loops oscillate"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 8
+          },
+          "y": {
+            "label": "Response",
+            "min": -5,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Poles in left half",
+              "type": "damped",
+              "a": 1,
+              "k": 0.5,
+              "tau": 2,
+              "ask": "How do poles tell you if a system is stable?"
+            },
+            {
+              "label": "Poles on the axis",
+              "type": "sine",
+              "a": 1,
+              "k": 0.5,
+              "phase": 90,
+              "ask": "What is marginal stability?"
+            },
+            {
+              "label": "Poles in right half",
+              "type": "damped",
+              "a": 1,
+              "k": 0.5,
+              "tau": -5,
+              "ask": "Why does a microphone howl near a speaker?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Remember, poles are the values of s that make a transfer function's denominator zero. Each pole adds a term e to the sigma t to the response, where sigma is its real part. If sigma is negative, that term dies away: stable. Look at the first group, both in the left half of the s-plane. What happens if sigma is positive?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Where are the poles?",
+          "groups": [
+            {
+              "label": "Stable: left half",
+              "icon": "smile",
+              "items": [
+                "s = −2",
+                "s = −1 ± 3j"
+              ],
+              "ask": "How do poles tell you if a system is stable?"
+            },
+            {
+              "label": "Marginal: on axis",
+              "icon": "scale",
+              "items": [
+                "s = ± 2j",
+                "s = 0"
+              ],
+              "ask": "What is marginal stability?"
+            },
+            {
+              "label": "Unstable: right half",
+              "icon": "fire",
+              "items": [
+                "s = +0.5",
+                "s = 1 ± 2j"
+              ]
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Pole s = σ ± jω → response e^(σt) × oscillation at ω"
+        }
+      ]
+    },
+    {
+      "say": "It grows, like the third curve, the microphone howl. Poles exactly on the imaginary axis give the middle curve, a steady oscillation that never grows or dies: marginally stable. The imaginary part of a pole sets how fast it wiggles. So the rule is simple: every pole must sit in the left half plane. Which pair in the sorted groups was unstable and oscillating?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 8
+          },
+          "y": {
+            "label": "Response",
+            "min": -5,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Poles in left half",
+              "type": "damped",
+              "a": 1,
+              "k": 0.5,
+              "tau": 2,
+              "ask": "How do poles tell you if a system is stable?"
+            },
+            {
+              "label": "Poles on the axis",
+              "type": "sine",
+              "a": 1,
+              "k": 0.5,
+              "phase": 90,
+              "ask": "What is marginal stability?"
+            },
+            {
+              "label": "Poles in right half",
+              "type": "damped",
+              "a": 1,
+              "k": 0.5,
+              "tau": -5,
+              "ask": "Why does a microphone howl near a speaker?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Any pole with Re(s) > 0 → unstable"
+        }
+      ]
+    },
+    {
+      "say": "The pair 1 plus or minus 2 j. Now, how close to trouble is a loop? Take one with three identical lags, K over s plus 1 cubed, with K of 2. At about 1.73 radians per second its phase reaches minus 180 degrees, so the signal comes back turned upside down, which feedback turns into reinforcement. Look at the gain there: minus 12 decibels, a quarter. Is the loop safe?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "ω (rad/s)",
+            "max": 3.5
+          },
+          "y": {
+            "label": "|G(jω)| (dB)",
+            "min": -30,
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Loop gain, K = 2",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  6.02
+                ],
+                [
+                  0.25,
+                  5.23
+                ],
+                [
+                  0.5,
+                  3.11
+                ],
+                [
+                  0.75,
+                  0.21
+                ],
+                [
+                  1,
+                  -3.01
+                ],
+                [
+                  1.25,
+                  -6.24
+                ],
+                [
+                  1.5,
+                  -9.34
+                ],
+                [
+                  1.732,
+                  -12.04
+                ],
+                [
+                  2,
+                  -14.95
+                ],
+                [
+                  2.25,
+                  -17.46
+                ],
+                [
+                  2.5,
+                  -19.79
+                ],
+                [
+                  2.75,
+                  -21.96
+                ],
+                [
+                  3,
+                  -23.98
+                ],
+                [
+                  3.25,
+                  -25.87
+                ],
+                [
+                  3.5,
+                  -27.65
+                ]
+              ],
+              "ask": "What is gain margin?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1.732,
+              "label": "Phase −180°: −12 dB"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "G(s) = 2/(s + 1)³: phase −180° at ω = √3 ≈ 1.73 rad/s"
+        }
+      ]
+    },
+    {
+      "say": "Yes. The loop gain at the danger frequency is one quarter, so you could raise K four times, to 8, before it oscillates. That safety factor is the gain margin, 12 decibels, and engineers usually want at least about 6. Excellent! Challenge: if K were raised to 4, what would the gain margin be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "ω (rad/s)",
+            "max": 3.5
+          },
+          "y": {
+            "label": "|G(jω)| (dB)",
+            "min": -30,
+            "max": 10
+          },
+          "curves": [
+            {
+              "label": "Loop gain, K = 2",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  6.02
+                ],
+                [
+                  0.25,
+                  5.23
+                ],
+                [
+                  0.5,
+                  3.11
+                ],
+                [
+                  0.75,
+                  0.21
+                ],
+                [
+                  1,
+                  -3.01
+                ],
+                [
+                  1.25,
+                  -6.24
+                ],
+                [
+                  1.5,
+                  -9.34
+                ],
+                [
+                  1.732,
+                  -12.04
+                ],
+                [
+                  2,
+                  -14.95
+                ],
+                [
+                  2.25,
+                  -17.46
+                ],
+                [
+                  2.5,
+                  -19.79
+                ],
+                [
+                  2.75,
+                  -21.96
+                ],
+                [
+                  3,
+                  -23.98
+                ],
+                [
+                  3.25,
+                  -25.87
+                ],
+                [
+                  3.5,
+                  -27.65
+                ]
+              ],
+              "ask": "What is gain margin?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1.732,
+              "label": "Phase −180°: −12 dB"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "GM = 1/|G(j√3)| = 8/2 = 4 → 20 log₁₀ 4 ≈ 12 dB"
+        },
+        {
+          "op": "note",
+          "text": "Good designs usually keep at least about 6 dB of gain margin"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do poles tell you if a system is stable?",
+      "a": "Each pole adds a term that behaves like e to the power of its real part times time. If every pole has a negative real part, lying in the left half of the s-plane, every term dies away and the system is stable.",
+      "asks": [
+        "Why must poles be in the left half plane?"
+      ]
+    },
+    {
+      "q": "What is gain margin?",
+      "a": "Gain margin is how much the loop gain could increase before the system becomes unstable. It is measured where the loop phase is minus 180 degrees: if the gain there is one quarter, the margin is 4, about 12 decibels.",
+      "asks": [
+        "How do you calculate gain margin?"
+      ]
+    },
+    {
+      "q": "Why does a microphone howl near a speaker?",
+      "a": "Sound from the speaker reaches the microphone, is amplified and comes out louder. At a frequency where the loop gain is above 1 and the round trip reinforces itself, the sound grows each trip until the amplifier limits: that is the howl.",
+      "asks": [
+        "What causes audio feedback?"
+      ]
+    },
+    {
+      "q": "What is marginal stability?",
+      "a": "A marginally stable system has poles exactly on the imaginary axis and none in the right half. A kick makes it oscillate at a steady amplitude that neither grows nor dies away.",
+      "asks": [
+        "What happens with poles on the imaginary axis?"
+      ]
+    },
+    {
+      "q": "What is phase margin?",
+      "a": "Phase margin is how much extra phase lag the loop could take, at the frequency where its gain is exactly 1, before reaching minus 180 degrees. Designers often aim for about 45 to 60 degrees.",
+      "asks": [
+        "Gain margin vs phase margin?"
+      ]
+    }
+  ],
+  "facts": [
+    "A linear system is stable when all its poles lie in the left half of the s-plane.",
+    "For G(s) = K/(s + 1)³ the phase reaches −180° at ω = √3 rad/s, where |G| = K/8.",
+    "Designers commonly aim for at least 6 dB of gain margin and about 45° of phase margin."
+  ],
+  "quiz": [
+    {
+      "say": "For G of s equals K over s plus 1 cubed, what is the gain margin when K equals 4?",
+      "show": "For G(s) = K/(s + 1)³, what is the gain margin when K = 4?",
+      "options": [
+        {
+          "show": "2, about 6 dB",
+          "say": "2, about 6 decibels"
+        },
+        {
+          "show": "4, about 12 dB",
+          "say": "4, about 12 decibels"
+        },
+        {
+          "show": "0.5, about −6 dB",
+          "say": "0.5, about minus 6 decibels"
+        }
+      ],
+      "answer": 0,
+      "why": "The critical gain is 8, so the margin is 8 over 4, which is 2, about 6 decibels.",
+      "wrong": {
+        "1": "That is the margin for K equals 2.",
+        "2": "A margin below 1 would mean the loop is already unstable, which needs K above 8."
+      }
+    },
+    {
+      "say": "A system has poles at minus 3 and plus 1. Is it stable?",
+      "show": "A system has poles at s = −3 and s = +1. Is it stable?",
+      "options": [
+        {
+          "show": "No: the pole at +1 makes it unstable",
+          "say": "No: the pole at +1 makes it unstable"
+        },
+        {
+          "show": "Yes: one pole is negative",
+          "say": "Yes: one pole is negative"
+        },
+        {
+          "show": "Yes: the poles cancel out",
+          "say": "Yes: the poles cancel out"
+        }
+      ],
+      "answer": 0,
+      "why": "One right-half-plane pole is enough: its term, e to the t, grows without limit.",
+      "wrong": {
+        "1": "Every pole must be in the left half plane, not just one of them.",
+        "2": "Poles do not cancel each other; each adds its own term to the response."
+      }
+    }
+  ]
+}

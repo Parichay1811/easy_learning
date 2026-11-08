@@ -1,0 +1,707 @@
+{
+  "id": "ENGX-FLUD-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a combi boiler heats water on demand",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "combi boiler",
+    "heat exchanger",
+    "gas burner",
+    "condensing boiler",
+    "flue",
+    "instant hot water"
+  ],
+  "examples": [
+    "How does a combi boiler heat water instantly?",
+    "What is a heat exchanger?",
+    "Why does a boiler have a pipe going outside?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "cold",
+          "kind": "pipe",
+          "x": 0.1,
+          "y": 0.8,
+          "size": 0.8,
+          "label": "Cold water in",
+          "motion": "flow"
+        },
+        {
+          "id": "sensor",
+          "kind": "valve",
+          "x": 0.3,
+          "y": 0.8,
+          "size": 0.7,
+          "label": "Flow sensor",
+          "motion": "pulse",
+          "ask": "How does the boiler know you turned on a tap?"
+        },
+        {
+          "id": "gas",
+          "kind": "valve",
+          "x": 0.3,
+          "y": 0.42,
+          "size": 0.7,
+          "label": "Gas valve",
+          "motion": "none"
+        },
+        {
+          "id": "burner",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.55,
+          "size": 1,
+          "label": "Burner flame",
+          "motion": "pulse"
+        },
+        {
+          "id": "hx",
+          "kind": "coil",
+          "x": 0.62,
+          "y": 0.3,
+          "size": 1.1,
+          "label": "Heat exchanger",
+          "motion": "flow",
+          "ask": "What is a heat exchanger?"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.85,
+          "y": 0.12,
+          "size": 0.7,
+          "label": "Flue fan",
+          "motion": "spin",
+          "ask": "Why does a boiler have a pipe going outside?"
+        },
+        {
+          "id": "hot",
+          "kind": "pipe",
+          "x": 0.88,
+          "y": 0.62,
+          "size": 0.8,
+          "label": "Hot water out",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "cold",
+          "to": "sensor",
+          "kind": "fluid"
+        },
+        {
+          "from": "sensor",
+          "to": "gas",
+          "kind": "signal",
+          "label": "tap is on"
+        },
+        {
+          "from": "gas",
+          "to": "burner",
+          "kind": "energy",
+          "label": "gas"
+        },
+        {
+          "from": "burner",
+          "to": "hx",
+          "kind": "heat",
+          "label": "hot gases"
+        },
+        {
+          "from": "sensor",
+          "to": "hx",
+          "kind": "fluid",
+          "label": "water"
+        },
+        {
+          "from": "hx",
+          "to": "hot",
+          "kind": "fluid",
+          "label": "about 50 °C"
+        },
+        {
+          "from": "hx",
+          "to": "fan",
+          "kind": "heat",
+          "label": "exhaust"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A combi boiler heats water only when you need it, without a storage tank. The moment you open a hot tap, cold mains water starts flowing through the boiler.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a combi boiler heats water on demand"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cold",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Cold water in",
+              "motion": "flow"
+            },
+            {
+              "id": "sensor",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Flow sensor",
+              "motion": "pulse",
+              "ask": "How does the boiler know you turned on a tap?"
+            },
+            {
+              "id": "gas",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.42,
+              "size": 0.7,
+              "label": "Gas valve",
+              "motion": "none"
+            },
+            {
+              "id": "burner",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Burner flame",
+              "motion": "pulse"
+            },
+            {
+              "id": "hx",
+              "kind": "coil",
+              "x": 0.62,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Heat exchanger",
+              "motion": "flow",
+              "ask": "What is a heat exchanger?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.85,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Flue fan",
+              "motion": "spin",
+              "ask": "Why does a boiler have a pipe going outside?"
+            },
+            {
+              "id": "hot",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Hot water out",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "cold",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "gas",
+              "kind": "signal",
+              "label": "tap is on"
+            },
+            {
+              "from": "gas",
+              "to": "burner",
+              "kind": "energy",
+              "label": "gas"
+            },
+            {
+              "from": "burner",
+              "to": "hx",
+              "kind": "heat",
+              "label": "hot gases"
+            },
+            {
+              "from": "sensor",
+              "to": "hx",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "hx",
+              "to": "hot",
+              "kind": "fluid",
+              "label": "about 50 °C"
+            },
+            {
+              "from": "hx",
+              "to": "fan",
+              "kind": "heat",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "A flow sensor notices the moving water and tells the control board to open the gas valve and light the burner.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cold",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Cold water in",
+              "motion": "flow"
+            },
+            {
+              "id": "sensor",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Flow sensor",
+              "motion": "pulse",
+              "ask": "How does the boiler know you turned on a tap?"
+            },
+            {
+              "id": "gas",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.42,
+              "size": 0.7,
+              "label": "Gas valve",
+              "motion": "none"
+            },
+            {
+              "id": "burner",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Burner flame",
+              "motion": "pulse"
+            },
+            {
+              "id": "hx",
+              "kind": "coil",
+              "x": 0.62,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Heat exchanger",
+              "motion": "flow",
+              "ask": "What is a heat exchanger?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.85,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Flue fan",
+              "motion": "spin",
+              "ask": "Why does a boiler have a pipe going outside?"
+            },
+            {
+              "id": "hot",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Hot water out",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "cold",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "gas",
+              "kind": "signal",
+              "label": "tap is on"
+            },
+            {
+              "from": "gas",
+              "to": "burner",
+              "kind": "energy",
+              "label": "gas"
+            },
+            {
+              "from": "burner",
+              "to": "hx",
+              "kind": "heat",
+              "label": "hot gases"
+            },
+            {
+              "from": "sensor",
+              "to": "hx",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "hx",
+              "to": "hot",
+              "kind": "fluid",
+              "label": "about 50 °C"
+            },
+            {
+              "from": "hx",
+              "to": "fan",
+              "kind": "heat",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The flame heats a heat exchanger, a coil of thin pipes, and the cold water flowing through it warms up in a few seconds before going on to your tap.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cold",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Cold water in",
+              "motion": "flow"
+            },
+            {
+              "id": "sensor",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Flow sensor",
+              "motion": "pulse",
+              "ask": "How does the boiler know you turned on a tap?"
+            },
+            {
+              "id": "gas",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.42,
+              "size": 0.7,
+              "label": "Gas valve",
+              "motion": "none"
+            },
+            {
+              "id": "burner",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Burner flame",
+              "motion": "pulse"
+            },
+            {
+              "id": "hx",
+              "kind": "coil",
+              "x": 0.62,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Heat exchanger",
+              "motion": "flow",
+              "ask": "What is a heat exchanger?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.85,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Flue fan",
+              "motion": "spin",
+              "ask": "Why does a boiler have a pipe going outside?"
+            },
+            {
+              "id": "hot",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Hot water out",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "cold",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "gas",
+              "kind": "signal",
+              "label": "tap is on"
+            },
+            {
+              "from": "gas",
+              "to": "burner",
+              "kind": "energy",
+              "label": "gas"
+            },
+            {
+              "from": "burner",
+              "to": "hx",
+              "kind": "heat",
+              "label": "hot gases"
+            },
+            {
+              "from": "sensor",
+              "to": "hx",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "hx",
+              "to": "hot",
+              "kind": "fluid",
+              "label": "about 50 °C"
+            },
+            {
+              "from": "hx",
+              "to": "fan",
+              "kind": "heat",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "A fan pushes the burnt gases out through the flue to the outside. Condensing boilers cool these gases so much that water drips out of them, squeezing out extra heat.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cold",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Cold water in",
+              "motion": "flow"
+            },
+            {
+              "id": "sensor",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Flow sensor",
+              "motion": "pulse",
+              "ask": "How does the boiler know you turned on a tap?"
+            },
+            {
+              "id": "gas",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.42,
+              "size": 0.7,
+              "label": "Gas valve",
+              "motion": "none"
+            },
+            {
+              "id": "burner",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Burner flame",
+              "motion": "pulse"
+            },
+            {
+              "id": "hx",
+              "kind": "coil",
+              "x": 0.62,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Heat exchanger",
+              "motion": "flow",
+              "ask": "What is a heat exchanger?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.85,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Flue fan",
+              "motion": "spin",
+              "ask": "Why does a boiler have a pipe going outside?"
+            },
+            {
+              "id": "hot",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Hot water out",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "cold",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "gas",
+              "kind": "signal",
+              "label": "tap is on"
+            },
+            {
+              "from": "gas",
+              "to": "burner",
+              "kind": "energy",
+              "label": "gas"
+            },
+            {
+              "from": "burner",
+              "to": "hx",
+              "kind": "heat",
+              "label": "hot gases"
+            },
+            {
+              "from": "sensor",
+              "to": "hx",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "hx",
+              "to": "hot",
+              "kind": "fluid",
+              "label": "about 50 °C"
+            },
+            {
+              "from": "hx",
+              "to": "fan",
+              "kind": "heat",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does the boiler know you turned on a tap?",
+      "a": "A flow sensor in the cold-water inlet detects water moving. It signals the control board, which lights the burner straight away.",
+      "asks": [
+        "How does a combi boiler start when I open the hot tap?"
+      ]
+    },
+    {
+      "q": "What is a heat exchanger?",
+      "a": "A heat exchanger passes heat from one thing to another without mixing them. In a boiler, hot flame gases flow around thin pipes, heating the water inside.",
+      "asks": [
+        "How does the flame heat the water?"
+      ]
+    },
+    {
+      "q": "Why does a boiler have a pipe going outside?",
+      "a": "That pipe is the flue. Burning gas makes carbon dioxide, water vapour and sometimes poisonous carbon monoxide, so a fan blows these gases safely outdoors.",
+      "asks": [
+        "What is the flue for?",
+        "Why does my boiler pipe steam in winter?"
+      ]
+    },
+    {
+      "q": "What is a condensing boiler?",
+      "a": "A condensing boiler cools its exhaust gases until their water vapour turns back into liquid. That releases extra heat into the water, making the boiler much more efficient.",
+      "asks": [
+        "Why does my boiler have a drain pipe?"
+      ]
+    },
+    {
+      "q": "Why does a combi boiler heat radiators too?",
+      "a": "A combi has two jobs. When no tap is open, it heats water that circulates through the radiators; when you open a hot tap, it switches to heating tap water first.",
+      "asks": [
+        "Does a combi boiler do central heating too?"
+      ]
+    }
+  ],
+  "facts": [
+    "Combi boilers heat water directly from the mains when a tap is opened, so they need no hot-water cylinder.",
+    "Modern condensing boilers can reach about 90 percent efficiency by recovering heat from the water vapour in their exhaust."
+  ],
+  "quiz": [
+    {
+      "say": "What turns on a combi boiler when you open a hot tap?",
+      "show": "What turns on a combi boiler when you open a hot tap?",
+      "options": [
+        {
+          "show": "A flow sensor detects moving water",
+          "say": "A flow sensor detects moving water"
+        },
+        {
+          "show": "A timer every hour",
+          "say": "A timer every hour"
+        },
+        {
+          "show": "The tap sends a radio signal",
+          "say": "The tap sends a radio signal"
+        }
+      ],
+      "answer": 0,
+      "why": "Opening the tap makes water flow, and the sensor tells the boiler to light the burner.",
+      "wrong": {
+        "1": "A timer controls heating times, but tap water is heated on demand.",
+        "2": "Ordinary taps have no electronics; the flow itself is the signal."
+      }
+    }
+  ]
+}

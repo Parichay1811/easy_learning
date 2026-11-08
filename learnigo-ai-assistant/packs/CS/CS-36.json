@@ -1,0 +1,252 @@
+{
+  "id": "CS-36",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Graph algorithms",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "graph traversal",
+    "shortest path",
+    "bfs",
+    "dfs",
+    "dijkstra's algorithm"
+  ],
+  "examples": [
+    "When should I use BFS instead of DFS?",
+    "What is the main difference between BFS and Dijkstra's?",
+    "Can Dijkstra's algorithm handle negative edge weights?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning about graph traversal algorithms. These help us explore connections in a network.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Graph algorithms"
+        },
+        {
+          "op": "text",
+          "text": "Graph Traversal: BFS, DFS, Dijkstra",
+          "at": "graph"
+        }
+      ]
+    },
+    {
+      "say": "Breadth First Search, or BFS, explores layer by layer. It checks all neighbors before moving deeper.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start Node",
+            "Visit all neighbors (Level 1)",
+            "Visit all neighbors of Level 1 (Level 2)",
+            "Continue until all nodes are visited"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "BFS: Level by Level"
+        }
+      ]
+    },
+    {
+      "say": "Depth First Search, or DFS, explores as far as possible down one path. It goes deep before it goes wide.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start Node",
+            "Go to the first unvisited neighbor",
+            "Keep going deeper until you hit a dead end",
+            "Backtrack to the previous node and try another path"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "DFS: Deep First Path",
+          "at": "deep"
+        }
+      ]
+    },
+    {
+      "say": "Dijkstra's algorithm finds the shortest path from one node to all others. It works best with non-negative weights.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Dijkstra's: Shortest Path",
+          "at": "dijkstra's"
+        }
+      ]
+    },
+    {
+      "say": "Imagine finding the quickest route on a map with varying travel times. Dijkstra's algorithm is perfect for this.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Real Life: Shortest Time Route",
+          "at": "route"
+        }
+      ]
+    },
+    {
+      "say": "A common mistake is assuming BFS always finds the shortest path. It only finds the path with the fewest edges.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Mistake: BFS vs Weighted Path",
+          "at": "mistake"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between BFS and DFS?",
+      "a": "BFS explores neighbors level by level, like ripples in water. DFS explores one path fully before backtracking, like digging a tunnel.",
+      "asks": [
+        "How do I choose between BFS and DFS?",
+        "Does BFS always check all nodes at the same distance?"
+      ]
+    },
+    {
+      "q": "When should I use Dijkstra's algorithm?",
+      "a": "You should use Dijkstra's when you need the path with the minimum total weight. This means the path that costs the least.",
+      "asks": [
+        "Is Dijkstra's for finding the shortest route?",
+        "Does Dijkstra's need positive weights?"
+      ]
+    },
+    {
+      "q": "Can Dijkstra's handle negative edge weights?",
+      "a": "No, Dijkstra's algorithm is not guaranteed to work correctly with negative edge weights. You might need a different algorithm then.",
+      "asks": [
+        "What if the path costs money?",
+        "Is there an alternative to Dijkstra's for negative weights?"
+      ]
+    },
+    {
+      "q": "What is a 'weight' in this context?",
+      "a": "A weight is a number assigned to an edge representing a cost, distance, or time. It tells us how 'expensive' the connection is.",
+      "asks": [
+        "What does the weight mean?",
+        "Are weights always positive numbers?"
+      ]
+    },
+    {
+      "q": "Do these algorithms require the graph to be connected?",
+      "a": "The algorithms work best on connected graphs. If parts are separate, you might only explore the part you start in.",
+      "asks": [
+        "What if the graph has islands?",
+        "Do they need all nodes to be reachable?"
+      ]
+    }
+  ],
+  "facts": [
+    "BFS uses a queue data structure to manage nodes to visit.",
+    "DFS typically uses a stack data structure for its traversal.",
+    "Dijkstra's algorithm requires that all edge weights be non-negative.",
+    "BFS guarantees finding the shortest path in terms of the number of edges."
+  ],
+  "quiz": [
+    {
+      "say": "If you want to find the route with the fewest stops, which algorithm is best?",
+      "show": "Fewest Stops = BFS",
+      "options": [
+        {
+          "show": "Dijkstra's",
+          "say": "Dijkstra's"
+        },
+        {
+          "show": "Both DFS and Dijkstra's",
+          "say": "Both DFS and Dijkstra's"
+        },
+        {
+          "show": "BFS",
+          "say": "BFS"
+        },
+        {
+          "show": "DFS",
+          "say": "DFS"
+        }
+      ],
+      "answer": 2,
+      "why": "BFS explores outward evenly, guaranteeing it finds the path with the minimum number of steps or edges first.",
+      "wrong": {
+        "0": "Dijkstra's focuses on the total weight, not just the count of edges.",
+        "1": "Both algorithms are designed for weighted paths, not just edge counting.",
+        "3": "DFS might go down a very long, winding path before finding a shorter one."
+      }
+    },
+    {
+      "say": "A map where every road has a positive travel time should use which algorithm?",
+      "show": "Positive Weights = Dijkstra's",
+      "options": [
+        {
+          "show": "DFS",
+          "say": "DFS"
+        },
+        {
+          "show": "A simple Breadth search",
+          "say": "A simple Breadth search"
+        },
+        {
+          "show": "Dijkstra's",
+          "say": "Dijkstra's"
+        },
+        {
+          "show": "BFS",
+          "say": "BFS"
+        }
+      ],
+      "answer": 2,
+      "why": "Dijkstra's is specifically designed to calculate the minimum cumulative weight when all weights are zero or positive.",
+      "wrong": {
+        "0": "DFS explores depth, not the minimum accumulated cost across the entire network.",
+        "1": "A simple search cannot account for varying travel times or costs.",
+        "3": "BFS ignores the travel time weights entirely, only counting the number of roads."
+      }
+    },
+    {
+      "say": "If a graph has a negative edge weight, which algorithm might fail?",
+      "show": "Negative Weights Fail = Dijkstra's",
+      "options": [
+        {
+          "show": "Dijkstra's",
+          "say": "Dijkstra's"
+        },
+        {
+          "show": "BFS",
+          "say": "BFS"
+        },
+        {
+          "show": "DFS",
+          "say": "DFS"
+        },
+        {
+          "show": "None of the above",
+          "say": "None of the above"
+        }
+      ],
+      "answer": 0,
+      "why": "Dijkstra's assumes that adding more edges will never decrease the total path cost, which negative weights break.",
+      "wrong": {
+        "1": "BFS only cares about the count of edges, so negative weights do not affect its logic.",
+        "2": "DFS is path-dependent and is not designed to calculate minimum cumulative costs.",
+        "3": "All three algorithms are affected by negative edge weights in some way."
+      }
+    }
+  ]
+}

@@ -1,0 +1,239 @@
+{
+  "id": "MATH-STAT-10",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Confidence intervals",
+  "area": "Mathematics",
+  "group": "MATH-STAT — Statistics",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "confidence interval",
+    "margin of error",
+    "sampling",
+    "estimate",
+    "confidence level"
+  ],
+  "examples": [
+    "What does a 95 percent confidence interval actually mean?",
+    "How do I calculate the margin of error if I know the standard deviation?",
+    "What must be true about my data before I can use a confidence interval?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn about confidence intervals for estimating population means. First, we need to understand the margin of error. The margin of error gives us a range around our sample mean. It tells us how far our sample mean might be from the true population mean.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Confidence intervals"
+        },
+        {
+          "op": "flow",
+          "items": [
+            "Start with sample mean",
+            "Calculate margin of error",
+            "Result: range around true mean"
+          ],
+          "at": "sample"
+        },
+        {
+          "op": "text",
+          "text": "Margin of Error: $\\text{ME}$",
+          "at": "margin"
+        }
+      ]
+    },
+    {
+      "say": "The formula for the margin of error depends on the standard deviation and the sample size. A common formula uses the z score multiplied by the standard error. Remember that the z score relates to the confidence level we choose.",
+      "draw": [
+        {
+          "op": "pyramid",
+          "items": [
+            "Top (Fewest): Z-score",
+            "Middle: Standard Error ( rac{ ext{SD}}{ ext{sqrt}(n)})",
+            "Base (Most): Margin of Error ( ext{ME})"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "$ ext{ME} = z^ \\cdot \\frac{\\sigma}{\\sqrt{n}}$"
+        }
+      ]
+    },
+    {
+      "say": "Next, we build the interval itself. The confidence interval is simply the sample mean plus or minus the margin of error. This gives us a lower bound and an upper bound for the true mean.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start with sample mean (\bar{x})",
+            "Subtract margin of error (\bar{x} - ext{ME})",
+            "Add margin of error (\bar{x} + ext{ME})",
+            "Result: Lower bound to Upper bound"
+          ],
+          "at": "sample"
+        },
+        {
+          "op": "text",
+          "text": "$\\text{CI} = \\bar{x} \\pm \\text{ME}$"
+        }
+      ]
+    },
+    {
+      "say": "Finally, interpretation is key. If we are 95 percent confident, it means that if we repeated this sampling process many times, ninety-five percent of the resulting intervals would contain the true population mean.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "95% CI: 95% chance the true mean is in this range.",
+          "at": "true"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the 95 percent confidence level actually mean?",
+      "a": "It means that if we repeated the sampling process many times, ninety-five percent of the intervals we calculate would contain the true population mean. It does not mean there is a ninety-five percent chance the true mean is in this specific interval.",
+      "asks": [
+        "What does 95 percent confidence really mean?",
+        "Is 95 percent confidence the probability the mean is in the interval?"
+      ]
+    },
+    {
+      "q": "When can I use this method to find an interval?",
+      "a": "You must know the sample size and have a measure of the population standard deviation or use the sample standard deviation if the sample size is large enough. The data should also be random.",
+      "asks": [
+        "What are the conditions for using CIs?",
+        "Do I need a normal distribution for this?"
+      ]
+    },
+    {
+      "q": "Does the margin of error change if I increase my sample size?",
+      "a": "Yes, the margin of error decreases as the sample size increases. This makes our estimate more precise because we have more information from our sample.",
+      "asks": [
+        "How does sample size affect the error?",
+        "If I take more samples, is my estimate better?"
+      ]
+    },
+    {
+      "q": "If I want to be more confident, should I change the margin of error?",
+      "a": "To be more confident, you must accept a wider margin of error. A higher confidence level means a wider range to capture the true mean.",
+      "asks": [
+        "Can I make the interval smaller and still be confident?",
+        "What happens if I choose 99 percent confidence?"
+      ]
+    },
+    {
+      "q": "Is the sample mean always the center of the confidence interval?",
+      "a": "Yes, the sample mean always serves as the center point for the confidence interval. The margin of error extends equally in both directions from the sample mean.",
+      "asks": [
+        "Is the average always in the middle of the interval?",
+        "How is the interval centered?"
+      ]
+    }
+  ],
+  "facts": [
+    "A confidence interval provides a range estimate for a population parameter.",
+    "The margin of error accounts for the uncertainty due to sampling variability.",
+    "Larger sample sizes result in smaller margins of error, increasing precision.",
+    "The confidence level dictates the z score used in the calculation."
+  ],
+  "quiz": [
+    {
+      "say": "A study finds a sample mean of 50 with a margin of error of 3. What is the lower bound of the interval?",
+      "show": "Lower Bound = $\\bar{x} - \\text{ME}$",
+      "options": [
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "50",
+          "say": "50"
+        },
+        {
+          "show": "47",
+          "say": "47"
+        },
+        {
+          "show": "53",
+          "say": "53"
+        }
+      ],
+      "answer": 2,
+      "why": "The lower bound is found by subtracting the margin of error from the sample mean, giving 50 minus 3 equals 47.",
+      "wrong": {
+        "0": "This incorrectly states the margin of error as the answer, ignoring the sample mean.",
+        "1": "This incorrectly assumes the margin of error is zero, providing no range.",
+        "3": "This incorrectly adds the margin of error to the mean, which finds the upper bound."
+      }
+    },
+    {
+      "say": "If you increase your sample size, what happens to the margin of error?",
+      "show": "Sample Size $\\uparrow \\implies \\text{ME}$ ?",
+      "options": [
+        {
+          "show": "It increases",
+          "say": "It increases"
+        },
+        {
+          "show": "It stays the same",
+          "say": "It stays the same"
+        },
+        {
+          "show": "It depends on the mean",
+          "say": "It depends on the mean"
+        },
+        {
+          "show": "It decreases",
+          "say": "It decreases"
+        }
+      ],
+      "answer": 3,
+      "why": "Because the sample size is in the denominator of the margin of error formula, increasing it makes the overall value smaller.",
+      "wrong": {
+        "0": "This confuses the relationship; more data leads to less uncertainty, not more.",
+        "1": "The margin of error is directly related to sample size, so it must change.",
+        "2": "The margin of error depends on standard deviation and sample size, not the sample mean itself."
+      }
+    },
+    {
+      "say": "A 99 percent confidence interval is wider than a 90 percent confidence interval. Why?",
+      "show": "Higher Confidence $\\implies$ Wider Interval",
+      "options": [
+        {
+          "show": "To be more certain, you must allow for a larger possible range.",
+          "say": "To be more certain, you must allow for a larger possible range."
+        },
+        {
+          "show": "It means the sample data was less reliable.",
+          "say": "It means the sample data was less reliable."
+        },
+        {
+          "show": "The margin of error automatically shrinks.",
+          "say": "The margin of error automatically shrinks."
+        },
+        {
+          "show": "It only depends on the sample mean.",
+          "say": "It only depends on the sample mean."
+        }
+      ],
+      "answer": 0,
+      "why": "A higher confidence level requires a larger z score, which increases the margin of error and widens the interval.",
+      "wrong": {
+        "1": "The confidence level relates to the method, not the quality of the specific sample data collected.",
+        "2": "This is incorrect; higher confidence requires a larger, not smaller, margin of error.",
+        "3": "The interval width depends on both the margin of error and the sample mean, but the confidence level changes the error."
+      }
+    }
+  ]
+}

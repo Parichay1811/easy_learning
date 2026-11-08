@@ -1,0 +1,709 @@
+{
+  "id": "ENGX-TRAN-50",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a lorry's air brakes work",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "air brakes",
+    "lorry brakes",
+    "brake chamber",
+    "spring brake",
+    "air compressor"
+  ],
+  "examples": [
+    "How do lorry air brakes work?",
+    "Why do lorries hiss when they stop?",
+    "What happens if a lorry loses air pressure?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "comp",
+          "kind": "motor",
+          "x": 0.1,
+          "y": 0.2,
+          "size": 1,
+          "label": "Air compressor",
+          "motion": "spin",
+          "ask": "Why do lorries use air instead of brake fluid?"
+        },
+        {
+          "id": "tank",
+          "kind": "tank",
+          "x": 0.32,
+          "y": 0.2,
+          "size": 1.2,
+          "label": "Air tank",
+          "motion": "none",
+          "ask": "What is the air tank for?"
+        },
+        {
+          "id": "valve",
+          "kind": "valve",
+          "x": 0.56,
+          "y": 0.2,
+          "size": 0.8,
+          "label": "Brake pedal valve",
+          "motion": "pulse",
+          "ask": "Why do lorries hiss when they stop?"
+        },
+        {
+          "id": "pipe",
+          "kind": "pipe",
+          "x": 0.56,
+          "y": 0.5,
+          "size": 1,
+          "label": "Air line",
+          "motion": "flow"
+        },
+        {
+          "id": "chamber",
+          "kind": "piston",
+          "x": 0.8,
+          "y": 0.45,
+          "size": 1,
+          "label": "Brake chamber",
+          "motion": "slide",
+          "ask": "What is a brake chamber?"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.82,
+          "y": 0.82,
+          "size": 0.9,
+          "label": "Parking spring",
+          "motion": "pulse",
+          "ask": "What happens if a lorry loses air pressure?"
+        },
+        {
+          "id": "drum",
+          "kind": "wheel",
+          "x": 0.45,
+          "y": 0.82,
+          "size": 1.2,
+          "label": "Brake drum",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "comp",
+          "to": "tank",
+          "kind": "fluid",
+          "label": "compressed air"
+        },
+        {
+          "from": "tank",
+          "to": "valve",
+          "kind": "fluid"
+        },
+        {
+          "from": "valve",
+          "to": "pipe",
+          "kind": "fluid",
+          "label": "when pressed"
+        },
+        {
+          "from": "pipe",
+          "to": "chamber",
+          "kind": "fluid",
+          "label": "pushes"
+        },
+        {
+          "from": "chamber",
+          "to": "drum",
+          "kind": "force",
+          "label": "applies brake"
+        },
+        {
+          "from": "spring",
+          "to": "drum",
+          "kind": "force",
+          "label": "brakes if air lost"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Heavy lorries and buses use air instead of liquid to work their brakes. An engine-driven compressor pumps air into storage tanks at around eight to ten times normal air pressure.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a lorry's air brakes work"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1,
+              "label": "Air compressor",
+              "motion": "spin",
+              "ask": "Why do lorries use air instead of brake fluid?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.32,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Air tank",
+              "motion": "none",
+              "ask": "What is the air tank for?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.56,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Brake pedal valve",
+              "motion": "pulse",
+              "ask": "Why do lorries hiss when they stop?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1,
+              "label": "Air line",
+              "motion": "flow"
+            },
+            {
+              "id": "chamber",
+              "kind": "piston",
+              "x": 0.8,
+              "y": 0.45,
+              "size": 1,
+              "label": "Brake chamber",
+              "motion": "slide",
+              "ask": "What is a brake chamber?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.82,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Parking spring",
+              "motion": "pulse",
+              "ask": "What happens if a lorry loses air pressure?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Brake drum",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "compressed air"
+            },
+            {
+              "from": "tank",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "when pressed"
+            },
+            {
+              "from": "pipe",
+              "to": "chamber",
+              "kind": "fluid",
+              "label": "pushes"
+            },
+            {
+              "from": "chamber",
+              "to": "drum",
+              "kind": "force",
+              "label": "applies brake"
+            },
+            {
+              "from": "spring",
+              "to": "drum",
+              "kind": "force",
+              "label": "brakes if air lost"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The tanks hold enough air for many stops. When the driver presses the brake pedal, a valve lets compressed air flow from the tanks along pipes to each wheel.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1,
+              "label": "Air compressor",
+              "motion": "spin",
+              "ask": "Why do lorries use air instead of brake fluid?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.32,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Air tank",
+              "motion": "none",
+              "ask": "What is the air tank for?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.56,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Brake pedal valve",
+              "motion": "pulse",
+              "ask": "Why do lorries hiss when they stop?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1,
+              "label": "Air line",
+              "motion": "flow"
+            },
+            {
+              "id": "chamber",
+              "kind": "piston",
+              "x": 0.8,
+              "y": 0.45,
+              "size": 1,
+              "label": "Brake chamber",
+              "motion": "slide",
+              "ask": "What is a brake chamber?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.82,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Parking spring",
+              "motion": "pulse",
+              "ask": "What happens if a lorry loses air pressure?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Brake drum",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "compressed air"
+            },
+            {
+              "from": "tank",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "when pressed"
+            },
+            {
+              "from": "pipe",
+              "to": "chamber",
+              "kind": "fluid",
+              "label": "pushes"
+            },
+            {
+              "from": "chamber",
+              "to": "drum",
+              "kind": "force",
+              "label": "applies brake"
+            },
+            {
+              "from": "spring",
+              "to": "drum",
+              "kind": "force",
+              "label": "brakes if air lost"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "At each wheel the air pushes on a rubber diaphragm in a brake chamber, which pushes a rod and turns a lever. That forces the brake shoes or pads against the drum or disc, slowing the lorry.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1,
+              "label": "Air compressor",
+              "motion": "spin",
+              "ask": "Why do lorries use air instead of brake fluid?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.32,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Air tank",
+              "motion": "none",
+              "ask": "What is the air tank for?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.56,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Brake pedal valve",
+              "motion": "pulse",
+              "ask": "Why do lorries hiss when they stop?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1,
+              "label": "Air line",
+              "motion": "flow"
+            },
+            {
+              "id": "chamber",
+              "kind": "piston",
+              "x": 0.8,
+              "y": 0.45,
+              "size": 1,
+              "label": "Brake chamber",
+              "motion": "slide",
+              "ask": "What is a brake chamber?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.82,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Parking spring",
+              "motion": "pulse",
+              "ask": "What happens if a lorry loses air pressure?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Brake drum",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "compressed air"
+            },
+            {
+              "from": "tank",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "when pressed"
+            },
+            {
+              "from": "pipe",
+              "to": "chamber",
+              "kind": "fluid",
+              "label": "pushes"
+            },
+            {
+              "from": "chamber",
+              "to": "drum",
+              "kind": "force",
+              "label": "applies brake"
+            },
+            {
+              "from": "spring",
+              "to": "drum",
+              "kind": "force",
+              "label": "brakes if air lost"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "There is a clever safety feature: powerful springs in the chambers try to put the brakes on all the time, and air pressure holds them off. If a pipe bursts or a trailer breaks away, the air escapes and the springs apply the brakes automatically.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1,
+              "label": "Air compressor",
+              "motion": "spin",
+              "ask": "Why do lorries use air instead of brake fluid?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.32,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Air tank",
+              "motion": "none",
+              "ask": "What is the air tank for?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.56,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Brake pedal valve",
+              "motion": "pulse",
+              "ask": "Why do lorries hiss when they stop?"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.56,
+              "y": 0.5,
+              "size": 1,
+              "label": "Air line",
+              "motion": "flow"
+            },
+            {
+              "id": "chamber",
+              "kind": "piston",
+              "x": 0.8,
+              "y": 0.45,
+              "size": 1,
+              "label": "Brake chamber",
+              "motion": "slide",
+              "ask": "What is a brake chamber?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.82,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Parking spring",
+              "motion": "pulse",
+              "ask": "What happens if a lorry loses air pressure?"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Brake drum",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "compressed air"
+            },
+            {
+              "from": "tank",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "when pressed"
+            },
+            {
+              "from": "pipe",
+              "to": "chamber",
+              "kind": "fluid",
+              "label": "pushes"
+            },
+            {
+              "from": "chamber",
+              "to": "drum",
+              "kind": "force",
+              "label": "applies brake"
+            },
+            {
+              "from": "spring",
+              "to": "drum",
+              "kind": "force",
+              "label": "brakes if air lost"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do lorries use air instead of brake fluid?",
+      "a": "Air is free and never runs out, a small leak does not leave you without brakes straight away, and air lines are easy to connect between a lorry and its trailer.",
+      "asks": [
+        "Why don't lorries use hydraulic brakes?"
+      ]
+    },
+    {
+      "q": "What is the air tank for?",
+      "a": "The air tanks, called reservoirs, store compressed air so there is enough for many brake applications even if the compressor stops. A gauge warns the driver if pressure falls.",
+      "asks": [
+        "How much air does a lorry store?"
+      ]
+    },
+    {
+      "q": "Why do lorries hiss when they stop?",
+      "a": "When the driver releases the brake, the valve lets the used air out of the brake chambers into the open with a loud hiss. The compressor then tops the tanks up.",
+      "asks": [
+        "What is the hissing noise from a bus?"
+      ]
+    },
+    {
+      "q": "What is a brake chamber?",
+      "a": "The brake chamber is a round metal can at each wheel with a rubber diaphragm inside. Air pressure pushes the diaphragm and a rod, which turns a lever to apply the brake.",
+      "asks": [
+        "How does air push the brakes on?"
+      ]
+    },
+    {
+      "q": "What happens if a lorry loses air pressure?",
+      "a": "Strong springs in the brake chambers apply the brakes when air pressure falls, so a burst pipe or a trailer breaking away makes the brakes come on rather than fail.",
+      "asks": [
+        "Are air brakes fail-safe?"
+      ]
+    }
+  ],
+  "facts": [
+    "George Westinghouse patented the railway air brake in 1869.",
+    "Lorry air brake systems typically store air at about eight to ten times atmospheric pressure.",
+    "Spring brakes on lorries apply automatically if air pressure is lost."
+  ],
+  "quiz": [
+    {
+      "say": "What happens if a lorry's trailer breaks away and its air line snaps?",
+      "show": "What happens if a lorry's trailer breaks away and its air line snaps?",
+      "options": [
+        {
+          "show": "The trailer brakes come on automatically",
+          "say": "The trailer brakes come on automatically"
+        },
+        {
+          "show": "The trailer rolls freely",
+          "say": "The trailer rolls freely"
+        },
+        {
+          "show": "The engine stops",
+          "say": "The engine stops"
+        }
+      ],
+      "answer": 0,
+      "why": "Losing air pressure releases the springs, which apply the brakes, so the system fails safe.",
+      "wrong": {
+        "1": "The spring brakes are designed to stop exactly that.",
+        "2": "The brakes respond to air pressure; the engine is not involved."
+      }
+    },
+    {
+      "say": "Why do lorries hiss when the driver releases the brakes?",
+      "show": "Why do lorries hiss when the driver releases the brakes?",
+      "options": [
+        {
+          "show": "Used air is let out of the brake chambers",
+          "say": "Used air is let out of the brake chambers"
+        },
+        {
+          "show": "The tyres are leaking",
+          "say": "The tyres are leaking"
+        },
+        {
+          "show": "The engine is overheating",
+          "say": "The engine is overheating"
+        }
+      ],
+      "answer": 0,
+      "why": "Releasing the brakes vents the air that was pushing the diaphragms, making the hiss.",
+      "wrong": {
+        "1": "The hiss is normal and comes from the brake valves, not the tyres.",
+        "2": "An overheating engine does not cause that regular hiss."
+      }
+    }
+  ]
+}

@@ -1,0 +1,598 @@
+{
+  "id": "ENGX-CIVL-11",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a bascule bridge lifts its leaves",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "bascule bridge",
+    "counterweight",
+    "Tower Bridge",
+    "trunnion",
+    "drawbridge"
+  ],
+  "examples": [
+    "How does a bascule bridge open?",
+    "Why do lifting bridges have counterweights?",
+    "How does Tower Bridge lift?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.78,
+          "label": "Drive motor",
+          "motion": "spin",
+          "ask": "What powers a bascule bridge?"
+        },
+        {
+          "id": "pin",
+          "kind": "gear",
+          "x": 0.3,
+          "y": 0.72,
+          "size": 0.7,
+          "label": "Pinion gear",
+          "motion": "spin"
+        },
+        {
+          "id": "rack",
+          "kind": "gear",
+          "x": 0.46,
+          "y": 0.58,
+          "size": 1.3,
+          "label": "Curved rack",
+          "motion": "spin",
+          "speed": 0.3
+        },
+        {
+          "id": "trun",
+          "kind": "axle",
+          "x": 0.58,
+          "y": 0.4,
+          "label": "Trunnion pivot",
+          "ask": "What is a trunnion?"
+        },
+        {
+          "id": "leaf",
+          "kind": "lever",
+          "x": 0.82,
+          "y": 0.28,
+          "size": 1.5,
+          "label": "Bridge leaf",
+          "motion": "swing",
+          "ask": "What is a bascule bridge?"
+        },
+        {
+          "id": "cw",
+          "kind": "weight",
+          "x": 0.4,
+          "y": 0.9,
+          "size": 1.2,
+          "label": "Counterweight",
+          "motion": "swing",
+          "ask": "Why does a bascule bridge have a counterweight?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "pin",
+          "kind": "energy",
+          "label": "turns"
+        },
+        {
+          "from": "pin",
+          "to": "rack",
+          "kind": "force",
+          "label": "meshes"
+        },
+        {
+          "from": "rack",
+          "to": "trun",
+          "kind": "force"
+        },
+        {
+          "from": "trun",
+          "to": "leaf",
+          "kind": "force",
+          "label": "lifts"
+        },
+        {
+          "from": "cw",
+          "to": "trun",
+          "kind": "force",
+          "label": "balances"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A bascule bridge opens by tipping its deck up like a seesaw, so tall ships can pass. Bascule is French for seesaw, and each tipping section is called a leaf.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a bascule bridge lifts its leaves"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.78,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What powers a bascule bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rack",
+              "kind": "gear",
+              "x": 0.46,
+              "y": 0.58,
+              "size": 1.3,
+              "label": "Curved rack",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "trun",
+              "kind": "axle",
+              "x": 0.58,
+              "y": 0.4,
+              "label": "Trunnion pivot",
+              "ask": "What is a trunnion?"
+            },
+            {
+              "id": "leaf",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.28,
+              "size": 1.5,
+              "label": "Bridge leaf",
+              "motion": "swing",
+              "ask": "What is a bascule bridge?"
+            },
+            {
+              "id": "cw",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.9,
+              "size": 1.2,
+              "label": "Counterweight",
+              "motion": "swing",
+              "ask": "Why does a bascule bridge have a counterweight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "rack",
+              "to": "trun",
+              "kind": "force"
+            },
+            {
+              "from": "trun",
+              "to": "leaf",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "cw",
+              "to": "trun",
+              "kind": "force",
+              "label": "balances"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Behind the pivot, often in a pit under the road, sits a huge counterweight. It almost exactly balances the leaf, so very little force is needed to tip it.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.78,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What powers a bascule bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rack",
+              "kind": "gear",
+              "x": 0.46,
+              "y": 0.58,
+              "size": 1.3,
+              "label": "Curved rack",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "trun",
+              "kind": "axle",
+              "x": 0.58,
+              "y": 0.4,
+              "label": "Trunnion pivot",
+              "ask": "What is a trunnion?"
+            },
+            {
+              "id": "leaf",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.28,
+              "size": 1.5,
+              "label": "Bridge leaf",
+              "motion": "swing",
+              "ask": "What is a bascule bridge?"
+            },
+            {
+              "id": "cw",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.9,
+              "size": 1.2,
+              "label": "Counterweight",
+              "motion": "swing",
+              "ask": "Why does a bascule bridge have a counterweight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "rack",
+              "to": "trun",
+              "kind": "force"
+            },
+            {
+              "from": "trun",
+              "to": "leaf",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "cw",
+              "to": "trun",
+              "kind": "force",
+              "label": "balances"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "The leaf turns on a big axle called the trunnion. Because the leaf and counterweight balance, they rotate around this pivot as easily as a well-balanced seesaw.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.78,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What powers a bascule bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rack",
+              "kind": "gear",
+              "x": 0.46,
+              "y": 0.58,
+              "size": 1.3,
+              "label": "Curved rack",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "trun",
+              "kind": "axle",
+              "x": 0.58,
+              "y": 0.4,
+              "label": "Trunnion pivot",
+              "ask": "What is a trunnion?"
+            },
+            {
+              "id": "leaf",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.28,
+              "size": 1.5,
+              "label": "Bridge leaf",
+              "motion": "swing",
+              "ask": "What is a bascule bridge?"
+            },
+            {
+              "id": "cw",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.9,
+              "size": 1.2,
+              "label": "Counterweight",
+              "motion": "swing",
+              "ask": "Why does a bascule bridge have a counterweight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "rack",
+              "to": "trun",
+              "kind": "force"
+            },
+            {
+              "from": "trun",
+              "to": "leaf",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "cw",
+              "to": "trun",
+              "kind": "force",
+              "label": "balances"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "A motor turns a small pinion gear that meshes with a curved toothed rack fixed to the leaf. Thanks to the balance, a modest motor can raise a leaf weighing hundreds of tonnes in a minute or two.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.78,
+              "label": "Drive motor",
+              "motion": "spin",
+              "ask": "What powers a bascule bridge?"
+            },
+            {
+              "id": "pin",
+              "kind": "gear",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Pinion gear",
+              "motion": "spin"
+            },
+            {
+              "id": "rack",
+              "kind": "gear",
+              "x": 0.46,
+              "y": 0.58,
+              "size": 1.3,
+              "label": "Curved rack",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "trun",
+              "kind": "axle",
+              "x": 0.58,
+              "y": 0.4,
+              "label": "Trunnion pivot",
+              "ask": "What is a trunnion?"
+            },
+            {
+              "id": "leaf",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.28,
+              "size": 1.5,
+              "label": "Bridge leaf",
+              "motion": "swing",
+              "ask": "What is a bascule bridge?"
+            },
+            {
+              "id": "cw",
+              "kind": "weight",
+              "x": 0.4,
+              "y": 0.9,
+              "size": 1.2,
+              "label": "Counterweight",
+              "motion": "swing",
+              "ask": "Why does a bascule bridge have a counterweight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pin",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "pin",
+              "to": "rack",
+              "kind": "force",
+              "label": "meshes"
+            },
+            {
+              "from": "rack",
+              "to": "trun",
+              "kind": "force"
+            },
+            {
+              "from": "trun",
+              "to": "leaf",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "cw",
+              "to": "trun",
+              "kind": "force",
+              "label": "balances"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a bascule bridge?",
+      "a": "A bascule bridge has one or two deck sections, called leaves, that pivot upward to let boats pass. Tower Bridge in London and many city drawbridges are bascule bridges.",
+      "asks": [
+        "What is a drawbridge?",
+        "How does a lifting bridge open?"
+      ]
+    },
+    {
+      "q": "Why does a bascule bridge have a counterweight?",
+      "a": "The counterweight sits on the other side of the pivot and balances the heavy leaf. Because the two nearly cancel, the motor only has to overcome friction, wind and a small imbalance, not lift the whole leaf.",
+      "asks": [
+        "What does the counterweight do?",
+        "Why are bascule bridges easy to lift?"
+      ]
+    },
+    {
+      "q": "What is a trunnion?",
+      "a": "A trunnion is the large axle the leaf pivots on. It carries the weight of the leaf and counterweight while letting them rotate smoothly.",
+      "asks": [
+        "What does the leaf pivot on?"
+      ]
+    },
+    {
+      "q": "What powers a bascule bridge?",
+      "a": "Usually electric motors or hydraulic rams. Motors turn a pinion gear against a curved rack on the leaf. Tower Bridge first used steam-driven hydraulics and changed to oil and electric power in the 1970s.",
+      "asks": [
+        "How is Tower Bridge powered?",
+        "What makes the bridge move?"
+      ]
+    },
+    {
+      "q": "Why build a bridge that opens?",
+      "a": "In a flat city, a fixed bridge high enough for tall ships would need very long ramps. A moving bridge can sit low over the water and open only when a ship comes.",
+      "asks": [
+        "Why not just build a higher bridge?"
+      ]
+    }
+  ],
+  "facts": [
+    "Tower Bridge in London opened in 1894, and its bascules were first raised by hydraulic power from steam engines.",
+    "The word bascule comes from the French for seesaw."
+  ],
+  "quiz": [
+    {
+      "say": "Why can a fairly small motor lift a huge bascule bridge leaf?",
+      "show": "A small motor lifts a huge leaf because…",
+      "options": [
+        {
+          "show": "A counterweight balances the leaf",
+          "say": "A counterweight balances the leaf"
+        },
+        {
+          "show": "The leaf is made of light plastic",
+          "say": "The leaf is made of light plastic"
+        },
+        {
+          "show": "Passing ships push it up",
+          "say": "Passing ships push it up"
+        }
+      ],
+      "answer": 0,
+      "why": "The counterweight on the other side of the pivot nearly cancels the leaf's weight, so the motor only overcomes friction and small imbalances.",
+      "wrong": {
+        "1": "Leaves are steel and concrete, often weighing hundreds of tonnes.",
+        "2": "The bridge must be open before the ship arrives."
+      }
+    }
+  ]
+}

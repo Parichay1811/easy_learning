@@ -1,0 +1,636 @@
+{
+  "id": "ENGX-FLUD-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a toilet cistern refills after a flush",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "toilet cistern",
+    "float valve",
+    "ballcock",
+    "fill valve",
+    "overflow pipe"
+  ],
+  "examples": [
+    "How does a toilet know when to stop filling?",
+    "What does the float in a toilet tank do?",
+    "Why does my toilet keep running?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "supply",
+          "kind": "pipe",
+          "x": 0.1,
+          "y": 0.2,
+          "size": 0.8,
+          "label": "Water supply",
+          "motion": "flow"
+        },
+        {
+          "id": "fill",
+          "kind": "valve",
+          "x": 0.33,
+          "y": 0.2,
+          "size": 0.8,
+          "label": "Fill valve",
+          "motion": "pulse",
+          "ask": "What does the fill valve do?"
+        },
+        {
+          "id": "arm",
+          "kind": "lever",
+          "x": 0.58,
+          "y": 0.28,
+          "size": 0.9,
+          "label": "Float arm",
+          "motion": "swing"
+        },
+        {
+          "id": "float",
+          "kind": "weight",
+          "x": 0.82,
+          "y": 0.45,
+          "size": 0.8,
+          "label": "Float",
+          "motion": "slide",
+          "ask": "What does the float in a toilet tank do?"
+        },
+        {
+          "id": "tank",
+          "kind": "tank",
+          "x": 0.45,
+          "y": 0.68,
+          "size": 1.4,
+          "label": "Cistern water",
+          "motion": "none"
+        },
+        {
+          "id": "overflow",
+          "kind": "pipe",
+          "x": 0.85,
+          "y": 0.85,
+          "size": 0.7,
+          "label": "Overflow pipe",
+          "motion": "none",
+          "ask": "What is the overflow pipe for?"
+        }
+      ],
+      "links": [
+        {
+          "from": "supply",
+          "to": "fill",
+          "kind": "fluid",
+          "label": "mains water"
+        },
+        {
+          "from": "fill",
+          "to": "tank",
+          "kind": "fluid",
+          "label": "refills"
+        },
+        {
+          "from": "tank",
+          "to": "float",
+          "kind": "force",
+          "label": "lifts"
+        },
+        {
+          "from": "float",
+          "to": "arm",
+          "kind": "force",
+          "label": "rises"
+        },
+        {
+          "from": "arm",
+          "to": "fill",
+          "kind": "force",
+          "label": "closes valve"
+        },
+        {
+          "from": "tank",
+          "to": "overflow",
+          "kind": "fluid",
+          "label": "if too full"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "After a flush the cistern, the tank behind the toilet, is almost empty, and it has to refill itself to the right level without anyone touching it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a toilet cistern refills after a flush"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Water supply",
+              "motion": "flow"
+            },
+            {
+              "id": "fill",
+              "kind": "valve",
+              "x": 0.33,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Fill valve",
+              "motion": "pulse",
+              "ask": "What does the fill valve do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.58,
+              "y": 0.28,
+              "size": 0.9,
+              "label": "Float arm",
+              "motion": "swing"
+            },
+            {
+              "id": "float",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Float",
+              "motion": "slide",
+              "ask": "What does the float in a toilet tank do?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.4,
+              "label": "Cistern water",
+              "motion": "none"
+            },
+            {
+              "id": "overflow",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Overflow pipe",
+              "motion": "none",
+              "ask": "What is the overflow pipe for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "fill",
+              "kind": "fluid",
+              "label": "mains water"
+            },
+            {
+              "from": "fill",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "refills"
+            },
+            {
+              "from": "tank",
+              "to": "float",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "float",
+              "to": "arm",
+              "kind": "force",
+              "label": "rises"
+            },
+            {
+              "from": "arm",
+              "to": "fill",
+              "kind": "force",
+              "label": "closes valve"
+            },
+            {
+              "from": "tank",
+              "to": "overflow",
+              "kind": "fluid",
+              "label": "if too full"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The float drops with the water. That lowers the float arm, which opens the fill valve, so mains water pours in.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Water supply",
+              "motion": "flow"
+            },
+            {
+              "id": "fill",
+              "kind": "valve",
+              "x": 0.33,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Fill valve",
+              "motion": "pulse",
+              "ask": "What does the fill valve do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.58,
+              "y": 0.28,
+              "size": 0.9,
+              "label": "Float arm",
+              "motion": "swing"
+            },
+            {
+              "id": "float",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Float",
+              "motion": "slide",
+              "ask": "What does the float in a toilet tank do?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.4,
+              "label": "Cistern water",
+              "motion": "none"
+            },
+            {
+              "id": "overflow",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Overflow pipe",
+              "motion": "none",
+              "ask": "What is the overflow pipe for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "fill",
+              "kind": "fluid",
+              "label": "mains water"
+            },
+            {
+              "from": "fill",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "refills"
+            },
+            {
+              "from": "tank",
+              "to": "float",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "float",
+              "to": "arm",
+              "kind": "force",
+              "label": "rises"
+            },
+            {
+              "from": "arm",
+              "to": "fill",
+              "kind": "force",
+              "label": "closes valve"
+            },
+            {
+              "from": "tank",
+              "to": "overflow",
+              "kind": "fluid",
+              "label": "if too full"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "As the tank fills, the float rises because it is lighter than water. The arm lifts and gradually pushes the fill valve shut.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Water supply",
+              "motion": "flow"
+            },
+            {
+              "id": "fill",
+              "kind": "valve",
+              "x": 0.33,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Fill valve",
+              "motion": "pulse",
+              "ask": "What does the fill valve do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.58,
+              "y": 0.28,
+              "size": 0.9,
+              "label": "Float arm",
+              "motion": "swing"
+            },
+            {
+              "id": "float",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Float",
+              "motion": "slide",
+              "ask": "What does the float in a toilet tank do?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.4,
+              "label": "Cistern water",
+              "motion": "none"
+            },
+            {
+              "id": "overflow",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Overflow pipe",
+              "motion": "none",
+              "ask": "What is the overflow pipe for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "fill",
+              "kind": "fluid",
+              "label": "mains water"
+            },
+            {
+              "from": "fill",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "refills"
+            },
+            {
+              "from": "tank",
+              "to": "float",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "float",
+              "to": "arm",
+              "kind": "force",
+              "label": "rises"
+            },
+            {
+              "from": "arm",
+              "to": "fill",
+              "kind": "force",
+              "label": "closes valve"
+            },
+            {
+              "from": "tank",
+              "to": "overflow",
+              "kind": "fluid",
+              "label": "if too full"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "When the water reaches the set level, the valve closes completely. If the valve fails, the overflow pipe takes the extra water away so the tank cannot flood.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Water supply",
+              "motion": "flow"
+            },
+            {
+              "id": "fill",
+              "kind": "valve",
+              "x": 0.33,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Fill valve",
+              "motion": "pulse",
+              "ask": "What does the fill valve do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.58,
+              "y": 0.28,
+              "size": 0.9,
+              "label": "Float arm",
+              "motion": "swing"
+            },
+            {
+              "id": "float",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Float",
+              "motion": "slide",
+              "ask": "What does the float in a toilet tank do?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.45,
+              "y": 0.68,
+              "size": 1.4,
+              "label": "Cistern water",
+              "motion": "none"
+            },
+            {
+              "id": "overflow",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.85,
+              "size": 0.7,
+              "label": "Overflow pipe",
+              "motion": "none",
+              "ask": "What is the overflow pipe for?"
+            }
+          ],
+          "links": [
+            {
+              "from": "supply",
+              "to": "fill",
+              "kind": "fluid",
+              "label": "mains water"
+            },
+            {
+              "from": "fill",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "refills"
+            },
+            {
+              "from": "tank",
+              "to": "float",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "float",
+              "to": "arm",
+              "kind": "force",
+              "label": "rises"
+            },
+            {
+              "from": "arm",
+              "to": "fill",
+              "kind": "force",
+              "label": "closes valve"
+            },
+            {
+              "from": "tank",
+              "to": "overflow",
+              "kind": "fluid",
+              "label": "if too full"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the float in a toilet tank do?",
+      "a": "The float sits on the water and rises and falls with it. It is linked to the fill valve, so a low float opens the valve and a high float closes it.",
+      "asks": [
+        "What is the ball in the toilet tank for?",
+        "How does a ballcock work?"
+      ]
+    },
+    {
+      "q": "What does the fill valve do?",
+      "a": "The fill valve lets mains water into the cistern. It opens when the float is low and closes when the float rises to the right level.",
+      "asks": [
+        "What lets water into the toilet tank?"
+      ]
+    },
+    {
+      "q": "How does a toilet know when to stop filling?",
+      "a": "It does not need to know anything: the rising float closes the fill valve automatically. The water level itself switches the valve off.",
+      "asks": [
+        "Why does the toilet stop filling by itself?"
+      ]
+    },
+    {
+      "q": "What is the overflow pipe for?",
+      "a": "If the fill valve sticks open, the water keeps rising. The overflow pipe carries the extra water safely away into the bowl or outside, instead of flooding the bathroom.",
+      "asks": [
+        "Why is there a pipe sticking up in my cistern?"
+      ]
+    },
+    {
+      "q": "Why does my toilet keep running?",
+      "a": "Usually the float is set too high so water spills into the overflow, or the flush valve at the bottom is not sealing so water leaks into the bowl. Adjusting the float or replacing the seal fixes it.",
+      "asks": [
+        "Why can I hear my toilet filling all the time?"
+      ]
+    }
+  ],
+  "facts": [
+    "A cistern float valve is a feedback system: the water level itself closes the valve.",
+    "Since 2001, new toilets in the UK may use no more than 6 litres per full flush."
+  ],
+  "quiz": [
+    {
+      "say": "What closes the fill valve when the cistern is full?",
+      "show": "What closes the fill valve when the cistern is full?",
+      "options": [
+        {
+          "show": "A timer",
+          "say": "A timer"
+        },
+        {
+          "show": "The rising float",
+          "say": "The rising float"
+        },
+        {
+          "show": "The person flushing",
+          "say": "The person flushing"
+        }
+      ],
+      "answer": 1,
+      "why": "The float rises with the water and its arm pushes the fill valve shut at the right level.",
+      "wrong": {
+        "0": "There is no timer; the water level controls the valve.",
+        "2": "The flush starts the cycle but the float stops the filling."
+      }
+    }
+  ]
+}

@@ -1,0 +1,524 @@
+{
+  "id": "ENGX-ELEC-14",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a transformer steps voltage up or down",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "transformer",
+    "step-down transformer",
+    "turns ratio",
+    "primary and secondary coil",
+    "iron core"
+  ],
+  "examples": [
+    "How does a transformer change voltage?",
+    "Why does a transformer only work with AC?",
+    "What is the turns ratio?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "ac",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.55,
+          "size": 0.8,
+          "label": "AC supply in",
+          "motion": "pulse"
+        },
+        {
+          "id": "p",
+          "kind": "coil",
+          "x": 0.33,
+          "y": 0.55,
+          "size": 1.3,
+          "label": "Primary coil",
+          "motion": "pulse",
+          "ask": "What does the primary coil in a transformer do?"
+        },
+        {
+          "id": "core",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.18,
+          "size": 1.4,
+          "label": "Iron core",
+          "ask": "Why does a transformer have an iron core?"
+        },
+        {
+          "id": "s",
+          "kind": "coil",
+          "x": 0.67,
+          "y": 0.55,
+          "size": 0.9,
+          "label": "Secondary coil",
+          "motion": "pulse",
+          "ask": "How does the secondary coil get electricity without touching?"
+        },
+        {
+          "id": "out",
+          "kind": "bulb",
+          "x": 0.9,
+          "y": 0.55,
+          "size": 0.9,
+          "label": "Lower voltage out",
+          "ask": "How does a transformer decide the output voltage?"
+        }
+      ],
+      "links": [
+        {
+          "from": "ac",
+          "to": "p",
+          "kind": "power",
+          "label": "Alternating current"
+        },
+        {
+          "from": "p",
+          "to": "core",
+          "kind": "energy",
+          "label": "Changing field"
+        },
+        {
+          "from": "core",
+          "to": "s",
+          "kind": "energy",
+          "label": "Field passes on"
+        },
+        {
+          "from": "s",
+          "to": "out",
+          "kind": "power",
+          "label": "New voltage"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A transformer changes the voltage of alternating current, up or down. It is two coils of wire wound on one iron core, with no wire joining them.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a transformer steps voltage up or down"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ac",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "AC supply in",
+              "motion": "pulse"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.33,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Primary coil",
+              "motion": "pulse",
+              "ask": "What does the primary coil in a transformer do?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 1.4,
+              "label": "Iron core",
+              "ask": "Why does a transformer have an iron core?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.67,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Secondary coil",
+              "motion": "pulse",
+              "ask": "How does the secondary coil get electricity without touching?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.9,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Lower voltage out",
+              "ask": "How does a transformer decide the output voltage?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ac",
+              "to": "p",
+              "kind": "power",
+              "label": "Alternating current"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Field passes on"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "New voltage"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Alternating current in the primary coil makes a magnetic field that keeps growing, shrinking and flipping direction.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ac",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "AC supply in",
+              "motion": "pulse"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.33,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Primary coil",
+              "motion": "pulse",
+              "ask": "What does the primary coil in a transformer do?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 1.4,
+              "label": "Iron core",
+              "ask": "Why does a transformer have an iron core?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.67,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Secondary coil",
+              "motion": "pulse",
+              "ask": "How does the secondary coil get electricity without touching?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.9,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Lower voltage out",
+              "ask": "How does a transformer decide the output voltage?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ac",
+              "to": "p",
+              "kind": "power",
+              "label": "Alternating current"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Field passes on"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "New voltage"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The iron core carries that changing field round to the secondary coil, where it induces a new voltage. The energy crosses by magnetism alone.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ac",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "AC supply in",
+              "motion": "pulse"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.33,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Primary coil",
+              "motion": "pulse",
+              "ask": "What does the primary coil in a transformer do?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 1.4,
+              "label": "Iron core",
+              "ask": "Why does a transformer have an iron core?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.67,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Secondary coil",
+              "motion": "pulse",
+              "ask": "How does the secondary coil get electricity without touching?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.9,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Lower voltage out",
+              "ask": "How does a transformer decide the output voltage?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ac",
+              "to": "p",
+              "kind": "power",
+              "label": "Alternating current"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Field passes on"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "New voltage"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The output depends on the turns: fewer turns on the secondary steps the voltage down, and more turns steps it up.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ac",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "AC supply in",
+              "motion": "pulse"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.33,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Primary coil",
+              "motion": "pulse",
+              "ask": "What does the primary coil in a transformer do?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.18,
+              "size": 1.4,
+              "label": "Iron core",
+              "ask": "Why does a transformer have an iron core?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.67,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Secondary coil",
+              "motion": "pulse",
+              "ask": "How does the secondary coil get electricity without touching?"
+            },
+            {
+              "id": "out",
+              "kind": "bulb",
+              "x": 0.9,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Lower voltage out",
+              "ask": "How does a transformer decide the output voltage?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ac",
+              "to": "p",
+              "kind": "power",
+              "label": "Alternating current"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing field"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Field passes on"
+            },
+            {
+              "from": "s",
+              "to": "out",
+              "kind": "power",
+              "label": "New voltage"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the primary coil in a transformer do?",
+      "a": "The primary coil carries the incoming alternating current. Because that current keeps reversing, it makes a magnetic field that keeps growing, shrinking and flipping.",
+      "asks": [
+        "What is the input coil of a transformer?"
+      ]
+    },
+    {
+      "q": "Why does a transformer have an iron core?",
+      "a": "Iron carries magnetic fields far better than air. The core channels almost all of the primary coil's changing field through the secondary coil, so very little is wasted.",
+      "asks": [
+        "What is the iron core for?"
+      ]
+    },
+    {
+      "q": "How does the secondary coil get electricity without touching?",
+      "a": "The changing magnetic field passes through the secondary coil and induces a voltage in it. No wire joins the two coils; the energy crosses by magnetism.",
+      "asks": [
+        "Are the two coils connected?"
+      ]
+    },
+    {
+      "q": "How does a transformer decide the output voltage?",
+      "a": "By the ratio of turns. If the secondary has half as many turns as the primary, the voltage halves; twice as many, and it doubles.",
+      "asks": [
+        "What is the turns ratio?"
+      ]
+    },
+    {
+      "q": "Why don't transformers work with DC?",
+      "a": "A transformer needs a changing magnetic field. Steady direct current makes a steady field, which induces nothing in the secondary coil, so no voltage comes out.",
+      "asks": [
+        "Can a transformer work on a battery?"
+      ]
+    }
+  ],
+  "facts": [
+    "In a transformer the voltage ratio equals the turns ratio between the two coils.",
+    "Large power-grid transformers can be more than 99 percent efficient."
+  ],
+  "quiz": [
+    {
+      "say": "A transformer's secondary coil has half as many turns as its primary, and 240 volts goes in. What comes out?",
+      "show": "A transformer's secondary coil has half as many turns as its primary, and 240 volts goes in. What comes out?",
+      "options": [
+        {
+          "show": "120 volts",
+          "say": "120 volts"
+        },
+        {
+          "show": "480 volts",
+          "say": "480 volts"
+        },
+        {
+          "show": "240 volts",
+          "say": "240 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "The voltage changes by the turns ratio: half the turns gives half the voltage, 120 volts.",
+      "wrong": {
+        "1": "Doubling needs more turns on the secondary, not fewer.",
+        "2": "Different numbers of turns give a different voltage."
+      }
+    }
+  ]
+}

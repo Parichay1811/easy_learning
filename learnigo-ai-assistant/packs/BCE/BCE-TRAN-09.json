@@ -1,0 +1,368 @@
+{
+  "id": "BCE-TRAN-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Airport runway design: orientation, crosswind and length corrections",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-TRAN — Transportation engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "runway orientation",
+    "crosswind component",
+    "runway length correction",
+    "runway numbering",
+    "wind rose",
+    "airfield pavement"
+  ],
+  "examples": [
+    "How are runways numbered?",
+    "How do you calculate the crosswind component?",
+    "Why do high airports need longer runways?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Basic 2000 m",
+          "icon": "plane",
+          "note": "Sea level, 15 °C, flat runway"
+        },
+        {
+          "label": "Height: 2280 m",
+          "icon": "mountain",
+          "note": "+7% per 300 m: 600 m up adds 14%",
+          "ask": "How is runway length corrected for elevation and temperature?"
+        },
+        {
+          "label": "Heat: 2665 m",
+          "icon": "thermometer",
+          "note": "+1% per °C above standard: +16.9%"
+        },
+        {
+          "label": "Slope: 2799 m",
+          "icon": "ruler",
+          "note": "+10% per 1% gradient: 0.5% adds 5%"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Daocheng Yading airport in China sits about four thousand four hundred metres above sea level, and its runway is about four point two kilometres long. Thin, warm air gives wings less lift and engines less push, so planes need a longer run. Watch how a basic runway length grows with height, heat and slope.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Airport runway design: orientation, crosswind and length corrections"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Basic 2000 m",
+              "icon": "plane",
+              "note": "Sea level, 15 °C, flat runway"
+            },
+            {
+              "label": "Height: 2280 m",
+              "icon": "mountain",
+              "note": "+7% per 300 m: 600 m up adds 14%",
+              "ask": "How is runway length corrected for elevation and temperature?"
+            },
+            {
+              "label": "Heat: 2665 m",
+              "icon": "thermometer",
+              "note": "+1% per °C above standard: +16.9%"
+            },
+            {
+              "label": "Slope: 2799 m",
+              "icon": "ruler",
+              "note": "+10% per 1% gradient: 0.5% adds 5%"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Each correction adds a share. Seven percent for every three hundred metres of height: six hundred metres adds fourteen percent, giving two thousand two hundred and eighty metres. Then one percent per degree hotter than standard air, and ten percent per one percent of slope. The two thousand metre runway grows to almost two thousand eight hundred.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Basic 2000 m",
+              "icon": "plane",
+              "note": "Sea level, 15 °C, flat runway"
+            },
+            {
+              "label": "Height: 2280 m",
+              "icon": "mountain",
+              "note": "+7% per 300 m: 600 m up adds 14%",
+              "ask": "How is runway length corrected for elevation and temperature?"
+            },
+            {
+              "label": "Heat: 2665 m",
+              "icon": "thermometer",
+              "note": "+1% per °C above standard: +16.9%"
+            },
+            {
+              "label": "Slope: 2799 m",
+              "icon": "ruler",
+              "note": "+10% per 1% gradient: 0.5% adds 5%"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "L = 2000 × 1.14 × 1.169 × 1.05 ≈ 2799 m"
+        }
+      ]
+    },
+    {
+      "say": "Now direction. Planes take off and land into the wind, and dislike wind from the side. The side push is the crosswind: wind speed times the sine of the angle to the runway. Look at the curve: a twenty knot wind at thirty degrees gives ten knots of crosswind. At ninety degrees, the full twenty.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Wind angle (°)",
+            "max": 90
+          },
+          "y": {
+            "label": "Crosswind (knots)",
+            "max": 22
+          },
+          "curves": [
+            {
+              "label": "20 knot wind",
+              "type": "sine",
+              "a": 20,
+              "k": 0.0027778,
+              "ask": "How do you calculate the crosswind component?"
+            },
+            {
+              "label": "Limit 13 knots",
+              "type": "line",
+              "c": 13,
+              "k": 0,
+              "ask": "What is the allowable crosswind for a runway?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30°: 10 knots",
+              "ask": "How do you calculate the crosswind component?"
+            },
+            {
+              "x": 40.5,
+              "label": "Hits 13 kn at 40°"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Crosswind = V sin θ = 20 × sin 30° = 10 knots"
+        }
+      ]
+    },
+    {
+      "say": "For a medium runway the crosswind limit is thirteen knots. See where the curve crosses the limit line: about forty degrees. So engineers study years of wind records, the wind rose, and point the runway so it can be used at least ninety five percent of the time. Its number is its magnetic heading over ten: runway nine faces east.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Wind angle (°)",
+            "max": 90
+          },
+          "y": {
+            "label": "Crosswind (knots)",
+            "max": 22
+          },
+          "curves": [
+            {
+              "label": "20 knot wind",
+              "type": "sine",
+              "a": 20,
+              "k": 0.0027778,
+              "ask": "How do you calculate the crosswind component?"
+            },
+            {
+              "label": "Limit 13 knots",
+              "type": "line",
+              "c": 13,
+              "k": 0,
+              "ask": "What is the allowable crosswind for a runway?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "30°: 10 knots",
+              "ask": "How do you calculate the crosswind component?"
+            },
+            {
+              "x": 40.5,
+              "label": "Hits 13 kn at 40°"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Runway 09 faces 090°; its other end is runway 27, facing 270°."
+        }
+      ]
+    },
+    {
+      "say": "Runway pavements are thick, because big jets press their tyres down hard, and grooved, so water drains away. Brilliant! Exam tip: apply height, then temperature, then slope, in that order. Challenge: a runway points two hundred and fifty degrees magnetic. What numbers are painted at each end?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Grooved surface",
+              "note": "Grooves drain water: no aquaplaning",
+              "size": 0.5
+            },
+            {
+              "label": "Asphalt or concrete",
+              "note": "Thick: big jet tyres press about 1.5 MPa",
+              "size": 1.4,
+              "ask": "Why are runway pavements so thick?"
+            },
+            {
+              "label": "Stabilised base",
+              "note": "Cement-bound crushed rock",
+              "size": 1
+            },
+            {
+              "label": "Sub-base",
+              "note": "Granular layer that drains",
+              "size": 0.8
+            },
+            {
+              "label": "Subgrade",
+              "note": "Compacted soil",
+              "size": 1
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How are runways numbered?",
+      "a": "By their magnetic heading divided by ten and rounded. A runway facing 090 degrees is runway 09, and the same strip used the other way, facing 270 degrees, is runway 27.",
+      "asks": [
+        "What do runway numbers mean?"
+      ]
+    },
+    {
+      "q": "How do you calculate the crosswind component?",
+      "a": "Multiply the wind speed by the sine of the angle between the wind and the runway. A 20 knot wind at 30 degrees gives 10 knots of crosswind.",
+      "asks": [
+        "Crosswind formula",
+        "V sin theta"
+      ]
+    },
+    {
+      "q": "What is the allowable crosswind for a runway?",
+      "a": "ICAO uses 20 knots for runways 1,500 metres or longer, 13 knots for 1,200 to 1,500 metres and 10 knots for shorter ones. The runway should be usable at least 95 percent of the time.",
+      "asks": [
+        "Crosswind limits ICAO",
+        "Wind rose analysis"
+      ]
+    },
+    {
+      "q": "How is runway length corrected for elevation and temperature?",
+      "a": "The basic length is raised 7 percent per 300 metres of elevation, then 1 percent per degree Celsius by which the reference temperature exceeds the standard atmosphere temperature at that height, then for gradient.",
+      "asks": [
+        "Runway length correction",
+        "Why do high airports need longer runways?"
+      ]
+    },
+    {
+      "q": "Why are runway pavements so thick?",
+      "a": "Large aircraft put very heavy loads on a few wheels with high tyre pressures, often around 1.5 megapascals, so the pavement must spread those loads safely to the soil, for decades.",
+      "asks": [
+        "Airport pavement design"
+      ]
+    }
+  ],
+  "facts": [
+    "ICAO corrects basic runway length by 7% per 300 m of elevation and 1% per °C above the standard atmosphere temperature.",
+    "ICAO recommends that a runway system be usable at least 95% of the time, judged from wind records."
+  ],
+  "quiz": [
+    {
+      "say": "A 30 knot wind blows at 30 degrees to the runway. What is the crosswind component?",
+      "show": "A 30 knot wind blows at 30° to the runway. Crosswind component?",
+      "options": [
+        {
+          "show": "15 knots",
+          "say": "15 knots"
+        },
+        {
+          "show": "26 knots",
+          "say": "26 knots"
+        },
+        {
+          "show": "30 knots",
+          "say": "30 knots"
+        }
+      ],
+      "answer": 0,
+      "why": "Crosswind = 30 × sin 30° = 30 × 0.5 = 15 knots.",
+      "wrong": {
+        "1": "That uses the cosine, the headwind part.",
+        "2": "Only a wind at 90 degrees is all crosswind."
+      }
+    },
+    {
+      "say": "A runway faces 270° magnetic. Its number is…",
+      "show": "A runway faces 270° magnetic. Its number is…",
+      "options": [
+        {
+          "show": "27",
+          "say": "27"
+        },
+        {
+          "show": "270",
+          "say": "270"
+        },
+        {
+          "show": "09",
+          "say": "09"
+        }
+      ],
+      "answer": 0,
+      "why": "Divide the heading by ten: 270 becomes 27.",
+      "wrong": {
+        "1": "Runway numbers drop the last digit.",
+        "2": "09 is the opposite end, facing 090°."
+      }
+    }
+  ]
+}

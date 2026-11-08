@@ -1,0 +1,438 @@
+{
+  "id": "BEE-SIG-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Feedback control and the PID controller: how cruise control holds your speed",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "feedback control",
+    "PID controller",
+    "steady-state error",
+    "proportional gain",
+    "integral action",
+    "cruise control"
+  ],
+  "examples": [
+    "How does a PID controller work?",
+    "Why does proportional control leave a steady-state error?",
+    "What does the derivative term do in PID?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-cycle",
+      "stages": [
+        {
+          "label": "Set point 100 km/h",
+          "icon": "flag",
+          "note": "The speed you ask for"
+        },
+        {
+          "label": "Error",
+          "icon": "scale",
+          "note": "Set point minus measured speed",
+          "ask": "Why does proportional control leave a steady-state error?"
+        },
+        {
+          "label": "PID controller",
+          "icon": "chip",
+          "note": "Works out how much throttle",
+          "ask": "How does a PID controller work?"
+        },
+        {
+          "label": "Throttle",
+          "icon": "engine",
+          "note": "The actuator: more fuel or current"
+        },
+        {
+          "label": "Car",
+          "icon": "car",
+          "note": "The plant: speed responds to throttle"
+        },
+        {
+          "label": "Speed sensor",
+          "icon": "sensor",
+          "note": "Feeds the measured speed back",
+          "ask": "What is negative feedback?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Set cruise control at 100 kilometres per hour, and the car holds it up hills and down, with no foot on the pedal. It works by feedback: measure, compare, correct, again and again. Follow the loop on the board, from the set point, through the controller, the throttle and the car, and back round through the speed sensor.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Feedback control and the PID controller: how cruise control holds your speed"
+        },
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Set point 100 km/h",
+              "icon": "flag",
+              "note": "The speed you ask for"
+            },
+            {
+              "label": "Error",
+              "icon": "scale",
+              "note": "Set point minus measured speed",
+              "ask": "Why does proportional control leave a steady-state error?"
+            },
+            {
+              "label": "PID controller",
+              "icon": "chip",
+              "note": "Works out how much throttle",
+              "ask": "How does a PID controller work?"
+            },
+            {
+              "label": "Throttle",
+              "icon": "engine",
+              "note": "The actuator: more fuel or current"
+            },
+            {
+              "label": "Car",
+              "icon": "car",
+              "note": "The plant: speed responds to throttle"
+            },
+            {
+              "label": "Speed sensor",
+              "icon": "sensor",
+              "note": "Feeds the measured speed back",
+              "ask": "What is negative feedback?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Start at the error, the gap between what you want and what you have. Suppose the car is doing 80 when you set 100: the error is 20 kilometres per hour. The controller's whole job is to turn that error into a throttle command. The simplest idea is to push harder the bigger the error. What happens to the push as the speed gets close to 100?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Set point 100 km/h",
+              "icon": "flag",
+              "note": "The speed you ask for"
+            },
+            {
+              "label": "Error",
+              "icon": "scale",
+              "note": "Set point minus measured speed",
+              "ask": "Why does proportional control leave a steady-state error?"
+            },
+            {
+              "label": "PID controller",
+              "icon": "chip",
+              "note": "Works out how much throttle",
+              "ask": "How does a PID controller work?"
+            },
+            {
+              "label": "Throttle",
+              "icon": "engine",
+              "note": "The actuator: more fuel or current"
+            },
+            {
+              "label": "Car",
+              "icon": "car",
+              "note": "The plant: speed responds to throttle"
+            },
+            {
+              "label": "Speed sensor",
+              "icon": "sensor",
+              "note": "Feeds the measured speed back",
+              "ask": "What is negative feedback?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Error e = set point − measured = 100 − 80 = 20 km/h"
+        }
+      ]
+    },
+    {
+      "say": "The push fades as the error shrinks, and that is the problem with proportional control alone. Look at the P only curve: it levels off at 96, because some error is needed to keep any throttle on at all. With a loop gain of 4, the leftover error is 20 over 1 plus 4, which is 4 kilometres per hour. How could the controller remember a lasting error?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 20
+          },
+          "y": {
+            "label": "Speed (km/h)",
+            "min": 75,
+            "max": 110
+          },
+          "curves": [
+            {
+              "label": "P only",
+              "type": "rise",
+              "c": 80,
+              "a": 16,
+              "k": 3,
+              "ask": "Why does proportional control leave a steady-state error?"
+            },
+            {
+              "label": "PI",
+              "type": "damped",
+              "c": 100,
+              "a": -20,
+              "tau": 4,
+              "k": 0.1,
+              "ask": "What does the integral term do?"
+            },
+            {
+              "label": "PID",
+              "type": "damped",
+              "c": 100,
+              "a": -20,
+              "tau": 1.5,
+              "k": 0.08,
+              "ask": "What does the derivative term do in PID?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 15,
+              "label": "P only: 96 km/h"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P only: e_ss = 20/(1 + KKp) = 20/(1 + 4) = 4 km/h"
+        }
+      ]
+    },
+    {
+      "say": "Add integral action, the I: it adds up the error over time, so even a small lasting error slowly winds the throttle up until the error is zero. See the PI curve reach 100, but it overshoots to about 106 first, because the stored-up integral takes time to unwind. What could calm that overshoot?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 20
+          },
+          "y": {
+            "label": "Speed (km/h)",
+            "min": 75,
+            "max": 110
+          },
+          "curves": [
+            {
+              "label": "P only",
+              "type": "rise",
+              "c": 80,
+              "a": 16,
+              "k": 3,
+              "ask": "Why does proportional control leave a steady-state error?"
+            },
+            {
+              "label": "PI",
+              "type": "damped",
+              "c": 100,
+              "a": -20,
+              "tau": 4,
+              "k": 0.1,
+              "ask": "What does the integral term do?"
+            },
+            {
+              "label": "PID",
+              "type": "damped",
+              "c": 100,
+              "a": -20,
+              "tau": 1.5,
+              "k": 0.08,
+              "ask": "What does the derivative term do in PID?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 15,
+              "label": "P only: 96 km/h"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "u = Kp·e + Ki·∫e dt + Kd·de/dt"
+        }
+      ]
+    },
+    {
+      "say": "Derivative action, the D, which watches how fast the error is changing and eases off early, like lifting your foot before you reach the target. The PID curve arrives fast with almost no overshoot. PID loops run cruise control, drones, ovens and chemical plants. Brilliant! Challenge: with a loop gain of 9, what steady error would P-only control leave?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 20
+          },
+          "y": {
+            "label": "Speed (km/h)",
+            "min": 75,
+            "max": 110
+          },
+          "curves": [
+            {
+              "label": "P only",
+              "type": "rise",
+              "c": 80,
+              "a": 16,
+              "k": 3,
+              "ask": "Why does proportional control leave a steady-state error?"
+            },
+            {
+              "label": "PI",
+              "type": "damped",
+              "c": 100,
+              "a": -20,
+              "tau": 4,
+              "k": 0.1,
+              "ask": "What does the integral term do?"
+            },
+            {
+              "label": "PID",
+              "type": "damped",
+              "c": 100,
+              "a": -20,
+              "tau": 1.5,
+              "k": 0.08,
+              "ask": "What does the derivative term do in PID?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 15,
+              "label": "P only: 96 km/h"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "D term: eases off early, using the rate of change"
+        },
+        {
+          "op": "note",
+          "text": "An example tuning: typical shapes, not one real car"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a PID controller work?",
+      "a": "It calculates a control signal from the error in three ways: proportional to the error now, proportional to the error added up over time, and proportional to how fast the error is changing. The three are weighted by gains Kp, Ki and Kd and added.",
+      "asks": [
+        "What do P, I and D stand for?"
+      ]
+    },
+    {
+      "q": "Why does proportional control leave a steady-state error?",
+      "a": "A proportional controller only produces output when there is an error. To hold the throttle open against drag, some error must remain. For a step of 20 and a loop gain of 4, the leftover error is 20 over 1 plus 4, which is 4.",
+      "asks": [
+        "What is steady-state error?"
+      ]
+    },
+    {
+      "q": "What does the integral term do?",
+      "a": "It accumulates the error over time, so any lasting error keeps growing the control signal until the error is driven to zero. Too much integral action causes overshoot and slow oscillation.",
+      "asks": [
+        "Why add integral action?"
+      ]
+    },
+    {
+      "q": "What does the derivative term do in PID?",
+      "a": "It responds to the rate of change of the error, acting like a brake as the output rushes towards the set point. That reduces overshoot, though it also amplifies sensor noise, so it is usually filtered.",
+      "asks": [
+        "What is derivative action?"
+      ]
+    },
+    {
+      "q": "What is negative feedback?",
+      "a": "The measured output is fed back and subtracted from the set point, so the controller always acts against any difference. It makes systems accurate and resistant to disturbances such as hills or wind.",
+      "asks": [
+        "Why is the feedback negative?"
+      ]
+    }
+  ],
+  "facts": [
+    "Proportional-only control leaves a steady-state error of Δ/(1 + KKp) for a step change Δ.",
+    "Integral action removes steady-state error; derivative action reduces overshoot.",
+    "PID controllers are the most widely used feedback controllers in industry."
+  ],
+  "quiz": [
+    {
+      "say": "With proportional-only control and a loop gain of 9, a 20 kilometre per hour step leaves what steady error?",
+      "show": "With P-only control and a loop gain of 9, a 20 km/h step leaves what steady error?",
+      "options": [
+        {
+          "show": "2 km/h",
+          "say": "2 kilometres per hour"
+        },
+        {
+          "show": "0 km/h",
+          "say": "zero"
+        },
+        {
+          "show": "About 2.2 km/h",
+          "say": "about 2.2 kilometres per hour"
+        }
+      ],
+      "answer": 0,
+      "why": "The steady error is 20 over 1 plus 9, which is 2 kilometres per hour.",
+      "wrong": {
+        "1": "Only integral action removes the error completely.",
+        "2": "That divides by the gain alone; the formula divides by 1 plus the loop gain."
+      }
+    },
+    {
+      "say": "Which PID term removes steady-state error?",
+      "show": "Which PID term removes steady-state error?",
+      "options": [
+        {
+          "show": "Integral",
+          "say": "Integral"
+        },
+        {
+          "show": "Proportional",
+          "say": "Proportional"
+        },
+        {
+          "show": "Derivative",
+          "say": "Derivative"
+        }
+      ],
+      "answer": 0,
+      "why": "The integral keeps growing while any error remains, so it pushes the error to zero.",
+      "wrong": {
+        "1": "Proportional action needs some error to give any output, so it leaves a residue.",
+        "2": "Derivative action responds only to change, and a steady error has zero rate of change."
+      }
+    }
+  ]
+}

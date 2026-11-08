@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Live Teacher Admin</title>
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 24px; display: grid; gap: 20px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 12px; }
+    .stat { background: var(--surface); border-radius: 14px; padding: 14px 18px; min-width: 140px; }
+    .stat b { display: block; font-size: 28px; }
+    .stat span { color: var(--muted); font-size: 14px; }
+    table { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 14px; overflow: hidden; }
+    th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); font-size: 15px; vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; font-size: 13px; }
+    tr.done td { color: var(--muted); text-decoration: line-through; }
+    td button { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px; cursor: pointer; }
+    h2 { margin: 0 0 8px; font-size: 18px; }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <header><div><h1>Live Teacher Admin</h1><p id="status" class="muted">What students asked, and what the teacher still has to learn</p></div></header>
+  <div class="wrap">
+    <div class="stats" id="stats"></div>
+    <section>
+      <h2>Lesson packs</h2>
+      <p class="muted" id="packinfo"></p>
+      <div class="stats" id="areas"></div>
+    </section>
+    <section>
+      <h2>Pack factory</h2>
+      <p class="muted" id="factoryinfo">Not running. Start it with <code>npm run packs</code>.</p>
+      <table><thead><tr><th>Topic</th><th>Result</th><th>When</th></tr></thead><tbody id="factory"></tbody></table>
+    </section>
+    <section>
+      <h2>TODO: questions with no lesson yet</h2>
+      <p class="muted">Most asked first. Make a pack in <code>packs/</code> (or a template in <code>shared/solvers.js</code>), then mark it done.</p>
+      <table><thead><tr><th>Question</th><th>Asked</th><th>Got</th><th>Last</th><th></th></tr></thead><tbody id="todos"></tbody></table>
+    </section>
+    <section>
+      <h2>Words it mishears</h2>
+      <p class="muted">Corrections made by tapping what the teacher heard. Each is applied to everything heard from then on.</p>
+      <table><thead><tr><th>Heard</th><th>Means</th><th>Learned</th><th></th></tr></thead><tbody id="fixes"></tbody></table>
+    </section>
+    <section>
+      <h2>Recent questions</h2>
+      <table><thead><tr><th>Question</th><th>Answered by</th><th>Lesson</th><th>First words</th><th>Done in</th></tr></thead><tbody id="recent"></tbody></table>
+    </section>
+  </div>
+  <script type="module">
+    const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    async function load() {
+      const d = await (await fetch('/api/admin')).json();
+      const tiers = d.stats.byTier;
+      const total = d.stats.total || 1;
+      const free = ((tiers.rules || 0) + (tiers.packs || 0) + (tiers.kb || 0) + (tiers.talk || 0) + (tiers.unclear || 0)) / total;
+      document.getElementById('stats').innerHTML = [
+        [d.stats.total, 'questions (recent)'], [`${Math.round(free * 100)}%`, 'answered with no model'],
+        [(tiers.llm || 0) + (tiers.chat || 0), 'needed the LLM'], [tiers.unclear || 0, 'not heard clearly'], [tiers.miss || 0, 'missed (TODO)'],
+        [d.tts.made ? `${Math.round(d.tts.ms / d.tts.made)} ms` : '–', 'per new sentence of voice'], [d.tts.cached, 'voice lines from cache'],
+      ].map(([b, s]) => `<div class="stat"><b>${esc(b)}</b><span>${esc(s)}</span></div>`).join('');
+      const pk = d.packs;
+      document.getElementById('packinfo').textContent = `${pk.total} packs: ${pk.reviewed} reviewed by people, ${pk.draft} generated drafts waiting for review (set "status": "reviewed" in the file).`;
+      document.getElementById('areas').innerHTML = Object.entries(pk.byArea).sort((a, b) => b[1] - a[1]).map(([a, n]) => `<div class="stat"><b>${n}</b><span>${esc(a)}</span></div>`).join('');
+      const f = d.factory;
+      if (f) {
+        document.getElementById('factoryinfo').textContent = `${f.made} packs made, ${f.failed} failed${f.avgSeconds ? `, about ${f.avgSeconds} s a pack` : ''}. Latest:`;
+        document.getElementById('factory').innerHTML = f.last.map((r) => `<tr><td>${esc(r.id)}</td><td>${r.ok ? 'made' : `failed: ${esc(r.problem)}`}</td><td>${esc(r.at?.slice(11, 19))}</td></tr>`).join('');
+      }
+      document.getElementById('todos').innerHTML = d.todos.map((t) => `<tr class="${t.done ? 'done' : ''}"><td>${esc(t.text)}</td><td>${t.count}</td><td>${t.answered ? 'a quick spoken answer' : 'nothing'}</td><td>${esc(t.last?.slice(0, 16).replace('T', ' '))}</td><td>${t.done ? '' : `<button data-key="${esc(t.key)}">Done</button>`}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Nothing yet.</td></tr>';
+      const h = await (await fetch('/api/heard')).json();
+      document.getElementById('fixes').innerHTML = h.fixes.slice().reverse().map((x) => `<tr><td>${esc(x.from)}</td><td>${esc(x.to)}</td><td>${esc(x.at?.slice(0, 16).replace('T', ' '))}</td><td><button data-forget="${esc(x.from)}">Forget</button></td></tr>`).join('') || '<tr><td colspan="4" class="muted">None yet.</td></tr>';
+      document.getElementById('recent').innerHTML = d.recent.map((r) => `<tr><td>${esc(r.text)}</td><td>${esc(r.tier)}</td><td>${esc(r.topic || r.kind)}</td><td>${r.ack ?? r.first ?? r.ms} ms</td><td>${r.ms} ms</td></tr>`).join('') || '<tr><td colspan="5" class="muted">Nothing yet.</td></tr>';
+    }
+    document.getElementById('todos').addEventListener('click', async (e) => {
+      const key = e.target.dataset?.key;
+      if (!key) return;
+      await fetch('/api/admin/done', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key }) });
+      load();
+    });
+    document.getElementById('fixes').addEventListener('click', async (e) => {
+      const forget = e.target.dataset?.forget;
+      if (!forget) return;
+      await fetch('/api/heard', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ forget }) });
+      load();
+    });
+    load();
+    setInterval(load, 5000);
+  </script>
+</body>
+</html>

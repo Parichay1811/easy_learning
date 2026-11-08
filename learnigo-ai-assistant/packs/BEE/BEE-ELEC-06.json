@@ -1,0 +1,472 @@
+{
+  "id": "BEE-ELEC-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The BJT: how a small base current controls a big collector current",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "BJT",
+    "bipolar junction transistor",
+    "current gain beta",
+    "collector current",
+    "active region",
+    "saturation"
+  ],
+  "examples": [
+    "How does a bipolar transistor work?",
+    "What is beta in a transistor?",
+    "How do I calculate collector current and V_CE?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "layout": "transistor",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Supply",
+          "value": "9 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R_C",
+          "value": "2 kΩ",
+          "ask": "How do I calculate the collector-emitter voltage?"
+        },
+        {
+          "kind": "npn",
+          "label": "NPN transistor",
+          "value": "β = 100",
+          "ask": "How does a BJT work?",
+          "note": "Base current 20 µA"
+        },
+        {
+          "kind": "resistor",
+          "label": "R_B",
+          "value": "100 kΩ"
+        },
+        {
+          "kind": "cell",
+          "label": "Base drive",
+          "value": "2.7 V"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Collector current",
+          "value": "2 mA",
+          "ask": "What is beta, the current gain?"
+        }
+      ],
+      "readouts": [
+        "I_B = 20 µA",
+        "I_C = βI_B = 2 mA",
+        "V_CE = 9 − 4 = 5 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In December 1947 John Bardeen and Walter Brattain at Bell Labs made a sliver of germanium amplify a signal, and the transistor was born; William Shockley soon designed the junction transistor we use here. On the board, a 9 volt supply drives a 2 kilohm collector resistor through an NPN transistor. The control is a tiny 20 microamp base current, fed from 2.7 volts through 100 kilohms.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The BJT: how a small base current controls a big collector current"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "transistor",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_C",
+              "value": "2 kΩ",
+              "ask": "How do I calculate the collector-emitter voltage?"
+            },
+            {
+              "kind": "npn",
+              "label": "NPN transistor",
+              "value": "β = 100",
+              "ask": "How does a BJT work?",
+              "note": "Base current 20 µA"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_B",
+              "value": "100 kΩ"
+            },
+            {
+              "kind": "cell",
+              "label": "Base drive",
+              "value": "2.7 V"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Collector current",
+              "value": "2 mA",
+              "ask": "What is beta, the current gain?"
+            }
+          ],
+          "readouts": [
+            "I_B = 20 µA",
+            "I_C = βI_B = 2 mA",
+            "V_CE = 9 − 4 = 5 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Inside are three layers: an n-type emitter, a thin p-type base and an n-type collector. Put about 0.7 volts across the base and emitter and electrons flood from the emitter into the base. The base is so thin that almost all of them shoot straight through into the collector; only a few meet holes and leave by the base wire. What fraction do you think make it across?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "layers": [
+            {
+              "label": "Collector (n)",
+              "note": "Collects the electrons"
+            },
+            {
+              "label": "Base (p, thin)",
+              "note": "Very thin and lightly doped",
+              "size": 0.4,
+              "ask": "Why is the base so thin?"
+            },
+            {
+              "label": "Emitter (n)",
+              "note": "Heavily doped, emits electrons"
+            }
+          ],
+          "flow": {
+            "label": "Electrons",
+            "from": 2,
+            "to": 0
+          },
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Base-emitter forward biased (about 0.7 V); collector reverse biased."
+        }
+      ]
+    },
+    {
+      "say": "About 99 in every 100. So the collector current is the base current times a big number, beta, the current gain, here 100. 20 microamps in at the base lets 2 milliamps flow in the collector. That 2 milliamps drops 4 volts across the 2 kilohm resistor, leaving 5 volts across the transistor. What if the base current doubled?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "transistor",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_C",
+              "value": "2 kΩ",
+              "ask": "How do I calculate the collector-emitter voltage?"
+            },
+            {
+              "kind": "npn",
+              "label": "NPN transistor",
+              "value": "β = 100",
+              "ask": "How does a BJT work?",
+              "note": "Base current 20 µA"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_B",
+              "value": "100 kΩ"
+            },
+            {
+              "kind": "cell",
+              "label": "Base drive",
+              "value": "2.7 V"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Collector current",
+              "value": "2 mA",
+              "ask": "What is beta, the current gain?"
+            }
+          ],
+          "readouts": [
+            "I_B = 20 µA",
+            "I_C = βI_B = 2 mA",
+            "V_CE = 9 − 4 = 5 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "I_C = β I_B = 100 × 20 µA = 2 mA"
+        }
+      ]
+    },
+    {
+      "say": "The collector current doubles too, to 4 milliamps. Here are the output curves: one flat line for each base current. In this flat active region the collector current is set by the base current, not by the collector voltage. On the far left, the steep part, the transistor is saturated, fully on. Which region would you use for an amplifier?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "V_CE (V)",
+            "max": 10
+          },
+          "y": {
+            "label": "I_C (mA)",
+            "max": 4
+          },
+          "curves": [
+            {
+              "label": "I_B = 20 µA",
+              "type": "points",
+              "ask": "What are the saturation and cut-off regions?",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.2,
+                  1.6
+                ],
+                [
+                  0.4,
+                  2
+                ],
+                [
+                  10,
+                  2.16
+                ]
+              ]
+            },
+            {
+              "label": "I_B = 10 µA",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.2,
+                  0.8
+                ],
+                [
+                  0.4,
+                  1
+                ],
+                [
+                  10,
+                  1.08
+                ]
+              ]
+            },
+            {
+              "label": "I_B = 30 µA",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.2,
+                  2.4
+                ],
+                [
+                  0.4,
+                  3
+                ],
+                [
+                  10,
+                  3.24
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Q-point: 5 V, 2 mA"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Active region: I_C ≈ β I_B, nearly flat"
+        }
+      ]
+    },
+    {
+      "say": "The active region. As a switch, you use the two ends instead: cut-off with no base current, and saturation, where the collector current is limited by the circuit, here about 9 volts over 2 kilohms, 4.5 milliamps. Superb! Exam tip: the emitter carries both currents, 2.02 milliamps here. Challenge: with beta of 150 and the same base current, what is V CE?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "transistor",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_C",
+              "value": "2 kΩ",
+              "ask": "How do I calculate the collector-emitter voltage?"
+            },
+            {
+              "kind": "npn",
+              "label": "NPN transistor",
+              "value": "β = 100",
+              "ask": "How does a BJT work?",
+              "note": "Base current 20 µA"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_B",
+              "value": "100 kΩ"
+            },
+            {
+              "kind": "cell",
+              "label": "Base drive",
+              "value": "2.7 V"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Collector current",
+              "value": "2 mA",
+              "ask": "What is beta, the current gain?"
+            }
+          ],
+          "readouts": [
+            "I_B = 20 µA",
+            "I_C = βI_B = 2 mA",
+            "V_CE = 9 − 4 = 5 V"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "I_E = I_B + I_C = 0.02 + 2 = 2.02 mA"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a BJT work?",
+      "a": "A small base current controls a much larger collector current. Electrons injected from the emitter cross the thin base, and nearly all of them are swept into the collector.",
+      "asks": [
+        "How does a bipolar transistor amplify?",
+        "What is a BJT?"
+      ]
+    },
+    {
+      "q": "What is beta, the current gain?",
+      "a": "Beta is the ratio of collector current to base current, typically 50 to 300 for small transistors. With beta 100, 20 microamps of base current gives 2 milliamps of collector current.",
+      "asks": [
+        "What is hFE?",
+        "Current gain of a transistor"
+      ]
+    },
+    {
+      "q": "Why is the base so thin?",
+      "a": "So that electrons from the emitter cross it before they can recombine with holes. Only a tiny fraction recombine, and that small flow is the base current.",
+      "asks": [
+        "Why is the base thin and lightly doped?"
+      ]
+    },
+    {
+      "q": "How do I calculate the collector-emitter voltage?",
+      "a": "Subtract the collector resistor drop from the supply: 9 volts minus 2 milliamps times 2 kilohms leaves 5 volts.",
+      "asks": [
+        "What is V_CE?"
+      ]
+    },
+    {
+      "q": "What are the saturation and cut-off regions?",
+      "a": "In cut-off there is no base current and the transistor is off. In saturation it is fully on, V CE is only about 0.2 volts, and the collector current is limited by the circuit, not by beta.",
+      "asks": [
+        "How does a transistor act as a switch?"
+      ]
+    }
+  ],
+  "facts": [
+    "John Bardeen and Walter Brattain built the first transistor, a point-contact device, at Bell Labs in December 1947.",
+    "Bardeen, Brattain and William Shockley shared the 1956 Nobel Prize in Physics for the transistor."
+  ],
+  "quiz": [
+    {
+      "say": "A transistor has a beta of 150 and a base current of 40 microamps. What is the collector current?",
+      "show": "A transistor has β = 150 and I_B = 40 µA. What is I_C?",
+      "options": [
+        {
+          "show": "6 mA",
+          "say": "6 milliamps"
+        },
+        {
+          "show": "0.27 mA",
+          "say": "0.27 milliamps"
+        },
+        {
+          "show": "150 mA",
+          "say": "150 milliamps"
+        }
+      ],
+      "answer": 0,
+      "why": "I C is beta times I B: 150 times 40 microamps is 6000 microamps, which is 6 milliamps.",
+      "wrong": {
+        "1": "That divides by beta instead of multiplying.",
+        "2": "That slips the units; 40 microamps is 0.04 milliamps."
+      }
+    },
+    {
+      "say": "In an NPN transistor, what is the base like?",
+      "show": "In an NPN transistor, the base is...",
+      "options": [
+        {
+          "show": "Thin and lightly doped",
+          "say": "Thin and lightly doped"
+        },
+        {
+          "show": "Thick and heavily doped",
+          "say": "Thick and heavily doped"
+        },
+        {
+          "show": "A metal layer",
+          "say": "A metal layer"
+        }
+      ],
+      "answer": 0,
+      "why": "A thin, lightly doped base lets almost all the electrons from the emitter cross to the collector.",
+      "wrong": {
+        "1": "A thick, heavily doped base would swallow the electrons, giving very little gain.",
+        "2": "The base is p-type silicon, a semiconductor, not metal."
+      }
+    }
+  ]
+}

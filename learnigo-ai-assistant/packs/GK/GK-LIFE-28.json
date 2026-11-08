@@ -1,0 +1,820 @@
+{
+  "id": "GK-LIFE-28",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "Where does your rubbish go after the bin lorry?",
+  "area": "General Knowledge",
+  "group": "GK-LIFE — Everyday Knowledge",
+  "levels": [
+    "P2",
+    "L"
+  ],
+  "keywords": [
+    "rubbish",
+    "waste management",
+    "landfill",
+    "energy from waste",
+    "recycling"
+  ],
+  "examples": [
+    "Where does my rubbish go?",
+    "What happens to rubbish after it's collected?",
+    "How can rubbish make electricity?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "bin",
+          "label": "Your bin",
+          "icon": "bag",
+          "x": 0.08,
+          "y": 0.5,
+          "ask": "Where does my rubbish go?"
+        },
+        {
+          "id": "lorry",
+          "label": "Bin lorry",
+          "icon": "car",
+          "x": 0.3,
+          "y": 0.5
+        },
+        {
+          "id": "recycle",
+          "label": "Recycling centre",
+          "icon": "factory",
+          "x": 0.6,
+          "y": 0.12,
+          "ask": "What happens at a recycling centre?"
+        },
+        {
+          "id": "compost",
+          "label": "Compost site",
+          "icon": "soil",
+          "x": 0.6,
+          "y": 0.38
+        },
+        {
+          "id": "burn",
+          "label": "Energy from waste",
+          "icon": "fire",
+          "x": 0.6,
+          "y": 0.64,
+          "ask": "How can burning rubbish make electricity?"
+        },
+        {
+          "id": "landfill",
+          "label": "Landfill",
+          "icon": "mountain",
+          "x": 0.6,
+          "y": 0.9,
+          "ask": "What is a landfill?"
+        },
+        {
+          "id": "new",
+          "label": "New products",
+          "icon": "gift",
+          "x": 0.9,
+          "y": 0.12
+        },
+        {
+          "id": "power",
+          "label": "Electricity",
+          "icon": "bulb",
+          "x": 0.9,
+          "y": 0.64
+        }
+      ],
+      "links": [
+        {
+          "from": "bin",
+          "to": "lorry",
+          "kind": "force",
+          "label": "collected"
+        },
+        {
+          "from": "lorry",
+          "to": "recycle",
+          "kind": "force",
+          "label": "sorted"
+        },
+        {
+          "from": "lorry",
+          "to": "compost",
+          "kind": "food",
+          "label": "food and garden"
+        },
+        {
+          "from": "lorry",
+          "to": "burn",
+          "kind": "force",
+          "label": "burned"
+        },
+        {
+          "from": "lorry",
+          "to": "landfill",
+          "kind": "force",
+          "label": "buried"
+        },
+        {
+          "from": "recycle",
+          "to": "new",
+          "kind": "force",
+          "label": "remade"
+        },
+        {
+          "from": "burn",
+          "to": "power",
+          "kind": "energy",
+          "label": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every week your family fills a bin and then, poof, it's gone. But where does it actually go? Look at the network on the board. It all starts in your bin, and then the bin lorry comes to collect it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Where does your rubbish go after the bin lorry?"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bin",
+              "label": "Your bin",
+              "icon": "bag",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "Where does my rubbish go?"
+            },
+            {
+              "id": "lorry",
+              "label": "Bin lorry",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "recycle",
+              "label": "Recycling centre",
+              "icon": "factory",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "What happens at a recycling centre?"
+            },
+            {
+              "id": "compost",
+              "label": "Compost site",
+              "icon": "soil",
+              "x": 0.6,
+              "y": 0.38
+            },
+            {
+              "id": "burn",
+              "label": "Energy from waste",
+              "icon": "fire",
+              "x": 0.6,
+              "y": 0.64,
+              "ask": "How can burning rubbish make electricity?"
+            },
+            {
+              "id": "landfill",
+              "label": "Landfill",
+              "icon": "mountain",
+              "x": 0.6,
+              "y": 0.9,
+              "ask": "What is a landfill?"
+            },
+            {
+              "id": "new",
+              "label": "New products",
+              "icon": "gift",
+              "x": 0.9,
+              "y": 0.12
+            },
+            {
+              "id": "power",
+              "label": "Electricity",
+              "icon": "bulb",
+              "x": 0.9,
+              "y": 0.64
+            }
+          ],
+          "links": [
+            {
+              "from": "bin",
+              "to": "lorry",
+              "kind": "force",
+              "label": "collected"
+            },
+            {
+              "from": "lorry",
+              "to": "recycle",
+              "kind": "force",
+              "label": "sorted"
+            },
+            {
+              "from": "lorry",
+              "to": "compost",
+              "kind": "food",
+              "label": "food and garden"
+            },
+            {
+              "from": "lorry",
+              "to": "burn",
+              "kind": "force",
+              "label": "burned"
+            },
+            {
+              "from": "lorry",
+              "to": "landfill",
+              "kind": "force",
+              "label": "buried"
+            },
+            {
+              "from": "recycle",
+              "to": "new",
+              "kind": "force",
+              "label": "remade"
+            },
+            {
+              "from": "burn",
+              "to": "power",
+              "kind": "energy",
+              "label": "power"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Follow the lines from the lorry. Paper, cans, glass and some plastics go to a recycling centre, see it lit up, where they're sorted and sent off to become new things. Can you name something in your home that could be recycled?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bin",
+              "label": "Your bin",
+              "icon": "bag",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "Where does my rubbish go?"
+            },
+            {
+              "id": "lorry",
+              "label": "Bin lorry",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "recycle",
+              "label": "Recycling centre",
+              "icon": "factory",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "What happens at a recycling centre?"
+            },
+            {
+              "id": "compost",
+              "label": "Compost site",
+              "icon": "soil",
+              "x": 0.6,
+              "y": 0.38
+            },
+            {
+              "id": "burn",
+              "label": "Energy from waste",
+              "icon": "fire",
+              "x": 0.6,
+              "y": 0.64,
+              "ask": "How can burning rubbish make electricity?"
+            },
+            {
+              "id": "landfill",
+              "label": "Landfill",
+              "icon": "mountain",
+              "x": 0.6,
+              "y": 0.9,
+              "ask": "What is a landfill?"
+            },
+            {
+              "id": "new",
+              "label": "New products",
+              "icon": "gift",
+              "x": 0.9,
+              "y": 0.12
+            },
+            {
+              "id": "power",
+              "label": "Electricity",
+              "icon": "bulb",
+              "x": 0.9,
+              "y": 0.64
+            }
+          ],
+          "links": [
+            {
+              "from": "bin",
+              "to": "lorry",
+              "kind": "force",
+              "label": "collected"
+            },
+            {
+              "from": "lorry",
+              "to": "recycle",
+              "kind": "force",
+              "label": "sorted"
+            },
+            {
+              "from": "lorry",
+              "to": "compost",
+              "kind": "food",
+              "label": "food and garden"
+            },
+            {
+              "from": "lorry",
+              "to": "burn",
+              "kind": "force",
+              "label": "burned"
+            },
+            {
+              "from": "lorry",
+              "to": "landfill",
+              "kind": "force",
+              "label": "buried"
+            },
+            {
+              "from": "recycle",
+              "to": "new",
+              "kind": "force",
+              "label": "remade"
+            },
+            {
+              "from": "burn",
+              "to": "power",
+              "kind": "energy",
+              "label": "power"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Look at the compost site. Food scraps and garden waste can be turned into rich compost for farms and gardens. And see the fire? In energy-from-waste plants, some rubbish is burned to boil water and make electricity.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bin",
+              "label": "Your bin",
+              "icon": "bag",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "Where does my rubbish go?"
+            },
+            {
+              "id": "lorry",
+              "label": "Bin lorry",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "recycle",
+              "label": "Recycling centre",
+              "icon": "factory",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "What happens at a recycling centre?"
+            },
+            {
+              "id": "compost",
+              "label": "Compost site",
+              "icon": "soil",
+              "x": 0.6,
+              "y": 0.38
+            },
+            {
+              "id": "burn",
+              "label": "Energy from waste",
+              "icon": "fire",
+              "x": 0.6,
+              "y": 0.64,
+              "ask": "How can burning rubbish make electricity?"
+            },
+            {
+              "id": "landfill",
+              "label": "Landfill",
+              "icon": "mountain",
+              "x": 0.6,
+              "y": 0.9,
+              "ask": "What is a landfill?"
+            },
+            {
+              "id": "new",
+              "label": "New products",
+              "icon": "gift",
+              "x": 0.9,
+              "y": 0.12
+            },
+            {
+              "id": "power",
+              "label": "Electricity",
+              "icon": "bulb",
+              "x": 0.9,
+              "y": 0.64
+            }
+          ],
+          "links": [
+            {
+              "from": "bin",
+              "to": "lorry",
+              "kind": "force",
+              "label": "collected"
+            },
+            {
+              "from": "lorry",
+              "to": "recycle",
+              "kind": "force",
+              "label": "sorted"
+            },
+            {
+              "from": "lorry",
+              "to": "compost",
+              "kind": "food",
+              "label": "food and garden"
+            },
+            {
+              "from": "lorry",
+              "to": "burn",
+              "kind": "force",
+              "label": "burned"
+            },
+            {
+              "from": "lorry",
+              "to": "landfill",
+              "kind": "force",
+              "label": "buried"
+            },
+            {
+              "from": "recycle",
+              "to": "new",
+              "kind": "force",
+              "label": "remade"
+            },
+            {
+              "from": "burn",
+              "to": "power",
+              "kind": "energy",
+              "label": "power"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Now the last line: landfill. Here, rubbish is buried in huge lined holes in the ground. It takes up lots of space, and some things, like plastic bags, may take hundreds of years to break down. Which line do you think is best for rubbish?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bin",
+              "label": "Your bin",
+              "icon": "bag",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "Where does my rubbish go?"
+            },
+            {
+              "id": "lorry",
+              "label": "Bin lorry",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "recycle",
+              "label": "Recycling centre",
+              "icon": "factory",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "What happens at a recycling centre?"
+            },
+            {
+              "id": "compost",
+              "label": "Compost site",
+              "icon": "soil",
+              "x": 0.6,
+              "y": 0.38
+            },
+            {
+              "id": "burn",
+              "label": "Energy from waste",
+              "icon": "fire",
+              "x": 0.6,
+              "y": 0.64,
+              "ask": "How can burning rubbish make electricity?"
+            },
+            {
+              "id": "landfill",
+              "label": "Landfill",
+              "icon": "mountain",
+              "x": 0.6,
+              "y": 0.9,
+              "ask": "What is a landfill?"
+            },
+            {
+              "id": "new",
+              "label": "New products",
+              "icon": "gift",
+              "x": 0.9,
+              "y": 0.12
+            },
+            {
+              "id": "power",
+              "label": "Electricity",
+              "icon": "bulb",
+              "x": 0.9,
+              "y": 0.64
+            }
+          ],
+          "links": [
+            {
+              "from": "bin",
+              "to": "lorry",
+              "kind": "force",
+              "label": "collected"
+            },
+            {
+              "from": "lorry",
+              "to": "recycle",
+              "kind": "force",
+              "label": "sorted"
+            },
+            {
+              "from": "lorry",
+              "to": "compost",
+              "kind": "food",
+              "label": "food and garden"
+            },
+            {
+              "from": "lorry",
+              "to": "burn",
+              "kind": "force",
+              "label": "burned"
+            },
+            {
+              "from": "lorry",
+              "to": "landfill",
+              "kind": "force",
+              "label": "buried"
+            },
+            {
+              "from": "recycle",
+              "to": "new",
+              "kind": "force",
+              "label": "remade"
+            },
+            {
+              "from": "burn",
+              "to": "power",
+              "kind": "energy",
+              "label": "power"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "Great thinking! The very best rubbish is the rubbish we never make. Wow: the world throws away about 2 billion tonnes of household rubbish a year, and only about one fifth is recycled or composted. Challenge: count how many things you throw away tomorrow!",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bin",
+              "label": "Your bin",
+              "icon": "bag",
+              "x": 0.08,
+              "y": 0.5,
+              "ask": "Where does my rubbish go?"
+            },
+            {
+              "id": "lorry",
+              "label": "Bin lorry",
+              "icon": "car",
+              "x": 0.3,
+              "y": 0.5
+            },
+            {
+              "id": "recycle",
+              "label": "Recycling centre",
+              "icon": "factory",
+              "x": 0.6,
+              "y": 0.12,
+              "ask": "What happens at a recycling centre?"
+            },
+            {
+              "id": "compost",
+              "label": "Compost site",
+              "icon": "soil",
+              "x": 0.6,
+              "y": 0.38
+            },
+            {
+              "id": "burn",
+              "label": "Energy from waste",
+              "icon": "fire",
+              "x": 0.6,
+              "y": 0.64,
+              "ask": "How can burning rubbish make electricity?"
+            },
+            {
+              "id": "landfill",
+              "label": "Landfill",
+              "icon": "mountain",
+              "x": 0.6,
+              "y": 0.9,
+              "ask": "What is a landfill?"
+            },
+            {
+              "id": "new",
+              "label": "New products",
+              "icon": "gift",
+              "x": 0.9,
+              "y": 0.12
+            },
+            {
+              "id": "power",
+              "label": "Electricity",
+              "icon": "bulb",
+              "x": 0.9,
+              "y": 0.64
+            }
+          ],
+          "links": [
+            {
+              "from": "bin",
+              "to": "lorry",
+              "kind": "force",
+              "label": "collected"
+            },
+            {
+              "from": "lorry",
+              "to": "recycle",
+              "kind": "force",
+              "label": "sorted"
+            },
+            {
+              "from": "lorry",
+              "to": "compost",
+              "kind": "food",
+              "label": "food and garden"
+            },
+            {
+              "from": "lorry",
+              "to": "burn",
+              "kind": "force",
+              "label": "burned"
+            },
+            {
+              "from": "lorry",
+              "to": "landfill",
+              "kind": "force",
+              "label": "buried"
+            },
+            {
+              "from": "recycle",
+              "to": "new",
+              "kind": "force",
+              "label": "remade"
+            },
+            {
+              "from": "burn",
+              "to": "power",
+              "kind": "energy",
+              "label": "power"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Where does my rubbish go?",
+      "a": "A bin lorry takes it away. Depending on what it is and where you live, it is recycled, composted, burned to make energy, or buried in a landfill.",
+      "asks": [
+        "What happens to rubbish after it's collected?"
+      ]
+    },
+    {
+      "q": "What happens at a recycling centre?",
+      "a": "Mixed recycling is sorted by machines and people into paper, metals, glass and plastics. Each material is pressed into bales and sold to factories that remake it.",
+      "asks": [
+        "What happens to my recycling?"
+      ]
+    },
+    {
+      "q": "How can burning rubbish make electricity?",
+      "a": "In an energy-from-waste plant, rubbish is burned to heat water into steam. The steam spins a turbine, which turns a generator to make electricity.",
+      "asks": [
+        "What is energy from waste?"
+      ]
+    },
+    {
+      "q": "What is a landfill?",
+      "a": "A big hole in the ground, lined with clay and plastic, where rubbish is buried in layers and covered with soil. It uses lots of land, and rotting waste gives off methane, a strong greenhouse gas.",
+      "asks": [
+        "Why is landfill bad?"
+      ]
+    },
+    {
+      "q": "How much rubbish does the world make?",
+      "a": "About 2 billion tonnes of household and city waste a year, according to the World Bank, and the amount is growing.",
+      "asks": [
+        "How much waste do people throw away?"
+      ]
+    }
+  ],
+  "facts": [
+    "The World Bank estimated that about 2.01 billion tonnes of municipal solid waste were generated worldwide in 2016.",
+    "Globally, only about one fifth of municipal waste is recycled or composted, according to the World Bank."
+  ],
+  "quiz": [
+    {
+      "say": "Which way of handling rubbish turns it into electricity?",
+      "show": "Which way of handling rubbish turns it into electricity?",
+      "options": [
+        {
+          "show": "Energy from waste",
+          "say": "Energy from waste"
+        },
+        {
+          "show": "Landfill",
+          "say": "Landfill"
+        },
+        {
+          "show": "Composting",
+          "say": "Composting"
+        }
+      ],
+      "answer": 0,
+      "why": "Burning rubbish makes steam that spins a turbine and generator.",
+      "wrong": {
+        "1": "Landfill buries rubbish; it doesn't make power directly.",
+        "2": "Composting makes soil food, not electricity."
+      }
+    },
+    {
+      "say": "What is the best way to reduce rubbish?",
+      "show": "What is the best way to reduce rubbish?",
+      "options": [
+        {
+          "show": "Make less of it in the first place",
+          "say": "Make less of it in the first place"
+        },
+        {
+          "show": "Bury it deeper",
+          "say": "Bury it deeper"
+        },
+        {
+          "show": "Throw it in a river",
+          "say": "Throw it in a river"
+        }
+      ],
+      "answer": 0,
+      "why": "Rubbish that is never made needs no handling at all.",
+      "wrong": {
+        "1": "Burying deeper still fills up land.",
+        "2": "Throwing rubbish in rivers pollutes water and harms wildlife."
+      }
+    }
+  ]
+}

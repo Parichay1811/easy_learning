@@ -1,0 +1,337 @@
+{
+  "id": "BCE-CONC-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "One-way and two-way slabs: which way does a floor carry its load?",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONC — Concrete and steel design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "one-way slab",
+    "two-way slab",
+    "aspect ratio",
+    "load path",
+    "slab design"
+  ],
+  "examples": [
+    "What is the difference between one-way and two-way slabs?",
+    "When is a slab two-way?",
+    "How do you design a one-way slab?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-compare",
+      "left": {
+        "title": "One-way slab",
+        "icon": "ruler",
+        "ask": "What is a one-way slab?",
+        "points": [
+          "Long side > 2 × short side",
+          "Bends across the short span",
+          "Main bars one way",
+          "Corridors, verandas"
+        ]
+      },
+      "right": {
+        "title": "Two-way slab",
+        "icon": "house",
+        "ask": "What is a two-way slab?",
+        "points": [
+          "Long side ≤ 2 × short side",
+          "Bends in both directions",
+          "Main bars both ways",
+          "Square-ish rooms"
+        ]
+      },
+      "verdict": "The ratio of the sides decides"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Look up at the ceiling. That flat slab is quietly carrying everything on the floor above out to its supporting beams. But which way does it send the load? That depends on the shape of the panel, and engineers call the two cases one-way and two-way slabs.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "One-way and two-way slabs: which way does a floor carry its load?"
+        },
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "One-way slab",
+            "icon": "ruler",
+            "ask": "What is a one-way slab?",
+            "points": [
+              "Long side > 2 × short side",
+              "Bends across the short span",
+              "Main bars one way",
+              "Corridors, verandas"
+            ]
+          },
+          "right": {
+            "title": "Two-way slab",
+            "icon": "house",
+            "ask": "What is a two-way slab?",
+            "points": [
+              "Long side ≤ 2 × short side",
+              "Bends in both directions",
+              "Main bars both ways",
+              "Square-ish rooms"
+            ]
+          },
+          "verdict": "The ratio of the sides decides"
+        }
+      ]
+    },
+    {
+      "say": "Take a corridor slab four metres wide and nine metres long. The long side over the short side is two point two five, more than two. Load takes the stiffest, shortest route, so almost all of it bends across the four metre span. That is a one-way slab, with its main bars running the short way.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "One-way slab",
+            "icon": "ruler",
+            "ask": "What is a one-way slab?",
+            "points": [
+              "Long side > 2 × short side",
+              "Bends across the short span",
+              "Main bars one way",
+              "Corridors, verandas"
+            ]
+          },
+          "right": {
+            "title": "Two-way slab",
+            "icon": "house",
+            "ask": "What is a two-way slab?",
+            "points": [
+              "Long side ≤ 2 × short side",
+              "Bends in both directions",
+              "Main bars both ways",
+              "Square-ish rooms"
+            ]
+          },
+          "verdict": "The ratio of the sides decides",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "L_y / L_x = 9 / 4 = 2.25 > 2 → one-way"
+        }
+      ]
+    },
+    {
+      "say": "So we design it like a beam one metre wide. Per square metre, a hundred and fifty millimetre slab weighs three point seven five kilonewtons, finishes one point two five, and people three: eight in all. On a four metre span, the moment is eight times sixteen over eight, sixteen kilonewton metres per metre width.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How is a one-way slab designed?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 8,
+              "label": "8 kN/m (1 m strip)",
+              "ask": "How is a one-way slab designed?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "w = 3.75 + 1.25 + 3 = 8 kN/m² → M = 8×4²/8 = 16 kN·m/m"
+        }
+      ]
+    },
+    {
+      "say": "Now a room four by five metres. The ratio is one point two five, less than two, so the slab bends both ways, like a trampoline held on all four sides. The moments are shared between the two directions, so the slab can be thinner, with bars both ways. Codes give moment coefficients for each panel shape.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "One-way slab",
+            "icon": "ruler",
+            "ask": "What is a one-way slab?",
+            "points": [
+              "Long side > 2 × short side",
+              "Bends across the short span",
+              "Main bars one way",
+              "Corridors, verandas"
+            ]
+          },
+          "right": {
+            "title": "Two-way slab",
+            "icon": "house",
+            "ask": "What is a two-way slab?",
+            "points": [
+              "Long side ≤ 2 × short side",
+              "Bends in both directions",
+              "Main bars both ways",
+              "Square-ish rooms"
+            ]
+          },
+          "verdict": "The ratio of the sides decides",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "L_y / L_x = 5 / 4 = 1.25 ≤ 2 → two-way"
+        }
+      ]
+    },
+    {
+      "say": "Whichever way it bends, the load then travels a path: slab to beams, beams to columns, columns to footings, footings to soil. Tracing this load path is the first thing a structural engineer does. Excellent work! Challenge: a balcony slab fixed only along one edge. One-way or two-way?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Slab",
+              "icon": "house",
+              "ask": "What is a load path?"
+            },
+            {
+              "label": "Beams",
+              "icon": "bridge"
+            },
+            {
+              "label": "Columns",
+              "icon": "tower"
+            },
+            {
+              "label": "Footings",
+              "icon": "rock"
+            },
+            {
+              "label": "Soil",
+              "icon": "soil"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a one-way slab?",
+      "a": "A slab that carries its load mainly in one direction, to two opposite supports. It happens when the long side is more than twice the short side, or when only two edges are supported.",
+      "asks": [
+        "Define one-way slab"
+      ]
+    },
+    {
+      "q": "What is a two-way slab?",
+      "a": "A slab supported on all four sides with a long side no more than twice the short side. It bends in both directions and has main bars both ways.",
+      "asks": [
+        "Define two-way slab"
+      ]
+    },
+    {
+      "q": "How do you decide between a one-way and a two-way slab?",
+      "a": "Divide the long span by the short span. Above 2 it acts one-way; 2 or less, supported on all four edges, it acts two-way. A 9 by 4 metre panel gives 2.25, so one-way.",
+      "asks": [
+        "When is a slab two-way?",
+        "Slab aspect ratio rule"
+      ]
+    },
+    {
+      "q": "How is a one-way slab designed?",
+      "a": "As a beam one metre wide spanning the short way. With 8 kilonewtons per square metre over 4 metres, the moment is 16 kilonewton metres per metre width.",
+      "asks": [
+        "One-way slab design steps"
+      ]
+    },
+    {
+      "q": "What is a load path?",
+      "a": "The route a load takes through a structure down to the ground: slab, beams, columns, footings, soil. Every load must have a complete path.",
+      "asks": [
+        "How do loads travel in a building?"
+      ]
+    }
+  ],
+  "facts": [
+    "A slab panel supported on four sides is usually treated as one-way when its long side exceeds twice its short side.",
+    "Flat slabs rest directly on columns without beams, giving flat ceilings and simpler formwork."
+  ],
+  "quiz": [
+    {
+      "say": "A slab panel supported on all four sides is 3.5 metres by 8 metres. Is it one-way or two-way?",
+      "show": "A slab panel supported on all four sides is 3.5 m by 8 m. One-way or two-way?",
+      "options": [
+        {
+          "show": "One-way",
+          "say": "One-way"
+        },
+        {
+          "show": "Two-way",
+          "say": "Two-way"
+        },
+        {
+          "show": "Cannot tell without the load",
+          "say": "Cannot tell without the load"
+        }
+      ],
+      "answer": 0,
+      "why": "8 ÷ 3.5 ≈ 2.29, more than 2, so it bends mainly across the short span.",
+      "wrong": {
+        "1": "Two-way needs a ratio of 2 or less.",
+        "2": "The behaviour depends on the shape, not the size of the load."
+      }
+    },
+    {
+      "say": "A one metre strip of one-way slab spans 5 metres and carries 10 kilonewtons per square metre. What is the maximum moment per metre width?",
+      "show": "A 1 m strip of one-way slab spans 5 m and carries 10 kN/m². Maximum moment per metre?",
+      "options": [
+        {
+          "show": "31.25 kN·m/m",
+          "say": "31.25 kilonewton metres per metre"
+        },
+        {
+          "show": "62.5 kN·m/m",
+          "say": "62.5 kilonewton metres per metre"
+        },
+        {
+          "show": "25 kN·m/m",
+          "say": "25 kilonewton metres per metre"
+        }
+      ],
+      "answer": 0,
+      "why": "w L squared over 8: 10 × 25 / 8 = 31.25.",
+      "wrong": {
+        "1": "That divides by 4 instead of 8.",
+        "2": "That is the support reaction, 25 kilonewtons per metre, not the moment."
+      }
+    }
+  ]
+}

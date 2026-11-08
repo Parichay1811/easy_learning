@@ -1,0 +1,469 @@
+{
+  "id": "BME-MACHD-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Gears: spur, helical, bevel and worm, and how the gear ratio works",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MACHD — Machine design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "gear ratio",
+    "spur gear",
+    "helical gear",
+    "bevel gear",
+    "worm gear",
+    "pinion"
+  ],
+  "examples": [
+    "How do I calculate gear ratio?",
+    "What is the difference between spur and helical gears?",
+    "Why does a gearbox increase torque?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.5,
+          "label": "Motor 1500 rpm"
+        },
+        {
+          "id": "pinion",
+          "kind": "gear",
+          "x": 0.36,
+          "y": 0.5,
+          "size": 0.6,
+          "label": "Pinion 20 teeth",
+          "ask": "How do I calculate gear ratio?"
+        },
+        {
+          "id": "gear",
+          "kind": "gear",
+          "x": 0.62,
+          "y": 0.5,
+          "size": 1.8,
+          "label": "Gear 60 teeth",
+          "ask": "How do I calculate gear ratio?"
+        },
+        {
+          "id": "out",
+          "kind": "axle",
+          "x": 0.9,
+          "y": 0.5,
+          "label": "Output 500 rpm"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "pinion",
+          "kind": "power",
+          "label": "10 N·m"
+        },
+        {
+          "from": "gear",
+          "to": "out",
+          "kind": "power",
+          "label": "About 29 N·m"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A car gearbox, a food mixer and a wind turbine all trade speed for turning force with gears. Look at the board: a small gear, the pinion, with 20 teeth on a motor at 1500 revolutions per minute, driving a big gear with 60 teeth. Watch which turns faster.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Gears: spur, helical, bevel and worm, and how the gear ratio works"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "label": "Motor 1500 rpm"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.36,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Pinion 20 teeth",
+              "ask": "How do I calculate gear ratio?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.8,
+              "label": "Gear 60 teeth",
+              "ask": "How do I calculate gear ratio?"
+            },
+            {
+              "id": "out",
+              "kind": "axle",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Output 500 rpm"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pinion",
+              "kind": "power",
+              "label": "10 N·m"
+            },
+            {
+              "from": "gear",
+              "to": "out",
+              "kind": "power",
+              "label": "About 29 N·m"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Pinion: the smaller gear of a pair"
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a gear train. Count the teeth on the driver gear and the small gear; that ratio is the whole secret of gear speed and torque. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Gears: spur, helical, bevel and worm, and how the gear ratio works"
+        },
+        {
+          "op": "image",
+          "render": "gear-train"
+        }
+      ]
+    },
+    {
+      "say": "The teeth mesh one by one, so both gears move the same number of teeth each second. The big gear has three times the teeth, so it turns three times slower. Gear ratio is driven teeth over driver teeth: 60 over 20, which is 3. Output speed: 1500 over 3, that is 500 rpm. Which way does the big gear turn?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "label": "Motor 1500 rpm"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.36,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Pinion 20 teeth",
+              "ask": "How do I calculate gear ratio?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.8,
+              "label": "Gear 60 teeth",
+              "ask": "How do I calculate gear ratio?"
+            },
+            {
+              "id": "out",
+              "kind": "axle",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Output 500 rpm"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pinion",
+              "kind": "power",
+              "label": "10 N·m"
+            },
+            {
+              "from": "gear",
+              "to": "out",
+              "kind": "power",
+              "label": "About 29 N·m"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "i = N_driven/N_driver = 60/20 = 3 → 500 rpm"
+        }
+      ]
+    },
+    {
+      "say": "The opposite way! And here is the payoff. Power is torque times speed, and almost none is lost, so a third of the speed means three times the torque. The motor gives 10 newton metres; out comes about 29, since a spur pair is about 98 percent efficient. Gears trade speed for torque.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "label": "Motor 1500 rpm"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.36,
+              "y": 0.5,
+              "size": 0.6,
+              "label": "Pinion 20 teeth",
+              "ask": "How do I calculate gear ratio?"
+            },
+            {
+              "id": "gear",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.8,
+              "label": "Gear 60 teeth",
+              "ask": "How do I calculate gear ratio?"
+            },
+            {
+              "id": "out",
+              "kind": "axle",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Output 500 rpm"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pinion",
+              "kind": "power",
+              "label": "10 N·m"
+            },
+            {
+              "from": "gear",
+              "to": "out",
+              "kind": "power",
+              "label": "About 29 N·m"
+            }
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "T_out = T_in × i × η = 10 × 3 × 0.98 ≈ 29 N·m"
+        }
+      ]
+    },
+    {
+      "say": "Gear types fit different jobs. See the groups? Spur gears have straight teeth: simple but noisy. Helical gears have slanted teeth that engage gradually, so they are quiet, but push sideways along the shaft. Bevel gears turn the drive through an angle; a worm gives huge ratios in one step. What turns rotation into a straight line?",
+      "draw": [
+        {
+          "name": "x-sort",
+          "question": "Which gear for which job?",
+          "groups": [
+            {
+              "label": "Parallel shafts",
+              "icon": "gear",
+              "items": [
+                "Spur gear",
+                "Helical gear",
+                "Herringbone"
+              ]
+            },
+            {
+              "label": "Shafts that cross",
+              "icon": "gear",
+              "items": [
+                "Bevel gear",
+                "Worm and wheel"
+              ]
+            },
+            {
+              "label": "Turn into slide",
+              "icon": "arrow",
+              "items": [
+                "Rack and pinion",
+                "Steering rack"
+              ]
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Helical teeth: smoother and quieter, but create axial thrust"
+        }
+      ]
+    },
+    {
+      "say": "A rack and pinion, as in a car steering rack! Excellent work. Exam tip: for a gear train multiply the ratios of each pair; an idler gear between two others changes the direction but not the ratio. Challenge: what ratio do a 15-tooth pinion and a 45-tooth gear give?",
+      "draw": [
+        {
+          "name": "x-sort",
+          "question": "Which gear for which job?",
+          "groups": [
+            {
+              "label": "Parallel shafts",
+              "icon": "gear",
+              "items": [
+                "Spur gear",
+                "Helical gear",
+                "Herringbone"
+              ]
+            },
+            {
+              "label": "Shafts that cross",
+              "icon": "gear",
+              "items": [
+                "Bevel gear",
+                "Worm and wheel"
+              ]
+            },
+            {
+              "label": "Turn into slide",
+              "icon": "arrow",
+              "items": [
+                "Rack and pinion",
+                "Steering rack"
+              ]
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Train ratio = product of each pair ratio"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I calculate gear ratio?",
+      "a": "Divide the number of teeth on the driven gear by the teeth on the driving gear. Output speed is input speed divided by the ratio, and output torque is roughly input torque times the ratio.",
+      "asks": [
+        "gear ratio formula",
+        "what is a pinion"
+      ]
+    },
+    {
+      "q": "Why does a gearbox increase torque?",
+      "a": "Power is torque times speed and gears lose very little of it, so slowing the output by a ratio multiplies the torque by nearly the same ratio.",
+      "asks": [
+        "gears speed vs torque"
+      ]
+    },
+    {
+      "q": "What is the difference between spur and helical gears?",
+      "a": "Spur gears have teeth parallel to the shaft and are simple but noisy. Helical gears have angled teeth that mesh gradually, running quieter and carrying more load, but they push the shaft sideways.",
+      "asks": [
+        "helical gear advantages"
+      ]
+    },
+    {
+      "q": "What is a worm gear used for?",
+      "a": "A worm and wheel gives a large reduction in one step, often 20 to 1 or more, between crossing shafts. Many worm drives cannot be driven backwards, which is useful in lifts and hoists.",
+      "asks": [
+        "worm gear ratio"
+      ]
+    },
+    {
+      "q": "What does an idler gear do?",
+      "a": "An idler sits between two gears. It reverses the direction of the output but does not change the overall ratio.",
+      "asks": [
+        "idler gear ratio"
+      ]
+    }
+  ],
+  "facts": [
+    "Two meshing external gears always turn in opposite directions.",
+    "A good pair of spur gears transmits about 98 % of the power."
+  ],
+  "quiz": [
+    {
+      "say": "A 15-tooth pinion turning at 1200 rpm drives a 45-tooth gear. What is the output speed?",
+      "show": "15-tooth pinion at 1200 rpm drives a 45-tooth gear. Output speed?",
+      "options": [
+        {
+          "show": "400 rpm",
+          "say": "400 rpm"
+        },
+        {
+          "show": "3600 rpm",
+          "say": "3600 rpm"
+        },
+        {
+          "show": "1200 rpm",
+          "say": "1200 rpm"
+        }
+      ],
+      "answer": 0,
+      "why": "Ratio = 45/15 = 3, so output = 1200/3 = 400 rpm.",
+      "wrong": {
+        "1": "That multiplies by the ratio; the bigger driven gear turns slower.",
+        "2": "The speed changes because the gears have different numbers of teeth."
+      }
+    },
+    {
+      "say": "Which gear type would you choose to connect two shafts at right angles?",
+      "show": "Which gears connect two shafts at right angles?",
+      "options": [
+        {
+          "show": "Bevel gears",
+          "say": "Bevel gears"
+        },
+        {
+          "show": "Spur gears",
+          "say": "Spur gears"
+        },
+        {
+          "show": "Rack and pinion",
+          "say": "Rack and pinion"
+        }
+      ],
+      "answer": 0,
+      "why": "Bevel gears are cone-shaped so their shafts meet at an angle, usually 90°.",
+      "wrong": {
+        "1": "Spur gears join parallel shafts.",
+        "2": "A rack and pinion turns rotation into straight-line motion."
+      }
+    }
+  ]
+}

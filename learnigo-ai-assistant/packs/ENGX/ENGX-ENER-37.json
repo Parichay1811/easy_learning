@@ -1,0 +1,630 @@
+{
+  "id": "ENGX-ENER-37",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a smart grid balances supply and demand",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "smart grid",
+    "smart meter",
+    "demand response",
+    "time-of-use tariff",
+    "vehicle-to-grid"
+  ],
+  "examples": [
+    "What is a smart grid?",
+    "How can my electric car help the grid?",
+    "What is demand response?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "ctrl",
+          "label": "Grid control room",
+          "icon": "computer",
+          "x": 0.5,
+          "y": 0.12,
+          "ask": "What makes a grid smart?"
+        },
+        {
+          "id": "wind",
+          "label": "Wind farm",
+          "icon": "turbine",
+          "x": 0.1,
+          "y": 0.35
+        },
+        {
+          "id": "meter",
+          "label": "Smart meter",
+          "icon": "sensor",
+          "x": 0.3,
+          "y": 0.7,
+          "ask": "What does a smart meter do?"
+        },
+        {
+          "id": "ev",
+          "label": "Car charger",
+          "icon": "car",
+          "x": 0.55,
+          "y": 0.88,
+          "ask": "How can electric cars help the grid?"
+        },
+        {
+          "id": "homes",
+          "label": "Homes",
+          "icon": "house",
+          "x": 0.78,
+          "y": 0.62,
+          "ask": "What is demand response?"
+        },
+        {
+          "id": "batt",
+          "label": "Home batteries",
+          "icon": "battery",
+          "x": 0.9,
+          "y": 0.3
+        }
+      ],
+      "links": [
+        {
+          "from": "wind",
+          "to": "ctrl",
+          "kind": "data",
+          "label": "forecast"
+        },
+        {
+          "from": "ctrl",
+          "to": "meter",
+          "kind": "data",
+          "label": "price signal"
+        },
+        {
+          "from": "meter",
+          "to": "ctrl",
+          "kind": "data",
+          "label": "usage"
+        },
+        {
+          "from": "ctrl",
+          "to": "ev",
+          "kind": "data",
+          "label": "charge later"
+        },
+        {
+          "from": "ctrl",
+          "to": "batt",
+          "kind": "data",
+          "label": "release now"
+        },
+        {
+          "from": "wind",
+          "to": "homes",
+          "kind": "power"
+        },
+        {
+          "from": "homes",
+          "to": "ev",
+          "kind": "power",
+          "label": "charging"
+        },
+        {
+          "from": "batt",
+          "to": "homes",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An old-style grid simply turned power stations up and down to follow demand. A smart grid also uses sensors, meters and computers to shift when we use electricity, to match when it is available.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a smart grid balances supply and demand"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "ctrl",
+              "label": "Grid control room",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.12,
+              "ask": "What makes a grid smart?"
+            },
+            {
+              "id": "wind",
+              "label": "Wind farm",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.35
+            },
+            {
+              "id": "meter",
+              "label": "Smart meter",
+              "icon": "sensor",
+              "x": 0.3,
+              "y": 0.7,
+              "ask": "What does a smart meter do?"
+            },
+            {
+              "id": "ev",
+              "label": "Car charger",
+              "icon": "car",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "How can electric cars help the grid?"
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.78,
+              "y": 0.62,
+              "ask": "What is demand response?"
+            },
+            {
+              "id": "batt",
+              "label": "Home batteries",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.3
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "forecast"
+            },
+            {
+              "from": "ctrl",
+              "to": "meter",
+              "kind": "data",
+              "label": "price signal"
+            },
+            {
+              "from": "meter",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "usage"
+            },
+            {
+              "from": "ctrl",
+              "to": "ev",
+              "kind": "data",
+              "label": "charge later"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "data",
+              "label": "release now"
+            },
+            {
+              "from": "wind",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "homes",
+              "to": "ev",
+              "kind": "power",
+              "label": "charging"
+            },
+            {
+              "from": "batt",
+              "to": "homes",
+              "kind": "power"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Smart meters record how much electricity a home uses every half hour and send it to the supplier. Some tariffs then charge less when power is plentiful, like on windy nights.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "ctrl",
+              "label": "Grid control room",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.12,
+              "ask": "What makes a grid smart?"
+            },
+            {
+              "id": "wind",
+              "label": "Wind farm",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.35
+            },
+            {
+              "id": "meter",
+              "label": "Smart meter",
+              "icon": "sensor",
+              "x": 0.3,
+              "y": 0.7,
+              "ask": "What does a smart meter do?"
+            },
+            {
+              "id": "ev",
+              "label": "Car charger",
+              "icon": "car",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "How can electric cars help the grid?"
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.78,
+              "y": 0.62,
+              "ask": "What is demand response?"
+            },
+            {
+              "id": "batt",
+              "label": "Home batteries",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.3
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "forecast"
+            },
+            {
+              "from": "ctrl",
+              "to": "meter",
+              "kind": "data",
+              "label": "price signal"
+            },
+            {
+              "from": "meter",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "usage"
+            },
+            {
+              "from": "ctrl",
+              "to": "ev",
+              "kind": "data",
+              "label": "charge later"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "data",
+              "label": "release now"
+            },
+            {
+              "from": "wind",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "homes",
+              "to": "ev",
+              "kind": "power",
+              "label": "charging"
+            },
+            {
+              "from": "batt",
+              "to": "homes",
+              "kind": "power"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Electric car chargers, heat pumps and home batteries can be told to wait for cheaper, greener times, or to pause for a few minutes at a peak. Thousands of small changes add up to a power station's worth.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "ctrl",
+              "label": "Grid control room",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.12,
+              "ask": "What makes a grid smart?"
+            },
+            {
+              "id": "wind",
+              "label": "Wind farm",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.35
+            },
+            {
+              "id": "meter",
+              "label": "Smart meter",
+              "icon": "sensor",
+              "x": 0.3,
+              "y": 0.7,
+              "ask": "What does a smart meter do?"
+            },
+            {
+              "id": "ev",
+              "label": "Car charger",
+              "icon": "car",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "How can electric cars help the grid?"
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.78,
+              "y": 0.62,
+              "ask": "What is demand response?"
+            },
+            {
+              "id": "batt",
+              "label": "Home batteries",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.3
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "forecast"
+            },
+            {
+              "from": "ctrl",
+              "to": "meter",
+              "kind": "data",
+              "label": "price signal"
+            },
+            {
+              "from": "meter",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "usage"
+            },
+            {
+              "from": "ctrl",
+              "to": "ev",
+              "kind": "data",
+              "label": "charge later"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "data",
+              "label": "release now"
+            },
+            {
+              "from": "wind",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "homes",
+              "to": "ev",
+              "kind": "power",
+              "label": "charging"
+            },
+            {
+              "from": "batt",
+              "to": "homes",
+              "kind": "power"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Some electric cars and home batteries can even send power back to the grid at peak times. The grid becomes a two-way network, where homes both use and supply electricity.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "ctrl",
+              "label": "Grid control room",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.12,
+              "ask": "What makes a grid smart?"
+            },
+            {
+              "id": "wind",
+              "label": "Wind farm",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.35
+            },
+            {
+              "id": "meter",
+              "label": "Smart meter",
+              "icon": "sensor",
+              "x": 0.3,
+              "y": 0.7,
+              "ask": "What does a smart meter do?"
+            },
+            {
+              "id": "ev",
+              "label": "Car charger",
+              "icon": "car",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "How can electric cars help the grid?"
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.78,
+              "y": 0.62,
+              "ask": "What is demand response?"
+            },
+            {
+              "id": "batt",
+              "label": "Home batteries",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.3
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "forecast"
+            },
+            {
+              "from": "ctrl",
+              "to": "meter",
+              "kind": "data",
+              "label": "price signal"
+            },
+            {
+              "from": "meter",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "usage"
+            },
+            {
+              "from": "ctrl",
+              "to": "ev",
+              "kind": "data",
+              "label": "charge later"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "data",
+              "label": "release now"
+            },
+            {
+              "from": "wind",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "homes",
+              "to": "ev",
+              "kind": "power",
+              "label": "charging"
+            },
+            {
+              "from": "batt",
+              "to": "homes",
+              "kind": "power"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What makes a grid smart?",
+      "a": "Sensors, smart meters and computers share live information about supply and demand, so the grid can adjust automatically. Instead of only changing supply, it can also nudge demand to match.",
+      "asks": [
+        "What is a smart grid?"
+      ]
+    },
+    {
+      "q": "What does a smart meter do?",
+      "a": "It measures how much electricity and gas you use, usually every half hour, and sends the readings automatically to your supplier. It also lets you see your use and cost on a display at home.",
+      "asks": [
+        "How does a smart meter work?"
+      ]
+    },
+    {
+      "q": "How can electric cars help the grid?",
+      "a": "Cars can charge when power is cheap and plentiful, like overnight or on windy days. With vehicle-to-grid chargers, some can even send power back during evening peaks.",
+      "asks": [
+        "What is vehicle-to-grid?"
+      ]
+    },
+    {
+      "q": "What is demand response?",
+      "a": "Demand response means using less electricity, or using it at a different time, when the grid is stretched. Factories, heat pumps and car chargers can be paid to pause briefly, which can be cheaper than running an extra power station.",
+      "asks": [
+        "What is demand side response?"
+      ]
+    },
+    {
+      "q": "What is a time-of-use tariff?",
+      "a": "It is an electricity price that changes during the day: cheaper at night or when renewables are plentiful, dearer at the evening peak. It encourages people to run washing machines or charge cars at quiet times.",
+      "asks": [
+        "Why does electricity cost more at some times?"
+      ]
+    }
+  ],
+  "facts": [
+    "Smart meters in Britain usually record readings every half hour.",
+    "Vehicle-to-grid technology lets suitably equipped electric cars send power back to the grid."
+  ],
+  "quiz": [
+    {
+      "say": "Which of these is an example of demand response?",
+      "show": "Demand response example?",
+      "options": [
+        {
+          "show": "Car chargers pausing during the evening peak",
+          "say": "Car chargers pausing during the evening peak"
+        },
+        {
+          "show": "Building a new coal power station",
+          "say": "Building a new coal power station"
+        },
+        {
+          "show": "Raising the voltage on pylons",
+          "say": "Raising the voltage on pylons"
+        }
+      ],
+      "answer": 0,
+      "why": "Demand response changes when electricity is used, such as delaying charging, to help balance the grid.",
+      "wrong": {
+        "1": "A new power station changes supply, not demand.",
+        "2": "Raising voltage cuts losses; it does not change demand."
+      }
+    }
+  ]
+}

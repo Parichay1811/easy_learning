@@ -1,0 +1,403 @@
+{
+  "id": "BME-THERM-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The first law for a closed system: heat in, work out, energy stored",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-THERM — Thermodynamics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "first law of thermodynamics",
+    "internal energy",
+    "heat transfer",
+    "boundary work",
+    "sign convention"
+  ],
+  "examples": [
+    "What is the first law of thermodynamics?",
+    "What is the sign convention for heat and work?",
+    "How do I calculate the change in internal energy?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "cyl",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.6,
+          "size": 1.3,
+          "label": "Gas (system)",
+          "ask": "What is the first law of thermodynamics?"
+        },
+        {
+          "id": "piston",
+          "kind": "piston",
+          "x": 0.5,
+          "y": 0.25,
+          "label": "Piston",
+          "ask": "What is the sign convention for heat and work?"
+        },
+        {
+          "id": "heat",
+          "kind": "box",
+          "x": 0.15,
+          "y": 0.6,
+          "label": "Surroundings"
+        }
+      ],
+      "links": [
+        {
+          "from": "heat",
+          "to": "cyl",
+          "kind": "heat",
+          "label": "Heat"
+        },
+        {
+          "from": "cyl",
+          "to": "piston",
+          "kind": "force",
+          "label": "Work"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "In the 1840s, James Joule stirred water with a falling weight and showed it warmed by a fixed amount for each joule of work. Work and heat are both just energy on the move. The first law says energy is never made or destroyed, only moved and stored. Look at the gas under the piston.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The first law for a closed system: heat in, work out, energy stored"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyl",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Gas (system)",
+              "ask": "What is the first law of thermodynamics?"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.25,
+              "label": "Piston",
+              "ask": "What is the sign convention for heat and work?"
+            },
+            {
+              "id": "heat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.6,
+              "label": "Surroundings"
+            }
+          ],
+          "links": [
+            {
+              "from": "heat",
+              "to": "cyl",
+              "kind": "heat",
+              "label": "Heat"
+            },
+            {
+              "from": "cyl",
+              "to": "piston",
+              "kind": "force",
+              "label": "Work"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Joule's paddle-wheel experiment, 1840s"
+        }
+      ]
+    },
+    {
+      "say": "For a closed system, the law reads Q minus W equals delta U. Q is heat added, W is work done by the gas, and delta U is the change in internal energy, the energy stored in the moving molecules. Suppose a burner adds 50 kilojoules. See the heat flowing in?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyl",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Gas (system)",
+              "ask": "What is the first law of thermodynamics?"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.25,
+              "label": "Piston",
+              "ask": "What is the sign convention for heat and work?"
+            },
+            {
+              "id": "heat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.6,
+              "label": "Surroundings"
+            }
+          ],
+          "links": [
+            {
+              "from": "heat",
+              "to": "cyl",
+              "kind": "heat",
+              "label": "Heat"
+            },
+            {
+              "from": "cyl",
+              "to": "piston",
+              "kind": "force",
+              "label": "Work"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Q − W = ΔU"
+        }
+      ]
+    },
+    {
+      "say": "The gas expands and pushes the piston up, doing 20 kilojoules of work. Where did the other 30 go? Look at the energy diagram: 50 in, 20 out as work, and 30 stays inside as internal energy, so the gas gets hotter. What if the piston were locked?",
+      "draw": [
+        {
+          "name": "x-energy",
+          "unit": "kJ",
+          "input": {
+            "label": "Heat in 50 kJ",
+            "amount": 50,
+            "ask": "Where does the heat go when a gas is heated?"
+          },
+          "outputs": [
+            {
+              "label": "Work out 20 kJ",
+              "amount": 20,
+              "useful": true,
+              "ask": "What counts as work in a closed system?"
+            },
+            {
+              "label": "Stored as ΔU 30 kJ",
+              "amount": 30,
+              "useful": false,
+              "ask": "How do I calculate the change in internal energy?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "50 − 20 = ΔU, so ΔU = 30 kJ"
+        }
+      ]
+    },
+    {
+      "say": "Then no work, and every joule of heat raises the internal energy. For an ideal gas, delta U equals m c v delta T. Heating 2 kilograms of air in a rigid tank by 20 degrees needs 2 times 0.718 times 20, about 28.7 kilojoules. See the stored part? Would a gas cool if it did work with no heat added?",
+      "draw": [
+        {
+          "name": "x-energy",
+          "unit": "kJ",
+          "input": {
+            "label": "Heat in 50 kJ",
+            "amount": 50,
+            "ask": "Where does the heat go when a gas is heated?"
+          },
+          "outputs": [
+            {
+              "label": "Work out 20 kJ",
+              "amount": 20,
+              "useful": true,
+              "ask": "What counts as work in a closed system?"
+            },
+            {
+              "label": "Stored as ΔU 30 kJ",
+              "amount": 30,
+              "useful": false,
+              "ask": "How do I calculate the change in internal energy?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Rigid tank: Q = ΔU = m c_v ΔT = 2 × 0.718 × 20 = 28.7 kJ"
+        }
+      ]
+    },
+    {
+      "say": "Yes: Q is zero, so delta U equals minus W, and the gas cools. That is how aerosol cans get cold. Great work! Exam tip: textbooks use different signs, so write yours down; here heat in is positive and work done by the gas is positive. Over a full cycle, delta U is zero, so the net heat equals the net work.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyl",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Gas (system)",
+              "ask": "What is the first law of thermodynamics?"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.25,
+              "label": "Piston",
+              "ask": "What is the sign convention for heat and work?"
+            },
+            {
+              "id": "heat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.6,
+              "label": "Surroundings"
+            }
+          ],
+          "links": [
+            {
+              "from": "heat",
+              "to": "cyl",
+              "kind": "heat",
+              "label": "Heat"
+            },
+            {
+              "from": "cyl",
+              "to": "piston",
+              "kind": "force",
+              "label": "Work"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Cycle: ΔU = 0, so net Q = net W"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the first law of thermodynamics?",
+      "a": "Energy cannot be created or destroyed. For a closed system, the heat added minus the work done by the system equals the change in its internal energy.",
+      "asks": [
+        "first law equation",
+        "conservation of energy thermodynamics"
+      ]
+    },
+    {
+      "q": "What is the sign convention for heat and work?",
+      "a": "A common convention takes heat added to the system as positive and work done by the system as positive, giving Q minus W equals delta U. Some books take work done on the system as positive instead.",
+      "asks": [
+        "sign of work and heat"
+      ]
+    },
+    {
+      "q": "Where does the heat go when a gas is heated?",
+      "a": "Part may leave as work if the gas expands; the rest raises the internal energy, so the temperature rises.",
+      "asks": [
+        "what happens to heat added to a gas"
+      ]
+    },
+    {
+      "q": "What counts as work in a closed system?",
+      "a": "Most often boundary work, when the gas pushes a moving piston. Shaft work from a paddle or electrical work from a heater also count.",
+      "asks": [
+        "types of work thermodynamics"
+      ]
+    },
+    {
+      "q": "How do I calculate the change in internal energy?",
+      "a": "From the first law, delta U equals Q minus W. For an ideal gas it also equals m times c v times delta T, whatever the process.",
+      "asks": [
+        "internal energy of ideal gas"
+      ]
+    }
+  ],
+  "facts": [
+    "For any closed system going through a complete cycle, the net heat transfer equals the net work done.",
+    "The specific heat of air at constant volume is about 0.718 kilojoules per kilogram kelvin."
+  ],
+  "quiz": [
+    {
+      "say": "A gas receives 80 kilojoules of heat and does 30 kilojoules of work on a piston. What is its change in internal energy?",
+      "show": "A gas gets 80 kJ of heat and does 30 kJ of work. ΔU = ?",
+      "options": [
+        {
+          "show": "+50 kJ",
+          "say": "plus 50 kilojoules"
+        },
+        {
+          "show": "+110 kJ",
+          "say": "plus 110 kilojoules"
+        },
+        {
+          "show": "−50 kJ",
+          "say": "minus 50 kilojoules"
+        }
+      ],
+      "answer": 0,
+      "why": "ΔU = Q − W = 80 − 30 = 50 kJ.",
+      "wrong": {
+        "1": "That adds the work; work done by the gas takes energy out.",
+        "2": "The heat in is bigger than the work out, so the energy rises."
+      }
+    },
+    {
+      "say": "Gas in a sealed rigid tank is heated by 15 kilojoules. How much work does it do?",
+      "show": "Gas in a rigid, sealed tank is heated by 15 kJ. Work done?",
+      "options": [
+        {
+          "show": "0 kJ",
+          "say": "zero kilojoules"
+        },
+        {
+          "show": "15 kJ",
+          "say": "15 kilojoules"
+        },
+        {
+          "show": "−15 kJ",
+          "say": "minus 15 kilojoules"
+        }
+      ],
+      "answer": 0,
+      "why": "The volume cannot change, so there is no boundary work; all 15 kJ raises the internal energy.",
+      "wrong": {
+        "1": "Work needs a moving boundary; a rigid tank has none.",
+        "2": "No work is done on or by the gas."
+      }
+    }
+  ]
+}

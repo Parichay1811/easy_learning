@@ -1,0 +1,672 @@
+{
+  "id": "ENGX-MECH-12",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a pendulum clock keeps time",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "pendulum clock",
+    "escapement",
+    "falling weight",
+    "gear train",
+    "grandfather clock"
+  ],
+  "examples": [
+    "How does a grandfather clock work?",
+    "Why does a clock need a pendulum?",
+    "What makes a clock tick?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "weight",
+          "kind": "weight",
+          "x": 0.1,
+          "y": 0.4,
+          "size": 0.8,
+          "label": "Falling weight",
+          "motion": "slide",
+          "ask": "What powers a pendulum clock?"
+        },
+        {
+          "id": "train",
+          "kind": "gear",
+          "x": 0.33,
+          "y": 0.35,
+          "size": 1.2,
+          "label": "Gear train",
+          "motion": "spin"
+        },
+        {
+          "id": "hands",
+          "kind": "lever",
+          "x": 0.33,
+          "y": 0.78,
+          "size": 0.8,
+          "label": "Hands",
+          "motion": "spin"
+        },
+        {
+          "id": "escape",
+          "kind": "gear",
+          "x": 0.6,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Escape wheel",
+          "motion": "spin",
+          "ask": "What does the escape wheel do?"
+        },
+        {
+          "id": "anchor",
+          "kind": "lever",
+          "x": 0.85,
+          "y": 0.3,
+          "size": 0.7,
+          "label": "Anchor",
+          "motion": "swing"
+        },
+        {
+          "id": "pendulum",
+          "kind": "lever",
+          "x": 0.75,
+          "y": 0.75,
+          "size": 1.3,
+          "label": "Pendulum",
+          "motion": "swing",
+          "ask": "Why does a clock need a pendulum?"
+        }
+      ],
+      "links": [
+        {
+          "from": "weight",
+          "to": "train",
+          "kind": "energy",
+          "label": "pulls the cord"
+        },
+        {
+          "from": "train",
+          "to": "hands",
+          "kind": "energy",
+          "label": "turns hands"
+        },
+        {
+          "from": "train",
+          "to": "escape",
+          "kind": "force"
+        },
+        {
+          "from": "escape",
+          "to": "anchor",
+          "kind": "force",
+          "label": "one tooth at a time"
+        },
+        {
+          "from": "anchor",
+          "to": "pendulum",
+          "kind": "force",
+          "label": "small push"
+        },
+        {
+          "from": "pendulum",
+          "to": "anchor",
+          "kind": "signal",
+          "label": "sets the beat"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A pendulum clock needs three things: something to keep time, a store of energy, and a way to let the energy out at the right speed. These are the pendulum, the falling weight and the escapement.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a pendulum clock keeps time"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.1,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Falling weight",
+              "motion": "slide",
+              "ask": "What powers a pendulum clock?"
+            },
+            {
+              "id": "train",
+              "kind": "gear",
+              "x": 0.33,
+              "y": 0.35,
+              "size": 1.2,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "hands",
+              "kind": "lever",
+              "x": 0.33,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Hands",
+              "motion": "spin"
+            },
+            {
+              "id": "escape",
+              "kind": "gear",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Escape wheel",
+              "motion": "spin",
+              "ask": "What does the escape wheel do?"
+            },
+            {
+              "id": "anchor",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Anchor",
+              "motion": "swing"
+            },
+            {
+              "id": "pendulum",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Pendulum",
+              "motion": "swing",
+              "ask": "Why does a clock need a pendulum?"
+            }
+          ],
+          "links": [
+            {
+              "from": "weight",
+              "to": "train",
+              "kind": "energy",
+              "label": "pulls the cord"
+            },
+            {
+              "from": "train",
+              "to": "hands",
+              "kind": "energy",
+              "label": "turns hands"
+            },
+            {
+              "from": "train",
+              "to": "escape",
+              "kind": "force"
+            },
+            {
+              "from": "escape",
+              "to": "anchor",
+              "kind": "force",
+              "label": "one tooth at a time"
+            },
+            {
+              "from": "anchor",
+              "to": "pendulum",
+              "kind": "force",
+              "label": "small push"
+            },
+            {
+              "from": "pendulum",
+              "to": "anchor",
+              "kind": "signal",
+              "label": "sets the beat"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: a pendulum. Look at the pivot, the string and the bob. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a pendulum clock keeps time"
+        },
+        {
+          "op": "image",
+          "render": "pendulum"
+        }
+      ]
+    },
+    {
+      "say": "A pendulum always takes the same time for each swing, whether the swing is big or small, as long as it stays small. A pendulum about one metre long takes about one second per swing.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.1,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Falling weight",
+              "motion": "slide",
+              "ask": "What powers a pendulum clock?"
+            },
+            {
+              "id": "train",
+              "kind": "gear",
+              "x": 0.33,
+              "y": 0.35,
+              "size": 1.2,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "hands",
+              "kind": "lever",
+              "x": 0.33,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Hands",
+              "motion": "spin"
+            },
+            {
+              "id": "escape",
+              "kind": "gear",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Escape wheel",
+              "motion": "spin",
+              "ask": "What does the escape wheel do?"
+            },
+            {
+              "id": "anchor",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Anchor",
+              "motion": "swing"
+            },
+            {
+              "id": "pendulum",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Pendulum",
+              "motion": "swing",
+              "ask": "Why does a clock need a pendulum?"
+            }
+          ],
+          "links": [
+            {
+              "from": "weight",
+              "to": "train",
+              "kind": "energy",
+              "label": "pulls the cord"
+            },
+            {
+              "from": "train",
+              "to": "hands",
+              "kind": "energy",
+              "label": "turns hands"
+            },
+            {
+              "from": "train",
+              "to": "escape",
+              "kind": "force"
+            },
+            {
+              "from": "escape",
+              "to": "anchor",
+              "kind": "force",
+              "label": "one tooth at a time"
+            },
+            {
+              "from": "anchor",
+              "to": "pendulum",
+              "kind": "force",
+              "label": "small push"
+            },
+            {
+              "from": "pendulum",
+              "to": "anchor",
+              "kind": "signal",
+              "label": "sets the beat"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "A slowly falling weight, or a wound spring, pulls a cord round a drum and tries to turn the gear train. Without anything to stop it, the gears would spin round in seconds.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.1,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Falling weight",
+              "motion": "slide",
+              "ask": "What powers a pendulum clock?"
+            },
+            {
+              "id": "train",
+              "kind": "gear",
+              "x": 0.33,
+              "y": 0.35,
+              "size": 1.2,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "hands",
+              "kind": "lever",
+              "x": 0.33,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Hands",
+              "motion": "spin"
+            },
+            {
+              "id": "escape",
+              "kind": "gear",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Escape wheel",
+              "motion": "spin",
+              "ask": "What does the escape wheel do?"
+            },
+            {
+              "id": "anchor",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Anchor",
+              "motion": "swing"
+            },
+            {
+              "id": "pendulum",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Pendulum",
+              "motion": "swing",
+              "ask": "Why does a clock need a pendulum?"
+            }
+          ],
+          "links": [
+            {
+              "from": "weight",
+              "to": "train",
+              "kind": "energy",
+              "label": "pulls the cord"
+            },
+            {
+              "from": "train",
+              "to": "hands",
+              "kind": "energy",
+              "label": "turns hands"
+            },
+            {
+              "from": "train",
+              "to": "escape",
+              "kind": "force"
+            },
+            {
+              "from": "escape",
+              "to": "anchor",
+              "kind": "force",
+              "label": "one tooth at a time"
+            },
+            {
+              "from": "anchor",
+              "to": "pendulum",
+              "kind": "force",
+              "label": "small push"
+            },
+            {
+              "from": "pendulum",
+              "to": "anchor",
+              "kind": "signal",
+              "label": "sets the beat"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The escapement lets the escape wheel move on one tooth per swing, making the tick, and gives the pendulum a tiny push each time so it never stops. The gear train turns the hands at the right speeds.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.1,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Falling weight",
+              "motion": "slide",
+              "ask": "What powers a pendulum clock?"
+            },
+            {
+              "id": "train",
+              "kind": "gear",
+              "x": 0.33,
+              "y": 0.35,
+              "size": 1.2,
+              "label": "Gear train",
+              "motion": "spin"
+            },
+            {
+              "id": "hands",
+              "kind": "lever",
+              "x": 0.33,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Hands",
+              "motion": "spin"
+            },
+            {
+              "id": "escape",
+              "kind": "gear",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Escape wheel",
+              "motion": "spin",
+              "ask": "What does the escape wheel do?"
+            },
+            {
+              "id": "anchor",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Anchor",
+              "motion": "swing"
+            },
+            {
+              "id": "pendulum",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Pendulum",
+              "motion": "swing",
+              "ask": "Why does a clock need a pendulum?"
+            }
+          ],
+          "links": [
+            {
+              "from": "weight",
+              "to": "train",
+              "kind": "energy",
+              "label": "pulls the cord"
+            },
+            {
+              "from": "train",
+              "to": "hands",
+              "kind": "energy",
+              "label": "turns hands"
+            },
+            {
+              "from": "train",
+              "to": "escape",
+              "kind": "force"
+            },
+            {
+              "from": "escape",
+              "to": "anchor",
+              "kind": "force",
+              "label": "one tooth at a time"
+            },
+            {
+              "from": "anchor",
+              "to": "pendulum",
+              "kind": "force",
+              "label": "small push"
+            },
+            {
+              "from": "pendulum",
+              "to": "anchor",
+              "kind": "signal",
+              "label": "sets the beat"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does a clock need a pendulum?",
+      "a": "A pendulum swings with a very steady beat that depends mainly on its length. The clock counts these swings, so the pendulum sets how fast the hands go.",
+      "asks": [
+        "What does the pendulum do?",
+        "Why do clocks swing?"
+      ]
+    },
+    {
+      "q": "What powers a pendulum clock?",
+      "a": "A falling weight or a wound-up spring. Winding the clock lifts the weight or tightens the spring, storing energy that is let out slowly over a day or a week.",
+      "asks": [
+        "Why do you wind a clock?"
+      ]
+    },
+    {
+      "q": "What does the escape wheel do?",
+      "a": "The escape wheel is the last gear in the train. The anchor lets it move on one tooth at each swing of the pendulum, and its teeth give the pendulum a small push to keep it swinging.",
+      "asks": [
+        "What is an escapement?",
+        "What makes a clock tick?"
+      ]
+    },
+    {
+      "q": "How do you make a pendulum clock faster or slower?",
+      "a": "Change the pendulum's length. Moving the bob up makes the pendulum shorter and the clock faster; moving it down makes it slower.",
+      "asks": [
+        "How do you adjust a grandfather clock?"
+      ]
+    },
+    {
+      "q": "Who invented the pendulum clock?",
+      "a": "Christiaan Huygens built the first pendulum clock in 1656, after Galileo had noticed that a pendulum's swings keep a steady time.",
+      "asks": [
+        "When was the pendulum clock invented?"
+      ]
+    }
+  ],
+  "facts": [
+    "Christiaan Huygens built the first pendulum clock in 1656.",
+    "A pendulum about 99 centimetres long takes about one second for each swing.",
+    "A pendulum's period depends on its length, not on the weight of its bob."
+  ],
+  "quiz": [
+    {
+      "say": "A pendulum clock runs slow. What should you do?",
+      "show": "A pendulum clock runs slow. What should you do?",
+      "options": [
+        {
+          "show": "Make the pendulum shorter",
+          "say": "Make the pendulum shorter"
+        },
+        {
+          "show": "Make the pendulum longer",
+          "say": "Make the pendulum longer"
+        },
+        {
+          "show": "Add a heavier bob",
+          "say": "Add a heavier bob"
+        }
+      ],
+      "answer": 0,
+      "why": "A shorter pendulum swings faster, so the clock speeds up.",
+      "wrong": {
+        "1": "A longer pendulum swings more slowly and the clock would lose even more time.",
+        "2": "The bob's weight barely affects the timing."
+      }
+    },
+    {
+      "say": "What stops the falling weight from running the gears down in seconds?",
+      "show": "What stops the falling weight from running the gears down in seconds?",
+      "options": [
+        {
+          "show": "The escapement",
+          "say": "The escapement"
+        },
+        {
+          "show": "The clock face",
+          "say": "The clock face"
+        },
+        {
+          "show": "The hands",
+          "say": "The hands"
+        }
+      ],
+      "answer": 0,
+      "why": "The escapement only lets the escape wheel move one tooth per swing of the pendulum.",
+      "wrong": {
+        "1": "The face just shows the numbers.",
+        "2": "The hands are driven by the gears; they do not control them."
+      }
+    }
+  ]
+}

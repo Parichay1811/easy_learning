@@ -1,0 +1,353 @@
+{
+  "id": "BCE-GEO-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Shear strength of soil: the Mohr–Coulomb failure line",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-GEO — Geotechnical engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "shear strength",
+    "Mohr–Coulomb",
+    "angle of internal friction",
+    "cohesion",
+    "direct shear test"
+  ],
+  "examples": [
+    "What is the Mohr–Coulomb failure criterion?",
+    "How do you calculate the shear strength of sand?",
+    "What is cohesion in soil?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "soil",
+      "objectAsk": "What is a direct shear box test?",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Normal load",
+          "dir": "down",
+          "size": 4,
+          "ask": "What is a direct shear box test?"
+        },
+        {
+          "label": "Shear push",
+          "dir": "right",
+          "size": 3,
+          "ask": "What is a direct shear box test?"
+        },
+        {
+          "label": "Soil resistance",
+          "dir": "left",
+          "size": 3,
+          "ask": "What is the Mohr–Coulomb failure criterion?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Why does a sandcastle stand when damp but slump when dry? Why do hillsides slide after heavy rain? It all comes down to shear strength, how hard soil resists sliding along a surface. On the board is a shear box test: press down on a soil sample, then push sideways until it slips.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Shear strength of soil: the Mohr–Coulomb failure line"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "soil",
+          "objectAsk": "What is a direct shear box test?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Normal load",
+              "dir": "down",
+              "size": 4,
+              "ask": "What is a direct shear box test?"
+            },
+            {
+              "label": "Shear push",
+              "dir": "right",
+              "size": 3,
+              "ask": "What is a direct shear box test?"
+            },
+            {
+              "label": "Soil resistance",
+              "dir": "left",
+              "size": 3,
+              "ask": "What is the Mohr–Coulomb failure criterion?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Repeat the test with heavier and heavier loads and plot the results. For a sand, the points fall on a straight line through zero. Its slope is set by the friction angle, phi, here thirty degrees. Press harder and the grains grip harder, just as a heavy box is harder to slide across the floor.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Normal stress σ' (kPa)",
+            "max": 200
+          },
+          "y": {
+            "label": "Shear strength (kPa)",
+            "max": 150
+          },
+          "curves": [
+            {
+              "label": "Sand: φ'=30°",
+              "type": "line",
+              "k": 0.5774,
+              "ask": "What is the angle of internal friction?"
+            },
+            {
+              "label": "Clay: c'=10, φ'=25°",
+              "type": "line",
+              "c": 10,
+              "k": 0.4663,
+              "ask": "What is cohesion in soil?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "σ' = 100 kPa",
+              "ask": "What is the Mohr–Coulomb failure criterion?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "τ = c' + σ' tan φ'"
+        }
+      ]
+    },
+    {
+      "say": "Now a number. At an effective normal stress of a hundred kilopascals, sand with a friction angle of thirty degrees resists fifty seven point seven kilopascals of shear, because tan thirty is zero point five seven seven. What extra part would a clay add to the formula?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Normal stress σ' (kPa)",
+            "max": 200
+          },
+          "y": {
+            "label": "Shear strength (kPa)",
+            "max": 150
+          },
+          "curves": [
+            {
+              "label": "Sand: φ'=30°",
+              "type": "line",
+              "k": 0.5774,
+              "ask": "What is the angle of internal friction?"
+            },
+            {
+              "label": "Clay: c'=10, φ'=25°",
+              "type": "line",
+              "c": 10,
+              "k": 0.4663,
+              "ask": "What is cohesion in soil?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "σ' = 100 kPa",
+              "ask": "What is the Mohr–Coulomb failure criterion?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Sand: τ = 0 + 100 × tan 30° = 57.7 kPa"
+        }
+      ]
+    },
+    {
+      "say": "Cohesion! The clay line starts above zero, at ten kilopascals, a little stickiness between particles, then rises with a gentler friction angle of twenty five degrees. At a hundred kilopascals it gives ten plus forty six point six, which is fifty six point six kilopascals.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Normal stress σ' (kPa)",
+            "max": 200
+          },
+          "y": {
+            "label": "Shear strength (kPa)",
+            "max": 150
+          },
+          "curves": [
+            {
+              "label": "Sand: φ'=30°",
+              "type": "line",
+              "k": 0.5774,
+              "ask": "What is the angle of internal friction?"
+            },
+            {
+              "label": "Clay: c'=10, φ'=25°",
+              "type": "line",
+              "c": 10,
+              "k": 0.4663,
+              "ask": "What is cohesion in soil?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "σ' = 100 kPa",
+              "ask": "What is the Mohr–Coulomb failure criterion?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Clay: τ = 10 + 100 × tan 25° = 56.6 kPa"
+        }
+      ]
+    },
+    {
+      "say": "Here is why rain triggers landslides, from Kerala to Rio de Janeiro. Water soaks in, pore pressure rises, effective stress falls, and the friction part of strength falls with it. When strength drops below the downhill pull, the slope fails. Brilliant! Exam tip: use effective stresses in Mohr–Coulomb for slow, drained problems.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-why",
+          "question": "Why do slopes fail after heavy rain?",
+          "because": [
+            {
+              "label": "Rain soaks in",
+              "icon": "rain"
+            },
+            {
+              "label": "Pore pressure rises",
+              "icon": "drop"
+            },
+            {
+              "label": "Effective stress falls",
+              "icon": "arrow"
+            },
+            {
+              "label": "Shear strength drops",
+              "icon": "soil",
+              "ask": "Why do slopes fail after heavy rain?"
+            }
+          ],
+          "answer": "Strength falls below the downhill pull of gravity",
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the Mohr–Coulomb failure criterion?",
+      "a": "It says soil fails in shear when the shear stress reaches c plus sigma tan phi: cohesion plus normal stress times the tangent of the friction angle. Plotted, it is a straight failure line.",
+      "asks": [
+        "Mohr Coulomb equation",
+        "What is the failure envelope?"
+      ]
+    },
+    {
+      "q": "What is the angle of internal friction?",
+      "a": "It is the angle phi that sets how fast shear strength grows with normal stress, like the friction angle of a block on a ramp. Sands typically have about 28 to 40 degrees.",
+      "asks": [
+        "What is phi in soil?",
+        "Friction angle of sand"
+      ]
+    },
+    {
+      "q": "What is cohesion in soil?",
+      "a": "Cohesion c is the part of shear strength that exists even with no normal stress, from bonding or suction between fine particles. Clean sand has essentially none.",
+      "asks": [
+        "What is c in soil mechanics?"
+      ]
+    },
+    {
+      "q": "What is a direct shear box test?",
+      "a": "A soil sample sits in a split box. A normal load presses on it and the top half is pushed sideways until the soil fails. Repeating at several loads gives c and phi.",
+      "asks": [
+        "How does a shear box work?"
+      ]
+    },
+    {
+      "q": "Why do slopes fail after heavy rain?",
+      "a": "Rain raises the pore water pressure, which lowers the effective stress between grains. Less effective stress means less friction, so the soil's strength can drop below the pull of gravity.",
+      "asks": [
+        "Why does rain cause landslides?"
+      ]
+    }
+  ],
+  "facts": [
+    "Charles-Augustin de Coulomb presented his friction-plus-cohesion law for soil in 1773, published in 1776.",
+    "Loose to dense sands typically have effective friction angles of about 28 to 40 degrees."
+  ],
+  "quiz": [
+    {
+      "say": "A sand has a friction angle of 35 degrees, so tan phi is about 0.7, under an effective stress of 200 kilopascals. What is its shear strength?",
+      "show": "Sand with φ' = 35° (tan 35° ≈ 0.70) under σ' = 200 kPa. Shear strength?",
+      "options": [
+        {
+          "show": "140 kPa",
+          "say": "140 kilopascals"
+        },
+        {
+          "show": "200 kPa",
+          "say": "200 kilopascals"
+        },
+        {
+          "show": "70 kPa",
+          "say": "70 kilopascals"
+        }
+      ],
+      "answer": 0,
+      "why": "τ = 0 + 200 × 0.70 = 140 kilopascals.",
+      "wrong": {
+        "1": "That is the normal stress; multiply it by tan phi.",
+        "2": "That uses 100 kilopascals instead of 200."
+      }
+    },
+    {
+      "say": "In τ = c' + σ' tan φ', which term is zero for clean, dry sand?",
+      "show": "In τ = c' + σ' tan φ', which term is zero for clean, dry sand?",
+      "options": [
+        {
+          "show": "c'",
+          "say": "c'"
+        },
+        {
+          "show": "σ'",
+          "say": "σ'"
+        },
+        {
+          "show": "tan φ'",
+          "say": "tan φ'"
+        }
+      ],
+      "answer": 0,
+      "why": "Clean sand has no cohesion; all its strength is friction.",
+      "wrong": {
+        "1": "Normal stress comes from the weight above, which sand still has.",
+        "2": "Sand has a large friction angle, so tan phi is far from zero."
+      }
+    }
+  ]
+}

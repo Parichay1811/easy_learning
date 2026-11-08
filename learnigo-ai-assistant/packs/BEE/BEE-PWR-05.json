@@ -1,0 +1,406 @@
+{
+  "id": "BEE-PWR-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Short-circuit faults: why a fault can draw twenty times normal current",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "short-circuit fault",
+    "fault current",
+    "fault level MVA",
+    "percent impedance",
+    "line-to-ground fault"
+  ],
+  "examples": [
+    "How do you calculate fault current?",
+    "What is the most common type of fault?",
+    "What is fault level in MVA?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Source per phase",
+          "value": "6.35 kV"
+        },
+        {
+          "kind": "inductor",
+          "label": "Transformer X",
+          "value": "0.30 Ω",
+          "ask": "Why does transformer impedance limit fault current?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter",
+          "value": "1.05 kA",
+          "ask": "What is fault level in MVA?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Load",
+          "value": "6.05 Ω",
+          "branch": 1
+        },
+        {
+          "kind": "switch",
+          "label": "Fault path",
+          "value": "Open",
+          "open": true,
+          "branch": 2,
+          "ask": "How do you calculate fault current?"
+        }
+      ],
+      "readouts": [
+        "Normal: I ≈ 1.05 kA",
+        "Rated 20 MVA at 11 kV"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A tree branch falls across a line, a digger hits a cable, lightning flashes over an insulator. In an instant the current takes a short cut and surges far above normal. On the board, an 11 kilovolt bus is fed by a 20 megavolt-ampere transformer, drawn for one phase. It is carrying its rated load, about 1.05 kiloamps. The fault path is still open.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Short-circuit faults: why a fault can draw twenty times normal current"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Source per phase",
+              "value": "6.35 kV"
+            },
+            {
+              "kind": "inductor",
+              "label": "Transformer X",
+              "value": "0.30 Ω",
+              "ask": "Why does transformer impedance limit fault current?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "1.05 kA",
+              "ask": "What is fault level in MVA?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "6.05 Ω",
+              "branch": 1
+            },
+            {
+              "kind": "switch",
+              "label": "Fault path",
+              "value": "Open",
+              "open": true,
+              "branch": 2,
+              "ask": "How do you calculate fault current?"
+            }
+          ],
+          "readouts": [
+            "Normal: I ≈ 1.05 kA",
+            "Rated 20 MVA at 11 kV"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the transformer's reactance, the only thing between the source and a fault. Its nameplate says 5 percent impedance, 0.05 per unit. The base impedance is 11 squared over 20, 6.05 ohms, so the transformer is just 0.30 ohms, tiny next to the 6.05 ohm load. What happens when something bypasses the load?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Source per phase",
+              "value": "6.35 kV"
+            },
+            {
+              "kind": "inductor",
+              "label": "Transformer X",
+              "value": "0.30 Ω",
+              "ask": "Why does transformer impedance limit fault current?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "1.05 kA",
+              "ask": "What is fault level in MVA?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "6.05 Ω",
+              "branch": 1
+            },
+            {
+              "kind": "switch",
+              "label": "Fault path",
+              "value": "Open",
+              "open": true,
+              "branch": 2,
+              "ask": "How do you calculate fault current?"
+            }
+          ],
+          "readouts": [
+            "Normal: I ≈ 1.05 kA",
+            "Rated 20 MVA at 11 kV"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "X_T = 0.05 × Z_base = 0.05 × 11²/20 = 0.30 Ω"
+        }
+      ]
+    },
+    {
+      "say": "Close the fault path. Now only 0.30 ohms is left, so the current jumps to 6351 volts over 0.3025 ohms, about 21 kiloamps, twenty times normal. Watch the dots race. In per unit it is even quicker: fault current is 1 over 0.05, which is 20 per unit. So does a smaller transformer impedance make faults better or worse?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Source per phase",
+              "value": "6.35 kV"
+            },
+            {
+              "kind": "inductor",
+              "label": "Transformer X",
+              "value": "0.30 Ω",
+              "ask": "Why does transformer impedance limit fault current?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "21 kA",
+              "ask": "What is fault level in MVA?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "6.05 Ω",
+              "branch": 1
+            },
+            {
+              "kind": "switch",
+              "label": "Fault path",
+              "value": "Closed",
+              "open": false,
+              "branch": 2,
+              "ask": "How do you calculate fault current?"
+            }
+          ],
+          "readouts": [
+            "I = 6351 V / 0.3025 Ω",
+            "≈ 21 kA = 20 × rated"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "I_f = 6351 V / 0.3025 Ω ≈ 21,000 A"
+        }
+      ]
+    },
+    {
+      "say": "Worse, because less impedance lets more current through. See the two waves: the normal current is a ripple beside the fault current, which peaks near 30 kiloamps. Engineers quote the fault level in megavolt-amperes: 20 over 0.05, 400 megavolt-amperes. Every breaker on this bus must be able to break that. Which kind of fault do you think happens most often?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 40
+          },
+          "y": {
+            "label": "Current (kA)",
+            "min": -32,
+            "max": 32
+          },
+          "curves": [
+            {
+              "label": "Normal 1.05 kA rms",
+              "type": "sine",
+              "a": 1.48,
+              "k": 0.05
+            },
+            {
+              "label": "Fault 21 kA rms",
+              "type": "sine",
+              "a": 29.7,
+              "k": 0.05,
+              "ask": "What happens if a breaker cannot handle the fault current?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Fault level = 20 MVA / 0.05 = 400 MVA"
+        }
+      ]
+    },
+    {
+      "say": "Single line to ground, by far: about 70 to 80 percent of faults on overhead lines. Three-phase faults are rare but the most severe, so they set equipment ratings, while unbalanced faults are worked out with symmetrical components. Excellent! Challenge: with a 10 percent transformer impedance instead, what would the fault current be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Fault types on overhead lines",
+          "groups": [
+            {
+              "label": "Line to ground",
+              "icon": "lightning",
+              "items": [
+                "About 70–80%",
+                "Tree on one wire",
+                "Flashover"
+              ],
+              "ask": "What is the most common type of fault?"
+            },
+            {
+              "label": "Line to line",
+              "icon": "wire",
+              "items": [
+                "LL or LLG",
+                "About 15–25%",
+                "Wires clash"
+              ]
+            },
+            {
+              "label": "Three-phase",
+              "icon": "fire",
+              "items": [
+                "About 5%",
+                "Most severe",
+                "Sets ratings"
+              ]
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "I_f (pu) = 1 / Z_pu = 1 / 0.05 = 20 pu"
+        },
+        {
+          "op": "note",
+          "text": "Three-phase faults are rarest but set the breaker ratings"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you calculate fault current?",
+      "a": "For a three-phase fault at a transformer's terminals, fault current is rated current divided by the per-unit impedance. A 20 megavolt-ampere, 11 kilovolt transformer has a rated current of about 1.05 kiloamps, so with 5 percent impedance the fault current is about 21 kiloamps.",
+      "asks": [
+        "What is the fault current formula?"
+      ]
+    },
+    {
+      "q": "What is fault level in MVA?",
+      "a": "Fault level is the three-phase fault power at a point: root 3 times the rated voltage times the fault current, or simply the base megavolt-amperes divided by the per-unit impedance. 20 over 0.05 gives 400 megavolt-amperes.",
+      "asks": [
+        "What does short-circuit level mean?"
+      ]
+    },
+    {
+      "q": "What is the most common type of fault?",
+      "a": "Single line to ground faults, where one conductor touches earth or a grounded object, make up about 70 to 80 percent of faults on overhead lines. Three-phase faults are the rarest.",
+      "asks": [
+        "Which faults happen most often?"
+      ]
+    },
+    {
+      "q": "Why does transformer impedance limit fault current?",
+      "a": "During a short circuit the load is bypassed, so only the source and transformer impedance remain. A transformer with lower percent impedance lets more fault current flow, so impedance is chosen with fault levels in mind.",
+      "asks": [
+        "What limits short-circuit current?"
+      ]
+    },
+    {
+      "q": "What happens if a breaker cannot handle the fault current?",
+      "a": "If the fault current exceeds the breaker's breaking capacity, it may fail to interrupt the arc and can be destroyed, spreading the damage. That is why breaker ratings are chosen from fault-level studies.",
+      "asks": [
+        "What is breaking capacity?"
+      ]
+    }
+  ],
+  "facts": [
+    "A transformer with 5% impedance gives a terminal fault current of about 20 times its rated current.",
+    "Single line-to-ground faults make up roughly 70–80% of faults on overhead lines.",
+    "Fault level in MVA equals the base MVA divided by the per-unit impedance to the fault."
+  ],
+  "quiz": [
+    {
+      "say": "A 20 megavolt-ampere, 11 kilovolt transformer has 10 percent impedance. What is the terminal fault current?",
+      "show": "A 20 MVA, 11 kV transformer has 10% impedance. What is the terminal fault current?",
+      "options": [
+        {
+          "show": "About 10.5 kA",
+          "say": "about 10.5 kiloamps"
+        },
+        {
+          "show": "About 21 kA",
+          "say": "about 21 kiloamps"
+        },
+        {
+          "show": "About 1.05 kA",
+          "say": "about 1.05 kiloamps"
+        }
+      ],
+      "answer": 0,
+      "why": "Rated current is about 1.05 kiloamps, and dividing by 0.1 per unit gives about 10.5 kiloamps.",
+      "wrong": {
+        "1": "21 kiloamps is the answer for 5 percent impedance.",
+        "2": "1.05 kiloamps is the normal rated current, not the fault current."
+      }
+    },
+    {
+      "say": "Which fault is the most common on overhead lines?",
+      "show": "Which fault is the most common on overhead lines?",
+      "options": [
+        {
+          "show": "Single line to ground",
+          "say": "Single line to ground"
+        },
+        {
+          "show": "Three-phase",
+          "say": "Three-phase"
+        },
+        {
+          "show": "Line to line",
+          "say": "Line to line"
+        }
+      ],
+      "answer": 0,
+      "why": "One conductor touching earth, through a tree or a flashover, accounts for most faults.",
+      "wrong": {
+        "1": "Three-phase faults are the rarest, though the most severe.",
+        "2": "Line-to-line faults happen, but much less often than line-to-ground ones."
+      }
+    }
+  ]
+}

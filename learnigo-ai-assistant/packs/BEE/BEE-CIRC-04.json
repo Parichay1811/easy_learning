@@ -1,0 +1,391 @@
+{
+  "id": "BEE-CIRC-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The voltage divider: getting any voltage you need from two resistors",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "voltage divider",
+    "potential divider",
+    "divider formula",
+    "loading effect",
+    "potentiometer"
+  ],
+  "examples": [
+    "How does a voltage divider work?",
+    "What is the voltage divider formula?",
+    "Why does my divider output drop when I connect a load?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Supply",
+          "value": "9 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1 (top)",
+          "value": "3 kΩ",
+          "ask": "What does the top resistor do?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R2 (bottom)",
+          "value": "6 kΩ",
+          "branch": 1,
+          "ask": "What is the voltage divider formula?"
+        },
+        {
+          "kind": "voltmeter",
+          "label": "V out",
+          "value": "6 V",
+          "branch": 2,
+          "ask": "Where is the output of a voltage divider?"
+        }
+      ],
+      "readouts": [
+        "I = 9 V / 9 kΩ = 1 mA",
+        "V_out = 6 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your phone's light sensor, a guitar's volume knob and a car's fuel gauge all hide the same trick: two resistors in series sharing a voltage. On the board, a 9 volt supply feeds a 3 kilohm and a 6 kilohm resistor, and a voltmeter reads the voltage across the bottom one.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The voltage divider: getting any voltage you need from two resistors"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1 (top)",
+              "value": "3 kΩ",
+              "ask": "What does the top resistor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (bottom)",
+              "value": "6 kΩ",
+              "branch": 1,
+              "ask": "What is the voltage divider formula?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "6 V",
+              "branch": 2,
+              "ask": "Where is the output of a voltage divider?"
+            }
+          ],
+          "readouts": [
+            "I = 9 V / 9 kΩ = 1 mA",
+            "V_out = 6 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First the current. The resistors are in series, so 3 plus 6 makes 9 kilohms, and 9 volts over 9 kilohms is 1 milliamp. A milliamp is a thousandth of an amp. That one current flows through both resistors. What voltage does it drop across the 3 kilohm one?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1 (top)",
+              "value": "3 kΩ",
+              "ask": "What does the top resistor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (bottom)",
+              "value": "6 kΩ",
+              "branch": 1,
+              "ask": "What is the voltage divider formula?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "6 V",
+              "branch": 2,
+              "ask": "Where is the output of a voltage divider?"
+            }
+          ],
+          "readouts": [
+            "I = 9 V / 9 kΩ = 1 mA",
+            "V_out = 6 V"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "I = 9 V / (3 kΩ + 6 kΩ) = 1 mA"
+        }
+      ]
+    },
+    {
+      "say": "1 milliamp times 3 kilohms is 3 volts. And across the 6 kilohm resistor, 6 volts, which is what the voltmeter shows. The voltage splits in the ratio of the resistances. That gives the divider formula: V out equals V in times R2, over R1 plus R2. Which part of the formula is R2's share?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1 (top)",
+              "value": "3 kΩ",
+              "ask": "What does the top resistor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (bottom)",
+              "value": "6 kΩ",
+              "branch": 1,
+              "ask": "What is the voltage divider formula?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "6 V",
+              "branch": 2,
+              "ask": "Where is the output of a voltage divider?"
+            }
+          ],
+          "readouts": [
+            "I = 9 V / 9 kΩ = 1 mA",
+            "V_out = 6 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "V_out = V_in × R2/(R1+R2) = 9 × 6/9 = 6 V"
+        }
+      ]
+    },
+    {
+      "say": "R2 over the total, that's its share. Now a real-world catch: connect a 6 kilohm load across the output. The load sits in parallel with R2, and two 6 kilohm resistors in parallel make just 3 kilohms. Now the bottom is 3 out of 6 kilohms, so the output sags to 4.5 volts. Did the load raise or lower the output?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1 (top)",
+              "value": "3 kΩ",
+              "ask": "What does the top resistor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (bottom)",
+              "value": "6 kΩ",
+              "branch": 1,
+              "ask": "What is the voltage divider formula?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "4.5 V",
+              "branch": 2,
+              "ask": "Where is the output of a voltage divider?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "6 kΩ",
+              "branch": 3,
+              "ask": "Why does a load change the divider output?"
+            }
+          ],
+          "readouts": [
+            "R2 ∥ load = 3 kΩ",
+            "V_out = 4.5 V"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "V_out = 9 × 3/(3+3) = 4.5 V"
+        }
+      ]
+    },
+    {
+      "say": "Lowered it. That is called loading, and the fix is to make the load much bigger than R2, at least ten times, or to add a buffer amplifier. Great work. Challenge: design a divider that turns 12 volts into 5 volts for a sensor. Hint: try 7 kilohms on top and 5 kilohms at the bottom.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "9 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1 (top)",
+              "value": "3 kΩ",
+              "ask": "What does the top resistor do?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (bottom)",
+              "value": "6 kΩ",
+              "branch": 1,
+              "ask": "What is the voltage divider formula?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "value": "6 V",
+              "branch": 2,
+              "ask": "Where is the output of a voltage divider?"
+            }
+          ],
+          "readouts": [
+            "I = 9 V / 9 kΩ = 1 mA",
+            "V_out = 6 V"
+          ]
+        },
+        {
+          "op": "note",
+          "text": "Rule of thumb: keep the load at least 10 times R2."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the voltage divider formula?",
+      "a": "V out equals V in times R2 divided by R1 plus R2, where R2 is the resistor you take the output across. It holds when no current is drawn from the output.",
+      "asks": [
+        "How do you calculate a potential divider?",
+        "Vout formula"
+      ]
+    },
+    {
+      "q": "What does the top resistor do?",
+      "a": "It sets how much voltage is dropped before the output. A bigger R1 takes a bigger share, leaving less for R2 and the output.",
+      "asks": [
+        "What does R1 do in a voltage divider?"
+      ]
+    },
+    {
+      "q": "Where is the output of a voltage divider?",
+      "a": "The output is taken across the bottom resistor, between the middle point and ground. That is the voltage a sensor input or the next stage sees.",
+      "asks": [
+        "Why do we measure across R2?"
+      ]
+    },
+    {
+      "q": "Why does a load change the divider output?",
+      "a": "The load sits in parallel with R2, which lowers the bottom resistance. The bottom then takes a smaller share, so the output voltage drops. This is called loading.",
+      "asks": [
+        "What is loading in a voltage divider?",
+        "Why does Vout drop when I connect a load?"
+      ]
+    },
+    {
+      "q": "Where are voltage dividers used?",
+      "a": "In volume knobs and potentiometers, light and temperature sensors with an LDR or thermistor, transistor biasing, and scaling large voltages down for a microcontroller to read.",
+      "asks": [
+        "Real-life uses of a potential divider"
+      ]
+    }
+  ],
+  "facts": [
+    "A potentiometer is an adjustable voltage divider with a sliding contact.",
+    "The unloaded divider output depends only on the ratio of the two resistors, not on their actual size."
+  ],
+  "quiz": [
+    {
+      "say": "A 10 volt supply feeds R1 of 8 kilohms and R2 of 2 kilohms. What is the output across R2?",
+      "show": "A 10 V supply feeds R1 = 8 kΩ and R2 = 2 kΩ. What is V_out across R2?",
+      "options": [
+        {
+          "show": "2 V",
+          "say": "2 volts"
+        },
+        {
+          "show": "8 V",
+          "say": "8 volts"
+        },
+        {
+          "show": "5 V",
+          "say": "5 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "V out is 10 times 2 over 10, which is 2 volts.",
+      "wrong": {
+        "1": "8 volts is across R1, the bigger resistor.",
+        "2": "5 volts would need equal resistors."
+      }
+    },
+    {
+      "say": "What happens to the output voltage when a low-resistance load is connected across R2?",
+      "show": "What happens to V_out when a low-resistance load is connected across R2?",
+      "options": [
+        {
+          "show": "It falls",
+          "say": "It falls"
+        },
+        {
+          "show": "It rises",
+          "say": "It rises"
+        },
+        {
+          "show": "It stays the same",
+          "say": "It stays the same"
+        }
+      ],
+      "answer": 0,
+      "why": "The load in parallel lowers the bottom resistance, so the bottom gets a smaller share of the supply.",
+      "wrong": {
+        "1": "Adding a parallel path can only lower the bottom resistance, never raise it.",
+        "2": "It only stays nearly the same if the load is much larger than R2."
+      }
+    }
+  ]
+}

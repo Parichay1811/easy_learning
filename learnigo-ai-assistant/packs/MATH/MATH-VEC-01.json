@@ -1,0 +1,343 @@
+{
+  "id": "MATH-VEC-01",
+  "status": "reviewed",
+  "title": "Column vectors",
+  "template": "vec_add",
+  "keywords": [
+    "vector",
+    "vectors",
+    "column",
+    "translation",
+    "scalar",
+    "displacement"
+  ],
+  "examples": [
+    "Add vectors 3, 4 and -1, 2",
+    "What is a column vector?",
+    "Subtract vector 2, 5 from 6, 1"
+  ],
+  "figure": [
+    {
+      "op": "vecgrid",
+      "range": 5
+    },
+    {
+      "op": "vec",
+      "from": [
+        0,
+        0
+      ],
+      "v": [
+        4,
+        1
+      ],
+      "color": "blue",
+      "label": "a"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A column vector is a move. The top number says how far across: right is positive, and left is negative.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Column vectors"
+        },
+        {
+          "op": "vecgrid",
+          "range": 5
+        },
+        {
+          "op": "vec",
+          "from": [
+            0,
+            0
+          ],
+          "v": [
+            4,
+            1
+          ],
+          "color": "blue",
+          "label": "a",
+          "at": "move"
+        },
+        {
+          "op": "colvec",
+          "name": "a",
+          "v": [
+            4,
+            1
+          ],
+          "color": "blue",
+          "at": "top"
+        }
+      ]
+    },
+    {
+      "say": "The bottom number says how far up or down: up is positive, and down is negative.",
+      "draw": [
+        {
+          "op": "vec",
+          "from": [
+            0,
+            0
+          ],
+          "v": [
+            -1,
+            3
+          ],
+          "color": "orange",
+          "label": "b",
+          "at": "bottom"
+        },
+        {
+          "op": "colvec",
+          "name": "b",
+          "v": [
+            -1,
+            3
+          ],
+          "color": "orange",
+          "at": "up"
+        }
+      ]
+    },
+    {
+      "say": "To add two vectors, add the tops, then add the bottoms. So a plus b is 3 over 4: one move after the other.",
+      "draw": [
+        {
+          "op": "vec",
+          "from": [
+            4,
+            1
+          ],
+          "v": [
+            -1,
+            3
+          ],
+          "color": "orange",
+          "dashed": true,
+          "at": "add"
+        },
+        {
+          "op": "vec",
+          "from": [
+            0,
+            0
+          ],
+          "v": [
+            3,
+            4
+          ],
+          "color": "green",
+          "label": "a + b",
+          "at": "So",
+          "sfx": "correct"
+        },
+        {
+          "op": "colvec",
+          "name": "a + b",
+          "v": [
+            3,
+            4
+          ],
+          "color": "green",
+          "at": "So"
+        }
+      ]
+    },
+    {
+      "say": "Watch the direction: the vector from B to A is minus the vector from A to B, so every sign flips.",
+      "draw": [
+        {
+          "op": "note",
+          "text": "Trap: BA = −AB, every sign flips",
+          "at": "direction"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    [
+      "What is a column vector?",
+      "A column vector is a move written as two numbers, one above the other: across on top, up or down below."
+    ],
+    {
+      "q": "Is the top number always across?",
+      "a": "Yes. The top number is across, right positive. The bottom is up or down, up positive.",
+      "asks": [
+        "which number goes sideways",
+        "which number in a column vector is across",
+        "what does the top number mean"
+      ]
+    },
+    [
+      "Why is there an arrow over AB?",
+      "The arrow shows direction: AB goes from A to B. BA is the reverse, with every sign flipped."
+    ],
+    [
+      "Do I need brackets for a column vector?",
+      "Yes. Write the two numbers in tall brackets, one above the other, with no comma."
+    ],
+    {
+      "q": "What is a scalar?",
+      "a": "A scalar is just a number that multiplies a vector, like the 2 in 2a. It stretches the arrow.",
+      "asks": [
+        "what does scalar mean",
+        "what is the 2 in 2a"
+      ]
+    },
+    {
+      "q": "Is a minus b the same as b minus a?",
+      "a": "No. Each one is minus the other, so every sign flips.",
+      "asks": [
+        "is a take away b the same as b take away a",
+        "does the order matter when subtracting vectors"
+      ]
+    },
+    [
+      "What is the difference between a and minus a?",
+      "Same length, opposite direction. Both signs flip."
+    ]
+  ],
+  "quiz": [
+    {
+      "say": "Which column vector means 3 left and 4 up?",
+      "show": "Which column vector is 3 left and 4 up?",
+      "options": [
+        {
+          "show": "(3, 4)",
+          "say": "3 over 4",
+          "col": [
+            3,
+            4
+          ]
+        },
+        {
+          "show": "(-3, 4)",
+          "say": "minus 3 over 4",
+          "col": [
+            -3,
+            4
+          ]
+        },
+        {
+          "show": "(4, -3)",
+          "say": "4 over minus 3",
+          "col": [
+            4,
+            -3
+          ]
+        },
+        {
+          "show": "(-4, 3)",
+          "say": "minus 4 over 3",
+          "col": [
+            -4,
+            3
+          ]
+        }
+      ],
+      "answer": 1,
+      "why": "Left is negative and up is positive: minus 3 over 4.",
+      "wrong": {
+        "0": "That is 3 right. Left is negative.",
+        "2": "The rows are swapped, and a sign slipped.",
+        "3": "The rows are swapped. The top number is across."
+      }
+    },
+    {
+      "say": "Vector a is 4 over 1 and vector b is minus 1 over 3. What is a plus b?",
+      "show": "a = (4, 1), b = (−1, 3). What is a + b?",
+      "options": [
+        {
+          "show": "(3, 4)",
+          "say": "3 over 4",
+          "col": [
+            3,
+            4
+          ]
+        },
+        {
+          "show": "(5, -2)",
+          "say": "5 over minus 2",
+          "col": [
+            5,
+            -2
+          ]
+        },
+        {
+          "show": "(4, 3)",
+          "say": "4 over 3",
+          "col": [
+            4,
+            3
+          ]
+        },
+        {
+          "show": "(3, -2)",
+          "say": "3 over minus 2",
+          "col": [
+            3,
+            -2
+          ]
+        }
+      ],
+      "answer": 0,
+      "why": "Add the tops: 4 plus minus 1 is 3. Add the bottoms: 1 plus 3 is 4.",
+      "wrong": {
+        "1": "That subtracted b.",
+        "2": "The rows are swapped.",
+        "3": "A sign slipped on the bottom: 1 plus 3 is 4."
+      }
+    },
+    {
+      "say": "With a equal to 4 over 1 and b equal to minus 1 over 3, what is 2 a minus b?",
+      "show": "a = (4, 1), b = (−1, 3). What is 2a − b?",
+      "options": [
+        {
+          "show": "(7, -1)",
+          "say": "7 over minus 1",
+          "col": [
+            7,
+            -1
+          ]
+        },
+        {
+          "show": "(9, 5)",
+          "say": "9 over 5",
+          "col": [
+            9,
+            5
+          ]
+        },
+        {
+          "show": "(8, 2)",
+          "say": "8 over 2",
+          "col": [
+            8,
+            2
+          ]
+        },
+        {
+          "show": "(9, -1)",
+          "say": "9 over minus 1",
+          "col": [
+            9,
+            -1
+          ]
+        }
+      ],
+      "answer": 3,
+      "why": "2a is 8 over 2. Take away b: 8 minus minus 1 is 9, and 2 minus 3 is minus 1.",
+      "wrong": {
+        "0": "Minus a negative is plus: 8 minus minus 1 is 9.",
+        "1": "On the bottom, 2 minus 3 is minus 1.",
+        "2": "That doubled a but did not take away b."
+      }
+    }
+  ]
+}

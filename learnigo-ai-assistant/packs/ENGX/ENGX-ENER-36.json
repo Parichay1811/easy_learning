@@ -1,0 +1,300 @@
+{
+  "id": "ENGX-ENER-36",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How much electricity is lost on the way to your home?",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "transmission losses",
+    "distribution losses",
+    "grid losses",
+    "power line heating",
+    "I squared R"
+  ],
+  "examples": [
+    "How much electricity is lost in power lines?",
+    "Why do power lines waste energy?",
+    "Where is energy lost between the power station and my house?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-energy",
+      "input": {
+        "label": "Electricity generated",
+        "amount": 100
+      },
+      "outputs": [
+        {
+          "label": "Delivered to users",
+          "amount": 92,
+          "useful": true,
+          "ask": "How much electricity is lost in the grid?"
+        },
+        {
+          "label": "Transmission lines",
+          "amount": 2,
+          "useful": false,
+          "ask": "Why do power lines lose energy?"
+        },
+        {
+          "label": "Local cables",
+          "amount": 4,
+          "useful": false,
+          "ask": "Why do local cables lose more than pylons?"
+        },
+        {
+          "label": "Transformers",
+          "amount": 2,
+          "useful": false,
+          "ask": "Do transformers waste energy?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Follow 100 units of electricity leaving power stations in a country like Britain. About 92 reach homes, shops and factories; the other 8 or so are lost on the way, mostly as heat.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How much electricity is lost on the way to your home?"
+        },
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "input": {
+            "label": "Electricity generated",
+            "amount": 100
+          },
+          "outputs": [
+            {
+              "label": "Delivered to users",
+              "amount": 92,
+              "useful": true,
+              "ask": "How much electricity is lost in the grid?"
+            },
+            {
+              "label": "Transmission lines",
+              "amount": 2,
+              "useful": false,
+              "ask": "Why do power lines lose energy?"
+            },
+            {
+              "label": "Local cables",
+              "amount": 4,
+              "useful": false,
+              "ask": "Why do local cables lose more than pylons?"
+            },
+            {
+              "label": "Transformers",
+              "amount": 2,
+              "useful": false,
+              "ask": "Do transformers waste energy?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The long-distance lines on pylons lose only about 2 units, because they run at very high voltage. High voltage means a small current, and a small current heats the wires very little.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "input": {
+            "label": "Electricity generated",
+            "amount": 100
+          },
+          "outputs": [
+            {
+              "label": "Delivered to users",
+              "amount": 92,
+              "useful": true,
+              "ask": "How much electricity is lost in the grid?"
+            },
+            {
+              "label": "Transmission lines",
+              "amount": 2,
+              "useful": false,
+              "ask": "Why do power lines lose energy?"
+            },
+            {
+              "label": "Local cables",
+              "amount": 4,
+              "useful": false,
+              "ask": "Why do local cables lose more than pylons?"
+            },
+            {
+              "label": "Transformers",
+              "amount": 2,
+              "useful": false,
+              "ask": "Do transformers waste energy?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The local network loses more, around 4 units in its cables, because it carries power at lower voltages, with bigger currents, through a huge length of smaller wires.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "input": {
+            "label": "Electricity generated",
+            "amount": 100
+          },
+          "outputs": [
+            {
+              "label": "Delivered to users",
+              "amount": 92,
+              "useful": true,
+              "ask": "How much electricity is lost in the grid?"
+            },
+            {
+              "label": "Transmission lines",
+              "amount": 2,
+              "useful": false,
+              "ask": "Why do power lines lose energy?"
+            },
+            {
+              "label": "Local cables",
+              "amount": 4,
+              "useful": false,
+              "ask": "Why do local cables lose more than pylons?"
+            },
+            {
+              "label": "Transformers",
+              "amount": 2,
+              "useful": false,
+              "ask": "Do transformers waste energy?"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Transformers lose about 2 more, warming their coils and iron cores. Engineers cut losses with thicker wires, better transformers and by generating power closer to where it is used.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "input": {
+            "label": "Electricity generated",
+            "amount": 100
+          },
+          "outputs": [
+            {
+              "label": "Delivered to users",
+              "amount": 92,
+              "useful": true,
+              "ask": "How much electricity is lost in the grid?"
+            },
+            {
+              "label": "Transmission lines",
+              "amount": 2,
+              "useful": false,
+              "ask": "Why do power lines lose energy?"
+            },
+            {
+              "label": "Local cables",
+              "amount": 4,
+              "useful": false,
+              "ask": "Why do local cables lose more than pylons?"
+            },
+            {
+              "label": "Transformers",
+              "amount": 2,
+              "useful": false,
+              "ask": "Do transformers waste energy?"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How much electricity is lost in the grid?",
+      "a": "In Britain roughly 7 to 8 percent of electricity is lost between power stations and users: about 2 percent on the high-voltage transmission network and about 5 to 6 percent in local distribution.",
+      "asks": [
+        "What are grid losses?"
+      ]
+    },
+    {
+      "q": "Why do power lines lose energy?",
+      "a": "Every wire has resistance, so a current flowing through it makes heat. The heat lost grows with the current squared, so halving the current cuts the loss to a quarter.",
+      "asks": [
+        "Why do wires get warm?"
+      ]
+    },
+    {
+      "q": "Why do local cables lose more than pylons?",
+      "a": "Local networks run at lower voltages, from 33,000 volts down to 230 volts, so they carry bigger currents for the same power. They also have far more wire in total, reaching every street.",
+      "asks": [
+        "Why is distribution loss higher than transmission loss?"
+      ]
+    },
+    {
+      "q": "Do transformers waste energy?",
+      "a": "A little. Current heats their copper coils, and the changing magnetism warms their iron cores. Big transformers are over 99 percent efficient, but there are a huge number of them.",
+      "asks": [
+        "How efficient is a transformer?"
+      ]
+    },
+    {
+      "q": "Would underground cables lose less?",
+      "a": "Underground cables have similar losses for the same voltage and current. They are used in towns and beautiful countryside because they are hidden, but they cost several times more to install.",
+      "asks": [
+        "Why are power lines not buried?"
+      ]
+    }
+  ],
+  "facts": [
+    "The power lost as heat in a wire equals the current squared multiplied by the wire's resistance.",
+    "In Britain, roughly 2 percent of electricity is lost in transmission and around 5 to 6 percent in distribution."
+  ],
+  "quiz": [
+    {
+      "say": "If the current in a power line is halved, what happens to the heat lost in it?",
+      "show": "Halve the current: the heat loss…",
+      "options": [
+        {
+          "show": "Falls to a quarter",
+          "say": "Falls to a quarter"
+        },
+        {
+          "show": "Halves",
+          "say": "Halves"
+        },
+        {
+          "show": "Doubles",
+          "say": "Doubles"
+        }
+      ],
+      "answer": 0,
+      "why": "Heat loss goes with the current squared, and one half squared is one quarter.",
+      "wrong": {
+        "1": "Loss does not simply follow current; it goes with the square.",
+        "2": "Less current always means less heat, not more."
+      }
+    }
+  ]
+}

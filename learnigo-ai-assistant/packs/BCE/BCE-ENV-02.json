@@ -1,0 +1,425 @@
+{
+  "id": "BCE-ENV-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Coagulation, flocculation and settling: Stokes' law in a water works",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-ENV — Environmental engineering",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "coagulation",
+    "flocculation",
+    "Stokes' law",
+    "settling velocity",
+    "overflow rate",
+    "jar test"
+  ],
+  "examples": [
+    "What is the difference between coagulation and flocculation?",
+    "How do you use Stokes' law for settling?",
+    "How do you size a sedimentation tank?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Muddy raw water",
+          "icon": "river",
+          "note": "Tiny clay bits that will not sink"
+        },
+        {
+          "label": "Rapid mix + alum",
+          "icon": "flask",
+          "note": "Seconds of fierce stirring",
+          "ask": "What is coagulation?"
+        },
+        {
+          "label": "Slow stirring",
+          "icon": "gear",
+          "note": "20 to 30 minutes of gentle paddling",
+          "ask": "What is flocculation?"
+        },
+        {
+          "label": "Settling tank",
+          "icon": "soil",
+          "note": "Two or three hours of calm"
+        },
+        {
+          "label": "Clear water",
+          "icon": "drop",
+          "note": "On to the filters"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Fill a jar with muddy river water and leave it on the shelf. Sand drops in seconds, but the water stays cloudy for days, because the finest clay bits are so tiny they barely sink. A water works cannot wait days. So it does three things in a row, shown on the board.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Coagulation, flocculation and settling: Stokes' law in a water works"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Muddy raw water",
+              "icon": "river",
+              "note": "Tiny clay bits that will not sink"
+            },
+            {
+              "label": "Rapid mix + alum",
+              "icon": "flask",
+              "note": "Seconds of fierce stirring",
+              "ask": "What is coagulation?"
+            },
+            {
+              "label": "Slow stirring",
+              "icon": "gear",
+              "note": "20 to 30 minutes of gentle paddling",
+              "ask": "What is flocculation?"
+            },
+            {
+              "label": "Settling tank",
+              "icon": "soil",
+              "note": "Two or three hours of calm"
+            },
+            {
+              "label": "Clear water",
+              "icon": "drop",
+              "note": "On to the filters"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is a water works in 3D. Look at the flocculation tank and the settling tank next to it: tiny flocs grow, then sink as sludge. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Coagulation, flocculation and settling: Stokes' law in a water works"
+        },
+        {
+          "op": "image",
+          "render": "water-treatment-plant"
+        }
+      ]
+    },
+    {
+      "say": "Here is the real machine. In the rapid mix tank a flash mixer spins hard for under a minute while alum is dosed in: that is coagulation, cancelling the charges. Then in the flocculator big paddles turn slowly for twenty to thirty minutes, so the bits bump gently and grow into fluffy flocs. Why slowly? What would fast paddles do to a floc?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "dose",
+              "kind": "pipe",
+              "x": 0.12,
+              "y": 0.2,
+              "label": "Alum dosing",
+              "ask": "What is coagulation?"
+            },
+            {
+              "id": "t1",
+              "kind": "tank",
+              "x": 0.25,
+              "y": 0.6,
+              "label": "Rapid mix tank"
+            },
+            {
+              "id": "m1",
+              "kind": "propeller",
+              "x": 0.25,
+              "y": 0.62,
+              "size": 0.6,
+              "speed": 3,
+              "label": "Flash mixer"
+            },
+            {
+              "id": "t2",
+              "kind": "tank",
+              "x": 0.65,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Flocculator",
+              "ask": "What is flocculation?"
+            },
+            {
+              "id": "p2",
+              "kind": "fan",
+              "x": 0.65,
+              "y": 0.62,
+              "size": 0.8,
+              "speed": 0.3,
+              "label": "Slow paddles"
+            },
+            {
+              "id": "out",
+              "kind": "pipe",
+              "x": 0.92,
+              "y": 0.6,
+              "label": "To settling tank"
+            }
+          ],
+          "links": [
+            {
+              "from": "dose",
+              "to": "t1",
+              "kind": "fluid"
+            },
+            {
+              "from": "t1",
+              "to": "t2",
+              "kind": "fluid"
+            },
+            {
+              "from": "t2",
+              "to": "out",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "They would smash it! Now why bigger is better. Stokes' law says a particle sinks at a speed that grows with the square of its size. Look at the curve: a ten micrometre clay grain sinks at only zero point three two metres per hour. Double the size and it sinks four times faster, about one point three metres per hour.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Particle size (µm)",
+            "max": 30
+          },
+          "y": {
+            "label": "Settling speed (m/h)",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "Stokes' law",
+              "type": "power",
+              "a": 0.003237,
+              "k": 2,
+              "ask": "What is Stokes' law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "10 µm: 0.32 m/h"
+            },
+            {
+              "x": 17.6,
+              "label": "Cut-off 17.6 µm",
+              "ask": "What is the overflow rate of a settling tank?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "v = g(ρp − ρw)d² / 18μ ≈ 0.0032 d² m/h (d in µm)"
+        }
+      ]
+    },
+    {
+      "say": "So how big must the settling tank be? Any particle sinking faster than the overflow rate, the flow divided by the tank's surface area, will settle out. Our works sends six hundred and twenty five cubic metres an hour into six hundred and twenty five square metres of tank: one metre per hour. See the cut-off mark: grains bigger than about seventeen point six micrometres are caught.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Particle size (µm)",
+            "max": 30
+          },
+          "y": {
+            "label": "Settling speed (m/h)",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "Stokes' law",
+              "type": "power",
+              "a": 0.003237,
+              "k": 2,
+              "ask": "What is Stokes' law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "10 µm: 0.32 m/h"
+            },
+            {
+              "x": 17.6,
+              "label": "Cut-off 17.6 µm",
+              "ask": "What is the overflow rate of a settling tank?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Overflow rate = Q / A = 625 / 625 = 1 m/h"
+        },
+        {
+          "op": "note",
+          "text": "Surface area matters, not depth: a wide shallow tank settles well."
+        }
+      ]
+    },
+    {
+      "say": "Operators choose the alum dose with a jar test: six jars, six doses, stirred like the plant, and the clearest jar wins. Well done! Exam tip: the overflow rate has units of a speed, so compare it straight with the settling speed. Challenge: a grain three times bigger than ten micrometres, how fast does it sink?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Particle size (µm)",
+            "max": 30
+          },
+          "y": {
+            "label": "Settling speed (m/h)",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "Stokes' law",
+              "type": "power",
+              "a": 0.003237,
+              "k": 2,
+              "ask": "What is Stokes' law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "10 µm: 0.32 m/h"
+            },
+            {
+              "x": 17.6,
+              "label": "Cut-off 17.6 µm",
+              "ask": "What is the overflow rate of a settling tank?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is coagulation?",
+      "a": "Coagulation is the fast mixing of a chemical such as alum into raw water to cancel the negative charges on tiny particles, so they stop repelling each other and can stick together.",
+      "asks": [
+        "What does a coagulant do?"
+      ]
+    },
+    {
+      "q": "What is flocculation?",
+      "a": "Flocculation is the slow, gentle stirring that follows coagulation, for about 20 to 30 minutes, so the destabilised particles bump together and grow into large flocs that settle.",
+      "asks": [
+        "Coagulation vs flocculation"
+      ]
+    },
+    {
+      "q": "What is Stokes' law?",
+      "a": "Stokes' law gives the settling speed of a small sphere in a fluid: g times the density difference times the diameter squared, over 18 times the viscosity. Speed grows with the square of size.",
+      "asks": [
+        "Settling velocity formula"
+      ]
+    },
+    {
+      "q": "What is the overflow rate of a settling tank?",
+      "a": "The overflow rate is the flow divided by the tank surface area. Every particle that settles faster than this speed is removed; 625 cubic metres per hour over 625 square metres gives 1 metre per hour.",
+      "asks": [
+        "Surface loading rate",
+        "How do you size a sedimentation tank?"
+      ]
+    },
+    {
+      "q": "What is a jar test?",
+      "a": "A jar test is a bench test where several jars of raw water get different coagulant doses and are stirred like the plant. The dose giving the clearest water is chosen.",
+      "asks": [
+        "How is the alum dose chosen?"
+      ]
+    }
+  ],
+  "facts": [
+    "George Gabriel Stokes published his law for the drag on a slow-moving sphere in 1851.",
+    "Aluminium sulphate (alum) and ferric chloride are the most common coagulants in water treatment."
+  ],
+  "quiz": [
+    {
+      "say": "A settling tank takes 1,200 cubic metres per hour, and the overflow rate must be 1.5 metres per hour. What surface area does it need?",
+      "show": "Q = 1,200 m³/h and the overflow rate must be 1.5 m/h. Tank area?",
+      "options": [
+        {
+          "show": "800 m²",
+          "say": "800 square metres"
+        },
+        {
+          "show": "1,800 m²",
+          "say": "1,800 square metres"
+        },
+        {
+          "show": "80 m²",
+          "say": "80 square metres"
+        }
+      ],
+      "answer": 0,
+      "why": "A = Q / overflow rate = 1,200 / 1.5 = 800 m².",
+      "wrong": {
+        "1": "That multiplies by the overflow rate instead of dividing.",
+        "2": "That slips a factor of ten."
+      }
+    },
+    {
+      "say": "By Stokes' law, doubling a particle's diameter makes it settle…",
+      "show": "By Stokes' law, doubling a particle's diameter makes it settle…",
+      "options": [
+        {
+          "show": "Four times faster",
+          "say": "Four times faster"
+        },
+        {
+          "show": "Twice as fast",
+          "say": "Twice as fast"
+        },
+        {
+          "show": "At the same speed",
+          "say": "At the same speed"
+        }
+      ],
+      "answer": 0,
+      "why": "Settling speed grows with the diameter squared: 2² = 4.",
+      "wrong": {
+        "1": "Speed is not proportional to size, but to size squared.",
+        "2": "Size matters a lot; that is why flocculation grows the particles."
+      }
+    }
+  ]
+}

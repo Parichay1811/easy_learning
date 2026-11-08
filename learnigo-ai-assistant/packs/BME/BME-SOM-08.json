@@ -1,0 +1,536 @@
+{
+  "id": "BME-SOM-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Shear stress in beams: why it peaks at the neutral axis",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-SOM — Mechanics of materials",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "shear stress distribution",
+    "VQ/Ib",
+    "shear flow",
+    "horizontal shear",
+    "neutral axis"
+  ],
+  "examples": [
+    "Where is shear stress maximum in a beam?",
+    "What is the shear stress formula VQ/Ib?",
+    "Why do timber beams split along the middle?"
+  ],
+  "figure": [
+    {
+      "name": "x-beam",
+      "length": 4,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "point",
+          "at": 0.5,
+          "size": 20,
+          "label": "Load 20 kN"
+        }
+      ],
+      "show": "beam",
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Bend a stack of paper and the sheets slide over each other at the ends. Glue them into a block and it is far stiffer, because the glue stops the sliding. That sliding tendency is shear inside a beam. Here a 4 metre timber beam, 100 by 200 millimetres, carries 20 kilonewtons at midspan.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Shear stress in beams: why it peaks at the neutral axis"
+        },
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 20,
+              "label": "Load 20 kN"
+            }
+          ],
+          "show": "beam",
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Timber beam 100 mm wide × 200 mm deep, 4 m span"
+        }
+      ]
+    },
+    {
+      "say": "Here is an I-beam bending in 3D. The thin web in the middle is where most of the shear stress travels, while the flanges carry the bending. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Shear stress in beams: why it peaks at the neutral axis"
+        },
+        {
+          "op": "image",
+          "render": "i-beam-bending"
+        }
+      ]
+    },
+    {
+      "say": "Look at the shear force diagram: 10 kilonewtons on the left half and minus 10 on the right, because each support carries half the load. The shear force is the same along each half. So how is that 10 kilonewtons spread over the depth of the section?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 4,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 20,
+              "label": "Load 20 kN"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "V = 20 / 2 = 10 kN"
+        }
+      ]
+    },
+    {
+      "say": "Not evenly! The shear stress is zero at the top and bottom faces, because nothing pushes along a free surface, and it peaks at the neutral axis. For a rectangle it follows a parabola. See the curve, highest in the middle? Its average is V over A: 10 thousand over 20 thousand, 0.5 megapascals.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Height from NA (mm)",
+            "min": -100,
+            "max": 100
+          },
+          "y": {
+            "label": "Shear stress (MPa)",
+            "max": 0.9
+          },
+          "curves": [
+            {
+              "label": "Shear stress",
+              "type": "points",
+              "points": [
+                [
+                  -100,
+                  0
+                ],
+                [
+                  -75,
+                  0.33
+                ],
+                [
+                  -62.5,
+                  0.46
+                ],
+                [
+                  -50,
+                  0.56
+                ],
+                [
+                  -37.5,
+                  0.64
+                ],
+                [
+                  -25,
+                  0.7
+                ],
+                [
+                  -12.5,
+                  0.74
+                ],
+                [
+                  0,
+                  0.75
+                ],
+                [
+                  12.5,
+                  0.74
+                ],
+                [
+                  25,
+                  0.7
+                ],
+                [
+                  37.5,
+                  0.64
+                ],
+                [
+                  50,
+                  0.56
+                ],
+                [
+                  62.5,
+                  0.46
+                ],
+                [
+                  75,
+                  0.33
+                ],
+                [
+                  100,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "Where is shear stress maximum in a beam?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Max 0.75 MPa"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "τ_avg = V / A = 10 000 / 20 000 = 0.5 MPa"
+        }
+      ]
+    },
+    {
+      "say": "The general formula is tau equals V Q over I b, where Q is the first moment of the area beyond the level you are checking. For a rectangle, at the neutral axis, it simplifies to 1.5 times the average: 0.75 megapascals. See the peak at the dashed line? Why is Q largest at the neutral axis?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Height from NA (mm)",
+            "min": -100,
+            "max": 100
+          },
+          "y": {
+            "label": "Shear stress (MPa)",
+            "max": 0.9
+          },
+          "curves": [
+            {
+              "label": "Shear stress",
+              "type": "points",
+              "points": [
+                [
+                  -100,
+                  0
+                ],
+                [
+                  -75,
+                  0.33
+                ],
+                [
+                  -62.5,
+                  0.46
+                ],
+                [
+                  -50,
+                  0.56
+                ],
+                [
+                  -37.5,
+                  0.64
+                ],
+                [
+                  -25,
+                  0.7
+                ],
+                [
+                  -12.5,
+                  0.74
+                ],
+                [
+                  0,
+                  0.75
+                ],
+                [
+                  12.5,
+                  0.74
+                ],
+                [
+                  25,
+                  0.7
+                ],
+                [
+                  37.5,
+                  0.64
+                ],
+                [
+                  50,
+                  0.56
+                ],
+                [
+                  62.5,
+                  0.46
+                ],
+                [
+                  75,
+                  0.33
+                ],
+                [
+                  100,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "Where is shear stress maximum in a beam?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Max 0.75 MPa"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "τ_max = 1.5 V / A = 1.5 × 0.5 = 0.75 MPa"
+        }
+      ]
+    },
+    {
+      "say": "Because all the area on one side is beyond it. Well done! Real link: timber is weak along its grain, so overloaded wooden beams often split horizontally along the middle. In an I-beam, the thin web carries almost all the shear. Exam tip: shear stress at a free surface is always zero. Challenge: what load gives 1.5 megapascals here?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Height from NA (mm)",
+            "min": -100,
+            "max": 100
+          },
+          "y": {
+            "label": "Shear stress (MPa)",
+            "max": 0.9
+          },
+          "curves": [
+            {
+              "label": "Shear stress",
+              "type": "points",
+              "points": [
+                [
+                  -100,
+                  0
+                ],
+                [
+                  -75,
+                  0.33
+                ],
+                [
+                  -62.5,
+                  0.46
+                ],
+                [
+                  -50,
+                  0.56
+                ],
+                [
+                  -37.5,
+                  0.64
+                ],
+                [
+                  -25,
+                  0.7
+                ],
+                [
+                  -12.5,
+                  0.74
+                ],
+                [
+                  0,
+                  0.75
+                ],
+                [
+                  12.5,
+                  0.74
+                ],
+                [
+                  25,
+                  0.7
+                ],
+                [
+                  37.5,
+                  0.64
+                ],
+                [
+                  50,
+                  0.56
+                ],
+                [
+                  62.5,
+                  0.46
+                ],
+                [
+                  75,
+                  0.33
+                ],
+                [
+                  100,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "Where is shear stress maximum in a beam?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Max 0.75 MPa"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Timber beams can split along the neutral axis"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the shear force diagram show here?",
+      "a": "With a 20 kilonewton load in the middle, each support pushes up 10 kilonewtons, so the shear force is plus 10 on the left half and minus 10 on the right half.",
+      "asks": [
+        "shear force in this beam"
+      ]
+    },
+    {
+      "q": "Where is shear stress maximum in a beam?",
+      "a": "Usually at the neutral axis. For a rectangular section, it is 1.5 times the average shear stress, V over A.",
+      "asks": [
+        "what does the shear stress curve show",
+        "max shear stress rectangular beam"
+      ]
+    },
+    {
+      "q": "What is the shear stress formula VQ/Ib?",
+      "a": "Tau equals V times Q over I times b. V is the shear force, Q the first moment of the area beyond the level, I the second moment of the whole section and b the width at that level.",
+      "asks": [
+        "VQ over Ib explained"
+      ]
+    },
+    {
+      "q": "Why is shear stress zero at the top and bottom of a beam?",
+      "a": "Shear stresses on perpendicular planes are equal. The top and bottom faces are free surfaces with no horizontal force on them, so the vertical shear stress there must be zero too.",
+      "asks": [
+        "shear at free surface"
+      ]
+    },
+    {
+      "q": "Why do timber beams split along the middle?",
+      "a": "Timber is much weaker in shear along its grain than across it. The horizontal shear stress peaks at the neutral axis, so that is where a split starts.",
+      "asks": [
+        "horizontal shear failure timber"
+      ]
+    }
+  ],
+  "facts": [
+    "For a rectangular beam section, the maximum shear stress is 1.5 times the average, V over A.",
+    "Shear stress in a beam is zero at the free top and bottom surfaces."
+  ],
+  "quiz": [
+    {
+      "say": "A rectangular beam 50 by 120 millimetres carries a shear force of 6 kilonewtons. What is the maximum shear stress?",
+      "show": "Rectangle 50 × 120 mm, V = 6 kN. Maximum shear stress?",
+      "options": [
+        {
+          "show": "1.5 MPa",
+          "say": "1.5 megapascals"
+        },
+        {
+          "show": "1.0 MPa",
+          "say": "1.0 megapascals"
+        },
+        {
+          "show": "0.67 MPa",
+          "say": "0.67 megapascals"
+        }
+      ],
+      "answer": 0,
+      "why": "Average = 6000 / 6000 = 1.0 MPa; maximum = 1.5 × 1.0 = 1.5 MPa.",
+      "wrong": {
+        "1": "That is the average; the peak at the neutral axis is 1.5 times bigger.",
+        "2": "That divides by 1.5 instead of multiplying."
+      }
+    },
+    {
+      "say": "In an I-beam, which part carries most of the shear force?",
+      "show": "Which part of an I-beam carries most of the shear?",
+      "options": [
+        {
+          "show": "The web",
+          "say": "The web"
+        },
+        {
+          "show": "The top flange",
+          "say": "The top flange"
+        },
+        {
+          "show": "The bottom flange",
+          "say": "The bottom flange"
+        }
+      ],
+      "answer": 0,
+      "why": "Shear stress is highest near the neutral axis, which runs through the web.",
+      "wrong": {
+        "1": "The flanges mainly resist bending stress, not shear.",
+        "2": "The bottom flange mainly carries bending tension."
+      }
+    }
+  ]
+}

@@ -1,0 +1,257 @@
+{
+  "id": "GAME-02",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "beyond",
+    "enriched": true
+  },
+  "title": "Sudoku strategies",
+  "area": "Sport and Games",
+  "group": "GAME — Puzzles and Games",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "sudoku",
+    "logic puzzle",
+    "rows",
+    "columns",
+    "boxes",
+    "candidates"
+  ],
+  "examples": [
+    "Can you show me how to use the columns to help me?",
+    "What is the first thing I should look at when I start?",
+    "Is there a trick for when I get stuck on a box?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning about Sudoku puzzle strategies. You need to use logic to fill in the numbers. Remember that every number from one to nine must appear once.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Sudoku strategies"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Each row must have numbers one through nine.",
+            "Each column must have numbers one through nine.",
+            "Each 3x3 box must have numbers one through nine."
+          ],
+          "at": "must"
+        },
+        {
+          "op": "text",
+          "text": "Sudoku: 1-9 once per row, column, box",
+          "at": "sudoku"
+        }
+      ]
+    },
+    {
+      "say": "First, we look at the rows. A row is any straight line across the puzzle. For example, if you look at the top row, you can only put the missing numbers there.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Row Check: Horizontal line",
+          "at": "line"
+        }
+      ]
+    },
+    {
+      "say": "Next, we check the columns. A column is any straight line going up and down. If you look at the middle column, you must use a number not already there.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Column Check: Vertical line",
+          "at": "column"
+        }
+      ]
+    },
+    {
+      "say": "Then we look at the boxes. The puzzle is divided into nine small boxes. Each box must also have all numbers from one to nine.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Box Check: 3x3 square"
+        }
+      ]
+    },
+    {
+      "say": "Now we find single candidates. This means looking at one empty square. You check its row, column, and box to see which number can fit there.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Look at the square",
+            "Check the row",
+            "Check the column",
+            "Check the box",
+            "Place the only possible number"
+          ],
+          "at": "square"
+        },
+        {
+          "op": "text",
+          "text": "Single Candidate: Check all three areas",
+          "at": "single"
+        }
+      ]
+    },
+    {
+      "say": "In real life, this is like scheduling a party. You have nine guests, and you must make sure each guest gets a unique seat. You check the room layout to see where each person can sit.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Real Life: Unique seating arrangement",
+          "at": "real"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Do I have to check all three areas every time?",
+      "a": "Yes, you must check the row, the column, and the box for every empty square. This makes sure the number follows all the rules.",
+      "asks": [
+        "What do I check first?",
+        "Do I check rows, columns, and boxes together?"
+      ]
+    },
+    {
+      "q": "What if two numbers can fit in a square?",
+      "a": "If two numbers can fit, you cannot place a number yet. You need to look at a different empty square nearby.",
+      "asks": [
+        "Can I skip a square?",
+        "When should I move to another square?"
+      ]
+    },
+    {
+      "q": "Does the puzzle have a starting point?",
+      "a": "Sometimes the puzzle gives you a hint, but you should always use the rules to find the next number. Start anywhere and follow the logic.",
+      "asks": [
+        "Where should I start looking?",
+        "Is there an easy place to begin?"
+      ]
+    },
+    {
+      "q": "What is the difference between a row and a column?",
+      "a": "A row goes across like reading a book. A column goes up and down like standing up straight. They are two different directions.",
+      "asks": [
+        "Which way is a row?",
+        "How is a column different from a row?"
+      ]
+    },
+    {
+      "q": "Can I use a pencil to write guesses?",
+      "a": "Yes, it is best to use a pencil to write your possible numbers. This way you can erase them if you are wrong.",
+      "asks": [
+        "Should I use a pen?",
+        "Can I erase my guesses?"
+      ]
+    }
+  ],
+  "facts": [
+    "Sudoku puzzles use numbers from one to nine.",
+    "The grid is always divided into nine smaller boxes.",
+    "A number cannot repeat in any single row, column, or box.",
+    "Finding single candidates means checking all three constraints at once."
+  ],
+  "quiz": [
+    {
+      "say": "If a square's row already has a four and a seven, and its column has a four and a nine, what number is definitely missing from the box?",
+      "show": "Row has 4, 7. Column has 4, 9. Box needs one number.",
+      "options": [
+        {
+          "show": "The number must be two.",
+          "say": "The number must be two."
+        },
+        {
+          "show": "The number must be three.",
+          "say": "The number must be three."
+        },
+        {
+          "show": "The number cannot be four, seven, or nine.",
+          "say": "The number cannot be four, seven, or nine."
+        },
+        {
+          "show": "The number must be one.",
+          "say": "The number must be one."
+        }
+      ],
+      "answer": 2,
+      "why": "You checked the row and column to eliminate those numbers, leaving only one choice for the box.",
+      "wrong": {
+        "0": "This is tempting because two is a small, easy number to remember.",
+        "1": "This is tempting because the numbers are in order.",
+        "3": "This is tempting because one is often the first number you check."
+      }
+    },
+    {
+      "say": "A square is in the top row, the middle column, and the top-left box. Which rule limits the number there?",
+      "show": "Top Row, Middle Column, Top-Left Box",
+      "options": [
+        {
+          "show": "Only the row limits the number.",
+          "say": "Only the row limits the number."
+        },
+        {
+          "show": "Only the box limits the number.",
+          "say": "Only the box limits the number."
+        },
+        {
+          "show": "No rule limits the number.",
+          "say": "No rule limits the number."
+        },
+        {
+          "show": "All three rules limit the number.",
+          "say": "All three rules limit the number."
+        }
+      ],
+      "answer": 3,
+      "why": "You must check the row, the column, and the box because the number must follow all three rules.",
+      "wrong": {
+        "0": "You forgot to check the column and the box, which are also rules.",
+        "1": "You ignored the row and column, which are also important rules.",
+        "2": "Every number must follow all three rules to be correct."
+      }
+    },
+    {
+      "say": "If you find a square where only the number five can fit based on its row, column, and box, what should you do?",
+      "show": "Only one number fits: 5",
+      "options": [
+        {
+          "show": "Circle the square and move on.",
+          "say": "Circle the square and move on."
+        },
+        {
+          "show": "Write five, but use a lighter pencil.",
+          "say": "Write five, but use a lighter pencil."
+        },
+        {
+          "show": "Check the next square first.",
+          "say": "Check the next square first."
+        },
+        {
+          "show": "Write the number five in that square.",
+          "say": "Write the number five in that square."
+        }
+      ],
+      "answer": 3,
+      "why": "When only one number works for all three rules, that is your answer and you should write it down.",
+      "wrong": {
+        "0": "You are leaving an answer that you know for sure.",
+        "1": "You should write it clearly because it is a confirmed answer.",
+        "2": "You are ignoring a definite answer you just found."
+      }
+    }
+  ]
+}

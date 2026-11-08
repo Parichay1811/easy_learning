@@ -1,0 +1,421 @@
+{
+  "id": "BEE-ACC-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Sinusoids: peak, RMS, frequency and phase of the mains supply",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "sinusoid",
+    "RMS value",
+    "peak voltage",
+    "frequency and period",
+    "phase angle",
+    "angular frequency"
+  ],
+  "examples": [
+    "Why is 230 V mains 325 V peak?",
+    "What does RMS mean?",
+    "How do I find the period of a 50 Hz wave?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (ms)",
+        "max": 40
+      },
+      "y": {
+        "label": "Voltage (V)",
+        "min": -400,
+        "max": 400
+      },
+      "curves": [
+        {
+          "label": "Mains voltage",
+          "type": "sine",
+          "a": 325,
+          "k": 0.05,
+          "ask": "What is the peak voltage of the mains?"
+        },
+        {
+          "label": "RMS level 230 V",
+          "type": "line",
+          "c": 230,
+          "k": 0,
+          "ask": "What does RMS mean?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 5,
+          "label": "Peak 325 V"
+        },
+        {
+          "x": 20,
+          "label": "One period, 20 ms"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Plug a phone charger into a wall in Delhi and it receives a voltage that swings smoothly up and down 50 times every second. That shape is a sinusoid, a sine wave. The curve on the board is the real Indian mains. Let's read four numbers off it: the peak, the RMS value, the frequency and the phase.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Sinusoids: peak, RMS, frequency and phase of the mains supply"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 40
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Mains voltage",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "ask": "What is the peak voltage of the mains?"
+            },
+            {
+              "label": "RMS level 230 V",
+              "type": "line",
+              "c": 230,
+              "k": 0,
+              "ask": "What does RMS mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Peak 325 V"
+            },
+            {
+              "x": 20,
+              "label": "One period, 20 ms"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the top of the wave. The peak, or amplitude, is about 325 volts, the most the voltage ever reaches. Half a cycle later it hits minus 325 volts, pushing the other way. So why does everyone call it 230 volts? Any guess?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 40
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Mains voltage",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "ask": "What is the peak voltage of the mains?"
+            },
+            {
+              "label": "RMS level 230 V",
+              "type": "line",
+              "c": 230,
+              "k": 0,
+              "ask": "What does RMS mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Peak 325 V"
+            },
+            {
+              "x": 20,
+              "label": "One period, 20 ms"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "v(t) = V_p sin(2πft),   V_p = 325 V"
+        }
+      ]
+    },
+    {
+      "say": "Because 230 volts is the RMS value, short for root mean square. It is the steady DC voltage that would heat a resistor just as much. For a sine wave, RMS is the peak divided by the square root of 2: 325 over 1.414 is 230 volts. See the flat line? Is the RMS value bigger or smaller than the peak?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 40
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Mains voltage",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "ask": "What is the peak voltage of the mains?"
+            },
+            {
+              "label": "RMS level 230 V",
+              "type": "line",
+              "c": 230,
+              "k": 0,
+              "ask": "What does RMS mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Peak 325 V"
+            },
+            {
+              "x": 20,
+              "label": "One period, 20 ms"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V_rms = V_p / √2 = 325 / 1.414 ≈ 230 V"
+        }
+      ]
+    },
+    {
+      "say": "Smaller, about 71 percent of it. Now time. One full cycle takes 20 milliseconds, called the period, T. Frequency is cycles per second, one over T, so 1 over 0.02 seconds is 50 hertz. Engineers also use angular frequency, omega, equal to 2 pi f, about 314 radians per second. What would the period be at 60 hertz, as in the USA?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 40
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Mains voltage",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "ask": "What is the peak voltage of the mains?"
+            },
+            {
+              "label": "RMS level 230 V",
+              "type": "line",
+              "c": 230,
+              "k": 0,
+              "ask": "What does RMS mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Peak 325 V"
+            },
+            {
+              "x": 20,
+              "label": "One period, 20 ms"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "f = 1/T = 1/0.02 s = 50 Hz;  ω = 2πf ≈ 314 rad/s"
+        }
+      ]
+    },
+    {
+      "say": "About 16.7 milliseconds. Finally, phase. The new wave on the board has the same size and frequency but peaks later, by 60 degrees, a sixth of a cycle. We say it lags by 60 degrees. Wonderful! Exam tip: AC meters show RMS unless they say otherwise. Challenge: the US supply is 120 volts RMS. What is its peak?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 40
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Mains voltage",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "ask": "What is the peak voltage of the mains?"
+            },
+            {
+              "label": "RMS level 230 V",
+              "type": "line",
+              "c": 230,
+              "k": 0,
+              "ask": "What does RMS mean?"
+            },
+            {
+              "label": "Lagging by 60°",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "phase": -60,
+              "ask": "What is phase difference?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "Peak 325 V"
+            },
+            {
+              "x": 20,
+              "label": "One period, 20 ms"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "v = 325 sin(ωt − 60°)"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the peak voltage of the mains?",
+      "a": "For a 230 volt RMS supply the peak is 230 times the square root of 2, about 325 volts. The voltage swings between plus and minus 325 volts every cycle.",
+      "asks": [
+        "Why is 230 V mains actually 325 V peak?",
+        "What is peak voltage?"
+      ]
+    },
+    {
+      "q": "What does RMS mean?",
+      "a": "RMS stands for root mean square. It is the DC value that would deliver the same heating power to a resistor. For a pure sine wave it equals the peak divided by the square root of 2.",
+      "asks": [
+        "What is RMS voltage?",
+        "Why do we use RMS?"
+      ]
+    },
+    {
+      "q": "What is the period of a sine wave?",
+      "a": "The period is the time for one complete cycle. It is one over the frequency, so 50 hertz gives 20 milliseconds.",
+      "asks": [
+        "How do you find period from frequency?"
+      ]
+    },
+    {
+      "q": "What is phase difference?",
+      "a": "Phase difference is how far one wave is shifted in time relative to another, measured in degrees of a 360 degree cycle. A wave that peaks later is said to lag.",
+      "asks": [
+        "What does lagging by 60 degrees mean?",
+        "What is phase angle?"
+      ]
+    },
+    {
+      "q": "What is angular frequency?",
+      "a": "Angular frequency, omega, is 2 pi times the frequency, measured in radians per second. For 50 hertz it is about 314 radians per second.",
+      "asks": [
+        "What is omega in AC?"
+      ]
+    }
+  ],
+  "facts": [
+    "India, the UK and most of Europe use 230 volts at 50 hertz, while the USA uses 120 volts at 60 hertz.",
+    "Japan uses 50 hertz in the east of the country and 60 hertz in the west."
+  ],
+  "quiz": [
+    {
+      "say": "A sine wave has a peak of 170 volts. What is its RMS value?",
+      "show": "A sine wave has a peak of 170 V. What is its RMS value?",
+      "options": [
+        {
+          "show": "120 V",
+          "say": "120 volts"
+        },
+        {
+          "show": "240 V",
+          "say": "240 volts"
+        },
+        {
+          "show": "85 V",
+          "say": "85 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "RMS is the peak over root 2: 170 divided by 1.414 is about 120 volts.",
+      "wrong": {
+        "1": "That multiplies by root 2 instead of dividing.",
+        "2": "That halves the peak; RMS divides by 1.414, not 2."
+      }
+    },
+    {
+      "say": "A supply runs at 60 hertz. What is its period?",
+      "show": "A supply runs at 60 Hz. What is its period?",
+      "options": [
+        {
+          "show": "16.7 ms",
+          "say": "16.7 milliseconds"
+        },
+        {
+          "show": "60 ms",
+          "say": "60 milliseconds"
+        },
+        {
+          "show": "6 ms",
+          "say": "6 milliseconds"
+        }
+      ],
+      "answer": 0,
+      "why": "T is 1 over f: 1 over 60 is about 0.0167 seconds, which is 16.7 milliseconds.",
+      "wrong": {
+        "1": "The period is one over the frequency, not the frequency itself.",
+        "2": "That is too short; 6 milliseconds would be about 167 hertz."
+      }
+    }
+  ]
+}

@@ -1,0 +1,611 @@
+{
+  "id": "HOWN-PLNT-28",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How do plants fight off hungry insects?",
+  "area": "How Nature Works",
+  "group": "HOWN — How and Why in Nature",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "plant defences",
+    "plant chemicals",
+    "alarm scent",
+    "jasmonic acid",
+    "thorns and spines"
+  ],
+  "examples": [
+    "Can plants defend themselves?",
+    "Can plants call for help?",
+    "Why are chillies hot?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "cat",
+          "label": "Caterpillar",
+          "icon": "butterfly",
+          "x": 0.14,
+          "y": 0.2
+        },
+        {
+          "id": "leaf",
+          "label": "Chewed leaf",
+          "icon": "leaf",
+          "x": 0.45,
+          "y": 0.46,
+          "ask": "How does a plant know it is being eaten?"
+        },
+        {
+          "id": "poison",
+          "label": "Bitter chemicals",
+          "icon": "molecule",
+          "x": 0.18,
+          "y": 0.82,
+          "ask": "What chemicals do plants use for defence?"
+        },
+        {
+          "id": "scent",
+          "label": "Alarm scent",
+          "icon": "wind",
+          "x": 0.76,
+          "y": 0.18,
+          "ask": "Can plants call for help?"
+        },
+        {
+          "id": "wasp",
+          "label": "Helper wasps",
+          "icon": "bee",
+          "x": 0.9,
+          "y": 0.55
+        },
+        {
+          "id": "nbr",
+          "label": "Neighbour plant",
+          "icon": "grass",
+          "x": 0.7,
+          "y": 0.86,
+          "ask": "Do plants warn each other?"
+        }
+      ],
+      "links": [
+        {
+          "from": "cat",
+          "to": "leaf",
+          "kind": "force",
+          "label": "chews"
+        },
+        {
+          "from": "leaf",
+          "to": "poison",
+          "kind": "signal",
+          "label": "makes"
+        },
+        {
+          "from": "poison",
+          "to": "cat",
+          "kind": "signal",
+          "label": "tastes bad"
+        },
+        {
+          "from": "leaf",
+          "to": "scent",
+          "kind": "signal",
+          "label": "releases"
+        },
+        {
+          "from": "scent",
+          "to": "wasp",
+          "kind": "signal",
+          "label": "attracts"
+        },
+        {
+          "from": "wasp",
+          "to": "cat",
+          "kind": "force",
+          "label": "attacks"
+        },
+        {
+          "from": "scent",
+          "to": "nbr",
+          "kind": "signal",
+          "label": "warns"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Plants cannot run away from hungry insects, but they are far from helpless. Thorns, hairs and tough leaves keep some away, and when an attack starts, plants fight back with chemistry.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How do plants fight off hungry insects?"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "cat",
+              "label": "Caterpillar",
+              "icon": "butterfly",
+              "x": 0.14,
+              "y": 0.2
+            },
+            {
+              "id": "leaf",
+              "label": "Chewed leaf",
+              "icon": "leaf",
+              "x": 0.45,
+              "y": 0.46,
+              "ask": "How does a plant know it is being eaten?"
+            },
+            {
+              "id": "poison",
+              "label": "Bitter chemicals",
+              "icon": "molecule",
+              "x": 0.18,
+              "y": 0.82,
+              "ask": "What chemicals do plants use for defence?"
+            },
+            {
+              "id": "scent",
+              "label": "Alarm scent",
+              "icon": "wind",
+              "x": 0.76,
+              "y": 0.18,
+              "ask": "Can plants call for help?"
+            },
+            {
+              "id": "wasp",
+              "label": "Helper wasps",
+              "icon": "bee",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "nbr",
+              "label": "Neighbour plant",
+              "icon": "grass",
+              "x": 0.7,
+              "y": 0.86,
+              "ask": "Do plants warn each other?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cat",
+              "to": "leaf",
+              "kind": "force",
+              "label": "chews"
+            },
+            {
+              "from": "leaf",
+              "to": "poison",
+              "kind": "signal",
+              "label": "makes"
+            },
+            {
+              "from": "poison",
+              "to": "cat",
+              "kind": "signal",
+              "label": "tastes bad"
+            },
+            {
+              "from": "leaf",
+              "to": "scent",
+              "kind": "signal",
+              "label": "releases"
+            },
+            {
+              "from": "scent",
+              "to": "wasp",
+              "kind": "signal",
+              "label": "attracts"
+            },
+            {
+              "from": "wasp",
+              "to": "cat",
+              "kind": "force",
+              "label": "attacks"
+            },
+            {
+              "from": "scent",
+              "to": "nbr",
+              "kind": "signal",
+              "label": "warns"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "When a caterpillar chews a leaf, the damaged cells send signals through the plant, carried by hormones. Even leaves that have not been bitten start getting ready.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "cat",
+              "label": "Caterpillar",
+              "icon": "butterfly",
+              "x": 0.14,
+              "y": 0.2
+            },
+            {
+              "id": "leaf",
+              "label": "Chewed leaf",
+              "icon": "leaf",
+              "x": 0.45,
+              "y": 0.46,
+              "ask": "How does a plant know it is being eaten?"
+            },
+            {
+              "id": "poison",
+              "label": "Bitter chemicals",
+              "icon": "molecule",
+              "x": 0.18,
+              "y": 0.82,
+              "ask": "What chemicals do plants use for defence?"
+            },
+            {
+              "id": "scent",
+              "label": "Alarm scent",
+              "icon": "wind",
+              "x": 0.76,
+              "y": 0.18,
+              "ask": "Can plants call for help?"
+            },
+            {
+              "id": "wasp",
+              "label": "Helper wasps",
+              "icon": "bee",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "nbr",
+              "label": "Neighbour plant",
+              "icon": "grass",
+              "x": 0.7,
+              "y": 0.86,
+              "ask": "Do plants warn each other?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cat",
+              "to": "leaf",
+              "kind": "force",
+              "label": "chews"
+            },
+            {
+              "from": "leaf",
+              "to": "poison",
+              "kind": "signal",
+              "label": "makes"
+            },
+            {
+              "from": "poison",
+              "to": "cat",
+              "kind": "signal",
+              "label": "tastes bad"
+            },
+            {
+              "from": "leaf",
+              "to": "scent",
+              "kind": "signal",
+              "label": "releases"
+            },
+            {
+              "from": "scent",
+              "to": "wasp",
+              "kind": "signal",
+              "label": "attracts"
+            },
+            {
+              "from": "wasp",
+              "to": "cat",
+              "kind": "force",
+              "label": "attacks"
+            },
+            {
+              "from": "scent",
+              "to": "nbr",
+              "kind": "signal",
+              "label": "warns"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Leaves fill with bitter or poisonous chemicals, and substances that make them hard to digest. Caffeine, nicotine and mustard oils all began as plant defences.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "cat",
+              "label": "Caterpillar",
+              "icon": "butterfly",
+              "x": 0.14,
+              "y": 0.2
+            },
+            {
+              "id": "leaf",
+              "label": "Chewed leaf",
+              "icon": "leaf",
+              "x": 0.45,
+              "y": 0.46,
+              "ask": "How does a plant know it is being eaten?"
+            },
+            {
+              "id": "poison",
+              "label": "Bitter chemicals",
+              "icon": "molecule",
+              "x": 0.18,
+              "y": 0.82,
+              "ask": "What chemicals do plants use for defence?"
+            },
+            {
+              "id": "scent",
+              "label": "Alarm scent",
+              "icon": "wind",
+              "x": 0.76,
+              "y": 0.18,
+              "ask": "Can plants call for help?"
+            },
+            {
+              "id": "wasp",
+              "label": "Helper wasps",
+              "icon": "bee",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "nbr",
+              "label": "Neighbour plant",
+              "icon": "grass",
+              "x": 0.7,
+              "y": 0.86,
+              "ask": "Do plants warn each other?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cat",
+              "to": "leaf",
+              "kind": "force",
+              "label": "chews"
+            },
+            {
+              "from": "leaf",
+              "to": "poison",
+              "kind": "signal",
+              "label": "makes"
+            },
+            {
+              "from": "poison",
+              "to": "cat",
+              "kind": "signal",
+              "label": "tastes bad"
+            },
+            {
+              "from": "leaf",
+              "to": "scent",
+              "kind": "signal",
+              "label": "releases"
+            },
+            {
+              "from": "scent",
+              "to": "wasp",
+              "kind": "signal",
+              "label": "attracts"
+            },
+            {
+              "from": "wasp",
+              "to": "cat",
+              "kind": "force",
+              "label": "attacks"
+            },
+            {
+              "from": "scent",
+              "to": "nbr",
+              "kind": "signal",
+              "label": "warns"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Many plants also release an alarm scent into the air. It attracts tiny wasps that lay their eggs in caterpillars, and nearby plants that smell it can prepare their own defences.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "cat",
+              "label": "Caterpillar",
+              "icon": "butterfly",
+              "x": 0.14,
+              "y": 0.2
+            },
+            {
+              "id": "leaf",
+              "label": "Chewed leaf",
+              "icon": "leaf",
+              "x": 0.45,
+              "y": 0.46,
+              "ask": "How does a plant know it is being eaten?"
+            },
+            {
+              "id": "poison",
+              "label": "Bitter chemicals",
+              "icon": "molecule",
+              "x": 0.18,
+              "y": 0.82,
+              "ask": "What chemicals do plants use for defence?"
+            },
+            {
+              "id": "scent",
+              "label": "Alarm scent",
+              "icon": "wind",
+              "x": 0.76,
+              "y": 0.18,
+              "ask": "Can plants call for help?"
+            },
+            {
+              "id": "wasp",
+              "label": "Helper wasps",
+              "icon": "bee",
+              "x": 0.9,
+              "y": 0.55
+            },
+            {
+              "id": "nbr",
+              "label": "Neighbour plant",
+              "icon": "grass",
+              "x": 0.7,
+              "y": 0.86,
+              "ask": "Do plants warn each other?"
+            }
+          ],
+          "links": [
+            {
+              "from": "cat",
+              "to": "leaf",
+              "kind": "force",
+              "label": "chews"
+            },
+            {
+              "from": "leaf",
+              "to": "poison",
+              "kind": "signal",
+              "label": "makes"
+            },
+            {
+              "from": "poison",
+              "to": "cat",
+              "kind": "signal",
+              "label": "tastes bad"
+            },
+            {
+              "from": "leaf",
+              "to": "scent",
+              "kind": "signal",
+              "label": "releases"
+            },
+            {
+              "from": "scent",
+              "to": "wasp",
+              "kind": "signal",
+              "label": "attracts"
+            },
+            {
+              "from": "wasp",
+              "to": "cat",
+              "kind": "force",
+              "label": "attacks"
+            },
+            {
+              "from": "scent",
+              "to": "nbr",
+              "kind": "signal",
+              "label": "warns"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a plant know it is being eaten?",
+      "a": "Plants detect torn cells and chemicals in insect saliva. This triggers hormone signals, such as jasmonic acid, that spread through the plant and switch on its defences.",
+      "asks": [
+        "Can plants feel insects eating them?"
+      ]
+    },
+    {
+      "q": "What chemicals do plants use for defence?",
+      "a": "Many: bitter tannins, nicotine in tobacco, caffeine in coffee and tea, mustard oils in cabbages and the burning capsaicin in chilli peppers. Many flavours we enjoy started as plant defences.",
+      "asks": [
+        "Why is chilli hot?"
+      ]
+    },
+    {
+      "q": "Can plants call for help?",
+      "a": "Yes, in a way. Maize and other plants attacked by caterpillars release scents that attract parasitic wasps, which lay their eggs inside the caterpillars.",
+      "asks": [
+        "How do plants use wasps?"
+      ]
+    },
+    {
+      "q": "Do plants warn each other?",
+      "a": "Plants can pick up the alarm scents of an attacked neighbour and start preparing defences before insects reach them. Scientists are still studying how common and how strong this effect is.",
+      "asks": [
+        "Can plants talk to each other?"
+      ]
+    },
+    {
+      "q": "What physical defences do plants have?",
+      "a": "Thorns, spines, stinging hairs like a nettle's, sticky hairs that trap insects, and tough or waxy leaves. Holly even grows pricklier leaves low down, where animals graze.",
+      "asks": [
+        "Why do plants have thorns?"
+      ]
+    }
+  ],
+  "facts": [
+    "A 1990 study showed that maize seedlings attacked by caterpillars release scents that attract parasitic wasps.",
+    "Jasmonic acid is a plant hormone that switches on defences after insect attack.",
+    "Holly trees tend to grow spiny leaves low down, within reach of grazing animals, and smoother leaves higher up."
+  ],
+  "quiz": [
+    {
+      "say": "How do some plants get help against caterpillars?",
+      "show": "How do some plants get help against caterpillars?",
+      "options": [
+        {
+          "show": "They release scents that attract wasps",
+          "say": "They release scents that attract wasps"
+        },
+        {
+          "show": "They pull up their roots and move",
+          "say": "They pull up their roots and move"
+        },
+        {
+          "show": "They grow taller overnight",
+          "say": "They grow taller overnight"
+        }
+      ],
+      "answer": 0,
+      "why": "The alarm scent brings parasitic wasps that attack the caterpillars.",
+      "wrong": {
+        "1": "Rooted plants cannot move away.",
+        "2": "Growing taller would not stop a caterpillar already on the leaf."
+      }
+    }
+  ]
+}

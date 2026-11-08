@@ -1,0 +1,542 @@
+{
+  "id": "BEE-ACC-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "RC low-pass and high-pass filters: cutoff frequency and the Bode plot",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "low-pass filter",
+    "high-pass filter",
+    "cutoff frequency",
+    "Bode plot",
+    "decibel",
+    "minus 3 dB"
+  ],
+  "examples": [
+    "How does an RC low-pass filter work?",
+    "What is the cutoff frequency of an RC filter?",
+    "What does minus 20 dB per decade mean?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Input signal",
+          "value": "1 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R",
+          "value": "1 kΩ",
+          "ask": "What is the cutoff frequency of an RC filter?"
+        },
+        {
+          "kind": "capacitor",
+          "label": "C",
+          "value": "159 nF",
+          "branch": 1,
+          "ask": "Why does the capacitor block high frequencies here?"
+        },
+        {
+          "kind": "voltmeter",
+          "label": "V out",
+          "branch": 2,
+          "ask": "What is a low-pass filter?"
+        }
+      ],
+      "readouts": [
+        "f_c = 1/(2πRC) ≈ 1 kHz",
+        "At f_c: V_out = 0.707 V",
+        "Low-pass"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When you turn down the treble on a speaker, or a phone strips hiss from a recording, a filter is at work. The simplest is just a resistor and a capacitor. On the board, a 1 volt AC signal goes through a 1 kilohm resistor, and we take the output across a 159 nanofarad capacitor. This is a low-pass filter.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "RC low-pass and high-pass filters: cutoff frequency and the Bode plot"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Input signal",
+              "value": "1 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "1 kΩ",
+              "ask": "What is the cutoff frequency of an RC filter?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "C",
+              "value": "159 nF",
+              "branch": 1,
+              "ask": "Why does the capacitor block high frequencies here?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "branch": 2,
+              "ask": "What is a low-pass filter?"
+            }
+          ],
+          "readouts": [
+            "f_c = 1/(2πRC) ≈ 1 kHz",
+            "At f_c: V_out = 0.707 V",
+            "Low-pass"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Think about the capacitor's reactance, 1 over 2 pi f C. At low frequency it is huge, almost an open circuit, so nearly all the input appears at the output. At high frequency it is tiny, almost a short, so the output collapses. Low notes pass, high notes are blocked, hence the name. What happens to a DC input?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Input signal",
+              "value": "1 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "1 kΩ",
+              "ask": "What is the cutoff frequency of an RC filter?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "C",
+              "value": "159 nF",
+              "branch": 1,
+              "ask": "Why does the capacitor block high frequencies here?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "branch": 2,
+              "ask": "What is a low-pass filter?"
+            }
+          ],
+          "readouts": [
+            "f_c = 1/(2πRC) ≈ 1 kHz",
+            "At f_c: V_out = 0.707 V",
+            "Low-pass"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "X_C = 1/(2πfC): large at low f, small at high f"
+        }
+      ]
+    },
+    {
+      "say": "It passes completely. The changeover happens at the cutoff frequency, where the reactance equals R: f c equals 1 over 2 pi R C. Here that is 1 over 2 pi times 1 kilohm times 159 nanofarads, about 1 kilohertz. At cutoff the output is 0.707 volts, which is minus 3 decibels, half the power. Why half the power, if the voltage is 0.707?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Input signal",
+              "value": "1 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "1 kΩ",
+              "ask": "What is the cutoff frequency of an RC filter?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "C",
+              "value": "159 nF",
+              "branch": 1,
+              "ask": "Why does the capacitor block high frequencies here?"
+            },
+            {
+              "kind": "voltmeter",
+              "label": "V out",
+              "branch": 2,
+              "ask": "What is a low-pass filter?"
+            }
+          ],
+          "readouts": [
+            "f_c = 1/(2πRC) ≈ 1 kHz",
+            "At f_c: V_out = 0.707 V",
+            "Low-pass"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "f_c = 1/(2π × 1 kΩ × 159 nF) ≈ 1 kHz"
+        }
+      ]
+    },
+    {
+      "say": "Because power goes as voltage squared, and 0.707 squared is 0.5. This is the Bode plot: gain in decibels against frequency on a log scale, each step ten times the last. It is flat below 1 kilohertz, then falls steadily: at 10 kilohertz the gain is minus 20 decibels, a tenth of the voltage. What is the gain at 100 kilohertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "log₁₀ frequency (Hz)",
+            "min": 1,
+            "max": 5
+          },
+          "y": {
+            "label": "Gain (dB)",
+            "min": -40,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Low-pass",
+              "type": "points",
+              "smooth": true,
+              "ask": "What is a decibel?",
+              "points": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  1.5,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  2.5,
+                  -0.4
+                ],
+                [
+                  3,
+                  -3
+                ],
+                [
+                  3.5,
+                  -10.4
+                ],
+                [
+                  4,
+                  -20
+                ],
+                [
+                  4.5,
+                  -30
+                ],
+                [
+                  5,
+                  -40
+                ]
+              ]
+            },
+            {
+              "label": "High-pass",
+              "type": "points",
+              "smooth": true,
+              "ask": "How do you make a high-pass filter?",
+              "points": [
+                [
+                  1,
+                  -40
+                ],
+                [
+                  1.5,
+                  -30
+                ],
+                [
+                  2,
+                  -20
+                ],
+                [
+                  2.5,
+                  -10.4
+                ],
+                [
+                  3,
+                  -3
+                ],
+                [
+                  3.5,
+                  -0.4
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  4.5,
+                  0
+                ],
+                [
+                  5,
+                  0
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "f_c = 1 kHz: −3 dB"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "|H| = 1/√(1 + (f/f_c)²);   −20 dB per decade"
+        },
+        {
+          "op": "note",
+          "text": "On the x axis, 1 means 10 Hz, 3 means 1 kHz and 5 means 100 kHz."
+        }
+      ]
+    },
+    {
+      "say": "About minus 40 decibels. Now swap the two parts, capacitor in series and output across the resistor, and you get the mirror image: a high-pass filter that blocks low frequencies and DC. Same cutoff, same formula. Superb! Speaker crossovers use both, sending lows to the woofer and highs to the tweeter. Challenge: what resistor gives a 100 hertz cutoff with the same capacitor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "log₁₀ frequency (Hz)",
+            "min": 1,
+            "max": 5
+          },
+          "y": {
+            "label": "Gain (dB)",
+            "min": -40,
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Low-pass",
+              "type": "points",
+              "smooth": true,
+              "ask": "What is a decibel?",
+              "points": [
+                [
+                  1,
+                  0
+                ],
+                [
+                  1.5,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  2.5,
+                  -0.4
+                ],
+                [
+                  3,
+                  -3
+                ],
+                [
+                  3.5,
+                  -10.4
+                ],
+                [
+                  4,
+                  -20
+                ],
+                [
+                  4.5,
+                  -30
+                ],
+                [
+                  5,
+                  -40
+                ]
+              ]
+            },
+            {
+              "label": "High-pass",
+              "type": "points",
+              "smooth": true,
+              "ask": "How do you make a high-pass filter?",
+              "points": [
+                [
+                  1,
+                  -40
+                ],
+                [
+                  1.5,
+                  -30
+                ],
+                [
+                  2,
+                  -20
+                ],
+                [
+                  2.5,
+                  -10.4
+                ],
+                [
+                  3,
+                  -3
+                ],
+                [
+                  3.5,
+                  -0.4
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  4.5,
+                  0
+                ],
+                [
+                  5,
+                  0
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "f_c = 1 kHz: −3 dB"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "High-pass: |H| = 1/√(1 + (f_c/f)²)"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a low-pass filter?",
+      "a": "A circuit that lets low frequencies through and weakens high ones. The simplest is a series resistor with the output taken across a capacitor.",
+      "asks": [
+        "How does an RC low-pass filter work?",
+        "What does a low pass filter do?"
+      ]
+    },
+    {
+      "q": "What is the cutoff frequency of an RC filter?",
+      "a": "f c equals 1 over 2 pi R C. It is where the capacitor's reactance equals the resistance and the output has fallen to 0.707 of the input, which is minus 3 decibels.",
+      "asks": [
+        "RC filter cutoff formula",
+        "What is the minus 3 dB point?"
+      ]
+    },
+    {
+      "q": "Why does the capacitor block high frequencies here?",
+      "a": "At high frequency the capacitor's reactance is tiny, so it shorts the output to ground. Most of the voltage is dropped across the resistor instead.",
+      "asks": [
+        "Why does a capacitor short high frequencies?"
+      ]
+    },
+    {
+      "q": "What is a decibel?",
+      "a": "A decibel compares two powers on a log scale: 10 times the log of the power ratio, or 20 times the log of the voltage ratio. Minus 20 decibels means a tenth of the voltage.",
+      "asks": [
+        "What does minus 20 dB mean?",
+        "Decibel formula for voltage"
+      ]
+    },
+    {
+      "q": "How do you make a high-pass filter?",
+      "a": "Swap the parts: put the capacitor in series and take the output across the resistor. Low frequencies and DC are blocked, high frequencies pass, with the same cutoff formula.",
+      "asks": [
+        "RC high pass filter circuit"
+      ]
+    }
+  ],
+  "facts": [
+    "A single RC filter stage rolls off at 20 decibels per decade, about 6 decibels per octave.",
+    "At the cutoff frequency the output voltage is 1 over root 2, about 70.7 percent, of the input."
+  ],
+  "quiz": [
+    {
+      "say": "R is 1 kilohm and C is 1 microfarad. What is the cutoff frequency?",
+      "show": "R = 1 kΩ and C = 1 µF. What is the cutoff frequency?",
+      "options": [
+        {
+          "show": "159 Hz",
+          "say": "159 hertz"
+        },
+        {
+          "show": "1 kHz",
+          "say": "1 kilohertz"
+        },
+        {
+          "show": "1 MHz",
+          "say": "1 megahertz"
+        }
+      ],
+      "answer": 0,
+      "why": "R C is 1 millisecond, and 1 over 2 pi times 0.001 is about 159 hertz.",
+      "wrong": {
+        "1": "One over R C gives 1000 radians per second, not hertz; divide by 2 pi.",
+        "2": "Check the powers of ten: R C is a thousandth of a second, not a millionth."
+      }
+    },
+    {
+      "say": "In an RC low-pass filter, what is the output taken across?",
+      "show": "In an RC low-pass filter, the output is taken across...",
+      "options": [
+        {
+          "show": "The capacitor",
+          "say": "The capacitor"
+        },
+        {
+          "show": "The resistor",
+          "say": "The resistor"
+        },
+        {
+          "show": "The source",
+          "say": "The source"
+        }
+      ],
+      "answer": 0,
+      "why": "The capacitor's voltage stays high at low frequency and falls at high frequency, which is low-pass behaviour.",
+      "wrong": {
+        "1": "Taking the output across the resistor gives a high-pass filter.",
+        "2": "The source voltage is the input, not the filtered output."
+      }
+    }
+  ]
+}

@@ -1,0 +1,665 @@
+{
+  "id": "ENGX-ENER-11",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a tokamak tries to make fusion energy",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "tokamak",
+    "nuclear fusion",
+    "plasma",
+    "ITER",
+    "magnetic confinement"
+  ],
+  "examples": [
+    "How does a fusion reactor work?",
+    "What is a tokamak?",
+    "How do you hold something hotter than the Sun?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "coils",
+          "kind": "magnet",
+          "x": 0.14,
+          "y": 0.3,
+          "label": "Magnet coils",
+          "motion": "pulse",
+          "ask": "Why does a tokamak need such strong magnets?"
+        },
+        {
+          "id": "plasma",
+          "kind": "wheel",
+          "x": 0.45,
+          "y": 0.38,
+          "size": 1.5,
+          "label": "Plasma ring",
+          "motion": "spin",
+          "ask": "What is plasma?"
+        },
+        {
+          "id": "fuel",
+          "kind": "tank",
+          "x": 0.12,
+          "y": 0.75,
+          "size": 0.9,
+          "label": "Hydrogen fuel",
+          "ask": "What fuel does fusion use?"
+        },
+        {
+          "id": "heat",
+          "kind": "pipe",
+          "x": 0.36,
+          "y": 0.82,
+          "size": 0.8,
+          "label": "Heating beams",
+          "motion": "flow",
+          "ask": "How is the plasma heated to 150 million degrees?"
+        },
+        {
+          "id": "blanket",
+          "kind": "box",
+          "x": 0.74,
+          "y": 0.36,
+          "label": "Blanket wall",
+          "motion": "pulse",
+          "ask": "What does the blanket do?"
+        },
+        {
+          "id": "hx",
+          "kind": "tank",
+          "x": 0.68,
+          "y": 0.8,
+          "size": 0.9,
+          "label": "Heat exchanger"
+        },
+        {
+          "id": "turb",
+          "kind": "fan",
+          "x": 0.9,
+          "y": 0.8,
+          "size": 0.9,
+          "label": "Turbine",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "fuel",
+          "to": "plasma",
+          "kind": "fluid",
+          "label": "fuel gas"
+        },
+        {
+          "from": "heat",
+          "to": "plasma",
+          "kind": "energy",
+          "label": "heats"
+        },
+        {
+          "from": "coils",
+          "to": "plasma",
+          "kind": "force",
+          "label": "holds"
+        },
+        {
+          "from": "plasma",
+          "to": "blanket",
+          "kind": "heat",
+          "label": "fast neutrons"
+        },
+        {
+          "from": "blanket",
+          "to": "hx",
+          "kind": "heat"
+        },
+        {
+          "from": "hx",
+          "to": "turb",
+          "kind": "fluid",
+          "label": "steam"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Fusion powers the Sun: light nuclei join to make heavier ones and release energy. A tokamak tries to do it on Earth inside a doughnut-shaped chamber filled with a hot, thin gas called plasma.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a tokamak tries to make fusion energy"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coils",
+              "kind": "magnet",
+              "x": 0.14,
+              "y": 0.3,
+              "label": "Magnet coils",
+              "motion": "pulse",
+              "ask": "Why does a tokamak need such strong magnets?"
+            },
+            {
+              "id": "plasma",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.38,
+              "size": 1.5,
+              "label": "Plasma ring",
+              "motion": "spin",
+              "ask": "What is plasma?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Hydrogen fuel",
+              "ask": "What fuel does fusion use?"
+            },
+            {
+              "id": "heat",
+              "kind": "pipe",
+              "x": 0.36,
+              "y": 0.82,
+              "size": 0.8,
+              "label": "Heating beams",
+              "motion": "flow",
+              "ask": "How is the plasma heated to 150 million degrees?"
+            },
+            {
+              "id": "blanket",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.36,
+              "label": "Blanket wall",
+              "motion": "pulse",
+              "ask": "What does the blanket do?"
+            },
+            {
+              "id": "hx",
+              "kind": "tank",
+              "x": 0.68,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Heat exchanger"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Turbine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "fuel",
+              "to": "plasma",
+              "kind": "fluid",
+              "label": "fuel gas"
+            },
+            {
+              "from": "heat",
+              "to": "plasma",
+              "kind": "energy",
+              "label": "heats"
+            },
+            {
+              "from": "coils",
+              "to": "plasma",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "plasma",
+              "to": "blanket",
+              "kind": "heat",
+              "label": "fast neutrons"
+            },
+            {
+              "from": "blanket",
+              "to": "hx",
+              "kind": "heat"
+            },
+            {
+              "from": "hx",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The fuel, two heavy forms of hydrogen called deuterium and tritium, must be heated to about 150 million degrees Celsius, ten times hotter than the Sun's core, so the nuclei crash together hard enough to fuse.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coils",
+              "kind": "magnet",
+              "x": 0.14,
+              "y": 0.3,
+              "label": "Magnet coils",
+              "motion": "pulse",
+              "ask": "Why does a tokamak need such strong magnets?"
+            },
+            {
+              "id": "plasma",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.38,
+              "size": 1.5,
+              "label": "Plasma ring",
+              "motion": "spin",
+              "ask": "What is plasma?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Hydrogen fuel",
+              "ask": "What fuel does fusion use?"
+            },
+            {
+              "id": "heat",
+              "kind": "pipe",
+              "x": 0.36,
+              "y": 0.82,
+              "size": 0.8,
+              "label": "Heating beams",
+              "motion": "flow",
+              "ask": "How is the plasma heated to 150 million degrees?"
+            },
+            {
+              "id": "blanket",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.36,
+              "label": "Blanket wall",
+              "motion": "pulse",
+              "ask": "What does the blanket do?"
+            },
+            {
+              "id": "hx",
+              "kind": "tank",
+              "x": 0.68,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Heat exchanger"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Turbine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "fuel",
+              "to": "plasma",
+              "kind": "fluid",
+              "label": "fuel gas"
+            },
+            {
+              "from": "heat",
+              "to": "plasma",
+              "kind": "energy",
+              "label": "heats"
+            },
+            {
+              "from": "coils",
+              "to": "plasma",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "plasma",
+              "to": "blanket",
+              "kind": "heat",
+              "label": "fast neutrons"
+            },
+            {
+              "from": "blanket",
+              "to": "hx",
+              "kind": "heat"
+            },
+            {
+              "from": "hx",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Nothing solid can touch something that hot, so powerful magnetic coils hold the plasma in a ring, floating away from the walls. A current flowing in the plasma itself twists the field to keep it steady.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coils",
+              "kind": "magnet",
+              "x": 0.14,
+              "y": 0.3,
+              "label": "Magnet coils",
+              "motion": "pulse",
+              "ask": "Why does a tokamak need such strong magnets?"
+            },
+            {
+              "id": "plasma",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.38,
+              "size": 1.5,
+              "label": "Plasma ring",
+              "motion": "spin",
+              "ask": "What is plasma?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Hydrogen fuel",
+              "ask": "What fuel does fusion use?"
+            },
+            {
+              "id": "heat",
+              "kind": "pipe",
+              "x": 0.36,
+              "y": 0.82,
+              "size": 0.8,
+              "label": "Heating beams",
+              "motion": "flow",
+              "ask": "How is the plasma heated to 150 million degrees?"
+            },
+            {
+              "id": "blanket",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.36,
+              "label": "Blanket wall",
+              "motion": "pulse",
+              "ask": "What does the blanket do?"
+            },
+            {
+              "id": "hx",
+              "kind": "tank",
+              "x": 0.68,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Heat exchanger"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Turbine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "fuel",
+              "to": "plasma",
+              "kind": "fluid",
+              "label": "fuel gas"
+            },
+            {
+              "from": "heat",
+              "to": "plasma",
+              "kind": "energy",
+              "label": "heats"
+            },
+            {
+              "from": "coils",
+              "to": "plasma",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "plasma",
+              "to": "blanket",
+              "kind": "heat",
+              "label": "fast neutrons"
+            },
+            {
+              "from": "blanket",
+              "to": "hx",
+              "kind": "heat"
+            },
+            {
+              "from": "hx",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Each fusion makes a helium nucleus and a fast neutron. The neutrons fly into a thick blanket wall and heat it, and in a future power station that heat would make steam to drive a turbine.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "coils",
+              "kind": "magnet",
+              "x": 0.14,
+              "y": 0.3,
+              "label": "Magnet coils",
+              "motion": "pulse",
+              "ask": "Why does a tokamak need such strong magnets?"
+            },
+            {
+              "id": "plasma",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.38,
+              "size": 1.5,
+              "label": "Plasma ring",
+              "motion": "spin",
+              "ask": "What is plasma?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Hydrogen fuel",
+              "ask": "What fuel does fusion use?"
+            },
+            {
+              "id": "heat",
+              "kind": "pipe",
+              "x": 0.36,
+              "y": 0.82,
+              "size": 0.8,
+              "label": "Heating beams",
+              "motion": "flow",
+              "ask": "How is the plasma heated to 150 million degrees?"
+            },
+            {
+              "id": "blanket",
+              "kind": "box",
+              "x": 0.74,
+              "y": 0.36,
+              "label": "Blanket wall",
+              "motion": "pulse",
+              "ask": "What does the blanket do?"
+            },
+            {
+              "id": "hx",
+              "kind": "tank",
+              "x": 0.68,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Heat exchanger"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Turbine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "fuel",
+              "to": "plasma",
+              "kind": "fluid",
+              "label": "fuel gas"
+            },
+            {
+              "from": "heat",
+              "to": "plasma",
+              "kind": "energy",
+              "label": "heats"
+            },
+            {
+              "from": "coils",
+              "to": "plasma",
+              "kind": "force",
+              "label": "holds"
+            },
+            {
+              "from": "plasma",
+              "to": "blanket",
+              "kind": "heat",
+              "label": "fast neutrons"
+            },
+            {
+              "from": "blanket",
+              "to": "hx",
+              "kind": "heat"
+            },
+            {
+              "from": "hx",
+              "to": "turb",
+              "kind": "fluid",
+              "label": "steam"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does a tokamak need such strong magnets?",
+      "a": "Plasma at 150 million degrees would instantly cool and damage any wall it touched. Plasma is made of charged particles, which spiral along magnetic field lines, so strong magnets can trap it in a ring without touching anything.",
+      "asks": [
+        "How do magnets hold the plasma?"
+      ]
+    },
+    {
+      "q": "What is plasma?",
+      "a": "Plasma is often called the fourth state of matter: a gas so hot that electrons are torn off the atoms, leaving a mix of charged particles. Lightning, neon signs and the Sun are all plasma.",
+      "asks": [
+        "What is the fourth state of matter?"
+      ]
+    },
+    {
+      "q": "What fuel does fusion use?",
+      "a": "Most designs use deuterium and tritium, two heavy forms of hydrogen. Deuterium can be taken from seawater, while tritium is rare and would be made inside the reactor's blanket from lithium.",
+      "asks": [
+        "Where does fusion fuel come from?"
+      ]
+    },
+    {
+      "q": "How is the plasma heated to 150 million degrees?",
+      "a": "A current driven through the plasma heats it like a kettle element, then beams of fast particles and powerful radio waves add much more heat, a bit like a microwave oven heating food.",
+      "asks": [
+        "How do you heat a plasma?"
+      ]
+    },
+    {
+      "q": "What does the blanket do?",
+      "a": "The blanket lines the chamber and catches the fast neutrons, turning their energy into heat that could make steam. Blankets containing lithium would also breed new tritium fuel.",
+      "asks": [
+        "How would a fusion power station make electricity?"
+      ]
+    }
+  ],
+  "facts": [
+    "In 2023 the JET tokamak in England produced a record 69 megajoules of fusion energy in a single pulse of about 5 seconds.",
+    "ITER, a large international tokamak being built in France, is designed to make ten times more fusion power than the heating power put into its plasma."
+  ],
+  "quiz": [
+    {
+      "say": "Why must the plasma in a tokamak never touch the walls?",
+      "show": "Why is the plasma kept off the walls?",
+      "options": [
+        {
+          "show": "It is far too hot and would cool and damage them",
+          "say": "It is far too hot and would cool and damage them"
+        },
+        {
+          "show": "It would freeze onto the walls",
+          "say": "It would freeze onto the walls"
+        },
+        {
+          "show": "The walls are made of fuel",
+          "say": "The walls are made of fuel"
+        }
+      ],
+      "answer": 0,
+      "why": "At around 150 million degrees, touching a wall would cool the plasma at once and damage the wall, so magnets hold it away.",
+      "wrong": {
+        "1": "Plasma is extremely hot, not cold.",
+        "2": "The walls are not fuel; the fuel is hydrogen gas inside."
+      }
+    }
+  ]
+}

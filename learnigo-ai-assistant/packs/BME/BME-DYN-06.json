@@ -1,0 +1,337 @@
+{
+  "id": "BME-DYN-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Centripetal acceleration: the sideways grip a car needs on a curve",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-DYN — Dynamics and vibration",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "centripetal acceleration",
+    "centripetal force",
+    "circular motion",
+    "radius of curvature",
+    "banked curve"
+  ],
+  "examples": [
+    "What is centripetal acceleration?",
+    "Why do cars skid on sharp bends?",
+    "What provides the centripetal force for a car turning?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "car",
+      "forces": [
+        {
+          "label": "Tyre grip 9.6 kN",
+          "dir": "left",
+          "size": 4,
+          "ask": "What provides the centripetal force for a car turning?"
+        },
+        {
+          "label": "Weight 11.8 kN",
+          "dir": "down",
+          "size": 4
+        },
+        {
+          "label": "Road reaction",
+          "dir": "up",
+          "size": 4
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Drive round a roundabout and you feel pushed to the outside. In fact, nothing pushes you out: your body wants to go straight, and the car pulls you inwards. Anything moving in a circle accelerates towards the centre, even at steady speed, because its direction keeps changing. Look at the car from behind.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Centripetal acceleration: the sideways grip a car needs on a curve"
+        },
+        {
+          "name": "x-forces",
+          "object": "car",
+          "forces": [
+            {
+              "label": "Tyre grip 9.6 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What provides the centripetal force for a car turning?"
+            },
+            {
+              "label": "Weight 11.8 kN",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Road reaction",
+              "dir": "up",
+              "size": 4
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Car 1200 kg at 20 m/s on a curve of radius 50 m"
+        }
+      ]
+    },
+    {
+      "say": "That inward acceleration is called centripetal acceleration. It equals v squared over r. At 20 metres per second on a curve of radius 50 metres, that is 400 over 50, which is 8 metres per second squared. Where does the inward force come from? See the sideways arrow at the tyres?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "car",
+          "forces": [
+            {
+              "label": "Tyre grip 9.6 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What provides the centripetal force for a car turning?"
+            },
+            {
+              "label": "Weight 11.8 kN",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Road reaction",
+              "dir": "up",
+              "size": 4
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "a = v² / r = 20² / 50 = 8 m/s²"
+        }
+      ]
+    },
+    {
+      "say": "It is friction between the tyres and the road! The force needed is m times a: 1200 times 8, which is 9600 newtons, pointing to the centre of the curve. Friction can give at most mu times the weight, so mu must be at least 8 over 9.81, about 0.82. Is that easy on a wet road?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "car",
+          "forces": [
+            {
+              "label": "Tyre grip 9.6 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "What provides the centripetal force for a car turning?"
+            },
+            {
+              "label": "Weight 11.8 kN",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Road reaction",
+              "dir": "up",
+              "size": 4
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F = ma = 1200 × 8 = 9.6 kN; μ ≥ 8 / 9.81 = 0.82"
+        }
+      ]
+    },
+    {
+      "say": "No, wet roads may only give about 0.5, so the car would skid outwards. Look at the graph: acceleration grows with speed squared. At 15 metres per second it drops to 4.5. And on the gentler 100 metre curve, everything halves. Which matters more, slowing down or a wider curve?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (m/s)",
+            "max": 30
+          },
+          "y": {
+            "label": "Accel. (m/s²)",
+            "max": 18
+          },
+          "curves": [
+            {
+              "label": "Radius 50 m",
+              "type": "power",
+              "a": 0.02,
+              "k": 2,
+              "ask": "Why does the needed acceleration grow so fast with speed?"
+            },
+            {
+              "label": "Radius 100 m",
+              "type": "power",
+              "a": 0.01,
+              "k": 2
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "8 m/s²"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "At 15 m/s: a = 15² / 50 = 4.5 m/s²"
+        }
+      ]
+    },
+    {
+      "say": "Slowing down, because speed is squared! Great work. Real link: highways and racing tracks bank their curves so part of the road reaction points inwards and helps the tyres. Exam tip: centripetal force is never a new force on your diagram; it is the job done by friction, tension or a reaction. Challenge: what speed needs only mu equals 0.5 here?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (m/s)",
+            "max": 30
+          },
+          "y": {
+            "label": "Accel. (m/s²)",
+            "max": 18
+          },
+          "curves": [
+            {
+              "label": "Radius 50 m",
+              "type": "power",
+              "a": 0.02,
+              "k": 2,
+              "ask": "Why does the needed acceleration grow so fast with speed?"
+            },
+            {
+              "label": "Radius 100 m",
+              "type": "power",
+              "a": 0.01,
+              "k": 2
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "8 m/s²"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Centripetal force is a role, not an extra force"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is centripetal acceleration?",
+      "a": "It is the acceleration of a body moving in a circle, pointing towards the centre. Its size is v squared over r, or omega squared times r.",
+      "asks": [
+        "formula for centripetal acceleration"
+      ]
+    },
+    {
+      "q": "What provides the centripetal force for a car turning?",
+      "a": "Sideways friction between the tyres and the road. On a banked curve, part of the normal reaction helps too.",
+      "asks": [
+        "what force keeps a car on a curve",
+        "friction on a bend"
+      ]
+    },
+    {
+      "q": "Why does the needed acceleration grow so fast with speed?",
+      "a": "Centripetal acceleration is v squared over r, so doubling the speed needs four times the acceleration and four times the grip.",
+      "asks": [
+        "speed squared on bends"
+      ]
+    },
+    {
+      "q": "Why do cars skid on sharp bends?",
+      "a": "If the needed inward force, m v squared over r, is larger than the maximum friction the tyres can give, the car slides outwards along a wider path.",
+      "asks": [
+        "why do cars slide on corners"
+      ]
+    },
+    {
+      "q": "Is centrifugal force real?",
+      "a": "In the ground frame, no: there is only the inward centripetal force, and your body tends to go straight. In a rotating frame it appears as an apparent outward force.",
+      "asks": [
+        "centrifugal vs centripetal"
+      ]
+    }
+  ],
+  "facts": [
+    "A body moving in a circle at constant speed has an acceleration of v squared over r towards the centre.",
+    "On a flat curve, the highest safe speed is the square root of mu times g times r."
+  ],
+  "quiz": [
+    {
+      "say": "A cyclist rides at 10 metres per second around a bend of radius 25 metres. What is her centripetal acceleration?",
+      "show": "Cyclist at 10 m/s on a bend of radius 25 m. Centripetal acceleration?",
+      "options": [
+        {
+          "show": "4 m/s²",
+          "say": "4 metres per second squared"
+        },
+        {
+          "show": "0.4 m/s²",
+          "say": "0.4 metres per second squared"
+        },
+        {
+          "show": "250 m/s²",
+          "say": "250 metres per second squared"
+        }
+      ],
+      "answer": 0,
+      "why": "a = v² / r = 100 / 25 = 4 m/s².",
+      "wrong": {
+        "1": "That divides v by r without squaring v.",
+        "2": "That multiplies v squared by r instead of dividing."
+      }
+    },
+    {
+      "say": "If a car takes the same curve at three times the speed, the grip needed becomes…",
+      "show": "Same curve, three times the speed: the sideways grip needed becomes…",
+      "options": [
+        {
+          "show": "9 times bigger",
+          "say": "9 times bigger"
+        },
+        {
+          "show": "3 times bigger",
+          "say": "3 times bigger"
+        },
+        {
+          "show": "The same",
+          "say": "The same"
+        }
+      ],
+      "answer": 0,
+      "why": "Force is m v² / r, and 3² = 9.",
+      "wrong": {
+        "1": "Speed is squared in the formula, not used directly.",
+        "2": "Faster on the same curve always needs more inward force."
+      }
+    }
+  ]
+}

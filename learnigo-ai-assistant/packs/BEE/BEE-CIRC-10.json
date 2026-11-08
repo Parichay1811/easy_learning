@@ -1,0 +1,381 @@
+{
+  "id": "BEE-CIRC-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Maximum power transfer: why a load gets the most power when it matches the source",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "maximum power transfer",
+    "impedance matching",
+    "internal resistance",
+    "load resistance",
+    "efficiency"
+  ],
+  "examples": [
+    "When does a load get maximum power?",
+    "Why is efficiency 50 percent at maximum power?",
+    "What load resistance gives maximum power?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Source",
+          "value": "8 V",
+          "ask": "Why isn't the power grid matched for maximum power?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Internal R_th",
+          "value": "4 Ω",
+          "ask": "What is internal resistance?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Load R_L",
+          "value": "4 Ω",
+          "ask": "What is the maximum power transfer theorem?"
+        }
+      ],
+      "readouts": [
+        "I = 1 A",
+        "P_load = 4 W",
+        "Efficiency = 50 %"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Why are hi-fi speakers rated at 8 ohms and radio antennas at 50 ohms? Because of matching. On the board, a source is shown as its Thevenin model: 8 volts behind an internal resistance of 4 ohms, feeding a load. We'll vary the load and hunt for the most power.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Maximum power transfer: why a load gets the most power when it matches the source"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "8 V",
+              "ask": "Why isn't the power grid matched for maximum power?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Internal R_th",
+              "value": "4 Ω",
+              "ask": "What is internal resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "4 Ω",
+              "ask": "What is the maximum power transfer theorem?"
+            }
+          ],
+          "readouts": [
+            "I = 1 A",
+            "P_load = 4 W",
+            "Efficiency = 50 %"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Try a small load, 1 ohm. Lots of current flows, 8 over 5, which is 1.6 amps, but the load's share of the voltage is tiny, so its power, I squared R, is only 2.56 watts. Most of the heat is wasted inside the source. What do you expect with a big load, say 16 ohms?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "8 V",
+              "ask": "Why isn't the power grid matched for maximum power?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Internal R_th",
+              "value": "4 Ω",
+              "ask": "What is internal resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "1 Ω",
+              "ask": "What is the maximum power transfer theorem?"
+            }
+          ],
+          "readouts": [
+            "I = 1.6 A",
+            "P_load = 2.56 W"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "P_L = I²R_L = 1.6² × 1 = 2.56 W"
+        }
+      ]
+    },
+    {
+      "say": "Now the current starves: 8 over 20 is 0.4 amps, so the load gets 0.4 squared times 16, again just 2.56 watts. Too small a load means too little voltage; too big means too little current. Somewhere in between is a peak. Where would you guess it is?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "8 V",
+              "ask": "Why isn't the power grid matched for maximum power?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Internal R_th",
+              "value": "4 Ω",
+              "ask": "What is internal resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "16 Ω",
+              "ask": "What is the maximum power transfer theorem?"
+            }
+          ],
+          "readouts": [
+            "I = 0.4 A",
+            "P_load = 2.56 W"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "P_L = 0.4² × 16 = 2.56 W"
+        }
+      ]
+    },
+    {
+      "say": "Right at R L equals R th, 4 ohms. The curve on the board is the load power for every load. At 4 ohms, 1 amp flows and the load gets 4 watts, the highest point. In general the peak is V th squared over 4 R th: 64 over 16, which is 4 watts. Is the curve symmetric around its peak?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Load resistance (Ω)",
+            "max": 16
+          },
+          "y": {
+            "label": "Load power (W)",
+            "max": 5
+          },
+          "curves": [
+            {
+              "label": "Power in load",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  2.56
+                ],
+                [
+                  2,
+                  3.56
+                ],
+                [
+                  3,
+                  3.92
+                ],
+                [
+                  4,
+                  4
+                ],
+                [
+                  6,
+                  3.84
+                ],
+                [
+                  8,
+                  3.56
+                ],
+                [
+                  12,
+                  3
+                ],
+                [
+                  16,
+                  2.56
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 4,
+              "label": "Matched: 4 Ω, 4 W"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P_max = V_th² / (4 R_th) = 64 / 16 = 4 W"
+        }
+      ]
+    },
+    {
+      "say": "Not quite, it falls more slowly on the right. And here's the catch: when matched, the source wastes as much as the load gets, so efficiency is only 50 percent. That suits a weak radio signal or a speaker, but never the power grid, which keeps its source resistance far below the loads. Great job! Challenge: what load suits a 6 volt, 2 ohm source?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "8 V",
+              "ask": "Why isn't the power grid matched for maximum power?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Internal R_th",
+              "value": "4 Ω",
+              "ask": "What is internal resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "4 Ω",
+              "ask": "What is the maximum power transfer theorem?"
+            }
+          ],
+          "readouts": [
+            "I = 1 A",
+            "P_load = 4 W",
+            "Efficiency = 50 %"
+          ]
+        },
+        {
+          "op": "note",
+          "text": "Matched: half the power reaches the load, half heats the source."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the maximum power transfer theorem?",
+      "a": "A load draws the most power from a source when the load resistance equals the source's Thevenin resistance. The maximum power is V th squared over four R th.",
+      "asks": [
+        "State the maximum power transfer theorem",
+        "When is power to the load maximum?"
+      ]
+    },
+    {
+      "q": "What is internal resistance?",
+      "a": "Every real source has some resistance inside it, from its chemistry or its windings. It wastes power as heat and makes the terminal voltage sag under load.",
+      "asks": [
+        "Why does a battery have internal resistance?"
+      ]
+    },
+    {
+      "q": "Why is the efficiency only 50 percent at maximum power?",
+      "a": "When R L equals R th the same current flows through both, so they get equal power. Half is delivered and half is wasted inside the source.",
+      "asks": [
+        "Efficiency at maximum power transfer"
+      ]
+    },
+    {
+      "q": "Why isn't the power grid matched for maximum power?",
+      "a": "The grid needs high efficiency, not the largest possible power from a small source. Its source resistance is kept far smaller than the loads, so very little is wasted.",
+      "asks": [
+        "Do power stations use impedance matching?"
+      ]
+    },
+    {
+      "q": "Where is impedance matching used?",
+      "a": "In audio amplifiers and speakers, radio antennas and their 50 ohm cables, and sensors: wherever a weak signal must deliver as much power as possible.",
+      "asks": [
+        "Real uses of maximum power transfer"
+      ]
+    }
+  ],
+  "facts": [
+    "At maximum power transfer the efficiency is exactly 50 percent.",
+    "Coaxial cables for radio and test equipment are commonly made with a characteristic impedance of 50 ohms.",
+    "Moritz von Jacobi described the maximum power idea around 1840, so it is sometimes called Jacobi's law."
+  ],
+  "quiz": [
+    {
+      "say": "A source has a Thevenin voltage of 12 volts and a Thevenin resistance of 3 ohms. What is the most power it can deliver to a load?",
+      "show": "A source has V_th = 12 V and R_th = 3 Ω. What is the most power it can deliver to a load?",
+      "options": [
+        {
+          "show": "12 W",
+          "say": "12 watts"
+        },
+        {
+          "show": "48 W",
+          "say": "48 watts"
+        },
+        {
+          "show": "24 W",
+          "say": "24 watts"
+        }
+      ],
+      "answer": 0,
+      "why": "P max is V th squared over 4 R th: 144 over 12, which is 12 watts, with a 3 ohm load.",
+      "wrong": {
+        "1": "That is V squared over R th; the formula divides by four R th.",
+        "2": "That divides by two R th; the formula divides by four R th."
+      }
+    },
+    {
+      "say": "What is the efficiency at maximum power transfer?",
+      "show": "What is the efficiency at maximum power transfer?",
+      "options": [
+        {
+          "show": "50%",
+          "say": "50 percent"
+        },
+        {
+          "show": "100%",
+          "say": "100 percent"
+        },
+        {
+          "show": "25%",
+          "say": "25 percent"
+        }
+      ],
+      "answer": 0,
+      "why": "The load and the internal resistance carry the same current and have equal resistance, so they get equal power.",
+      "wrong": {
+        "1": "Some power is always lost in the internal resistance.",
+        "2": "The load gets half, not a quarter, of the total power."
+      }
+    }
+  ]
+}

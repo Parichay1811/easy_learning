@@ -1,0 +1,670 @@
+{
+  "id": "ENGX-MATL-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How extrusion squeezes out pipes and window frames",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "extrusion",
+    "extrusion die",
+    "plastic pipe",
+    "aluminium extrusion",
+    "profile"
+  ],
+  "examples": [
+    "How are plastic pipes made?",
+    "What is extrusion?",
+    "How are window frames made?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "hopper",
+          "kind": "tank",
+          "x": 0.12,
+          "y": 0.2,
+          "size": 0.8,
+          "label": "Hopper",
+          "motion": "none"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.65,
+          "size": 0.7,
+          "label": "Drive motor",
+          "motion": "spin"
+        },
+        {
+          "id": "heat",
+          "kind": "coil",
+          "x": 0.38,
+          "y": 0.15,
+          "size": 0.6,
+          "label": "Heaters",
+          "motion": "pulse"
+        },
+        {
+          "id": "screw",
+          "kind": "axle",
+          "x": 0.38,
+          "y": 0.45,
+          "size": 1.2,
+          "label": "Screw in barrel",
+          "motion": "spin",
+          "ask": "What is the difference between extrusion and injection moulding?"
+        },
+        {
+          "id": "die",
+          "kind": "box",
+          "x": 0.62,
+          "y": 0.45,
+          "size": 0.8,
+          "label": "Shaped die",
+          "motion": "none",
+          "ask": "What is an extrusion die?"
+        },
+        {
+          "id": "bath",
+          "kind": "tank",
+          "x": 0.83,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Water cooling bath",
+          "motion": "flow",
+          "ask": "What things are made by extrusion?"
+        },
+        {
+          "id": "puller",
+          "kind": "wheel",
+          "x": 0.83,
+          "y": 0.75,
+          "size": 0.8,
+          "label": "Puller and cutter",
+          "motion": "spin",
+          "ask": "How long can an extruded pipe be?"
+        }
+      ],
+      "links": [
+        {
+          "from": "hopper",
+          "to": "screw",
+          "kind": "fluid",
+          "label": "pellets"
+        },
+        {
+          "from": "motor",
+          "to": "screw",
+          "kind": "force"
+        },
+        {
+          "from": "heat",
+          "to": "screw",
+          "kind": "heat"
+        },
+        {
+          "from": "screw",
+          "to": "die",
+          "kind": "fluid",
+          "label": "melt"
+        },
+        {
+          "from": "die",
+          "to": "bath",
+          "kind": "fluid",
+          "label": "profile"
+        },
+        {
+          "from": "bath",
+          "to": "puller",
+          "kind": "force"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Extrusion makes long objects with the same shape all the way along, like pipes, window frames, straws and the plastic coating on cables. It works like squeezing toothpaste from a tube: the hole sets the shape.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How extrusion squeezes out pipes and window frames"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hopper",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Hopper",
+              "motion": "none"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.65,
+              "size": 0.7,
+              "label": "Drive motor",
+              "motion": "spin"
+            },
+            {
+              "id": "heat",
+              "kind": "coil",
+              "x": 0.38,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Heaters",
+              "motion": "pulse"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Screw in barrel",
+              "motion": "spin",
+              "ask": "What is the difference between extrusion and injection moulding?"
+            },
+            {
+              "id": "die",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Shaped die",
+              "motion": "none",
+              "ask": "What is an extrusion die?"
+            },
+            {
+              "id": "bath",
+              "kind": "tank",
+              "x": 0.83,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Water cooling bath",
+              "motion": "flow",
+              "ask": "What things are made by extrusion?"
+            },
+            {
+              "id": "puller",
+              "kind": "wheel",
+              "x": 0.83,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Puller and cutter",
+              "motion": "spin",
+              "ask": "How long can an extruded pipe be?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hopper",
+              "to": "screw",
+              "kind": "fluid",
+              "label": "pellets"
+            },
+            {
+              "from": "motor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "heat",
+              "to": "screw",
+              "kind": "heat"
+            },
+            {
+              "from": "screw",
+              "to": "die",
+              "kind": "fluid",
+              "label": "melt"
+            },
+            {
+              "from": "die",
+              "to": "bath",
+              "kind": "fluid",
+              "label": "profile"
+            },
+            {
+              "from": "bath",
+              "to": "puller",
+              "kind": "force"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Plastic pellets fall into a heated barrel, where a turning screw melts them and pushes them forward with steady pressure, without stopping.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hopper",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Hopper",
+              "motion": "none"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.65,
+              "size": 0.7,
+              "label": "Drive motor",
+              "motion": "spin"
+            },
+            {
+              "id": "heat",
+              "kind": "coil",
+              "x": 0.38,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Heaters",
+              "motion": "pulse"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Screw in barrel",
+              "motion": "spin",
+              "ask": "What is the difference between extrusion and injection moulding?"
+            },
+            {
+              "id": "die",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Shaped die",
+              "motion": "none",
+              "ask": "What is an extrusion die?"
+            },
+            {
+              "id": "bath",
+              "kind": "tank",
+              "x": 0.83,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Water cooling bath",
+              "motion": "flow",
+              "ask": "What things are made by extrusion?"
+            },
+            {
+              "id": "puller",
+              "kind": "wheel",
+              "x": 0.83,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Puller and cutter",
+              "motion": "spin",
+              "ask": "How long can an extruded pipe be?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hopper",
+              "to": "screw",
+              "kind": "fluid",
+              "label": "pellets"
+            },
+            {
+              "from": "motor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "heat",
+              "to": "screw",
+              "kind": "heat"
+            },
+            {
+              "from": "screw",
+              "to": "die",
+              "kind": "fluid",
+              "label": "melt"
+            },
+            {
+              "from": "die",
+              "to": "bath",
+              "kind": "fluid",
+              "label": "profile"
+            },
+            {
+              "from": "bath",
+              "to": "puller",
+              "kind": "force"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "At the end, the melt is forced through a steel die, a plate with a hole cut in the shape you want. A ring-shaped gap makes a pipe; a complicated outline makes a window frame. The soft shape then runs through a water bath to set.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hopper",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Hopper",
+              "motion": "none"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.65,
+              "size": 0.7,
+              "label": "Drive motor",
+              "motion": "spin"
+            },
+            {
+              "id": "heat",
+              "kind": "coil",
+              "x": 0.38,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Heaters",
+              "motion": "pulse"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Screw in barrel",
+              "motion": "spin",
+              "ask": "What is the difference between extrusion and injection moulding?"
+            },
+            {
+              "id": "die",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Shaped die",
+              "motion": "none",
+              "ask": "What is an extrusion die?"
+            },
+            {
+              "id": "bath",
+              "kind": "tank",
+              "x": 0.83,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Water cooling bath",
+              "motion": "flow",
+              "ask": "What things are made by extrusion?"
+            },
+            {
+              "id": "puller",
+              "kind": "wheel",
+              "x": 0.83,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Puller and cutter",
+              "motion": "spin",
+              "ask": "How long can an extruded pipe be?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hopper",
+              "to": "screw",
+              "kind": "fluid",
+              "label": "pellets"
+            },
+            {
+              "from": "motor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "heat",
+              "to": "screw",
+              "kind": "heat"
+            },
+            {
+              "from": "screw",
+              "to": "die",
+              "kind": "fluid",
+              "label": "melt"
+            },
+            {
+              "from": "die",
+              "to": "bath",
+              "kind": "fluid",
+              "label": "profile"
+            },
+            {
+              "from": "bath",
+              "to": "puller",
+              "kind": "force"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "A puller draws it along at a steady speed and a saw cuts it to length, so the product can be as long as you like. Aluminium is extruded too, pushed as a hot solid block through a die.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hopper",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Hopper",
+              "motion": "none"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.65,
+              "size": 0.7,
+              "label": "Drive motor",
+              "motion": "spin"
+            },
+            {
+              "id": "heat",
+              "kind": "coil",
+              "x": 0.38,
+              "y": 0.15,
+              "size": 0.6,
+              "label": "Heaters",
+              "motion": "pulse"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Screw in barrel",
+              "motion": "spin",
+              "ask": "What is the difference between extrusion and injection moulding?"
+            },
+            {
+              "id": "die",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Shaped die",
+              "motion": "none",
+              "ask": "What is an extrusion die?"
+            },
+            {
+              "id": "bath",
+              "kind": "tank",
+              "x": 0.83,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Water cooling bath",
+              "motion": "flow",
+              "ask": "What things are made by extrusion?"
+            },
+            {
+              "id": "puller",
+              "kind": "wheel",
+              "x": 0.83,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Puller and cutter",
+              "motion": "spin",
+              "ask": "How long can an extruded pipe be?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hopper",
+              "to": "screw",
+              "kind": "fluid",
+              "label": "pellets"
+            },
+            {
+              "from": "motor",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "heat",
+              "to": "screw",
+              "kind": "heat"
+            },
+            {
+              "from": "screw",
+              "to": "die",
+              "kind": "fluid",
+              "label": "melt"
+            },
+            {
+              "from": "die",
+              "to": "bath",
+              "kind": "fluid",
+              "label": "profile"
+            },
+            {
+              "from": "bath",
+              "to": "puller",
+              "kind": "force"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an extrusion die?",
+      "a": "A die is a thick steel plate with an opening shaped like the cross-section you want. Whatever is pushed through comes out with that shape, so changing the die changes the product.",
+      "asks": [
+        "What decides the shape in extrusion?"
+      ]
+    },
+    {
+      "q": "What is the difference between extrusion and injection moulding?",
+      "a": "Extrusion pushes material continuously through a shaped hole to make long products with the same cross-section. Injection moulding fills a closed mould to make separate, fully shaped parts like caps or toys.",
+      "asks": [
+        "Extrusion or moulding?"
+      ]
+    },
+    {
+      "q": "What things are made by extrusion?",
+      "a": "Pipes, hoses, window and door frames, drinking straws, plastic sheet and film, cable insulation, and aluminium rails and frames are all made by extrusion. Even pasta and some snacks are extruded.",
+      "asks": [
+        "Is pasta extruded?"
+      ]
+    },
+    {
+      "q": "Can metal be extruded?",
+      "a": "Yes. A hot block of aluminium, at roughly 450 to 500 degrees Celsius, is soft enough to be pushed through a steel die by a powerful ram while still solid, making frames, rails and heat sinks.",
+      "asks": [
+        "How are aluminium frames made?"
+      ]
+    },
+    {
+      "q": "How long can an extruded pipe be?",
+      "a": "As long as you like, because extrusion is continuous. Pipes are cut into lengths or, if flexible, wound onto huge reels hundreds of metres long.",
+      "asks": [
+        "Why are some pipes sold on reels?"
+      ]
+    }
+  ],
+  "facts": [
+    "Joseph Bramah patented an early extrusion process for making lead pipe in 1797.",
+    "Aluminium is usually extruded as a solid at around 450 to 500 °C, well below its melting point of 660 °C."
+  ],
+  "quiz": [
+    {
+      "say": "What decides the cross-section shape of an extruded product?",
+      "show": "The shape comes from…",
+      "options": [
+        {
+          "show": "The opening in the die",
+          "say": "The opening in the die"
+        },
+        {
+          "show": "The speed of the screw",
+          "say": "The speed of the screw"
+        },
+        {
+          "show": "The colour of the plastic",
+          "say": "The colour of the plastic"
+        }
+      ],
+      "answer": 0,
+      "why": "The material takes the shape of the hole it is pushed through.",
+      "wrong": {
+        "1": "Screw speed changes how fast it comes out, not its shape.",
+        "2": "Colour has nothing to do with shape."
+      }
+    }
+  ]
+}

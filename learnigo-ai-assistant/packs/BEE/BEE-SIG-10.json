@@ -1,0 +1,409 @@
+{
+  "id": "BEE-SIG-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "AM and FM modulation: carrying a voice on a radio wave",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "amplitude modulation",
+    "frequency modulation",
+    "carrier wave",
+    "sidebands",
+    "signal bandwidth",
+    "Carson's rule"
+  ],
+  "examples": [
+    "What is the difference between AM and FM?",
+    "What bandwidth does an AM signal need?",
+    "Why does FM sound better than AM?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "Voice up to 5 kHz",
+          "icon": "speech",
+          "note": "Too slow to radiate well on its own"
+        },
+        {
+          "label": "Modulator",
+          "icon": "chip",
+          "note": "Imprints the voice on the carrier",
+          "ask": "What is the difference between AM and FM?"
+        },
+        {
+          "label": "Carrier 1000 kHz",
+          "icon": "wave",
+          "note": "A steady high-frequency radio wave",
+          "ask": "Why do we need a carrier wave at all?"
+        },
+        {
+          "label": "Antenna",
+          "icon": "antenna",
+          "note": "Radiates the modulated wave"
+        },
+        {
+          "label": "Receiver",
+          "icon": "headphones",
+          "note": "Tunes in and recovers the voice"
+        },
+        {
+          "label": "Speaker",
+          "icon": "sound",
+          "note": "Your voice again, far away"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Speak into a microphone and your voice is a wave of a few kilohertz, far too slow to radiate well from a sensibly sized antenna. So radio piggybacks it on a fast carrier wave. On the board, a voice up to 5 kilohertz is imprinted on a 1000 kilohertz carrier, a medium-wave AM station, and sent from the antenna to your radio.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "AM and FM modulation: carrying a voice on a radio wave"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Voice up to 5 kHz",
+              "icon": "speech",
+              "note": "Too slow to radiate well on its own"
+            },
+            {
+              "label": "Modulator",
+              "icon": "chip",
+              "note": "Imprints the voice on the carrier",
+              "ask": "What is the difference between AM and FM?"
+            },
+            {
+              "label": "Carrier 1000 kHz",
+              "icon": "wave",
+              "note": "A steady high-frequency radio wave",
+              "ask": "Why do we need a carrier wave at all?"
+            },
+            {
+              "label": "Antenna",
+              "icon": "antenna",
+              "note": "Radiates the modulated wave"
+            },
+            {
+              "label": "Receiver",
+              "icon": "headphones",
+              "note": "Tunes in and recovers the voice"
+            },
+            {
+              "label": "Speaker",
+              "icon": "sound",
+              "note": "Your voice again, far away"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the carrier, a steady sine wave at a million cycles a second. In amplitude modulation, AM, the voice makes the carrier's height swell and shrink, so its outline, the envelope, traces the voice. The modulation index m says how deep: 0.5 means the height swings 50 percent each way. What do you think that does to the carrier's frequencies?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Voice up to 5 kHz",
+              "icon": "speech",
+              "note": "Too slow to radiate well on its own"
+            },
+            {
+              "label": "Modulator",
+              "icon": "chip",
+              "note": "Imprints the voice on the carrier",
+              "ask": "What is the difference between AM and FM?"
+            },
+            {
+              "label": "Carrier 1000 kHz",
+              "icon": "wave",
+              "note": "A steady high-frequency radio wave",
+              "ask": "Why do we need a carrier wave at all?"
+            },
+            {
+              "label": "Antenna",
+              "icon": "antenna",
+              "note": "Radiates the modulated wave"
+            },
+            {
+              "label": "Receiver",
+              "icon": "headphones",
+              "note": "Tunes in and recovers the voice"
+            },
+            {
+              "label": "Speaker",
+              "icon": "sound",
+              "note": "Your voice again, far away"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "AM: amplitude = carrier × (1 + m × voice)"
+        }
+      ]
+    },
+    {
+      "say": "It creates new ones. Look at the spectrum: the carrier at 1000 kilohertz, plus two sidebands at 995 and 1005, each of height m over 2, 0.25. A whole voice up to 5 kilohertz spreads 5 kilohertz either side, so an AM station needs 10 kilohertz of space. Notice that the big carrier spike carries no voice at all. Can you see a weakness?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency (kHz)",
+            "min": 990,
+            "max": 1010
+          },
+          "y": {
+            "label": "Amplitude",
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "AM spectrum (m = 0.5)",
+              "type": "points",
+              "points": [
+                [
+                  990,
+                  0
+                ],
+                [
+                  995,
+                  0
+                ],
+                [
+                  995,
+                  0.25
+                ],
+                [
+                  995,
+                  0
+                ],
+                [
+                  1000,
+                  0
+                ],
+                [
+                  1000,
+                  1
+                ],
+                [
+                  1000,
+                  0
+                ],
+                [
+                  1005,
+                  0
+                ],
+                [
+                  1005,
+                  0.25
+                ],
+                [
+                  1005,
+                  0
+                ],
+                [
+                  1010,
+                  0
+                ]
+              ],
+              "ask": "What bandwidth does an AM signal need?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Sidebands at 1000 ± 5 kHz → bandwidth = 2 × 5 = 10 kHz"
+        }
+      ]
+    },
+    {
+      "say": "Most of the power sits in that carrier, and electrical noise adds straight onto the height, which is the voice. FM, frequency modulation, keeps the height fixed and lets the voice nudge the frequency, up to 75 kilohertz either way on broadcast FM. Noise that changes the height is simply ignored. The price? Look at the bandwidth on the right.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "AM",
+            "icon": "antenna",
+            "points": [
+              "Voice changes the height",
+              "Bandwidth 2 × 5 = 10 kHz",
+              "Travels far at night",
+              "Noise rides on the height"
+            ]
+          },
+          "right": {
+            "title": "FM",
+            "icon": "music",
+            "points": [
+              "Voice changes the frequency",
+              "Bandwidth 2(75 + 15) = 180 kHz",
+              "Line of sight, 88–108 MHz",
+              "Ignores height noise"
+            ]
+          },
+          "verdict": "AM saves bandwidth; FM gives cleaner sound",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "FM, Carson's rule: B = 2(Δf + f_m) = 2(75 + 15) = 180 kHz"
+        }
+      ]
+    },
+    {
+      "say": "180 kilohertz, 18 times what AM needs, which is why FM lives up near 100 megahertz where there is room. Digital radio packs several stations into one 1.5 megahertz block. Superb! Challenge: by Carson's rule, what bandwidth does FM need with a 5 kilohertz deviation and 3 kilohertz audio?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "kHz",
+          "items": [
+            {
+              "label": "AM station",
+              "size": 10,
+              "icon": "antenna",
+              "ask": "What bandwidth does an AM signal need?"
+            },
+            {
+              "label": "FM station",
+              "size": 180,
+              "icon": "music",
+              "ask": "What is Carson's rule?"
+            },
+            {
+              "label": "DAB block",
+              "size": 1536,
+              "icon": "satellite"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "180 kHz / 10 kHz = 18 times the space of AM"
+        },
+        {
+          "op": "note",
+          "text": "FM stations sit about 200 kHz apart in the 87.5–108 MHz band"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between AM and FM?",
+      "a": "In AM the message changes the carrier's amplitude, its height. In FM the message changes the carrier's frequency while the height stays constant. FM resists noise better but needs much more bandwidth.",
+      "asks": [
+        "AM vs FM?"
+      ]
+    },
+    {
+      "q": "What bandwidth does an AM signal need?",
+      "a": "Twice the highest audio frequency, because the message makes sidebands above and below the carrier. Audio up to 5 kilohertz needs 10 kilohertz.",
+      "asks": [
+        "What are sidebands?"
+      ]
+    },
+    {
+      "q": "Why does FM sound better than AM?",
+      "a": "Most electrical noise changes a signal's amplitude. An FM receiver ignores amplitude and listens only to frequency, and broadcast FM also carries audio up to 15 kilohertz instead of about 5, so it sounds cleaner and brighter.",
+      "asks": [
+        "Why is FM less noisy?"
+      ]
+    },
+    {
+      "q": "What is Carson's rule?",
+      "a": "It estimates FM bandwidth as twice the sum of the peak frequency deviation and the highest audio frequency. For broadcast FM, 2 times 75 plus 15 kilohertz gives 180 kilohertz.",
+      "asks": [
+        "How do you calculate FM bandwidth?"
+      ]
+    },
+    {
+      "q": "Why do we need a carrier wave at all?",
+      "a": "Audio frequencies would need enormous antennas and every station would overlap. Moving the message up to a high carrier frequency lets small antennas radiate it and lets many stations share the airwaves on different carriers.",
+      "asks": [
+        "Why not transmit audio directly?"
+      ]
+    }
+  ],
+  "facts": [
+    "Broadcast FM uses a peak deviation of 75 kHz and audio up to 15 kHz, about 180 kHz by Carson's rule.",
+    "Medium-wave AM stations are spaced 9 kHz apart in Europe, Africa and Asia, and 10 kHz apart in the Americas.",
+    "The FM broadcast band runs from 87.5 to 108 MHz in most countries."
+  ],
+  "quiz": [
+    {
+      "say": "By Carson's rule, what bandwidth does FM need with 5 kilohertz deviation and 3 kilohertz audio?",
+      "show": "By Carson's rule, what bandwidth does FM need with 5 kHz deviation and 3 kHz audio?",
+      "options": [
+        {
+          "show": "16 kHz",
+          "say": "16 kilohertz"
+        },
+        {
+          "show": "8 kHz",
+          "say": "8 kilohertz"
+        },
+        {
+          "show": "6 kHz",
+          "say": "6 kilohertz"
+        }
+      ],
+      "answer": 0,
+      "why": "B equals 2 times 5 plus 3, which is 16 kilohertz.",
+      "wrong": {
+        "1": "That forgets to double the sum.",
+        "2": "That is just twice the audio frequency, the AM answer, ignoring the deviation."
+      }
+    },
+    {
+      "say": "An AM station carries audio up to 4.5 kilohertz. What bandwidth does it occupy?",
+      "show": "An AM station carries audio up to 4.5 kHz. What bandwidth does it occupy?",
+      "options": [
+        {
+          "show": "9 kHz",
+          "say": "9 kilohertz"
+        },
+        {
+          "show": "4.5 kHz",
+          "say": "4.5 kilohertz"
+        },
+        {
+          "show": "180 kHz",
+          "say": "180 kilohertz"
+        }
+      ],
+      "answer": 0,
+      "why": "AM needs twice the highest audio frequency: 2 times 4.5 is 9 kilohertz.",
+      "wrong": {
+        "1": "That counts only one sideband; AM has two.",
+        "2": "180 kilohertz is broadcast FM, not AM."
+      }
+    }
+  ]
+}

@@ -1,0 +1,410 @@
+{
+  "id": "BCE-HYD-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Open channel flow: free surfaces, the Froude number and critical depth",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-HYD — Hydraulics and water resources",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "open channel flow",
+    "Froude number",
+    "critical depth",
+    "specific energy",
+    "subcritical and supercritical"
+  ],
+  "examples": [
+    "What is open channel flow?",
+    "How do you calculate the Froude number?",
+    "What is critical depth in a channel?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-compare",
+      "left": {
+        "title": "Pipe flow",
+        "icon": "pipe",
+        "points": [
+          "Pipe runs full",
+          "Driven by pressure",
+          "Water mains, pumped lines"
+        ]
+      },
+      "right": {
+        "title": "Open channel",
+        "icon": "river",
+        "ask": "What is open channel flow?",
+        "points": [
+          "Free surface open to air",
+          "Driven by gravity and slope",
+          "Rivers, canals, sewers"
+        ]
+      },
+      "verdict": "A free surface makes depth a key unknown"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Rivers, irrigation canals, roadside drains and even sewers share one thing: the water has a free surface, open to the air. That is open channel flow, and it behaves quite differently from water in a full pipe. Let us compare the two on the board.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Open channel flow: free surfaces, the Froude number and critical depth"
+        },
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Pipe flow",
+            "icon": "pipe",
+            "points": [
+              "Pipe runs full",
+              "Driven by pressure",
+              "Water mains, pumped lines"
+            ]
+          },
+          "right": {
+            "title": "Open channel",
+            "icon": "river",
+            "ask": "What is open channel flow?",
+            "points": [
+              "Free surface open to air",
+              "Driven by gravity and slope",
+              "Rivers, canals, sewers"
+            ]
+          },
+          "verdict": "A free surface makes depth a key unknown"
+        }
+      ]
+    },
+    {
+      "say": "In a pipe, pressure pushes the water along and the pipe stays full. In an open channel only gravity moves it, sliding down the slope of the bed, and the depth can rise and fall. So depth becomes a key unknown. What sets how fast a canal flows: its slope, or a pump's pressure?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Pipe flow",
+            "icon": "pipe",
+            "points": [
+              "Pipe runs full",
+              "Driven by pressure",
+              "Water mains, pumped lines"
+            ]
+          },
+          "right": {
+            "title": "Open channel",
+            "icon": "river",
+            "ask": "What is open channel flow?",
+            "points": [
+              "Free surface open to air",
+              "Driven by gravity and slope",
+              "Rivers, canals, sewers"
+            ]
+          },
+          "verdict": "A free surface makes depth a key unknown",
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Its slope! Now the key number in channels, the Froude number: velocity over the square root of g times depth. It compares the flow speed with the speed of a small surface wave. Below one is subcritical, deep and calm; above one is supercritical, shallow and fast. Water at three metres per second, half a metre deep, has a Froude number of about one point three five.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Which flow regime is it?",
+          "groups": [
+            {
+              "label": "Subcritical",
+              "icon": "river",
+              "items": [
+                "Fr < 1",
+                "Deep and slow",
+                "Lowland rivers"
+              ]
+            },
+            {
+              "label": "Critical",
+              "icon": "wave",
+              "items": [
+                "Fr = 1",
+                "Least energy",
+                "Over a weir crest"
+              ]
+            },
+            {
+              "label": "Supercritical",
+              "icon": "arrow",
+              "items": [
+                "Fr > 1",
+                "Shallow and fast",
+                "Spillway chutes"
+              ]
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Fr = V / √(g y) = 3 / √(9.81 × 0.5) ≈ 1.35"
+        }
+      ]
+    },
+    {
+      "say": "So that flow is supercritical. Here is why critical matters. Specific energy is depth plus velocity head, the energy the flow carries above the bed. For two cubic metres per second per metre width, it has a lowest point at the critical depth, zero point seven four metres. Any higher energy allows two depths: one deep and slow, one shallow and fast.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Depth y (m)",
+            "min": 0.3,
+            "max": 2
+          },
+          "y": {
+            "label": "Specific energy (m)",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "E for q = 2 m²/s",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0.3,
+                  2.565
+                ],
+                [
+                  0.4,
+                  1.674
+                ],
+                [
+                  0.5,
+                  1.315
+                ],
+                [
+                  0.6,
+                  1.166
+                ],
+                [
+                  0.7416,
+                  1.112
+                ],
+                [
+                  0.9,
+                  1.152
+                ],
+                [
+                  1.2,
+                  1.342
+                ],
+                [
+                  1.5,
+                  1.591
+                ],
+                [
+                  2,
+                  2.051
+                ]
+              ],
+              "ask": "What is specific energy?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.74,
+              "label": "Critical depth 0.74 m",
+              "ask": "What is critical depth?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "y_c = (q²/g)^⅓ = (2²/9.81)^⅓ ≈ 0.74 m"
+        },
+        {
+          "op": "note",
+          "text": "Minimum specific energy E = 1.5 y_c ≈ 1.11 m"
+        }
+      ]
+    },
+    {
+      "say": "That is why weirs and flumes can measure flow: at a crest the water passes through critical depth, so one depth reading gives the discharge. Brilliant! Exam tip: find the Froude number first, because it tells you which way disturbances travel. Challenge: is a flow one metre deep at two metres per second subcritical or supercritical?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Depth y (m)",
+            "min": 0.3,
+            "max": 2
+          },
+          "y": {
+            "label": "Specific energy (m)",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "E for q = 2 m²/s",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0.3,
+                  2.565
+                ],
+                [
+                  0.4,
+                  1.674
+                ],
+                [
+                  0.5,
+                  1.315
+                ],
+                [
+                  0.6,
+                  1.166
+                ],
+                [
+                  0.7416,
+                  1.112
+                ],
+                [
+                  0.9,
+                  1.152
+                ],
+                [
+                  1.2,
+                  1.342
+                ],
+                [
+                  1.5,
+                  1.591
+                ],
+                [
+                  2,
+                  2.051
+                ]
+              ],
+              "ask": "What is specific energy?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.74,
+              "label": "Critical depth 0.74 m",
+              "ask": "What is critical depth?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is open channel flow?",
+      "a": "Flow with a free surface open to the air, driven by gravity, as in rivers, canals, culverts and part-full sewers. The depth can change, unlike flow in a full pipe.",
+      "asks": [
+        "Define open channel flow"
+      ]
+    },
+    {
+      "q": "What is the Froude number?",
+      "a": "The Froude number is velocity divided by the square root of g times depth. It compares the flow speed with the speed of small surface waves; 3 metres per second at 0.5 metres deep gives about 1.35.",
+      "asks": [
+        "Froude number formula",
+        "What does Fr mean?"
+      ]
+    },
+    {
+      "q": "What is the difference between subcritical and supercritical flow?",
+      "a": "Subcritical flow, Froude number below 1, is deep and slow, and waves can travel upstream. Supercritical flow, above 1, is shallow and fast, and waves are swept downstream.",
+      "asks": [
+        "Subcritical vs supercritical"
+      ]
+    },
+    {
+      "q": "What is critical depth?",
+      "a": "Critical depth is the depth at which a given flow has its minimum specific energy and a Froude number of exactly 1. In a rectangular channel it is the cube root of q squared over g: 0.74 metres for 2 cubic metres per second per metre.",
+      "asks": [
+        "How do you calculate critical depth?"
+      ]
+    },
+    {
+      "q": "What is specific energy?",
+      "a": "Specific energy is the flow depth plus the velocity head, V squared over 2g, measured from the channel bed. Plotted against depth it gives a curve with a minimum at critical depth.",
+      "asks": [
+        "Specific energy curve"
+      ]
+    }
+  ],
+  "facts": [
+    "In a rectangular channel, critical depth is y_c = (q²/g)^(1/3) and the minimum specific energy is 1.5 y_c.",
+    "The Froude number is named after William Froude, a 19th-century English engineer famous for testing ship models."
+  ],
+  "quiz": [
+    {
+      "say": "Water flows one metre deep at two metres per second. What is the Froude number?",
+      "show": "Flow 1 m deep at 2 m/s. Froude number (g = 9.81 m/s²)?",
+      "options": [
+        {
+          "show": "0.64, subcritical",
+          "say": "zero point six four, subcritical"
+        },
+        {
+          "show": "2.0, supercritical",
+          "say": "two, supercritical"
+        },
+        {
+          "show": "0.20, subcritical",
+          "say": "zero point two, subcritical"
+        }
+      ],
+      "answer": 0,
+      "why": "Fr = 2 / √(9.81 × 1) = 2 / 3.13 ≈ 0.64, below 1, so subcritical.",
+      "wrong": {
+        "1": "That forgets the square root of g times depth.",
+        "2": "That divides by g itself instead of its square root times depth."
+      }
+    },
+    {
+      "say": "At critical depth, the specific energy is…",
+      "show": "At critical depth, the specific energy is…",
+      "options": [
+        {
+          "show": "At its minimum",
+          "say": "At its minimum"
+        },
+        {
+          "show": "At its maximum",
+          "say": "At its maximum"
+        },
+        {
+          "show": "Zero",
+          "say": "Zero"
+        }
+      ],
+      "answer": 0,
+      "why": "Critical depth is the lowest point of the specific energy curve.",
+      "wrong": {
+        "1": "The curve has no maximum; energy grows for very shallow and very deep flow.",
+        "2": "Moving water always carries some energy above the bed."
+      }
+    }
+  ]
+}

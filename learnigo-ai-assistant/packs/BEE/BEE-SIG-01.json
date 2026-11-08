@@ -1,0 +1,541 @@
+{
+  "id": "BEE-SIG-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Sampling and the Nyquist rate: why audio CDs use 44.1 kHz",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "sampling theorem",
+    "Nyquist rate",
+    "aliasing",
+    "anti-aliasing filter",
+    "sampling frequency"
+  ],
+  "examples": [
+    "What is the Nyquist rate?",
+    "What is aliasing in sampling?",
+    "Why do CDs sample at 44.1 kHz?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (s)",
+        "max": 1
+      },
+      "y": {
+        "label": "Signal",
+        "min": -1.2,
+        "max": 1.2
+      },
+      "curves": [
+        {
+          "label": "1 Hz signal",
+          "type": "sine",
+          "a": 1,
+          "k": 1,
+          "ask": "What is the Nyquist rate?"
+        },
+        {
+          "label": "Samples at 10 Hz",
+          "type": "points",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              0.1,
+              0.588
+            ],
+            [
+              0.2,
+              0.951
+            ],
+            [
+              0.3,
+              0.951
+            ],
+            [
+              0.4,
+              0.588
+            ],
+            [
+              0.5,
+              0
+            ],
+            [
+              0.6,
+              -0.588
+            ],
+            [
+              0.7,
+              -0.951
+            ],
+            [
+              0.8,
+              -0.951
+            ],
+            [
+              0.9,
+              -0.588
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When Sony and Philips designed the audio CD around 1980, they had to choose how often to measure the sound wave, and they picked 44,100 times a second. Why that number? On the board, a 1 hertz wave is sampled 10 times a second, and each dot is one measurement. Join the dots and the wave is clearly still there.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Sampling and the Nyquist rate: why audio CDs use 44.1 kHz"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Signal",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "1 Hz signal",
+              "type": "sine",
+              "a": 1,
+              "k": 1,
+              "ask": "What is the Nyquist rate?"
+            },
+            {
+              "label": "Samples at 10 Hz",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.1,
+                  0.588
+                ],
+                [
+                  0.2,
+                  0.951
+                ],
+                [
+                  0.3,
+                  0.951
+                ],
+                [
+                  0.4,
+                  0.588
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.6,
+                  -0.588
+                ],
+                [
+                  0.7,
+                  -0.951
+                ],
+                [
+                  0.8,
+                  -0.951
+                ],
+                [
+                  0.9,
+                  -0.588
+                ],
+                [
+                  1,
+                  0
+                ]
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is the rule, from Harry Nyquist and Claude Shannon: to capture a signal, sample at more than twice its highest frequency. Here 10 samples a second is far more than twice 1 hertz, so the dots trace the wave faithfully. Human hearing tops out at about 20 kilohertz. So what is the least a CD must sample at?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Signal",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "1 Hz signal",
+              "type": "sine",
+              "a": 1,
+              "k": 1,
+              "ask": "What is the Nyquist rate?"
+            },
+            {
+              "label": "Samples at 10 Hz",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.1,
+                  0.588
+                ],
+                [
+                  0.2,
+                  0.951
+                ],
+                [
+                  0.3,
+                  0.951
+                ],
+                [
+                  0.4,
+                  0.588
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.6,
+                  -0.588
+                ],
+                [
+                  0.7,
+                  -0.951
+                ],
+                [
+                  0.8,
+                  -0.951
+                ],
+                [
+                  0.9,
+                  -0.588
+                ],
+                [
+                  1,
+                  0
+                ]
+              ]
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Nyquist: sample at fs > 2 × f_max"
+        }
+      ]
+    },
+    {
+      "say": "More than 40 kilohertz. Now break the rule. A 9 hertz wave is sampled at only 10 hertz, below twice 9. Look at the dots: they land on a slow 1 hertz wave that is not really there. This impostor is called an alias, like a car wheel in a film that seems to spin backwards. Can you predict the alias of an 11 hertz wave sampled at 10 hertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 1
+          },
+          "y": {
+            "label": "Signal",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "9 Hz signal",
+              "type": "sine",
+              "a": 1,
+              "k": 9
+            },
+            {
+              "label": "Samples at 10 Hz",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.1,
+                  -0.588
+                ],
+                [
+                  0.2,
+                  -0.951
+                ],
+                [
+                  0.3,
+                  -0.951
+                ],
+                [
+                  0.4,
+                  -0.588
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.6,
+                  0.588
+                ],
+                [
+                  0.7,
+                  0.951
+                ],
+                [
+                  0.8,
+                  0.951
+                ],
+                [
+                  0.9,
+                  0.588
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "ask": "What is the wagon-wheel effect?"
+            },
+            {
+              "label": "Alias seen: 1 Hz",
+              "type": "sine",
+              "a": 1,
+              "k": 1,
+              "phase": 180,
+              "ask": "What is aliasing in sampling?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "f_alias = |f − fs| = |9 − 10| = 1 Hz"
+        }
+      ]
+    },
+    {
+      "say": "Also 1 hertz. Once aliases get in, no software can tell them from real sound, so they must be stopped first. Follow the chain: an anti-aliasing filter removes everything above 20 kilohertz before sampling. Real filters cannot cut off instantly, so the CD leaves a gap: half of 44.1 is 22.05 kilohertz, room for the filter to roll off. Why not sample at a million hertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Microphone",
+              "icon": "sound",
+              "note": "Sound becomes a smooth voltage"
+            },
+            {
+              "label": "Anti-alias filter",
+              "icon": "scissors",
+              "note": "Removes everything above 20 kHz",
+              "ask": "What does an anti-aliasing filter do?"
+            },
+            {
+              "label": "Sample 44.1 kHz",
+              "icon": "clock",
+              "note": "44,100 snapshots every second",
+              "ask": "Why do CDs sample at 44.1 kHz?"
+            },
+            {
+              "label": "16-bit ADC",
+              "icon": "chip",
+              "note": "Each snapshot becomes a number"
+            },
+            {
+              "label": "Digital audio",
+              "icon": "music",
+              "note": "Stored on a disc or in a file"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "44.1 kHz / 2 = 22.05 kHz, above 20 kHz"
+        }
+      ]
+    },
+    {
+      "say": "You could, but every sample costs storage: a CD already needs 44,100 times 16 bits times 2 channels, about 1.4 megabits every second. Engineers pick the lowest safe rate, and phone calls use just 8 kilohertz for voices. Great work! Challenge: what is the lowest sampling rate for a signal with frequencies up to 3.4 kilohertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Microphone",
+              "icon": "sound",
+              "note": "Sound becomes a smooth voltage"
+            },
+            {
+              "label": "Anti-alias filter",
+              "icon": "scissors",
+              "note": "Removes everything above 20 kHz",
+              "ask": "What does an anti-aliasing filter do?"
+            },
+            {
+              "label": "Sample 44.1 kHz",
+              "icon": "clock",
+              "note": "44,100 snapshots every second",
+              "ask": "Why do CDs sample at 44.1 kHz?"
+            },
+            {
+              "label": "16-bit ADC",
+              "icon": "chip",
+              "note": "Each snapshot becomes a number"
+            },
+            {
+              "label": "Digital audio",
+              "icon": "music",
+              "note": "Stored on a disc or in a file"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "44,100 × 16 bits × 2 channels ≈ 1.41 Mbit/s"
+        },
+        {
+          "op": "note",
+          "text": "Phone calls sample at 8 kHz, enough for speech up to about 3.4 kHz"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the Nyquist rate?",
+      "a": "It is twice the highest frequency in a signal. Sampling faster than that captures the signal completely; sampling slower lets high frequencies masquerade as low ones. For sound up to 20 kilohertz the Nyquist rate is 40 kilohertz.",
+      "asks": [
+        "What is the sampling theorem?"
+      ]
+    },
+    {
+      "q": "What is aliasing in sampling?",
+      "a": "Aliasing happens when a signal is sampled too slowly. Its samples match a lower-frequency wave, the alias, at the difference between the signal and the sampling frequency. A 9 hertz wave sampled at 10 hertz looks like 1 hertz.",
+      "asks": [
+        "Why does a fast wave look slow when sampled?"
+      ]
+    },
+    {
+      "q": "Why do CDs sample at 44.1 kHz?",
+      "a": "Human hearing reaches about 20 kilohertz, so the rate must exceed 40 kilohertz. 44.1 kilohertz leaves room for a practical anti-aliasing filter, and it also fitted the video recorders used to store early digital audio masters.",
+      "asks": [
+        "Why 44,100 samples per second?"
+      ]
+    },
+    {
+      "q": "What does an anti-aliasing filter do?",
+      "a": "It is a low-pass filter placed before the ADC that removes frequencies above half the sampling rate. Without it, those frequencies would fold down into the wanted range as aliases that can never be removed.",
+      "asks": [
+        "Why filter before sampling?"
+      ]
+    },
+    {
+      "q": "What is the wagon-wheel effect?",
+      "a": "In films, a spinning wheel can seem to turn slowly or backwards because the camera samples it at about 24 frames a second, too slowly for the spokes. It is aliasing you can see.",
+      "asks": [
+        "Why do wheels look like they spin backwards on video?"
+      ]
+    }
+  ],
+  "facts": [
+    "Audio CDs sample at 44.1 kHz with 16 bits per sample for each channel.",
+    "The Nyquist–Shannon sampling theorem says a signal must be sampled at more than twice its highest frequency.",
+    "Digital telephone speech is traditionally sampled at 8 kHz."
+  ],
+  "quiz": [
+    {
+      "say": "What is the minimum sampling rate for a signal with frequencies up to 3.4 kilohertz?",
+      "show": "What is the minimum sampling rate for a signal with frequencies up to 3.4 kHz?",
+      "options": [
+        {
+          "show": "6.8 kHz",
+          "say": "6.8 kilohertz"
+        },
+        {
+          "show": "3.4 kHz",
+          "say": "3.4 kilohertz"
+        },
+        {
+          "show": "1.7 kHz",
+          "say": "1.7 kilohertz"
+        }
+      ],
+      "answer": 0,
+      "why": "Sample at more than twice the highest frequency: 2 times 3.4 is 6.8 kilohertz.",
+      "wrong": {
+        "1": "Sampling at the signal frequency itself makes it alias down to zero.",
+        "2": "That is half the signal frequency, far too slow."
+      }
+    },
+    {
+      "say": "A 9 hertz sine wave is sampled at 10 hertz. What frequency appears in the samples?",
+      "show": "A 9 Hz sine is sampled at 10 Hz. What frequency appears in the samples?",
+      "options": [
+        {
+          "show": "1 Hz",
+          "say": "1 hertz"
+        },
+        {
+          "show": "9 Hz",
+          "say": "9 hertz"
+        },
+        {
+          "show": "19 Hz",
+          "say": "19 hertz"
+        }
+      ],
+      "answer": 0,
+      "why": "The alias is the difference, 10 minus 9, which is 1 hertz.",
+      "wrong": {
+        "1": "To keep 9 hertz you would need to sample above 18 hertz.",
+        "2": "Samples cannot show a frequency above half the sampling rate."
+      }
+    }
+  ]
+}

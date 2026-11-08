@@ -1,0 +1,375 @@
+{
+  "id": "BCE-HYD-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Spillways and energy dissipation: letting floods pass a dam safely",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-HYD — Hydraulics and water resources",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "spillway",
+    "ogee crest",
+    "stilling basin",
+    "energy dissipation",
+    "ski-jump bucket"
+  ],
+  "examples": [
+    "What does a dam spillway do?",
+    "How do you calculate flow over a spillway?",
+    "Why do spillways need stilling basins?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Reservoir",
+          "icon": "ocean",
+          "ask": "What is a spillway?"
+        },
+        {
+          "label": "Ogee crest",
+          "icon": "wave",
+          "ask": "How do you calculate flow over an ogee spillway?"
+        },
+        {
+          "label": "Spillway chute",
+          "icon": "arrow",
+          "ask": "Why must spillway energy be dissipated?"
+        },
+        {
+          "label": "Stilling basin",
+          "icon": "drop",
+          "ask": "Why must spillway energy be dissipated?"
+        },
+        {
+          "label": "River below",
+          "icon": "river"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In February twenty seventeen, the main spillway of California's Oroville Dam began breaking apart during heavy rain, and more than one hundred and eighty thousand people downstream were told to leave. Spillways are the safety valves of dams. On the board, the path a flood takes: over the crest, down the chute, into a stilling basin, and back to the river.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Spillways and energy dissipation: letting floods pass a dam safely"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Reservoir",
+              "icon": "ocean",
+              "ask": "What is a spillway?"
+            },
+            {
+              "label": "Ogee crest",
+              "icon": "wave",
+              "ask": "How do you calculate flow over an ogee spillway?"
+            },
+            {
+              "label": "Spillway chute",
+              "icon": "arrow",
+              "ask": "Why must spillway energy be dissipated?"
+            },
+            {
+              "label": "Stilling basin",
+              "icon": "drop",
+              "ask": "Why must spillway energy be dissipated?"
+            },
+            {
+              "label": "River below",
+              "icon": "river"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is a gravity dam in 3D. See the spillway on its face? In a flood, water pours over it down to the tailwater, and that energy has to be tamed. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Spillways and energy dissipation: letting floods pass a dam safely"
+        },
+        {
+          "op": "image",
+          "render": "gravity-dam"
+        }
+      ]
+    },
+    {
+      "say": "First, how much can the crest pass? For an ogee crest, the smooth S-shaped lip, discharge equals a coefficient times the crest length times the head to the power one and a half. With a coefficient of two point two and a fifty metre crest, two metres of water over the crest passes about three hundred and eleven cubic metres per second.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Head over crest H (m)",
+            "max": 3
+          },
+          "y": {
+            "label": "Discharge (m³/s)",
+            "max": 600
+          },
+          "curves": [
+            {
+              "label": "Q = 110 H^1.5",
+              "type": "power",
+              "a": 110,
+              "k": 1.5,
+              "ask": "How do you calculate flow over an ogee spillway?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 2,
+              "label": "H = 2 m: 311 m³/s",
+              "ask": "How do you calculate flow over an ogee spillway?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Q = C L H^1.5 = 2.2 × 50 × 2^1.5 ≈ 311 m³/s"
+        },
+        {
+          "op": "note",
+          "text": "Head H is the lake level above the crest."
+        }
+      ]
+    },
+    {
+      "say": "Now down the chute. Water dropping fifty metres could reach about thirty one metres per second, over a hundred kilometres an hour, if friction did nothing. A flood of five hundred cubic metres per second falling that far carries about two hundred and forty five megawatts. Water that fast can rip up concrete and rock. What must we do before it reaches the river?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Reservoir",
+              "icon": "ocean",
+              "ask": "What is a spillway?"
+            },
+            {
+              "label": "Ogee crest",
+              "icon": "wave",
+              "ask": "How do you calculate flow over an ogee spillway?"
+            },
+            {
+              "label": "Spillway chute",
+              "icon": "arrow",
+              "ask": "Why must spillway energy be dissipated?"
+            },
+            {
+              "label": "Stilling basin",
+              "icon": "drop",
+              "ask": "Why must spillway energy be dissipated?"
+            },
+            {
+              "label": "River below",
+              "icon": "river"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "v = √(2gH) = √(2 × 9.81 × 50) ≈ 31 m/s"
+        },
+        {
+          "op": "note",
+          "text": "Power = ρgQH = 1000 × 9.81 × 500 × 50 ≈ 245 MW"
+        }
+      ]
+    },
+    {
+      "say": "Destroy the energy! A stilling basin forces a hydraulic jump, turning the fast, shallow jet into slow, deep flow and churning the energy into turbulence. Other designs fling the water into the air off a ski-jump bucket so it lands in a deep plunge pool far from the dam, or tumble it down a stepped spillway.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Reservoir",
+              "icon": "ocean",
+              "ask": "What is a spillway?"
+            },
+            {
+              "label": "Ogee crest",
+              "icon": "wave",
+              "ask": "How do you calculate flow over an ogee spillway?"
+            },
+            {
+              "label": "Spillway chute",
+              "icon": "arrow",
+              "ask": "Why must spillway energy be dissipated?"
+            },
+            {
+              "label": "Stilling basin",
+              "icon": "drop",
+              "ask": "Why must spillway energy be dissipated?"
+            },
+            {
+              "label": "River below",
+              "icon": "river"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Oroville's chute failed partly because water got under its concrete slabs and lifted them, a reminder that every detail matters. Excellent! Exam tip: big dams are often designed to pass the probable maximum flood, the largest flood thought possible. Challenge: if the head over the crest doubles, how many times more water flows?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "How is the energy destroyed?",
+          "groups": [
+            {
+              "label": "Chute and basin",
+              "icon": "drop",
+              "items": [
+                "Long steep chute",
+                "Jump in a basin"
+              ]
+            },
+            {
+              "label": "Ski-jump bucket",
+              "icon": "arrow",
+              "items": [
+                "Jet thrown in air",
+                "Deep plunge pool"
+              ]
+            },
+            {
+              "label": "Stepped spillway",
+              "icon": "mountain",
+              "items": [
+                "Steps slow water",
+                "Roller-compacted"
+              ]
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a spillway?",
+      "a": "A spillway is the structure that lets flood water pass a dam safely without overtopping it. It usually has a crest or gates, a chute, and an energy dissipator at the bottom.",
+      "asks": [
+        "What does a spillway do?",
+        "Define spillway"
+      ]
+    },
+    {
+      "q": "How do you calculate flow over an ogee spillway?",
+      "a": "Use Q equals C L H to the power 1.5, with C a discharge coefficient, about 2.2 in SI units for a typical ogee, L the crest length and H the head. A 50 metre crest under 2 metres of head passes about 311 cubic metres per second.",
+      "asks": [
+        "Spillway discharge formula",
+        "Weir equation"
+      ]
+    },
+    {
+      "q": "Why must spillway energy be dissipated?",
+      "a": "Water falling tens of metres reaches very high speeds and carries huge power. Released straight into the river it would scour the bed and banks and could undermine the dam itself.",
+      "asks": [
+        "Why do dams need stilling basins?"
+      ]
+    },
+    {
+      "q": "What is a ski-jump spillway?",
+      "a": "A ski-jump or flip bucket curves up at the end of the chute and throws the water jet into the air, so it breaks up and lands in a plunge pool well away from the dam.",
+      "asks": [
+        "What is a flip bucket?"
+      ]
+    },
+    {
+      "q": "What happened at Oroville Dam?",
+      "a": "In February 2017, the main spillway of Oroville Dam in California broke up during heavy flows, and erosion near the emergency spillway led to the evacuation of more than 180,000 people. Investigators found weaknesses in the design and foundation of the chute slabs.",
+      "asks": [
+        "Oroville spillway failure"
+      ]
+    }
+  ],
+  "facts": [
+    "In February 2017, damage to the spillways of Oroville Dam in California led to the evacuation of more than 180,000 people.",
+    "Flow over a weir or spillway crest grows with the head to the power 1.5."
+  ],
+  "quiz": [
+    {
+      "say": "An ogee spillway has a coefficient of 2.2, a crest length of 20 metres and a head of 1 metre. What is the discharge?",
+      "show": "An ogee crest has C = 2.2, L = 20 m and H = 1 m. Discharge?",
+      "options": [
+        {
+          "show": "44 m³/s",
+          "say": "44 cubic metres per second"
+        },
+        {
+          "show": "22 m³/s",
+          "say": "22 cubic metres per second"
+        },
+        {
+          "show": "88 m³/s",
+          "say": "88 cubic metres per second"
+        }
+      ],
+      "answer": 0,
+      "why": "Q = 2.2 × 20 × 1^1.5 = 44 cubic metres per second.",
+      "wrong": {
+        "1": "That halves the answer; 1 to any power is still 1.",
+        "2": "That doubles the answer, as if the head were about 1.6 metres."
+      }
+    },
+    {
+      "say": "A stilling basin dissipates energy mainly by…",
+      "show": "A stilling basin dissipates energy mainly by…",
+      "options": [
+        {
+          "show": "Forcing a hydraulic jump",
+          "say": "Forcing a hydraulic jump"
+        },
+        {
+          "show": "Heating the water with coils",
+          "say": "Heating the water with coils"
+        },
+        {
+          "show": "Pumping water back uphill",
+          "say": "Pumping water back uphill"
+        }
+      ],
+      "answer": 0,
+      "why": "The jump turns fast flow into slow, deep flow and loses energy as turbulence.",
+      "wrong": {
+        "1": "No outside heating is used; turbulence itself turns energy into heat.",
+        "2": "Pumping would need energy, not destroy it."
+      }
+    }
+  ]
+}

@@ -1,0 +1,610 @@
+{
+  "id": "ENGX-ENER-49",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an off-grid solar system powers a home",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "off-grid solar",
+    "solar home system",
+    "charge controller",
+    "battery bank",
+    "stand-alone power"
+  ],
+  "examples": [
+    "How does off-grid solar work?",
+    "Can you power a house with only solar panels?",
+    "What does a solar charge controller do?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "panels",
+          "label": "Solar panels",
+          "icon": "sun",
+          "x": 0.12,
+          "y": 0.2
+        },
+        {
+          "id": "ctrl",
+          "label": "Charge controller",
+          "icon": "chip",
+          "x": 0.36,
+          "y": 0.42,
+          "ask": "What does a charge controller do?"
+        },
+        {
+          "id": "batt",
+          "label": "Battery bank",
+          "icon": "battery",
+          "x": 0.34,
+          "y": 0.82,
+          "ask": "Why does an off-grid system need batteries?"
+        },
+        {
+          "id": "inv",
+          "label": "Inverter",
+          "icon": "switch",
+          "x": 0.62,
+          "y": 0.42,
+          "ask": "Why does an off-grid home need an inverter?"
+        },
+        {
+          "id": "lights",
+          "label": "Lights and phone",
+          "icon": "bulb",
+          "x": 0.88,
+          "y": 0.2
+        },
+        {
+          "id": "home",
+          "label": "Home appliances",
+          "icon": "house",
+          "x": 0.88,
+          "y": 0.68
+        },
+        {
+          "id": "gen",
+          "label": "Backup generator",
+          "icon": "engine",
+          "x": 0.62,
+          "y": 0.86
+        }
+      ],
+      "links": [
+        {
+          "from": "panels",
+          "to": "ctrl",
+          "kind": "power",
+          "label": "DC"
+        },
+        {
+          "from": "ctrl",
+          "to": "batt",
+          "kind": "power",
+          "label": "charge"
+        },
+        {
+          "from": "batt",
+          "to": "inv",
+          "kind": "power",
+          "label": "DC"
+        },
+        {
+          "from": "inv",
+          "to": "lights",
+          "kind": "power",
+          "label": "AC"
+        },
+        {
+          "from": "inv",
+          "to": "home",
+          "kind": "power",
+          "label": "AC"
+        },
+        {
+          "from": "gen",
+          "to": "batt",
+          "kind": "power",
+          "label": "cloudy days"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An off-grid home makes and stores all its own electricity, with no connection to the grid. Solar panels on the roof turn sunlight into direct current.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an off-grid solar system powers a home"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "panels",
+              "label": "Solar panels",
+              "icon": "sun",
+              "x": 0.12,
+              "y": 0.2
+            },
+            {
+              "id": "ctrl",
+              "label": "Charge controller",
+              "icon": "chip",
+              "x": 0.36,
+              "y": 0.42,
+              "ask": "What does a charge controller do?"
+            },
+            {
+              "id": "batt",
+              "label": "Battery bank",
+              "icon": "battery",
+              "x": 0.34,
+              "y": 0.82,
+              "ask": "Why does an off-grid system need batteries?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverter",
+              "icon": "switch",
+              "x": 0.62,
+              "y": 0.42,
+              "ask": "Why does an off-grid home need an inverter?"
+            },
+            {
+              "id": "lights",
+              "label": "Lights and phone",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.2
+            },
+            {
+              "id": "home",
+              "label": "Home appliances",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.68
+            },
+            {
+              "id": "gen",
+              "label": "Backup generator",
+              "icon": "engine",
+              "x": 0.62,
+              "y": 0.86
+            }
+          ],
+          "links": [
+            {
+              "from": "panels",
+              "to": "ctrl",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "power",
+              "label": "charge"
+            },
+            {
+              "from": "batt",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "lights",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "inv",
+              "to": "home",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "cloudy days"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "A charge controller sits between the panels and the batteries. It feeds the batteries the right amount, stopping overcharging on bright days and stopping power draining back into the panels at night.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "panels",
+              "label": "Solar panels",
+              "icon": "sun",
+              "x": 0.12,
+              "y": 0.2
+            },
+            {
+              "id": "ctrl",
+              "label": "Charge controller",
+              "icon": "chip",
+              "x": 0.36,
+              "y": 0.42,
+              "ask": "What does a charge controller do?"
+            },
+            {
+              "id": "batt",
+              "label": "Battery bank",
+              "icon": "battery",
+              "x": 0.34,
+              "y": 0.82,
+              "ask": "Why does an off-grid system need batteries?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverter",
+              "icon": "switch",
+              "x": 0.62,
+              "y": 0.42,
+              "ask": "Why does an off-grid home need an inverter?"
+            },
+            {
+              "id": "lights",
+              "label": "Lights and phone",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.2
+            },
+            {
+              "id": "home",
+              "label": "Home appliances",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.68
+            },
+            {
+              "id": "gen",
+              "label": "Backup generator",
+              "icon": "engine",
+              "x": 0.62,
+              "y": 0.86
+            }
+          ],
+          "links": [
+            {
+              "from": "panels",
+              "to": "ctrl",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "power",
+              "label": "charge"
+            },
+            {
+              "from": "batt",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "lights",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "inv",
+              "to": "home",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "cloudy days"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The batteries store energy for evenings and cloudy days. The system must be sized carefully: enough panels to fill the batteries, and enough battery to last until the sun returns.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "panels",
+              "label": "Solar panels",
+              "icon": "sun",
+              "x": 0.12,
+              "y": 0.2
+            },
+            {
+              "id": "ctrl",
+              "label": "Charge controller",
+              "icon": "chip",
+              "x": 0.36,
+              "y": 0.42,
+              "ask": "What does a charge controller do?"
+            },
+            {
+              "id": "batt",
+              "label": "Battery bank",
+              "icon": "battery",
+              "x": 0.34,
+              "y": 0.82,
+              "ask": "Why does an off-grid system need batteries?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverter",
+              "icon": "switch",
+              "x": 0.62,
+              "y": 0.42,
+              "ask": "Why does an off-grid home need an inverter?"
+            },
+            {
+              "id": "lights",
+              "label": "Lights and phone",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.2
+            },
+            {
+              "id": "home",
+              "label": "Home appliances",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.68
+            },
+            {
+              "id": "gen",
+              "label": "Backup generator",
+              "icon": "engine",
+              "x": 0.62,
+              "y": 0.86
+            }
+          ],
+          "links": [
+            {
+              "from": "panels",
+              "to": "ctrl",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "power",
+              "label": "charge"
+            },
+            {
+              "from": "batt",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "lights",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "inv",
+              "to": "home",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "cloudy days"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "An inverter turns the batteries' direct current into ordinary alternating current for lights, fridges and phone chargers. Many off-grid homes also keep a small backup generator for long gloomy spells.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "panels",
+              "label": "Solar panels",
+              "icon": "sun",
+              "x": 0.12,
+              "y": 0.2
+            },
+            {
+              "id": "ctrl",
+              "label": "Charge controller",
+              "icon": "chip",
+              "x": 0.36,
+              "y": 0.42,
+              "ask": "What does a charge controller do?"
+            },
+            {
+              "id": "batt",
+              "label": "Battery bank",
+              "icon": "battery",
+              "x": 0.34,
+              "y": 0.82,
+              "ask": "Why does an off-grid system need batteries?"
+            },
+            {
+              "id": "inv",
+              "label": "Inverter",
+              "icon": "switch",
+              "x": 0.62,
+              "y": 0.42,
+              "ask": "Why does an off-grid home need an inverter?"
+            },
+            {
+              "id": "lights",
+              "label": "Lights and phone",
+              "icon": "bulb",
+              "x": 0.88,
+              "y": 0.2
+            },
+            {
+              "id": "home",
+              "label": "Home appliances",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.68
+            },
+            {
+              "id": "gen",
+              "label": "Backup generator",
+              "icon": "engine",
+              "x": 0.62,
+              "y": 0.86
+            }
+          ],
+          "links": [
+            {
+              "from": "panels",
+              "to": "ctrl",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "ctrl",
+              "to": "batt",
+              "kind": "power",
+              "label": "charge"
+            },
+            {
+              "from": "batt",
+              "to": "inv",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "inv",
+              "to": "lights",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "inv",
+              "to": "home",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "cloudy days"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does a charge controller do?",
+      "a": "It controls the current flowing from the panels into the batteries, so they charge fully without being overcharged. Better ones, called MPPT controllers, also get the most power out of the panels.",
+      "asks": [
+        "What is an MPPT controller?"
+      ]
+    },
+    {
+      "q": "Why does an off-grid system need batteries?",
+      "a": "The sun shines only by day and varies with the weather, but people want light at night. Batteries store spare daytime energy so it can be used later.",
+      "asks": [
+        "Can solar panels work without batteries?"
+      ]
+    },
+    {
+      "q": "Why does an off-grid home need an inverter?",
+      "a": "Panels and batteries give direct current, but most household appliances are made for alternating current. The inverter converts it, though small systems can run some lights and phone chargers straight from direct current.",
+      "asks": [
+        "Do I need an inverter for solar panels?"
+      ]
+    },
+    {
+      "q": "How do you size an off-grid solar system?",
+      "a": "Add up the energy the home uses each day in kilowatt-hours, then choose enough battery to cover a few cloudy days and enough panels to recharge it, allowing for short winter days.",
+      "asks": [
+        "How many solar panels do I need?"
+      ]
+    },
+    {
+      "q": "Who uses off-grid solar?",
+      "a": "Millions of homes in rural Africa and Asia use solar home systems, often just a panel, a battery and LED lights, because the grid does not reach them. Cabins, boats and camper vans use them too.",
+      "asks": [
+        "Where is off-grid solar used?"
+      ]
+    }
+  ],
+  "facts": [
+    "Solar panels and batteries both work with direct current, so an inverter is needed for ordinary household appliances.",
+    "Solar home systems bring electricity to millions of homes not connected to a grid, especially in Africa and South Asia."
+  ],
+  "quiz": [
+    {
+      "say": "In an off-grid solar system, which part stops the batteries being overcharged?",
+      "show": "Which part prevents overcharging?",
+      "options": [
+        {
+          "show": "The charge controller",
+          "say": "The charge controller"
+        },
+        {
+          "show": "The inverter",
+          "say": "The inverter"
+        },
+        {
+          "show": "The light bulbs",
+          "say": "The light bulbs"
+        }
+      ],
+      "answer": 0,
+      "why": "The charge controller regulates the current from the panels so the batteries charge safely.",
+      "wrong": {
+        "1": "The inverter turns direct current into alternating current for appliances.",
+        "2": "Bulbs use power; they do not control charging."
+      }
+    }
+  ]
+}

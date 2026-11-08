@@ -1,0 +1,563 @@
+{
+  "id": "BEE-SIG-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Fourier series: building a square wave from sine waves",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Fourier series",
+    "harmonics",
+    "fundamental frequency",
+    "odd harmonics",
+    "Gibbs phenomenon"
+  ],
+  "examples": [
+    "What is a Fourier series?",
+    "How do sine waves make a square wave?",
+    "What is the Gibbs phenomenon?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (periods)",
+        "max": 1
+      },
+      "y": {
+        "label": "Amplitude",
+        "min": -1.6,
+        "max": 1.6
+      },
+      "curves": [
+        {
+          "label": "Target square wave",
+          "type": "points",
+          "points": [
+            [
+              0,
+              1
+            ],
+            [
+              0.5,
+              1
+            ],
+            [
+              0.5,
+              -1
+            ],
+            [
+              1,
+              -1
+            ]
+          ],
+          "ask": "How do sine waves make a square wave?"
+        },
+        {
+          "label": "Fundamental (4/π)",
+          "type": "sine",
+          "a": 1.273,
+          "k": 1,
+          "ask": "What is a Fourier series?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1807 Joseph Fourier made a bold claim while studying heat: any repeating wave, however jagged, can be built by adding up simple sine waves. Many mathematicians doubted him, but he was right, and today the idea is inside every music app and phone. On the board is our target, a square wave, and one sine wave, the fundamental, trying to copy it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Fourier series: building a square wave from sine waves"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (periods)",
+            "max": 1
+          },
+          "y": {
+            "label": "Amplitude",
+            "min": -1.6,
+            "max": 1.6
+          },
+          "curves": [
+            {
+              "label": "Target square wave",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.5,
+                  1
+                ],
+                [
+                  0.5,
+                  -1
+                ],
+                [
+                  1,
+                  -1
+                ]
+              ],
+              "ask": "How do sine waves make a square wave?"
+            },
+            {
+              "label": "Fundamental (4/π)",
+              "type": "sine",
+              "a": 1.273,
+              "k": 1,
+              "ask": "What is a Fourier series?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the fundamental. It has the same frequency as the square wave, and its height is 4 over pi, about 1.27, a little taller than the square so that it matches on average. It gets the basic up and down right, but the corners are far too round. What could you add to sharpen them?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (periods)",
+            "max": 1
+          },
+          "y": {
+            "label": "Amplitude",
+            "min": -1.6,
+            "max": 1.6
+          },
+          "curves": [
+            {
+              "label": "Target square wave",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.5,
+                  1
+                ],
+                [
+                  0.5,
+                  -1
+                ],
+                [
+                  1,
+                  -1
+                ]
+              ],
+              "ask": "How do sine waves make a square wave?"
+            },
+            {
+              "label": "Fundamental (4/π)",
+              "type": "sine",
+              "a": 1.273,
+              "k": 1,
+              "ask": "What is a Fourier series?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Fundamental: (4/π) sin ωt, amplitude ≈ 1.27"
+        }
+      ]
+    },
+    {
+      "say": "Add a harmonic, a sine wave at a whole-number multiple of the frequency. A square wave needs only the odd ones: 3, 5, 7 times. Look at the third harmonic: three times as fast and one third as tall, 0.42. It pulls down the middle of the fundamental's hump and lifts its shoulders. Can you guess the height of the 5th harmonic?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (periods)",
+            "max": 1
+          },
+          "y": {
+            "label": "Amplitude",
+            "min": -1.6,
+            "max": 1.6
+          },
+          "curves": [
+            {
+              "label": "Fundamental (4/π)",
+              "type": "sine",
+              "a": 1.273,
+              "k": 1,
+              "ask": "What is a Fourier series?"
+            },
+            {
+              "label": "3rd harmonic (4/3π)",
+              "type": "sine",
+              "a": 0.424,
+              "k": 3,
+              "ask": "What is a harmonic?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "3rd harmonic: (4/3π) sin 3ωt, amplitude ≈ 0.42"
+        }
+      ]
+    },
+    {
+      "say": "4 over 5 pi, about 0.25. Now add the first three together. See the sum: flatter tops, steeper sides, already looking square. Each extra odd harmonic, smaller as one over n, sharpens it further, and with infinitely many you get the square wave exactly. Why might the even harmonics be missing?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (periods)",
+            "max": 1
+          },
+          "y": {
+            "label": "Amplitude",
+            "min": -1.6,
+            "max": 1.6
+          },
+          "curves": [
+            {
+              "label": "Target square wave",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.5,
+                  1
+                ],
+                [
+                  0.5,
+                  -1
+                ],
+                [
+                  1,
+                  -1
+                ]
+              ],
+              "ask": "How do sine waves make a square wave?"
+            },
+            {
+              "label": "Sum of 1st, 3rd, 5th",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.035,
+                  0.765
+                ],
+                [
+                  0.07,
+                  1.159
+                ],
+                [
+                  0.125,
+                  1.02
+                ],
+                [
+                  0.18,
+                  0.897
+                ],
+                [
+                  0.25,
+                  1.103
+                ],
+                [
+                  0.32,
+                  0.897
+                ],
+                [
+                  0.375,
+                  1.02
+                ],
+                [
+                  0.43,
+                  1.159
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.57,
+                  -1.159
+                ],
+                [
+                  0.68,
+                  -0.897
+                ],
+                [
+                  0.75,
+                  -1.103
+                ],
+                [
+                  0.82,
+                  -0.897
+                ],
+                [
+                  0.93,
+                  -1.159
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "ask": "What is the Gibbs phenomenon?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "x(t) = (4/π)[sin ωt + ⅓ sin 3ωt + ⅕ sin 5ωt + …]"
+        }
+      ]
+    },
+    {
+      "say": "Because the square wave's top and bottom halves are mirror images, and even harmonics would spoil that symmetry. One surprise: next to each jump the sum always overshoots by about 9 percent, however many terms you add. That is the Gibbs phenomenon. Superb! Challenge: what is the amplitude of the 7th harmonic?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (periods)",
+            "max": 1
+          },
+          "y": {
+            "label": "Amplitude",
+            "min": -1.6,
+            "max": 1.6
+          },
+          "curves": [
+            {
+              "label": "Target square wave",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.5,
+                  1
+                ],
+                [
+                  0.5,
+                  -1
+                ],
+                [
+                  1,
+                  -1
+                ]
+              ],
+              "ask": "How do sine waves make a square wave?"
+            },
+            {
+              "label": "Sum of 1st, 3rd, 5th",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.035,
+                  0.765
+                ],
+                [
+                  0.07,
+                  1.159
+                ],
+                [
+                  0.125,
+                  1.02
+                ],
+                [
+                  0.18,
+                  0.897
+                ],
+                [
+                  0.25,
+                  1.103
+                ],
+                [
+                  0.32,
+                  0.897
+                ],
+                [
+                  0.375,
+                  1.02
+                ],
+                [
+                  0.43,
+                  1.159
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.57,
+                  -1.159
+                ],
+                [
+                  0.68,
+                  -0.897
+                ],
+                [
+                  0.75,
+                  -1.103
+                ],
+                [
+                  0.82,
+                  -0.897
+                ],
+                [
+                  0.93,
+                  -1.159
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "ask": "What is the Gibbs phenomenon?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Harmonic n: amplitude 4/(nπ), n = 1, 3, 5, …"
+        },
+        {
+          "op": "note",
+          "text": "Gibbs: about 9% overshoot at each jump, however many terms you add"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a Fourier series?",
+      "a": "It writes any periodic signal as a sum of sine and cosine waves at the fundamental frequency and its whole-number multiples, the harmonics, each with its own amplitude and phase.",
+      "asks": [
+        "What does Fourier series mean?"
+      ]
+    },
+    {
+      "q": "How do sine waves make a square wave?",
+      "a": "Add the fundamental with amplitude 4 over pi, then the odd harmonics 3, 5, 7 and so on, each with amplitude 4 over n pi. The more terms you add, the flatter the tops and the steeper the edges.",
+      "asks": [
+        "What harmonics are in a square wave?"
+      ]
+    },
+    {
+      "q": "What is a harmonic?",
+      "a": "A harmonic is a sine wave at a whole-number multiple of the fundamental frequency. For a 50 hertz signal, the 3rd harmonic is 150 hertz and the 5th is 250 hertz.",
+      "asks": [
+        "What is the third harmonic?"
+      ]
+    },
+    {
+      "q": "Why does a square wave have only odd harmonics?",
+      "a": "A square wave has half-wave symmetry: its second half is the first half flipped upside down. Even harmonics do not share that symmetry, so their coefficients come out zero.",
+      "asks": [
+        "Why are there no even harmonics in a square wave?"
+      ]
+    },
+    {
+      "q": "What is the Gibbs phenomenon?",
+      "a": "When a Fourier series approximates a sudden jump, the sum overshoots by about 9 percent of the jump right beside it. Adding more terms makes the overshoot narrower but never smaller.",
+      "asks": [
+        "Why does the Fourier sum overshoot at the edges?"
+      ]
+    }
+  ],
+  "facts": [
+    "Joseph Fourier presented trigonometric series for heat flow in 1807 and published them in 1822.",
+    "A square wave's Fourier series contains only odd harmonics, with amplitudes 4/(nπ).",
+    "The Gibbs overshoot at a jump is about 9% of the jump size."
+  ],
+  "quiz": [
+    {
+      "say": "What is the amplitude of the 7th harmonic of a unit square wave?",
+      "show": "What is the amplitude of the 7th harmonic of a unit square wave?",
+      "options": [
+        {
+          "show": "About 0.18",
+          "say": "about 0.18"
+        },
+        {
+          "show": "About 0.57",
+          "say": "about 0.57"
+        },
+        {
+          "show": "0",
+          "say": "zero"
+        }
+      ],
+      "answer": 0,
+      "why": "Amplitude is 4 over n pi: 4 over 7 pi is about 0.18.",
+      "wrong": {
+        "1": "That is 4 over 7, missing the pi.",
+        "2": "Only the even harmonics are zero for a square wave, and 7 is odd."
+      }
+    },
+    {
+      "say": "Which harmonics does a symmetrical square wave contain?",
+      "show": "Which harmonics does a symmetrical square wave contain?",
+      "options": [
+        {
+          "show": "Only odd ones",
+          "say": "Only odd ones"
+        },
+        {
+          "show": "Only even ones",
+          "say": "Only even ones"
+        },
+        {
+          "show": "All of them equally",
+          "say": "All of them equally"
+        }
+      ],
+      "answer": 0,
+      "why": "Half-wave symmetry cancels the even harmonics, leaving 1, 3, 5, 7 and so on.",
+      "wrong": {
+        "1": "The even harmonics are exactly the ones that cancel.",
+        "2": "They are not equal: amplitudes fall as one over n, and the even ones are zero."
+      }
+    }
+  ]
+}

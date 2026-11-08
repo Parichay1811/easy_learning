@@ -1,0 +1,381 @@
+{
+  "id": "BME-STAT-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Friction and the angle of repose: when does a block start to slide?",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "coefficient of static friction",
+    "kinetic friction",
+    "angle of repose",
+    "limiting friction",
+    "Coulomb friction"
+  ],
+  "examples": [
+    "What is the angle of repose?",
+    "Why is static friction bigger than kinetic friction?",
+    "How do I find the coefficient of friction from the angle?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "rock",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Weight",
+          "dir": "down",
+          "size": 4
+        },
+        {
+          "label": "Normal force",
+          "dir": 116.6,
+          "size": 4
+        },
+        {
+          "label": "Friction μN",
+          "dir": 26.6,
+          "size": 2,
+          "ask": "Why does mu equal tan theta at the point of sliding?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Pour dry sand from your hand and it always forms a cone with the same slope, about 34 degrees. Tip a book on a ramp and at one exact angle it starts to slide. That angle is the angle of repose, and it tells you the friction coefficient. Let us find out why.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Friction and the angle of repose: when does a block start to slide?"
+        },
+        {
+          "name": "x-forces",
+          "object": "rock",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Normal force",
+              "dir": 116.6,
+              "size": 4
+            },
+            {
+              "label": "Friction μN",
+              "dir": 26.6,
+              "size": 2,
+              "ask": "Why does mu equal tan theta at the point of sliding?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Dry sand settles at about 34 degrees"
+        }
+      ]
+    },
+    {
+      "say": "Friction can grow only up to a limit: the coefficient mu times the normal force. On a slope, the downhill pull is W sin theta and the normal force is W cos theta. Sliding starts when W sin theta equals mu times W cos theta. See the friction arrow along the slope? What cancels out?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "rock",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Normal force",
+              "dir": 116.6,
+              "size": 4
+            },
+            {
+              "label": "Friction μN",
+              "dir": 26.6,
+              "size": 2,
+              "ask": "Why does mu equal tan theta at the point of sliding?"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "W sin θ = μ W cos θ, so μ = tan θ"
+        }
+      ]
+    },
+    {
+      "say": "The weight cancels, so mu equals tan theta, whatever the mass! For mu equals 0.5, the angle is about 26.6 degrees, the slope drawn here. Now look at this graph of friction against your push on a 100 newton block. Friction matches your push exactly, until it reaches 50 newtons. Why does the line stop there?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Applied force (N)",
+            "max": 80
+          },
+          "y": {
+            "label": "Friction force (N)",
+            "max": 60
+          },
+          "curves": [
+            {
+              "label": "Friction",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  50,
+                  50
+                ],
+                [
+                  50,
+                  40
+                ],
+                [
+                  80,
+                  40
+                ]
+              ],
+              "ask": "Why is static friction bigger than kinetic friction?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "Starts to slide"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "θ = tan⁻¹(0.5) = 26.6°; F_max = 0.5 × 100 N = 50 N"
+        }
+      ]
+    },
+    {
+      "say": "Because 50 newtons is the limit, mu s times N. Then the block breaks free and friction drops to the kinetic value, mu k times N, here 0.4 times 100, which is 40 newtons. See the step down at the dashed line? That is why a stuck drawer suddenly jerks open. Is it easier to keep something sliding or to start it?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Applied force (N)",
+            "max": 80
+          },
+          "y": {
+            "label": "Friction force (N)",
+            "max": 60
+          },
+          "curves": [
+            {
+              "label": "Friction",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  50,
+                  50
+                ],
+                [
+                  50,
+                  40
+                ],
+                [
+                  80,
+                  40
+                ]
+              ],
+              "ask": "Why is static friction bigger than kinetic friction?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "Starts to slide"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Kinetic: F_k = μk N = 0.4 × 100 = 40 N"
+        }
+      ]
+    },
+    {
+      "say": "Keeping it sliding is easier. Well done! Real link: engineers use the angle of repose to design grain silos, coal heaps and the slopes of road cuttings. Exam tip: friction is not always mu N; it is only as large as needed, up to mu N. Challenge: what angle of repose gives mu equals 1?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Applied force (N)",
+            "max": 80
+          },
+          "y": {
+            "label": "Friction force (N)",
+            "max": 60
+          },
+          "curves": [
+            {
+              "label": "Friction",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  50,
+                  50
+                ],
+                [
+                  50,
+                  40
+                ],
+                [
+                  80,
+                  40
+                ]
+              ],
+              "ask": "Why is static friction bigger than kinetic friction?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "Starts to slide"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Tip: F ≤ μs N while still; F = μk N while sliding"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the angle of repose?",
+      "a": "It is the steepest slope at which a material or object can rest without sliding. At that angle, the tangent of the angle equals the coefficient of static friction.",
+      "asks": [
+        "angle of repose definition",
+        "why sand piles have the same slope"
+      ]
+    },
+    {
+      "q": "Why does mu equal tan theta at the point of sliding?",
+      "a": "The downhill pull is the weight times sin theta and the largest friction is mu times the weight times cos theta. Setting them equal, the weight cancels and mu equals tan theta.",
+      "asks": [
+        "derive coefficient of friction from angle"
+      ]
+    },
+    {
+      "q": "Why is static friction bigger than kinetic friction?",
+      "a": "When surfaces rest together, tiny high spots settle and stick more firmly. Once sliding, they have less time to bond, so less force keeps the motion going.",
+      "asks": [
+        "static vs kinetic friction",
+        "why does friction drop when sliding starts"
+      ]
+    },
+    {
+      "q": "Does friction depend on contact area?",
+      "a": "In the simple Coulomb model, no. Friction depends on the normal force and the coefficient, not on the apparent contact area.",
+      "asks": [
+        "does surface area affect friction"
+      ]
+    },
+    {
+      "q": "Is friction always equal to mu times N?",
+      "a": "No. While an object is still, friction is only as big as needed to stop it moving, up to the limit of mu s times N. It equals mu k times N only while sliding.",
+      "asks": [
+        "when is friction equal to mu N"
+      ]
+    }
+  ],
+  "facts": [
+    "At the angle of repose, the coefficient of static friction equals the tangent of the slope angle.",
+    "In the Coulomb model, friction does not depend on the apparent area of contact."
+  ],
+  "quiz": [
+    {
+      "say": "A crate starts to slide when its ramp reaches 35 degrees. What is the coefficient of static friction?",
+      "show": "A crate starts to slide at a ramp angle of 35°. μs = ?",
+      "options": [
+        {
+          "show": "0.70",
+          "say": "0.70"
+        },
+        {
+          "show": "0.57",
+          "say": "0.57"
+        },
+        {
+          "show": "0.82",
+          "say": "0.82"
+        }
+      ],
+      "answer": 0,
+      "why": "μs = tan 35° = 0.70.",
+      "wrong": {
+        "1": "That is sin 35°, not tan 35°.",
+        "2": "That is cos 35°; the ratio needed is sin over cos, which is tan."
+      }
+    },
+    {
+      "say": "A 200 newton box sits on a floor with mu s equals 0.3. You push sideways with 40 newtons. What is the friction force?",
+      "show": "200 N box, μs = 0.3, you push with 40 N. Friction force?",
+      "options": [
+        {
+          "show": "40 N",
+          "say": "40 newtons"
+        },
+        {
+          "show": "60 N",
+          "say": "60 newtons"
+        },
+        {
+          "show": "0 N",
+          "say": "zero newtons"
+        }
+      ],
+      "answer": 0,
+      "why": "The limit is 0.3 × 200 = 60 N, but friction only needs 40 N to balance your push, so it is 40 N and the box stays put.",
+      "wrong": {
+        "1": "60 N is the limit, not the actual friction while the box is still.",
+        "2": "Without friction the box would move under your push."
+      }
+    }
+  ]
+}

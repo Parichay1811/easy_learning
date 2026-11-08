@@ -1,0 +1,654 @@
+{
+  "id": "BEE-MACH-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Synchronous generators: how a power station turns a spinning shaft into 50 hertz",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "synchronous generator",
+    "alternator",
+    "excitation",
+    "power angle",
+    "generator frequency f = pn/120",
+    "loss of synchronism"
+  ],
+  "examples": [
+    "How does a power station generator make 50 Hz?",
+    "What does excitation do in a synchronous generator?",
+    "What is the power angle of a generator?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "steam",
+          "kind": "pipe",
+          "x": 0.07,
+          "y": 0.55,
+          "label": "Steam",
+          "motion": "flow"
+        },
+        {
+          "id": "turb",
+          "kind": "fan",
+          "x": 0.25,
+          "y": 0.55,
+          "size": 1.2,
+          "label": "Turbine 3000 rpm",
+          "ask": "How does a power station generator make 50 Hz?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.42,
+          "y": 0.55,
+          "label": "Shaft"
+        },
+        {
+          "id": "rotor",
+          "kind": "magnet",
+          "x": 0.6,
+          "y": 0.55,
+          "size": 1.2,
+          "label": "Rotor (DC field)",
+          "motion": "spin",
+          "ask": "Why do hydro generators have so many poles?"
+        },
+        {
+          "id": "exc",
+          "kind": "battery",
+          "x": 0.6,
+          "y": 0.15,
+          "label": "Exciter DC",
+          "ask": "What does excitation do in a synchronous generator?"
+        },
+        {
+          "id": "stator",
+          "kind": "coil",
+          "x": 0.78,
+          "y": 0.55,
+          "size": 1.3,
+          "label": "Stator 3-phase"
+        },
+        {
+          "id": "grid",
+          "kind": "box",
+          "x": 0.94,
+          "y": 0.55,
+          "label": "Grid 50 Hz",
+          "ask": "What is loss of synchronism?"
+        }
+      ],
+      "links": [
+        {
+          "from": "steam",
+          "to": "turb",
+          "kind": "fluid"
+        },
+        {
+          "from": "turb",
+          "to": "shaft",
+          "kind": "force"
+        },
+        {
+          "from": "shaft",
+          "to": "rotor",
+          "kind": "force"
+        },
+        {
+          "from": "exc",
+          "to": "rotor",
+          "kind": "power",
+          "label": "Field current"
+        },
+        {
+          "from": "rotor",
+          "to": "stator",
+          "kind": "energy",
+          "label": "Rotating flux"
+        },
+        {
+          "from": "stator",
+          "to": "grid",
+          "kind": "power",
+          "label": "AC out"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "China's Three Gorges Dam, the biggest power station on Earth, and a coal plant in Gujarat share the same heart: the synchronous generator. On the board, steam spins a turbine at 3000 rpm, the shaft turns a rotor that is an electromagnet, and the stator coils around it deliver three-phase power to the grid.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Synchronous generators: how a power station turns a spinning shaft into 50 hertz"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "steam",
+              "kind": "pipe",
+              "x": 0.07,
+              "y": 0.55,
+              "label": "Steam",
+              "motion": "flow"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.25,
+              "y": 0.55,
+              "size": 1.2,
+              "label": "Turbine 3000 rpm",
+              "ask": "How does a power station generator make 50 Hz?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Shaft"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.6,
+              "y": 0.55,
+              "size": 1.2,
+              "label": "Rotor (DC field)",
+              "motion": "spin",
+              "ask": "Why do hydro generators have so many poles?"
+            },
+            {
+              "id": "exc",
+              "kind": "battery",
+              "x": 0.6,
+              "y": 0.15,
+              "label": "Exciter DC",
+              "ask": "What does excitation do in a synchronous generator?"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.78,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Stator 3-phase"
+            },
+            {
+              "id": "grid",
+              "kind": "box",
+              "x": 0.94,
+              "y": 0.55,
+              "label": "Grid 50 Hz",
+              "ask": "What is loss of synchronism?"
+            }
+          ],
+          "links": [
+            {
+              "from": "steam",
+              "to": "turb",
+              "kind": "fluid"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "rotor",
+              "kind": "force"
+            },
+            {
+              "from": "exc",
+              "to": "rotor",
+              "kind": "power",
+              "label": "Field current"
+            },
+            {
+              "from": "rotor",
+              "to": "stator",
+              "kind": "energy",
+              "label": "Rotating flux"
+            },
+            {
+              "from": "stator",
+              "to": "grid",
+              "kind": "power",
+              "label": "AC out"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a power station's turbine and generator. Steam spins the blades, the coupling turns the generator rotor, and the stator windings deliver the power. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Synchronous generators: how a power station turns a spinning shaft into 50 hertz"
+        },
+        {
+          "op": "image",
+          "render": "turbine-generator"
+        }
+      ]
+    },
+    {
+      "say": "Look at the rotor. Fed with DC from the exciter, it is a spinning magnet, and its field sweeps past the stator coils, inducing an AC voltage in each. The rotor is locked in step, synchronous, with that voltage: a 2-pole rotor at 3000 rpm makes exactly 50 cycles a second. What speed would a 2-pole machine need for 60 hertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "steam",
+              "kind": "pipe",
+              "x": 0.07,
+              "y": 0.55,
+              "label": "Steam",
+              "motion": "flow"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.25,
+              "y": 0.55,
+              "size": 1.2,
+              "label": "Turbine 3000 rpm",
+              "ask": "How does a power station generator make 50 Hz?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Shaft"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.6,
+              "y": 0.55,
+              "size": 1.2,
+              "label": "Rotor (DC field)",
+              "motion": "spin",
+              "ask": "Why do hydro generators have so many poles?"
+            },
+            {
+              "id": "exc",
+              "kind": "battery",
+              "x": 0.6,
+              "y": 0.15,
+              "label": "Exciter DC",
+              "ask": "What does excitation do in a synchronous generator?"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.78,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Stator 3-phase"
+            },
+            {
+              "id": "grid",
+              "kind": "box",
+              "x": 0.94,
+              "y": 0.55,
+              "label": "Grid 50 Hz",
+              "ask": "What is loss of synchronism?"
+            }
+          ],
+          "links": [
+            {
+              "from": "steam",
+              "to": "turb",
+              "kind": "fluid"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "rotor",
+              "kind": "force"
+            },
+            {
+              "from": "exc",
+              "to": "rotor",
+              "kind": "power",
+              "label": "Field current"
+            },
+            {
+              "from": "rotor",
+              "to": "stator",
+              "kind": "energy",
+              "label": "Rotating flux"
+            },
+            {
+              "from": "stator",
+              "to": "grid",
+              "kind": "power",
+              "label": "AC out"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "f = p·n / 120 = 2 × 3000 / 120 = 50 Hz"
+        }
+      ]
+    },
+    {
+      "say": "3600 rpm, as in the USA. Slow water turbines use rotors with many poles instead: 40 poles at 150 rpm also make 50 hertz. Now the exciter. Turning up its field current raises the generated voltage E, and on a big grid that mainly changes the reactive power the machine supplies, which holds up the grid voltage. So what decides the real power it sends?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "steam",
+              "kind": "pipe",
+              "x": 0.07,
+              "y": 0.55,
+              "label": "Steam",
+              "motion": "flow"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.25,
+              "y": 0.55,
+              "size": 1.2,
+              "label": "Turbine 3000 rpm",
+              "ask": "How does a power station generator make 50 Hz?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Shaft"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.6,
+              "y": 0.55,
+              "size": 1.2,
+              "label": "Rotor (DC field)",
+              "motion": "spin",
+              "ask": "Why do hydro generators have so many poles?"
+            },
+            {
+              "id": "exc",
+              "kind": "battery",
+              "x": 0.6,
+              "y": 0.15,
+              "label": "Exciter DC",
+              "ask": "What does excitation do in a synchronous generator?"
+            },
+            {
+              "id": "stator",
+              "kind": "coil",
+              "x": 0.78,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Stator 3-phase"
+            },
+            {
+              "id": "grid",
+              "kind": "box",
+              "x": 0.94,
+              "y": 0.55,
+              "label": "Grid 50 Hz",
+              "ask": "What is loss of synchronism?"
+            }
+          ],
+          "links": [
+            {
+              "from": "steam",
+              "to": "turb",
+              "kind": "fluid"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "rotor",
+              "kind": "force"
+            },
+            {
+              "from": "exc",
+              "to": "rotor",
+              "kind": "power",
+              "label": "Field current"
+            },
+            {
+              "from": "rotor",
+              "to": "stator",
+              "kind": "energy",
+              "label": "Rotating flux"
+            },
+            {
+              "from": "stator",
+              "to": "grid",
+              "kind": "power",
+              "label": "AC out"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "Hydro: 40 poles × 150 rpm / 120 = 50 Hz"
+        }
+      ]
+    },
+    {
+      "say": "The steam valve. Open it and the rotor edges ahead of the grid by an angle called delta, the power angle. Power sent equals E times V over X, times sine delta. With E of 1.2, V of 1.0 and a reactance of 0.8 per unit, at 30 degrees it sends 0.75 per unit. Look along the curve: what happens beyond 90 degrees?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Power angle δ (°)",
+            "max": 180
+          },
+          "y": {
+            "label": "Power (per unit)",
+            "max": 1.6
+          },
+          "curves": [
+            {
+              "label": "P = 1.5 sin δ",
+              "type": "sine",
+              "a": 1.5,
+              "k": 0.002777777777777778,
+              "ask": "What is the power angle of a generator?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "δ = 30°: 0.75 pu"
+            },
+            {
+              "x": 90,
+              "label": "Limit 1.5 pu"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P = (EV/X) sin δ = (1.2 × 1.0/0.8) sin 30° = 0.75 pu"
+        }
+      ]
+    },
+    {
+      "say": "Beyond 90 degrees more angle gives less power, so the rotor would race ahead and slip out of step, a loss of synchronism that protection must catch fast. That is why operators keep delta well below 90 degrees. Superb! Challenge: how much power does this generator send at 60 degrees?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Power angle δ (°)",
+            "max": 180
+          },
+          "y": {
+            "label": "Power (per unit)",
+            "max": 1.6
+          },
+          "curves": [
+            {
+              "label": "P = 1.5 sin δ",
+              "type": "sine",
+              "a": 1.5,
+              "k": 0.002777777777777778,
+              "ask": "What is the power angle of a generator?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 30,
+              "label": "δ = 30°: 0.75 pu"
+            },
+            {
+              "x": 90,
+              "label": "Limit 1.5 pu"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Steady-state limit at δ = 90°: P_max = 1.5 pu"
+        },
+        {
+          "op": "note",
+          "text": "Real machines run well below 90° to keep a safety margin"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a power station generator make 50 Hz?",
+      "a": "A turbine spins the rotor, a DC electromagnet, at a fixed speed. Frequency equals poles times rpm over 120, so a 2-pole rotor at 3000 rpm gives exactly 50 hertz.",
+      "asks": [
+        "Why do generators spin at 3000 rpm?"
+      ]
+    },
+    {
+      "q": "What does excitation do in a synchronous generator?",
+      "a": "Excitation is the DC current in the rotor winding that makes its magnetic field. More excitation raises the internal voltage, which on a grid mainly increases the reactive power the generator supplies and supports the voltage.",
+      "asks": [
+        "What is the exciter for?"
+      ]
+    },
+    {
+      "q": "What is the power angle of a generator?",
+      "a": "It is the angle by which the rotor's internal voltage leads the grid voltage. Real power sent is E V over X times sine delta, so more turbine power pushes delta larger.",
+      "asks": [
+        "What is the load angle delta?"
+      ]
+    },
+    {
+      "q": "What is loss of synchronism?",
+      "a": "If the turbine pushes more power than E V over X can carry, or a fault upsets the balance, delta passes the stable limit and the rotor slips poles relative to the grid. Protection then trips the unit to avoid damage.",
+      "asks": [
+        "What does pole slipping mean?"
+      ]
+    },
+    {
+      "q": "Why do hydro generators have so many poles?",
+      "a": "Water turbines turn slowly, perhaps 100 to 300 rpm. To make 50 hertz at low speed the rotor needs many poles: 40 poles at 150 rpm gives 40 times 150 over 120, which is 50 hertz.",
+      "asks": [
+        "Why are hydro generators so wide?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Three Gorges Dam in China is the world's largest power station, at about 22.5 GW.",
+    "Generator frequency f = pn/120: 2 poles at 3000 rpm or 4 poles at 1500 rpm give 50 Hz.",
+    "Large turbo-generators in coal and nuclear plants usually have 2 or 4 poles."
+  ],
+  "quiz": [
+    {
+      "say": "A generator has E of 1.2, V of 1.0 and X of 0.8 per unit. What power does it send at a power angle of 60 degrees?",
+      "show": "A generator has E = 1.2 pu, V = 1.0 pu, X = 0.8 pu. What power does it send at δ = 60°?",
+      "options": [
+        {
+          "show": "About 1.30 pu",
+          "say": "about 1.30 per unit"
+        },
+        {
+          "show": "0.75 pu",
+          "say": "0.75 per unit"
+        },
+        {
+          "show": "1.5 pu",
+          "say": "1.5 per unit"
+        }
+      ],
+      "answer": 0,
+      "why": "P equals 1.2 times 1.0 over 0.8, which is 1.5, times sine 60 degrees, 0.866: about 1.30 per unit.",
+      "wrong": {
+        "1": "0.75 per unit is the power at 30 degrees.",
+        "2": "1.5 per unit is the maximum, reached only at 90 degrees."
+      }
+    },
+    {
+      "say": "How many poles does a 50 hertz hydro generator need at 150 rpm?",
+      "show": "How many poles does a 50 Hz hydro generator need at 150 rpm?",
+      "options": [
+        {
+          "show": "40",
+          "say": "40"
+        },
+        {
+          "show": "20",
+          "say": "20"
+        },
+        {
+          "show": "4",
+          "say": "4"
+        }
+      ],
+      "answer": 0,
+      "why": "Poles equal 120 times frequency over speed: 120 times 50 over 150 is 40.",
+      "wrong": {
+        "1": "20 poles at 150 rpm would give only 25 hertz.",
+        "2": "4 poles would need 1500 rpm for 50 hertz."
+      }
+    }
+  ]
+}

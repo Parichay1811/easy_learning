@@ -1,0 +1,755 @@
+{
+  "id": "ENGX-ENER-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a combined-cycle gas power station uses its fuel twice",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "combined cycle gas turbine",
+    "CCGT",
+    "gas turbine power station",
+    "heat recovery steam generator",
+    "gas power plant efficiency"
+  ],
+  "examples": [
+    "How does a gas power station work?",
+    "What is a combined-cycle power plant?",
+    "Why are combined-cycle plants so efficient?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "comp",
+          "kind": "fan",
+          "x": 0.1,
+          "y": 0.25,
+          "label": "Compressor",
+          "motion": "spin",
+          "ask": "What does the compressor do in a gas turbine?"
+        },
+        {
+          "id": "burn",
+          "kind": "box",
+          "x": 0.28,
+          "y": 0.25,
+          "size": 0.9,
+          "label": "Combustion chamber",
+          "motion": "pulse"
+        },
+        {
+          "id": "gt",
+          "kind": "fan",
+          "x": 0.47,
+          "y": 0.25,
+          "size": 1.1,
+          "label": "Gas turbine",
+          "motion": "spin"
+        },
+        {
+          "id": "genA",
+          "kind": "coil",
+          "x": 0.7,
+          "y": 0.25,
+          "label": "Generator 1",
+          "motion": "spin"
+        },
+        {
+          "id": "hrsg",
+          "kind": "tank",
+          "x": 0.36,
+          "y": 0.72,
+          "size": 1.2,
+          "label": "Heat recovery boiler",
+          "motion": "pulse",
+          "ask": "What does the heat recovery boiler do?"
+        },
+        {
+          "id": "st",
+          "kind": "fan",
+          "x": 0.62,
+          "y": 0.72,
+          "label": "Steam turbine",
+          "motion": "spin",
+          "ask": "Why is combined cycle more efficient?"
+        },
+        {
+          "id": "genB",
+          "kind": "coil",
+          "x": 0.86,
+          "y": 0.72,
+          "label": "Generator 2",
+          "motion": "spin"
+        },
+        {
+          "id": "stack",
+          "kind": "pipe",
+          "x": 0.1,
+          "y": 0.72,
+          "size": 0.8,
+          "label": "Chimney",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "comp",
+          "to": "burn",
+          "kind": "fluid",
+          "label": "squeezed air"
+        },
+        {
+          "from": "burn",
+          "to": "gt",
+          "kind": "heat",
+          "label": "hot gas"
+        },
+        {
+          "from": "gt",
+          "to": "genA",
+          "kind": "energy"
+        },
+        {
+          "from": "gt",
+          "to": "comp",
+          "kind": "force",
+          "label": "drives"
+        },
+        {
+          "from": "gt",
+          "to": "hrsg",
+          "kind": "heat",
+          "label": "exhaust"
+        },
+        {
+          "from": "hrsg",
+          "to": "st",
+          "kind": "fluid",
+          "label": "steam"
+        },
+        {
+          "from": "st",
+          "to": "genB",
+          "kind": "energy"
+        },
+        {
+          "from": "hrsg",
+          "to": "stack",
+          "kind": "fluid",
+          "label": "cooled gas"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A combined-cycle station uses its fuel twice. First comes a gas turbine, like a jet engine bolted to the ground, which sucks in air and squeezes it with a compressor.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a combined-cycle gas power station uses its fuel twice"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do in a gas turbine?"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Combustion chamber",
+              "motion": "pulse"
+            },
+            {
+              "id": "gt",
+              "kind": "fan",
+              "x": 0.47,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Gas turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "genA",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.25,
+              "label": "Generator 1",
+              "motion": "spin"
+            },
+            {
+              "id": "hrsg",
+              "kind": "tank",
+              "x": 0.36,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Heat recovery boiler",
+              "motion": "pulse",
+              "ask": "What does the heat recovery boiler do?"
+            },
+            {
+              "id": "st",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "Why is combined cycle more efficient?"
+            },
+            {
+              "id": "genB",
+              "kind": "coil",
+              "x": 0.86,
+              "y": 0.72,
+              "label": "Generator 2",
+              "motion": "spin"
+            },
+            {
+              "id": "stack",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Chimney",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "burn",
+              "to": "gt",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "gt",
+              "to": "genA",
+              "kind": "energy"
+            },
+            {
+              "from": "gt",
+              "to": "comp",
+              "kind": "force",
+              "label": "drives"
+            },
+            {
+              "from": "gt",
+              "to": "hrsg",
+              "kind": "heat",
+              "label": "exhaust"
+            },
+            {
+              "from": "hrsg",
+              "to": "st",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "st",
+              "to": "genB",
+              "kind": "energy"
+            },
+            {
+              "from": "hrsg",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "cooled gas"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Natural gas burns in the squeezed air at well over 1,000 degrees Celsius, and the hot gas blasts through the turbine blades, spinning both the compressor and a generator.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do in a gas turbine?"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Combustion chamber",
+              "motion": "pulse"
+            },
+            {
+              "id": "gt",
+              "kind": "fan",
+              "x": 0.47,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Gas turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "genA",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.25,
+              "label": "Generator 1",
+              "motion": "spin"
+            },
+            {
+              "id": "hrsg",
+              "kind": "tank",
+              "x": 0.36,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Heat recovery boiler",
+              "motion": "pulse",
+              "ask": "What does the heat recovery boiler do?"
+            },
+            {
+              "id": "st",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "Why is combined cycle more efficient?"
+            },
+            {
+              "id": "genB",
+              "kind": "coil",
+              "x": 0.86,
+              "y": 0.72,
+              "label": "Generator 2",
+              "motion": "spin"
+            },
+            {
+              "id": "stack",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Chimney",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "burn",
+              "to": "gt",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "gt",
+              "to": "genA",
+              "kind": "energy"
+            },
+            {
+              "from": "gt",
+              "to": "comp",
+              "kind": "force",
+              "label": "drives"
+            },
+            {
+              "from": "gt",
+              "to": "hrsg",
+              "kind": "heat",
+              "label": "exhaust"
+            },
+            {
+              "from": "hrsg",
+              "to": "st",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "st",
+              "to": "genB",
+              "kind": "energy"
+            },
+            {
+              "from": "hrsg",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "cooled gas"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The exhaust leaving the gas turbine is still around 600 degrees, hot enough to boil water. A heat recovery boiler uses it to make steam instead of wasting it.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do in a gas turbine?"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Combustion chamber",
+              "motion": "pulse"
+            },
+            {
+              "id": "gt",
+              "kind": "fan",
+              "x": 0.47,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Gas turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "genA",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.25,
+              "label": "Generator 1",
+              "motion": "spin"
+            },
+            {
+              "id": "hrsg",
+              "kind": "tank",
+              "x": 0.36,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Heat recovery boiler",
+              "motion": "pulse",
+              "ask": "What does the heat recovery boiler do?"
+            },
+            {
+              "id": "st",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "Why is combined cycle more efficient?"
+            },
+            {
+              "id": "genB",
+              "kind": "coil",
+              "x": 0.86,
+              "y": 0.72,
+              "label": "Generator 2",
+              "motion": "spin"
+            },
+            {
+              "id": "stack",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Chimney",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "burn",
+              "to": "gt",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "gt",
+              "to": "genA",
+              "kind": "energy"
+            },
+            {
+              "from": "gt",
+              "to": "comp",
+              "kind": "force",
+              "label": "drives"
+            },
+            {
+              "from": "gt",
+              "to": "hrsg",
+              "kind": "heat",
+              "label": "exhaust"
+            },
+            {
+              "from": "hrsg",
+              "to": "st",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "st",
+              "to": "genB",
+              "kind": "energy"
+            },
+            {
+              "from": "hrsg",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "cooled gas"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "That steam drives a second turbine and generator. Together the two cycles turn about 60 percent of the gas's energy into electricity, compared with about 38 percent for a gas turbine alone.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.25,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do in a gas turbine?"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.28,
+              "y": 0.25,
+              "size": 0.9,
+              "label": "Combustion chamber",
+              "motion": "pulse"
+            },
+            {
+              "id": "gt",
+              "kind": "fan",
+              "x": 0.47,
+              "y": 0.25,
+              "size": 1.1,
+              "label": "Gas turbine",
+              "motion": "spin"
+            },
+            {
+              "id": "genA",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.25,
+              "label": "Generator 1",
+              "motion": "spin"
+            },
+            {
+              "id": "hrsg",
+              "kind": "tank",
+              "x": 0.36,
+              "y": 0.72,
+              "size": 1.2,
+              "label": "Heat recovery boiler",
+              "motion": "pulse",
+              "ask": "What does the heat recovery boiler do?"
+            },
+            {
+              "id": "st",
+              "kind": "fan",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "Why is combined cycle more efficient?"
+            },
+            {
+              "id": "genB",
+              "kind": "coil",
+              "x": 0.86,
+              "y": 0.72,
+              "label": "Generator 2",
+              "motion": "spin"
+            },
+            {
+              "id": "stack",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Chimney",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "burn",
+              "to": "gt",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "gt",
+              "to": "genA",
+              "kind": "energy"
+            },
+            {
+              "from": "gt",
+              "to": "comp",
+              "kind": "force",
+              "label": "drives"
+            },
+            {
+              "from": "gt",
+              "to": "hrsg",
+              "kind": "heat",
+              "label": "exhaust"
+            },
+            {
+              "from": "hrsg",
+              "to": "st",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "st",
+              "to": "genB",
+              "kind": "energy"
+            },
+            {
+              "from": "hrsg",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "cooled gas"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the compressor do in a gas turbine?",
+      "a": "It squeezes incoming air to around 20 times normal pressure before the fuel burns in it. The hot, high-pressure gas then expands through the turbine with great force. The compressor uses over half of the turbine's own power.",
+      "asks": [
+        "Why does a gas turbine squeeze the air?"
+      ]
+    },
+    {
+      "q": "What does the heat recovery boiler do?",
+      "a": "It is a huge boiler with no flame of its own. Hot exhaust from the gas turbine flows past bundles of water tubes, boiling the water into steam for the steam turbine.",
+      "asks": [
+        "What is a heat recovery steam generator?"
+      ]
+    },
+    {
+      "q": "Why is combined cycle more efficient?",
+      "a": "A gas turbine on its own throws away very hot exhaust. Using that heat to run a steam turbine turns waste into extra electricity, so about 60 percent of the fuel's energy is used instead of about 38 percent.",
+      "asks": [
+        "How efficient is a combined-cycle gas plant?"
+      ]
+    },
+    {
+      "q": "Why are gas power stations useful for the grid?",
+      "a": "Gas turbines can change their output quickly, and simple open-cycle ones reach full power in about 10 to 30 minutes, much faster than coal or nuclear. So gas plants fill gaps when demand jumps or the wind drops.",
+      "asks": [
+        "How fast can a gas power station start?"
+      ]
+    },
+    {
+      "q": "Does a gas power station release carbon dioxide?",
+      "a": "Yes. Burning natural gas makes carbon dioxide and water, but a combined-cycle plant emits roughly half as much carbon dioxide as a coal station for each unit of electricity.",
+      "asks": [
+        "Is gas power cleaner than coal?"
+      ]
+    }
+  ],
+  "facts": [
+    "The best combined-cycle gas plants reach a little over 60 percent efficiency, the highest of any fuel-burning power station.",
+    "In a typical combined-cycle plant, about two thirds of the electricity comes from the gas turbine and one third from the steam turbine."
+  ],
+  "quiz": [
+    {
+      "say": "What heats the water for the steam turbine in a combined-cycle plant?",
+      "show": "The steam turbine's steam is made using…",
+      "options": [
+        {
+          "show": "Hot exhaust from the gas turbine",
+          "say": "Hot exhaust from the gas turbine"
+        },
+        {
+          "show": "A separate coal boiler",
+          "say": "A separate coal boiler"
+        },
+        {
+          "show": "Steam from a geyser",
+          "say": "Steam from a geyser"
+        }
+      ],
+      "answer": 0,
+      "why": "The heat recovery boiler uses the gas turbine's hot exhaust, so the fuel's heat is used twice.",
+      "wrong": {
+        "1": "There is no coal boiler; the gas turbine's exhaust is reused.",
+        "2": "Geothermal plants use underground steam, not gas plants."
+      }
+    }
+  ]
+}

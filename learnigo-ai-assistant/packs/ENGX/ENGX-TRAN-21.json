@@ -1,0 +1,640 @@
+{
+  "id": "ENGX-TRAN-21",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a hybrid car switches between engine and motor",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "hybrid car",
+    "power split",
+    "electric motor",
+    "petrol engine",
+    "full hybrid"
+  ],
+  "examples": [
+    "How does a hybrid car work?",
+    "Do you have to plug in a hybrid?",
+    "Why is a hybrid silent when it pulls away?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "eng",
+          "kind": "piston",
+          "x": 0.12,
+          "y": 0.3,
+          "size": 1.2,
+          "label": "Petrol engine",
+          "motion": "slide",
+          "ask": "When does a hybrid use its petrol engine?"
+        },
+        {
+          "id": "gen",
+          "kind": "coil",
+          "x": 0.42,
+          "y": 0.1,
+          "size": 0.7,
+          "label": "Generator",
+          "motion": "spin"
+        },
+        {
+          "id": "split",
+          "kind": "gear",
+          "x": 0.42,
+          "y": 0.45,
+          "size": 1,
+          "label": "Power-split gears",
+          "motion": "spin",
+          "ask": "What are power-split gears?"
+        },
+        {
+          "id": "batt",
+          "kind": "battery",
+          "x": 0.42,
+          "y": 0.84,
+          "size": 1,
+          "label": "Battery",
+          "motion": "pulse",
+          "ask": "Do you plug in a hybrid car?"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.72,
+          "y": 0.45,
+          "size": 1,
+          "label": "Electric motor",
+          "motion": "spin",
+          "ask": "Why does a hybrid start off on electric power?"
+        },
+        {
+          "id": "wheels",
+          "kind": "wheel",
+          "x": 0.92,
+          "y": 0.75,
+          "size": 1.2,
+          "label": "Wheels",
+          "motion": "spin",
+          "ask": "How does a hybrid recharge when braking?"
+        }
+      ],
+      "links": [
+        {
+          "from": "eng",
+          "to": "split",
+          "kind": "energy",
+          "label": "turning"
+        },
+        {
+          "from": "split",
+          "to": "gen",
+          "kind": "energy"
+        },
+        {
+          "from": "gen",
+          "to": "batt",
+          "kind": "power",
+          "label": "charges"
+        },
+        {
+          "from": "batt",
+          "to": "motor",
+          "kind": "power",
+          "label": "electricity"
+        },
+        {
+          "from": "split",
+          "to": "wheels",
+          "kind": "energy",
+          "label": "engine drive"
+        },
+        {
+          "from": "motor",
+          "to": "wheels",
+          "kind": "energy",
+          "label": "motor drive"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A full hybrid car has a petrol engine, an electric motor and a battery. A computer chooses, moment by moment, which of them drives the wheels, to burn as little fuel as possible.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a hybrid car switches between engine and motor"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Petrol engine",
+              "motion": "slide",
+              "ask": "When does a hybrid use its petrol engine?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.1,
+              "size": 0.7,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "split",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.45,
+              "size": 1,
+              "label": "Power-split gears",
+              "motion": "spin",
+              "ask": "What are power-split gears?"
+            },
+            {
+              "id": "batt",
+              "kind": "battery",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1,
+              "label": "Battery",
+              "motion": "pulse",
+              "ask": "Do you plug in a hybrid car?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.45,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "Why does a hybrid start off on electric power?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.75,
+              "size": 1.2,
+              "label": "Wheels",
+              "motion": "spin",
+              "ask": "How does a hybrid recharge when braking?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "split",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "split",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "charges"
+            },
+            {
+              "from": "batt",
+              "to": "motor",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "split",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "engine drive"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "motor drive"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Pulling away and at low speed, the electric motor often drives the car alone from the battery, because motors are strong from standstill while petrol engines are wasteful when slow.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Petrol engine",
+              "motion": "slide",
+              "ask": "When does a hybrid use its petrol engine?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.1,
+              "size": 0.7,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "split",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.45,
+              "size": 1,
+              "label": "Power-split gears",
+              "motion": "spin",
+              "ask": "What are power-split gears?"
+            },
+            {
+              "id": "batt",
+              "kind": "battery",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1,
+              "label": "Battery",
+              "motion": "pulse",
+              "ask": "Do you plug in a hybrid car?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.45,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "Why does a hybrid start off on electric power?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.75,
+              "size": 1.2,
+              "label": "Wheels",
+              "motion": "spin",
+              "ask": "How does a hybrid recharge when braking?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "split",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "split",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "charges"
+            },
+            {
+              "from": "batt",
+              "to": "motor",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "split",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "engine drive"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "motor drive"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "At higher speeds or when you need more power, the engine starts. Power-split gears send some of its turning force to the wheels and some to a generator, which can top up the battery or feed the motor.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Petrol engine",
+              "motion": "slide",
+              "ask": "When does a hybrid use its petrol engine?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.1,
+              "size": 0.7,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "split",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.45,
+              "size": 1,
+              "label": "Power-split gears",
+              "motion": "spin",
+              "ask": "What are power-split gears?"
+            },
+            {
+              "id": "batt",
+              "kind": "battery",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1,
+              "label": "Battery",
+              "motion": "pulse",
+              "ask": "Do you plug in a hybrid car?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.45,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "Why does a hybrid start off on electric power?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.75,
+              "size": 1.2,
+              "label": "Wheels",
+              "motion": "spin",
+              "ask": "How does a hybrid recharge when braking?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "split",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "split",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "charges"
+            },
+            {
+              "from": "batt",
+              "to": "motor",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "split",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "engine drive"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "motor drive"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "When you slow down, the motor works as a generator, turning the car's movement into electricity for the battery. Recycling that braking energy is why hybrids save the most fuel in town traffic.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Petrol engine",
+              "motion": "slide",
+              "ask": "When does a hybrid use its petrol engine?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.42,
+              "y": 0.1,
+              "size": 0.7,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "split",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.45,
+              "size": 1,
+              "label": "Power-split gears",
+              "motion": "spin",
+              "ask": "What are power-split gears?"
+            },
+            {
+              "id": "batt",
+              "kind": "battery",
+              "x": 0.42,
+              "y": 0.84,
+              "size": 1,
+              "label": "Battery",
+              "motion": "pulse",
+              "ask": "Do you plug in a hybrid car?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.45,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "Why does a hybrid start off on electric power?"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.75,
+              "size": 1.2,
+              "label": "Wheels",
+              "motion": "spin",
+              "ask": "How does a hybrid recharge when braking?"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "split",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "split",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "gen",
+              "to": "batt",
+              "kind": "power",
+              "label": "charges"
+            },
+            {
+              "from": "batt",
+              "to": "motor",
+              "kind": "power",
+              "label": "electricity"
+            },
+            {
+              "from": "split",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "engine drive"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "motor drive"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "When does a hybrid use its petrol engine?",
+      "a": "The engine runs when more power is needed, at higher speeds, or when the battery is low. The computer starts and stops it automatically and keeps it working near its most efficient speed.",
+      "asks": [
+        "Does a hybrid engine run all the time?"
+      ]
+    },
+    {
+      "q": "What are power-split gears?",
+      "a": "In many hybrids a planetary gear set links the engine, a generator and the drive motor. It can split the engine's power between driving the wheels and making electricity, in any mix.",
+      "asks": [
+        "How does a hybrid gearbox work?"
+      ]
+    },
+    {
+      "q": "Do you plug in a hybrid car?",
+      "a": "A normal full hybrid is never plugged in: its small battery is charged by the engine and by braking. A plug-in hybrid has a bigger battery you can charge from the mains for longer electric-only driving.",
+      "asks": [
+        "What is a plug-in hybrid?"
+      ]
+    },
+    {
+      "q": "Why does a hybrid start off on electric power?",
+      "a": "An electric motor gives strong turning force from standstill and burns no fuel, while a petrol engine is least efficient at low speed. So the motor handles pulling away.",
+      "asks": [
+        "Why is a hybrid silent when it pulls away?"
+      ]
+    },
+    {
+      "q": "How does a hybrid recharge when braking?",
+      "a": "When you lift off or brake, the electric motor is switched to work as a generator. Turning it takes energy from the car's movement, which slows the car and charges the battery.",
+      "asks": [
+        "What is regenerative braking in a hybrid?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Toyota Prius, launched in Japan in 1997, was the first mass-produced hybrid car.",
+    "Full hybrids save the most fuel in stop-start town driving, where braking energy can be recovered often.",
+    "A planetary gear set lets many hybrids mix engine and motor power without a normal gearbox."
+  ],
+  "quiz": [
+    {
+      "say": "Where does a normal full hybrid get the electricity for its battery?",
+      "show": "Where does a normal full hybrid get the electricity for its battery?",
+      "options": [
+        {
+          "show": "From its engine and from braking",
+          "say": "From its engine and from braking"
+        },
+        {
+          "show": "From a plug at home",
+          "say": "From a plug at home"
+        },
+        {
+          "show": "From solar panels on the roof",
+          "say": "From solar panels on the roof"
+        }
+      ],
+      "answer": 0,
+      "why": "A full hybrid charges itself using the engine-driven generator and regenerative braking.",
+      "wrong": {
+        "1": "That is a plug-in hybrid or a fully electric car.",
+        "2": "A few cars have small solar panels, but they are not how hybrids charge."
+      }
+    }
+  ]
+}

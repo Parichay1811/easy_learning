@@ -1,0 +1,355 @@
+{
+  "id": "BEE-DIG-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Boolean algebra and De Morgan's laws: simplifying logic before you build it",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Boolean algebra",
+    "De Morgan's laws",
+    "logic simplification",
+    "complement rule",
+    "absorption law"
+  ],
+  "examples": [
+    "What are De Morgan's laws?",
+    "How do you simplify AB + AB'?",
+    "What are the basic rules of Boolean algebra?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "Y = AB + AB'",
+          "icon": "puzzle",
+          "note": "Two ANDs, a NOT and an OR: four gates",
+          "ask": "Why simplify logic before building it?"
+        },
+        {
+          "label": "Y = A(B + B')",
+          "icon": "scissors",
+          "note": "Take out the common factor A"
+        },
+        {
+          "label": "Y = A · 1",
+          "icon": "switch",
+          "note": "B OR NOT B is always 1"
+        },
+        {
+          "label": "Y = A",
+          "icon": "chip",
+          "note": "Just a wire: no gates at all",
+          "ask": "How do you simplify AB + AB'?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1854 George Boole wrote rules for logic as if it were algebra, and in 1937 Claude Shannon showed they describe switching circuits. Today they save chip makers real money, because fewer gates mean less area, power and delay. Look at the expression at the start of the chain. It needs four gates. Let's shrink it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Boolean algebra and De Morgan's laws: simplifying logic before you build it"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Y = AB + AB'",
+              "icon": "puzzle",
+              "note": "Two ANDs, a NOT and an OR: four gates",
+              "ask": "Why simplify logic before building it?"
+            },
+            {
+              "label": "Y = A(B + B')",
+              "icon": "scissors",
+              "note": "Take out the common factor A"
+            },
+            {
+              "label": "Y = A · 1",
+              "icon": "switch",
+              "note": "B OR NOT B is always 1"
+            },
+            {
+              "label": "Y = A",
+              "icon": "chip",
+              "note": "Just a wire: no gates at all",
+              "ask": "How do you simplify AB + AB'?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First, your toolkit. In Boolean algebra a dot means AND, a plus means OR, and a dash, called a prime, means NOT. Look at the complement rules: A or not A is always 1, and A and not A is always 0, because a signal cannot be both at once. Which rule says A or 1 equals 1?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Rules you can use to simplify",
+          "groups": [
+            {
+              "label": "Identity",
+              "icon": "key",
+              "items": [
+                "A + 0 = A",
+                "A · 1 = A"
+              ],
+              "ask": "What are the basic rules of Boolean algebra?"
+            },
+            {
+              "label": "Null",
+              "icon": "switch",
+              "items": [
+                "A + 1 = 1",
+                "A · 0 = 0"
+              ]
+            },
+            {
+              "label": "Complement",
+              "icon": "puzzle",
+              "items": [
+                "A + A' = 1",
+                "A · A' = 0"
+              ],
+              "ask": "What does the complement rule say?"
+            },
+            {
+              "label": "Absorption",
+              "icon": "scissors",
+              "items": [
+                "A + AB = A",
+                "A(A + B) = A"
+              ]
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "A + A' = 1    A · A' = 0"
+        }
+      ]
+    },
+    {
+      "say": "Back to our circuit. Take out the common factor A, just as in ordinary algebra, to get A times the bracket B or not B. That bracket is always 1, by the complement rule. So Y equals A, and four gates become one plain wire. Can you see that input B never mattered at all?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Y = AB + AB'",
+              "icon": "puzzle",
+              "note": "Two ANDs, a NOT and an OR: four gates",
+              "ask": "Why simplify logic before building it?"
+            },
+            {
+              "label": "Y = A(B + B')",
+              "icon": "scissors",
+              "note": "Take out the common factor A"
+            },
+            {
+              "label": "Y = A · 1",
+              "icon": "switch",
+              "note": "B OR NOT B is always 1"
+            },
+            {
+              "label": "Y = A",
+              "icon": "chip",
+              "note": "Just a wire: no gates at all",
+              "ask": "How do you simplify AB + AB'?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "AB + AB' = A(B + B') = A · 1 = A"
+        }
+      ]
+    },
+    {
+      "say": "Now De Morgan's laws, named after Augustus De Morgan. Compare the two sides: NOT of A AND B gives exactly the same outputs as NOT A OR NOT B. The rule of thumb is break the bar and change the sign. The second law works the other way: NOT of A OR B equals NOT A AND NOT B. Try it: what does NOT of A OR B become?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "NOT (A AND B)",
+            "icon": "switch",
+            "points": [
+              "Written (AB)'",
+              "Output 0 only for 1, 1",
+              "This is the NAND gate"
+            ]
+          },
+          "right": {
+            "title": "(NOT A) OR (NOT B)",
+            "icon": "switch",
+            "points": [
+              "Written A' + B'",
+              "Output 0 only for 1, 1",
+              "An OR with inverted inputs"
+            ]
+          },
+          "verdict": "Same truth table: (AB)' = A' + B'"
+        },
+        {
+          "op": "formula",
+          "text": "(AB)' = A' + B'    (A + B)' = A'B'"
+        }
+      ]
+    },
+    {
+      "say": "It becomes NOT A AND NOT B. And look at the last box: a whole circuit became a wire. Engineers use De Morgan every day to turn designs into all-NAND or all-NOR gates, which suit chip factories. Superb! Challenge: simplify A plus A B. Hint: look back at the absorption rule.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Y = AB + AB'",
+              "icon": "puzzle",
+              "note": "Two ANDs, a NOT and an OR: four gates",
+              "ask": "Why simplify logic before building it?"
+            },
+            {
+              "label": "Y = A(B + B')",
+              "icon": "scissors",
+              "note": "Take out the common factor A"
+            },
+            {
+              "label": "Y = A · 1",
+              "icon": "switch",
+              "note": "B OR NOT B is always 1"
+            },
+            {
+              "label": "Y = A",
+              "icon": "chip",
+              "note": "Just a wire: no gates at all",
+              "ask": "How do you simplify AB + AB'?"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "(A + B)' = A' · B'"
+        },
+        {
+          "op": "note",
+          "text": "De Morgan lets you build any design from only NAND or NOR gates"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What are De Morgan's laws?",
+      "a": "There are two. NOT of A AND B equals NOT A OR NOT B, and NOT of A OR B equals NOT A AND NOT B. In short: break the bar over the expression and change AND to OR, or OR to AND.",
+      "asks": [
+        "How do you apply De Morgan's theorem?",
+        "What does break the bar, change the sign mean?"
+      ]
+    },
+    {
+      "q": "How do you simplify AB + AB'?",
+      "a": "Factor out A to get A times B plus not B. Since B plus not B is always 1, the whole thing is A times 1, which is just A.",
+      "asks": [
+        "What is A B plus A B bar?"
+      ]
+    },
+    {
+      "q": "What does the complement rule say?",
+      "a": "A signal and its opposite cover every case, so A OR NOT A is always 1, and A AND NOT A is always 0. These two facts remove many terms when you simplify.",
+      "asks": [
+        "Why is A plus A bar equal to 1?"
+      ]
+    },
+    {
+      "q": "What are the basic rules of Boolean algebra?",
+      "a": "The main ones are identity, A plus 0 is A and A times 1 is A; null, A plus 1 is 1 and A times 0 is 0; complement; idempotent, A plus A is A; and absorption, A plus A B is A. Most ordinary algebra moves, like expanding brackets, also work.",
+      "asks": [
+        "What laws does Boolean algebra have?"
+      ]
+    },
+    {
+      "q": "Why simplify logic before building it?",
+      "a": "Every gate costs chip area, power and a little delay. A simpler expression means fewer transistors, a faster circuit and a cheaper chip, while the outputs stay exactly the same.",
+      "asks": [
+        "What is the point of Boolean simplification?"
+      ]
+    }
+  ],
+  "facts": [
+    "George Boole published his algebra of logic in The Laws of Thought in 1854.",
+    "Claude Shannon's 1937 master's thesis showed that Boolean algebra describes relay and switching circuits.",
+    "Augustus De Morgan, a London mathematician, stated his laws in the 19th century."
+  ],
+  "quiz": [
+    {
+      "say": "By De Morgan, NOT of A OR B equals what?",
+      "show": "By De Morgan, (A + B)' equals…",
+      "options": [
+        {
+          "show": "A' · B'",
+          "say": "NOT A AND NOT B"
+        },
+        {
+          "show": "A' + B'",
+          "say": "NOT A OR NOT B"
+        },
+        {
+          "show": "A · B",
+          "say": "A AND B"
+        }
+      ],
+      "answer": 0,
+      "why": "Break the bar and change the sign: the OR becomes AND, and each input gets its own NOT.",
+      "wrong": {
+        "1": "You broke the bar but forgot to change OR to AND. That is the NAND form, a different function.",
+        "2": "The NOTs have vanished; that is a different function altogether."
+      }
+    },
+    {
+      "say": "Simplify A plus A B.",
+      "show": "Simplify A + AB.",
+      "options": [
+        {
+          "show": "A",
+          "say": "A"
+        },
+        {
+          "show": "AB",
+          "say": "A B"
+        },
+        {
+          "show": "A + B",
+          "say": "A plus B"
+        }
+      ],
+      "answer": 0,
+      "why": "Factor A to get A times 1 plus B. One plus anything is 1, so it is A times 1, which is A. This is the absorption rule.",
+      "wrong": {
+        "1": "If A is 1 and B is 0, the original gives 1 but AB gives 0, so they differ.",
+        "2": "If A is 0 and B is 1, the original gives 0 but A plus B gives 1."
+      }
+    }
+  ]
+}

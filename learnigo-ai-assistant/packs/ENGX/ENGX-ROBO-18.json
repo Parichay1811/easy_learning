@@ -1,0 +1,287 @@
+{
+  "id": "ENGX-ROBO-18",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How cruise control holds a car's speed",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "cruise control",
+    "adaptive cruise control",
+    "speed control loop",
+    "throttle control",
+    "wheel speed sensor"
+  ],
+  "examples": [
+    "How does cruise control work?",
+    "How does cruise control go up hills?",
+    "What is adaptive cruise control?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-cycle",
+      "stages": [
+        {
+          "label": "Set speed",
+          "icon": "switch",
+          "note": "The driver presses set at, say, 100 km/h."
+        },
+        {
+          "label": "Measure speed",
+          "icon": "wheel",
+          "note": "Wheel sensors report the actual speed.",
+          "ask": "How does cruise control know the speed?"
+        },
+        {
+          "label": "Compare",
+          "icon": "scale",
+          "note": "The computer finds the gap from the set speed.",
+          "ask": "Is cruise control a closed-loop system?"
+        },
+        {
+          "label": "Adjust power",
+          "icon": "engine",
+          "note": "It opens or closes the throttle to close the gap.",
+          "ask": "How does cruise control go up hills?"
+        },
+        {
+          "label": "Car responds",
+          "icon": "car",
+          "note": "Hills and wind change the speed; the loop repeats."
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Cruise control keeps a car at the speed the driver chooses without a foot on the pedal. It is a classic feedback loop that runs many times a second.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How cruise control holds a car's speed"
+        },
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Set speed",
+              "icon": "switch",
+              "note": "The driver presses set at, say, 100 km/h."
+            },
+            {
+              "label": "Measure speed",
+              "icon": "wheel",
+              "note": "Wheel sensors report the actual speed.",
+              "ask": "How does cruise control know the speed?"
+            },
+            {
+              "label": "Compare",
+              "icon": "scale",
+              "note": "The computer finds the gap from the set speed.",
+              "ask": "Is cruise control a closed-loop system?"
+            },
+            {
+              "label": "Adjust power",
+              "icon": "engine",
+              "note": "It opens or closes the throttle to close the gap.",
+              "ask": "How does cruise control go up hills?"
+            },
+            {
+              "label": "Car responds",
+              "icon": "car",
+              "note": "Hills and wind change the speed; the loop repeats."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Sensors on the wheels measure the real speed, and the computer compares it with the set speed. The difference tells it whether to add or reduce engine power.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Set speed",
+              "icon": "switch",
+              "note": "The driver presses set at, say, 100 km/h."
+            },
+            {
+              "label": "Measure speed",
+              "icon": "wheel",
+              "note": "Wheel sensors report the actual speed.",
+              "ask": "How does cruise control know the speed?"
+            },
+            {
+              "label": "Compare",
+              "icon": "scale",
+              "note": "The computer finds the gap from the set speed.",
+              "ask": "Is cruise control a closed-loop system?"
+            },
+            {
+              "label": "Adjust power",
+              "icon": "engine",
+              "note": "It opens or closes the throttle to close the gap.",
+              "ask": "How does cruise control go up hills?"
+            },
+            {
+              "label": "Car responds",
+              "icon": "car",
+              "note": "Hills and wind change the speed; the loop repeats."
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Going up a hill, gravity pulls back and the car slows slightly, so the controller opens the throttle to push harder until the forces balance again. Going down, it eases off.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "car",
+          "forces": [
+            {
+              "label": "Engine push",
+              "dir": "right",
+              "size": 4
+            },
+            {
+              "label": "Air drag",
+              "dir": "left",
+              "size": 2
+            },
+            {
+              "label": "Hill pulls back",
+              "dir": "left",
+              "size": 2
+            }
+          ],
+          "motion": "right"
+        }
+      ]
+    },
+    {
+      "say": "Adaptive cruise control adds a radar or camera to watch the car ahead. If that car is slower, the system reduces speed to keep a safe gap, then speeds up again when the road clears.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Set speed",
+              "icon": "switch",
+              "note": "The driver presses set at, say, 100 km/h."
+            },
+            {
+              "label": "Measure speed",
+              "icon": "wheel",
+              "note": "Wheel sensors report the actual speed.",
+              "ask": "How does cruise control know the speed?"
+            },
+            {
+              "label": "Compare",
+              "icon": "scale",
+              "note": "The computer finds the gap from the set speed.",
+              "ask": "Is cruise control a closed-loop system?"
+            },
+            {
+              "label": "Adjust power",
+              "icon": "engine",
+              "note": "It opens or closes the throttle to close the gap.",
+              "ask": "How does cruise control go up hills?"
+            },
+            {
+              "label": "Car responds",
+              "icon": "car",
+              "note": "Hills and wind change the speed; the loop repeats."
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does cruise control know the speed?",
+      "a": "It reads the wheel speed sensors, the same ones used by the anti-lock brakes, and turns their pulses into the car's speed.",
+      "asks": [
+        "What sensor does cruise control use?"
+      ]
+    },
+    {
+      "q": "How does cruise control go up hills?",
+      "a": "As the hill slows the car, the measured speed drops below the set speed. The controller opens the throttle for more power until the speed recovers.",
+      "asks": [
+        "Why does the engine get louder on hills with cruise control?"
+      ]
+    },
+    {
+      "q": "What is adaptive cruise control?",
+      "a": "It adds a radar or camera that measures the distance and speed of the car ahead. The system slows down to keep a safe gap and speeds back up when the lane clears.",
+      "asks": [
+        "How does adaptive cruise control work?"
+      ]
+    },
+    {
+      "q": "How do you switch off cruise control?",
+      "a": "Pressing the brake or clutch, or the cancel button, switches it off at once, handing control back to the driver.",
+      "asks": [
+        "How do I cancel cruise control?"
+      ]
+    },
+    {
+      "q": "Is cruise control a closed-loop system?",
+      "a": "Yes. It constantly measures the actual speed, compares it with the target, and corrects the engine power, which is exactly what closed-loop feedback control means.",
+      "asks": [
+        "Is cruise control feedback control?"
+      ]
+    }
+  ],
+  "facts": [
+    "Engineer Ralph Teetor invented modern cruise control; it first appeared on 1958 Chrysler cars.",
+    "Adaptive cruise control uses radar or cameras to keep a set gap to the car in front."
+  ],
+  "quiz": [
+    {
+      "say": "A car on cruise control starts climbing a hill. What does the system do?",
+      "show": "On a hill, cruise control…",
+      "options": [
+        {
+          "show": "Gives the engine more power",
+          "say": "Gives the engine more power"
+        },
+        {
+          "show": "Switches itself off",
+          "say": "Switches itself off"
+        },
+        {
+          "show": "Brakes hard",
+          "say": "Brakes hard"
+        }
+      ],
+      "answer": 0,
+      "why": "The car starts to slow, so the controller opens the throttle to hold the set speed.",
+      "wrong": {
+        "1": "Hills do not switch it off; it corrects for them.",
+        "2": "Braking would slow it further; it needs more power."
+      }
+    }
+  ]
+}

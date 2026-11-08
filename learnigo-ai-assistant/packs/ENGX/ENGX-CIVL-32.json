@@ -1,0 +1,641 @@
+{
+  "id": "ENGX-CIVL-32",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How city sewers carry waste away by gravity",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "sewer",
+    "gravity sewer",
+    "combined sewer overflow",
+    "sewage pumping station",
+    "Bazalgette"
+  ],
+  "examples": [
+    "How do sewers work?",
+    "Where does the water go when I flush?",
+    "Why do sewers slope downhill?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "house",
+          "label": "Homes",
+          "icon": "house",
+          "x": 0.1,
+          "y": 0.22,
+          "ask": "Where does the water go when I flush?"
+        },
+        {
+          "id": "rain",
+          "label": "Street drains",
+          "icon": "rain",
+          "x": 0.36,
+          "y": 0.08
+        },
+        {
+          "id": "lat",
+          "label": "Local sewer",
+          "icon": "pipe",
+          "x": 0.3,
+          "y": 0.42,
+          "ask": "Why do sewers slope downhill?"
+        },
+        {
+          "id": "trunk",
+          "label": "Trunk sewer",
+          "icon": "pipe",
+          "x": 0.55,
+          "y": 0.58
+        },
+        {
+          "id": "pump",
+          "label": "Pumping station",
+          "icon": "pump",
+          "x": 0.76,
+          "y": 0.36,
+          "ask": "What does a sewage pumping station do?"
+        },
+        {
+          "id": "works",
+          "label": "Treatment works",
+          "icon": "factory",
+          "x": 0.9,
+          "y": 0.7
+        },
+        {
+          "id": "river",
+          "label": "River",
+          "icon": "river",
+          "x": 0.55,
+          "y": 0.92,
+          "ask": "What is a combined sewer overflow?"
+        }
+      ],
+      "links": [
+        {
+          "from": "house",
+          "to": "lat",
+          "kind": "fluid",
+          "label": "waste water"
+        },
+        {
+          "from": "rain",
+          "to": "lat",
+          "kind": "fluid",
+          "label": "rain"
+        },
+        {
+          "from": "lat",
+          "to": "trunk",
+          "kind": "fluid",
+          "label": "downhill"
+        },
+        {
+          "from": "trunk",
+          "to": "pump",
+          "kind": "fluid"
+        },
+        {
+          "from": "pump",
+          "to": "works",
+          "kind": "fluid",
+          "label": "lifted"
+        },
+        {
+          "from": "works",
+          "to": "river",
+          "kind": "fluid",
+          "label": "cleaned"
+        },
+        {
+          "from": "trunk",
+          "to": "river",
+          "kind": "fluid",
+          "label": "storm overflow"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every time you flush or drain a sink, the waste water flows into a pipe under the street. Most sewers work by gravity alone, sloping gently downhill all the way.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How city sewers carry waste away by gravity"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "house",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.1,
+              "y": 0.22,
+              "ask": "Where does the water go when I flush?"
+            },
+            {
+              "id": "rain",
+              "label": "Street drains",
+              "icon": "rain",
+              "x": 0.36,
+              "y": 0.08
+            },
+            {
+              "id": "lat",
+              "label": "Local sewer",
+              "icon": "pipe",
+              "x": 0.3,
+              "y": 0.42,
+              "ask": "Why do sewers slope downhill?"
+            },
+            {
+              "id": "trunk",
+              "label": "Trunk sewer",
+              "icon": "pipe",
+              "x": 0.55,
+              "y": 0.58
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.76,
+              "y": 0.36,
+              "ask": "What does a sewage pumping station do?"
+            },
+            {
+              "id": "works",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.9,
+              "y": 0.7
+            },
+            {
+              "id": "river",
+              "label": "River",
+              "icon": "river",
+              "x": 0.55,
+              "y": 0.92,
+              "ask": "What is a combined sewer overflow?"
+            }
+          ],
+          "links": [
+            {
+              "from": "house",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "waste water"
+            },
+            {
+              "from": "rain",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "rain"
+            },
+            {
+              "from": "lat",
+              "to": "trunk",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "trunk",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "works",
+              "kind": "fluid",
+              "label": "lifted"
+            },
+            {
+              "from": "works",
+              "to": "river",
+              "kind": "fluid",
+              "label": "cleaned"
+            },
+            {
+              "from": "trunk",
+              "to": "river",
+              "kind": "fluid",
+              "label": "storm overflow"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Small local sewers join bigger and bigger trunk sewers, like streams joining a river. Engineers set a steady slope so the flow moves fast enough to carry solids along without leaving them behind.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "house",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.1,
+              "y": 0.22,
+              "ask": "Where does the water go when I flush?"
+            },
+            {
+              "id": "rain",
+              "label": "Street drains",
+              "icon": "rain",
+              "x": 0.36,
+              "y": 0.08
+            },
+            {
+              "id": "lat",
+              "label": "Local sewer",
+              "icon": "pipe",
+              "x": 0.3,
+              "y": 0.42,
+              "ask": "Why do sewers slope downhill?"
+            },
+            {
+              "id": "trunk",
+              "label": "Trunk sewer",
+              "icon": "pipe",
+              "x": 0.55,
+              "y": 0.58
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.76,
+              "y": 0.36,
+              "ask": "What does a sewage pumping station do?"
+            },
+            {
+              "id": "works",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.9,
+              "y": 0.7
+            },
+            {
+              "id": "river",
+              "label": "River",
+              "icon": "river",
+              "x": 0.55,
+              "y": 0.92,
+              "ask": "What is a combined sewer overflow?"
+            }
+          ],
+          "links": [
+            {
+              "from": "house",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "waste water"
+            },
+            {
+              "from": "rain",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "rain"
+            },
+            {
+              "from": "lat",
+              "to": "trunk",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "trunk",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "works",
+              "kind": "fluid",
+              "label": "lifted"
+            },
+            {
+              "from": "works",
+              "to": "river",
+              "kind": "fluid",
+              "label": "cleaned"
+            },
+            {
+              "from": "trunk",
+              "to": "river",
+              "kind": "fluid",
+              "label": "storm overflow"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Where the land is flat or the pipes would get too deep, a pumping station lifts the sewage up so it can flow downhill again. Eventually it reaches a treatment works, which cleans it before it returns to a river.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "house",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.1,
+              "y": 0.22,
+              "ask": "Where does the water go when I flush?"
+            },
+            {
+              "id": "rain",
+              "label": "Street drains",
+              "icon": "rain",
+              "x": 0.36,
+              "y": 0.08
+            },
+            {
+              "id": "lat",
+              "label": "Local sewer",
+              "icon": "pipe",
+              "x": 0.3,
+              "y": 0.42,
+              "ask": "Why do sewers slope downhill?"
+            },
+            {
+              "id": "trunk",
+              "label": "Trunk sewer",
+              "icon": "pipe",
+              "x": 0.55,
+              "y": 0.58
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.76,
+              "y": 0.36,
+              "ask": "What does a sewage pumping station do?"
+            },
+            {
+              "id": "works",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.9,
+              "y": 0.7
+            },
+            {
+              "id": "river",
+              "label": "River",
+              "icon": "river",
+              "x": 0.55,
+              "y": 0.92,
+              "ask": "What is a combined sewer overflow?"
+            }
+          ],
+          "links": [
+            {
+              "from": "house",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "waste water"
+            },
+            {
+              "from": "rain",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "rain"
+            },
+            {
+              "from": "lat",
+              "to": "trunk",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "trunk",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "works",
+              "kind": "fluid",
+              "label": "lifted"
+            },
+            {
+              "from": "works",
+              "to": "river",
+              "kind": "fluid",
+              "label": "cleaned"
+            },
+            {
+              "from": "trunk",
+              "to": "river",
+              "kind": "fluid",
+              "label": "storm overflow"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "In older cities, rain from street drains goes into the same pipes. In heavy storms the sewers fill up, and overflows release diluted sewage into rivers so it does not back up into homes. Many cities are now building giant storage tunnels to stop this.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "house",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.1,
+              "y": 0.22,
+              "ask": "Where does the water go when I flush?"
+            },
+            {
+              "id": "rain",
+              "label": "Street drains",
+              "icon": "rain",
+              "x": 0.36,
+              "y": 0.08
+            },
+            {
+              "id": "lat",
+              "label": "Local sewer",
+              "icon": "pipe",
+              "x": 0.3,
+              "y": 0.42,
+              "ask": "Why do sewers slope downhill?"
+            },
+            {
+              "id": "trunk",
+              "label": "Trunk sewer",
+              "icon": "pipe",
+              "x": 0.55,
+              "y": 0.58
+            },
+            {
+              "id": "pump",
+              "label": "Pumping station",
+              "icon": "pump",
+              "x": 0.76,
+              "y": 0.36,
+              "ask": "What does a sewage pumping station do?"
+            },
+            {
+              "id": "works",
+              "label": "Treatment works",
+              "icon": "factory",
+              "x": 0.9,
+              "y": 0.7
+            },
+            {
+              "id": "river",
+              "label": "River",
+              "icon": "river",
+              "x": 0.55,
+              "y": 0.92,
+              "ask": "What is a combined sewer overflow?"
+            }
+          ],
+          "links": [
+            {
+              "from": "house",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "waste water"
+            },
+            {
+              "from": "rain",
+              "to": "lat",
+              "kind": "fluid",
+              "label": "rain"
+            },
+            {
+              "from": "lat",
+              "to": "trunk",
+              "kind": "fluid",
+              "label": "downhill"
+            },
+            {
+              "from": "trunk",
+              "to": "pump",
+              "kind": "fluid"
+            },
+            {
+              "from": "pump",
+              "to": "works",
+              "kind": "fluid",
+              "label": "lifted"
+            },
+            {
+              "from": "works",
+              "to": "river",
+              "kind": "fluid",
+              "label": "cleaned"
+            },
+            {
+              "from": "trunk",
+              "to": "river",
+              "kind": "fluid",
+              "label": "storm overflow"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Where does the water go when I flush?",
+      "a": "It flows through a pipe from your home into a sewer under the street, then through bigger sewers, mostly downhill, to a treatment works where it is cleaned before returning to a river or the sea.",
+      "asks": [
+        "How do sewers work?",
+        "Where does toilet waste go?"
+      ]
+    },
+    {
+      "q": "Why do sewers slope downhill?",
+      "a": "Most sewers rely on gravity, not pumps, so they are laid at a steady slope. It must be steep enough to keep the flow moving and carry solids, but not so steep that the pipes end up very deep.",
+      "asks": [
+        "How do sewers flow without pumps?"
+      ]
+    },
+    {
+      "q": "What does a sewage pumping station do?",
+      "a": "When a sewer would have to go too deep to keep sloping downhill, a pumping station lifts the sewage up into a higher pipe, so it can flow on by gravity.",
+      "asks": [
+        "Why do sewers need pumps?"
+      ]
+    },
+    {
+      "q": "What is a combined sewer overflow?",
+      "a": "In older systems, rainwater and sewage share the same pipes. When heavy rain overfills them, overflow points release the excess, diluted sewage into rivers so it does not flood streets and homes.",
+      "asks": [
+        "Why does sewage go into rivers in storms?"
+      ]
+    },
+    {
+      "q": "Who built London's sewers?",
+      "a": "Joseph Bazalgette designed London's main sewer system after the Great Stink of 1858. Its large brick intercepting sewers carried waste away from the Thames in the city, and they are still in use today.",
+      "asks": [
+        "What was the Great Stink?"
+      ]
+    }
+  ],
+  "facts": [
+    "After the Great Stink of 1858, Joseph Bazalgette built London's intercepting sewers: about 132 kilometres of main sewers fed by over 1,800 kilometres of street sewers.",
+    "Most sewers flow by gravity, laid at a gentle, steady downhill slope."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a city sewer system need pumping stations in some places?",
+      "show": "Sewers need pumping stations where…",
+      "options": [
+        {
+          "show": "The pipes would otherwise get too deep",
+          "say": "The pipes would otherwise get too deep"
+        },
+        {
+          "show": "The sewage is too clean",
+          "say": "The sewage is too clean"
+        },
+        {
+          "show": "It rains too little",
+          "say": "It rains too little"
+        }
+      ],
+      "answer": 0,
+      "why": "On flat land a sloping pipe keeps getting deeper, so pumps lift the flow back up to continue by gravity.",
+      "wrong": {
+        "1": "Sewage is not clean; that is why it goes to treatment.",
+        "2": "Low rainfall is not why pumps are needed."
+      }
+    }
+  ]
+}

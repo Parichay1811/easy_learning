@@ -1,0 +1,380 @@
+{
+  "id": "BCE-STRA-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Beam deflection and stiffness: why span matters to the fourth power",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "beam deflection",
+    "flexural stiffness EI",
+    "deflection limit",
+    "second moment of area",
+    "5wL⁴/384EI"
+  ],
+  "examples": [
+    "How do you calculate the deflection of a beam?",
+    "What is the deflection limit span over 360?",
+    "Why does a longer beam sag so much more?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 6,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "What is the deflection limit for beams?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 10,
+          "label": "10 kN/m",
+          "ask": "What is beam deflection?"
+        }
+      ],
+      "show": [
+        "beam",
+        "deflection"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A floor can be strong enough never to break and still bounce like a trampoline when you walk across it. That bounce is deflection, how far the beam sags. Codes limit it so ceilings do not crack and floors feel solid. Here a six metre steel beam carries ten kilonewtons per metre.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Beam deflection and stiffness: why span matters to the fourth power"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is the deflection limit for beams?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "What is beam deflection?"
+            }
+          ],
+          "show": [
+            "beam",
+            "deflection"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is a beam deflecting in 3D, between a pin support and a roller support. The bend is exaggerated so you can see it; this lesson works out how big it really is. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Beam deflection and stiffness: why span matters to the fourth power"
+        },
+        {
+          "op": "image",
+          "render": "i-beam-bending"
+        }
+      ]
+    },
+    {
+      "say": "Look at the curved line under the beam: the deflected shape, deepest at midspan. The sag there is five w L to the fourth over three hundred and eighty four E I. E is the material stiffness, Young's modulus, and I is the second moment of area, how well the shape resists bending. Which of these can a designer change most easily?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is the deflection limit for beams?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "What is beam deflection?"
+            }
+          ],
+          "show": [
+            "beam",
+            "deflection"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ = 5wL⁴ / (384 EI)"
+        },
+        {
+          "op": "note",
+          "text": "Steel: E = 200 GPa. Concrete: E ≈ 30 GPa."
+        }
+      ]
+    },
+    {
+      "say": "Usually I, by choosing a bigger section. Let us put in numbers. Steel at two hundred gigapascals and I of one times ten to the minus four metres to the fourth give a sag of about eight point four millimetres. A common limit is span over three hundred and sixty, about sixteen point seven millimetres, so the beam passes comfortably.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is the deflection limit for beams?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "What is beam deflection?"
+            }
+          ],
+          "show": [
+            "beam",
+            "deflection"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ = 5×10×6⁴ / (384 × 2×10⁸ × 10⁻⁴) = 8.4 mm"
+        },
+        {
+          "op": "note",
+          "text": "Limit L/360 = 6000/360 = 16.7 mm, so 8.4 mm is fine."
+        }
+      ]
+    },
+    {
+      "say": "Now double the span to twelve metres with the same load per metre. The moment grows four times, to one hundred and eighty kilonewton metres, but the sag grows sixteen times, because span is raised to the fourth power. Our beam would now sag about a hundred and thirty five millimetres! What would you change to fix it?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 12,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is the deflection limit for beams?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does doubling the span increase deflection sixteen times?"
+            }
+          ],
+          "show": [
+            "beam",
+            "deflection"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ ∝ L⁴: 2 × span → 2⁴ = 16 × sag"
+        }
+      ]
+    },
+    {
+      "say": "Make it deeper! For a rectangle, I is b h cubed over twelve, so doubling the depth makes the beam eight times stiffer. That is why long-span beams are tall and slim, not wide and flat. Superb work. Challenge: a plank on edge or lying flat, which sags less, and by how much?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is the deflection limit for beams?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "What is beam deflection?"
+            }
+          ],
+          "show": [
+            "beam",
+            "deflection"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "I = bh³/12 → 2 × depth = 8 × stiffer"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is beam deflection?",
+      "a": "Deflection is how far a beam moves from its original line under load, usually measured at midspan in millimetres. It is a serviceability check: a beam can be strong enough yet too bouncy.",
+      "asks": [
+        "What does deflection mean?",
+        "How much does a beam sag?"
+      ]
+    },
+    {
+      "q": "What is flexural stiffness EI?",
+      "a": "EI is Young's modulus times the second moment of area. E is how stiff the material is, I is how well the cross-section shape resists bending; a bigger EI means less sag.",
+      "asks": [
+        "What is EI in beams?",
+        "What is the second moment of area?"
+      ]
+    },
+    {
+      "q": "What is the deflection limit for beams?",
+      "a": "Limits are often written as span divided by a number, such as span over 250 for overall sag or span over 360 under live load, so a 6 metre beam might be limited to about 16.7 millimetres.",
+      "asks": [
+        "Span over 360 rule",
+        "How much deflection is allowed?"
+      ]
+    },
+    {
+      "q": "Why does doubling the span increase deflection sixteen times?",
+      "a": "Deflection under a uniform load depends on span to the fourth power. Two to the fourth is sixteen, so twice the span gives sixteen times the sag for the same load per metre.",
+      "asks": [
+        "Why does span matter so much for deflection?"
+      ]
+    },
+    {
+      "q": "How does beam depth affect stiffness?",
+      "a": "For a rectangular section I equals b h cubed over twelve, so stiffness grows with the cube of depth. Doubling the depth makes it eight times stiffer, while doubling the width only doubles it.",
+      "asks": [
+        "Deeper or wider beam?"
+      ]
+    }
+  ],
+  "facts": [
+    "Young's modulus is about 200 GPa for structural steel and roughly 30 GPa for normal-strength concrete.",
+    "Eurocode 2 suggests span/250 as a general limit on the sag of concrete beams and slabs, and span/500 where partitions could be damaged."
+  ],
+  "quiz": [
+    {
+      "say": "A beam sags 5 millimetres. The span is made one and a half times longer with the same load per metre. What is the new sag?",
+      "show": "A beam sags 5 mm. The span grows 1.5 times, same load per metre. New sag?",
+      "options": [
+        {
+          "show": "7.5 mm",
+          "say": "7.5 millimetres"
+        },
+        {
+          "show": "11.3 mm",
+          "say": "11.3 millimetres"
+        },
+        {
+          "show": "25.3 mm",
+          "say": "25.3 millimetres"
+        }
+      ],
+      "answer": 2,
+      "why": "Sag goes with span to the fourth power: 1.5⁴ ≈ 5.06, and 5 × 5.06 ≈ 25.3 millimetres.",
+      "wrong": {
+        "0": "That assumes sag grows in direct proportion to span.",
+        "1": "That uses span squared, which is how the moment grows, not the sag."
+      }
+    },
+    {
+      "say": "Doubling the depth of a rectangular beam makes it how many times stiffer?",
+      "show": "Doubling the depth of a rectangular beam makes it how many times stiffer?",
+      "options": [
+        {
+          "show": "2 times",
+          "say": "2 times"
+        },
+        {
+          "show": "4 times",
+          "say": "4 times"
+        },
+        {
+          "show": "8 times",
+          "say": "8 times"
+        }
+      ],
+      "answer": 2,
+      "why": "I = bh³/12, so doubling h multiplies I by 2³ = 8.",
+      "wrong": {
+        "0": "Doubling the width gives 2 times; depth counts as a cube.",
+        "1": "That is the square; I uses the cube of the depth."
+      }
+    }
+  ]
+}

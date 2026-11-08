@@ -1,0 +1,516 @@
+{
+  "id": "BME-HEAT-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Insulation and the critical radius: when lagging a pipe adds heat loss",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-HEAT — Heat transfer",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "critical radius of insulation",
+    "pipe insulation",
+    "cylindrical conduction",
+    "lagging",
+    "wire insulation"
+  ],
+  "examples": [
+    "What is the critical radius of insulation?",
+    "Can insulation increase heat loss?",
+    "How do I calculate heat loss from an insulated pipe?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Outer radius (mm)",
+        "min": 5,
+        "max": 50
+      },
+      "y": {
+        "label": "Heat loss (W/m)",
+        "max": 30
+      },
+      "curves": [
+        {
+          "label": "PVC on 5 mm wire",
+          "type": "points",
+          "points": [
+            [
+              5,
+              15.7
+            ],
+            [
+              8,
+              20.6
+            ],
+            [
+              11,
+              22.9
+            ],
+            [
+              14,
+              23.8
+            ],
+            [
+              17,
+              24
+            ],
+            [
+              20,
+              23.9
+            ],
+            [
+              25,
+              23.3
+            ],
+            [
+              30,
+              22.6
+            ],
+            [
+              40,
+              21.3
+            ],
+            [
+              50,
+              20.2
+            ]
+          ],
+          "smooth": true,
+          "ask": "What is the critical radius of insulation?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 17,
+          "label": "Critical 17 mm"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Here is a surprise. Wrap a thin electric wire in plastic and it can lose more heat, not less. Engineers actually use this to keep cables cool. Look at the cross-section: a hot core, a ring of insulation and a film of air around the outside.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Insulation and the critical radius: when lagging a pipe adds heat loss"
+        },
+        {
+          "name": "x-layers",
+          "radial": true,
+          "layers": [
+            {
+              "label": "Outside air film",
+              "note": "R = 1/(h 2πr): shrinks as r grows",
+              "color": "#9cc3e6",
+              "ask": "Why does the air film resistance shrink as insulation is added?"
+            },
+            {
+              "label": "Insulation",
+              "note": "R = ln(r₂/r₁)/(2πk): grows as r grows",
+              "color": "#f3e27a",
+              "size": 1.6,
+              "ask": "Why does insulation resistance grow with thickness?"
+            },
+            {
+              "label": "Wire or pipe",
+              "note": "Hot core",
+              "color": "#c0703c"
+            }
+          ],
+          "flow": {
+            "label": "Heat out",
+            "from": 2,
+            "to": 0
+          },
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Wire radius 5 mm, PVC k = 0.17, air h = 10, 50 K hotter"
+        }
+      ]
+    },
+    {
+      "say": "Two resistances fight. The insulation's conduction resistance grows as you add thickness. But its outer surface also gets bigger, and the air film resistance, 1 over h times area, shrinks. Which effect wins depends on the radius. See the two rings?",
+      "draw": [
+        {
+          "name": "x-layers",
+          "radial": true,
+          "layers": [
+            {
+              "label": "Outside air film",
+              "note": "R = 1/(h 2πr): shrinks as r grows",
+              "color": "#9cc3e6",
+              "ask": "Why does the air film resistance shrink as insulation is added?"
+            },
+            {
+              "label": "Insulation",
+              "note": "R = ln(r₂/r₁)/(2πk): grows as r grows",
+              "color": "#f3e27a",
+              "size": 1.6,
+              "ask": "Why does insulation resistance grow with thickness?"
+            },
+            {
+              "label": "Wire or pipe",
+              "note": "Hot core",
+              "color": "#c0703c"
+            }
+          ],
+          "flow": {
+            "label": "Heat out",
+            "from": 2,
+            "to": 0
+          },
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "R' = ln(r₂/r₁)/(2πk) + 1/(2πr₂h)"
+        }
+      ]
+    },
+    {
+      "say": "The graph shows heat loss per metre against outer radius. At first, adding plastic raises the loss, from 15.7 to 24 watts per metre. The peak is at the critical radius, k over h: 0.17 over 10, which is 17 millimetres. Only beyond that does more insulation cut the loss. Where is the critical radius?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Outer radius (mm)",
+            "min": 5,
+            "max": 50
+          },
+          "y": {
+            "label": "Heat loss (W/m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "PVC on 5 mm wire",
+              "type": "points",
+              "points": [
+                [
+                  5,
+                  15.7
+                ],
+                [
+                  8,
+                  20.6
+                ],
+                [
+                  11,
+                  22.9
+                ],
+                [
+                  14,
+                  23.8
+                ],
+                [
+                  17,
+                  24
+                ],
+                [
+                  20,
+                  23.9
+                ],
+                [
+                  25,
+                  23.3
+                ],
+                [
+                  30,
+                  22.6
+                ],
+                [
+                  40,
+                  21.3
+                ],
+                [
+                  50,
+                  20.2
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the critical radius of insulation?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 17,
+              "label": "Critical 17 mm"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "r_cr = k/h = 0.17/10 = 0.017 m = 17 mm"
+        }
+      ]
+    },
+    {
+      "say": "At the top of the hump. For a cable, staying below 17 millimetres is good news: the plastic insulates electrically and helps cool the wire. Now a steam pipe 50 millimetres in radius with mineral wool, k 0.04: r critical is only 4 millimetres. The pipe is already far bigger, so does lagging always help here?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Outer radius (mm)",
+            "min": 5,
+            "max": 50
+          },
+          "y": {
+            "label": "Heat loss (W/m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "PVC on 5 mm wire",
+              "type": "points",
+              "points": [
+                [
+                  5,
+                  15.7
+                ],
+                [
+                  8,
+                  20.6
+                ],
+                [
+                  11,
+                  22.9
+                ],
+                [
+                  14,
+                  23.8
+                ],
+                [
+                  17,
+                  24
+                ],
+                [
+                  20,
+                  23.9
+                ],
+                [
+                  25,
+                  23.3
+                ],
+                [
+                  30,
+                  22.6
+                ],
+                [
+                  40,
+                  21.3
+                ],
+                [
+                  50,
+                  20.2
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the critical radius of insulation?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 17,
+              "label": "Critical 17 mm"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Mineral wool: r_cr = 0.04/10 = 4 mm, far below the pipe radius"
+        }
+      ]
+    },
+    {
+      "say": "Yes, every bit of lagging cuts the loss! Great thinking. Exam tip: critical radius k over h is for cylinders; for a sphere it is 2 k over h. Real link: thin pipes and wires are where this matters, so always check the radius against k over h.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Outer radius (mm)",
+            "min": 5,
+            "max": 50
+          },
+          "y": {
+            "label": "Heat loss (W/m)",
+            "max": 30
+          },
+          "curves": [
+            {
+              "label": "PVC on 5 mm wire",
+              "type": "points",
+              "points": [
+                [
+                  5,
+                  15.7
+                ],
+                [
+                  8,
+                  20.6
+                ],
+                [
+                  11,
+                  22.9
+                ],
+                [
+                  14,
+                  23.8
+                ],
+                [
+                  17,
+                  24
+                ],
+                [
+                  20,
+                  23.9
+                ],
+                [
+                  25,
+                  23.3
+                ],
+                [
+                  30,
+                  22.6
+                ],
+                [
+                  40,
+                  21.3
+                ],
+                [
+                  50,
+                  20.2
+                ]
+              ],
+              "smooth": true,
+              "ask": "What is the critical radius of insulation?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 17,
+              "label": "Critical 17 mm"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Sphere: r_cr = 2k/h"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the critical radius of insulation?",
+      "a": "The outer radius at which heat loss from an insulated cylinder is greatest. For a cylinder it equals k over h; below it, adding insulation increases heat loss.",
+      "asks": [
+        "critical radius formula",
+        "can insulation increase heat loss"
+      ]
+    },
+    {
+      "q": "Why does insulation resistance grow with thickness?",
+      "a": "For a cylinder the conduction resistance is the natural log of r2 over r1 divided by 2 pi k per metre, which grows as the outer radius grows.",
+      "asks": [
+        "cylindrical conduction resistance"
+      ]
+    },
+    {
+      "q": "Why does the air film resistance shrink as insulation is added?",
+      "a": "The outer surface gets bigger, and the convection resistance is 1 over h times the area, so more area means less resistance.",
+      "asks": [
+        "outer surface area effect"
+      ]
+    },
+    {
+      "q": "How do I calculate heat loss from an insulated pipe?",
+      "a": "Add the cylinder resistance of each layer and the outside convection resistance per metre, then divide the temperature difference by the total.",
+      "asks": [
+        "insulated pipe heat loss"
+      ]
+    },
+    {
+      "q": "Does lagging always help a steam pipe?",
+      "a": "Usually yes. A steam pipe is much bigger than the critical radius of good insulation like mineral wool, so every extra layer reduces heat loss.",
+      "asks": [
+        "pipe lagging"
+      ]
+    }
+  ],
+  "facts": [
+    "The critical radius of insulation for a cylinder is k/h, and for a sphere 2k/h.",
+    "Below the critical radius, adding insulation increases heat loss."
+  ],
+  "quiz": [
+    {
+      "say": "Insulation with k equal to 0.05 is used in air where h is 10. What is the critical radius for a pipe?",
+      "show": "k = 0.05 W/m·K, h = 10 W/m²·K. Critical radius for a cylinder?",
+      "options": [
+        {
+          "show": "5 mm",
+          "say": "5 millimetres"
+        },
+        {
+          "show": "10 mm",
+          "say": "10 millimetres"
+        },
+        {
+          "show": "200 mm",
+          "say": "200 millimetres"
+        }
+      ],
+      "answer": 0,
+      "why": "r_cr = k/h = 0.05/10 = 0.005 m = 5 mm.",
+      "wrong": {
+        "1": "That uses 2k/h, the formula for a sphere.",
+        "2": "That divides h by k, upside down."
+      }
+    },
+    {
+      "say": "A wire has a radius smaller than the critical radius. What does adding a thin layer of insulation do?",
+      "show": "Wire radius < critical radius. Adding thin insulation…",
+      "options": [
+        {
+          "show": "Increases the heat loss",
+          "say": "Increases the heat loss"
+        },
+        {
+          "show": "Decreases the heat loss",
+          "say": "Decreases the heat loss"
+        },
+        {
+          "show": "Has no effect",
+          "say": "Has no effect"
+        }
+      ],
+      "answer": 0,
+      "why": "Below r_cr the drop in surface resistance beats the rise in conduction resistance, so heat loss rises.",
+      "wrong": {
+        "1": "That only happens above the critical radius.",
+        "2": "The heat loss changes; it peaks at the critical radius."
+      }
+    }
+  ]
+}

@@ -1,0 +1,629 @@
+{
+  "id": "ENGX-COMP-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a hard drive reads and writes data",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "hard drive",
+    "HDD platter",
+    "read write head",
+    "actuator arm",
+    "magnetic storage"
+  ],
+  "examples": [
+    "How does a hard drive store data?",
+    "What is inside a hard disk drive?",
+    "Why do hard drives break if you drop them?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "platter",
+          "kind": "wheel",
+          "x": 0.38,
+          "y": 0.45,
+          "size": 1.5,
+          "label": "Spinning platter",
+          "motion": "spin",
+          "ask": "What is a hard drive platter?"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.38,
+          "y": 0.88,
+          "size": 0.7,
+          "label": "Spindle motor",
+          "motion": "spin",
+          "ask": "How fast does a hard drive spin?"
+        },
+        {
+          "id": "head",
+          "kind": "coil",
+          "x": 0.6,
+          "y": 0.3,
+          "size": 0.6,
+          "label": "Read/write head",
+          "motion": "pulse",
+          "ask": "How does the read/write head write data?"
+        },
+        {
+          "id": "arm",
+          "kind": "lever",
+          "x": 0.78,
+          "y": 0.45,
+          "size": 1,
+          "label": "Actuator arm",
+          "motion": "swing",
+          "ask": "How does the arm find the right place?"
+        },
+        {
+          "id": "vcm",
+          "kind": "magnet",
+          "x": 0.9,
+          "y": 0.78,
+          "size": 0.8,
+          "label": "Voice coil magnet",
+          "motion": "none"
+        },
+        {
+          "id": "ctrl",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.18,
+          "size": 0.7,
+          "label": "Controller chip",
+          "motion": "pulse"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "platter",
+          "kind": "energy",
+          "label": "spins"
+        },
+        {
+          "from": "vcm",
+          "to": "arm",
+          "kind": "force",
+          "label": "swings"
+        },
+        {
+          "from": "arm",
+          "to": "head",
+          "kind": "force"
+        },
+        {
+          "from": "head",
+          "to": "platter",
+          "kind": "signal",
+          "label": "magnetises"
+        },
+        {
+          "from": "ctrl",
+          "to": "head",
+          "kind": "data",
+          "label": "bits"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A hard drive stores data as tiny magnetised patches on a spinning disc coated in magnetic material, called a platter. Each patch's magnetic direction stands for a 1 or a 0.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a hard drive reads and writes data"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "platter",
+              "kind": "wheel",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Spinning platter",
+              "motion": "spin",
+              "ask": "What is a hard drive platter?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "How fast does a hard drive spin?"
+            },
+            {
+              "id": "head",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Read/write head",
+              "motion": "pulse",
+              "ask": "How does the read/write head write data?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.45,
+              "size": 1,
+              "label": "Actuator arm",
+              "motion": "swing",
+              "ask": "How does the arm find the right place?"
+            },
+            {
+              "id": "vcm",
+              "kind": "magnet",
+              "x": 0.9,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Voice coil magnet",
+              "motion": "none"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "size": 0.7,
+              "label": "Controller chip",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "platter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "vcm",
+              "to": "arm",
+              "kind": "force",
+              "label": "swings"
+            },
+            {
+              "from": "arm",
+              "to": "head",
+              "kind": "force"
+            },
+            {
+              "from": "head",
+              "to": "platter",
+              "kind": "signal",
+              "label": "magnetises"
+            },
+            {
+              "from": "ctrl",
+              "to": "head",
+              "kind": "data",
+              "label": "bits"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "A motor spins the platter, often at 5,400 or 7,200 turns a minute, so any spot on the disc passes under the head many times a second.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "platter",
+              "kind": "wheel",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Spinning platter",
+              "motion": "spin",
+              "ask": "What is a hard drive platter?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "How fast does a hard drive spin?"
+            },
+            {
+              "id": "head",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Read/write head",
+              "motion": "pulse",
+              "ask": "How does the read/write head write data?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.45,
+              "size": 1,
+              "label": "Actuator arm",
+              "motion": "swing",
+              "ask": "How does the arm find the right place?"
+            },
+            {
+              "id": "vcm",
+              "kind": "magnet",
+              "x": 0.9,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Voice coil magnet",
+              "motion": "none"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "size": 0.7,
+              "label": "Controller chip",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "platter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "vcm",
+              "to": "arm",
+              "kind": "force",
+              "label": "swings"
+            },
+            {
+              "from": "arm",
+              "to": "head",
+              "kind": "force"
+            },
+            {
+              "from": "head",
+              "to": "platter",
+              "kind": "signal",
+              "label": "magnetises"
+            },
+            {
+              "from": "ctrl",
+              "to": "head",
+              "kind": "data",
+              "label": "bits"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The read/write head is a tiny electromagnet that flies on a cushion of air just nanometres above the surface. Current through it flips the magnetic patches to write, and it senses their direction to read.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "platter",
+              "kind": "wheel",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Spinning platter",
+              "motion": "spin",
+              "ask": "What is a hard drive platter?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "How fast does a hard drive spin?"
+            },
+            {
+              "id": "head",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Read/write head",
+              "motion": "pulse",
+              "ask": "How does the read/write head write data?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.45,
+              "size": 1,
+              "label": "Actuator arm",
+              "motion": "swing",
+              "ask": "How does the arm find the right place?"
+            },
+            {
+              "id": "vcm",
+              "kind": "magnet",
+              "x": 0.9,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Voice coil magnet",
+              "motion": "none"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "size": 0.7,
+              "label": "Controller chip",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "platter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "vcm",
+              "to": "arm",
+              "kind": "force",
+              "label": "swings"
+            },
+            {
+              "from": "arm",
+              "to": "head",
+              "kind": "force"
+            },
+            {
+              "from": "head",
+              "to": "platter",
+              "kind": "signal",
+              "label": "magnetises"
+            },
+            {
+              "from": "ctrl",
+              "to": "head",
+              "kind": "data",
+              "label": "bits"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "A voice coil magnet swings the arm across the platter in a few milliseconds to reach the right ring of data, called a track. Because parts must move, a hard drive is slower than an SSD, but it stores lots of data cheaply.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "platter",
+              "kind": "wheel",
+              "x": 0.38,
+              "y": 0.45,
+              "size": 1.5,
+              "label": "Spinning platter",
+              "motion": "spin",
+              "ask": "What is a hard drive platter?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Spindle motor",
+              "motion": "spin",
+              "ask": "How fast does a hard drive spin?"
+            },
+            {
+              "id": "head",
+              "kind": "coil",
+              "x": 0.6,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Read/write head",
+              "motion": "pulse",
+              "ask": "How does the read/write head write data?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.45,
+              "size": 1,
+              "label": "Actuator arm",
+              "motion": "swing",
+              "ask": "How does the arm find the right place?"
+            },
+            {
+              "id": "vcm",
+              "kind": "magnet",
+              "x": 0.9,
+              "y": 0.78,
+              "size": 0.8,
+              "label": "Voice coil magnet",
+              "motion": "none"
+            },
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "size": 0.7,
+              "label": "Controller chip",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "platter",
+              "kind": "energy",
+              "label": "spins"
+            },
+            {
+              "from": "vcm",
+              "to": "arm",
+              "kind": "force",
+              "label": "swings"
+            },
+            {
+              "from": "arm",
+              "to": "head",
+              "kind": "force"
+            },
+            {
+              "from": "head",
+              "to": "platter",
+              "kind": "signal",
+              "label": "magnetises"
+            },
+            {
+              "from": "ctrl",
+              "to": "head",
+              "kind": "data",
+              "label": "bits"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a hard drive platter?",
+      "a": "A platter is a perfectly smooth disc of aluminium or glass coated with a thin magnetic layer. Data is written in rings called tracks, and a drive may stack several platters on one spindle.",
+      "asks": [
+        "What is the disc inside a hard drive?"
+      ]
+    },
+    {
+      "q": "How fast does a hard drive spin?",
+      "a": "Most hard drives spin at 5,400 or 7,200 revolutions per minute, and some server drives at 10,000 or 15,000. At 7,200 rpm the platter turns 120 times every second.",
+      "asks": [
+        "What does 7200 rpm mean?"
+      ]
+    },
+    {
+      "q": "How does the read/write head write data?",
+      "a": "The head is a tiny electromagnet. Current through it makes a magnetic field that sets the direction of the patch beneath it, north one way for a 1 and the other way for a 0. To read, a sensor in the head feels those directions as it passes.",
+      "asks": [
+        "How does a hard drive read data?"
+      ]
+    },
+    {
+      "q": "How does the arm find the right place?",
+      "a": "A coil on the arm sits between strong magnets, like a loudspeaker. Current in the coil swings the arm, and servo markings on the platter tell the drive exactly which track the head is over.",
+      "asks": [
+        "What is the actuator arm?"
+      ]
+    },
+    {
+      "q": "Why do hard drives break if you drop them?",
+      "a": "The head flies only a few nanometres above the spinning platter. A jolt can slam it into the surface, a head crash, scratching off the magnetic coating and the data with it. Many drives park the head when they sense a fall.",
+      "asks": [
+        "What is a head crash?"
+      ]
+    }
+  ],
+  "facts": [
+    "IBM's first hard drive, the RAMAC 350 of 1956, stored about 5 megabytes on fifty 24-inch platters.",
+    "Modern hard drive heads fly only a few nanometres above the platter surface."
+  ],
+  "quiz": [
+    {
+      "say": "What stores a 1 or a 0 on a hard drive platter?",
+      "show": "A bit on a platter is…",
+      "options": [
+        {
+          "show": "The direction of a tiny magnetised patch",
+          "say": "The direction of a tiny magnetised patch"
+        },
+        {
+          "show": "A tiny hole punched in the disc",
+          "say": "A tiny hole punched in the disc"
+        },
+        {
+          "show": "Electrons trapped behind insulation",
+          "say": "Electrons trapped behind insulation"
+        }
+      ],
+      "answer": 0,
+      "why": "The head magnetises each patch one way or the other, and that direction is the bit.",
+      "wrong": {
+        "1": "Holes were used in old punched cards, not hard drives.",
+        "2": "Trapped electrons are how flash memory in an SSD works."
+      }
+    },
+    {
+      "say": "Why is a hard drive slower than an SSD?",
+      "show": "Hard drives are slower because…",
+      "options": [
+        {
+          "show": "They use slower electricity",
+          "say": "They use slower electricity"
+        },
+        {
+          "show": "Parts must physically move to the data",
+          "say": "Parts must physically move to the data"
+        },
+        {
+          "show": "They store fewer bits",
+          "say": "They store fewer bits"
+        }
+      ],
+      "answer": 1,
+      "why": "The platter must spin round and the arm must swing to the right track before data can be read.",
+      "wrong": {
+        "0": "Electricity travels just as fast in both; the delay is mechanical.",
+        "2": "Hard drives often hold more data, not less; capacity is not what makes them slow."
+      }
+    }
+  ]
+}

@@ -1,0 +1,787 @@
+{
+  "id": "BEE-MACH-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Starting big motors: direct-on-line, star–delta and soft starters",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "star-delta starter",
+    "soft starter",
+    "direct-on-line starting",
+    "motor inrush current",
+    "variable frequency drive"
+  ],
+  "examples": [
+    "Why do big motors need a starter?",
+    "How does a star-delta starter reduce current?",
+    "What is the difference between a soft starter and a VFD?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (s)",
+        "max": 10
+      },
+      "y": {
+        "label": "Current (× rated)",
+        "max": 7
+      },
+      "curves": [
+        {
+          "label": "Direct on line",
+          "type": "points",
+          "points": [
+            [
+              0,
+              6
+            ],
+            [
+              2,
+              6
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3.6,
+              1
+            ],
+            [
+              10,
+              1
+            ]
+          ],
+          "ask": "Why do big motors need a starter?"
+        },
+        {
+          "label": "Star–delta",
+          "type": "points",
+          "points": [
+            [
+              0,
+              2
+            ],
+            [
+              4.5,
+              2
+            ],
+            [
+              5,
+              1.6
+            ],
+            [
+              5,
+              3.5
+            ],
+            [
+              5.6,
+              1.2
+            ],
+            [
+              6.2,
+              1
+            ],
+            [
+              10,
+              1
+            ]
+          ],
+          "ask": "How does a star-delta starter reduce current?"
+        },
+        {
+          "label": "Soft starter",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              0,
+              1.5
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              7,
+              1
+            ],
+            [
+              10,
+              1
+            ]
+          ],
+          "ask": "How does a soft starter work?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 1,
+          "label": "DOL ≈ 6 × rated"
+        },
+        {
+          "x": 5,
+          "label": "Switch to delta"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Start a 55 kilowatt pump motor straight off the line at a water plant in Brazil and, for a few seconds, it gulps about six times its rated current, around 600 amps instead of 100. The voltage sags, lights flicker and the pipes take a hammer blow. On the board, the tall curve is that direct-on-line start; the two lower curves are kinder ways to start.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Starting big motors: direct-on-line, star–delta and soft starters"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 10
+          },
+          "y": {
+            "label": "Current (× rated)",
+            "max": 7
+          },
+          "curves": [
+            {
+              "label": "Direct on line",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  6
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3.6,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "Why do big motors need a starter?"
+            },
+            {
+              "label": "Star–delta",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  4.5,
+                  2
+                ],
+                [
+                  5,
+                  1.6
+                ],
+                [
+                  5,
+                  3.5
+                ],
+                [
+                  5.6,
+                  1.2
+                ],
+                [
+                  6.2,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a star-delta starter reduce current?"
+            },
+            {
+              "label": "Soft starter",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  1.5
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  6,
+                  3
+                ],
+                [
+                  7,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a soft starter work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "DOL ≈ 6 × rated"
+            },
+            {
+              "x": 5,
+              "label": "Switch to delta"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is the kind of motor we need to start gently, in 3D: a big induction motor. At standstill its rotor bars draw a huge current, which is why starters exist. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Starting big motors: direct-on-line, star–delta and soft starters"
+        },
+        {
+          "op": "image",
+          "render": "induction-motor"
+        }
+      ]
+    },
+    {
+      "say": "Look at the direct-on-line curve. At standstill an induction motor is like a transformer with its secondary shorted, so only the winding impedance limits the current: about six times rated, until the rotor gets up to speed and the slip falls. Small motors shrug this off, but a big one disturbs the whole supply. How could you lower the voltage each coil sees at the start?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 10
+          },
+          "y": {
+            "label": "Current (× rated)",
+            "max": 7
+          },
+          "curves": [
+            {
+              "label": "Direct on line",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  6
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3.6,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "Why do big motors need a starter?"
+            },
+            {
+              "label": "Star–delta",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  4.5,
+                  2
+                ],
+                [
+                  5,
+                  1.6
+                ],
+                [
+                  5,
+                  3.5
+                ],
+                [
+                  5.6,
+                  1.2
+                ],
+                [
+                  6.2,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a star-delta starter reduce current?"
+            },
+            {
+              "label": "Soft starter",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  1.5
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  6,
+                  3
+                ],
+                [
+                  7,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a soft starter work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "DOL ≈ 6 × rated"
+            },
+            {
+              "x": 5,
+              "label": "Switch to delta"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "DOL: I_start ≈ 6 × I_rated ≈ 6 × 100 A = 600 A"
+        }
+      ]
+    },
+    {
+      "say": "Connect the three coils in star first. Then each coil sits between a line and the centre point, getting 400 over root 3, 231 volts, instead of the full 400. The line current and the starting torque both drop to one third. Near full speed, a timer switches the coils to delta, at full voltage. What is the catch with only a third of the torque?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Star (Y) at start",
+            "icon": "star",
+            "points": [
+              "Each coil gets 400/√3 = 231 V",
+              "Line current ÷ 3",
+              "Starting torque ÷ 3"
+            ]
+          },
+          "right": {
+            "title": "Delta (Δ) running",
+            "icon": "motor",
+            "points": [
+              "Each coil gets the full 400 V",
+              "Full current and torque",
+              "A timer makes the switch"
+            ]
+          },
+          "verdict": "Start in star, run in delta"
+        },
+        {
+          "op": "formula",
+          "text": "Star: V_coil = 400/√3 = 231 V → line I and T ÷ 3"
+        }
+      ]
+    },
+    {
+      "say": "A heavily loaded machine may not start at all. See the star–delta curve: about 2 times rated current, but with a spike at the changeover, because the supply is briefly broken. A soft starter does better: thyristors, fast electronic switches, ramp the voltage up smoothly, so the current rises gently and the pump starts without a hammer blow. Which curve looks smoothest?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 10
+          },
+          "y": {
+            "label": "Current (× rated)",
+            "max": 7
+          },
+          "curves": [
+            {
+              "label": "Direct on line",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  6
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3.6,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "Why do big motors need a starter?"
+            },
+            {
+              "label": "Star–delta",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  4.5,
+                  2
+                ],
+                [
+                  5,
+                  1.6
+                ],
+                [
+                  5,
+                  3.5
+                ],
+                [
+                  5.6,
+                  1.2
+                ],
+                [
+                  6.2,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a star-delta starter reduce current?"
+            },
+            {
+              "label": "Soft starter",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  1.5
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  6,
+                  3
+                ],
+                [
+                  7,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a soft starter work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "DOL ≈ 6 × rated"
+            },
+            {
+              "x": 5,
+              "label": "Switch to delta"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Star–delta: about 6 ÷ 3 = 2 × rated, plus a changeover spike"
+        }
+      ]
+    },
+    {
+      "say": "The soft starter's. The best of all is a variable frequency drive, which ramps the frequency too, so the motor makes full torque at about rated current, and it can run the pump slower afterwards to save energy. Fantastic! Exam tip: star–delta divides starting current and torque by three, because each coil's voltage falls by root 3 and torque goes with voltage squared.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 10
+          },
+          "y": {
+            "label": "Current (× rated)",
+            "max": 7
+          },
+          "curves": [
+            {
+              "label": "Direct on line",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  6
+                ],
+                [
+                  2,
+                  6
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3.6,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "Why do big motors need a starter?"
+            },
+            {
+              "label": "Star–delta",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  4.5,
+                  2
+                ],
+                [
+                  5,
+                  1.6
+                ],
+                [
+                  5,
+                  3.5
+                ],
+                [
+                  5.6,
+                  1.2
+                ],
+                [
+                  6.2,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a star-delta starter reduce current?"
+            },
+            {
+              "label": "Soft starter",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  1.5
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  6,
+                  3
+                ],
+                [
+                  7,
+                  1
+                ],
+                [
+                  10,
+                  1
+                ]
+              ],
+              "ask": "How does a soft starter work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "DOL ≈ 6 × rated"
+            },
+            {
+              "x": 5,
+              "label": "Switch to delta"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "VFD: ramps voltage and frequency, ≈ 1 × rated current"
+        },
+        {
+          "op": "note",
+          "text": "The curves are typical shapes, not one motor's test data"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do big motors need a starter?",
+      "a": "At standstill an induction motor draws about five to eight times its rated current, because there is no slip-limited rotor impedance yet. For large motors that inrush causes voltage dips and mechanical shocks, so starters limit it.",
+      "asks": [
+        "What is motor inrush current?"
+      ]
+    },
+    {
+      "q": "How does a star-delta starter reduce current?",
+      "a": "It starts the motor with its windings in star, so each coil gets line voltage over root 3. That cuts the line current and the torque to one third. When the motor nears speed it switches to delta for full voltage.",
+      "asks": [
+        "How does a star delta starter work?"
+      ]
+    },
+    {
+      "q": "What is the downside of star-delta starting?",
+      "a": "Starting torque falls to a third, so heavily loaded machines may not start, and there is a current and torque spike at the moment of changeover from star to delta.",
+      "asks": [
+        "Why not always use star-delta?"
+      ]
+    },
+    {
+      "q": "How does a soft starter work?",
+      "a": "Back-to-back thyristors in each line delay the switch-on point of every half cycle, ramping the motor voltage up over several seconds. Current and torque rise gradually, avoiding jolts and water hammer.",
+      "asks": [
+        "What is a soft starter?"
+      ]
+    },
+    {
+      "q": "What is the difference between a soft starter and a VFD?",
+      "a": "A soft starter only ramps the voltage at a fixed 50 hertz, then usually bypasses itself. A variable frequency drive changes both voltage and frequency, so it can start at about rated current with full torque and also control speed while running.",
+      "asks": [
+        "Soft starter vs variable frequency drive?"
+      ]
+    }
+  ],
+  "facts": [
+    "Direct-on-line starting current of an induction motor is typically 5 to 8 times rated current.",
+    "In star, each winding receives line voltage ÷ √3, for example 400/√3 ≈ 231 V.",
+    "Star–delta starting reduces line current and starting torque to one third of their direct-on-line values."
+  ],
+  "quiz": [
+    {
+      "say": "A motor draws 600 amps when started direct on line. Roughly what does it draw with a star delta starter?",
+      "show": "A motor draws 600 A when started direct-on-line. Roughly what does it draw with a star–delta starter?",
+      "options": [
+        {
+          "show": "200 A",
+          "say": "200 amps"
+        },
+        {
+          "show": "346 A",
+          "say": "346 amps"
+        },
+        {
+          "show": "600 A",
+          "say": "600 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "Star–delta cuts the starting line current to one third: 600 over 3 is 200 amps.",
+      "wrong": {
+        "1": "That divides by root 3, the drop in coil voltage, but the line current falls by 3.",
+        "2": "That is the direct-on-line current with no reduction."
+      }
+    },
+    {
+      "say": "What voltage does each winding get in star on a 400 volt supply?",
+      "show": "What voltage does each winding get in star on a 400 V supply?",
+      "options": [
+        {
+          "show": "231 V",
+          "say": "231 volts"
+        },
+        {
+          "show": "400 V",
+          "say": "400 volts"
+        },
+        {
+          "show": "133 V",
+          "say": "133 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "In star each coil sits between a line and the neutral point: 400 over root 3 is about 231 volts.",
+      "wrong": {
+        "1": "400 volts is what each coil gets in delta.",
+        "2": "That divides by 3 instead of by root 3."
+      }
+    }
+  ]
+}

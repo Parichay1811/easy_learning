@@ -1,0 +1,580 @@
+{
+  "id": "ENGX-TRAN-35",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a funicular railway balances two cars",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "funicular",
+    "counterbalance",
+    "cliff railway",
+    "passing loop",
+    "cable railway"
+  ],
+  "examples": [
+    "How does a funicular work?",
+    "How do the two cars pass on one track?",
+    "Why is a funicular like a seesaw?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.5,
+          "y": 0.1,
+          "size": 0.9,
+          "label": "Winding motor",
+          "motion": "spin",
+          "ask": "What powers a funicular?"
+        },
+        {
+          "id": "pulley",
+          "kind": "wheel",
+          "x": 0.75,
+          "y": 0.12,
+          "size": 1.1,
+          "label": "Top pulley",
+          "motion": "spin",
+          "ask": "What does the top pulley do?"
+        },
+        {
+          "id": "up",
+          "kind": "weight",
+          "x": 0.85,
+          "y": 0.45,
+          "size": 1,
+          "label": "Car going up",
+          "motion": "slide"
+        },
+        {
+          "id": "down",
+          "kind": "weight",
+          "x": 0.25,
+          "y": 0.7,
+          "size": 1,
+          "label": "Car going down",
+          "motion": "slide",
+          "ask": "Why do the two cars balance each other?"
+        },
+        {
+          "id": "cable",
+          "kind": "belt",
+          "x": 0.55,
+          "y": 0.42,
+          "size": 1.3,
+          "label": "Cable",
+          "motion": "flow",
+          "ask": "What happens if a funicular cable breaks?"
+        },
+        {
+          "id": "loop",
+          "kind": "box",
+          "x": 0.55,
+          "y": 0.86,
+          "size": 0.8,
+          "label": "Passing loop",
+          "motion": "none",
+          "ask": "How do the cars pass each other on one track?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "pulley",
+          "kind": "energy"
+        },
+        {
+          "from": "pulley",
+          "to": "cable",
+          "kind": "force",
+          "label": "winds"
+        },
+        {
+          "from": "cable",
+          "to": "up",
+          "kind": "force",
+          "label": "pulls up"
+        },
+        {
+          "from": "down",
+          "to": "cable",
+          "kind": "force",
+          "label": "weight helps"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A funicular is a short, very steep railway with two cars joined by one cable. The cable runs over a big pulley at the top, so when one car goes up, the other comes down.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a funicular railway balances two cars"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.9,
+              "label": "Winding motor",
+              "motion": "spin",
+              "ask": "What powers a funicular?"
+            },
+            {
+              "id": "pulley",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.12,
+              "size": 1.1,
+              "label": "Top pulley",
+              "motion": "spin",
+              "ask": "What does the top pulley do?"
+            },
+            {
+              "id": "up",
+              "kind": "weight",
+              "x": 0.85,
+              "y": 0.45,
+              "size": 1,
+              "label": "Car going up",
+              "motion": "slide"
+            },
+            {
+              "id": "down",
+              "kind": "weight",
+              "x": 0.25,
+              "y": 0.7,
+              "size": 1,
+              "label": "Car going down",
+              "motion": "slide",
+              "ask": "Why do the two cars balance each other?"
+            },
+            {
+              "id": "cable",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Cable",
+              "motion": "flow",
+              "ask": "What happens if a funicular cable breaks?"
+            },
+            {
+              "id": "loop",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Passing loop",
+              "motion": "none",
+              "ask": "How do the cars pass each other on one track?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pulley",
+              "kind": "energy"
+            },
+            {
+              "from": "pulley",
+              "to": "cable",
+              "kind": "force",
+              "label": "winds"
+            },
+            {
+              "from": "cable",
+              "to": "up",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "down",
+              "to": "cable",
+              "kind": "force",
+              "label": "weight helps"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The cars balance each other like the two sides of a seesaw. The weight of the car going down helps pull the other one up, so the motor only has to make up the difference, plus friction.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.9,
+              "label": "Winding motor",
+              "motion": "spin",
+              "ask": "What powers a funicular?"
+            },
+            {
+              "id": "pulley",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.12,
+              "size": 1.1,
+              "label": "Top pulley",
+              "motion": "spin",
+              "ask": "What does the top pulley do?"
+            },
+            {
+              "id": "up",
+              "kind": "weight",
+              "x": 0.85,
+              "y": 0.45,
+              "size": 1,
+              "label": "Car going up",
+              "motion": "slide"
+            },
+            {
+              "id": "down",
+              "kind": "weight",
+              "x": 0.25,
+              "y": 0.7,
+              "size": 1,
+              "label": "Car going down",
+              "motion": "slide",
+              "ask": "Why do the two cars balance each other?"
+            },
+            {
+              "id": "cable",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Cable",
+              "motion": "flow",
+              "ask": "What happens if a funicular cable breaks?"
+            },
+            {
+              "id": "loop",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Passing loop",
+              "motion": "none",
+              "ask": "How do the cars pass each other on one track?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pulley",
+              "kind": "energy"
+            },
+            {
+              "from": "pulley",
+              "to": "cable",
+              "kind": "force",
+              "label": "winds"
+            },
+            {
+              "from": "cable",
+              "to": "up",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "down",
+              "to": "cable",
+              "kind": "force",
+              "label": "weight helps"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "A motor at the top station turns the pulley that winds the cable. Because the cars counterbalance, a modest motor can move heavy cars up a slope far too steep for ordinary train wheels to grip.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.9,
+              "label": "Winding motor",
+              "motion": "spin",
+              "ask": "What powers a funicular?"
+            },
+            {
+              "id": "pulley",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.12,
+              "size": 1.1,
+              "label": "Top pulley",
+              "motion": "spin",
+              "ask": "What does the top pulley do?"
+            },
+            {
+              "id": "up",
+              "kind": "weight",
+              "x": 0.85,
+              "y": 0.45,
+              "size": 1,
+              "label": "Car going up",
+              "motion": "slide"
+            },
+            {
+              "id": "down",
+              "kind": "weight",
+              "x": 0.25,
+              "y": 0.7,
+              "size": 1,
+              "label": "Car going down",
+              "motion": "slide",
+              "ask": "Why do the two cars balance each other?"
+            },
+            {
+              "id": "cable",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Cable",
+              "motion": "flow",
+              "ask": "What happens if a funicular cable breaks?"
+            },
+            {
+              "id": "loop",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Passing loop",
+              "motion": "none",
+              "ask": "How do the cars pass each other on one track?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pulley",
+              "kind": "energy"
+            },
+            {
+              "from": "pulley",
+              "to": "cable",
+              "kind": "force",
+              "label": "winds"
+            },
+            {
+              "from": "cable",
+              "to": "up",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "down",
+              "to": "cable",
+              "kind": "force",
+              "label": "weight helps"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "There is usually just one track, which splits into a passing loop halfway. Each car has flanged wheels on one side and wide flat wheels on the other, so it automatically follows its own side of the loop with no moving points.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.9,
+              "label": "Winding motor",
+              "motion": "spin",
+              "ask": "What powers a funicular?"
+            },
+            {
+              "id": "pulley",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.12,
+              "size": 1.1,
+              "label": "Top pulley",
+              "motion": "spin",
+              "ask": "What does the top pulley do?"
+            },
+            {
+              "id": "up",
+              "kind": "weight",
+              "x": 0.85,
+              "y": 0.45,
+              "size": 1,
+              "label": "Car going up",
+              "motion": "slide"
+            },
+            {
+              "id": "down",
+              "kind": "weight",
+              "x": 0.25,
+              "y": 0.7,
+              "size": 1,
+              "label": "Car going down",
+              "motion": "slide",
+              "ask": "Why do the two cars balance each other?"
+            },
+            {
+              "id": "cable",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.42,
+              "size": 1.3,
+              "label": "Cable",
+              "motion": "flow",
+              "ask": "What happens if a funicular cable breaks?"
+            },
+            {
+              "id": "loop",
+              "kind": "box",
+              "x": 0.55,
+              "y": 0.86,
+              "size": 0.8,
+              "label": "Passing loop",
+              "motion": "none",
+              "ask": "How do the cars pass each other on one track?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pulley",
+              "kind": "energy"
+            },
+            {
+              "from": "pulley",
+              "to": "cable",
+              "kind": "force",
+              "label": "winds"
+            },
+            {
+              "from": "cable",
+              "to": "up",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "down",
+              "to": "cable",
+              "kind": "force",
+              "label": "weight helps"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What powers a funicular?",
+      "a": "An electric motor in the top station turns the big pulley that moves the cable. Some early funiculars used water instead: the top car filled a tank to become heavier and pulled the other car up.",
+      "asks": [
+        "How did water-powered funiculars work?"
+      ]
+    },
+    {
+      "q": "What does the top pulley do?",
+      "a": "The cable from one car runs over the pulley and down to the other car. Turning the pulley moves both cars at once, in opposite directions.",
+      "asks": [
+        "How are funicular cars connected?"
+      ]
+    },
+    {
+      "q": "Why do the two cars balance each other?",
+      "a": "Both cars weigh about the same, so the one going down pulls the one going up through the cable. The motor only needs to lift the difference in passengers and overcome friction.",
+      "asks": [
+        "How is a funicular like a seesaw?"
+      ]
+    },
+    {
+      "q": "How do the cars pass each other on one track?",
+      "a": "Halfway, the track splits into a passing loop. Each car has double-flanged wheels on one side and wide flat wheels on the other, so it always follows its own side of the loop.",
+      "asks": [
+        "What is an Abt switch?"
+      ]
+    },
+    {
+      "q": "What happens if a funicular cable breaks?",
+      "a": "Funicular cars have strong emergency brakes that clamp onto the rails if the cable goes slack or the car goes too fast. The cables are also inspected very often.",
+      "asks": [
+        "Is a funicular safe?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Stoosbahn in Switzerland climbs a gradient of up to 110 percent, steeper than 45 degrees.",
+    "The passing loop used by most funiculars is called an Abt switch, after Swiss engineer Carl Roman Abt.",
+    "Some early funiculars were powered by water tanks in the cars instead of motors."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a funicular need only a modest motor?",
+      "show": "Why does a funicular need only a modest motor?",
+      "options": [
+        {
+          "show": "The two cars counterbalance each other",
+          "say": "The two cars counterbalance each other"
+        },
+        {
+          "show": "The cars are very light",
+          "say": "The cars are very light"
+        },
+        {
+          "show": "Gravity pulls both cars up",
+          "say": "Gravity pulls both cars up"
+        }
+      ],
+      "answer": 0,
+      "why": "The car going down helps pull the car going up, so the motor only lifts the difference.",
+      "wrong": {
+        "1": "Funicular cars can be heavy; the balance is what matters.",
+        "2": "Gravity pulls both cars down the slope; the cable links them so they balance."
+      }
+    }
+  ]
+}

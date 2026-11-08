@@ -1,0 +1,499 @@
+{
+  "id": "BEE-CIRC-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The current divider: how current splits between parallel paths",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "current divider",
+    "parallel resistors",
+    "product over sum",
+    "conductance",
+    "ammeter shunt"
+  ],
+  "examples": [
+    "What is the current divider rule?",
+    "How does current split between 3 ohm and 6 ohm resistors?",
+    "Why does more current go through the smaller resistor?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Battery",
+          "value": "12 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R0",
+          "value": "2 Ω",
+          "ask": "What does the series resistor R0 do?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Main ammeter",
+          "value": "3 A",
+          "ask": "How do I combine two resistors in parallel?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "3 Ω",
+          "branch": 1,
+          "ask": "What is the current divider rule?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter 1",
+          "value": "2 A",
+          "branch": 1
+        },
+        {
+          "kind": "resistor",
+          "label": "R2",
+          "value": "6 Ω",
+          "branch": 2,
+          "ask": "Why use the other branch's resistance?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter 2",
+          "value": "1 A",
+          "branch": 2
+        }
+      ],
+      "readouts": [
+        "3 Ω ∥ 6 Ω = 2 Ω",
+        "I = 12 V / 4 Ω = 3 A",
+        "Split: 2 A and 1 A"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Water from a tank splits between a wide pipe and a narrow one, and more goes down the wide one. Current does the same. On the board, a 12 volt battery pushes current through a 2 ohm resistor and then into two branches, 3 ohms and 6 ohms. How will the current split?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The current divider: how current splits between parallel paths"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R0",
+              "value": "2 Ω",
+              "ask": "What does the series resistor R0 do?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Main ammeter",
+              "value": "3 A",
+              "ask": "How do I combine two resistors in parallel?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "branch": 1,
+              "ask": "What is the current divider rule?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 1",
+              "value": "2 A",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 2,
+              "ask": "Why use the other branch's resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 2",
+              "value": "1 A",
+              "branch": 2
+            }
+          ],
+          "readouts": [
+            "3 Ω ∥ 6 Ω = 2 Ω",
+            "I = 12 V / 4 Ω = 3 A",
+            "Split: 2 A and 1 A"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First find the total. Two resistors in parallel combine as product over sum: 3 times 6 is 18, over 3 plus 6, which is 9, gives 2 ohms. Add the 2 ohm R0 in series and the whole circuit is 4 ohms, so 12 volts over 4 ohms is 3 amps from the battery. Is the parallel pair smaller or bigger than its smallest resistor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R0",
+              "value": "2 Ω",
+              "ask": "What does the series resistor R0 do?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Main ammeter",
+              "value": "3 A",
+              "ask": "How do I combine two resistors in parallel?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "branch": 1,
+              "ask": "What is the current divider rule?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 1",
+              "value": "2 A",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 2,
+              "ask": "Why use the other branch's resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 2",
+              "value": "1 A",
+              "branch": 2
+            }
+          ],
+          "readouts": [
+            "3 Ω ∥ 6 Ω = 2 Ω",
+            "I = 12 V / 4 Ω = 3 A",
+            "Split: 2 A and 1 A"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "R∥ = 3×6/(3+6) = 2 Ω; R_total = 4 Ω"
+        }
+      ]
+    },
+    {
+      "say": "Smaller, always. Now the split. The current divider rule says one branch gets the total times the other branch's resistance, over the sum. For the 3 ohm branch that is 3 amps times 6 over 9, which is 2 amps. A bigger opposite branch pushes more current your way. What does the 6 ohm branch get?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R0",
+              "value": "2 Ω",
+              "ask": "What does the series resistor R0 do?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Main ammeter",
+              "value": "3 A",
+              "ask": "How do I combine two resistors in parallel?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "branch": 1,
+              "ask": "What is the current divider rule?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 1",
+              "value": "2 A",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 2,
+              "ask": "Why use the other branch's resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 2",
+              "value": "1 A",
+              "branch": 2
+            }
+          ],
+          "readouts": [
+            "3 Ω ∥ 6 Ω = 2 Ω",
+            "I = 12 V / 4 Ω = 3 A",
+            "Split: 2 A and 1 A"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "I1 = I × R2/(R1+R2) = 3 × 6/9 = 2 A"
+        }
+      ]
+    },
+    {
+      "say": "3 times 3 over 9, which is 1 amp. And 2 plus 1 gives back the 3 amps, so Kirchhoff's current law checks out. Another view: both branches share the same 6 volts, so 6 over 3 is 2 amps and 6 over 6 is 1 amp. Half the resistance, double the current. Which branch has more conductance, meaning ease of flow?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R0",
+              "value": "2 Ω",
+              "ask": "What does the series resistor R0 do?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Main ammeter",
+              "value": "3 A",
+              "ask": "How do I combine two resistors in parallel?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "branch": 1,
+              "ask": "What is the current divider rule?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 1",
+              "value": "2 A",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 2,
+              "ask": "Why use the other branch's resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 2",
+              "value": "1 A",
+              "branch": 2
+            }
+          ],
+          "readouts": [
+            "3 Ω ∥ 6 Ω = 2 Ω",
+            "I = 12 V / 4 Ω = 3 A",
+            "Split: 2 A and 1 A"
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "V∥ = 3 A × 2 Ω = 6 V"
+        }
+      ]
+    },
+    {
+      "say": "The 3 ohm branch. Well done! Conductance, measured in siemens, is one over resistance, and current divides in proportion to it, just as voltage divides in proportion to resistance in series. Ammeter shunts use this: a tiny resistor beside a meter carries most of the current. Challenge: split 10 amps between 1 ohm and 4 ohms.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Battery",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R0",
+              "value": "2 Ω",
+              "ask": "What does the series resistor R0 do?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Main ammeter",
+              "value": "3 A",
+              "ask": "How do I combine two resistors in parallel?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "branch": 1,
+              "ask": "What is the current divider rule?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 1",
+              "value": "2 A",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 2,
+              "ask": "Why use the other branch's resistance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter 2",
+              "value": "1 A",
+              "branch": 2
+            }
+          ],
+          "readouts": [
+            "3 Ω ∥ 6 Ω = 2 Ω",
+            "I = 12 V / 4 Ω = 3 A",
+            "Split: 2 A and 1 A"
+          ]
+        },
+        {
+          "op": "note",
+          "text": "Shunt: a small resistor in parallel that carries most current."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the current divider rule?",
+      "a": "For two parallel branches, the current in one branch equals the total current times the other branch's resistance, divided by the sum of both resistances.",
+      "asks": [
+        "How do you split current between two resistors?",
+        "current division formula"
+      ]
+    },
+    {
+      "q": "Why use the other branch's resistance?",
+      "a": "The larger the opposite branch, the harder it is for current to go that way, so more comes to your branch. The formula is just Ohm's law with the shared voltage written out.",
+      "asks": [
+        "Why is it R2 on top for I1?"
+      ]
+    },
+    {
+      "q": "How do I combine two resistors in parallel?",
+      "a": "Use product over sum: R1 times R2 divided by R1 plus R2. The result is always smaller than the smaller resistor.",
+      "asks": [
+        "Parallel resistance formula",
+        "What is product over sum?"
+      ]
+    },
+    {
+      "q": "What does the series resistor R0 do?",
+      "a": "It limits the total current from the battery. Here it takes 6 volts, leaving 6 volts across the parallel pair.",
+      "asks": [
+        "Why is there a resistor before the branches?"
+      ]
+    },
+    {
+      "q": "What is conductance?",
+      "a": "Conductance is one over resistance, measured in siemens. In parallel the conductances add, and current divides in proportion to each branch's conductance.",
+      "asks": [
+        "What is a siemens?",
+        "Define conductance"
+      ]
+    }
+  ],
+  "facts": [
+    "For resistors in parallel, the reciprocal of the total resistance equals the sum of the reciprocals.",
+    "The unit of conductance, the siemens, is named after Werner von Siemens."
+  ],
+  "quiz": [
+    {
+      "say": "12 amps splits between a 2 ohm and a 4 ohm resistor in parallel. What current flows in the 2 ohm branch?",
+      "show": "12 A splits between 2 Ω and 4 Ω in parallel. What current flows in the 2 Ω branch?",
+      "options": [
+        {
+          "show": "8 A",
+          "say": "8 amps"
+        },
+        {
+          "show": "4 A",
+          "say": "4 amps"
+        },
+        {
+          "show": "6 A",
+          "say": "6 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "I1 is 12 times 4 over 6, which is 8 amps. The 4 ohm branch takes the other 4 amps.",
+      "wrong": {
+        "1": "4 amps flows in the 4 ohm branch; the smaller resistor takes more.",
+        "2": "An equal split of 6 amps each would need equal resistors."
+      }
+    },
+    {
+      "say": "In a two-branch parallel circuit, which branch takes more current?",
+      "show": "In a two-branch parallel circuit, which branch takes more current?",
+      "options": [
+        {
+          "show": "The lower resistance",
+          "say": "The lower resistance"
+        },
+        {
+          "show": "The higher resistance",
+          "say": "The higher resistance"
+        },
+        {
+          "show": "Always an equal share",
+          "say": "Always an equal share"
+        }
+      ],
+      "answer": 0,
+      "why": "Both branches have the same voltage, so the branch with less resistance lets more current through.",
+      "wrong": {
+        "1": "A higher resistance lets less current through at the same voltage.",
+        "2": "The split is only equal when the resistances are equal."
+      }
+    }
+  ]
+}

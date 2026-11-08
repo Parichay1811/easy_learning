@@ -1,0 +1,346 @@
+{
+  "id": "SCH-AMA-32",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "Why ½ + ¼ + ⅛ + … adds up to exactly 1",
+  "area": "School Explainers",
+  "group": "SCH-AMA — Advanced Maths (class 11–12)",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "infinite geometric series",
+    "sum to infinity",
+    "halving",
+    "convergence",
+    "a / (1 − r)"
+  ],
+  "examples": [
+    "How can an infinite sum equal 1?",
+    "What is the sum to infinity of a geometric series?",
+    "What does convergent mean?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-graph",
+      "x": {
+        "label": "Pieces added"
+      },
+      "y": {
+        "label": "Running total"
+      },
+      "shape": "rise",
+      "marks": [
+        {
+          "at": 0.1,
+          "label": "½"
+        },
+        {
+          "at": 0.3,
+          "label": "½ + ¼ = ¾"
+        },
+        {
+          "at": 0.55,
+          "label": "+ ⅛ = ⅞",
+          "ask": "Why does the total never go past 1?"
+        },
+        {
+          "at": 0.97,
+          "label": "Total → 1",
+          "ask": "How can an infinite sum equal 1?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "You have one chocolate bar. You eat half. Then half of what is left. Then half again, forever. How much do you eat in total? Look at the first mark: after one bite you have eaten one half.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Why ½ + ¼ + ⅛ + … adds up to exactly 1"
+        },
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Pieces added"
+          },
+          "y": {
+            "label": "Running total"
+          },
+          "shape": "rise",
+          "marks": [
+            {
+              "at": 0.1,
+              "label": "½"
+            },
+            {
+              "at": 0.3,
+              "label": "½ + ¼ = ¾"
+            },
+            {
+              "at": 0.55,
+              "label": "+ ⅛ = ⅞",
+              "ask": "Why does the total never go past 1?"
+            },
+            {
+              "at": 0.97,
+              "label": "Total → 1",
+              "ask": "How can an infinite sum equal 1?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Next bite: half of the half, a quarter. One half plus one quarter is three quarters. Look at the second mark. Then add an eighth and you reach seven eighths, the third mark. What is left each time?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Pieces added"
+          },
+          "y": {
+            "label": "Running total"
+          },
+          "shape": "rise",
+          "marks": [
+            {
+              "at": 0.1,
+              "label": "½"
+            },
+            {
+              "at": 0.3,
+              "label": "½ + ¼ = ¾"
+            },
+            {
+              "at": 0.55,
+              "label": "+ ⅛ = ⅞",
+              "ask": "Why does the total never go past 1?"
+            },
+            {
+              "at": 0.97,
+              "label": "Total → 1",
+              "ask": "How can an infinite sum equal 1?"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Let us zoom in on what is left. A quarter, then an eighth, then a sixteenth. See the gap shrink? Each bite eats exactly half of the gap, so the gap gets as small as you like.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-zoom",
+          "levels": [
+            {
+              "label": "Half: ½",
+              "icon": "plate",
+              "note": "Half the bar is eaten."
+            },
+            {
+              "label": "Gap: ¼",
+              "icon": "eye",
+              "note": "A quarter is left, then eaten."
+            },
+            {
+              "label": "Gap: ⅛",
+              "icon": "microscope",
+              "note": "An eighth left, then eaten."
+            },
+            {
+              "label": "Gap: 1/16",
+              "icon": "atom",
+              "note": "The gap halves every time."
+            },
+            {
+              "label": "Gap → 0",
+              "icon": "star",
+              "note": "Nothing left: the total is 1.",
+              "ask": "What is the sum to infinity of a geometric series?"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "So the running total gets closer and closer to 1 and never goes past it. Look at the last mark. With endless bites, the sum is exactly 1. When an endless sum settles like this, we say it converges.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Pieces added"
+          },
+          "y": {
+            "label": "Running total"
+          },
+          "shape": "rise",
+          "marks": [
+            {
+              "at": 0.1,
+              "label": "½"
+            },
+            {
+              "at": 0.3,
+              "label": "½ + ¼ = ¾"
+            },
+            {
+              "at": 0.55,
+              "label": "+ ⅛ = ⅞",
+              "ask": "Why does the total never go past 1?"
+            },
+            {
+              "at": 0.97,
+              "label": "Total → 1",
+              "ask": "How can an infinite sum equal 1?"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Brilliant! There is a quick formula: first term over 1 minus the ratio, so one half over one half, which is 1. Challenge: what does 1 plus one third plus one ninth and so on add up to?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Pieces added"
+          },
+          "y": {
+            "label": "Running total"
+          },
+          "shape": "rise",
+          "marks": [
+            {
+              "at": 0.1,
+              "label": "½"
+            },
+            {
+              "at": 0.3,
+              "label": "½ + ¼ = ¾"
+            },
+            {
+              "at": 0.55,
+              "label": "+ ⅛ = ⅞",
+              "ask": "Why does the total never go past 1?"
+            },
+            {
+              "at": 0.97,
+              "label": "Total → 1",
+              "ask": "How can an infinite sum equal 1?"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How can an infinite sum equal 1?",
+      "a": "Each new piece fills exactly half of the gap left to 1. The gap shrinks towards zero, so the total gets as close to 1 as you like. That limit is the sum.",
+      "asks": [
+        "How can adding forever give a finite answer?"
+      ]
+    },
+    {
+      "q": "Why does the total never go past 1?",
+      "a": "Each piece is exactly half of what is missing, never more. So you always stay a little short of 1, by the size of the last piece.",
+      "asks": [
+        "Why does the sum stay under 1?"
+      ]
+    },
+    {
+      "q": "What is the sum to infinity of a geometric series?",
+      "a": "If the ratio r is between minus 1 and 1, the sum is the first term a divided by 1 minus r. For one half, one quarter, and so on, that is one half over one half, which is 1.",
+      "asks": [
+        "What is the formula a over 1 minus r?"
+      ]
+    },
+    {
+      "q": "What does convergent mean?",
+      "a": "A series converges if its running total settles down towards one fixed number as you add more and more terms.",
+      "asks": [
+        "What is a convergent series?"
+      ]
+    },
+    {
+      "q": "What does 1 plus one third plus one ninth add up to?",
+      "a": "The first term is 1 and the ratio is one third. So the sum is 1 over two thirds, which is 1.5.",
+      "asks": [
+        "What is the sum of 1 + 1/3 + 1/9 + ...?"
+      ]
+    }
+  ],
+  "facts": [
+    "The infinite series ½ + ¼ + ⅛ + … has sum 1.",
+    "A geometric series with first term a and ratio r, where −1 < r < 1, has sum to infinity a/(1 − r)."
+  ],
+  "quiz": [
+    {
+      "say": "What is the sum to infinity of 6 + 3 + 1.5 + 0.75 + …?",
+      "show": "What is the sum to infinity of 6 + 3 + 1.5 + 0.75 + …?",
+      "options": [
+        {
+          "show": "10.5",
+          "say": "10.5"
+        },
+        {
+          "show": "It has no sum",
+          "say": "It has no sum"
+        },
+        {
+          "show": "12",
+          "say": "12"
+        }
+      ],
+      "answer": 2,
+      "why": "a = 6 and r = ½, so the sum is 6 ÷ ½ = 12.",
+      "wrong": {
+        "0": "10.5 adds only the first few terms; the rest still add a bit more.",
+        "1": "The ratio is between −1 and 1, so the sum exists."
+      }
+    },
+    {
+      "say": "After adding a half, a quarter, an eighth and a sixteenth, how far is the total from 1?",
+      "show": "After adding ½ + ¼ + ⅛ + 1/16, how far is the total from 1?",
+      "options": [
+        {
+          "show": "1/16",
+          "say": "1/16"
+        },
+        {
+          "show": "⅛",
+          "say": "⅛"
+        },
+        {
+          "show": "0",
+          "say": "0"
+        }
+      ],
+      "answer": 0,
+      "why": "The total is 15/16, which is 1/16 short of 1.",
+      "wrong": {
+        "1": "⅛ was the gap one step earlier.",
+        "2": "The total only reaches 1 in the limit of endless pieces."
+      }
+    }
+  ]
+}

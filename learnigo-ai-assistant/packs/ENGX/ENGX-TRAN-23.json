@@ -1,0 +1,585 @@
+{
+  "id": "ENGX-TRAN-23",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an electric car is charged",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "electric car charging",
+    "home charger",
+    "rapid charger",
+    "on-board charger",
+    "AC and DC charging"
+  ],
+  "examples": [
+    "How do you charge an electric car?",
+    "How long does it take to charge an electric car at home?",
+    "Why are rapid chargers faster?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "plant",
+          "label": "Power station",
+          "icon": "factory",
+          "x": 0.08,
+          "y": 0.2
+        },
+        {
+          "id": "grid",
+          "label": "National grid",
+          "icon": "tower",
+          "x": 0.35,
+          "y": 0.15,
+          "ask": "Where does electric car electricity come from?"
+        },
+        {
+          "id": "home",
+          "label": "Home charger",
+          "icon": "house",
+          "x": 0.3,
+          "y": 0.75,
+          "ask": "How long does it take to charge an electric car at home?"
+        },
+        {
+          "id": "rapid",
+          "label": "Rapid charger",
+          "icon": "plug",
+          "x": 0.64,
+          "y": 0.12,
+          "ask": "Why are rapid chargers so fast?"
+        },
+        {
+          "id": "obc",
+          "label": "On-board charger",
+          "icon": "chip",
+          "x": 0.6,
+          "y": 0.72,
+          "ask": "Why do electric cars need an on-board charger?"
+        },
+        {
+          "id": "batt",
+          "label": "Car battery",
+          "icon": "battery",
+          "x": 0.9,
+          "y": 0.45,
+          "ask": "Is charging bad for the battery?"
+        }
+      ],
+      "links": [
+        {
+          "from": "plant",
+          "to": "grid",
+          "kind": "power",
+          "label": "high voltage"
+        },
+        {
+          "from": "grid",
+          "to": "home",
+          "kind": "power",
+          "label": "AC mains"
+        },
+        {
+          "from": "grid",
+          "to": "rapid",
+          "kind": "power",
+          "label": "AC supply"
+        },
+        {
+          "from": "home",
+          "to": "obc",
+          "kind": "power",
+          "label": "AC"
+        },
+        {
+          "from": "obc",
+          "to": "batt",
+          "kind": "power",
+          "label": "DC"
+        },
+        {
+          "from": "rapid",
+          "to": "batt",
+          "kind": "power",
+          "label": "DC direct"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An electric car's battery is filled from the electricity grid, which carries power from power stations, wind farms and solar parks. There are two main ways it gets from the plug into the battery.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an electric car is charged"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "plant",
+              "label": "Power station",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.2
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.15,
+              "ask": "Where does electric car electricity come from?"
+            },
+            {
+              "id": "home",
+              "label": "Home charger",
+              "icon": "house",
+              "x": 0.3,
+              "y": 0.75,
+              "ask": "How long does it take to charge an electric car at home?"
+            },
+            {
+              "id": "rapid",
+              "label": "Rapid charger",
+              "icon": "plug",
+              "x": 0.64,
+              "y": 0.12,
+              "ask": "Why are rapid chargers so fast?"
+            },
+            {
+              "id": "obc",
+              "label": "On-board charger",
+              "icon": "chip",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "Why do electric cars need an on-board charger?"
+            },
+            {
+              "id": "batt",
+              "label": "Car battery",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "Is charging bad for the battery?"
+            }
+          ],
+          "links": [
+            {
+              "from": "plant",
+              "to": "grid",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "grid",
+              "to": "home",
+              "kind": "power",
+              "label": "AC mains"
+            },
+            {
+              "from": "grid",
+              "to": "rapid",
+              "kind": "power",
+              "label": "AC supply"
+            },
+            {
+              "from": "home",
+              "to": "obc",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "obc",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "rapid",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC direct"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "At home, a wall charger supplies alternating current, AC, like any socket. A typical home charger gives about 7 kilowatts, enough to fill most car batteries overnight.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "plant",
+              "label": "Power station",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.2
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.15,
+              "ask": "Where does electric car electricity come from?"
+            },
+            {
+              "id": "home",
+              "label": "Home charger",
+              "icon": "house",
+              "x": 0.3,
+              "y": 0.75,
+              "ask": "How long does it take to charge an electric car at home?"
+            },
+            {
+              "id": "rapid",
+              "label": "Rapid charger",
+              "icon": "plug",
+              "x": 0.64,
+              "y": 0.12,
+              "ask": "Why are rapid chargers so fast?"
+            },
+            {
+              "id": "obc",
+              "label": "On-board charger",
+              "icon": "chip",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "Why do electric cars need an on-board charger?"
+            },
+            {
+              "id": "batt",
+              "label": "Car battery",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "Is charging bad for the battery?"
+            }
+          ],
+          "links": [
+            {
+              "from": "plant",
+              "to": "grid",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "grid",
+              "to": "home",
+              "kind": "power",
+              "label": "AC mains"
+            },
+            {
+              "from": "grid",
+              "to": "rapid",
+              "kind": "power",
+              "label": "AC supply"
+            },
+            {
+              "from": "home",
+              "to": "obc",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "obc",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "rapid",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC direct"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Batteries can only store direct current, DC, so the car carries an on-board charger that converts AC into DC and controls how fast the battery fills.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "plant",
+              "label": "Power station",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.2
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.15,
+              "ask": "Where does electric car electricity come from?"
+            },
+            {
+              "id": "home",
+              "label": "Home charger",
+              "icon": "house",
+              "x": 0.3,
+              "y": 0.75,
+              "ask": "How long does it take to charge an electric car at home?"
+            },
+            {
+              "id": "rapid",
+              "label": "Rapid charger",
+              "icon": "plug",
+              "x": 0.64,
+              "y": 0.12,
+              "ask": "Why are rapid chargers so fast?"
+            },
+            {
+              "id": "obc",
+              "label": "On-board charger",
+              "icon": "chip",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "Why do electric cars need an on-board charger?"
+            },
+            {
+              "id": "batt",
+              "label": "Car battery",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "Is charging bad for the battery?"
+            }
+          ],
+          "links": [
+            {
+              "from": "plant",
+              "to": "grid",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "grid",
+              "to": "home",
+              "kind": "power",
+              "label": "AC mains"
+            },
+            {
+              "from": "grid",
+              "to": "rapid",
+              "kind": "power",
+              "label": "AC supply"
+            },
+            {
+              "from": "home",
+              "to": "obc",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "obc",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "rapid",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC direct"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "A rapid charger at a motorway service station does the conversion itself in a big roadside cabinet and sends DC straight into the battery. At 50 to 350 kilowatts it can add hundreds of kilometres in half an hour.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "plant",
+              "label": "Power station",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.2
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.15,
+              "ask": "Where does electric car electricity come from?"
+            },
+            {
+              "id": "home",
+              "label": "Home charger",
+              "icon": "house",
+              "x": 0.3,
+              "y": 0.75,
+              "ask": "How long does it take to charge an electric car at home?"
+            },
+            {
+              "id": "rapid",
+              "label": "Rapid charger",
+              "icon": "plug",
+              "x": 0.64,
+              "y": 0.12,
+              "ask": "Why are rapid chargers so fast?"
+            },
+            {
+              "id": "obc",
+              "label": "On-board charger",
+              "icon": "chip",
+              "x": 0.6,
+              "y": 0.72,
+              "ask": "Why do electric cars need an on-board charger?"
+            },
+            {
+              "id": "batt",
+              "label": "Car battery",
+              "icon": "battery",
+              "x": 0.9,
+              "y": 0.45,
+              "ask": "Is charging bad for the battery?"
+            }
+          ],
+          "links": [
+            {
+              "from": "plant",
+              "to": "grid",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "grid",
+              "to": "home",
+              "kind": "power",
+              "label": "AC mains"
+            },
+            {
+              "from": "grid",
+              "to": "rapid",
+              "kind": "power",
+              "label": "AC supply"
+            },
+            {
+              "from": "home",
+              "to": "obc",
+              "kind": "power",
+              "label": "AC"
+            },
+            {
+              "from": "obc",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC"
+            },
+            {
+              "from": "rapid",
+              "to": "batt",
+              "kind": "power",
+              "label": "DC direct"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Where does electric car electricity come from?",
+      "a": "It comes from the national grid, which is fed by power stations, wind farms, solar parks and other sources. The cleaner the grid, the lower the car's carbon footprint.",
+      "asks": [
+        "Is charging an electric car green?"
+      ]
+    },
+    {
+      "q": "How long does it take to charge an electric car at home?",
+      "a": "A typical 7 kilowatt home charger adds roughly 40 to 50 kilometres of range an hour, so most cars fill up overnight. A normal three-pin socket is much slower.",
+      "asks": [
+        "Can you charge an electric car from a normal plug?"
+      ]
+    },
+    {
+      "q": "Why are rapid chargers so fast?",
+      "a": "Rapid chargers contain large, powerful converters that turn grid AC into DC and feed it straight into the battery, bypassing the small on-board charger. They supply 50 to 350 kilowatts.",
+      "asks": [
+        "What is DC fast charging?"
+      ]
+    },
+    {
+      "q": "Why do electric cars need an on-board charger?",
+      "a": "Home sockets and wall chargers supply AC, but batteries store DC. The on-board charger converts one to the other and manages the charging safely.",
+      "asks": [
+        "What does the on-board charger do?"
+      ]
+    },
+    {
+      "q": "Is charging bad for the battery?",
+      "a": "Batteries last longest when not kept completely full or nearly empty for long, and very frequent rapid charging adds a little wear. Many car makers suggest charging to about 80 percent day to day.",
+      "asks": [
+        "How should I look after an electric car battery?"
+      ]
+    }
+  ],
+  "facts": [
+    "Car batteries store direct current, so AC from the mains must be converted to DC.",
+    "A typical home wall charger in the UK supplies about 7 kilowatts.",
+    "The fastest public chargers can supply around 350 kilowatts."
+  ],
+  "quiz": [
+    {
+      "say": "Why does an electric car need an on-board charger for home charging?",
+      "show": "Why does an electric car need an on-board charger for home charging?",
+      "options": [
+        {
+          "show": "To convert AC from the mains into DC for the battery",
+          "say": "To convert AC from the mains into DC for the battery"
+        },
+        {
+          "show": "To make the electricity greener",
+          "say": "To make the electricity greener"
+        },
+        {
+          "show": "To cool the tyres",
+          "say": "To cool the tyres"
+        }
+      ],
+      "answer": 0,
+      "why": "Home power is alternating current, but batteries store direct current, so the car converts it.",
+      "wrong": {
+        "1": "The charger changes the type of current, not where it comes from.",
+        "2": "Tyres are not part of charging."
+      }
+    }
+  ]
+}

@@ -1,0 +1,385 @@
+{
+  "id": "BCE-STRA-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Shear force diagrams: tracking the slicing force along a beam",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "shear force diagram",
+    "shear force",
+    "point load step",
+    "distributed load",
+    "zero shear"
+  ],
+  "examples": [
+    "How do you draw a shear force diagram?",
+    "Why does a point load make a step in shear?",
+    "Where is shear force zero on a beam?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 8,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "What is shear force?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "point",
+          "at": 0.25,
+          "size": 30,
+          "label": "30 kN",
+          "ask": "Why does a point load make a step in the shear diagram?"
+        },
+        {
+          "kind": "point",
+          "at": 0.75,
+          "size": 10,
+          "label": "10 kN",
+          "ask": "Why does a point load make a step in the shear diagram?"
+        }
+      ],
+      "show": [
+        "beam",
+        "shear"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Imagine sawing a loaded beam at any point. The two pieces would try to slide past each other, one up and one down. That sliding tendency is shear force, and a shear force diagram maps it along the beam. Here an eight metre beam carries thirty kilonewtons at two metres and ten at six metres.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Shear force diagrams: tracking the slicing force along a beam"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is shear force?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 30,
+              "label": "30 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            },
+            {
+              "kind": "point",
+              "at": 0.75,
+              "size": 10,
+              "label": "10 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Start at the left support. It pushes up twenty five kilonewtons, so the diagram jumps up to plus twenty five. Walking right, nothing changes until we meet a load, so the line stays flat. Shear only changes where a force acts. What happens when we reach the thirty kilonewton load?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is shear force?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 30,
+              "label": "30 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            },
+            {
+              "kind": "point",
+              "at": 0.75,
+              "size": 10,
+              "label": "10 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "R_A = 25 kN, R_B = 15 kN"
+        },
+        {
+          "op": "note",
+          "text": "From moments about A: R_B × 8 = 30 × 2 + 10 × 6 = 120."
+        }
+      ]
+    },
+    {
+      "say": "It drops by thirty, from plus twenty five to minus five. See the step on the board. At the ten kilonewton load it drops again, to minus fifteen, and the right support pushes it back up to zero. So a point load always makes a sudden step.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is shear force?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 30,
+              "label": "30 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            },
+            {
+              "kind": "point",
+              "at": 0.75,
+              "size": 10,
+              "label": "10 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "V: +25 → 25 − 30 = −5 → −5 − 10 = −15 → 0"
+        }
+      ]
+    },
+    {
+      "say": "Now spread the load out: ten kilonewtons per metre on a six metre beam. Each support takes thirty. The shear now slopes steadily, losing ten kilonewtons every metre, from plus thirty to minus thirty. A spread load makes a slope, not a step. Where does this line cross zero?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is shear force?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "Why does a spread load make a sloping shear line?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Slope of V = −w = −10 kN per metre"
+        }
+      ]
+    },
+    {
+      "say": "Right in the middle! And here is the exam secret: wherever shear crosses zero, the bending moment is at its biggest. In the first beam that happens under the thirty kilonewton load. Shear also tells a designer where a concrete beam needs the most stirrups: near the supports. Brilliant work. Challenge: sketch the shear for one load at midspan.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is shear force?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 30,
+              "label": "30 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            },
+            {
+              "kind": "point",
+              "at": 0.75,
+              "size": 10,
+              "label": "10 kN",
+              "ask": "Why does a point load make a step in the shear diagram?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is shear force?",
+      "a": "Shear force at a section is the total vertical force on one side of it. It is the force trying to slide one part of the beam past the other, measured in kilonewtons.",
+      "asks": [
+        "Define shear force",
+        "What does shear force mean in a beam?"
+      ]
+    },
+    {
+      "q": "Why does a point load make a step in the shear diagram?",
+      "a": "A point load acts at a single spot, so the total force on the left side changes all at once as you pass it. The diagram drops by exactly the size of the load.",
+      "asks": [
+        "Why are there jumps in a shear force diagram?"
+      ]
+    },
+    {
+      "q": "Why does a spread load make a sloping shear line?",
+      "a": "A uniformly distributed load adds force a little at a time, so the shear falls steadily. The slope equals the load per metre, here 10 kilonewtons per metre.",
+      "asks": [
+        "Shear diagram for a UDL"
+      ]
+    },
+    {
+      "q": "Why does maximum moment occur where shear is zero?",
+      "a": "The slope of the bending moment diagram equals the shear force. Where the shear is zero the moment curve is flat, which is its peak.",
+      "asks": [
+        "Where is bending moment maximum?"
+      ]
+    },
+    {
+      "q": "What sign convention is used for shear force?",
+      "a": "A common convention takes shear as positive when the force on the left of the section acts upward. Pick one convention and keep it for the whole beam.",
+      "asks": [
+        "Positive and negative shear"
+      ]
+    }
+  ],
+  "facts": [
+    "The slope of the bending moment diagram equals the shear force: dM/dx = V.",
+    "The slope of the shear force diagram equals minus the distributed load: dV/dx = −w."
+  ],
+  "quiz": [
+    {
+      "say": "A four metre simply supported beam carries 8 kilonewtons per metre along its length. What is the shear force just to the right of the left support?",
+      "show": "A 4 m simply supported beam carries 8 kN/m. Shear just right of the left support?",
+      "options": [
+        {
+          "show": "8 kN",
+          "say": "8 kilonewtons"
+        },
+        {
+          "show": "16 kN",
+          "say": "16 kilonewtons"
+        },
+        {
+          "show": "32 kN",
+          "say": "32 kilonewtons"
+        }
+      ],
+      "answer": 1,
+      "why": "The total load is 32 kilonewtons, shared equally, so the left reaction and the shear there are 16 kilonewtons.",
+      "wrong": {
+        "0": "That is the load per metre, not the reaction.",
+        "2": "That is the whole load; each support carries half."
+      }
+    },
+    {
+      "say": "On a shear force diagram, a point load appears as…",
+      "show": "On a shear force diagram, a point load appears as…",
+      "options": [
+        {
+          "show": "A sloping line",
+          "say": "A sloping line"
+        },
+        {
+          "show": "A sudden vertical step",
+          "say": "A sudden vertical step"
+        },
+        {
+          "show": "A smooth curve",
+          "say": "A smooth curve"
+        }
+      ],
+      "answer": 1,
+      "why": "The shear changes all at once by the size of the point load.",
+      "wrong": {
+        "0": "A slope comes from a spread load.",
+        "2": "Curves in shear come from loads that vary along the beam."
+      }
+    }
+  ]
+}

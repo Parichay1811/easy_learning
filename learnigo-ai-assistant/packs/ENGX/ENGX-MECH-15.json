@@ -1,0 +1,655 @@
+{
+  "id": "ENGX-MECH-15",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a pin tumbler lock and key work",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "pin tumbler lock",
+    "key",
+    "shear line",
+    "cylinder lock",
+    "driver pins",
+    "plug"
+  ],
+  "examples": [
+    "How does a key open a lock?",
+    "Why does the wrong key not work?",
+    "What is inside a door lock?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "key",
+          "kind": "piston",
+          "x": 0.12,
+          "y": 0.62,
+          "size": 1,
+          "label": "Key",
+          "motion": "slide",
+          "ask": "How does a key open a lock?"
+        },
+        {
+          "id": "keypins",
+          "kind": "piston",
+          "x": 0.38,
+          "y": 0.62,
+          "size": 0.8,
+          "label": "Key pins",
+          "motion": "slide"
+        },
+        {
+          "id": "drivers",
+          "kind": "piston",
+          "x": 0.38,
+          "y": 0.36,
+          "size": 0.8,
+          "label": "Driver pins",
+          "motion": "slide",
+          "ask": "What are driver pins?"
+        },
+        {
+          "id": "springs",
+          "kind": "spring",
+          "x": 0.38,
+          "y": 0.1,
+          "size": 0.6,
+          "label": "Springs",
+          "motion": "pulse"
+        },
+        {
+          "id": "plug",
+          "kind": "wheel",
+          "x": 0.64,
+          "y": 0.62,
+          "size": 1.2,
+          "label": "Plug",
+          "motion": "spin",
+          "ask": "What is the plug?"
+        },
+        {
+          "id": "cam",
+          "kind": "lever",
+          "x": 0.88,
+          "y": 0.62,
+          "size": 0.7,
+          "label": "Cam",
+          "motion": "swing"
+        },
+        {
+          "id": "bolt",
+          "kind": "piston",
+          "x": 0.88,
+          "y": 0.25,
+          "size": 0.8,
+          "label": "Bolt",
+          "motion": "slide",
+          "ask": "What does the bolt do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "key",
+          "to": "keypins",
+          "kind": "force",
+          "label": "lifts"
+        },
+        {
+          "from": "keypins",
+          "to": "drivers",
+          "kind": "force",
+          "label": "push up"
+        },
+        {
+          "from": "springs",
+          "to": "drivers",
+          "kind": "force",
+          "label": "push down"
+        },
+        {
+          "from": "plug",
+          "to": "cam",
+          "kind": "force",
+          "label": "turns"
+        },
+        {
+          "from": "cam",
+          "to": "bolt",
+          "kind": "force",
+          "label": "draws back"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A pin tumbler lock has a cylinder, called the plug, that must turn to open the lock. Rows of little spring-loaded pins drop across the gap between the plug and the outer case and stop it turning.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a pin tumbler lock and key work"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.62,
+              "size": 1,
+              "label": "Key",
+              "motion": "slide",
+              "ask": "How does a key open a lock?"
+            },
+            {
+              "id": "keypins",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Key pins",
+              "motion": "slide"
+            },
+            {
+              "id": "drivers",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.36,
+              "size": 0.8,
+              "label": "Driver pins",
+              "motion": "slide",
+              "ask": "What are driver pins?"
+            },
+            {
+              "id": "springs",
+              "kind": "spring",
+              "x": 0.38,
+              "y": 0.1,
+              "size": 0.6,
+              "label": "Springs",
+              "motion": "pulse"
+            },
+            {
+              "id": "plug",
+              "kind": "wheel",
+              "x": 0.64,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Plug",
+              "motion": "spin",
+              "ask": "What is the plug?"
+            },
+            {
+              "id": "cam",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Cam",
+              "motion": "swing"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide",
+              "ask": "What does the bolt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "keypins",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "keypins",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push up"
+            },
+            {
+              "from": "springs",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push down"
+            },
+            {
+              "from": "plug",
+              "to": "cam",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "cam",
+              "to": "bolt",
+              "kind": "force",
+              "label": "draws back"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Each hole holds a key pin and a driver pin. Without a key, the springs push the driver pins down into the plug, jamming it.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.62,
+              "size": 1,
+              "label": "Key",
+              "motion": "slide",
+              "ask": "How does a key open a lock?"
+            },
+            {
+              "id": "keypins",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Key pins",
+              "motion": "slide"
+            },
+            {
+              "id": "drivers",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.36,
+              "size": 0.8,
+              "label": "Driver pins",
+              "motion": "slide",
+              "ask": "What are driver pins?"
+            },
+            {
+              "id": "springs",
+              "kind": "spring",
+              "x": 0.38,
+              "y": 0.1,
+              "size": 0.6,
+              "label": "Springs",
+              "motion": "pulse"
+            },
+            {
+              "id": "plug",
+              "kind": "wheel",
+              "x": 0.64,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Plug",
+              "motion": "spin",
+              "ask": "What is the plug?"
+            },
+            {
+              "id": "cam",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Cam",
+              "motion": "swing"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide",
+              "ask": "What does the bolt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "keypins",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "keypins",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push up"
+            },
+            {
+              "from": "springs",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push down"
+            },
+            {
+              "from": "plug",
+              "to": "cam",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "cam",
+              "to": "bolt",
+              "kind": "force",
+              "label": "draws back"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The right key's jagged edge lifts every key pin to exactly the right height, so the gap between each key pin and driver pin lines up with the edge of the plug, called the shear line.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.62,
+              "size": 1,
+              "label": "Key",
+              "motion": "slide",
+              "ask": "How does a key open a lock?"
+            },
+            {
+              "id": "keypins",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Key pins",
+              "motion": "slide"
+            },
+            {
+              "id": "drivers",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.36,
+              "size": 0.8,
+              "label": "Driver pins",
+              "motion": "slide",
+              "ask": "What are driver pins?"
+            },
+            {
+              "id": "springs",
+              "kind": "spring",
+              "x": 0.38,
+              "y": 0.1,
+              "size": 0.6,
+              "label": "Springs",
+              "motion": "pulse"
+            },
+            {
+              "id": "plug",
+              "kind": "wheel",
+              "x": 0.64,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Plug",
+              "motion": "spin",
+              "ask": "What is the plug?"
+            },
+            {
+              "id": "cam",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Cam",
+              "motion": "swing"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide",
+              "ask": "What does the bolt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "keypins",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "keypins",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push up"
+            },
+            {
+              "from": "springs",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push down"
+            },
+            {
+              "from": "plug",
+              "to": "cam",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "cam",
+              "to": "bolt",
+              "kind": "force",
+              "label": "draws back"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Now nothing crosses the shear line, so the plug turns. A cam on its back pulls the bolt out of the door frame. A wrong key leaves at least one pin across the line, and the plug stays locked.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "key",
+              "kind": "piston",
+              "x": 0.12,
+              "y": 0.62,
+              "size": 1,
+              "label": "Key",
+              "motion": "slide",
+              "ask": "How does a key open a lock?"
+            },
+            {
+              "id": "keypins",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.62,
+              "size": 0.8,
+              "label": "Key pins",
+              "motion": "slide"
+            },
+            {
+              "id": "drivers",
+              "kind": "piston",
+              "x": 0.38,
+              "y": 0.36,
+              "size": 0.8,
+              "label": "Driver pins",
+              "motion": "slide",
+              "ask": "What are driver pins?"
+            },
+            {
+              "id": "springs",
+              "kind": "spring",
+              "x": 0.38,
+              "y": 0.1,
+              "size": 0.6,
+              "label": "Springs",
+              "motion": "pulse"
+            },
+            {
+              "id": "plug",
+              "kind": "wheel",
+              "x": 0.64,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Plug",
+              "motion": "spin",
+              "ask": "What is the plug?"
+            },
+            {
+              "id": "cam",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Cam",
+              "motion": "swing"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.88,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide",
+              "ask": "What does the bolt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "key",
+              "to": "keypins",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "keypins",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push up"
+            },
+            {
+              "from": "springs",
+              "to": "drivers",
+              "kind": "force",
+              "label": "push down"
+            },
+            {
+              "from": "plug",
+              "to": "cam",
+              "kind": "force",
+              "label": "turns"
+            },
+            {
+              "from": "cam",
+              "to": "bolt",
+              "kind": "force",
+              "label": "draws back"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a key open a lock?",
+      "a": "The bumps on the key, called its bitting, lift each pair of pins so the join between them sits exactly at the shear line. With every pin lined up, the plug is free to turn and pull back the bolt.",
+      "asks": [
+        "What does the key do inside the lock?"
+      ]
+    },
+    {
+      "q": "What are driver pins?",
+      "a": "Driver pins sit above the key pins, pushed down by springs. When no key is in, they cross the shear line into the plug and stop it turning.",
+      "asks": [
+        "What are the springs in a lock for?"
+      ]
+    },
+    {
+      "q": "What is the plug?",
+      "a": "The plug is the cylinder you put the key into. It turns inside the outer case when the pins are lined up, and its cam moves the bolt.",
+      "asks": [
+        "What turns in a lock?"
+      ]
+    },
+    {
+      "q": "What is the shear line?",
+      "a": "The shear line is the tiny gap between the plug and the outer case. The plug can only turn when no pin crosses it.",
+      "asks": [
+        "Why must the pins line up?"
+      ]
+    },
+    {
+      "q": "What does the bolt do?",
+      "a": "The bolt is the metal bar that slides into the door frame to keep the door shut. Turning the plug moves a cam that draws it back so the door can open.",
+      "asks": [
+        "How does turning the key move the bolt?"
+      ]
+    }
+  ],
+  "facts": [
+    "Linus Yale Jr. patented the modern pin tumbler cylinder lock in the 1860s, based on his father's design.",
+    "Ancient Egyptians used wooden pin locks about 4,000 years ago."
+  ],
+  "quiz": [
+    {
+      "say": "Why does the wrong key not open a pin tumbler lock?",
+      "show": "Why does the wrong key not open a pin tumbler lock?",
+      "options": [
+        {
+          "show": "At least one pin is left across the shear line",
+          "say": "At least one pin is left across the shear line"
+        },
+        {
+          "show": "The key is too heavy",
+          "say": "The key is too heavy"
+        },
+        {
+          "show": "The springs break",
+          "say": "The springs break"
+        }
+      ],
+      "answer": 0,
+      "why": "If even one pin pair is not lined up with the shear line, it jams the plug.",
+      "wrong": {
+        "1": "Weight does not matter; the shape of the cuts does.",
+        "2": "The springs are fine; the pins are simply at the wrong heights."
+      }
+    }
+  ]
+}

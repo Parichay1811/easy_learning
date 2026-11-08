@@ -1,0 +1,269 @@
+{
+  "id": "ENGX-ENER-33",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "Why the grid's frequency shows if supply matches demand",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "grid frequency",
+    "50 hertz",
+    "balancing the grid",
+    "inertia",
+    "TV pickup"
+  ],
+  "examples": [
+    "Why is the grid frequency 50 hertz?",
+    "What happens when a power station trips?",
+    "What is a TV pickup?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-balance",
+      "left": [
+        {
+          "label": "Power stations",
+          "weight": 4,
+          "dist": 2,
+          "ask": "Why does grid frequency stay at 50 hertz?"
+        },
+        {
+          "label": "Wind and solar",
+          "weight": 2,
+          "dist": 3,
+          "ask": "Why do spinning generators help keep the grid steady?"
+        }
+      ],
+      "right": [
+        {
+          "label": "Homes",
+          "weight": 4,
+          "dist": 2,
+          "ask": "What is a TV pickup?"
+        },
+        {
+          "label": "Industry",
+          "weight": 3,
+          "dist": 2
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Think of the grid as a seesaw, with power stations on one side and everything using electricity on the other. When supply and demand are equal, it balances, and in Britain the grid runs at 50 hertz.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Why the grid's frequency shows if supply matches demand"
+        },
+        {
+          "op": "sim",
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Power stations",
+              "weight": 4,
+              "dist": 2,
+              "ask": "Why does grid frequency stay at 50 hertz?"
+            },
+            {
+              "label": "Wind and solar",
+              "weight": 2,
+              "dist": 3,
+              "ask": "Why do spinning generators help keep the grid steady?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Homes",
+              "weight": 4,
+              "dist": 2,
+              "ask": "What is a TV pickup?"
+            },
+            {
+              "label": "Industry",
+              "weight": 3,
+              "dist": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "If a big power station suddenly trips off, demand outweighs supply. Spinning generators across the country slow down slightly, so the frequency starts to fall.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Seconds after a trip"
+          },
+          "y": {
+            "label": "Grid frequency"
+          },
+          "shape": "decay",
+          "marks": [
+            {
+              "at": 0.1,
+              "label": "Station trips",
+              "ask": "What happens when a power station suddenly trips?"
+            },
+            {
+              "at": 0.45,
+              "label": "Batteries respond"
+            },
+            {
+              "at": 0.9,
+              "label": "Reserves take over"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Within a second, batteries and fast-acting power stations sense the drop and push in extra power, stopping the fall. Engineers call this frequency response.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Seconds after a trip"
+          },
+          "y": {
+            "label": "Grid frequency"
+          },
+          "shape": "decay",
+          "marks": [
+            {
+              "at": 0.1,
+              "label": "Station trips",
+              "ask": "What happens when a power station suddenly trips?"
+            },
+            {
+              "at": 0.45,
+              "label": "Batteries respond"
+            },
+            {
+              "at": 0.9,
+              "label": "Reserves take over"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Over the next minutes, reserve power stations take over and bring the frequency back to 50 hertz. The control room keeps it between 49.8 and 50.2 hertz nearly all the time.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-graph",
+          "x": {
+            "label": "Seconds after a trip"
+          },
+          "y": {
+            "label": "Grid frequency"
+          },
+          "shape": "decay",
+          "marks": [
+            {
+              "at": 0.1,
+              "label": "Station trips",
+              "ask": "What happens when a power station suddenly trips?"
+            },
+            {
+              "at": 0.45,
+              "label": "Batteries respond"
+            },
+            {
+              "at": 0.9,
+              "label": "Reserves take over"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does grid frequency stay at 50 hertz?",
+      "a": "All the big generators spin in step, and their speed sets the frequency. When supply and demand match, the current swings back and forth exactly 50 times a second, and the control room adds or removes power to hold it there.",
+      "asks": [
+        "What is grid frequency?"
+      ]
+    },
+    {
+      "q": "What happens when a power station suddenly trips?",
+      "a": "The remaining generators must make up the missing power, and the extra load slows them slightly, so the frequency falls. Fast reserves then push in power to stop the fall and bring it back.",
+      "asks": [
+        "What happens if a power station breaks down?"
+      ]
+    },
+    {
+      "q": "Why do spinning generators help keep the grid steady?",
+      "a": "Big spinning turbines and generators store energy in their heavy rotating parts, called inertia. When supply drops, they slow only gradually, giving reserves time to respond. Wind and solar connected through inverters add little natural inertia.",
+      "asks": [
+        "What is grid inertia?"
+      ]
+    },
+    {
+      "q": "What is a TV pickup?",
+      "a": "When a popular TV programme ends, millions of people switch on kettles at once, causing a sudden jump in demand. After the 1990 World Cup semi-final, demand in England and Wales jumped by about 2,800 megawatts.",
+      "asks": [
+        "Why do kettles affect the grid?"
+      ]
+    },
+    {
+      "q": "What happens if the frequency falls too far?",
+      "a": "If it drops below about 48.8 hertz, automatic systems switch off some areas to protect the rest of the grid. That happened briefly in Britain in August 2019, when two generators tripped within moments.",
+      "asks": [
+        "What caused the 2019 power cut in Britain?"
+      ]
+    }
+  ],
+  "facts": [
+    "Britain's grid runs at 50 hertz, while North America's runs at 60 hertz.",
+    "On 9 August 2019, Britain's grid frequency fell to 48.8 hertz after two generators tripped, and about a million customers briefly lost power."
+  ],
+  "quiz": [
+    {
+      "say": "A large power station suddenly trips off. What happens to the grid frequency at first?",
+      "show": "Right after a station trips, the frequency…",
+      "options": [
+        {
+          "show": "Falls",
+          "say": "Falls"
+        },
+        {
+          "show": "Rises",
+          "say": "Rises"
+        },
+        {
+          "show": "Stays exactly at 50 hertz",
+          "say": "Stays exactly at 50 hertz"
+        }
+      ],
+      "answer": 0,
+      "why": "With less supply than demand, the spinning generators slow slightly, so the frequency drops until reserves respond.",
+      "wrong": {
+        "1": "Frequency rises when there is too much supply, not too little.",
+        "2": "Losing a big station always upsets the balance for a moment."
+      }
+    }
+  ]
+}

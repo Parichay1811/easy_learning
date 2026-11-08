@@ -1,0 +1,296 @@
+{
+  "id": "BME-DYN-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Newton's second law in engineering: what a lift cable and floor really carry",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-DYN — Dynamics and vibration",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Newton's second law",
+    "F = ma",
+    "apparent weight",
+    "lift acceleration",
+    "cable tension"
+  ],
+  "examples": [
+    "Why do I feel heavier when a lift starts going up?",
+    "How do I find the tension in a lift cable?",
+    "How do I apply F = ma to a free-body diagram?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "person",
+      "motion": "up",
+      "forces": [
+        {
+          "label": "Floor push 792 N",
+          "dir": "up",
+          "size": 4,
+          "ask": "Why do I feel heavier when a lift starts going up?"
+        },
+        {
+          "label": "Weight 687 N",
+          "dir": "down",
+          "size": 3
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Stand on bathroom scales in a lift. As it starts upwards the reading jumps, and as it slows near the top the reading drops. Your mass has not changed, so what has? Newton's second law: the net force on you equals your mass times your acceleration. Let us measure it for a 70 kilogram person.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Newton's second law in engineering: what a lift cable and floor really carry"
+        },
+        {
+          "name": "x-forces",
+          "object": "person",
+          "motion": "up",
+          "forces": [
+            {
+              "label": "Floor push 792 N",
+              "dir": "up",
+              "size": 4,
+              "ask": "Why do I feel heavier when a lift starts going up?"
+            },
+            {
+              "label": "Weight 687 N",
+              "dir": "down",
+              "size": 3
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Person 70 kg; lift accelerating up at 1.5 m/s²"
+        }
+      ]
+    },
+    {
+      "say": "Draw the free-body diagram. Gravity pulls down with 70 times 9.81, about 687 newtons. The floor pushes up with a force N. Choose up as positive, the direction of the acceleration. Then N minus 687 must equal 70 times 1.5. See the two arrows: which is longer?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "person",
+          "motion": "up",
+          "forces": [
+            {
+              "label": "Floor push 792 N",
+              "dir": "up",
+              "size": 4,
+              "ask": "Why do I feel heavier when a lift starts going up?"
+            },
+            {
+              "label": "Weight 687 N",
+              "dir": "down",
+              "size": 3
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "ΣF = ma: N − mg = ma"
+        }
+      ]
+    },
+    {
+      "say": "The floor push! N equals 70 times 9.81 plus 1.5, which is 70 times 11.31, about 792 newtons. The scales read that as about 81 kilograms. This push you feel is called your apparent weight. Now the lift accelerates downwards at 1.5. What will the scales say?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "person",
+          "motion": "up",
+          "forces": [
+            {
+              "label": "Floor push 792 N",
+              "dir": "up",
+              "size": 4,
+              "ask": "Why do I feel heavier when a lift starts going up?"
+            },
+            {
+              "label": "Weight 687 N",
+              "dir": "down",
+              "size": 3
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "N = m(g + a) = 70 × 11.31 = 792 N"
+        }
+      ]
+    },
+    {
+      "say": "Less! Now N equals 70 times 9.81 minus 1.5, which is about 582 newtons. Look: the floor arrow is now shorter than the weight, so the net force points down. If the cable snapped and you fell freely, N would be zero. What would you feel then?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "person",
+          "motion": "down",
+          "forces": [
+            {
+              "label": "Floor push 582 N",
+              "dir": "up",
+              "size": 2,
+              "ask": 0
+            },
+            {
+              "label": "Weight 687 N",
+              "dir": "down",
+              "size": 3
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "N = m(g − a) = 70 × 8.31 = 582 N"
+        }
+      ]
+    },
+    {
+      "say": "Weightless, like astronauts in orbit! Now the engineering part. A 1000 kilogram lift car accelerating up at 1.5 needs a cable tension of 1000 times 11.31, about 11.3 kilonewtons, not just its 9.8 kilonewton weight. Designers add safety factors on top. Great work! Exam tip: always take positive in the direction of the acceleration.",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "person",
+          "motion": "up",
+          "forces": [
+            {
+              "label": "Floor push 792 N",
+              "dir": "up",
+              "size": 4,
+              "ask": "Why do I feel heavier when a lift starts going up?"
+            },
+            {
+              "label": "Weight 687 N",
+              "dir": "down",
+              "size": 3
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "T = 1000 × (9.81 + 1.5) = 11.3 kN"
+        },
+        {
+          "op": "note",
+          "text": "Tip: choose positive in the direction of acceleration"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do I feel heavier when a lift starts going up?",
+      "a": "To accelerate you upwards, the floor must push harder than your weight. You feel that push, so your apparent weight rises to m times g plus a.",
+      "asks": [
+        "what is apparent weight",
+        "why scales read more in a lift"
+      ]
+    },
+    {
+      "q": "How do I apply F = ma to a free-body diagram?",
+      "a": "Draw all the forces, choose a positive direction, usually along the acceleration, add the forces with signs, and set the total equal to mass times acceleration.",
+      "asks": [
+        "steps for Newton second law problems"
+      ]
+    },
+    {
+      "q": "How do I find the tension in a lift cable?",
+      "a": "The cable must support the weight and provide the acceleration. Going up and speeding up, T equals m times g plus a; going up and slowing down, T equals m times g minus a.",
+      "asks": [
+        "lift cable tension formula"
+      ]
+    },
+    {
+      "q": "Why is the force in a falling lift zero?",
+      "a": "In free fall, you and the floor both accelerate at g, so the floor does not need to push on you at all. The scales read zero: you feel weightless.",
+      "asks": [
+        "free fall weightlessness"
+      ]
+    },
+    {
+      "q": "Is a moving lift at constant speed different from a still one?",
+      "a": "No. At constant velocity the acceleration is zero, so the floor push equals your weight, exactly as when the lift is still.",
+      "asks": [
+        "constant velocity lift scale reading"
+      ]
+    }
+  ],
+  "facts": [
+    "A body accelerating upwards at a feels an apparent weight of m times g plus a.",
+    "At constant velocity, the net force on a body is zero."
+  ],
+  "quiz": [
+    {
+      "say": "A 500 kilogram load is lifted by a crane with an upward acceleration of 2 metres per second squared. What is the cable tension? Use g equals 9.81.",
+      "show": "500 kg load, upward acceleration 2 m/s². Cable tension? (g = 9.81)",
+      "options": [
+        {
+          "show": "5.9 kN",
+          "say": "5.9 kilonewtons"
+        },
+        {
+          "show": "4.9 kN",
+          "say": "4.9 kilonewtons"
+        },
+        {
+          "show": "3.9 kN",
+          "say": "3.9 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "T = m(g + a) = 500 × 11.81 = 5905 N, about 5.9 kN.",
+      "wrong": {
+        "1": "That is just the weight; it ignores the acceleration.",
+        "2": "That subtracts the acceleration, which is for accelerating downwards."
+      }
+    },
+    {
+      "say": "A lift moves upwards at a steady 3 metres per second. Compared with your weight, the floor pushes on you with…",
+      "show": "A lift moves up at a steady 3 m/s. The floor's push on you is…",
+      "options": [
+        {
+          "show": "Equal to your weight",
+          "say": "Equal to your weight"
+        },
+        {
+          "show": "More than your weight",
+          "say": "More than your weight"
+        },
+        {
+          "show": "Less than your weight",
+          "say": "Less than your weight"
+        }
+      ],
+      "answer": 0,
+      "why": "Steady speed means zero acceleration, so the forces balance.",
+      "wrong": {
+        "1": "More is needed only while the lift speeds up going upwards.",
+        "2": "Less happens only while the acceleration points down."
+      }
+    }
+  ]
+}

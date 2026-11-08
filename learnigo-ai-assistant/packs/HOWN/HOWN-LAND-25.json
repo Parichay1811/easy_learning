@@ -1,0 +1,681 @@
+{
+  "id": "HOWN-LAND-25",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "What glaciers leave behind: moraines and erratics",
+  "area": "How Nature Works",
+  "group": "HOWN — How and Why in Nature",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "moraine",
+    "glacial erratic",
+    "till",
+    "drumlin",
+    "glacial deposition"
+  ],
+  "examples": [
+    "What is a moraine?",
+    "Why are there huge boulders in odd places?",
+    "What do glaciers leave behind when they melt?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "snow",
+          "kind": "tank",
+          "x": 0.12,
+          "y": 0.2,
+          "size": 1,
+          "label": "Snowfield",
+          "motion": "pulse"
+        },
+        {
+          "id": "ice",
+          "kind": "belt",
+          "x": 0.45,
+          "y": 0.42,
+          "size": 1.5,
+          "label": "Glacier ice",
+          "motion": "slide",
+          "ask": "How does a glacier carry rocks?"
+        },
+        {
+          "id": "rocks",
+          "kind": "weight",
+          "x": 0.45,
+          "y": 0.15,
+          "size": 0.8,
+          "label": "Rocks plucked up",
+          "motion": "slide"
+        },
+        {
+          "id": "snout",
+          "kind": "box",
+          "x": 0.78,
+          "y": 0.55,
+          "size": 1,
+          "label": "Melting snout",
+          "motion": "pulse"
+        },
+        {
+          "id": "moraine",
+          "kind": "weight",
+          "x": 0.9,
+          "y": 0.85,
+          "size": 1.2,
+          "label": "Moraine ridge",
+          "motion": "none",
+          "ask": "What is a moraine?"
+        },
+        {
+          "id": "erratic",
+          "kind": "weight",
+          "x": 0.55,
+          "y": 0.85,
+          "size": 0.9,
+          "label": "Erratic boulder",
+          "motion": "none",
+          "ask": "Why are there huge boulders in odd places?"
+        },
+        {
+          "id": "melt",
+          "kind": "pipe",
+          "x": 0.95,
+          "y": 0.4,
+          "size": 0.8,
+          "label": "Meltwater stream",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "snow",
+          "to": "ice",
+          "kind": "fluid",
+          "label": "feeds ice"
+        },
+        {
+          "from": "rocks",
+          "to": "ice",
+          "kind": "force",
+          "label": "frozen in"
+        },
+        {
+          "from": "ice",
+          "to": "snout",
+          "kind": "force",
+          "label": "carries load"
+        },
+        {
+          "from": "snout",
+          "to": "moraine",
+          "kind": "force",
+          "label": "dumps rock"
+        },
+        {
+          "from": "ice",
+          "to": "erratic",
+          "kind": "force",
+          "label": "drops boulder"
+        },
+        {
+          "from": "snout",
+          "to": "melt",
+          "kind": "fluid",
+          "label": "meltwater"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A glacier works like a slow conveyor belt. Snow piles up at the top, turns to ice, and the ice creeps downhill, carrying rocks it has plucked from the valley.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "What glaciers leave behind: moraines and erratics"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "snow",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Snowfield",
+              "motion": "pulse"
+            },
+            {
+              "id": "ice",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.42,
+              "size": 1.5,
+              "label": "Glacier ice",
+              "motion": "slide",
+              "ask": "How does a glacier carry rocks?"
+            },
+            {
+              "id": "rocks",
+              "kind": "weight",
+              "x": 0.45,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Rocks plucked up",
+              "motion": "slide"
+            },
+            {
+              "id": "snout",
+              "kind": "box",
+              "x": 0.78,
+              "y": 0.55,
+              "size": 1,
+              "label": "Melting snout",
+              "motion": "pulse"
+            },
+            {
+              "id": "moraine",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Moraine ridge",
+              "motion": "none",
+              "ask": "What is a moraine?"
+            },
+            {
+              "id": "erratic",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Erratic boulder",
+              "motion": "none",
+              "ask": "Why are there huge boulders in odd places?"
+            },
+            {
+              "id": "melt",
+              "kind": "pipe",
+              "x": 0.95,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Meltwater stream",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "snow",
+              "to": "ice",
+              "kind": "fluid",
+              "label": "feeds ice"
+            },
+            {
+              "from": "rocks",
+              "to": "ice",
+              "kind": "force",
+              "label": "frozen in"
+            },
+            {
+              "from": "ice",
+              "to": "snout",
+              "kind": "force",
+              "label": "carries load"
+            },
+            {
+              "from": "snout",
+              "to": "moraine",
+              "kind": "force",
+              "label": "dumps rock"
+            },
+            {
+              "from": "ice",
+              "to": "erratic",
+              "kind": "force",
+              "label": "drops boulder"
+            },
+            {
+              "from": "snout",
+              "to": "melt",
+              "kind": "fluid",
+              "label": "meltwater"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Rocks of every size, from fine dust to boulders as big as houses, ride frozen inside and on top of the ice, carried for many kilometres.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "snow",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Snowfield",
+              "motion": "pulse"
+            },
+            {
+              "id": "ice",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.42,
+              "size": 1.5,
+              "label": "Glacier ice",
+              "motion": "slide",
+              "ask": "How does a glacier carry rocks?"
+            },
+            {
+              "id": "rocks",
+              "kind": "weight",
+              "x": 0.45,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Rocks plucked up",
+              "motion": "slide"
+            },
+            {
+              "id": "snout",
+              "kind": "box",
+              "x": 0.78,
+              "y": 0.55,
+              "size": 1,
+              "label": "Melting snout",
+              "motion": "pulse"
+            },
+            {
+              "id": "moraine",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Moraine ridge",
+              "motion": "none",
+              "ask": "What is a moraine?"
+            },
+            {
+              "id": "erratic",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Erratic boulder",
+              "motion": "none",
+              "ask": "Why are there huge boulders in odd places?"
+            },
+            {
+              "id": "melt",
+              "kind": "pipe",
+              "x": 0.95,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Meltwater stream",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "snow",
+              "to": "ice",
+              "kind": "fluid",
+              "label": "feeds ice"
+            },
+            {
+              "from": "rocks",
+              "to": "ice",
+              "kind": "force",
+              "label": "frozen in"
+            },
+            {
+              "from": "ice",
+              "to": "snout",
+              "kind": "force",
+              "label": "carries load"
+            },
+            {
+              "from": "snout",
+              "to": "moraine",
+              "kind": "force",
+              "label": "dumps rock"
+            },
+            {
+              "from": "ice",
+              "to": "erratic",
+              "kind": "force",
+              "label": "drops boulder"
+            },
+            {
+              "from": "snout",
+              "to": "melt",
+              "kind": "fluid",
+              "label": "meltwater"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "At the melting snout, the ice dumps its load in a jumbled mix called till. Piles of it form ridges called moraines; the end moraine marks how far the glacier reached.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "snow",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Snowfield",
+              "motion": "pulse"
+            },
+            {
+              "id": "ice",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.42,
+              "size": 1.5,
+              "label": "Glacier ice",
+              "motion": "slide",
+              "ask": "How does a glacier carry rocks?"
+            },
+            {
+              "id": "rocks",
+              "kind": "weight",
+              "x": 0.45,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Rocks plucked up",
+              "motion": "slide"
+            },
+            {
+              "id": "snout",
+              "kind": "box",
+              "x": 0.78,
+              "y": 0.55,
+              "size": 1,
+              "label": "Melting snout",
+              "motion": "pulse"
+            },
+            {
+              "id": "moraine",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Moraine ridge",
+              "motion": "none",
+              "ask": "What is a moraine?"
+            },
+            {
+              "id": "erratic",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Erratic boulder",
+              "motion": "none",
+              "ask": "Why are there huge boulders in odd places?"
+            },
+            {
+              "id": "melt",
+              "kind": "pipe",
+              "x": 0.95,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Meltwater stream",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "snow",
+              "to": "ice",
+              "kind": "fluid",
+              "label": "feeds ice"
+            },
+            {
+              "from": "rocks",
+              "to": "ice",
+              "kind": "force",
+              "label": "frozen in"
+            },
+            {
+              "from": "ice",
+              "to": "snout",
+              "kind": "force",
+              "label": "carries load"
+            },
+            {
+              "from": "snout",
+              "to": "moraine",
+              "kind": "force",
+              "label": "dumps rock"
+            },
+            {
+              "from": "ice",
+              "to": "erratic",
+              "kind": "force",
+              "label": "drops boulder"
+            },
+            {
+              "from": "snout",
+              "to": "melt",
+              "kind": "fluid",
+              "label": "meltwater"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "When glaciers retreat, they can leave single giant boulders stranded far from where they came from, called erratics, plus streams of meltwater that sort sand and gravel.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "snow",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Snowfield",
+              "motion": "pulse"
+            },
+            {
+              "id": "ice",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.42,
+              "size": 1.5,
+              "label": "Glacier ice",
+              "motion": "slide",
+              "ask": "How does a glacier carry rocks?"
+            },
+            {
+              "id": "rocks",
+              "kind": "weight",
+              "x": 0.45,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Rocks plucked up",
+              "motion": "slide"
+            },
+            {
+              "id": "snout",
+              "kind": "box",
+              "x": 0.78,
+              "y": 0.55,
+              "size": 1,
+              "label": "Melting snout",
+              "motion": "pulse"
+            },
+            {
+              "id": "moraine",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Moraine ridge",
+              "motion": "none",
+              "ask": "What is a moraine?"
+            },
+            {
+              "id": "erratic",
+              "kind": "weight",
+              "x": 0.55,
+              "y": 0.85,
+              "size": 0.9,
+              "label": "Erratic boulder",
+              "motion": "none",
+              "ask": "Why are there huge boulders in odd places?"
+            },
+            {
+              "id": "melt",
+              "kind": "pipe",
+              "x": 0.95,
+              "y": 0.4,
+              "size": 0.8,
+              "label": "Meltwater stream",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "snow",
+              "to": "ice",
+              "kind": "fluid",
+              "label": "feeds ice"
+            },
+            {
+              "from": "rocks",
+              "to": "ice",
+              "kind": "force",
+              "label": "frozen in"
+            },
+            {
+              "from": "ice",
+              "to": "snout",
+              "kind": "force",
+              "label": "carries load"
+            },
+            {
+              "from": "snout",
+              "to": "moraine",
+              "kind": "force",
+              "label": "dumps rock"
+            },
+            {
+              "from": "ice",
+              "to": "erratic",
+              "kind": "force",
+              "label": "drops boulder"
+            },
+            {
+              "from": "snout",
+              "to": "melt",
+              "kind": "fluid",
+              "label": "meltwater"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a glacier carry rocks?",
+      "a": "Rocks fall onto the glacier from valley sides, and the ice also freezes onto bedrock and plucks pieces away. These rocks travel inside, under and on top of the moving ice.",
+      "asks": [
+        "What does a glacier carry?"
+      ]
+    },
+    {
+      "q": "What is a moraine?",
+      "a": "A moraine is a ridge or mound of rock and soil left by a glacier. End moraines form at the glacier's snout, and lateral moraines form along its sides.",
+      "asks": [
+        "What is an end moraine?"
+      ]
+    },
+    {
+      "q": "Why are there huge boulders in odd places?",
+      "a": "Many are glacial erratics: boulders carried by ice age glaciers, sometimes hundreds of kilometres, and dropped when the ice melted. They often differ from the local rock.",
+      "asks": [
+        "What is a glacial erratic?"
+      ]
+    },
+    {
+      "q": "What is till?",
+      "a": "Till is the unsorted mix of clay, sand, gravel and boulders dumped directly by melting glacier ice.",
+      "asks": [
+        "What is boulder clay?"
+      ]
+    },
+    {
+      "q": "What is a drumlin?",
+      "a": "A drumlin is a smooth, oval hill of till shaped by a glacier flowing over it, like an upside-down spoon. Its steep end points the way the ice came from.",
+      "asks": [
+        "What shape is a drumlin?"
+      ]
+    }
+  ],
+  "facts": [
+    "Glacial erratics can be carried hundreds of kilometres from their source rock.",
+    "Long Island in New York is largely made of moraines left by ice age glaciers."
+  ],
+  "quiz": [
+    {
+      "say": "A granite boulder sits alone in a field of limestone. What most likely brought it?",
+      "show": "The boulder was probably carried by…",
+      "options": [
+        {
+          "show": "An ice age glacier",
+          "say": "An ice age glacier"
+        },
+        {
+          "show": "A river in a flood last week",
+          "say": "A river in a flood last week"
+        },
+        {
+          "show": "A volcano nearby",
+          "say": "A volcano nearby"
+        }
+      ],
+      "answer": 0,
+      "why": "Glaciers carry boulders great distances and drop them as erratics when they melt.",
+      "wrong": {
+        "1": "Rivers rarely move huge boulders far onto fields of different rock.",
+        "2": "A volcano would leave volcanic rock, not granite boulders on limestone."
+      }
+    }
+  ]
+}

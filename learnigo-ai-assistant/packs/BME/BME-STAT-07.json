@@ -1,0 +1,299 @@
+{
+  "id": "BME-STAT-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Centroids and centre of gravity: the balance point of a T-section",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "centroid",
+    "centre of gravity",
+    "composite section",
+    "first moment of area",
+    "T-section"
+  ],
+  "examples": [
+    "How do I find the centroid of a T-section?",
+    "What is the difference between centroid and centre of gravity?",
+    "Centroid of a composite shape worked example"
+  ],
+  "figure": [
+    {
+      "name": "x-balance",
+      "left": [
+        {
+          "label": "Web 1600 mm²",
+          "weight": 8,
+          "dist": 5,
+          "ask": "How do I find the centroid of a composite shape?"
+        }
+      ],
+      "right": [
+        {
+          "label": "Flange 2000 mm²",
+          "weight": 10,
+          "dist": 4,
+          "ask": "How do I find the centroid of a composite shape?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Balance a ruler on one finger and you have found its centre of gravity, the point where all its weight seems to act. For a flat shape, the same balance point is called the centroid. Today we find it for a T-shaped steel section: a 100 by 20 millimetre flange sitting on an 80 by 20 millimetre web.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Centroids and centre of gravity: the balance point of a T-section"
+        },
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Web 1600 mm²",
+              "weight": 8,
+              "dist": 5,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Flange 2000 mm²",
+              "weight": 10,
+              "dist": 4,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "T-section: flange 100 × 20 mm on top, web 20 × 80 mm below"
+        }
+      ]
+    },
+    {
+      "say": "Split the T into two rectangles. The web has an area of 1600 square millimetres, with its own centroid 40 millimetres up from the bottom. The flange has 2000 square millimetres, with its centroid 90 millimetres up. See the two parts on the balance? Which one pulls the balance point towards it?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Web 1600 mm²",
+              "weight": 8,
+              "dist": 5,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Flange 2000 mm²",
+              "weight": 10,
+              "dist": 4,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "A_web = 1600 mm², y = 40 mm; A_flange = 2000 mm², y = 90 mm"
+        }
+      ]
+    },
+    {
+      "say": "The bigger flange! Now average the heights, weighted by area: 2000 times 90 plus 1600 times 40, all divided by 3600. That gives y bar equals 67.8 millimetres from the bottom. It sits closer to the flange, just as the balance shows. Can you guess why it is called the first moment of area?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Web 1600 mm²",
+              "weight": 8,
+              "dist": 5,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Flange 2000 mm²",
+              "weight": 10,
+              "dist": 4,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "ȳ = (2000×90 + 1600×40) / 3600 = 67.8 mm"
+        }
+      ]
+    },
+    {
+      "say": "Because area times distance is like force times distance, a moment. Check the balance: the flange is 22.2 millimetres from the centroid and the web is 27.8 millimetres away. 2000 times 22.2 equals 1600 times 27.8, about 44 thousand each side. Balanced! See the beam sit level?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Web 1600 mm²",
+              "weight": 8,
+              "dist": 5,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Flange 2000 mm²",
+              "weight": 10,
+              "dist": 4,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "2000 × 22.2 ≈ 1600 × 27.8 ≈ 44 400 mm³"
+        }
+      ]
+    },
+    {
+      "say": "Wonderful. Why it matters: bending stresses in a beam are measured from this centroid line, and a lorry tips over when its centre of gravity moves outside its wheels. Exam tip: use symmetry first; here the centroid is on the centre line, so you only needed y bar. Challenge: flip the T upside down. Where is the centroid now?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Web 1600 mm²",
+              "weight": 8,
+              "dist": 5,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Flange 2000 mm²",
+              "weight": 10,
+              "dist": 4,
+              "ask": "How do I find the centroid of a composite shape?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Tip: an axis of symmetry always contains the centroid"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a centroid?",
+      "a": "It is the geometric centre of an area: the point where a thin plate of uniform thickness would balance. For a composite shape, it is the area-weighted average of the parts' centroids.",
+      "asks": [
+        "define centroid"
+      ]
+    },
+    {
+      "q": "How do I find the centroid of a composite shape?",
+      "a": "Split the shape into simple parts, find each area and centroid, then divide the sum of area times distance by the total area. Holes count as negative areas.",
+      "asks": [
+        "how do I find the centroid of a T-section",
+        "centroid of composite area method"
+      ]
+    },
+    {
+      "q": "What is the difference between centroid and centre of gravity?",
+      "a": "The centroid depends only on shape. The centre of gravity is where the weight acts, which matches the centroid when the material is uniform and gravity is even.",
+      "asks": [
+        "centroid vs centre of gravity",
+        "centre of mass vs centroid"
+      ]
+    },
+    {
+      "q": "What is the first moment of area?",
+      "a": "It is area multiplied by the distance of its centroid from an axis. The first moment about an axis through the centroid is zero, which is how we locate the centroid.",
+      "asks": [
+        "first moment of area definition"
+      ]
+    },
+    {
+      "q": "Why does the centroid matter for beams?",
+      "a": "A beam bends about its neutral axis, which passes through the centroid of its cross-section. Bending stress and the second moment of area are both measured from it.",
+      "asks": [
+        "neutral axis passes through centroid"
+      ]
+    }
+  ],
+  "facts": [
+    "For a homogeneous body in uniform gravity, the centre of gravity coincides with the centroid.",
+    "If a shape has an axis of symmetry, its centroid lies on that axis."
+  ],
+  "quiz": [
+    {
+      "say": "An L-shape is made of a 1000 square millimetre part with centroid at 10 millimetres and a 500 square millimetre part with centroid at 40 millimetres. Where is the overall centroid?",
+      "show": "Parts: 1000 mm² at 10 mm and 500 mm² at 40 mm. Overall centroid?",
+      "options": [
+        {
+          "show": "20 mm",
+          "say": "20 millimetres"
+        },
+        {
+          "show": "25 mm",
+          "say": "25 millimetres"
+        },
+        {
+          "show": "30 mm",
+          "say": "30 millimetres"
+        }
+      ],
+      "answer": 0,
+      "why": "(1000 × 10 + 500 × 40) / 1500 = 30000 / 1500 = 20 mm.",
+      "wrong": {
+        "1": "That is the simple average, which ignores that the first part is twice as big.",
+        "2": "That would lean towards the smaller part, not the larger one."
+      }
+    },
+    {
+      "say": "How do you treat a circular hole when finding the centroid of a plate?",
+      "show": "How is a hole treated in a composite centroid calculation?",
+      "options": [
+        {
+          "show": "As a negative area",
+          "say": "As a negative area"
+        },
+        {
+          "show": "As a positive area",
+          "say": "As a positive area"
+        },
+        {
+          "show": "Ignore it",
+          "say": "Ignore it"
+        }
+      ],
+      "answer": 0,
+      "why": "Removing material subtracts its area and its first moment, so the hole counts as negative.",
+      "wrong": {
+        "1": "Adding it would count material that is not there.",
+        "2": "Ignoring it puts the centroid in the wrong place unless the hole is on the centre line."
+      }
+    }
+  ]
+}

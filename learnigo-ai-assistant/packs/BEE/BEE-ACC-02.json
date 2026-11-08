@@ -1,0 +1,391 @@
+{
+  "id": "BEE-ACC-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Phasors: turning AC sine waves into rotating arrows",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "phasor",
+    "phasor diagram",
+    "leading and lagging",
+    "complex numbers",
+    "j operator"
+  ],
+  "examples": [
+    "What is a phasor?",
+    "How do you add two sine waves using phasors?",
+    "Why do engineers use j instead of i?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (ms)",
+        "max": 20
+      },
+      "y": {
+        "label": "Voltage (V)",
+        "min": -6,
+        "max": 6
+      },
+      "curves": [
+        {
+          "label": "v1: 3 V at 0°",
+          "type": "sine",
+          "a": 3,
+          "k": 0.05,
+          "ask": "What is a phasor?"
+        },
+        {
+          "label": "v2: 4 V at +90°",
+          "type": "sine",
+          "a": 4,
+          "k": 0.05,
+          "phase": 90,
+          "ask": "What does j mean in phasors?"
+        },
+        {
+          "label": "Sum: 5 V at 53°",
+          "type": "sine",
+          "a": 5,
+          "k": 0.05,
+          "phase": 53.13,
+          "ask": "Why isn't 3 V plus 4 V equal to 7 V here?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1893 Charles Steinmetz, an engineer at General Electric, found a trick that still runs every power grid: treat each sine wave as a spinning arrow. On the board are two 50 hertz voltages, 3 volts and 4 volts peak, and their sum. Adding waves point by point is painful. Arrows make it easy.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Phasors: turning AC sine waves into rotating arrows"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -6,
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "v1: 3 V at 0°",
+              "type": "sine",
+              "a": 3,
+              "k": 0.05,
+              "ask": "What is a phasor?"
+            },
+            {
+              "label": "v2: 4 V at +90°",
+              "type": "sine",
+              "a": 4,
+              "k": 0.05,
+              "phase": 90,
+              "ask": "What does j mean in phasors?"
+            },
+            {
+              "label": "Sum: 5 V at 53°",
+              "type": "sine",
+              "a": 5,
+              "k": 0.05,
+              "phase": 53.13,
+              "ask": "Why isn't 3 V plus 4 V equal to 7 V here?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the 3 volt wave. Imagine an arrow 3 units long spinning anticlockwise 50 times a second. Its height at each moment traces exactly this sine wave. That arrow is a phasor: its length is the peak and its starting angle is the phase. All these waves spin at the same speed, so we can freeze them at time zero. Where does the 3 volt arrow point then?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -6,
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "v1: 3 V at 0°",
+              "type": "sine",
+              "a": 3,
+              "k": 0.05,
+              "ask": "What is a phasor?"
+            },
+            {
+              "label": "v2: 4 V at +90°",
+              "type": "sine",
+              "a": 4,
+              "k": 0.05,
+              "phase": 90,
+              "ask": "What does j mean in phasors?"
+            },
+            {
+              "label": "Sum: 5 V at 53°",
+              "type": "sine",
+              "a": 5,
+              "k": 0.05,
+              "phase": 53.13,
+              "ask": "Why isn't 3 V plus 4 V equal to 7 V here?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "v = V_p sin(ωt + φ)  →  V_p ∠ φ"
+        }
+      ]
+    },
+    {
+      "say": "Flat, along zero degrees. The 4 volt wave peaks a quarter cycle earlier, so it leads by 90 degrees, and its arrow points straight up. In complex-number language the first is 3 and the second is j 4, where j is the engineer's square root of minus one. Which wave reaches its peak first?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -6,
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "v1: 3 V at 0°",
+              "type": "sine",
+              "a": 3,
+              "k": 0.05,
+              "ask": "What is a phasor?"
+            },
+            {
+              "label": "v2: 4 V at +90°",
+              "type": "sine",
+              "a": 4,
+              "k": 0.05,
+              "phase": 90,
+              "ask": "What does j mean in phasors?"
+            },
+            {
+              "label": "Sum: 5 V at 53°",
+              "type": "sine",
+              "a": 5,
+              "k": 0.05,
+              "phase": 53.13,
+              "ask": "Why isn't 3 V plus 4 V equal to 7 V here?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V1 = 3∠0° = 3,   V2 = 4∠90° = j4"
+        }
+      ]
+    },
+    {
+      "say": "The 4 volt one. Now the magic: to add the waves, add the arrows tip to tail, just like forces. 3 across and 4 up give an arrow 5 long, by Pythagoras, at an angle whose tangent is 4 over 3, about 53 degrees. So did adding a 3 volt and a 4 volt wave give 7 volts?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "compass",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "V1: 3 V at 0°",
+              "dir": 0,
+              "size": 3,
+              "ask": "How do you add two phasors?"
+            },
+            {
+              "label": "V2: 4 V at 90°",
+              "dir": 90,
+              "size": 4
+            },
+            {
+              "label": "Sum: 5 V at 53°",
+              "dir": 53,
+              "size": 5,
+              "ask": "Why isn't 3 V plus 4 V equal to 7 V here?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "|V| = √(3² + 4²) = 5 V,  φ = tan⁻¹(4/3) ≈ 53°"
+        }
+      ]
+    },
+    {
+      "say": "No, only 5, because their peaks happen at different times. The third curve proves it: a 5 volt wave shifted by 53 degrees, exactly the point-by-point sum. Excellent! Exam tip: phasors only work for waves of the same frequency, and grid engineers often draw them with RMS lengths. Challenge: add 6 volts at zero degrees and 8 volts at 90 degrees.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -6,
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "v1: 3 V at 0°",
+              "type": "sine",
+              "a": 3,
+              "k": 0.05,
+              "ask": "What is a phasor?"
+            },
+            {
+              "label": "v2: 4 V at +90°",
+              "type": "sine",
+              "a": 4,
+              "k": 0.05,
+              "phase": 90,
+              "ask": "What does j mean in phasors?"
+            },
+            {
+              "label": "Sum: 5 V at 53°",
+              "type": "sine",
+              "a": 5,
+              "k": 0.05,
+              "phase": 53.13,
+              "ask": "Why isn't 3 V plus 4 V equal to 7 V here?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "3 + j4 = 5∠53.1°"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a phasor?",
+      "a": "A phasor is an arrow, or a complex number, whose length is a sine wave's amplitude and whose angle is its phase. It is a snapshot of a rotating arrow whose height traces the wave.",
+      "asks": [
+        "Define phasor",
+        "What is phasor representation?"
+      ]
+    },
+    {
+      "q": "Why do phasors only work at one frequency?",
+      "a": "All the arrows must spin at the same speed so their angles stay fixed relative to each other. Waves of different frequencies drift apart, so their arrows cannot be frozen in one picture.",
+      "asks": [
+        "Can you add phasors of different frequencies?"
+      ]
+    },
+    {
+      "q": "How do you add two phasors?",
+      "a": "Place them tip to tail, or add their real parts and their imaginary parts. The length of the result is the amplitude of the summed wave and its angle is the phase.",
+      "asks": [
+        "Adding sine waves with phasors"
+      ]
+    },
+    {
+      "q": "What does j mean in phasors?",
+      "a": "Engineers use j for the square root of minus one, because i already means current. Multiplying a phasor by j turns it 90 degrees anticlockwise.",
+      "asks": [
+        "Why do engineers use j instead of i?"
+      ]
+    },
+    {
+      "q": "Why isn't 3 V plus 4 V equal to 7 V here?",
+      "a": "The two waves peak at different moments, a quarter cycle apart, so their peaks never line up. Their sum peaks at 5 volts, found by adding the arrows.",
+      "asks": [
+        "Why don't AC voltages simply add?"
+      ]
+    }
+  ],
+  "facts": [
+    "Charles Proteus Steinmetz presented the complex-number method for AC circuits in 1893.",
+    "Multiplying a phasor by j rotates it by 90 degrees anticlockwise."
+  ],
+  "quiz": [
+    {
+      "say": "Add 6 volts at zero degrees and 8 volts at 90 degrees, at the same frequency. What is the amplitude of the sum?",
+      "show": "Add 6 V at 0° and 8 V at 90° (same frequency). What is the amplitude of the sum?",
+      "options": [
+        {
+          "show": "10 V",
+          "say": "10 volts"
+        },
+        {
+          "show": "14 V",
+          "say": "14 volts"
+        },
+        {
+          "show": "2 V",
+          "say": "2 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "The arrows are at right angles, so the sum is the square root of 36 plus 64, which is 10 volts.",
+      "wrong": {
+        "1": "Simple addition only works when the waves are in phase.",
+        "2": "Subtracting only applies to waves 180 degrees apart."
+      }
+    },
+    {
+      "say": "A phasor at plus 90 degrees, compared with one at zero degrees, is what?",
+      "show": "A phasor at +90° compared with one at 0° is...",
+      "options": [
+        {
+          "show": "Leading by a quarter cycle",
+          "say": "Leading by a quarter cycle"
+        },
+        {
+          "show": "Lagging by a quarter cycle",
+          "say": "Lagging by a quarter cycle"
+        },
+        {
+          "show": "At a different frequency",
+          "say": "At a different frequency"
+        }
+      ],
+      "answer": 0,
+      "why": "A larger positive angle means the wave reaches its peak earlier, so it leads, and 90 degrees is a quarter of 360.",
+      "wrong": {
+        "1": "Lagging would be a negative angle, minus 90 degrees.",
+        "2": "Phasors in one diagram all share the same frequency."
+      }
+    }
+  ]
+}

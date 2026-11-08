@@ -1,0 +1,569 @@
+{
+  "id": "ENGX-ELEC-38",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "Live, neutral and earth: the three wires in a plug",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "three-pin plug",
+    "live wire",
+    "neutral wire",
+    "earth pin",
+    "plug wiring colours"
+  ],
+  "examples": [
+    "What do the three wires in a plug do?",
+    "Which wire is brown in a plug?",
+    "When does current flow in the earth wire?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "socket",
+          "label": "Wall socket",
+          "icon": "plug",
+          "x": 0.1,
+          "y": 0.5
+        },
+        {
+          "id": "live",
+          "label": "Live (brown)",
+          "icon": "lightning",
+          "x": 0.38,
+          "y": 0.15,
+          "ask": "What does the live wire do?"
+        },
+        {
+          "id": "fuse",
+          "label": "Fuse",
+          "icon": "fire",
+          "x": 0.65,
+          "y": 0.15,
+          "ask": "Why is the fuse connected to the live wire?"
+        },
+        {
+          "id": "kettle",
+          "label": "Kettle",
+          "icon": "steam",
+          "x": 0.9,
+          "y": 0.5
+        },
+        {
+          "id": "neutral",
+          "label": "Neutral (blue)",
+          "icon": "wire",
+          "x": 0.5,
+          "y": 0.52,
+          "ask": "What does the neutral wire do?"
+        },
+        {
+          "id": "earth",
+          "label": "Earth (green-yellow)",
+          "icon": "soil",
+          "x": 0.55,
+          "y": 0.88,
+          "ask": "When does current flow in the earth wire?"
+        }
+      ],
+      "links": [
+        {
+          "from": "socket",
+          "to": "live",
+          "kind": "power",
+          "label": "Mains push"
+        },
+        {
+          "from": "live",
+          "to": "fuse",
+          "kind": "power"
+        },
+        {
+          "from": "fuse",
+          "to": "kettle",
+          "kind": "power",
+          "label": "Current in"
+        },
+        {
+          "from": "kettle",
+          "to": "neutral",
+          "kind": "power",
+          "label": "Current back"
+        },
+        {
+          "from": "neutral",
+          "to": "socket",
+          "kind": "power"
+        },
+        {
+          "from": "kettle",
+          "to": "earth",
+          "kind": "power",
+          "label": "Only in a fault"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A three-pin plug connects an appliance to the mains with three wires, each with its own job and colour.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Live, neutral and earth: the three wires in a plug"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "socket",
+              "label": "Wall socket",
+              "icon": "plug",
+              "x": 0.1,
+              "y": 0.5
+            },
+            {
+              "id": "live",
+              "label": "Live (brown)",
+              "icon": "lightning",
+              "x": 0.38,
+              "y": 0.15,
+              "ask": "What does the live wire do?"
+            },
+            {
+              "id": "fuse",
+              "label": "Fuse",
+              "icon": "fire",
+              "x": 0.65,
+              "y": 0.15,
+              "ask": "Why is the fuse connected to the live wire?"
+            },
+            {
+              "id": "kettle",
+              "label": "Kettle",
+              "icon": "steam",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "neutral",
+              "label": "Neutral (blue)",
+              "icon": "wire",
+              "x": 0.5,
+              "y": 0.52,
+              "ask": "What does the neutral wire do?"
+            },
+            {
+              "id": "earth",
+              "label": "Earth (green-yellow)",
+              "icon": "soil",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "When does current flow in the earth wire?"
+            }
+          ],
+          "links": [
+            {
+              "from": "socket",
+              "to": "live",
+              "kind": "power",
+              "label": "Mains push"
+            },
+            {
+              "from": "live",
+              "to": "fuse",
+              "kind": "power"
+            },
+            {
+              "from": "fuse",
+              "to": "kettle",
+              "kind": "power",
+              "label": "Current in"
+            },
+            {
+              "from": "kettle",
+              "to": "neutral",
+              "kind": "power",
+              "label": "Current back"
+            },
+            {
+              "from": "neutral",
+              "to": "socket",
+              "kind": "power"
+            },
+            {
+              "from": "kettle",
+              "to": "earth",
+              "kind": "power",
+              "label": "Only in a fault"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The brown live wire carries the high voltage from the socket, through the fuse, to the appliance.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "socket",
+              "label": "Wall socket",
+              "icon": "plug",
+              "x": 0.1,
+              "y": 0.5
+            },
+            {
+              "id": "live",
+              "label": "Live (brown)",
+              "icon": "lightning",
+              "x": 0.38,
+              "y": 0.15,
+              "ask": "What does the live wire do?"
+            },
+            {
+              "id": "fuse",
+              "label": "Fuse",
+              "icon": "fire",
+              "x": 0.65,
+              "y": 0.15,
+              "ask": "Why is the fuse connected to the live wire?"
+            },
+            {
+              "id": "kettle",
+              "label": "Kettle",
+              "icon": "steam",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "neutral",
+              "label": "Neutral (blue)",
+              "icon": "wire",
+              "x": 0.5,
+              "y": 0.52,
+              "ask": "What does the neutral wire do?"
+            },
+            {
+              "id": "earth",
+              "label": "Earth (green-yellow)",
+              "icon": "soil",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "When does current flow in the earth wire?"
+            }
+          ],
+          "links": [
+            {
+              "from": "socket",
+              "to": "live",
+              "kind": "power",
+              "label": "Mains push"
+            },
+            {
+              "from": "live",
+              "to": "fuse",
+              "kind": "power"
+            },
+            {
+              "from": "fuse",
+              "to": "kettle",
+              "kind": "power",
+              "label": "Current in"
+            },
+            {
+              "from": "kettle",
+              "to": "neutral",
+              "kind": "power",
+              "label": "Current back"
+            },
+            {
+              "from": "neutral",
+              "to": "socket",
+              "kind": "power"
+            },
+            {
+              "from": "kettle",
+              "to": "earth",
+              "kind": "power",
+              "label": "Only in a fault"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The blue neutral wire carries the current back to complete the circuit, staying close to zero volts.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "socket",
+              "label": "Wall socket",
+              "icon": "plug",
+              "x": 0.1,
+              "y": 0.5
+            },
+            {
+              "id": "live",
+              "label": "Live (brown)",
+              "icon": "lightning",
+              "x": 0.38,
+              "y": 0.15,
+              "ask": "What does the live wire do?"
+            },
+            {
+              "id": "fuse",
+              "label": "Fuse",
+              "icon": "fire",
+              "x": 0.65,
+              "y": 0.15,
+              "ask": "Why is the fuse connected to the live wire?"
+            },
+            {
+              "id": "kettle",
+              "label": "Kettle",
+              "icon": "steam",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "neutral",
+              "label": "Neutral (blue)",
+              "icon": "wire",
+              "x": 0.5,
+              "y": 0.52,
+              "ask": "What does the neutral wire do?"
+            },
+            {
+              "id": "earth",
+              "label": "Earth (green-yellow)",
+              "icon": "soil",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "When does current flow in the earth wire?"
+            }
+          ],
+          "links": [
+            {
+              "from": "socket",
+              "to": "live",
+              "kind": "power",
+              "label": "Mains push"
+            },
+            {
+              "from": "live",
+              "to": "fuse",
+              "kind": "power"
+            },
+            {
+              "from": "fuse",
+              "to": "kettle",
+              "kind": "power",
+              "label": "Current in"
+            },
+            {
+              "from": "kettle",
+              "to": "neutral",
+              "kind": "power",
+              "label": "Current back"
+            },
+            {
+              "from": "neutral",
+              "to": "socket",
+              "kind": "power"
+            },
+            {
+              "from": "kettle",
+              "to": "earth",
+              "kind": "power",
+              "label": "Only in a fault"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The green and yellow earth wire normally carries nothing. If a fault makes the metal case live, it carries a big current to the ground and blows the fuse.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "socket",
+              "label": "Wall socket",
+              "icon": "plug",
+              "x": 0.1,
+              "y": 0.5
+            },
+            {
+              "id": "live",
+              "label": "Live (brown)",
+              "icon": "lightning",
+              "x": 0.38,
+              "y": 0.15,
+              "ask": "What does the live wire do?"
+            },
+            {
+              "id": "fuse",
+              "label": "Fuse",
+              "icon": "fire",
+              "x": 0.65,
+              "y": 0.15,
+              "ask": "Why is the fuse connected to the live wire?"
+            },
+            {
+              "id": "kettle",
+              "label": "Kettle",
+              "icon": "steam",
+              "x": 0.9,
+              "y": 0.5
+            },
+            {
+              "id": "neutral",
+              "label": "Neutral (blue)",
+              "icon": "wire",
+              "x": 0.5,
+              "y": 0.52,
+              "ask": "What does the neutral wire do?"
+            },
+            {
+              "id": "earth",
+              "label": "Earth (green-yellow)",
+              "icon": "soil",
+              "x": 0.55,
+              "y": 0.88,
+              "ask": "When does current flow in the earth wire?"
+            }
+          ],
+          "links": [
+            {
+              "from": "socket",
+              "to": "live",
+              "kind": "power",
+              "label": "Mains push"
+            },
+            {
+              "from": "live",
+              "to": "fuse",
+              "kind": "power"
+            },
+            {
+              "from": "fuse",
+              "to": "kettle",
+              "kind": "power",
+              "label": "Current in"
+            },
+            {
+              "from": "kettle",
+              "to": "neutral",
+              "kind": "power",
+              "label": "Current back"
+            },
+            {
+              "from": "neutral",
+              "to": "socket",
+              "kind": "power"
+            },
+            {
+              "from": "kettle",
+              "to": "earth",
+              "kind": "power",
+              "label": "Only in a fault"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the live wire do?",
+      "a": "The live wire carries the alternating voltage from the supply, about 230 volts in the UK. It is the dangerous one, so the fuse and switches are placed in it.",
+      "asks": [
+        "Which wire is the brown one?"
+      ]
+    },
+    {
+      "q": "What does the neutral wire do?",
+      "a": "The neutral wire completes the circuit, carrying the current back to the supply. It stays close to zero volts, near the voltage of the ground.",
+      "asks": [
+        "Which wire is the blue one?"
+      ]
+    },
+    {
+      "q": "When does current flow in the earth wire?",
+      "a": "Normally never. It only carries current if a fault makes a metal case live, and then it carries a big current that blows the fuse.",
+      "asks": [
+        "Does the earth wire carry current?"
+      ]
+    },
+    {
+      "q": "Why is the fuse connected to the live wire?",
+      "a": "When the fuse blows, it must cut the appliance off from the high voltage. In the live wire, nothing inside stays live once it melts.",
+      "asks": [
+        "Which wire does the fuse go in?"
+      ]
+    },
+    {
+      "q": "Why does a UK plug have a longer earth pin?",
+      "a": "The earth pin is longest, so it connects first and disconnects last, and it also opens the shutters that cover the live and neutral holes in the socket.",
+      "asks": [
+        "Why are UK plug pins different lengths?"
+      ]
+    }
+  ],
+  "facts": [
+    "UK mains voltage is nominally 230 volts.",
+    "UK plug wire colours are brown for live, blue for neutral, and green and yellow for earth."
+  ],
+  "quiz": [
+    {
+      "say": "In a working kettle with no fault, which wire carries no current?",
+      "show": "In a working kettle with no fault, which wire carries no current?",
+      "options": [
+        {
+          "show": "The earth wire",
+          "say": "The earth wire"
+        },
+        {
+          "show": "The live wire",
+          "say": "The live wire"
+        },
+        {
+          "show": "The neutral wire",
+          "say": "The neutral wire"
+        }
+      ],
+      "answer": 0,
+      "why": "The earth wire is a safety path that only carries current when a fault makes the case live.",
+      "wrong": {
+        "1": "The live wire carries current into the kettle.",
+        "2": "The neutral wire carries the current back out."
+      }
+    }
+  ]
+}

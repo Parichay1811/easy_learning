@@ -1,0 +1,403 @@
+{
+  "id": "BME-STAT-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Frames and machines: how pliers multiply your grip and cranes stay upright",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "frames and machines",
+    "multi-force member",
+    "mechanical advantage",
+    "pin forces",
+    "counterweight"
+  ],
+  "examples": [
+    "What is the difference between a frame and a machine?",
+    "How much force do pliers give at the jaws?",
+    "Why does a tower crane need a counterweight?"
+  ],
+  "figure": [
+    {
+      "name": "x-balance",
+      "left": [
+        {
+          "label": "Hand 100 N",
+          "weight": 2,
+          "dist": 5,
+          "ask": "How much force do pliers give at the jaws?"
+        }
+      ],
+      "right": [
+        {
+          "label": "Jaw 500 N",
+          "weight": 10,
+          "dist": 1,
+          "ask": "How much force do pliers give at the jaws?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Squeeze a pair of pliers and they bite through wire your fingers could never cut. Pliers are a machine: a structure with moving parts that changes a force. Like a frame, it has at least one member with three or more forces on it, so you must take it apart at the pins. Let us take the pliers apart.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Frames and machines: how pliers multiply your grip and cranes stay upright"
+        },
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Hand 100 N",
+              "weight": 2,
+              "dist": 5,
+              "ask": "How much force do pliers give at the jaws?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Jaw 500 N",
+              "weight": 10,
+              "dist": 1,
+              "ask": "How much force do pliers give at the jaws?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Frames hold loads; machines change forces"
+        }
+      ]
+    },
+    {
+      "say": "Cut one handle free. Your hand pushes 100 newtons at 100 millimetres from the pivot pin. The jaw is only 20 millimetres from the pin on the other side. Look at the balance: a long arm on the hand side and a short arm on the jaw side. Which force must be bigger?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Hand 100 N",
+              "weight": 2,
+              "dist": 5,
+              "ask": "How much force do pliers give at the jaws?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Jaw 500 N",
+              "weight": 10,
+              "dist": 1,
+              "ask": "How much force do pliers give at the jaws?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Hand: 100 N at 100 mm; jaw: 20 mm from the pin"
+        }
+      ]
+    },
+    {
+      "say": "The jaw force! Moments about the pin: 100 times 100 equals the jaw force times 20, so the jaw squeezes with 500 newtons. That is a mechanical advantage of 5. And by Newton's third law, the pin pushes equal and opposite on the two halves. Can you find the pin force?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Hand 100 N",
+              "weight": 2,
+              "dist": 5,
+              "ask": "How much force do pliers give at the jaws?"
+            }
+          ],
+          "right": [
+            {
+              "label": "Jaw 500 N",
+              "weight": 10,
+              "dist": 1,
+              "ask": "How much force do pliers give at the jaws?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "F_jaw = 100 × 100 / 20 = 500 N; MA = 5"
+        }
+      ]
+    },
+    {
+      "say": "It is 600 newtons, the hand force plus the jaw force. Now a big frame: a tower crane. The jib is a multi-force member: the cable, the mast and the counterweight all act on it. With 2 tonnes 20 metres out, what counterweight 5 metres behind the mast balances it?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "jib",
+              "kind": "lever",
+              "x": 0.5,
+              "y": 0.25,
+              "size": 1.4,
+              "label": "Jib",
+              "motion": "none",
+              "ask": "Why is a crane jib a multi-force member?"
+            },
+            {
+              "id": "mast",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.65,
+              "label": "Mast"
+            },
+            {
+              "id": "winch",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.42,
+              "size": 0.7,
+              "label": "Winch"
+            },
+            {
+              "id": "sheave",
+              "kind": "wheel",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Pulley"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.85,
+              "y": 0.75,
+              "label": "Load 2 t"
+            },
+            {
+              "id": "counter",
+              "kind": "weight",
+              "x": 0.15,
+              "y": 0.4,
+              "label": "Counterweight 8 t",
+              "ask": "Why does a tower crane need a counterweight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "winch",
+              "to": "sheave",
+              "kind": "force",
+              "label": "Cable"
+            },
+            {
+              "from": "sheave",
+              "to": "load",
+              "kind": "force"
+            },
+            {
+              "from": "counter",
+              "to": "mast",
+              "kind": "force"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "2 t × 20 m = m × 5 m"
+        }
+      ]
+    },
+    {
+      "say": "Eight tonnes! Real tower cranes in Dubai or Shanghai carry concrete blocks as counterweights, and a load chart limits the load further out. Great job! Exam tip: draw a separate free-body diagram for each member, with equal and opposite forces at shared pins. Challenge: what load can this crane hold at 25 metres?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "jib",
+              "kind": "lever",
+              "x": 0.5,
+              "y": 0.25,
+              "size": 1.4,
+              "label": "Jib",
+              "motion": "none",
+              "ask": "Why is a crane jib a multi-force member?"
+            },
+            {
+              "id": "mast",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.65,
+              "label": "Mast"
+            },
+            {
+              "id": "winch",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.42,
+              "size": 0.7,
+              "label": "Winch"
+            },
+            {
+              "id": "sheave",
+              "kind": "wheel",
+              "x": 0.85,
+              "y": 0.3,
+              "size": 0.6,
+              "label": "Pulley"
+            },
+            {
+              "id": "load",
+              "kind": "weight",
+              "x": 0.85,
+              "y": 0.75,
+              "label": "Load 2 t"
+            },
+            {
+              "id": "counter",
+              "kind": "weight",
+              "x": 0.15,
+              "y": 0.4,
+              "label": "Counterweight 8 t",
+              "ask": "Why does a tower crane need a counterweight?"
+            }
+          ],
+          "links": [
+            {
+              "from": "winch",
+              "to": "sheave",
+              "kind": "force",
+              "label": "Cable"
+            },
+            {
+              "from": "sheave",
+              "to": "load",
+              "kind": "force"
+            },
+            {
+              "from": "counter",
+              "to": "mast",
+              "kind": "force"
+            }
+          ],
+          "op": "sim",
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "Counterweight = 2 × 20 / 5 = 8 t"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a frame and a machine?",
+      "a": "Both contain at least one multi-force member. A frame is a fixed structure that supports loads, like a crane or a shelf bracket. A machine has moving parts that transmit and change forces, like pliers or a car jack.",
+      "asks": [
+        "frame vs machine statics",
+        "what is a multi-force member"
+      ]
+    },
+    {
+      "q": "How much force do pliers give at the jaws?",
+      "a": "Take moments about the pivot pin: the jaw force equals the hand force times the handle length divided by the jaw length. With 100 newtons at 100 millimetres and jaws at 20 millimetres, that is 500 newtons.",
+      "asks": [
+        "mechanical advantage of pliers"
+      ]
+    },
+    {
+      "q": "How do I analyse a frame?",
+      "a": "Draw the whole frame to find external reactions, then take it apart and draw each member, with equal and opposite pin forces where members meet. Solve the members one at a time.",
+      "asks": [
+        "method for frames and machines"
+      ]
+    },
+    {
+      "q": "Why is a crane jib a multi-force member?",
+      "a": "Forces act on it at several points, the cable, the load, the mast pin and the counterweight, and not just at two ends. So it bends as well as stretching, unlike a truss bar.",
+      "asks": [
+        "what is a multi force member example"
+      ]
+    },
+    {
+      "q": "Why does a tower crane need a counterweight?",
+      "a": "The load far out on the jib makes a big tipping moment about the mast. The counterweight on the short arm makes an opposite moment, so the mast is not bent over.",
+      "asks": [
+        "purpose of crane counterweight"
+      ]
+    }
+  ],
+  "facts": [
+    "In a frame or machine, the forces two members exert on each other at a shared pin are equal and opposite.",
+    "A multi-force member carries loads at three or more points, so it bends as well as carrying axial force."
+  ],
+  "quiz": [
+    {
+      "say": "A pair of cutters has 120 millimetre handles and 15 millimetre jaws from the pin. You squeeze with 80 newtons. What force do the jaws apply?",
+      "show": "Cutters: handles 120 mm, jaws 15 mm from the pin, hand 80 N. Jaw force?",
+      "options": [
+        {
+          "show": "640 N",
+          "say": "640 newtons"
+        },
+        {
+          "show": "10 N",
+          "say": "10 newtons"
+        },
+        {
+          "show": "1200 N",
+          "say": "1200 newtons"
+        }
+      ],
+      "answer": 0,
+      "why": "Moments about the pin: 80 × 120 = F × 15, so F = 640 N.",
+      "wrong": {
+        "1": "That divides the wrong way round; the short jaw arm gives a bigger force.",
+        "2": "That multiplies 80 by 15; the ratio of arms is 120 over 15, which is 8."
+      }
+    },
+    {
+      "say": "What makes a structure a frame rather than a truss?",
+      "show": "What makes a structure a frame rather than a truss?",
+      "options": [
+        {
+          "show": "It has at least one multi-force member",
+          "say": "It has at least one multi-force member"
+        },
+        {
+          "show": "It is made of steel",
+          "say": "It is made of steel"
+        },
+        {
+          "show": "It has more than ten members",
+          "say": "It has more than ten members"
+        }
+      ],
+      "answer": 0,
+      "why": "A truss has only two-force members; a frame has at least one member with three or more forces.",
+      "wrong": {
+        "1": "Trusses and frames can be made of any material.",
+        "2": "The number of members does not decide it."
+      }
+    }
+  ]
+}

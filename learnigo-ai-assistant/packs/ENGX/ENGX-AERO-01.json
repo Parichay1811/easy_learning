@@ -1,0 +1,680 @@
+{
+  "id": "ENGX-AERO-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a jet engine works",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "jet engine",
+    "turbojet",
+    "compressor and turbine",
+    "suck squeeze bang blow",
+    "jet thrust"
+  ],
+  "examples": [
+    "How does a jet engine work?",
+    "What does the turbine in a jet engine do?",
+    "How does a jet engine push a plane forward?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "in",
+          "kind": "fan",
+          "x": 0.1,
+          "y": 0.5,
+          "label": "Air intake",
+          "motion": "spin"
+        },
+        {
+          "id": "comp",
+          "kind": "fan",
+          "x": 0.3,
+          "y": 0.5,
+          "label": "Compressor",
+          "motion": "spin",
+          "ask": "What does the compressor do?"
+        },
+        {
+          "id": "fuel",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.15,
+          "label": "Fuel",
+          "motion": "none"
+        },
+        {
+          "id": "burn",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.5,
+          "label": "Combustion chamber",
+          "motion": "pulse",
+          "ask": "What happens in the combustion chamber?"
+        },
+        {
+          "id": "turb",
+          "kind": "fan",
+          "x": 0.7,
+          "y": 0.5,
+          "label": "Turbine",
+          "motion": "spin",
+          "ask": "What does the turbine do?"
+        },
+        {
+          "id": "noz",
+          "kind": "pipe",
+          "x": 0.9,
+          "y": 0.5,
+          "label": "Exhaust nozzle",
+          "motion": "flow",
+          "ask": "How does a jet engine make thrust?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.5,
+          "y": 0.85,
+          "label": "Shaft",
+          "motion": "spin",
+          "ask": "What does the turbine do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "in",
+          "to": "comp",
+          "kind": "fluid",
+          "label": "air"
+        },
+        {
+          "from": "comp",
+          "to": "burn",
+          "kind": "fluid",
+          "label": "squeezed air"
+        },
+        {
+          "from": "fuel",
+          "to": "burn",
+          "kind": "fluid",
+          "label": "kerosene"
+        },
+        {
+          "from": "burn",
+          "to": "turb",
+          "kind": "heat",
+          "label": "hot gas"
+        },
+        {
+          "from": "turb",
+          "to": "noz",
+          "kind": "fluid",
+          "label": "exhaust"
+        },
+        {
+          "from": "turb",
+          "to": "shaft",
+          "kind": "force"
+        },
+        {
+          "from": "shaft",
+          "to": "comp",
+          "kind": "force",
+          "label": "turns"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A jet engine works in four words: suck, squeeze, bang, blow. It pulls air in at the front, squeezes it, burns fuel in it, and blasts the hot gas out of the back.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a jet engine works"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Air intake",
+              "motion": "spin"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.15,
+              "label": "Fuel",
+              "motion": "none"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Combustion chamber",
+              "motion": "pulse",
+              "ask": "What happens in the combustion chamber?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            },
+            {
+              "id": "noz",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Exhaust nozzle",
+              "motion": "flow",
+              "ask": "How does a jet engine make thrust?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.85,
+              "label": "Shaft",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "fuel",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "kerosene"
+            },
+            {
+              "from": "burn",
+              "to": "turb",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "turb",
+              "to": "noz",
+              "kind": "fluid",
+              "label": "exhaust"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "force",
+              "label": "turns"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The compressor is rows of spinning blades that squeeze the air to many times its normal pressure. Squeezed air packs more oxygen into a small space, so the fuel burns fiercely.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Air intake",
+              "motion": "spin"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.15,
+              "label": "Fuel",
+              "motion": "none"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Combustion chamber",
+              "motion": "pulse",
+              "ask": "What happens in the combustion chamber?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            },
+            {
+              "id": "noz",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Exhaust nozzle",
+              "motion": "flow",
+              "ask": "How does a jet engine make thrust?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.85,
+              "label": "Shaft",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "fuel",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "kerosene"
+            },
+            {
+              "from": "burn",
+              "to": "turb",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "turb",
+              "to": "noz",
+              "kind": "fluid",
+              "label": "exhaust"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "force",
+              "label": "turns"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "In the combustion chamber, kerosene sprays into the squeezed air and burns non-stop. The hot gas rushes through the turbine and spins it, and a shaft carries that spin forward to drive the compressor.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Air intake",
+              "motion": "spin"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.15,
+              "label": "Fuel",
+              "motion": "none"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Combustion chamber",
+              "motion": "pulse",
+              "ask": "What happens in the combustion chamber?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            },
+            {
+              "id": "noz",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Exhaust nozzle",
+              "motion": "flow",
+              "ask": "How does a jet engine make thrust?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.85,
+              "label": "Shaft",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "fuel",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "kerosene"
+            },
+            {
+              "from": "burn",
+              "to": "turb",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "turb",
+              "to": "noz",
+              "kind": "fluid",
+              "label": "exhaust"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "force",
+              "label": "turns"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The gas leaves the nozzle far faster than the air came in. Throwing all that gas backwards pushes the engine forwards, which is Newton's third law, and that push is called thrust.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "in",
+              "kind": "fan",
+              "x": 0.1,
+              "y": 0.5,
+              "label": "Air intake",
+              "motion": "spin"
+            },
+            {
+              "id": "comp",
+              "kind": "fan",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Compressor",
+              "motion": "spin",
+              "ask": "What does the compressor do?"
+            },
+            {
+              "id": "fuel",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.15,
+              "label": "Fuel",
+              "motion": "none"
+            },
+            {
+              "id": "burn",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "label": "Combustion chamber",
+              "motion": "pulse",
+              "ask": "What happens in the combustion chamber?"
+            },
+            {
+              "id": "turb",
+              "kind": "fan",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Turbine",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            },
+            {
+              "id": "noz",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.5,
+              "label": "Exhaust nozzle",
+              "motion": "flow",
+              "ask": "How does a jet engine make thrust?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.5,
+              "y": 0.85,
+              "label": "Shaft",
+              "motion": "spin",
+              "ask": "What does the turbine do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "in",
+              "to": "comp",
+              "kind": "fluid",
+              "label": "air"
+            },
+            {
+              "from": "comp",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "squeezed air"
+            },
+            {
+              "from": "fuel",
+              "to": "burn",
+              "kind": "fluid",
+              "label": "kerosene"
+            },
+            {
+              "from": "burn",
+              "to": "turb",
+              "kind": "heat",
+              "label": "hot gas"
+            },
+            {
+              "from": "turb",
+              "to": "noz",
+              "kind": "fluid",
+              "label": "exhaust"
+            },
+            {
+              "from": "turb",
+              "to": "shaft",
+              "kind": "force"
+            },
+            {
+              "from": "shaft",
+              "to": "comp",
+              "kind": "force",
+              "label": "turns"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the compressor do?",
+      "a": "The compressor is a stack of spinning blades that squeezes the incoming air to a high pressure, around 40 times outside pressure in a modern airliner engine. Squeezed air lets the fuel burn hotter and more efficiently.",
+      "asks": [
+        "Why does a jet engine squeeze the air?"
+      ]
+    },
+    {
+      "q": "What happens in the combustion chamber?",
+      "a": "Fuel, usually kerosene, sprays into the squeezed air and burns continuously, like a blowtorch that never goes out. The gas becomes very hot, well over 1,000 degrees Celsius, and expands.",
+      "asks": [
+        "Where is the fuel burned in a jet engine?"
+      ]
+    },
+    {
+      "q": "What does the turbine do?",
+      "a": "The turbine is a set of blades that the hot gas spins on its way out. A shaft joins it to the compressor, so the exhaust itself powers the compressor and the engine keeps itself running once started.",
+      "asks": [
+        "Why is there a turbine in a jet engine?",
+        "What does the shaft in a jet engine do?"
+      ]
+    },
+    {
+      "q": "How does a jet engine make thrust?",
+      "a": "It throws a huge mass of gas backwards very fast. By Newton's third law, pushing gas backwards pushes the engine forwards, and the engine pushes the plane.",
+      "asks": [
+        "How does a jet engine push a plane forward?"
+      ]
+    },
+    {
+      "q": "How do you start a jet engine?",
+      "a": "A starter, often driven by compressed air from a small extra engine called the APU, spins the shaft until the compressor pushes enough air for the fuel to light. After that the turbine takes over and the engine runs itself.",
+      "asks": [
+        "What is an APU?"
+      ]
+    }
+  ],
+  "facts": [
+    "Frank Whittle in Britain and Hans von Ohain in Germany each invented the jet engine independently in the 1930s.",
+    "The first jet-powered aircraft to fly was the German Heinkel He 178, in 1939."
+  ],
+  "quiz": [
+    {
+      "say": "Which part of a jet engine powers the compressor?",
+      "show": "Which part powers the compressor?",
+      "options": [
+        {
+          "show": "The nozzle",
+          "say": "The nozzle"
+        },
+        {
+          "show": "The turbine",
+          "say": "The turbine"
+        },
+        {
+          "show": "The fuel tank",
+          "say": "The fuel tank"
+        }
+      ],
+      "answer": 1,
+      "why": "The hot gas spins the turbine, and a shaft carries that spin forward to the compressor.",
+      "wrong": {
+        "0": "The nozzle shapes the exhaust into a fast jet but turns nothing.",
+        "2": "The fuel tank stores kerosene and has no moving blades."
+      }
+    }
+  ]
+}

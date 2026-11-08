@@ -1,0 +1,572 @@
+{
+  "id": "ENGX-FLUD-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a mixer tap blends hot and cold water",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "mixer tap",
+    "thermostatic mixer",
+    "hot and cold water",
+    "mixing cartridge",
+    "shower mixer"
+  ],
+  "examples": [
+    "How does a mixer tap make warm water?",
+    "How does a thermostatic shower stay the same temperature?",
+    "Why does one lever control hot and cold?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "hot",
+          "label": "Hot supply",
+          "icon": "fire",
+          "x": 0.12,
+          "y": 0.25,
+          "ask": "Where does the hot water come from?"
+        },
+        {
+          "id": "cold",
+          "label": "Cold supply",
+          "icon": "drop",
+          "x": 0.12,
+          "y": 0.75
+        },
+        {
+          "id": "cart",
+          "label": "Mixing cartridge",
+          "icon": "valve",
+          "x": 0.45,
+          "y": 0.5,
+          "ask": "What is inside a mixer tap?"
+        },
+        {
+          "id": "lever",
+          "label": "Lever",
+          "icon": "lever",
+          "x": 0.45,
+          "y": 0.13
+        },
+        {
+          "id": "sensor",
+          "label": "Wax thermostat",
+          "icon": "thermometer",
+          "x": 0.72,
+          "y": 0.82,
+          "ask": "How does a thermostatic shower stay the same temperature?"
+        },
+        {
+          "id": "spout",
+          "label": "Warm water out",
+          "icon": "drop",
+          "x": 0.86,
+          "y": 0.4
+        }
+      ],
+      "links": [
+        {
+          "from": "hot",
+          "to": "cart",
+          "kind": "fluid",
+          "label": "hot"
+        },
+        {
+          "from": "cold",
+          "to": "cart",
+          "kind": "fluid",
+          "label": "cold"
+        },
+        {
+          "from": "lever",
+          "to": "cart",
+          "kind": "force",
+          "label": "sets the mix"
+        },
+        {
+          "from": "cart",
+          "to": "spout",
+          "kind": "fluid",
+          "label": "mixed water"
+        },
+        {
+          "from": "cart",
+          "to": "sensor",
+          "kind": "fluid"
+        },
+        {
+          "from": "sensor",
+          "to": "cart",
+          "kind": "signal",
+          "label": "adjusts"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A mixer tap has two pipes coming in, one bringing hot water from the boiler or cylinder and one bringing cold water from the mains.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a mixer tap blends hot and cold water"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "hot",
+              "label": "Hot supply",
+              "icon": "fire",
+              "x": 0.12,
+              "y": 0.25,
+              "ask": "Where does the hot water come from?"
+            },
+            {
+              "id": "cold",
+              "label": "Cold supply",
+              "icon": "drop",
+              "x": 0.12,
+              "y": 0.75
+            },
+            {
+              "id": "cart",
+              "label": "Mixing cartridge",
+              "icon": "valve",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "What is inside a mixer tap?"
+            },
+            {
+              "id": "lever",
+              "label": "Lever",
+              "icon": "lever",
+              "x": 0.45,
+              "y": 0.13
+            },
+            {
+              "id": "sensor",
+              "label": "Wax thermostat",
+              "icon": "thermometer",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does a thermostatic shower stay the same temperature?"
+            },
+            {
+              "id": "spout",
+              "label": "Warm water out",
+              "icon": "drop",
+              "x": 0.86,
+              "y": 0.4
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "hot"
+            },
+            {
+              "from": "cold",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "cold"
+            },
+            {
+              "from": "lever",
+              "to": "cart",
+              "kind": "force",
+              "label": "sets the mix"
+            },
+            {
+              "from": "cart",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "mixed water"
+            },
+            {
+              "from": "cart",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "cart",
+              "kind": "signal",
+              "label": "adjusts"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Both flow into a mixing cartridge. Inside, ceramic discs open the hot and cold holes by different amounts, and the two streams blend before they reach the spout.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "hot",
+              "label": "Hot supply",
+              "icon": "fire",
+              "x": 0.12,
+              "y": 0.25,
+              "ask": "Where does the hot water come from?"
+            },
+            {
+              "id": "cold",
+              "label": "Cold supply",
+              "icon": "drop",
+              "x": 0.12,
+              "y": 0.75
+            },
+            {
+              "id": "cart",
+              "label": "Mixing cartridge",
+              "icon": "valve",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "What is inside a mixer tap?"
+            },
+            {
+              "id": "lever",
+              "label": "Lever",
+              "icon": "lever",
+              "x": 0.45,
+              "y": 0.13
+            },
+            {
+              "id": "sensor",
+              "label": "Wax thermostat",
+              "icon": "thermometer",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does a thermostatic shower stay the same temperature?"
+            },
+            {
+              "id": "spout",
+              "label": "Warm water out",
+              "icon": "drop",
+              "x": 0.86,
+              "y": 0.4
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "hot"
+            },
+            {
+              "from": "cold",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "cold"
+            },
+            {
+              "from": "lever",
+              "to": "cart",
+              "kind": "force",
+              "label": "sets the mix"
+            },
+            {
+              "from": "cart",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "mixed water"
+            },
+            {
+              "from": "cart",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "cart",
+              "kind": "signal",
+              "label": "adjusts"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "One lever does two jobs: lifting it opens both holes for more flow, and swinging it left or right changes how much of each comes through.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "hot",
+              "label": "Hot supply",
+              "icon": "fire",
+              "x": 0.12,
+              "y": 0.25,
+              "ask": "Where does the hot water come from?"
+            },
+            {
+              "id": "cold",
+              "label": "Cold supply",
+              "icon": "drop",
+              "x": 0.12,
+              "y": 0.75
+            },
+            {
+              "id": "cart",
+              "label": "Mixing cartridge",
+              "icon": "valve",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "What is inside a mixer tap?"
+            },
+            {
+              "id": "lever",
+              "label": "Lever",
+              "icon": "lever",
+              "x": 0.45,
+              "y": 0.13
+            },
+            {
+              "id": "sensor",
+              "label": "Wax thermostat",
+              "icon": "thermometer",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does a thermostatic shower stay the same temperature?"
+            },
+            {
+              "id": "spout",
+              "label": "Warm water out",
+              "icon": "drop",
+              "x": 0.86,
+              "y": 0.4
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "hot"
+            },
+            {
+              "from": "cold",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "cold"
+            },
+            {
+              "from": "lever",
+              "to": "cart",
+              "kind": "force",
+              "label": "sets the mix"
+            },
+            {
+              "from": "cart",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "mixed water"
+            },
+            {
+              "from": "cart",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "cart",
+              "kind": "signal",
+              "label": "adjusts"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "A thermostatic mixer adds a wax capsule that swells when the water is too hot and shrinks when it is too cold, sliding a valve to keep your shower at the temperature you set.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "hot",
+              "label": "Hot supply",
+              "icon": "fire",
+              "x": 0.12,
+              "y": 0.25,
+              "ask": "Where does the hot water come from?"
+            },
+            {
+              "id": "cold",
+              "label": "Cold supply",
+              "icon": "drop",
+              "x": 0.12,
+              "y": 0.75
+            },
+            {
+              "id": "cart",
+              "label": "Mixing cartridge",
+              "icon": "valve",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "What is inside a mixer tap?"
+            },
+            {
+              "id": "lever",
+              "label": "Lever",
+              "icon": "lever",
+              "x": 0.45,
+              "y": 0.13
+            },
+            {
+              "id": "sensor",
+              "label": "Wax thermostat",
+              "icon": "thermometer",
+              "x": 0.72,
+              "y": 0.82,
+              "ask": "How does a thermostatic shower stay the same temperature?"
+            },
+            {
+              "id": "spout",
+              "label": "Warm water out",
+              "icon": "drop",
+              "x": 0.86,
+              "y": 0.4
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "hot"
+            },
+            {
+              "from": "cold",
+              "to": "cart",
+              "kind": "fluid",
+              "label": "cold"
+            },
+            {
+              "from": "lever",
+              "to": "cart",
+              "kind": "force",
+              "label": "sets the mix"
+            },
+            {
+              "from": "cart",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "mixed water"
+            },
+            {
+              "from": "cart",
+              "to": "sensor",
+              "kind": "fluid"
+            },
+            {
+              "from": "sensor",
+              "to": "cart",
+              "kind": "signal",
+              "label": "adjusts"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is inside a mixer tap?",
+      "a": "Inside is a cartridge, usually with ceramic discs. Moving the lever slides the discs so the hot and cold inlets open by different amounts, and the water mixes in a small chamber before the spout.",
+      "asks": [
+        "How does a single lever tap work?",
+        "What is a tap cartridge?"
+      ]
+    },
+    {
+      "q": "Where does the hot water come from?",
+      "a": "It comes from a boiler that heats water as you use it, or from a hot-water cylinder where heated water is stored. A separate pipe carries it to the tap.",
+      "asks": [
+        "Why does hot water take time to come through?"
+      ]
+    },
+    {
+      "q": "How does a thermostatic shower stay the same temperature?",
+      "a": "A capsule of wax inside expands when the mixed water gets hotter and contracts when it cools. It moves a valve that lets in more cold or more hot, so the outlet temperature stays steady.",
+      "asks": [
+        "What is a thermostatic mixing valve?",
+        "Why does my shower not go scalding when someone flushes the toilet?"
+      ]
+    },
+    {
+      "q": "Why does the water go cold first when I turn on the hot tap?",
+      "a": "The hot pipe is full of water that has cooled since it was last used. You have to run that cold water out before the newly heated water arrives.",
+      "asks": [
+        "Why does hot water start cold?"
+      ]
+    },
+    {
+      "q": "Why does a shower go hot when someone flushes the toilet?",
+      "a": "Flushing draws cold water away, so the cold pressure at a simple mixer drops and the mix becomes mostly hot. A thermostatic valve reacts within moments to correct it.",
+      "asks": [
+        "Why does the shower change temperature suddenly?"
+      ]
+    }
+  ],
+  "facts": [
+    "Thermostatic mixing valves often use a wax capsule that expands as it warms to move the mixing valve.",
+    "Single-lever mixer taps usually use a ceramic disc cartridge to control both flow and temperature."
+  ],
+  "quiz": [
+    {
+      "say": "In a thermostatic shower, what happens when the mixed water gets too hot?",
+      "show": "In a thermostatic shower, what happens when the mixed water gets too hot?",
+      "options": [
+        {
+          "show": "The wax swells and lets in more cold water",
+          "say": "The wax swells and lets in more cold water"
+        },
+        {
+          "show": "The boiler switches off",
+          "say": "The boiler switches off"
+        },
+        {
+          "show": "The shower head closes completely",
+          "say": "The shower head closes completely"
+        }
+      ],
+      "answer": 0,
+      "why": "Warm wax expands and pushes the valve towards the cold side, cooling the mix back to the setting.",
+      "wrong": {
+        "1": "The boiler is far away and is not controlled by the shower valve.",
+        "2": "The valve adjusts the mix; it does not just shut the flow."
+      }
+    }
+  ]
+}

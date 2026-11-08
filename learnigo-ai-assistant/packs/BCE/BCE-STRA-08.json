@@ -1,0 +1,341 @@
+{
+  "id": "BCE-STRA-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Statically determinate or indeterminate: counting reactions against equations",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "statically determinate",
+    "statically indeterminate",
+    "degree of indeterminacy",
+    "redundant supports",
+    "fixed-end moment"
+  ],
+  "examples": [
+    "What is the difference between determinate and indeterminate structures?",
+    "How do you find the degree of indeterminacy of a beam?",
+    "Why are indeterminate structures used?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 6,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "How do you find the degree of indeterminacy?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 10,
+          "label": "10 kN/m",
+          "ask": "What is a statically determinate structure?"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A three-legged stool never wobbles, but a four-legged table often does, because one leg is not quite touching. Structures have the same story: some can be solved with balance equations alone, and some need more. This six metre beam on a pin and a roller is our starting point.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Statically determinate or indeterminate: counting reactions against equations"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find the degree of indeterminacy?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "What is a statically determinate structure?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Count the unknown reactions. The pin gives two, up and sideways, and the roller one. That makes three. In a flat problem, statics gives exactly three equations: forces up, forces sideways and moments all add to zero. Three unknowns, three equations: statically determinate. What if we add one more support?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find the degree of indeterminacy?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "What is a statically determinate structure?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Degree of indeterminacy = r − 3 = 3 − 3 = 0"
+        }
+      ]
+    },
+    {
+      "say": "Then there are more unknowns than equations: statically indeterminate. A beam over three supports has four reactions, so it is indeterminate to the first degree. To solve it you also need how the beam bends, using methods like moment distribution or the stiffness method that computers use. Which side of the board describes a continuous bridge?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Determinate",
+            "icon": "scale",
+            "points": [
+              "Reactions = 3 equations",
+              "Solved by statics alone",
+              "Settlement causes no stress",
+              "Example: simple beam"
+            ]
+          },
+          "right": {
+            "title": "Indeterminate",
+            "icon": "bridge",
+            "points": [
+              "More unknowns than equations",
+              "Needs bending stiffness too",
+              "Spare load paths",
+              "Example: continuous beam"
+            ]
+          },
+          "verdict": "Extra supports: stiffer, but harder to solve",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Two-span beam: r = 4 → 4 − 3 = 1 degree"
+        }
+      ]
+    },
+    {
+      "say": "The right side. So why bother? Fix both ends of our beam and the moment is shared: thirty kilonewton metres hogging at each end and only fifteen sagging at midspan, instead of forty five. It also sags five times less. Extra restraint means smaller moments and spare load paths if something fails.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "kN·m",
+          "items": [
+            {
+              "label": "Simple: midspan",
+              "size": 45,
+              "icon": "bridge",
+              "ask": "Why use indeterminate structures?"
+            },
+            {
+              "label": "Fixed ends: ends",
+              "size": 30,
+              "icon": "bridge",
+              "ask": "Why use indeterminate structures?"
+            },
+            {
+              "label": "Fixed ends: middle",
+              "size": 15,
+              "icon": "bridge"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Fixed ends: wL²/12 = 30, midspan wL²/24 = 15 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "The price: indeterminate structures feel settlement and temperature. If one support sinks, new moments appear by themselves, while a determinate beam just tilts. Nicely done! Exam tip: work out the degree first, r minus three for beams, or three m plus r minus three j for frames, before choosing a method.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do you find the degree of indeterminacy?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "10 kN/m",
+              "ask": "What is a statically determinate structure?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a statically determinate structure?",
+      "a": "One whose reactions and internal forces can all be found from the equations of equilibrium alone. A simply supported beam with a pin and a roller is the classic example.",
+      "asks": [
+        "Define statically determinate"
+      ]
+    },
+    {
+      "q": "What is a statically indeterminate structure?",
+      "a": "One with more unknown reactions or members than the equilibrium equations can solve. You also need compatibility, how the structure deforms, to find the forces.",
+      "asks": [
+        "Define statically indeterminate",
+        "What is a redundant structure?"
+      ]
+    },
+    {
+      "q": "How do you find the degree of indeterminacy?",
+      "a": "For a beam, count the reactions r and subtract 3. For a plane frame use 3m + r − 3j, with m members and j joints. A beam on three supports has degree 4 − 3 = 1.",
+      "asks": [
+        "Degree of static indeterminacy formula"
+      ]
+    },
+    {
+      "q": "Why use indeterminate structures?",
+      "a": "Extra restraint shares the bending, lowering peak moments and deflections, and gives other load paths if one part is damaged. A fixed-ended beam has a peak moment of w L squared over 12 instead of over 8.",
+      "asks": [
+        "Advantages of continuous beams"
+      ]
+    },
+    {
+      "q": "Why does support settlement matter in indeterminate structures?",
+      "a": "The extra supports force the beam to follow them, so if one sinks the beam must bend to fit, creating extra moments. A determinate beam simply tilts with no extra stress.",
+      "asks": [
+        "Effect of settlement on continuous beams"
+      ]
+    }
+  ],
+  "facts": [
+    "For a plane frame, the degree of static indeterminacy is 3m + r − 3j, with m members, r reactions and j joints.",
+    "A fixed-ended beam under uniform load has end moments of wL²/12 and a midspan moment of wL²/24.",
+    "Hardy Cross introduced the moment distribution method in 1930, making continuous frames practical to analyse by hand."
+  ],
+  "quiz": [
+    {
+      "say": "A beam has a fixed support at one end and a roller at the other. Degree of indeterminacy?",
+      "show": "A beam has a fixed support at one end and a roller at the other. Degree of indeterminacy?",
+      "options": [
+        {
+          "show": "0",
+          "say": "0"
+        },
+        {
+          "show": "1",
+          "say": "1"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        }
+      ],
+      "answer": 1,
+      "why": "Fixed gives 3 reactions and the roller 1: r = 4, so 4 − 3 = 1.",
+      "wrong": {
+        "0": "Zero would need exactly 3 reactions, like a pin and a roller.",
+        "2": "That would need 5 reactions, such as a fixed end plus a pin."
+      }
+    },
+    {
+      "say": "Which beam is statically determinate?",
+      "show": "Which beam is statically determinate?",
+      "options": [
+        {
+          "show": "A pin and a roller",
+          "say": "A pin and a roller"
+        },
+        {
+          "show": "Fixed at both ends",
+          "say": "Fixed at both ends"
+        },
+        {
+          "show": "Three supports in a row",
+          "say": "Three supports in a row"
+        }
+      ],
+      "answer": 0,
+      "why": "A pin and a roller give exactly three reactions for three equations.",
+      "wrong": {
+        "1": "Two fixed ends give six reactions: indeterminate.",
+        "2": "Three supports give at least four reactions: indeterminate."
+      }
+    }
+  ]
+}

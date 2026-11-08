@@ -1,0 +1,363 @@
+{
+  "id": "BEE-SIG-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Laplace transforms and transfer functions: turning differential equations into algebra",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-SIG — Signals and control",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Laplace transform",
+    "transfer function",
+    "s-domain",
+    "poles of a system",
+    "RC low-pass filter"
+  ],
+  "examples": [
+    "What is a Laplace transform used for?",
+    "How do you find the transfer function of an RC circuit?",
+    "What is a pole of a transfer function?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Step input",
+          "value": "10 V",
+          "ask": "What is a Laplace transform used for?"
+        },
+        {
+          "kind": "switch",
+          "label": "Switch at t = 0"
+        },
+        {
+          "kind": "resistor",
+          "label": "Resistor",
+          "value": "10 kΩ"
+        },
+        {
+          "kind": "capacitor",
+          "label": "Capacitor",
+          "value": "100 µF",
+          "ask": "How do you find the transfer function of an RC circuit?"
+        }
+      ],
+      "readouts": [
+        "τ = RC = 1 s",
+        "H(s) = 1 / (1 + s)"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Engineers who design cruise control, audio filters or an airliner's autopilot all lean on one tool, worked out by Pierre-Simon Laplace over 200 years ago. It turns calculus into algebra. On the board is a simple RC circuit: 10 volts switched onto a 10 kilohm resistor and a 100 microfarad capacitor.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Laplace transforms and transfer functions: turning differential equations into algebra"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Step input",
+              "value": "10 V",
+              "ask": "What is a Laplace transform used for?"
+            },
+            {
+              "kind": "switch",
+              "label": "Switch at t = 0"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "10 kΩ"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "100 µF",
+              "ask": "How do you find the transfer function of an RC circuit?"
+            }
+          ],
+          "readouts": [
+            "τ = RC = 1 s",
+            "H(s) = 1 / (1 + s)"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Write the physics first. The capacitor current is C times dv by dt, and it flows through the resistor, so R C dv by dt plus v equals the input. That is a differential equation, with a derivative in it, the hard kind to solve. Look at the next box. What if a derivative could become a simple multiplication?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Circuit ODE",
+              "icon": "pencil",
+              "note": "RC dv/dt + v = vin"
+            },
+            {
+              "label": "Laplace: d/dt → s",
+              "icon": "scroll",
+              "note": "Derivatives become multiplication by s",
+              "ask": "What does d/dt become in the Laplace domain?"
+            },
+            {
+              "label": "Algebra in s",
+              "icon": "puzzle",
+              "note": "(RCs + 1) V(s) = Vin(s)"
+            },
+            {
+              "label": "H(s) = 1/(1 + RCs)",
+              "icon": "chip",
+              "note": "Output over input: the transfer function",
+              "ask": "How do you find the transfer function of an RC circuit?"
+            },
+            {
+              "label": "Back to time",
+              "icon": "clock",
+              "note": "Inverse transform: v(t) = 10(1 − e^(−t))",
+              "ask": "How do you get back from s to time?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "RC · dv/dt + v = v_in"
+        }
+      ]
+    },
+    {
+      "say": "That is exactly what the Laplace transform does: d by dt becomes multiplication by s. The equation turns into R C s V plus V equals V in, plain algebra. Divide output by input and you get the transfer function, H of s equals 1 over 1 plus s R C. Here R C is 1 second, so H is 1 over 1 plus s. Where does that denominator become zero?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Circuit ODE",
+              "icon": "pencil",
+              "note": "RC dv/dt + v = vin"
+            },
+            {
+              "label": "Laplace: d/dt → s",
+              "icon": "scroll",
+              "note": "Derivatives become multiplication by s",
+              "ask": "What does d/dt become in the Laplace domain?"
+            },
+            {
+              "label": "Algebra in s",
+              "icon": "puzzle",
+              "note": "(RCs + 1) V(s) = Vin(s)"
+            },
+            {
+              "label": "H(s) = 1/(1 + RCs)",
+              "icon": "chip",
+              "note": "Output over input: the transfer function",
+              "ask": "How do you find the transfer function of an RC circuit?"
+            },
+            {
+              "label": "Back to time",
+              "icon": "clock",
+              "note": "Inverse transform: v(t) = 10(1 − e^(−t))",
+              "ask": "How do you get back from s to time?"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "H(s) = V(s)/Vin(s) = 1/(1 + sRC) = 1/(1 + s)"
+        }
+      ]
+    },
+    {
+      "say": "At s equals minus 1. That value is called a pole, and it tells you the shape of the response without solving anything: a pole at minus 1 means an exponential with a time constant of 1 second. Look at the curve: the capacitor reaches 63 percent, 6.3 volts, after one second. What would a pole at minus 10 mean?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 5
+          },
+          "y": {
+            "label": "Capacitor voltage (V)",
+            "max": 11
+          },
+          "curves": [
+            {
+              "label": "v(t) = 10(1 − e^(−t))",
+              "type": "rise",
+              "a": 10,
+              "k": 1,
+              "ask": "What is a pole of a transfer function?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "t = RC: 6.3 V"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Pole at s = −1/RC = −1 s⁻¹ → decay e^(−t)"
+        }
+      ]
+    },
+    {
+      "say": "A response ten times faster. To get back to time, use a table of pairs like these: a step is 1 over s, and an exponential is 1 over s plus a. So 10 over s times 1 over 1 plus s splits into 10 over s minus 10 over s plus 1, which is 10 times 1 minus e to the minus t. Brilliant! Challenge: where is the pole of an RC circuit with R C of 2 milliseconds?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Laplace pairs worth remembering",
+          "groups": [
+            {
+              "label": "Signals",
+              "icon": "wave",
+              "items": [
+                "step → 1/s",
+                "e^(−at) → 1/(s+a)",
+                "sin ωt → ω/(s²+ω²)"
+              ],
+              "ask": "How do you get back from s to time?"
+            },
+            {
+              "label": "Operations",
+              "icon": "gear",
+              "items": [
+                "d/dt → s",
+                "∫ dt → 1/s",
+                "delay T → e^(−sT)"
+              ],
+              "ask": "What does d/dt become in the Laplace domain?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "V(s) = 10/(s(1 + s)) = 10/s − 10/(s + 1)"
+        },
+        {
+          "op": "note",
+          "text": "A table of pairs replaces most integrals"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a Laplace transform used for?",
+      "a": "It changes a function of time into a function of the complex variable s. Derivatives become multiplications by s, so linear differential equations become algebra, which makes circuits and control systems much easier to analyse.",
+      "asks": [
+        "Why do engineers use Laplace transforms?"
+      ]
+    },
+    {
+      "q": "How do you find the transfer function of an RC circuit?",
+      "a": "Treat the capacitor as an impedance of 1 over s C and use a voltage divider: H of s equals 1 over s C, divided by R plus 1 over s C, which simplifies to 1 over 1 plus s R C.",
+      "asks": [
+        "What is H(s) for a low-pass RC filter?"
+      ]
+    },
+    {
+      "q": "What is a pole of a transfer function?",
+      "a": "A pole is a value of s that makes the denominator zero. Each pole gives a term in the response: a real pole at minus a gives e to the minus a t, so poles in the left half plane mean decaying, stable behaviour.",
+      "asks": [
+        "What do poles tell you?"
+      ]
+    },
+    {
+      "q": "What does d/dt become in the Laplace domain?",
+      "a": "With zero starting conditions, differentiation becomes multiplication by s, and integration becomes division by s. That is why calculus turns into algebra.",
+      "asks": [
+        "Why does a derivative become s?"
+      ]
+    },
+    {
+      "q": "How do you get back from s to time?",
+      "a": "Split the expression into simple fractions, then look each one up in a table of Laplace pairs. For example 10 over s times s plus 1 becomes 10 over s minus 10 over s plus 1, which is 10 times 1 minus e to the minus t.",
+      "asks": [
+        "What is the inverse Laplace transform?"
+      ]
+    }
+  ],
+  "facts": [
+    "Pierre-Simon Laplace developed the transform in the late 18th century.",
+    "In the Laplace domain a capacitor has impedance 1/(sC) and an inductor sL.",
+    "A first-order RC low-pass filter has H(s) = 1/(1 + sRC), with one pole at s = −1/RC."
+  ],
+  "quiz": [
+    {
+      "say": "Where is the pole of an RC circuit with R C equal to 2 milliseconds?",
+      "show": "Where is the pole of an RC circuit with RC = 2 ms?",
+      "options": [
+        {
+          "show": "s = −500 s⁻¹",
+          "say": "minus 500 per second"
+        },
+        {
+          "show": "s = −2 s⁻¹",
+          "say": "minus 2 per second"
+        },
+        {
+          "show": "s = +500 s⁻¹",
+          "say": "plus 500 per second"
+        }
+      ],
+      "answer": 0,
+      "why": "The pole is minus 1 over R C: minus 1 over 0.002 seconds, which is minus 500 per second.",
+      "wrong": {
+        "1": "That uses R C in milliseconds directly instead of 1 over R C in seconds.",
+        "2": "An RC circuit's pole is negative, which is why it is stable."
+      }
+    },
+    {
+      "say": "In the Laplace domain, with zero initial conditions, what does d by dt become?",
+      "show": "In the Laplace domain, with zero initial conditions, what does d/dt become?",
+      "options": [
+        {
+          "show": "Multiplication by s",
+          "say": "Multiplication by s"
+        },
+        {
+          "show": "Division by s",
+          "say": "Division by s"
+        },
+        {
+          "show": "Adding s",
+          "say": "Adding s"
+        }
+      ],
+      "answer": 0,
+      "why": "Differentiation becomes multiplication by s, turning differential equations into algebra.",
+      "wrong": {
+        "1": "Division by s is integration.",
+        "2": "The transform multiplies by s; it does not add it."
+      }
+    }
+  ]
+}

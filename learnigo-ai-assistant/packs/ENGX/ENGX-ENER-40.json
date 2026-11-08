@@ -1,0 +1,590 @@
+{
+  "id": "ENGX-ENER-40",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How district heating warms a whole town",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "district heating",
+    "heat network",
+    "energy centre",
+    "heat interface unit",
+    "thermal store"
+  ],
+  "examples": [
+    "What is district heating?",
+    "How does a heat network work?",
+    "Why is district heating common in Denmark?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "centre",
+          "label": "Energy centre",
+          "icon": "factory",
+          "x": 0.14,
+          "y": 0.5,
+          "ask": "What is an energy centre?"
+        },
+        {
+          "id": "store",
+          "label": "Heat store",
+          "icon": "thermometer",
+          "x": 0.3,
+          "y": 0.15,
+          "ask": "Why do heat networks have big hot water tanks?"
+        },
+        {
+          "id": "pipes",
+          "label": "Insulated pipes",
+          "icon": "pipe",
+          "x": 0.46,
+          "y": 0.5,
+          "ask": "How do district heating pipes stay hot?"
+        },
+        {
+          "id": "flats",
+          "label": "Flats",
+          "icon": "house",
+          "x": 0.72,
+          "y": 0.18,
+          "ask": "Do you still have a boiler with district heating?"
+        },
+        {
+          "id": "school",
+          "label": "School",
+          "icon": "house",
+          "x": 0.88,
+          "y": 0.52
+        },
+        {
+          "id": "hosp",
+          "label": "Hospital",
+          "icon": "heart",
+          "x": 0.7,
+          "y": 0.84
+        }
+      ],
+      "links": [
+        {
+          "from": "centre",
+          "to": "store",
+          "kind": "heat"
+        },
+        {
+          "from": "store",
+          "to": "pipes",
+          "kind": "heat",
+          "label": "peak top-up"
+        },
+        {
+          "from": "centre",
+          "to": "pipes",
+          "kind": "heat",
+          "label": "hot water out"
+        },
+        {
+          "from": "pipes",
+          "to": "flats",
+          "kind": "heat"
+        },
+        {
+          "from": "pipes",
+          "to": "school",
+          "kind": "heat"
+        },
+        {
+          "from": "pipes",
+          "to": "hosp",
+          "kind": "heat"
+        },
+        {
+          "from": "hosp",
+          "to": "centre",
+          "kind": "fluid",
+          "label": "cooled water back"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "District heating heats many buildings from one central place. An energy centre heats water using waste heat from power stations or factories, big heat pumps, or efficient boilers.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How district heating warms a whole town"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "centre",
+              "label": "Energy centre",
+              "icon": "factory",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "What is an energy centre?"
+            },
+            {
+              "id": "store",
+              "label": "Heat store",
+              "icon": "thermometer",
+              "x": 0.3,
+              "y": 0.15,
+              "ask": "Why do heat networks have big hot water tanks?"
+            },
+            {
+              "id": "pipes",
+              "label": "Insulated pipes",
+              "icon": "pipe",
+              "x": 0.46,
+              "y": 0.5,
+              "ask": "How do district heating pipes stay hot?"
+            },
+            {
+              "id": "flats",
+              "label": "Flats",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.18,
+              "ask": "Do you still have a boiler with district heating?"
+            },
+            {
+              "id": "school",
+              "label": "School",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.52
+            },
+            {
+              "id": "hosp",
+              "label": "Hospital",
+              "icon": "heart",
+              "x": 0.7,
+              "y": 0.84
+            }
+          ],
+          "links": [
+            {
+              "from": "centre",
+              "to": "store",
+              "kind": "heat"
+            },
+            {
+              "from": "store",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "peak top-up"
+            },
+            {
+              "from": "centre",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "hot water out"
+            },
+            {
+              "from": "pipes",
+              "to": "flats",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "school",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "hosp",
+              "kind": "heat"
+            },
+            {
+              "from": "hosp",
+              "to": "centre",
+              "kind": "fluid",
+              "label": "cooled water back"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The hot water, often 70 to 90 degrees Celsius, is pumped through a network of well-insulated pipes buried under the streets.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "centre",
+              "label": "Energy centre",
+              "icon": "factory",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "What is an energy centre?"
+            },
+            {
+              "id": "store",
+              "label": "Heat store",
+              "icon": "thermometer",
+              "x": 0.3,
+              "y": 0.15,
+              "ask": "Why do heat networks have big hot water tanks?"
+            },
+            {
+              "id": "pipes",
+              "label": "Insulated pipes",
+              "icon": "pipe",
+              "x": 0.46,
+              "y": 0.5,
+              "ask": "How do district heating pipes stay hot?"
+            },
+            {
+              "id": "flats",
+              "label": "Flats",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.18,
+              "ask": "Do you still have a boiler with district heating?"
+            },
+            {
+              "id": "school",
+              "label": "School",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.52
+            },
+            {
+              "id": "hosp",
+              "label": "Hospital",
+              "icon": "heart",
+              "x": 0.7,
+              "y": 0.84
+            }
+          ],
+          "links": [
+            {
+              "from": "centre",
+              "to": "store",
+              "kind": "heat"
+            },
+            {
+              "from": "store",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "peak top-up"
+            },
+            {
+              "from": "centre",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "hot water out"
+            },
+            {
+              "from": "pipes",
+              "to": "flats",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "school",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "hosp",
+              "kind": "heat"
+            },
+            {
+              "from": "hosp",
+              "to": "centre",
+              "kind": "fluid",
+              "label": "cooled water back"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "At each building, a heat exchanger passes the heat into its own radiators and hot taps without the water mixing. The cooled water flows back to the energy centre to be heated again.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "centre",
+              "label": "Energy centre",
+              "icon": "factory",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "What is an energy centre?"
+            },
+            {
+              "id": "store",
+              "label": "Heat store",
+              "icon": "thermometer",
+              "x": 0.3,
+              "y": 0.15,
+              "ask": "Why do heat networks have big hot water tanks?"
+            },
+            {
+              "id": "pipes",
+              "label": "Insulated pipes",
+              "icon": "pipe",
+              "x": 0.46,
+              "y": 0.5,
+              "ask": "How do district heating pipes stay hot?"
+            },
+            {
+              "id": "flats",
+              "label": "Flats",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.18,
+              "ask": "Do you still have a boiler with district heating?"
+            },
+            {
+              "id": "school",
+              "label": "School",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.52
+            },
+            {
+              "id": "hosp",
+              "label": "Hospital",
+              "icon": "heart",
+              "x": 0.7,
+              "y": 0.84
+            }
+          ],
+          "links": [
+            {
+              "from": "centre",
+              "to": "store",
+              "kind": "heat"
+            },
+            {
+              "from": "store",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "peak top-up"
+            },
+            {
+              "from": "centre",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "hot water out"
+            },
+            {
+              "from": "pipes",
+              "to": "flats",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "school",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "hosp",
+              "kind": "heat"
+            },
+            {
+              "from": "hosp",
+              "to": "centre",
+              "kind": "fluid",
+              "label": "cooled water back"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Big insulated tanks store hot water for times of peak demand, like cold mornings. Sharing one efficient heat source, and using heat that would otherwise be wasted, cuts fuel use and emissions.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "centre",
+              "label": "Energy centre",
+              "icon": "factory",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "What is an energy centre?"
+            },
+            {
+              "id": "store",
+              "label": "Heat store",
+              "icon": "thermometer",
+              "x": 0.3,
+              "y": 0.15,
+              "ask": "Why do heat networks have big hot water tanks?"
+            },
+            {
+              "id": "pipes",
+              "label": "Insulated pipes",
+              "icon": "pipe",
+              "x": 0.46,
+              "y": 0.5,
+              "ask": "How do district heating pipes stay hot?"
+            },
+            {
+              "id": "flats",
+              "label": "Flats",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.18,
+              "ask": "Do you still have a boiler with district heating?"
+            },
+            {
+              "id": "school",
+              "label": "School",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.52
+            },
+            {
+              "id": "hosp",
+              "label": "Hospital",
+              "icon": "heart",
+              "x": 0.7,
+              "y": 0.84
+            }
+          ],
+          "links": [
+            {
+              "from": "centre",
+              "to": "store",
+              "kind": "heat"
+            },
+            {
+              "from": "store",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "peak top-up"
+            },
+            {
+              "from": "centre",
+              "to": "pipes",
+              "kind": "heat",
+              "label": "hot water out"
+            },
+            {
+              "from": "pipes",
+              "to": "flats",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "school",
+              "kind": "heat"
+            },
+            {
+              "from": "pipes",
+              "to": "hosp",
+              "kind": "heat"
+            },
+            {
+              "from": "hosp",
+              "to": "centre",
+              "kind": "fluid",
+              "label": "cooled water back"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an energy centre?",
+      "a": "It is the building that makes the heat for a district heating network. It might use waste heat from a power station, factory or incinerator, large heat pumps drawing on rivers or sewers, or efficient boilers.",
+      "asks": [
+        "Where does district heat come from?"
+      ]
+    },
+    {
+      "q": "How do district heating pipes stay hot?",
+      "a": "The steel or plastic pipes are wrapped in thick foam insulation inside a protective outer case, so hot water can travel kilometres while losing only a few degrees.",
+      "asks": [
+        "Do heat network pipes lose heat?"
+      ]
+    },
+    {
+      "q": "Why do heat networks have big hot water tanks?",
+      "a": "The tanks store heat made when it is cheap or plentiful and release it at busy times, like cold mornings, so the energy centre does not have to be sized for the biggest peak.",
+      "asks": [
+        "What is a thermal store?"
+      ]
+    },
+    {
+      "q": "Do you still have a boiler with district heating?",
+      "a": "No. Each building has a heat interface unit, a small box with a heat exchanger, controls and a meter, which takes the place of a boiler.",
+      "asks": [
+        "What is a heat interface unit?"
+      ]
+    },
+    {
+      "q": "Which country uses district heating the most?",
+      "a": "Denmark is a leader: around two thirds of Danish homes get their heat this way, and Copenhagen's network heats almost the whole city. Iceland heats most homes with geothermal hot water.",
+      "asks": [
+        "Why is district heating common in Denmark?"
+      ]
+    }
+  ],
+  "facts": [
+    "Around two thirds of homes in Denmark are heated by district heating.",
+    "Copenhagen's district heating network supplies about 98 percent of the city's heat demand."
+  ],
+  "quiz": [
+    {
+      "say": "In district heating, where does each building get its heat from?",
+      "show": "With district heating, heat comes from…",
+      "options": [
+        {
+          "show": "Hot water piped from a central energy centre",
+          "say": "Hot water piped from a central energy centre"
+        },
+        {
+          "show": "A gas boiler in every flat",
+          "say": "A gas boiler in every flat"
+        },
+        {
+          "show": "Electric fires only",
+          "say": "Electric fires only"
+        }
+      ],
+      "answer": 0,
+      "why": "One energy centre heats water and pipes it to many buildings, which take the heat through heat exchangers.",
+      "wrong": {
+        "1": "District heating replaces individual boilers.",
+        "2": "Heat arrives as hot water through pipes, not from electric fires."
+      }
+    }
+  ]
+}

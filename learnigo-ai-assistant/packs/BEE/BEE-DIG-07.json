@@ -1,0 +1,942 @@
+{
+  "id": "BEE-DIG-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Latches and flip-flops: how a circuit remembers one bit",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "SR latch",
+    "D flip-flop",
+    "clock edge",
+    "timing diagram",
+    "setup time",
+    "SRAM cell"
+  ],
+  "examples": [
+    "What is the difference between a latch and a flip-flop?",
+    "How does a D flip-flop work?",
+    "Why is S = R = 1 not allowed in an SR latch?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (clock periods)",
+        "max": 4
+      },
+      "y": {
+        "label": "Logic level",
+        "min": -0.5,
+        "max": 5.5
+      },
+      "curves": [
+        {
+          "label": "Clock",
+          "type": "points",
+          "points": [
+            [
+              0,
+              4
+            ],
+            [
+              0.5,
+              4
+            ],
+            [
+              0.5,
+              5
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              1,
+              4
+            ],
+            [
+              1.5,
+              4
+            ],
+            [
+              1.5,
+              5
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2.5,
+              4
+            ],
+            [
+              2.5,
+              5
+            ],
+            [
+              3,
+              5
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              3.5,
+              4
+            ],
+            [
+              3.5,
+              5
+            ],
+            [
+              4,
+              5
+            ]
+          ],
+          "ask": "What is the difference between a latch and a flip-flop?"
+        },
+        {
+          "label": "D input",
+          "type": "points",
+          "points": [
+            [
+              0,
+              2
+            ],
+            [
+              0.2,
+              2
+            ],
+            [
+              0.2,
+              3
+            ],
+            [
+              1.8,
+              3
+            ],
+            [
+              1.8,
+              2
+            ],
+            [
+              2.7,
+              2
+            ],
+            [
+              2.7,
+              3
+            ],
+            [
+              4,
+              3
+            ]
+          ],
+          "ask": "What is setup time?"
+        },
+        {
+          "label": "Q output",
+          "type": "points",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              0.5,
+              0
+            ],
+            [
+              0.5,
+              1
+            ],
+            [
+              2.5,
+              1
+            ],
+            [
+              2.5,
+              0
+            ],
+            [
+              3.5,
+              0
+            ],
+            [
+              3.5,
+              1
+            ],
+            [
+              4,
+              1
+            ]
+          ],
+          "ask": "How does a D flip-flop work?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0.5,
+          "label": "Edge 1: Q = 1"
+        },
+        {
+          "x": 2.5,
+          "label": "Edge 3: Q = 0"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your laptop's fastest memory, the cache, is made of SRAM, and every bit of it is a tiny loop of six transistors that remembers. So how can a circuit remember at all? On the board is a timing diagram: time runs left to right, and the three traces show a clock, a data input called D, and the stored output Q.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Latches and flip-flops: how a circuit remembers one bit"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (clock periods)",
+            "max": 4
+          },
+          "y": {
+            "label": "Logic level",
+            "min": -0.5,
+            "max": 5.5
+          },
+          "curves": [
+            {
+              "label": "Clock",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  1.5,
+                  4
+                ],
+                [
+                  1.5,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  5
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3.5,
+                  4
+                ],
+                [
+                  3.5,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ]
+              ],
+              "ask": "What is the difference between a latch and a flip-flop?"
+            },
+            {
+              "label": "D input",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  0.2,
+                  2
+                ],
+                [
+                  0.2,
+                  3
+                ],
+                [
+                  1.8,
+                  3
+                ],
+                [
+                  1.8,
+                  2
+                ],
+                [
+                  2.7,
+                  2
+                ],
+                [
+                  2.7,
+                  3
+                ],
+                [
+                  4,
+                  3
+                ]
+              ],
+              "ask": "What is setup time?"
+            },
+            {
+              "label": "Q output",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.5,
+                  1
+                ],
+                [
+                  2.5,
+                  1
+                ],
+                [
+                  2.5,
+                  0
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  4,
+                  1
+                ]
+              ],
+              "ask": "How does a D flip-flop work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "Edge 1: Q = 1"
+            },
+            {
+              "x": 2.5,
+              "label": "Edge 3: Q = 0"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The secret is feedback. Join two NOR gates so each one's output feeds the other's input, and you get an SR latch, for set and reset. Follow the chain: pulse S to 1 and Q goes high; let S fall back to 0 and Q stays high, because the loop holds it. That held state is memory. What do you think R does?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "S = 1 → Q = 1",
+              "icon": "switch",
+              "note": "Set: the output goes high",
+              "ask": "How does an SR latch remember?"
+            },
+            {
+              "label": "S back to 0",
+              "icon": "key",
+              "note": "Q stays 1: the loop holds it"
+            },
+            {
+              "label": "R = 1 → Q = 0",
+              "icon": "switch",
+              "note": "Reset: the output goes low"
+            },
+            {
+              "label": "R back to 0",
+              "icon": "key",
+              "note": "Q stays 0: remembered again"
+            },
+            {
+              "label": "S = R = 1",
+              "icon": "lightning",
+              "note": "Forbidden: both outputs forced to 0",
+              "ask": "Why is S = R = 1 not allowed in an SR latch?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "NOR latch: Q = (R + Q̄)',  Q̄ = (S + Q)'"
+        }
+      ]
+    },
+    {
+      "say": "R, reset, drives Q back to 0, and again it stays there. But look at the last box: if S and R are both 1, both outputs are forced to 0, which breaks the rule that Q and not Q are opposites. Release both together and the result is a race between the gates. So S equals R equals 1 is forbidden. How could a design make that impossible?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "S = 1 → Q = 1",
+              "icon": "switch",
+              "note": "Set: the output goes high",
+              "ask": "How does an SR latch remember?"
+            },
+            {
+              "label": "S back to 0",
+              "icon": "key",
+              "note": "Q stays 1: the loop holds it"
+            },
+            {
+              "label": "R = 1 → Q = 0",
+              "icon": "switch",
+              "note": "Reset: the output goes low"
+            },
+            {
+              "label": "R back to 0",
+              "icon": "key",
+              "note": "Q stays 0: remembered again"
+            },
+            {
+              "label": "S = R = 1",
+              "icon": "lightning",
+              "note": "Forbidden: both outputs forced to 0",
+              "ask": "Why is S = R = 1 not allowed in an SR latch?"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "S = R = 1 → Q = Q̄ = 0: not allowed"
+        }
+      ]
+    },
+    {
+      "say": "The D flip-flop solves it with one data input and a clock. Look at the Q trace: it copies D only at the instant the clock rises, called the rising edge. At edge 1, D is 1, so Q becomes 1. D drops to 0 between edges, but Q ignores it until edge 3, where it falls. What will Q do at edge 4?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (clock periods)",
+            "max": 4
+          },
+          "y": {
+            "label": "Logic level",
+            "min": -0.5,
+            "max": 5.5
+          },
+          "curves": [
+            {
+              "label": "Clock",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  1.5,
+                  4
+                ],
+                [
+                  1.5,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  5
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3.5,
+                  4
+                ],
+                [
+                  3.5,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ]
+              ],
+              "ask": "What is the difference between a latch and a flip-flop?"
+            },
+            {
+              "label": "D input",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  0.2,
+                  2
+                ],
+                [
+                  0.2,
+                  3
+                ],
+                [
+                  1.8,
+                  3
+                ],
+                [
+                  1.8,
+                  2
+                ],
+                [
+                  2.7,
+                  2
+                ],
+                [
+                  2.7,
+                  3
+                ],
+                [
+                  4,
+                  3
+                ]
+              ],
+              "ask": "What is setup time?"
+            },
+            {
+              "label": "Q output",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.5,
+                  1
+                ],
+                [
+                  2.5,
+                  1
+                ],
+                [
+                  2.5,
+                  0
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  4,
+                  1
+                ]
+              ],
+              "ask": "How does a D flip-flop work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "Edge 1: Q = 1"
+            },
+            {
+              "x": 2.5,
+              "label": "Edge 3: Q = 0"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "D flip-flop: Q takes the value of D at each rising edge"
+        }
+      ]
+    },
+    {
+      "say": "At edge 4 D is 1 again, so Q goes back to 1. Because everything changes only on clock edges, billions of flip-flops in a processor stay in step, like an orchestra following one conductor. Wonderful! Exam tip: D must be steady for a short setup time before each edge, or the flip-flop can misbehave.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (clock periods)",
+            "max": 4
+          },
+          "y": {
+            "label": "Logic level",
+            "min": -0.5,
+            "max": 5.5
+          },
+          "curves": [
+            {
+              "label": "Clock",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  4
+                ],
+                [
+                  0.5,
+                  4
+                ],
+                [
+                  0.5,
+                  5
+                ],
+                [
+                  1,
+                  5
+                ],
+                [
+                  1,
+                  4
+                ],
+                [
+                  1.5,
+                  4
+                ],
+                [
+                  1.5,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  2.5,
+                  4
+                ],
+                [
+                  2.5,
+                  5
+                ],
+                [
+                  3,
+                  5
+                ],
+                [
+                  3,
+                  4
+                ],
+                [
+                  3.5,
+                  4
+                ],
+                [
+                  3.5,
+                  5
+                ],
+                [
+                  4,
+                  5
+                ]
+              ],
+              "ask": "What is the difference between a latch and a flip-flop?"
+            },
+            {
+              "label": "D input",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  0.2,
+                  2
+                ],
+                [
+                  0.2,
+                  3
+                ],
+                [
+                  1.8,
+                  3
+                ],
+                [
+                  1.8,
+                  2
+                ],
+                [
+                  2.7,
+                  2
+                ],
+                [
+                  2.7,
+                  3
+                ],
+                [
+                  4,
+                  3
+                ]
+              ],
+              "ask": "What is setup time?"
+            },
+            {
+              "label": "Q output",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.5,
+                  1
+                ],
+                [
+                  2.5,
+                  1
+                ],
+                [
+                  2.5,
+                  0
+                ],
+                [
+                  3.5,
+                  0
+                ],
+                [
+                  3.5,
+                  1
+                ],
+                [
+                  4,
+                  1
+                ]
+              ],
+              "ask": "How does a D flip-flop work?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.5,
+              "label": "Edge 1: Q = 1"
+            },
+            {
+              "x": 2.5,
+              "label": "Edge 3: Q = 0"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Edges at 0.5, 1.5, 2.5, 3.5 → Q = 1, 1, 0, 1"
+        },
+        {
+          "op": "note",
+          "text": "D must be steady a little before each edge: the setup time"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a latch and a flip-flop?",
+      "a": "A latch follows its inputs whenever it is enabled, for as long as the enable level is held. A flip-flop changes only at a clock edge, the instant the clock rises or falls, which keeps large circuits in step.",
+      "asks": [
+        "Latch vs flip-flop?"
+      ]
+    },
+    {
+      "q": "How does an SR latch remember?",
+      "a": "Two cross-coupled gates feed each other's outputs back as inputs. Once set, the loop keeps Q at 1 even after S returns to 0, until a reset pulse flips it.",
+      "asks": [
+        "What is feedback in a latch?"
+      ]
+    },
+    {
+      "q": "Why is S = R = 1 not allowed in an SR latch?",
+      "a": "With NOR gates it forces both Q and not Q to 0, so they are no longer opposites, and if both inputs return to 0 together the final state depends on which gate is faster. Designs avoid it, for example by using a D flip-flop.",
+      "asks": [
+        "What is the forbidden state of an SR latch?"
+      ]
+    },
+    {
+      "q": "How does a D flip-flop work?",
+      "a": "At each rising clock edge it copies the D input to Q, then holds that value until the next edge, ignoring any changes to D in between.",
+      "asks": [
+        "What does a D flip-flop do on the clock edge?"
+      ]
+    },
+    {
+      "q": "What is setup time?",
+      "a": "Setup time is how long the D input must be steady before the clock edge for the flip-flop to capture it reliably. Hold time is how long it must stay steady after the edge. Breaking them can leave the output undecided, called metastable.",
+      "asks": [
+        "What are setup and hold times?"
+      ]
+    }
+  ],
+  "facts": [
+    "A standard SRAM memory cell uses six transistors: two cross-coupled inverters and two access transistors.",
+    "William Eccles and F. W. Jordan invented the flip-flop circuit in 1918, using vacuum tubes.",
+    "An edge-triggered D flip-flop updates its output only at a clock edge, usually the rising edge."
+  ],
+  "quiz": [
+    {
+      "say": "D goes from 1 to 0 halfway between two rising edges. What does a rising-edge D flip-flop's Q do?",
+      "show": "D goes from 1 to 0 halfway between two rising edges. What does a rising-edge D flip-flop's Q do?",
+      "options": [
+        {
+          "show": "Changes at the next rising edge",
+          "say": "Changes at the next rising edge"
+        },
+        {
+          "show": "Changes at once",
+          "say": "Changes at once"
+        },
+        {
+          "show": "Never changes",
+          "say": "Never changes"
+        }
+      ],
+      "answer": 0,
+      "why": "A flip-flop samples D only at the clock edge, so Q falls at the next rising edge.",
+      "wrong": {
+        "1": "That is how a transparent latch behaves while enabled, not an edge-triggered flip-flop.",
+        "2": "Q will follow D at the next edge; it is not stuck."
+      }
+    },
+    {
+      "say": "Which input pair is forbidden for a NOR SR latch?",
+      "show": "Which input pair is forbidden for a NOR SR latch?",
+      "options": [
+        {
+          "show": "S = 1, R = 1",
+          "say": "S equals 1 and R equals 1"
+        },
+        {
+          "show": "S = 0, R = 0",
+          "say": "S equals 0 and R equals 0"
+        },
+        {
+          "show": "S = 1, R = 0",
+          "say": "S equals 1 and R equals 0"
+        }
+      ],
+      "answer": 0,
+      "why": "Both at 1 forces Q and not Q to 0 together and causes a race when released.",
+      "wrong": {
+        "1": "Both at 0 is the hold state: the latch keeps its value.",
+        "2": "That is the set command, which makes Q equal 1."
+      }
+    }
+  ]
+}

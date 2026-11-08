@@ -1,0 +1,731 @@
+{
+  "id": "ENGX-ENER-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a steam turbine turns steam into spin",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "steam turbine",
+    "turbine blades",
+    "Parsons turbine",
+    "turbine stages",
+    "high-pressure steam"
+  ],
+  "examples": [
+    "How does a steam turbine work?",
+    "Why do turbines have so many blades?",
+    "How does steam make a turbine spin?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "steam",
+          "kind": "pipe",
+          "x": 0.06,
+          "y": 0.32,
+          "label": "High-pressure steam",
+          "motion": "flow",
+          "ask": "Why does the steam need to be at high pressure?"
+        },
+        {
+          "id": "valve",
+          "kind": "valve",
+          "x": 0.2,
+          "y": 0.32,
+          "size": 0.8,
+          "label": "Control valve",
+          "ask": "How is a turbine's speed controlled?"
+        },
+        {
+          "id": "stator",
+          "kind": "box",
+          "x": 0.3,
+          "y": 0.68,
+          "size": 0.7,
+          "label": "Fixed blades",
+          "ask": "Why are there many rows of blades instead of one?"
+        },
+        {
+          "id": "hp",
+          "kind": "fan",
+          "x": 0.38,
+          "y": 0.32,
+          "size": 0.8,
+          "label": "High-pressure blades",
+          "motion": "spin",
+          "ask": "Why do turbine blades get bigger along the shaft?"
+        },
+        {
+          "id": "lp",
+          "kind": "fan",
+          "x": 0.58,
+          "y": 0.32,
+          "size": 1.4,
+          "label": "Low-pressure blades",
+          "motion": "spin"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.75,
+          "y": 0.32,
+          "size": 0.6,
+          "label": "Shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "gen",
+          "kind": "coil",
+          "x": 0.91,
+          "y": 0.32,
+          "label": "Generator",
+          "motion": "spin"
+        },
+        {
+          "id": "cond",
+          "kind": "tank",
+          "x": 0.62,
+          "y": 0.78,
+          "label": "Condenser",
+          "motion": "flow",
+          "ask": "What does the condenser do for a turbine?"
+        }
+      ],
+      "links": [
+        {
+          "from": "steam",
+          "to": "valve",
+          "kind": "fluid"
+        },
+        {
+          "from": "valve",
+          "to": "hp",
+          "kind": "fluid",
+          "label": "steam"
+        },
+        {
+          "from": "stator",
+          "to": "hp",
+          "kind": "fluid",
+          "label": "steers steam"
+        },
+        {
+          "from": "hp",
+          "to": "lp",
+          "kind": "fluid",
+          "label": "expanding"
+        },
+        {
+          "from": "lp",
+          "to": "shaft",
+          "kind": "force",
+          "label": "turning"
+        },
+        {
+          "from": "shaft",
+          "to": "gen",
+          "kind": "energy"
+        },
+        {
+          "from": "lp",
+          "to": "cond",
+          "kind": "fluid",
+          "label": "exhaust"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Steam leaves the boiler at very high pressure and temperature, packed with energy. A steam turbine turns that energy into spinning, strong enough to drive a huge generator.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a steam turbine turns steam into spin"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "steam",
+              "kind": "pipe",
+              "x": 0.06,
+              "y": 0.32,
+              "label": "High-pressure steam",
+              "motion": "flow",
+              "ask": "Why does the steam need to be at high pressure?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.2,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Control valve",
+              "ask": "How is a turbine's speed controlled?"
+            },
+            {
+              "id": "stator",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Fixed blades",
+              "ask": "Why are there many rows of blades instead of one?"
+            },
+            {
+              "id": "hp",
+              "kind": "fan",
+              "x": 0.38,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "High-pressure blades",
+              "motion": "spin",
+              "ask": "Why do turbine blades get bigger along the shaft?"
+            },
+            {
+              "id": "lp",
+              "kind": "fan",
+              "x": 0.58,
+              "y": 0.32,
+              "size": 1.4,
+              "label": "Low-pressure blades",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.75,
+              "y": 0.32,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.91,
+              "y": 0.32,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.78,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do for a turbine?"
+            }
+          ],
+          "links": [
+            {
+              "from": "steam",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "stator",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steers steam"
+            },
+            {
+              "from": "hp",
+              "to": "lp",
+              "kind": "fluid",
+              "label": "expanding"
+            },
+            {
+              "from": "lp",
+              "to": "shaft",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "lp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Inside, rows of fixed blades steer the steam onto rows of curved moving blades on the shaft. The steam speeds up and pushes on the moving blades, like wind on a windmill, turning the shaft.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "steam",
+              "kind": "pipe",
+              "x": 0.06,
+              "y": 0.32,
+              "label": "High-pressure steam",
+              "motion": "flow",
+              "ask": "Why does the steam need to be at high pressure?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.2,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Control valve",
+              "ask": "How is a turbine's speed controlled?"
+            },
+            {
+              "id": "stator",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Fixed blades",
+              "ask": "Why are there many rows of blades instead of one?"
+            },
+            {
+              "id": "hp",
+              "kind": "fan",
+              "x": 0.38,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "High-pressure blades",
+              "motion": "spin",
+              "ask": "Why do turbine blades get bigger along the shaft?"
+            },
+            {
+              "id": "lp",
+              "kind": "fan",
+              "x": 0.58,
+              "y": 0.32,
+              "size": 1.4,
+              "label": "Low-pressure blades",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.75,
+              "y": 0.32,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.91,
+              "y": 0.32,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.78,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do for a turbine?"
+            }
+          ],
+          "links": [
+            {
+              "from": "steam",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "stator",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steers steam"
+            },
+            {
+              "from": "hp",
+              "to": "lp",
+              "kind": "fluid",
+              "label": "expanding"
+            },
+            {
+              "from": "lp",
+              "to": "shaft",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "lp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "At each row the steam loses pressure and expands, taking up more space. So the blades get longer and longer along the turbine, and the last ones can be well over a metre long.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "steam",
+              "kind": "pipe",
+              "x": 0.06,
+              "y": 0.32,
+              "label": "High-pressure steam",
+              "motion": "flow",
+              "ask": "Why does the steam need to be at high pressure?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.2,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Control valve",
+              "ask": "How is a turbine's speed controlled?"
+            },
+            {
+              "id": "stator",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Fixed blades",
+              "ask": "Why are there many rows of blades instead of one?"
+            },
+            {
+              "id": "hp",
+              "kind": "fan",
+              "x": 0.38,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "High-pressure blades",
+              "motion": "spin",
+              "ask": "Why do turbine blades get bigger along the shaft?"
+            },
+            {
+              "id": "lp",
+              "kind": "fan",
+              "x": 0.58,
+              "y": 0.32,
+              "size": 1.4,
+              "label": "Low-pressure blades",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.75,
+              "y": 0.32,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.91,
+              "y": 0.32,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.78,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do for a turbine?"
+            }
+          ],
+          "links": [
+            {
+              "from": "steam",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "stator",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steers steam"
+            },
+            {
+              "from": "hp",
+              "to": "lp",
+              "kind": "fluid",
+              "label": "expanding"
+            },
+            {
+              "from": "lp",
+              "to": "shaft",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "lp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Finally the steam enters the condenser, kept at a near vacuum. This pulls the steam through so it gives up as much energy as possible before it turns back into water.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "steam",
+              "kind": "pipe",
+              "x": 0.06,
+              "y": 0.32,
+              "label": "High-pressure steam",
+              "motion": "flow",
+              "ask": "Why does the steam need to be at high pressure?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.2,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Control valve",
+              "ask": "How is a turbine's speed controlled?"
+            },
+            {
+              "id": "stator",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.68,
+              "size": 0.7,
+              "label": "Fixed blades",
+              "ask": "Why are there many rows of blades instead of one?"
+            },
+            {
+              "id": "hp",
+              "kind": "fan",
+              "x": 0.38,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "High-pressure blades",
+              "motion": "spin",
+              "ask": "Why do turbine blades get bigger along the shaft?"
+            },
+            {
+              "id": "lp",
+              "kind": "fan",
+              "x": 0.58,
+              "y": 0.32,
+              "size": 1.4,
+              "label": "Low-pressure blades",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.75,
+              "y": 0.32,
+              "size": 0.6,
+              "label": "Shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.91,
+              "y": 0.32,
+              "label": "Generator",
+              "motion": "spin"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.78,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do for a turbine?"
+            }
+          ],
+          "links": [
+            {
+              "from": "steam",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "stator",
+              "to": "hp",
+              "kind": "fluid",
+              "label": "steers steam"
+            },
+            {
+              "from": "hp",
+              "to": "lp",
+              "kind": "fluid",
+              "label": "expanding"
+            },
+            {
+              "from": "lp",
+              "to": "shaft",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "shaft",
+              "to": "gen",
+              "kind": "energy"
+            },
+            {
+              "from": "lp",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "exhaust"
+            }
+          ],
+          "focus": 7
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does the steam need to be at high pressure?",
+      "a": "High pressure and temperature pack more energy into each kilogram of steam, and the big drop down to the condenser gives the steam more to push with. Power station steam can be at more than 160 times normal air pressure.",
+      "asks": [
+        "How strong is the steam in a turbine?"
+      ]
+    },
+    {
+      "q": "Why do turbine blades get bigger along the shaft?",
+      "a": "As steam passes each row it loses pressure and swells to fill much more space. Longer blades give the growing volume of steam room to pass while it keeps pushing the shaft round.",
+      "asks": [
+        "Why are the last turbine blades the biggest?"
+      ]
+    },
+    {
+      "q": "How is a turbine's speed controlled?",
+      "a": "Control valves let more or less steam in. On a 50 hertz grid a big generator turns at exactly 3,000 revolutions per minute, and the valves open further when more electricity is needed.",
+      "asks": [
+        "What keeps a turbine spinning at the right speed?"
+      ]
+    },
+    {
+      "q": "Why are there many rows of blades instead of one?",
+      "a": "Taking the energy out in many small steps is much more efficient than one huge blast, which would spin a single wheel impossibly fast. Big turbines have dozens of rows, split into high, intermediate and low pressure sections.",
+      "asks": [
+        "What are turbine stages?"
+      ]
+    },
+    {
+      "q": "What does the condenser do for a turbine?",
+      "a": "It turns the exhaust steam back into water, which leaves a near vacuum behind the last blades. That low pressure lets the steam expand further and do more work on the way.",
+      "asks": [
+        "Why is there a vacuum after a turbine?"
+      ]
+    }
+  ],
+  "facts": [
+    "Charles Parsons invented the modern multi-stage steam turbine in 1884.",
+    "In 1897 the turbine-powered boat Turbinia reached about 34 knots, faster than any other ship of its time.",
+    "Last-stage blades in large power station turbines can be over 1.5 metres long."
+  ],
+  "quiz": [
+    {
+      "say": "Why are the blades at the low-pressure end of a steam turbine the longest?",
+      "show": "Why are the last blades longest?",
+      "options": [
+        {
+          "show": "The steam has expanded and takes up more space",
+          "say": "The steam has expanded and takes up more space"
+        },
+        {
+          "show": "The steam is hottest there",
+          "say": "The steam is hottest there"
+        },
+        {
+          "show": "To make the turbine heavier",
+          "say": "To make the turbine heavier"
+        }
+      ],
+      "answer": 0,
+      "why": "As the steam loses pressure it expands, so the later rows need longer blades to let the bigger volume through.",
+      "wrong": {
+        "1": "The steam is coolest at the low-pressure end, not hottest.",
+        "2": "Extra weight would not help; the length is about steam volume."
+      }
+    }
+  ]
+}

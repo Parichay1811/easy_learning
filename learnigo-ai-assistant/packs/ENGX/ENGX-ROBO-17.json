@@ -1,0 +1,614 @@
+{
+  "id": "ENGX-ROBO-17",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a PLC controls a factory machine",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "PLC",
+    "programmable logic controller",
+    "ladder logic",
+    "scan cycle",
+    "industrial control inputs and outputs"
+  ],
+  "examples": [
+    "What is a PLC?",
+    "How does a PLC control a machine?",
+    "What is ladder logic?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "btn",
+          "label": "Start button",
+          "icon": "switch",
+          "x": 0.1,
+          "y": 0.15,
+          "ask": "What are PLC inputs and outputs?"
+        },
+        {
+          "id": "prox",
+          "label": "Part sensor",
+          "icon": "sensor",
+          "x": 0.1,
+          "y": 0.5,
+          "ask": "What are PLC inputs and outputs?"
+        },
+        {
+          "id": "estop",
+          "label": "Emergency stop",
+          "icon": "hand",
+          "x": 0.1,
+          "y": 0.85,
+          "ask": "What happens when you press an emergency stop?"
+        },
+        {
+          "id": "plc",
+          "label": "PLC",
+          "icon": "computer",
+          "x": 0.48,
+          "y": 0.5,
+          "ask": "What is a PLC?"
+        },
+        {
+          "id": "motor",
+          "label": "Conveyor motor",
+          "icon": "motor",
+          "x": 0.86,
+          "y": 0.15
+        },
+        {
+          "id": "valve",
+          "label": "Air valve",
+          "icon": "valve",
+          "x": 0.86,
+          "y": 0.5,
+          "ask": "What is ladder logic?"
+        },
+        {
+          "id": "lamp",
+          "label": "Warning light",
+          "icon": "light",
+          "x": 0.86,
+          "y": 0.85
+        }
+      ],
+      "links": [
+        {
+          "from": "btn",
+          "to": "plc",
+          "kind": "signal",
+          "label": "start"
+        },
+        {
+          "from": "prox",
+          "to": "plc",
+          "kind": "signal",
+          "label": "part here"
+        },
+        {
+          "from": "estop",
+          "to": "plc",
+          "kind": "signal",
+          "label": "stop"
+        },
+        {
+          "from": "plc",
+          "to": "motor",
+          "kind": "power",
+          "label": "run"
+        },
+        {
+          "from": "plc",
+          "to": "valve",
+          "kind": "signal",
+          "label": "push"
+        },
+        {
+          "from": "plc",
+          "to": "lamp",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A PLC, or programmable logic controller, is a tough little computer that runs most factory machines, from conveyor belts to bottling lines. Wires bring in signals from buttons and sensors, and other wires switch motors, valves and lights.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a PLC controls a factory machine"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "btn",
+              "label": "Start button",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.15,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "prox",
+              "label": "Part sensor",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.5,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "estop",
+              "label": "Emergency stop",
+              "icon": "hand",
+              "x": 0.1,
+              "y": 0.85,
+              "ask": "What happens when you press an emergency stop?"
+            },
+            {
+              "id": "plc",
+              "label": "PLC",
+              "icon": "computer",
+              "x": 0.48,
+              "y": 0.5,
+              "ask": "What is a PLC?"
+            },
+            {
+              "id": "motor",
+              "label": "Conveyor motor",
+              "icon": "motor",
+              "x": 0.86,
+              "y": 0.15
+            },
+            {
+              "id": "valve",
+              "label": "Air valve",
+              "icon": "valve",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is ladder logic?"
+            },
+            {
+              "id": "lamp",
+              "label": "Warning light",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "btn",
+              "to": "plc",
+              "kind": "signal",
+              "label": "start"
+            },
+            {
+              "from": "prox",
+              "to": "plc",
+              "kind": "signal",
+              "label": "part here"
+            },
+            {
+              "from": "estop",
+              "to": "plc",
+              "kind": "signal",
+              "label": "stop"
+            },
+            {
+              "from": "plc",
+              "to": "motor",
+              "kind": "power",
+              "label": "run"
+            },
+            {
+              "from": "plc",
+              "to": "valve",
+              "kind": "signal",
+              "label": "push"
+            },
+            {
+              "from": "plc",
+              "to": "lamp",
+              "kind": "power"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Inputs tell it what is happening: a start button pressed, or a sensor seeing a box arrive at the end of a conveyor.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "btn",
+              "label": "Start button",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.15,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "prox",
+              "label": "Part sensor",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.5,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "estop",
+              "label": "Emergency stop",
+              "icon": "hand",
+              "x": 0.1,
+              "y": 0.85,
+              "ask": "What happens when you press an emergency stop?"
+            },
+            {
+              "id": "plc",
+              "label": "PLC",
+              "icon": "computer",
+              "x": 0.48,
+              "y": 0.5,
+              "ask": "What is a PLC?"
+            },
+            {
+              "id": "motor",
+              "label": "Conveyor motor",
+              "icon": "motor",
+              "x": 0.86,
+              "y": 0.15
+            },
+            {
+              "id": "valve",
+              "label": "Air valve",
+              "icon": "valve",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is ladder logic?"
+            },
+            {
+              "id": "lamp",
+              "label": "Warning light",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "btn",
+              "to": "plc",
+              "kind": "signal",
+              "label": "start"
+            },
+            {
+              "from": "prox",
+              "to": "plc",
+              "kind": "signal",
+              "label": "part here"
+            },
+            {
+              "from": "estop",
+              "to": "plc",
+              "kind": "signal",
+              "label": "stop"
+            },
+            {
+              "from": "plc",
+              "to": "motor",
+              "kind": "power",
+              "label": "run"
+            },
+            {
+              "from": "plc",
+              "to": "valve",
+              "kind": "signal",
+              "label": "push"
+            },
+            {
+              "from": "plc",
+              "to": "lamp",
+              "kind": "power"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Its program is a list of rules, often drawn like an electrical circuit called ladder logic: if a box is here and the line is running, open the air valve to push it off. It checks every rule in one scan, many times a second.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "btn",
+              "label": "Start button",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.15,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "prox",
+              "label": "Part sensor",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.5,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "estop",
+              "label": "Emergency stop",
+              "icon": "hand",
+              "x": 0.1,
+              "y": 0.85,
+              "ask": "What happens when you press an emergency stop?"
+            },
+            {
+              "id": "plc",
+              "label": "PLC",
+              "icon": "computer",
+              "x": 0.48,
+              "y": 0.5,
+              "ask": "What is a PLC?"
+            },
+            {
+              "id": "motor",
+              "label": "Conveyor motor",
+              "icon": "motor",
+              "x": 0.86,
+              "y": 0.15
+            },
+            {
+              "id": "valve",
+              "label": "Air valve",
+              "icon": "valve",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is ladder logic?"
+            },
+            {
+              "id": "lamp",
+              "label": "Warning light",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "btn",
+              "to": "plc",
+              "kind": "signal",
+              "label": "start"
+            },
+            {
+              "from": "prox",
+              "to": "plc",
+              "kind": "signal",
+              "label": "part here"
+            },
+            {
+              "from": "estop",
+              "to": "plc",
+              "kind": "signal",
+              "label": "stop"
+            },
+            {
+              "from": "plc",
+              "to": "motor",
+              "kind": "power",
+              "label": "run"
+            },
+            {
+              "from": "plc",
+              "to": "valve",
+              "kind": "signal",
+              "label": "push"
+            },
+            {
+              "from": "plc",
+              "to": "lamp",
+              "kind": "power"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Then it sets its outputs, switching the motor, valve and warning light, and starts the next scan straight away. Emergency stops also work through separate safety circuits, so the machine stops even if the program goes wrong.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "btn",
+              "label": "Start button",
+              "icon": "switch",
+              "x": 0.1,
+              "y": 0.15,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "prox",
+              "label": "Part sensor",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.5,
+              "ask": "What are PLC inputs and outputs?"
+            },
+            {
+              "id": "estop",
+              "label": "Emergency stop",
+              "icon": "hand",
+              "x": 0.1,
+              "y": 0.85,
+              "ask": "What happens when you press an emergency stop?"
+            },
+            {
+              "id": "plc",
+              "label": "PLC",
+              "icon": "computer",
+              "x": 0.48,
+              "y": 0.5,
+              "ask": "What is a PLC?"
+            },
+            {
+              "id": "motor",
+              "label": "Conveyor motor",
+              "icon": "motor",
+              "x": 0.86,
+              "y": 0.15
+            },
+            {
+              "id": "valve",
+              "label": "Air valve",
+              "icon": "valve",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is ladder logic?"
+            },
+            {
+              "id": "lamp",
+              "label": "Warning light",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "btn",
+              "to": "plc",
+              "kind": "signal",
+              "label": "start"
+            },
+            {
+              "from": "prox",
+              "to": "plc",
+              "kind": "signal",
+              "label": "part here"
+            },
+            {
+              "from": "estop",
+              "to": "plc",
+              "kind": "signal",
+              "label": "stop"
+            },
+            {
+              "from": "plc",
+              "to": "motor",
+              "kind": "power",
+              "label": "run"
+            },
+            {
+              "from": "plc",
+              "to": "valve",
+              "kind": "signal",
+              "label": "push"
+            },
+            {
+              "from": "plc",
+              "to": "lamp",
+              "kind": "power"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a PLC?",
+      "a": "A programmable logic controller is a rugged industrial computer that controls machines. It reads inputs from sensors and buttons, runs a program, and switches outputs like motors and valves, and it is built to survive dust, heat and vibration.",
+      "asks": [
+        "What does PLC stand for?"
+      ]
+    },
+    {
+      "q": "What are PLC inputs and outputs?",
+      "a": "Inputs are signals coming in, such as buttons, switches and sensors. Outputs are things the PLC switches, such as motors, valves, lights and alarms.",
+      "asks": [
+        "What does a PLC connect to?"
+      ]
+    },
+    {
+      "q": "What is the PLC scan cycle?",
+      "a": "A PLC repeats the same loop over and over: read all the inputs, run the program from top to bottom, then update all the outputs. One scan usually takes just a few milliseconds.",
+      "asks": [
+        "How fast does a PLC work?"
+      ]
+    },
+    {
+      "q": "What is ladder logic?",
+      "a": "Ladder logic is a way of writing PLC programs that looks like an electrical wiring diagram, with rungs like a ladder. Each rung is a rule: if these contacts are closed, switch on that output.",
+      "asks": [
+        "How do you program a PLC?"
+      ]
+    },
+    {
+      "q": "What happens when you press an emergency stop?",
+      "a": "It cuts power to the dangerous parts of the machine through a dedicated safety circuit and tells the PLC to stop. The machine will not restart until the button is reset and someone deliberately starts it again.",
+      "asks": [
+        "What does an e-stop button do?"
+      ]
+    }
+  ],
+  "facts": [
+    "The first PLC, the Modicon 084, was developed around 1968 for General Motors to replace large panels of relays.",
+    "A typical PLC scan cycle takes a few milliseconds."
+  ],
+  "quiz": [
+    {
+      "say": "What does a PLC do in every scan?",
+      "show": "In each scan, a PLC…",
+      "options": [
+        {
+          "show": "Reads inputs, runs its program, updates outputs",
+          "say": "Reads inputs, runs its program, updates outputs"
+        },
+        {
+          "show": "Waits for a person to type commands",
+          "say": "Waits for a person to type commands"
+        },
+        {
+          "show": "Charges the factory's batteries",
+          "say": "Charges the factory's batteries"
+        }
+      ],
+      "answer": 0,
+      "why": "Every scan it reads all inputs, works through its rules, and sets the outputs, then starts again.",
+      "wrong": {
+        "1": "A PLC runs on its own, scanning continuously without anyone typing.",
+        "2": "A PLC controls machines; it does not charge batteries."
+      }
+    }
+  ]
+}

@@ -1,0 +1,680 @@
+{
+  "id": "ENGX-ENER-27",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a hydrogen fuel cell makes electricity",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "hydrogen fuel cell",
+    "fuel cell stack",
+    "proton exchange membrane",
+    "hydrogen and oxygen",
+    "fuel cell vehicle"
+  ],
+  "examples": [
+    "How does a hydrogen fuel cell work?",
+    "Why does a fuel cell only make water?",
+    "Is a fuel cell a battery?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "h2",
+          "kind": "tank",
+          "x": 0.08,
+          "y": 0.32,
+          "label": "Hydrogen in",
+          "ask": "Where does the hydrogen come from?"
+        },
+        {
+          "id": "anode",
+          "kind": "box",
+          "x": 0.3,
+          "y": 0.5,
+          "label": "Anode",
+          "motion": "pulse",
+          "ask": "What happens at the anode?"
+        },
+        {
+          "id": "mem",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Membrane",
+          "ask": "What does the membrane do in a fuel cell?"
+        },
+        {
+          "id": "cathode",
+          "kind": "box",
+          "x": 0.7,
+          "y": 0.5,
+          "label": "Cathode",
+          "motion": "pulse"
+        },
+        {
+          "id": "air",
+          "kind": "pipe",
+          "x": 0.92,
+          "y": 0.32,
+          "size": 0.8,
+          "label": "Oxygen from air",
+          "motion": "flow"
+        },
+        {
+          "id": "water",
+          "kind": "pipe",
+          "x": 0.9,
+          "y": 0.8,
+          "size": 0.8,
+          "label": "Water out",
+          "motion": "flow",
+          "ask": "What comes out of a fuel cell?"
+        },
+        {
+          "id": "load",
+          "kind": "bulb",
+          "x": 0.5,
+          "y": 0.1,
+          "size": 0.8,
+          "label": "Lamp or motor",
+          "motion": "pulse"
+        }
+      ],
+      "links": [
+        {
+          "from": "h2",
+          "to": "anode",
+          "kind": "fluid",
+          "label": "hydrogen"
+        },
+        {
+          "from": "anode",
+          "to": "mem",
+          "kind": "fluid",
+          "label": "protons"
+        },
+        {
+          "from": "mem",
+          "to": "cathode",
+          "kind": "fluid",
+          "label": "protons"
+        },
+        {
+          "from": "anode",
+          "to": "load",
+          "kind": "power",
+          "label": "electrons"
+        },
+        {
+          "from": "load",
+          "to": "cathode",
+          "kind": "power",
+          "label": "electrons"
+        },
+        {
+          "from": "air",
+          "to": "cathode",
+          "kind": "fluid"
+        },
+        {
+          "from": "cathode",
+          "to": "water",
+          "kind": "fluid"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A fuel cell makes electricity from hydrogen and oxygen without burning them. Hydrogen gas flows to one side, called the anode, and oxygen from the air flows to the other side, the cathode.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a hydrogen fuel cell makes electricity"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "h2",
+              "kind": "tank",
+              "x": 0.08,
+              "y": 0.32,
+              "label": "Hydrogen in",
+              "ask": "Where does the hydrogen come from?"
+            },
+            {
+              "id": "anode",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Anode",
+              "motion": "pulse",
+              "ask": "What happens at the anode?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a fuel cell?"
+            },
+            {
+              "id": "cathode",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Cathode",
+              "motion": "pulse"
+            },
+            {
+              "id": "air",
+              "kind": "pipe",
+              "x": 0.92,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Oxygen from air",
+              "motion": "flow"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Water out",
+              "motion": "flow",
+              "ask": "What comes out of a fuel cell?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Lamp or motor",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "h2",
+              "to": "anode",
+              "kind": "fluid",
+              "label": "hydrogen"
+            },
+            {
+              "from": "anode",
+              "to": "mem",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "mem",
+              "to": "cathode",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "anode",
+              "to": "load",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "load",
+              "to": "cathode",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "air",
+              "to": "cathode",
+              "kind": "fluid"
+            },
+            {
+              "from": "cathode",
+              "to": "water",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "At the anode, a platinum catalyst splits each hydrogen molecule into protons and electrons. The membrane between the two sides lets only the protons through.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "h2",
+              "kind": "tank",
+              "x": 0.08,
+              "y": 0.32,
+              "label": "Hydrogen in",
+              "ask": "Where does the hydrogen come from?"
+            },
+            {
+              "id": "anode",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Anode",
+              "motion": "pulse",
+              "ask": "What happens at the anode?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a fuel cell?"
+            },
+            {
+              "id": "cathode",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Cathode",
+              "motion": "pulse"
+            },
+            {
+              "id": "air",
+              "kind": "pipe",
+              "x": 0.92,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Oxygen from air",
+              "motion": "flow"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Water out",
+              "motion": "flow",
+              "ask": "What comes out of a fuel cell?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Lamp or motor",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "h2",
+              "to": "anode",
+              "kind": "fluid",
+              "label": "hydrogen"
+            },
+            {
+              "from": "anode",
+              "to": "mem",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "mem",
+              "to": "cathode",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "anode",
+              "to": "load",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "load",
+              "to": "cathode",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "air",
+              "to": "cathode",
+              "kind": "fluid"
+            },
+            {
+              "from": "cathode",
+              "to": "water",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The electrons cannot cross the membrane, so they travel round an outside wire to reach the cathode. That flow of electrons is an electric current, which can light a lamp or drive a motor.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "h2",
+              "kind": "tank",
+              "x": 0.08,
+              "y": 0.32,
+              "label": "Hydrogen in",
+              "ask": "Where does the hydrogen come from?"
+            },
+            {
+              "id": "anode",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Anode",
+              "motion": "pulse",
+              "ask": "What happens at the anode?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a fuel cell?"
+            },
+            {
+              "id": "cathode",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Cathode",
+              "motion": "pulse"
+            },
+            {
+              "id": "air",
+              "kind": "pipe",
+              "x": 0.92,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Oxygen from air",
+              "motion": "flow"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Water out",
+              "motion": "flow",
+              "ask": "What comes out of a fuel cell?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Lamp or motor",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "h2",
+              "to": "anode",
+              "kind": "fluid",
+              "label": "hydrogen"
+            },
+            {
+              "from": "anode",
+              "to": "mem",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "mem",
+              "to": "cathode",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "anode",
+              "to": "load",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "load",
+              "to": "cathode",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "air",
+              "to": "cathode",
+              "kind": "fluid"
+            },
+            {
+              "from": "cathode",
+              "to": "water",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    },
+    {
+      "say": "At the cathode, the protons, electrons and oxygen join to make water, the only thing that comes out. A single cell gives less than one volt, so hundreds are stacked together.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "h2",
+              "kind": "tank",
+              "x": 0.08,
+              "y": 0.32,
+              "label": "Hydrogen in",
+              "ask": "Where does the hydrogen come from?"
+            },
+            {
+              "id": "anode",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.5,
+              "label": "Anode",
+              "motion": "pulse",
+              "ask": "What happens at the anode?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a fuel cell?"
+            },
+            {
+              "id": "cathode",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.5,
+              "label": "Cathode",
+              "motion": "pulse"
+            },
+            {
+              "id": "air",
+              "kind": "pipe",
+              "x": 0.92,
+              "y": 0.32,
+              "size": 0.8,
+              "label": "Oxygen from air",
+              "motion": "flow"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.9,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Water out",
+              "motion": "flow",
+              "ask": "What comes out of a fuel cell?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Lamp or motor",
+              "motion": "pulse"
+            }
+          ],
+          "links": [
+            {
+              "from": "h2",
+              "to": "anode",
+              "kind": "fluid",
+              "label": "hydrogen"
+            },
+            {
+              "from": "anode",
+              "to": "mem",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "mem",
+              "to": "cathode",
+              "kind": "fluid",
+              "label": "protons"
+            },
+            {
+              "from": "anode",
+              "to": "load",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "load",
+              "to": "cathode",
+              "kind": "power",
+              "label": "electrons"
+            },
+            {
+              "from": "air",
+              "to": "cathode",
+              "kind": "fluid"
+            },
+            {
+              "from": "cathode",
+              "to": "water",
+              "kind": "fluid"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What happens at the anode?",
+      "a": "A thin layer of platinum catalyst helps each hydrogen molecule split into two protons and two electrons. The protons pass through the membrane, while the electrons are sent round the outside circuit.",
+      "asks": [
+        "How does a fuel cell split hydrogen?"
+      ]
+    },
+    {
+      "q": "What does the membrane do in a fuel cell?",
+      "a": "It is a thin plastic sheet that lets protons pass but blocks electrons and gases. That forces the electrons to take the long way round through the wire, which is the current we use.",
+      "asks": [
+        "What is a proton exchange membrane?"
+      ]
+    },
+    {
+      "q": "What comes out of a fuel cell?",
+      "a": "Just water and some heat. Hydrogen and oxygen combine to make water, so a fuel cell car drips clean water from its exhaust instead of giving off fumes.",
+      "asks": [
+        "Is a fuel cell clean?"
+      ]
+    },
+    {
+      "q": "Where does the hydrogen come from?",
+      "a": "Most hydrogen today is made from natural gas, which releases carbon dioxide. Green hydrogen is made by splitting water with electricity from wind or solar power, so the whole chain can be clean.",
+      "asks": [
+        "How is hydrogen fuel made?"
+      ]
+    },
+    {
+      "q": "How is a fuel cell different from a battery?",
+      "a": "A battery stores its chemicals inside and goes flat when they are used up. A fuel cell keeps working as long as hydrogen and air are supplied, so it is refuelled instead of recharged.",
+      "asks": [
+        "Is a fuel cell a battery?"
+      ]
+    }
+  ],
+  "facts": [
+    "William Grove demonstrated an early fuel cell, his gas battery, in 1842.",
+    "Fuel cells made electricity on NASA's Apollo spacecraft, and the astronauts used the water they produced."
+  ],
+  "quiz": [
+    {
+      "say": "In a hydrogen fuel cell, why do the electrons travel through the outside wire?",
+      "show": "Electrons go round the outside wire because…",
+      "options": [
+        {
+          "show": "The membrane lets only protons through",
+          "say": "The membrane lets only protons through"
+        },
+        {
+          "show": "The wire is a shorter route",
+          "say": "The wire is a shorter route"
+        },
+        {
+          "show": "Electrons are too heavy for the membrane",
+          "say": "Electrons are too heavy for the membrane"
+        }
+      ],
+      "answer": 0,
+      "why": "The membrane blocks electrons, so they must go round the circuit, and that flow is the useful current.",
+      "wrong": {
+        "1": "The route is forced by the membrane, not chosen for being short.",
+        "2": "Electrons are far lighter than protons; the membrane blocks them by its design."
+      }
+    }
+  ]
+}

@@ -1,0 +1,353 @@
+{
+  "id": "BME-STAT-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Distributed loads: replacing spread-out weight with one resultant force",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "distributed load",
+    "uniformly distributed load",
+    "resultant force",
+    "UDL",
+    "equivalent point load"
+  ],
+  "examples": [
+    "How do I find the resultant of a distributed load?",
+    "Where does the resultant of a UDL act?",
+    "Reactions of a beam with a partial UDL"
+  ],
+  "figure": [
+    {
+      "name": "x-beam",
+      "length": 6,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "How do I find the reactions of a beam with a partial UDL?"
+        },
+        {
+          "kind": "roller",
+          "at": 1,
+          "ask": "How do I find the reactions of a beam with a partial UDL?"
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 0.5,
+          "size": 4,
+          "label": "4 kN/m",
+          "ask": "How do I find the resultant of a distributed load?"
+        }
+      ],
+      "show": "beam",
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Snow on a roof, books along a shelf, water pressing on a tank wall: these loads are spread out, not concentrated at a point. We call them distributed loads, measured in kilonewtons per metre. Here a 6 metre beam carries 4 kilonewtons per metre over its left half. How do we handle that?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Distributed loads: replacing spread-out weight with one resultant force"
+        },
+        {
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.5,
+              "size": 4,
+              "label": "4 kN/m",
+              "ask": "How do I find the resultant of a distributed load?"
+            }
+          ],
+          "show": "beam",
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Beam: 6 m span, 4 kN/m over the first 3 m"
+        }
+      ]
+    },
+    {
+      "say": "Here is the trick: replace the whole spread-out load with one equivalent force. Its size is the area under the load diagram: 4 kilonewtons per metre times 3 metres, which is 12 kilonewtons. See the shaded load on the left? What would the area be for a triangle-shaped load?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.5,
+              "size": 4,
+              "label": "4 kN/m",
+              "ask": "How do I find the resultant of a distributed load?"
+            }
+          ],
+          "show": "beam",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Resultant = w × length = 4 × 3 = 12 kN"
+        }
+      ]
+    },
+    {
+      "say": "Half base times height! And where does the 12 kilonewtons act? At the centroid of the load shape: for a rectangle, the middle, 1.5 metres from the left. For a triangle it would be a third of the way from the tall end. Now take moments about the left pin: the right reaction times 6 equals 12 times 1.5. What do you get?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.5,
+              "size": 4,
+              "label": "4 kN/m",
+              "ask": "How do I find the resultant of a distributed load?"
+            }
+          ],
+          "show": "beam",
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "R_B × 6 = 12 × 1.5, so R_B = 3 kN"
+        }
+      ]
+    },
+    {
+      "say": "Three kilonewtons. The left pin takes the rest, 12 minus 3, which is 9 kilonewtons. Look at the shear diagram: it falls steadily under the load and crosses zero at 2.25 metres. That is where the bending moment peaks. Why there?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.5,
+              "size": 4,
+              "label": "4 kN/m",
+              "ask": "How do I find the resultant of a distributed load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear"
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "R_A = 12 − 3 = 9 kN; V = 0 at x = 9/4 = 2.25 m"
+        }
+      ]
+    },
+    {
+      "say": "Because the slope of the moment diagram is the shear, so zero shear means a peak. The maximum moment is 9 times 2.25 minus 4 times 2.25 squared over 2, which is about 10.1 kilonewton metres. See the curve? Great work! Warning: the resultant is fine for reactions, but never use it to draw shear inside the loaded length.",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "How do I find the reactions of a beam with a partial UDL?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 0.5,
+              "size": 4,
+              "label": "4 kN/m",
+              "ask": "How do I find the resultant of a distributed load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "shear",
+            "moment"
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "M_max = 9×2.25 − 4×2.25²/2 = 10.1 kN·m"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I find the resultant of a distributed load?",
+      "a": "Its size equals the area under the load intensity diagram. For a uniform load that is the intensity times the loaded length; for a triangle it is half the base times the peak intensity.",
+      "asks": [
+        "resultant of UDL",
+        "equivalent point load of distributed load"
+      ]
+    },
+    {
+      "q": "Where does the resultant of a UDL act?",
+      "a": "At the centroid of the load diagram. For a uniform load that is the middle of the loaded length; for a triangular load it is one third of the length from the larger end.",
+      "asks": [
+        "line of action of resultant distributed load"
+      ]
+    },
+    {
+      "q": "How do I find the reactions of a beam with a partial UDL?",
+      "a": "Replace the load with its resultant at the centroid, take moments about one support for the other reaction, then use the vertical force sum for the first.",
+      "asks": [
+        "reactions with distributed load"
+      ]
+    },
+    {
+      "q": "Why is the maximum bending moment where shear is zero?",
+      "a": "The slope of the bending moment diagram equals the shear force. Where the shear crosses zero, the slope is zero, so the moment reaches a maximum or minimum.",
+      "asks": [
+        "relationship between shear and moment"
+      ]
+    },
+    {
+      "q": "Can I use the resultant to draw the shear force diagram?",
+      "a": "Only outside the loaded region. Inside it, the shear changes steadily along the load, so you must use the actual distributed load, not one point force.",
+      "asks": [
+        "when not to use equivalent load"
+      ]
+    }
+  ],
+  "facts": [
+    "The resultant of a triangular distributed load acts one third of the span from its larger end.",
+    "The slope of a beam's bending moment diagram equals the shear force at that point."
+  ],
+  "quiz": [
+    {
+      "say": "A triangular load rises from zero to 6 kilonewtons per metre over 3 metres. What is its resultant?",
+      "show": "Triangular load: 0 to 6 kN/m over 3 m. Resultant?",
+      "options": [
+        {
+          "show": "9 kN",
+          "say": "9 kilonewtons"
+        },
+        {
+          "show": "18 kN",
+          "say": "18 kilonewtons"
+        },
+        {
+          "show": "6 kN",
+          "say": "6 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "Area of the triangle = ½ × 3 × 6 = 9 kN.",
+      "wrong": {
+        "1": "That treats it as a uniform load and forgets the half.",
+        "2": "That is the peak intensity, not the total load."
+      }
+    },
+    {
+      "say": "A 2 kilonewton per metre load covers a whole 8 metre simply supported beam. What is the maximum bending moment?",
+      "show": "2 kN/m over a whole 8 m simple span. Maximum bending moment?",
+      "options": [
+        {
+          "show": "16 kN·m",
+          "say": "16 kilonewton metres"
+        },
+        {
+          "show": "64 kN·m",
+          "say": "64 kilonewton metres"
+        },
+        {
+          "show": "8 kN·m",
+          "say": "8 kilonewton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "M = wL²/8 = 2 × 64 / 8 = 16 kN·m.",
+      "wrong": {
+        "1": "That is wL² without dividing by 8.",
+        "2": "That is the reaction at each support, in kN, not the moment."
+      }
+    }
+  ]
+}

@@ -1,0 +1,625 @@
+{
+  "id": "ENGX-ENER-21",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an offshore wind farm sends power ashore",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "offshore substation",
+    "export cable",
+    "array cables",
+    "HVDC link",
+    "offshore wind grid connection"
+  ],
+  "examples": [
+    "How does electricity get from an offshore wind farm to land?",
+    "What is an offshore substation?",
+    "How are wind turbines at sea connected?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "turb",
+          "label": "Wind turbines",
+          "icon": "turbine",
+          "x": 0.1,
+          "y": 0.3,
+          "ask": "How are offshore turbines connected together?"
+        },
+        {
+          "id": "osub",
+          "label": "Offshore substation",
+          "icon": "tower",
+          "x": 0.35,
+          "y": 0.3,
+          "ask": "What does an offshore substation do?"
+        },
+        {
+          "id": "cable",
+          "label": "Export cable",
+          "icon": "wire",
+          "x": 0.55,
+          "y": 0.55,
+          "ask": "How does the export cable carry power under the sea?"
+        },
+        {
+          "id": "lsub",
+          "label": "Onshore substation",
+          "icon": "factory",
+          "x": 0.75,
+          "y": 0.3
+        },
+        {
+          "id": "grid",
+          "label": "National grid",
+          "icon": "tower",
+          "x": 0.92,
+          "y": 0.6
+        },
+        {
+          "id": "homes",
+          "label": "Homes",
+          "icon": "house",
+          "x": 0.72,
+          "y": 0.85
+        },
+        {
+          "id": "ctrl",
+          "label": "Control room",
+          "icon": "computer",
+          "x": 0.15,
+          "y": 0.8
+        }
+      ],
+      "links": [
+        {
+          "from": "turb",
+          "to": "osub",
+          "kind": "power",
+          "label": "array cables"
+        },
+        {
+          "from": "osub",
+          "to": "cable",
+          "kind": "power",
+          "label": "high voltage"
+        },
+        {
+          "from": "cable",
+          "to": "lsub",
+          "kind": "power"
+        },
+        {
+          "from": "lsub",
+          "to": "grid",
+          "kind": "power"
+        },
+        {
+          "from": "grid",
+          "to": "homes",
+          "kind": "power"
+        },
+        {
+          "from": "ctrl",
+          "to": "turb",
+          "kind": "data",
+          "label": "commands"
+        },
+        {
+          "from": "turb",
+          "to": "ctrl",
+          "kind": "data",
+          "label": "readings"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Each turbine in an offshore wind farm makes electricity in its own generator, and a transformer inside raises the voltage. Cables buried in the seabed link the turbines together in strings.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an offshore wind farm sends power ashore"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "turb",
+              "label": "Wind turbines",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "How are offshore turbines connected together?"
+            },
+            {
+              "id": "osub",
+              "label": "Offshore substation",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "What does an offshore substation do?"
+            },
+            {
+              "id": "cable",
+              "label": "Export cable",
+              "icon": "wire",
+              "x": 0.55,
+              "y": 0.55,
+              "ask": "How does the export cable carry power under the sea?"
+            },
+            {
+              "id": "lsub",
+              "label": "Onshore substation",
+              "icon": "factory",
+              "x": 0.75,
+              "y": 0.3
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.92,
+              "y": 0.6
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.85
+            },
+            {
+              "id": "ctrl",
+              "label": "Control room",
+              "icon": "computer",
+              "x": 0.15,
+              "y": 0.8
+            }
+          ],
+          "links": [
+            {
+              "from": "turb",
+              "to": "osub",
+              "kind": "power",
+              "label": "array cables"
+            },
+            {
+              "from": "osub",
+              "to": "cable",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "cable",
+              "to": "lsub",
+              "kind": "power"
+            },
+            {
+              "from": "lsub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "grid",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "turb",
+              "kind": "data",
+              "label": "commands"
+            },
+            {
+              "from": "turb",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "readings"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The strings meet at an offshore substation, a platform on legs that raises the voltage again, often to around 220,000 volts. Higher voltage means a smaller current, so less energy is lost as heat in the cables.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "turb",
+              "label": "Wind turbines",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "How are offshore turbines connected together?"
+            },
+            {
+              "id": "osub",
+              "label": "Offshore substation",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "What does an offshore substation do?"
+            },
+            {
+              "id": "cable",
+              "label": "Export cable",
+              "icon": "wire",
+              "x": 0.55,
+              "y": 0.55,
+              "ask": "How does the export cable carry power under the sea?"
+            },
+            {
+              "id": "lsub",
+              "label": "Onshore substation",
+              "icon": "factory",
+              "x": 0.75,
+              "y": 0.3
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.92,
+              "y": 0.6
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.85
+            },
+            {
+              "id": "ctrl",
+              "label": "Control room",
+              "icon": "computer",
+              "x": 0.15,
+              "y": 0.8
+            }
+          ],
+          "links": [
+            {
+              "from": "turb",
+              "to": "osub",
+              "kind": "power",
+              "label": "array cables"
+            },
+            {
+              "from": "osub",
+              "to": "cable",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "cable",
+              "to": "lsub",
+              "kind": "power"
+            },
+            {
+              "from": "lsub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "grid",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "turb",
+              "kind": "data",
+              "label": "commands"
+            },
+            {
+              "from": "turb",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "readings"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "A thick export cable buried under the seabed carries the power to shore, sometimes over 100 kilometres. The longest links use direct current, which loses less energy than alternating current in long undersea cables.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "turb",
+              "label": "Wind turbines",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "How are offshore turbines connected together?"
+            },
+            {
+              "id": "osub",
+              "label": "Offshore substation",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "What does an offshore substation do?"
+            },
+            {
+              "id": "cable",
+              "label": "Export cable",
+              "icon": "wire",
+              "x": 0.55,
+              "y": 0.55,
+              "ask": "How does the export cable carry power under the sea?"
+            },
+            {
+              "id": "lsub",
+              "label": "Onshore substation",
+              "icon": "factory",
+              "x": 0.75,
+              "y": 0.3
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.92,
+              "y": 0.6
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.85
+            },
+            {
+              "id": "ctrl",
+              "label": "Control room",
+              "icon": "computer",
+              "x": 0.15,
+              "y": 0.8
+            }
+          ],
+          "links": [
+            {
+              "from": "turb",
+              "to": "osub",
+              "kind": "power",
+              "label": "array cables"
+            },
+            {
+              "from": "osub",
+              "to": "cable",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "cable",
+              "to": "lsub",
+              "kind": "power"
+            },
+            {
+              "from": "lsub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "grid",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "turb",
+              "kind": "data",
+              "label": "commands"
+            },
+            {
+              "from": "turb",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "readings"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "On land, an onshore substation adjusts the power to match the national grid, which carries it on to homes and businesses. Engineers in a control room watch over every turbine remotely.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "turb",
+              "label": "Wind turbines",
+              "icon": "turbine",
+              "x": 0.1,
+              "y": 0.3,
+              "ask": "How are offshore turbines connected together?"
+            },
+            {
+              "id": "osub",
+              "label": "Offshore substation",
+              "icon": "tower",
+              "x": 0.35,
+              "y": 0.3,
+              "ask": "What does an offshore substation do?"
+            },
+            {
+              "id": "cable",
+              "label": "Export cable",
+              "icon": "wire",
+              "x": 0.55,
+              "y": 0.55,
+              "ask": "How does the export cable carry power under the sea?"
+            },
+            {
+              "id": "lsub",
+              "label": "Onshore substation",
+              "icon": "factory",
+              "x": 0.75,
+              "y": 0.3
+            },
+            {
+              "id": "grid",
+              "label": "National grid",
+              "icon": "tower",
+              "x": 0.92,
+              "y": 0.6
+            },
+            {
+              "id": "homes",
+              "label": "Homes",
+              "icon": "house",
+              "x": 0.72,
+              "y": 0.85
+            },
+            {
+              "id": "ctrl",
+              "label": "Control room",
+              "icon": "computer",
+              "x": 0.15,
+              "y": 0.8
+            }
+          ],
+          "links": [
+            {
+              "from": "turb",
+              "to": "osub",
+              "kind": "power",
+              "label": "array cables"
+            },
+            {
+              "from": "osub",
+              "to": "cable",
+              "kind": "power",
+              "label": "high voltage"
+            },
+            {
+              "from": "cable",
+              "to": "lsub",
+              "kind": "power"
+            },
+            {
+              "from": "lsub",
+              "to": "grid",
+              "kind": "power"
+            },
+            {
+              "from": "grid",
+              "to": "homes",
+              "kind": "power"
+            },
+            {
+              "from": "ctrl",
+              "to": "turb",
+              "kind": "data",
+              "label": "commands"
+            },
+            {
+              "from": "turb",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "readings"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How are offshore turbines connected together?",
+      "a": "Array cables buried in the seabed link the turbines in strings, usually at about 33,000 or 66,000 volts. Each string runs back to the offshore substation.",
+      "asks": [
+        "What are array cables?"
+      ]
+    },
+    {
+      "q": "What does an offshore substation do?",
+      "a": "It collects the power from all the array cables and uses big transformers to step up the voltage, so the long trip to shore wastes less energy. It sits on a steel platform standing on the seabed.",
+      "asks": [
+        "Why does a wind farm need a substation at sea?"
+      ]
+    },
+    {
+      "q": "How does the export cable carry power under the sea?",
+      "a": "The export cable has thick copper or aluminium cores wrapped in insulation and steel armour. It is buried a metre or more under the seabed to protect it from anchors and fishing nets.",
+      "asks": [
+        "What is a subsea power cable?"
+      ]
+    },
+    {
+      "q": "Why do some wind farms use direct current cables?",
+      "a": "A long alternating current cable under the sea wastes a lot of current just charging and discharging the cable every cycle. Over roughly 80 kilometres or more, high-voltage direct current loses less, so converter stations change AC to DC and back.",
+      "asks": [
+        "What is HVDC?"
+      ]
+    },
+    {
+      "q": "What happens when a wind farm makes more than the grid needs?",
+      "a": "The grid operator can ask the wind farm to turn some turbines down, called curtailment. Or the spare power can charge batteries or be sent abroad through interconnectors.",
+      "asks": [
+        "What is curtailment?"
+      ]
+    }
+  ],
+  "facts": [
+    "Hornsea 2, off the Yorkshire coast, has a capacity of about 1.3 gigawatts and was the world's largest offshore wind farm when completed in 2022.",
+    "Offshore wind farms far from shore often use high-voltage direct current links to cut losses."
+  ],
+  "quiz": [
+    {
+      "say": "Why does an offshore substation raise the voltage before sending power to shore?",
+      "show": "Why step up the voltage at sea?",
+      "options": [
+        {
+          "show": "To cut the energy lost as heat in the cable",
+          "say": "To cut the energy lost as heat in the cable"
+        },
+        {
+          "show": "To make the turbines spin faster",
+          "say": "To make the turbines spin faster"
+        },
+        {
+          "show": "To turn the electricity into gas",
+          "say": "To turn the electricity into gas"
+        }
+      ],
+      "answer": 0,
+      "why": "At higher voltage the same power flows with a smaller current, and a smaller current heats the cable far less.",
+      "wrong": {
+        "1": "The turbines' speed depends on the wind, not on the substation.",
+        "2": "The substation changes voltage; it does not make gas."
+      }
+    }
+  ]
+}

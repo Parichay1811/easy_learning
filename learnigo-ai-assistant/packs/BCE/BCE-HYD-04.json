@@ -1,0 +1,811 @@
+{
+  "id": "BCE-HYD-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Rainfall–runoff and the flood hydrograph: lag time and peak flow",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-HYD — Hydraulics and water resources",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "hydrograph",
+    "lag time",
+    "peak discharge",
+    "base flow",
+    "rational method",
+    "urban runoff"
+  ],
+  "examples": [
+    "How do you read a flood hydrograph?",
+    "Why do cities flood faster than the countryside?",
+    "How does the rational method estimate peak flow?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (hours)",
+        "max": 24
+      },
+      "y": {
+        "label": "River flow (m³/s)",
+        "max": 80
+      },
+      "curves": [
+        {
+          "label": "Rural catchment",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              0,
+              5
+            ],
+            [
+              2,
+              5
+            ],
+            [
+              4,
+              15
+            ],
+            [
+              6,
+              40
+            ],
+            [
+              8,
+              60
+            ],
+            [
+              10,
+              45
+            ],
+            [
+              12,
+              30
+            ],
+            [
+              16,
+              15
+            ],
+            [
+              20,
+              8
+            ],
+            [
+              24,
+              6
+            ]
+          ],
+          "ask": "What is a hydrograph?"
+        },
+        {
+          "label": "Urban catchment",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              0,
+              5
+            ],
+            [
+              2,
+              8
+            ],
+            [
+              3,
+              40
+            ],
+            [
+              4,
+              75
+            ],
+            [
+              5,
+              55
+            ],
+            [
+              6,
+              35
+            ],
+            [
+              8,
+              18
+            ],
+            [
+              12,
+              9
+            ],
+            [
+              16,
+              6
+            ],
+            [
+              24,
+              5
+            ]
+          ],
+          "ask": "Why do urban areas flood faster?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 3,
+          "label": "Rain centre",
+          "ask": "What is lag time?"
+        },
+        {
+          "x": 8,
+          "label": "Rural peak 60 m³/s",
+          "ask": "What is lag time?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "After a storm, a river does not rise at once. The water takes hours to run off the land and gather in the channel. Plot river flow against time and you get a hydrograph, a hill-shaped curve flood engineers read like a heartbeat. On the board, a storm centred at three hours over a catchment, the land that drains to one river.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Rainfall–runoff and the flood hydrograph: lag time and peak flow"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (hours)",
+            "max": 24
+          },
+          "y": {
+            "label": "River flow (m³/s)",
+            "max": 80
+          },
+          "curves": [
+            {
+              "label": "Rural catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  4,
+                  15
+                ],
+                [
+                  6,
+                  40
+                ],
+                [
+                  8,
+                  60
+                ],
+                [
+                  10,
+                  45
+                ],
+                [
+                  12,
+                  30
+                ],
+                [
+                  16,
+                  15
+                ],
+                [
+                  20,
+                  8
+                ],
+                [
+                  24,
+                  6
+                ]
+              ],
+              "ask": "What is a hydrograph?"
+            },
+            {
+              "label": "Urban catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  8
+                ],
+                [
+                  3,
+                  40
+                ],
+                [
+                  4,
+                  75
+                ],
+                [
+                  5,
+                  55
+                ],
+                [
+                  6,
+                  35
+                ],
+                [
+                  8,
+                  18
+                ],
+                [
+                  12,
+                  9
+                ],
+                [
+                  16,
+                  6
+                ],
+                [
+                  24,
+                  5
+                ]
+              ],
+              "ask": "Why do urban areas flood faster?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "Rain centre",
+              "ask": "What is lag time?"
+            },
+            {
+              "x": 8,
+              "label": "Rural peak 60 m³/s",
+              "ask": "What is lag time?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Read the first curve. Flow starts at about five cubic metres per second, the base flow fed by groundwater. Then the rising limb climbs to a peak of sixty at eight hours, and the falling limb drains away slowly. The gap between the centre of the rain and the peak, five hours here, is the lag time. Why might the falling limb take so long?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (hours)",
+            "max": 24
+          },
+          "y": {
+            "label": "River flow (m³/s)",
+            "max": 80
+          },
+          "curves": [
+            {
+              "label": "Rural catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  4,
+                  15
+                ],
+                [
+                  6,
+                  40
+                ],
+                [
+                  8,
+                  60
+                ],
+                [
+                  10,
+                  45
+                ],
+                [
+                  12,
+                  30
+                ],
+                [
+                  16,
+                  15
+                ],
+                [
+                  20,
+                  8
+                ],
+                [
+                  24,
+                  6
+                ]
+              ],
+              "ask": "What is a hydrograph?"
+            },
+            {
+              "label": "Urban catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  8
+                ],
+                [
+                  3,
+                  40
+                ],
+                [
+                  4,
+                  75
+                ],
+                [
+                  5,
+                  55
+                ],
+                [
+                  6,
+                  35
+                ],
+                [
+                  8,
+                  18
+                ],
+                [
+                  12,
+                  9
+                ],
+                [
+                  16,
+                  6
+                ],
+                [
+                  24,
+                  5
+                ]
+              ],
+              "ask": "Why do urban areas flood faster?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "Rain centre",
+              "ask": "What is lag time?"
+            },
+            {
+              "x": 8,
+              "label": "Rural peak 60 m³/s",
+              "ask": "What is lag time?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Lag time = 8 h − 3 h = 5 h"
+        }
+      ]
+    },
+    {
+      "say": "Because rain takes many paths. Leaves catch some, some soaks into the soil, and the rest runs over the surface. Water soaking down through soil and rock reaches the river slowly, which stretches out the falling limb. The more water soaks in, the lower and later the peak.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Rainfall",
+              "icon": "rain"
+            },
+            {
+              "label": "Leaves catch some",
+              "icon": "tree"
+            },
+            {
+              "label": "Soaks into soil",
+              "icon": "soil",
+              "ask": "What is base flow?"
+            },
+            {
+              "label": "Runs over surface",
+              "icon": "wave"
+            },
+            {
+              "label": "Reaches the river",
+              "icon": "river"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Now pave the catchment with roofs and roads. Water cannot soak in, and drains rush it away. See the second curve: the peak leaps to seventy five cubic metres per second and arrives at four hours, just one hour after the rain centre. That is why cities like Chennai and Houston flood so fast in heavy storms.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (hours)",
+            "max": 24
+          },
+          "y": {
+            "label": "River flow (m³/s)",
+            "max": 80
+          },
+          "curves": [
+            {
+              "label": "Rural catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  4,
+                  15
+                ],
+                [
+                  6,
+                  40
+                ],
+                [
+                  8,
+                  60
+                ],
+                [
+                  10,
+                  45
+                ],
+                [
+                  12,
+                  30
+                ],
+                [
+                  16,
+                  15
+                ],
+                [
+                  20,
+                  8
+                ],
+                [
+                  24,
+                  6
+                ]
+              ],
+              "ask": "What is a hydrograph?"
+            },
+            {
+              "label": "Urban catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  8
+                ],
+                [
+                  3,
+                  40
+                ],
+                [
+                  4,
+                  75
+                ],
+                [
+                  5,
+                  55
+                ],
+                [
+                  6,
+                  35
+                ],
+                [
+                  8,
+                  18
+                ],
+                [
+                  12,
+                  9
+                ],
+                [
+                  16,
+                  6
+                ],
+                [
+                  24,
+                  5
+                ]
+              ],
+              "ask": "Why do urban areas flood faster?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "Rain centre",
+              "ask": "What is lag time?"
+            },
+            {
+              "x": 8,
+              "label": "Rural peak 60 m³/s",
+              "ask": "What is lag time?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Urban peak: higher (75 vs 60 m³/s) and earlier (4 h vs 8 h)."
+        }
+      ]
+    },
+    {
+      "say": "For small catchments engineers estimate the peak with the rational method: Q equals C i A over three point six, where C is the share of rain that runs off, i the intensity in millimetres per hour, and A the area in square kilometres. Sixty percent runoff, fifty millimetres an hour on two square kilometres, gives about sixteen point seven. Brilliant! What C would a car park have?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (hours)",
+            "max": 24
+          },
+          "y": {
+            "label": "River flow (m³/s)",
+            "max": 80
+          },
+          "curves": [
+            {
+              "label": "Rural catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  5
+                ],
+                [
+                  4,
+                  15
+                ],
+                [
+                  6,
+                  40
+                ],
+                [
+                  8,
+                  60
+                ],
+                [
+                  10,
+                  45
+                ],
+                [
+                  12,
+                  30
+                ],
+                [
+                  16,
+                  15
+                ],
+                [
+                  20,
+                  8
+                ],
+                [
+                  24,
+                  6
+                ]
+              ],
+              "ask": "What is a hydrograph?"
+            },
+            {
+              "label": "Urban catchment",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  5
+                ],
+                [
+                  2,
+                  8
+                ],
+                [
+                  3,
+                  40
+                ],
+                [
+                  4,
+                  75
+                ],
+                [
+                  5,
+                  55
+                ],
+                [
+                  6,
+                  35
+                ],
+                [
+                  8,
+                  18
+                ],
+                [
+                  12,
+                  9
+                ],
+                [
+                  16,
+                  6
+                ],
+                [
+                  24,
+                  5
+                ]
+              ],
+              "ask": "Why do urban areas flood faster?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 3,
+              "label": "Rain centre",
+              "ask": "What is lag time?"
+            },
+            {
+              "x": 8,
+              "label": "Rural peak 60 m³/s",
+              "ask": "What is lag time?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Q = C i A / 3.6 = 0.6 × 50 × 2 / 3.6 ≈ 16.7 m³/s"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a hydrograph?",
+      "a": "A hydrograph is a graph of river discharge against time at one point. A storm hydrograph shows the rising limb, the peak, the falling limb and the base flow.",
+      "asks": [
+        "Define hydrograph",
+        "How do you read a storm hydrograph?"
+      ]
+    },
+    {
+      "q": "What is lag time?",
+      "a": "Lag time is the time between the centre of the rainfall and the peak discharge. Here the rain centre is at 3 hours and the peak at 8, so the lag is 5 hours.",
+      "asks": [
+        "Define lag time"
+      ]
+    },
+    {
+      "q": "What is base flow?",
+      "a": "Base flow is the steady part of river flow fed by groundwater seeping into the channel, which continues between storms.",
+      "asks": [
+        "What keeps rivers flowing without rain?"
+      ]
+    },
+    {
+      "q": "Why do urban areas flood faster?",
+      "a": "Roofs, roads and drains stop water soaking in and carry it quickly to rivers, so the hydrograph peak is higher and comes much sooner.",
+      "asks": [
+        "Effect of urbanisation on hydrograph"
+      ]
+    },
+    {
+      "q": "What is the rational method?",
+      "a": "A simple formula for peak runoff from small catchments: Q equals C i A over 3.6, with C the runoff coefficient, i the rain intensity in millimetres per hour and A the area in square kilometres, giving Q in cubic metres per second.",
+      "asks": [
+        "Q = CiA",
+        "Runoff coefficient"
+      ]
+    }
+  ],
+  "facts": [
+    "In the rational method Q = CiA/3.6, with i in mm/h and A in km², the peak flow Q comes out in m³/s.",
+    "L. K. Sherman introduced the unit hydrograph method in 1932."
+  ],
+  "quiz": [
+    {
+      "say": "A car park catchment has C of 0.9, rain intensity of 40 millimetres per hour and an area of 0.5 square kilometres. What is the peak flow from the rational method?",
+      "show": "C = 0.9, i = 40 mm/h, A = 0.5 km². Peak flow from Q = CiA/3.6?",
+      "options": [
+        {
+          "show": "5 m³/s",
+          "say": "5 cubic metres per second"
+        },
+        {
+          "show": "18 m³/s",
+          "say": "18 cubic metres per second"
+        },
+        {
+          "show": "0.5 m³/s",
+          "say": "0.5 cubic metres per second"
+        }
+      ],
+      "answer": 0,
+      "why": "0.9 × 40 × 0.5 = 18, and 18 ÷ 3.6 = 5 cubic metres per second.",
+      "wrong": {
+        "1": "That forgets to divide by 3.6.",
+        "2": "That slips a factor of ten."
+      }
+    },
+    {
+      "say": "Replacing fields with roads and roofs makes the hydrograph peak…",
+      "show": "Replacing fields with roads and roofs makes the hydrograph peak…",
+      "options": [
+        {
+          "show": "Lower and later",
+          "say": "Lower and later"
+        },
+        {
+          "show": "Higher and earlier",
+          "say": "Higher and earlier"
+        },
+        {
+          "show": "Unchanged",
+          "say": "Unchanged"
+        }
+      ],
+      "answer": 1,
+      "why": "Less infiltration and fast drains send water to the river sooner and all at once.",
+      "wrong": {
+        "0": "That is the effect of forests and soaking soils.",
+        "2": "Paving changes runoff a lot."
+      }
+    }
+  ]
+}

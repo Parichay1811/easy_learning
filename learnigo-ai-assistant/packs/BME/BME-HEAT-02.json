@@ -1,0 +1,449 @@
+{
+  "id": "BME-HEAT-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Convection and Newton's law of cooling: heat carried away by moving fluid",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-HEAT — Heat transfer",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "convection",
+    "Newton's law of cooling",
+    "heat transfer coefficient",
+    "forced convection",
+    "natural convection"
+  ],
+  "examples": [
+    "What is Newton's law of cooling?",
+    "What is the convective heat transfer coefficient?",
+    "Why does a fan cool things faster?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "chip",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.8,
+          "label": "Hot chip 60 °C",
+          "ask": "How does a heat sink get rid of heat?"
+        },
+        {
+          "id": "sink",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.5,
+          "size": 1.4,
+          "label": "Heat sink 0.05 m²"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.5,
+          "y": 0.18,
+          "label": "Fan",
+          "ask": "Why does a fan cool things faster?"
+        },
+        {
+          "id": "air",
+          "kind": "pipe",
+          "x": 0.85,
+          "y": 0.35,
+          "label": "Air out",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "chip",
+          "to": "sink",
+          "kind": "heat",
+          "label": "Conduction"
+        },
+        {
+          "from": "sink",
+          "to": "air",
+          "kind": "heat",
+          "label": "Convection 100 W"
+        },
+        {
+          "from": "fan",
+          "to": "sink",
+          "kind": "fluid",
+          "label": "Air 20 °C"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Blow on hot soup and it cools faster. Your breath carries the heat away. Heat moving with a flowing fluid is convection. Look at a computer chip: it passes heat into a finned heat sink, and a fan blows air across the fins to carry it off.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Convection and Newton's law of cooling: heat carried away by moving fluid"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "chip",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.8,
+              "label": "Hot chip 60 °C",
+              "ask": "How does a heat sink get rid of heat?"
+            },
+            {
+              "id": "sink",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Heat sink 0.05 m²"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.5,
+              "y": 0.18,
+              "label": "Fan",
+              "ask": "Why does a fan cool things faster?"
+            },
+            {
+              "id": "air",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.35,
+              "label": "Air out",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "chip",
+              "to": "sink",
+              "kind": "heat",
+              "label": "Conduction"
+            },
+            {
+              "from": "sink",
+              "to": "air",
+              "kind": "heat",
+              "label": "Convection 100 W"
+            },
+            {
+              "from": "fan",
+              "to": "sink",
+              "kind": "fluid",
+              "label": "Air 20 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Convection = conduction into a fluid + the fluid moving away"
+        }
+      ]
+    },
+    {
+      "say": "Newton's law of cooling says the heat flow Q equals h times A times the difference between the surface and the fluid temperature. Here h is the heat transfer coefficient, how good the flow is at carrying heat. With fan air, h is about 50. The sink has 0.05 square metres at 40 degrees above the air: Q is 100 watts.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "chip",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.8,
+              "label": "Hot chip 60 °C",
+              "ask": "How does a heat sink get rid of heat?"
+            },
+            {
+              "id": "sink",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Heat sink 0.05 m²"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.5,
+              "y": 0.18,
+              "label": "Fan",
+              "ask": "Why does a fan cool things faster?"
+            },
+            {
+              "id": "air",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.35,
+              "label": "Air out",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "chip",
+              "to": "sink",
+              "kind": "heat",
+              "label": "Conduction"
+            },
+            {
+              "from": "sink",
+              "to": "air",
+              "kind": "heat",
+              "label": "Convection 100 W"
+            },
+            {
+              "from": "fan",
+              "to": "sink",
+              "kind": "fluid",
+              "label": "Air 20 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Q = hAΔT = 50 × 0.05 × 40 = 100 W"
+        }
+      ]
+    },
+    {
+      "say": "Natural convection is when warm air simply rises by itself. Forced convection is when a fan or pump drives the flow. See the bars? Still air gives h around 10, a fan about 100, pumped water thousands, boiling water tens of thousands. So switch the fan off and what happens to the chip?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "W/m²·K",
+          "items": [
+            {
+              "label": "Still air",
+              "size": 10,
+              "icon": "wind"
+            },
+            {
+              "label": "Fan-blown air",
+              "size": 100,
+              "icon": "fan"
+            },
+            {
+              "label": "Pumped water",
+              "size": 3000,
+              "icon": "drop"
+            },
+            {
+              "label": "Boiling water",
+              "size": 20000,
+              "icon": "steam"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Typical h values; real ones vary a lot with speed and shape"
+        }
+      ]
+    },
+    {
+      "say": "It heats up until the bigger temperature difference pushes the same 100 watts out. Now the graph: a coffee cooling in a room. The rate of cooling is proportional to how much hotter it is than the room, so it falls fast at first, then slowly. It starts at 90 degrees and reaches about 46 after 15 minutes.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (min)",
+            "max": 60
+          },
+          "y": {
+            "label": "Coffee temp (°C)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "Cup of coffee",
+              "type": "decay",
+              "c": 20,
+              "a": 70,
+              "k": 15,
+              "ask": "What does Newton's cooling curve look like?"
+            },
+            {
+              "label": "Room 20 °C",
+              "type": "line",
+              "c": 20,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 15,
+              "label": "15 min: 46 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "T = 20 + 70 e^(−t/15) → 45.8 °C at t = 15 min"
+        }
+      ]
+    },
+    {
+      "say": "Well done! Real link: car radiators, air coolers and your skin all rely on convection. Exam tip: h is not a property of the material; it depends on the fluid, the speed and the shape. Challenge: why does wind make a cold day feel colder?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (min)",
+            "max": 60
+          },
+          "y": {
+            "label": "Coffee temp (°C)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "Cup of coffee",
+              "type": "decay",
+              "c": 20,
+              "a": 70,
+              "k": 15,
+              "ask": "What does Newton's cooling curve look like?"
+            },
+            {
+              "label": "Room 20 °C",
+              "type": "line",
+              "c": 20,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 15,
+              "label": "15 min: 46 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Wind chill: higher h strips heat from your skin faster"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a heat sink get rid of heat?",
+      "a": "Heat conducts from the chip into the metal sink and spreads into its fins. Air flowing over the fins then carries it away by convection.",
+      "asks": [
+        "how does a CPU cooler work"
+      ]
+    },
+    {
+      "q": "Why does a fan cool things faster?",
+      "a": "Moving air sweeps warm air away from the surface and thins the slow boundary layer, which raises the heat transfer coefficient h.",
+      "asks": [
+        "forced convection vs natural convection"
+      ]
+    },
+    {
+      "q": "What does Newton's cooling curve look like?",
+      "a": "The temperature falls exponentially towards the surroundings: fast at first when the difference is big, then slower and slower.",
+      "asks": [
+        "cooling curve shape"
+      ]
+    },
+    {
+      "q": "What is Newton's law of cooling?",
+      "a": "The convective heat flow equals h times area times the temperature difference between the surface and the fluid far away.",
+      "asks": [
+        "Newton law of cooling formula"
+      ]
+    },
+    {
+      "q": "What is the convective heat transfer coefficient?",
+      "a": "h, in watts per square metre kelvin, measures how well a fluid flow carries heat from a surface. It depends on the fluid, its speed and the geometry.",
+      "asks": [
+        "what is h in convection",
+        "typical h values"
+      ]
+    }
+  ],
+  "facts": [
+    "Natural convection in air gives h of about 2 to 25 W/m²·K; forced air about 25 to 250.",
+    "Boiling and condensation give some of the highest heat transfer coefficients of all."
+  ],
+  "quiz": [
+    {
+      "say": "A pipe surface of 2 square metres at 70 degrees sits in air at 20 degrees with h equal to 8. What is the convective heat loss?",
+      "show": "A = 2 m², surface 70 °C, air 20 °C, h = 8 W/m²·K. Heat loss?",
+      "options": [
+        {
+          "show": "800 W",
+          "say": "800 watts"
+        },
+        {
+          "show": "400 W",
+          "say": "400 watts"
+        },
+        {
+          "show": "1120 W",
+          "say": "1120 watts"
+        }
+      ],
+      "answer": 0,
+      "why": "Q = hAΔT = 8 × 2 × 50 = 800 W.",
+      "wrong": {
+        "1": "That forgets to multiply by the 2 m² area.",
+        "2": "That uses the surface temperature, 70, instead of the difference, 50."
+      }
+    },
+    {
+      "say": "Which change would raise the heat transfer coefficient h the most?",
+      "show": "Which change raises h the most?",
+      "options": [
+        {
+          "show": "Switching from still air to pumped water",
+          "say": "Switching from still air to pumped water"
+        },
+        {
+          "show": "Painting the surface black",
+          "say": "Painting the surface black"
+        },
+        {
+          "show": "Making the wall thicker",
+          "say": "Making the wall thicker"
+        }
+      ],
+      "answer": 0,
+      "why": "Pumped water has a far higher h than still air, often hundreds of times higher.",
+      "wrong": {
+        "1": "Colour affects radiation, not convection.",
+        "2": "Thickness affects conduction, not the convection coefficient."
+      }
+    }
+  ]
+}

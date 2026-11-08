@@ -1,0 +1,646 @@
+{
+  "id": "HOWN-HEAT-14",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How wildfires spread so fast",
+  "area": "How Nature Works",
+  "group": "HOWN — How and Why in Nature",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "wildfire",
+    "forest fire spread",
+    "embers",
+    "firebreak",
+    "wind and slope"
+  ],
+  "examples": [
+    "How do wildfires spread?",
+    "Why do fires race uphill?",
+    "What is a firebreak?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "fire",
+          "label": "Fire front",
+          "icon": "fire",
+          "x": 0.45,
+          "y": 0.55
+        },
+        {
+          "id": "wind",
+          "label": "Wind",
+          "icon": "wind",
+          "x": 0.1,
+          "y": 0.4,
+          "ask": "How does wind make a wildfire spread?"
+        },
+        {
+          "id": "fuel",
+          "label": "Dry grass ahead",
+          "icon": "grass",
+          "x": 0.78,
+          "y": 0.8
+        },
+        {
+          "id": "trees",
+          "label": "Trees uphill",
+          "icon": "tree",
+          "x": 0.82,
+          "y": 0.38,
+          "ask": "Why do fires race uphill?"
+        },
+        {
+          "id": "embers",
+          "label": "Flying embers",
+          "icon": "smoke",
+          "x": 0.45,
+          "y": 0.12,
+          "ask": "What are embers and spot fires?"
+        },
+        {
+          "id": "spot",
+          "label": "New spot fire",
+          "icon": "fire",
+          "x": 0.82,
+          "y": 0.08
+        },
+        {
+          "id": "break",
+          "label": "Firebreak",
+          "icon": "soil",
+          "x": 0.12,
+          "y": 0.85,
+          "ask": "What is a firebreak?"
+        }
+      ],
+      "links": [
+        {
+          "from": "wind",
+          "to": "fire",
+          "kind": "fluid",
+          "label": "oxygen and push"
+        },
+        {
+          "from": "fire",
+          "to": "fuel",
+          "kind": "heat",
+          "label": "dries and heats"
+        },
+        {
+          "from": "fire",
+          "to": "trees",
+          "kind": "heat",
+          "label": "rising heat"
+        },
+        {
+          "from": "fire",
+          "to": "embers",
+          "kind": "heat",
+          "label": "lofts"
+        },
+        {
+          "from": "wind",
+          "to": "embers",
+          "kind": "force",
+          "label": "carries"
+        },
+        {
+          "from": "embers",
+          "to": "spot",
+          "kind": "heat",
+          "label": "land and ignite"
+        },
+        {
+          "from": "break",
+          "to": "fire",
+          "kind": "force",
+          "label": "nothing to burn"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A wildfire spreads because its heat dries out and warms the plants just ahead of it until they reach their ignition temperature and catch fire too. Dry, hot weather makes this much easier.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How wildfires spread so fast"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "fire",
+              "label": "Fire front",
+              "icon": "fire",
+              "x": 0.45,
+              "y": 0.55
+            },
+            {
+              "id": "wind",
+              "label": "Wind",
+              "icon": "wind",
+              "x": 0.1,
+              "y": 0.4,
+              "ask": "How does wind make a wildfire spread?"
+            },
+            {
+              "id": "fuel",
+              "label": "Dry grass ahead",
+              "icon": "grass",
+              "x": 0.78,
+              "y": 0.8
+            },
+            {
+              "id": "trees",
+              "label": "Trees uphill",
+              "icon": "tree",
+              "x": 0.82,
+              "y": 0.38,
+              "ask": "Why do fires race uphill?"
+            },
+            {
+              "id": "embers",
+              "label": "Flying embers",
+              "icon": "smoke",
+              "x": 0.45,
+              "y": 0.12,
+              "ask": "What are embers and spot fires?"
+            },
+            {
+              "id": "spot",
+              "label": "New spot fire",
+              "icon": "fire",
+              "x": 0.82,
+              "y": 0.08
+            },
+            {
+              "id": "break",
+              "label": "Firebreak",
+              "icon": "soil",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What is a firebreak?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "fire",
+              "kind": "fluid",
+              "label": "oxygen and push"
+            },
+            {
+              "from": "fire",
+              "to": "fuel",
+              "kind": "heat",
+              "label": "dries and heats"
+            },
+            {
+              "from": "fire",
+              "to": "trees",
+              "kind": "heat",
+              "label": "rising heat"
+            },
+            {
+              "from": "fire",
+              "to": "embers",
+              "kind": "heat",
+              "label": "lofts"
+            },
+            {
+              "from": "wind",
+              "to": "embers",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "embers",
+              "to": "spot",
+              "kind": "heat",
+              "label": "land and ignite"
+            },
+            {
+              "from": "break",
+              "to": "fire",
+              "kind": "force",
+              "label": "nothing to burn"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Wind feeds the fire with oxygen and tilts the flames forward, so they touch and preheat new fuel. Strong winds can make a fire race across grassland.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "fire",
+              "label": "Fire front",
+              "icon": "fire",
+              "x": 0.45,
+              "y": 0.55
+            },
+            {
+              "id": "wind",
+              "label": "Wind",
+              "icon": "wind",
+              "x": 0.1,
+              "y": 0.4,
+              "ask": "How does wind make a wildfire spread?"
+            },
+            {
+              "id": "fuel",
+              "label": "Dry grass ahead",
+              "icon": "grass",
+              "x": 0.78,
+              "y": 0.8
+            },
+            {
+              "id": "trees",
+              "label": "Trees uphill",
+              "icon": "tree",
+              "x": 0.82,
+              "y": 0.38,
+              "ask": "Why do fires race uphill?"
+            },
+            {
+              "id": "embers",
+              "label": "Flying embers",
+              "icon": "smoke",
+              "x": 0.45,
+              "y": 0.12,
+              "ask": "What are embers and spot fires?"
+            },
+            {
+              "id": "spot",
+              "label": "New spot fire",
+              "icon": "fire",
+              "x": 0.82,
+              "y": 0.08
+            },
+            {
+              "id": "break",
+              "label": "Firebreak",
+              "icon": "soil",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What is a firebreak?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "fire",
+              "kind": "fluid",
+              "label": "oxygen and push"
+            },
+            {
+              "from": "fire",
+              "to": "fuel",
+              "kind": "heat",
+              "label": "dries and heats"
+            },
+            {
+              "from": "fire",
+              "to": "trees",
+              "kind": "heat",
+              "label": "rising heat"
+            },
+            {
+              "from": "fire",
+              "to": "embers",
+              "kind": "heat",
+              "label": "lofts"
+            },
+            {
+              "from": "wind",
+              "to": "embers",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "embers",
+              "to": "spot",
+              "kind": "heat",
+              "label": "land and ignite"
+            },
+            {
+              "from": "break",
+              "to": "fire",
+              "kind": "force",
+              "label": "nothing to burn"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Fires also run uphill quickly, because heat rises and the flames lean towards the slope, drying the trees above. Burning embers can be blown far ahead to start new spot fires.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "fire",
+              "label": "Fire front",
+              "icon": "fire",
+              "x": 0.45,
+              "y": 0.55
+            },
+            {
+              "id": "wind",
+              "label": "Wind",
+              "icon": "wind",
+              "x": 0.1,
+              "y": 0.4,
+              "ask": "How does wind make a wildfire spread?"
+            },
+            {
+              "id": "fuel",
+              "label": "Dry grass ahead",
+              "icon": "grass",
+              "x": 0.78,
+              "y": 0.8
+            },
+            {
+              "id": "trees",
+              "label": "Trees uphill",
+              "icon": "tree",
+              "x": 0.82,
+              "y": 0.38,
+              "ask": "Why do fires race uphill?"
+            },
+            {
+              "id": "embers",
+              "label": "Flying embers",
+              "icon": "smoke",
+              "x": 0.45,
+              "y": 0.12,
+              "ask": "What are embers and spot fires?"
+            },
+            {
+              "id": "spot",
+              "label": "New spot fire",
+              "icon": "fire",
+              "x": 0.82,
+              "y": 0.08
+            },
+            {
+              "id": "break",
+              "label": "Firebreak",
+              "icon": "soil",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What is a firebreak?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "fire",
+              "kind": "fluid",
+              "label": "oxygen and push"
+            },
+            {
+              "from": "fire",
+              "to": "fuel",
+              "kind": "heat",
+              "label": "dries and heats"
+            },
+            {
+              "from": "fire",
+              "to": "trees",
+              "kind": "heat",
+              "label": "rising heat"
+            },
+            {
+              "from": "fire",
+              "to": "embers",
+              "kind": "heat",
+              "label": "lofts"
+            },
+            {
+              "from": "wind",
+              "to": "embers",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "embers",
+              "to": "spot",
+              "kind": "heat",
+              "label": "land and ignite"
+            },
+            {
+              "from": "break",
+              "to": "fire",
+              "kind": "force",
+              "label": "nothing to burn"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Firefighters fight back by removing fuel. A firebreak is a strip cleared of plants, so when the fire reaches it there is nothing left to burn.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "fire",
+              "label": "Fire front",
+              "icon": "fire",
+              "x": 0.45,
+              "y": 0.55
+            },
+            {
+              "id": "wind",
+              "label": "Wind",
+              "icon": "wind",
+              "x": 0.1,
+              "y": 0.4,
+              "ask": "How does wind make a wildfire spread?"
+            },
+            {
+              "id": "fuel",
+              "label": "Dry grass ahead",
+              "icon": "grass",
+              "x": 0.78,
+              "y": 0.8
+            },
+            {
+              "id": "trees",
+              "label": "Trees uphill",
+              "icon": "tree",
+              "x": 0.82,
+              "y": 0.38,
+              "ask": "Why do fires race uphill?"
+            },
+            {
+              "id": "embers",
+              "label": "Flying embers",
+              "icon": "smoke",
+              "x": 0.45,
+              "y": 0.12,
+              "ask": "What are embers and spot fires?"
+            },
+            {
+              "id": "spot",
+              "label": "New spot fire",
+              "icon": "fire",
+              "x": 0.82,
+              "y": 0.08
+            },
+            {
+              "id": "break",
+              "label": "Firebreak",
+              "icon": "soil",
+              "x": 0.12,
+              "y": 0.85,
+              "ask": "What is a firebreak?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wind",
+              "to": "fire",
+              "kind": "fluid",
+              "label": "oxygen and push"
+            },
+            {
+              "from": "fire",
+              "to": "fuel",
+              "kind": "heat",
+              "label": "dries and heats"
+            },
+            {
+              "from": "fire",
+              "to": "trees",
+              "kind": "heat",
+              "label": "rising heat"
+            },
+            {
+              "from": "fire",
+              "to": "embers",
+              "kind": "heat",
+              "label": "lofts"
+            },
+            {
+              "from": "wind",
+              "to": "embers",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "embers",
+              "to": "spot",
+              "kind": "heat",
+              "label": "land and ignite"
+            },
+            {
+              "from": "break",
+              "to": "fire",
+              "kind": "force",
+              "label": "nothing to burn"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does wind make a wildfire spread?",
+      "a": "Wind brings fresh oxygen, pushes the flames forward onto unburnt plants, and carries hot embers ahead. Fires can move many times faster in strong wind.",
+      "asks": [
+        "Why is wind dangerous in a fire?"
+      ]
+    },
+    {
+      "q": "Why do fires race uphill?",
+      "a": "Heat rises, and on a slope the flames lean towards the plants above, drying and heating them before the fire arrives. Firefighters say spread speed roughly doubles with every 10 degrees of slope.",
+      "asks": [
+        "Do fires spread faster up hills?"
+      ]
+    },
+    {
+      "q": "What are embers and spot fires?",
+      "a": "Embers are burning bits of bark, leaves and twigs lifted by the fire's hot air. Wind can carry them a kilometre or more ahead, where they land and start new fires called spot fires.",
+      "asks": [
+        "How do fires jump over roads?"
+      ]
+    },
+    {
+      "q": "What is a firebreak?",
+      "a": "A firebreak is a strip of ground cleared of plants, or a road or river, that a fire cannot cross easily because there is no fuel. Firefighters also burn strips on purpose ahead of a fire.",
+      "asks": [
+        "How do you stop a wildfire?"
+      ]
+    },
+    {
+      "q": "Why are wildfires worse in hot, dry weather?",
+      "a": "Heat and drought dry out grass, leaves and wood, so they need less heat to catch fire. Dry fuel lights quickly and burns fiercely.",
+      "asks": [
+        "Why do droughts cause wildfires?"
+      ]
+    }
+  ],
+  "facts": [
+    "Embers carried by strong winds can start new spot fires a kilometre or more ahead of the main fire.",
+    "A common firefighting rule of thumb says a fire's speed roughly doubles for every 10 degrees of upward slope."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a wildfire usually spread faster uphill?",
+      "show": "Why does a wildfire usually spread faster uphill?",
+      "options": [
+        {
+          "show": "There is more oxygen higher up",
+          "say": "There is more oxygen higher up"
+        },
+        {
+          "show": "Trees on hills are taller",
+          "say": "Trees on hills are taller"
+        },
+        {
+          "show": "Rising heat and leaning flames preheat the fuel above",
+          "say": "Rising heat and leaning flames preheat the fuel above"
+        }
+      ],
+      "answer": 2,
+      "why": "Heat rises and flames tilt towards the slope, drying and warming the plants above before the fire reaches them.",
+      "wrong": {
+        "0": "Air on a hillside has about the same oxygen; it is the preheating that matters.",
+        "1": "Tree height is not the reason; the slope brings fuel closer to the flames."
+      }
+    }
+  ]
+}

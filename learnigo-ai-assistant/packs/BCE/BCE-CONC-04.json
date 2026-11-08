@@ -1,0 +1,326 @@
+{
+  "id": "BCE-CONC-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Reinforced concrete columns: squash load, ties and buckling",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONC — Concrete and steel design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "reinforced concrete column",
+    "axial load capacity",
+    "lateral ties",
+    "slenderness ratio",
+    "buckling"
+  ],
+  "examples": [
+    "How do you calculate the capacity of a concrete column?",
+    "What is the difference between a short and a slender column?",
+    "Why do columns need ties?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "tower",
+      "objectAsk": "How do you calculate the load capacity of a concrete column?",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Floors above 2000 kN",
+          "dir": "down",
+          "size": 5,
+          "ask": "How do you calculate the load capacity of a concrete column?"
+        },
+        {
+          "label": "Footing pushes up",
+          "dir": "up",
+          "size": 5
+        },
+        {
+          "label": "Wind sway",
+          "dir": "right",
+          "size": 1,
+          "ask": "What is buckling?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every floor of a tower in Dubai or Shanghai rests on its columns, and the bottom ones carry the whole building. A column is a member squeezed along its length. On the board, the floors above press down two thousand kilonewtons and the footing pushes back. How do we make sure it will not crush?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Reinforced concrete columns: squash load, ties and buckling"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "tower",
+          "objectAsk": "How do you calculate the load capacity of a concrete column?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Floors above 2000 kN",
+              "dir": "down",
+              "size": 5,
+              "ask": "How do you calculate the load capacity of a concrete column?"
+            },
+            {
+              "label": "Footing pushes up",
+              "dir": "up",
+              "size": 5
+            },
+            {
+              "label": "Wind sway",
+              "dir": "right",
+              "size": 1,
+              "ask": "What is buckling?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Two materials share the squeeze. In India's code IS 456, a short column's design capacity is zero point four times concrete strength times concrete area, plus zero point six seven times steel strength times steel area. For a four hundred millimetre square column, M25 concrete and one percent steel, that is about two thousand one hundred and twenty kilonewtons.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "tower",
+          "objectAsk": "How do you calculate the load capacity of a concrete column?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Floors above 2000 kN",
+              "dir": "down",
+              "size": 5,
+              "ask": "How do you calculate the load capacity of a concrete column?"
+            },
+            {
+              "label": "Footing pushes up",
+              "dir": "up",
+              "size": 5
+            },
+            {
+              "label": "Wind sway",
+              "dir": "right",
+              "size": 1,
+              "ask": "What is buckling?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P_u = 0.4 f_ck A_c + 0.67 f_y A_sc"
+        },
+        {
+          "op": "note",
+          "text": "0.4×25×158400 + 0.67×500×1600 N = 1584 + 536 = 2120 kN"
+        }
+      ]
+    },
+    {
+      "say": "Two thousand one hundred and twenty beats two thousand, so it passes. Now look inside, from the outside in: forty millimetres of cover, then ties, small steel loops wrapped around, then the main vertical bars, then the concrete core. The ties stop the main bars bowing outward and bursting the cover under the squeeze.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-layers",
+          "radial": true,
+          "layers": [
+            {
+              "label": "Cover 40 mm",
+              "note": "Shields the steel from fire and rust"
+            },
+            {
+              "label": "Ties (links)",
+              "note": "Loops that hold the main bars in",
+              "color": "#e67e22",
+              "ask": "What are ties in a column for?"
+            },
+            {
+              "label": "Main bars",
+              "note": "Vertical steel sharing the squeeze",
+              "color": "#c0392b",
+              "ask": "Why do columns need minimum steel?"
+            },
+            {
+              "label": "Concrete core",
+              "note": "Carries most of the load"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "One more danger: buckling. Press a plastic ruler end to end and it bows out sideways long before it crushes. Columns do the same when they are slender. In IS 456 a column counts as short when its effective length is less than twelve times its width; beyond that, extra bending moments must be added in design.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Short column",
+            "icon": "tower",
+            "ask": "What is the difference between a short and a slender column?",
+            "points": [
+              "Fails by crushing",
+              "Effective length < 12 × width",
+              "Full squash load"
+            ]
+          },
+          "right": {
+            "title": "Slender column",
+            "icon": "ruler",
+            "ask": "What is buckling?",
+            "points": [
+              "Fails by bowing sideways",
+              "Extra moment from deflection",
+              "Capacity drops a lot"
+            ]
+          },
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Short if L_e / D < 12 (IS 456)"
+        }
+      ]
+    },
+    {
+      "say": "So a column is safe when it is strong enough not to crush and stocky or braced enough not to buckle. Earthquake tip: closely spaced ties near each floor keep columns whole while a building shakes. Wonderful! Challenge: a column four metres high and three hundred millimetres wide, with effective length equal to its height. Short or slender?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "tower",
+          "objectAsk": "How do you calculate the load capacity of a concrete column?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Floors above 2000 kN",
+              "dir": "down",
+              "size": 5,
+              "ask": "How do you calculate the load capacity of a concrete column?"
+            },
+            {
+              "label": "Footing pushes up",
+              "dir": "up",
+              "size": 5
+            },
+            {
+              "label": "Wind sway",
+              "dir": "right",
+              "size": 1,
+              "ask": "What is buckling?"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you calculate the load capacity of a concrete column?",
+      "a": "For a short column, add the concrete share and the steel share. IS 456 uses 0.4 f_ck times the concrete area plus 0.67 f_y times the steel area, giving about 2120 kilonewtons for a 400 millimetre square M25 column with 1 percent steel.",
+      "asks": [
+        "Axial capacity of a column",
+        "Column design formula"
+      ]
+    },
+    {
+      "q": "What are ties in a column for?",
+      "a": "Ties, or links, are steel loops around the main bars. They stop the bars buckling outward, confine the concrete and help the column survive earthquakes.",
+      "asks": [
+        "Why do columns have links?"
+      ]
+    },
+    {
+      "q": "What is the difference between a short and a slender column?",
+      "a": "A short column fails by crushing at its full squash load. A slender one bends sideways first, so it carries less; IS 456 calls a column short when its effective length is under 12 times its width.",
+      "asks": [
+        "Short vs long column"
+      ]
+    },
+    {
+      "q": "What is buckling?",
+      "a": "Buckling is a sudden sideways bowing of a slender member under compression, long before the material itself crushes. Euler showed the buckling load falls with the square of the length.",
+      "asks": [
+        "Why do thin columns bend?"
+      ]
+    },
+    {
+      "q": "Why do columns need minimum steel?",
+      "a": "A minimum amount of steel resists unexpected bending, creep and shrinkage, and makes failure less sudden. IS 456 asks for at least 0.8 percent of the gross area.",
+      "asks": [
+        "Minimum reinforcement in columns"
+      ]
+    }
+  ],
+  "facts": [
+    "IS 456 requires column longitudinal steel of at least 0.8 percent of the gross area and at most 6 percent, with about 4 percent a practical upper limit.",
+    "Euler's buckling load, π²EI/L_e², falls with the square of a column's effective length."
+  ],
+  "quiz": [
+    {
+      "say": "Using 0.4 times f c k times the concrete area, what is the concrete share for 30 megapascal concrete and 100 thousand square millimetres?",
+      "show": "Concrete share of a short column, 0.4 f_ck A_c, with f_ck = 30 MPa and A_c = 100,000 mm²?",
+      "options": [
+        {
+          "show": "1200 kN",
+          "say": "1200 kilonewtons"
+        },
+        {
+          "show": "3000 kN",
+          "say": "3000 kilonewtons"
+        },
+        {
+          "show": "120 kN",
+          "say": "120 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "0.4 × 30 × 100,000 = 1,200,000 newtons, which is 1200 kilonewtons.",
+      "wrong": {
+        "1": "That leaves out the 0.4 factor.",
+        "2": "That slips a factor of ten when converting newtons to kilonewtons."
+      }
+    },
+    {
+      "say": "A slender column is most likely to fail by…",
+      "show": "A slender column is most likely to fail by…",
+      "options": [
+        {
+          "show": "Crushing",
+          "say": "Crushing"
+        },
+        {
+          "show": "Buckling sideways",
+          "say": "Buckling sideways"
+        },
+        {
+          "show": "Shear at the top",
+          "say": "Shear at the top"
+        }
+      ],
+      "answer": 1,
+      "why": "Slender columns bow out sideways before the concrete crushes.",
+      "wrong": {
+        "0": "Crushing governs short, stocky columns.",
+        "2": "Shear is rarely the main failure for an axially loaded column."
+      }
+    }
+  ]
+}

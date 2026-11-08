@@ -1,0 +1,586 @@
+{
+  "id": "ENGX-AERO-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How ailerons, elevators and rudders steer a plane",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "ailerons",
+    "elevator",
+    "rudder",
+    "control surfaces",
+    "roll pitch yaw",
+    "fly-by-wire"
+  ],
+  "examples": [
+    "How does a plane turn?",
+    "What do the ailerons on a wing do?",
+    "How does a pilot make a plane go up or down?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "stick",
+          "kind": "lever",
+          "x": 0.12,
+          "y": 0.35,
+          "label": "Control stick",
+          "motion": "swing",
+          "ask": "How does the pilot move the control surfaces?"
+        },
+        {
+          "id": "ped",
+          "kind": "lever",
+          "x": 0.12,
+          "y": 0.8,
+          "label": "Rudder pedals",
+          "motion": "slide"
+        },
+        {
+          "id": "fcc",
+          "kind": "box",
+          "x": 0.42,
+          "y": 0.55,
+          "label": "Flight computer",
+          "motion": "pulse",
+          "ask": "How does the pilot move the control surfaces?"
+        },
+        {
+          "id": "ail",
+          "kind": "lever",
+          "x": 0.75,
+          "y": 0.15,
+          "label": "Ailerons",
+          "motion": "swing",
+          "ask": "What do ailerons do?"
+        },
+        {
+          "id": "elev",
+          "kind": "lever",
+          "x": 0.85,
+          "y": 0.5,
+          "label": "Elevator",
+          "motion": "swing",
+          "ask": "What does the elevator do?"
+        },
+        {
+          "id": "rud",
+          "kind": "lever",
+          "x": 0.75,
+          "y": 0.85,
+          "label": "Rudder",
+          "motion": "swing",
+          "ask": "What does the rudder do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "stick",
+          "to": "fcc",
+          "kind": "signal",
+          "label": "stick moves"
+        },
+        {
+          "from": "ped",
+          "to": "fcc",
+          "kind": "signal",
+          "label": "pedals"
+        },
+        {
+          "from": "fcc",
+          "to": "ail",
+          "kind": "force",
+          "label": "roll"
+        },
+        {
+          "from": "fcc",
+          "to": "elev",
+          "kind": "force",
+          "label": "pitch"
+        },
+        {
+          "from": "fcc",
+          "to": "rud",
+          "kind": "force",
+          "label": "yaw"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A plane can rotate three ways: roll, pitch and yaw. Hinged panels on the wings and tail, called control surfaces, tilt into the airflow and push the plane round.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How ailerons, elevators and rudders steer a plane"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "stick",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.35,
+              "label": "Control stick",
+              "motion": "swing",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ped",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.8,
+              "label": "Rudder pedals",
+              "motion": "slide"
+            },
+            {
+              "id": "fcc",
+              "kind": "box",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Flight computer",
+              "motion": "pulse",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ail",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.15,
+              "label": "Ailerons",
+              "motion": "swing",
+              "ask": "What do ailerons do?"
+            },
+            {
+              "id": "elev",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.5,
+              "label": "Elevator",
+              "motion": "swing",
+              "ask": "What does the elevator do?"
+            },
+            {
+              "id": "rud",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.85,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "What does the rudder do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "stick",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "stick moves"
+            },
+            {
+              "from": "ped",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "pedals"
+            },
+            {
+              "from": "fcc",
+              "to": "ail",
+              "kind": "force",
+              "label": "roll"
+            },
+            {
+              "from": "fcc",
+              "to": "elev",
+              "kind": "force",
+              "label": "pitch"
+            },
+            {
+              "from": "fcc",
+              "to": "rud",
+              "kind": "force",
+              "label": "yaw"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Ailerons sit near the wing tips and move in opposite directions. One goes up and its wing loses lift, the other goes down and its wing gains lift, so the plane rolls and banks into a turn.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "stick",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.35,
+              "label": "Control stick",
+              "motion": "swing",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ped",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.8,
+              "label": "Rudder pedals",
+              "motion": "slide"
+            },
+            {
+              "id": "fcc",
+              "kind": "box",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Flight computer",
+              "motion": "pulse",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ail",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.15,
+              "label": "Ailerons",
+              "motion": "swing",
+              "ask": "What do ailerons do?"
+            },
+            {
+              "id": "elev",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.5,
+              "label": "Elevator",
+              "motion": "swing",
+              "ask": "What does the elevator do?"
+            },
+            {
+              "id": "rud",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.85,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "What does the rudder do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "stick",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "stick moves"
+            },
+            {
+              "from": "ped",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "pedals"
+            },
+            {
+              "from": "fcc",
+              "to": "ail",
+              "kind": "force",
+              "label": "roll"
+            },
+            {
+              "from": "fcc",
+              "to": "elev",
+              "kind": "force",
+              "label": "pitch"
+            },
+            {
+              "from": "fcc",
+              "to": "rud",
+              "kind": "force",
+              "label": "yaw"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The elevator, on the horizontal part of the tail, controls pitch. Pull back on the stick and it tilts up, pushing the tail down and the nose up.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "stick",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.35,
+              "label": "Control stick",
+              "motion": "swing",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ped",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.8,
+              "label": "Rudder pedals",
+              "motion": "slide"
+            },
+            {
+              "id": "fcc",
+              "kind": "box",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Flight computer",
+              "motion": "pulse",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ail",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.15,
+              "label": "Ailerons",
+              "motion": "swing",
+              "ask": "What do ailerons do?"
+            },
+            {
+              "id": "elev",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.5,
+              "label": "Elevator",
+              "motion": "swing",
+              "ask": "What does the elevator do?"
+            },
+            {
+              "id": "rud",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.85,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "What does the rudder do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "stick",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "stick moves"
+            },
+            {
+              "from": "ped",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "pedals"
+            },
+            {
+              "from": "fcc",
+              "to": "ail",
+              "kind": "force",
+              "label": "roll"
+            },
+            {
+              "from": "fcc",
+              "to": "elev",
+              "kind": "force",
+              "label": "pitch"
+            },
+            {
+              "from": "fcc",
+              "to": "rud",
+              "kind": "force",
+              "label": "yaw"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The rudder on the tail fin swings left or right to yaw the nose sideways. Pilots use it with the ailerons to keep turns smooth and to stay straight in a crosswind.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "stick",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.35,
+              "label": "Control stick",
+              "motion": "swing",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ped",
+              "kind": "lever",
+              "x": 0.12,
+              "y": 0.8,
+              "label": "Rudder pedals",
+              "motion": "slide"
+            },
+            {
+              "id": "fcc",
+              "kind": "box",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Flight computer",
+              "motion": "pulse",
+              "ask": "How does the pilot move the control surfaces?"
+            },
+            {
+              "id": "ail",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.15,
+              "label": "Ailerons",
+              "motion": "swing",
+              "ask": "What do ailerons do?"
+            },
+            {
+              "id": "elev",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.5,
+              "label": "Elevator",
+              "motion": "swing",
+              "ask": "What does the elevator do?"
+            },
+            {
+              "id": "rud",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.85,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "What does the rudder do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "stick",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "stick moves"
+            },
+            {
+              "from": "ped",
+              "to": "fcc",
+              "kind": "signal",
+              "label": "pedals"
+            },
+            {
+              "from": "fcc",
+              "to": "ail",
+              "kind": "force",
+              "label": "roll"
+            },
+            {
+              "from": "fcc",
+              "to": "elev",
+              "kind": "force",
+              "label": "pitch"
+            },
+            {
+              "from": "fcc",
+              "to": "rud",
+              "kind": "force",
+              "label": "yaw"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What do ailerons do?",
+      "a": "Ailerons are hinged panels near the wing tips that move in opposite directions. The wing with the lowered aileron gains lift and rises, the other drops, and the plane rolls. Banking like this is how a plane turns.",
+      "asks": [
+        "How does a plane turn?",
+        "What are the flaps at the ends of the wings?"
+      ]
+    },
+    {
+      "q": "What does the elevator do?",
+      "a": "The elevator is the hinged back edge of the horizontal tail. Tilting it up pushes the tail down and the nose up to climb; tilting it down lowers the nose.",
+      "asks": [
+        "How does a plane go up and down?"
+      ]
+    },
+    {
+      "q": "What does the rudder do?",
+      "a": "The rudder is the hinged back part of the tail fin. It swings the nose left or right, called yaw, and helps keep turns balanced and the plane lined up with the runway in a crosswind.",
+      "asks": [
+        "What is yaw?"
+      ]
+    },
+    {
+      "q": "How does the pilot move the control surfaces?",
+      "a": "In older and smaller planes, cables and rods link the stick and pedals to the surfaces. In fly-by-wire airliners, the stick sends electrical signals to computers, which command hydraulic actuators to move the surfaces.",
+      "asks": [
+        "What is fly-by-wire?"
+      ]
+    },
+    {
+      "q": "Why doesn't a plane turn with the rudder alone?",
+      "a": "The rudder alone just skids the nose sideways, which is inefficient and uncomfortable. Banking with the ailerons tilts the wing's lift sideways, and that sideways part of the lift curves the plane's path.",
+      "asks": [
+        "Why do planes tilt when they turn?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Airbus A320, first flown in 1987, was the first airliner with digital fly-by-wire controls.",
+    "Roll, pitch and yaw are rotations about three axes through a plane's centre of gravity."
+  ],
+  "quiz": [
+    {
+      "say": "A pilot wants to roll the plane to the left. What do the ailerons do?",
+      "show": "To roll left, the ailerons…",
+      "options": [
+        {
+          "show": "Left aileron up, right aileron down",
+          "say": "Left aileron up, right aileron down"
+        },
+        {
+          "show": "Both ailerons go down",
+          "say": "Both ailerons go down"
+        },
+        {
+          "show": "Left aileron down, right aileron up",
+          "say": "Left aileron down, right aileron up"
+        }
+      ],
+      "answer": 0,
+      "why": "The raised left aileron cuts lift on the left wing and the lowered right aileron adds lift on the right, so the left wing drops and the plane rolls left.",
+      "wrong": {
+        "1": "Both down would add lift to both wings, not roll the plane.",
+        "2": "That would roll the plane to the right."
+      }
+    }
+  ]
+}

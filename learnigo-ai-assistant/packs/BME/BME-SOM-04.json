@@ -1,0 +1,372 @@
+{
+  "id": "BME-SOM-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Poisson's ratio: why a stretched bar gets thinner",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-SOM — Mechanics of materials",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Poisson's ratio",
+    "lateral strain",
+    "axial strain",
+    "auxetic material",
+    "volume change"
+  ],
+  "examples": [
+    "What is Poisson's ratio?",
+    "Why is cork used for wine bottles?",
+    "What is the Poisson's ratio of steel?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "wire",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Pull",
+          "dir": "left",
+          "size": 3
+        },
+        {
+          "label": "Pull",
+          "dir": "right",
+          "size": 3
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Stretch a rubber band and watch it get thinner. Squash a ball of clay and it bulges out at the sides. Almost every material does this: pull it one way and it shrinks the other ways. The size of that effect is Poisson's ratio, named after the French mathematician Simeon Denis Poisson. Look at the bar being pulled.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Poisson's ratio: why a stretched bar gets thinner"
+        },
+        {
+          "name": "x-forces",
+          "object": "wire",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Pull",
+              "dir": "left",
+              "size": 3
+            },
+            {
+              "label": "Pull",
+              "dir": "right",
+              "size": 3
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Pull along the bar and it shrinks across it"
+        }
+      ]
+    },
+    {
+      "say": "Poisson's ratio, nu, is minus the sideways strain divided by the lengthwise strain. The minus sign makes it positive, because one strain grows while the other shrinks. Look at the steel line: for every one thousandth of stretch, the steel gets 0.3 thousandths thinner. So for steel, nu is 0.3. Why the minus sign?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Axial strain (× 10⁻³)",
+            "max": 2
+          },
+          "y": {
+            "label": "Lateral (× 10⁻³)",
+            "min": -1.2,
+            "max": 0.3
+          },
+          "curves": [
+            {
+              "label": "Steel, ν = 0.3",
+              "type": "line",
+              "k": -0.3,
+              "ask": "What is the Poisson's ratio of steel?"
+            },
+            {
+              "label": "Rubber, ν ≈ 0.5",
+              "type": "line",
+              "k": -0.5,
+              "ask": "Why can't Poisson's ratio be more than 0.5?"
+            },
+            {
+              "label": "Cork, ν ≈ 0",
+              "type": "line",
+              "k": 0,
+              "ask": "Why is cork used for wine bottles?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Axial 0.001"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ν = − ε_lateral / ε_axial"
+        }
+      ]
+    },
+    {
+      "say": "Because lateral strain is negative when you stretch. Now rubber, the steepest line: nu is almost 0.5. That is the top limit for a normal material, and it means rubber keeps its volume while it changes shape. See it drop fastest? Worked example: a 20 millimetre steel bar at an axial strain of 0.001. How much thinner does it get?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Axial strain (× 10⁻³)",
+            "max": 2
+          },
+          "y": {
+            "label": "Lateral (× 10⁻³)",
+            "min": -1.2,
+            "max": 0.3
+          },
+          "curves": [
+            {
+              "label": "Steel, ν = 0.3",
+              "type": "line",
+              "k": -0.3,
+              "ask": "What is the Poisson's ratio of steel?"
+            },
+            {
+              "label": "Rubber, ν ≈ 0.5",
+              "type": "line",
+              "k": -0.5,
+              "ask": "Why can't Poisson's ratio be more than 0.5?"
+            },
+            {
+              "label": "Cork, ν ≈ 0",
+              "type": "line",
+              "k": 0,
+              "ask": "Why is cork used for wine bottles?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Axial 0.001"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Δd = ν ε d = 0.3 × 0.001 × 20 mm = 0.006 mm"
+        }
+      ]
+    },
+    {
+      "say": "Just 0.006 millimetres, tiny but measurable. Now cork, the flat line: nu is almost zero. Push a cork into a bottle and it squashes along its length without bulging sideways, so it slides in and then seals. That is why cork has stoppered wine for centuries. See the line stay flat?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Axial strain (× 10⁻³)",
+            "max": 2
+          },
+          "y": {
+            "label": "Lateral (× 10⁻³)",
+            "min": -1.2,
+            "max": 0.3
+          },
+          "curves": [
+            {
+              "label": "Steel, ν = 0.3",
+              "type": "line",
+              "k": -0.3,
+              "ask": "What is the Poisson's ratio of steel?"
+            },
+            {
+              "label": "Rubber, ν ≈ 0.5",
+              "type": "line",
+              "k": -0.5,
+              "ask": "Why can't Poisson's ratio be more than 0.5?"
+            },
+            {
+              "label": "Cork, ν ≈ 0",
+              "type": "line",
+              "k": 0,
+              "ask": "Why is cork used for wine bottles?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Axial 0.001"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Cork: ν ≈ 0, so it compresses without bulging"
+        }
+      ]
+    },
+    {
+      "say": "Wonderful. And here is a wow: some special auxetic foams and fabrics have a negative Poisson's ratio, so they get fatter when you stretch them! They are used in protective padding. Exam tip: Poisson's ratio links the three elastic constants: G equals E over 2 times 1 plus nu. Challenge: what is G for steel?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Axial strain (× 10⁻³)",
+            "max": 2
+          },
+          "y": {
+            "label": "Lateral (× 10⁻³)",
+            "min": -1.2,
+            "max": 0.3
+          },
+          "curves": [
+            {
+              "label": "Steel, ν = 0.3",
+              "type": "line",
+              "k": -0.3,
+              "ask": "What is the Poisson's ratio of steel?"
+            },
+            {
+              "label": "Rubber, ν ≈ 0.5",
+              "type": "line",
+              "k": -0.5,
+              "ask": "Why can't Poisson's ratio be more than 0.5?"
+            },
+            {
+              "label": "Cork, ν ≈ 0",
+              "type": "line",
+              "k": 0,
+              "ask": "Why is cork used for wine bottles?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 1,
+              "label": "Axial 0.001"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "G = E / 2(1 + ν) = 200 / 2.6 = 77 GPa"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Poisson's ratio?",
+      "a": "It is the negative ratio of lateral strain to axial strain when a material is loaded in one direction. It tells you how much a bar thins as it stretches.",
+      "asks": [
+        "define Poisson ratio",
+        "lateral strain over axial strain"
+      ]
+    },
+    {
+      "q": "What is the Poisson's ratio of steel?",
+      "a": "About 0.3. Most metals lie between about 0.25 and 0.35.",
+      "asks": [
+        "Poisson ratio of metals"
+      ]
+    },
+    {
+      "q": "Why can't Poisson's ratio be more than 0.5?",
+      "a": "For an isotropic material, 0.5 means the volume stays exactly constant under load. A larger value would make the volume shrink when you pull, which a stable isotropic material cannot do.",
+      "asks": [
+        "rubber Poisson ratio 0.5",
+        "incompressible material"
+      ]
+    },
+    {
+      "q": "Why is cork used for wine bottles?",
+      "a": "Cork has a Poisson's ratio near zero, so it squeezes lengthwise without bulging sideways. It slides into the neck and then presses back to make a seal.",
+      "asks": [
+        "cork Poisson ratio"
+      ]
+    },
+    {
+      "q": "What is an auxetic material?",
+      "a": "A material with a negative Poisson's ratio: it gets wider when stretched. Special foams and structures behave this way and are used in padding and medical stents.",
+      "asks": [
+        "negative Poisson ratio"
+      ]
+    }
+  ],
+  "facts": [
+    "Steel has a Poisson's ratio of about 0.3.",
+    "For an isotropic material, Poisson's ratio lies between minus 1 and 0.5."
+  ],
+  "quiz": [
+    {
+      "say": "An aluminium bar with nu equals 0.33 is stretched to an axial strain of 0.002. What is its lateral strain?",
+      "show": "Aluminium, ν = 0.33, axial strain 0.002. Lateral strain?",
+      "options": [
+        {
+          "show": "−0.00066",
+          "say": "−0.00066"
+        },
+        {
+          "show": "+0.00066",
+          "say": "+0.00066"
+        },
+        {
+          "show": "−0.0061",
+          "say": "−0.0061"
+        }
+      ],
+      "answer": 0,
+      "why": "ε_lat = −ν ε_axial = −0.33 × 0.002 = −0.00066; negative because it gets thinner.",
+      "wrong": {
+        "1": "The bar gets thinner when stretched, so the lateral strain is negative.",
+        "2": "That divides by nu instead of multiplying."
+      }
+    },
+    {
+      "say": "A material keeps its volume constant when deformed. What is its Poisson's ratio?",
+      "show": "A material keeps constant volume under load. Its ν is…",
+      "options": [
+        {
+          "show": "0.5",
+          "say": "0.5"
+        },
+        {
+          "show": "0",
+          "say": "0"
+        },
+        {
+          "show": "1",
+          "say": "1"
+        }
+      ],
+      "answer": 0,
+      "why": "An isotropic material with nu equals 0.5 is incompressible, like rubber.",
+      "wrong": {
+        "1": "Zero means no sideways change at all, like cork; the volume would change.",
+        "2": "Above 0.5 is impossible for a stable isotropic material."
+      }
+    }
+  ]
+}

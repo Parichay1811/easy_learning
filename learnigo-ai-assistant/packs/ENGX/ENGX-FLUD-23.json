@@ -1,0 +1,607 @@
+{
+  "id": "ENGX-FLUD-23",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a hydraulic car lift raises a car",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "hydraulic lift",
+    "car lift",
+    "Pascal principle",
+    "hydraulic ram",
+    "hydraulic oil",
+    "garage lift"
+  ],
+  "examples": [
+    "How does a garage lift raise a whole car?",
+    "Why is oil used in hydraulics?",
+    "How can a small pump lift something so heavy?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.1,
+          "y": 0.3,
+          "size": 0.9,
+          "label": "Electric motor",
+          "motion": "spin"
+        },
+        {
+          "id": "pump",
+          "kind": "piston",
+          "x": 0.3,
+          "y": 0.6,
+          "size": 0.7,
+          "label": "Small pump piston",
+          "motion": "slide",
+          "ask": "How can a small pump lift something so heavy?"
+        },
+        {
+          "id": "tank",
+          "kind": "tank",
+          "x": 0.1,
+          "y": 0.8,
+          "size": 0.8,
+          "label": "Oil reservoir",
+          "motion": "none"
+        },
+        {
+          "id": "pipe",
+          "kind": "pipe",
+          "x": 0.52,
+          "y": 0.75,
+          "size": 0.8,
+          "label": "Oil pipe",
+          "motion": "flow",
+          "ask": "Why is oil used in hydraulics?"
+        },
+        {
+          "id": "ram",
+          "kind": "piston",
+          "x": 0.75,
+          "y": 0.6,
+          "size": 1.4,
+          "label": "Big lifting ram",
+          "motion": "slide"
+        },
+        {
+          "id": "car",
+          "kind": "weight",
+          "x": 0.75,
+          "y": 0.18,
+          "size": 1.2,
+          "label": "Car on the arms",
+          "motion": "slide"
+        },
+        {
+          "id": "valve",
+          "kind": "valve",
+          "x": 0.52,
+          "y": 0.35,
+          "size": 0.7,
+          "label": "Lowering valve",
+          "motion": "none",
+          "ask": "How does a car lift come back down?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "pump",
+          "kind": "energy",
+          "label": "drives"
+        },
+        {
+          "from": "tank",
+          "to": "pump",
+          "kind": "fluid",
+          "label": "oil"
+        },
+        {
+          "from": "pump",
+          "to": "pipe",
+          "kind": "fluid",
+          "label": "pressure"
+        },
+        {
+          "from": "pipe",
+          "to": "ram",
+          "kind": "fluid",
+          "label": "same pressure"
+        },
+        {
+          "from": "ram",
+          "to": "car",
+          "kind": "force",
+          "label": "big push up"
+        },
+        {
+          "from": "ram",
+          "to": "valve",
+          "kind": "fluid"
+        },
+        {
+          "from": "valve",
+          "to": "tank",
+          "kind": "fluid",
+          "label": "back to tank"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A garage lift raises a car weighing over a tonne using oil, a small pump and a big piston called a ram.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a hydraulic car lift raises a car"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Electric motor",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.3,
+              "y": 0.6,
+              "size": 0.7,
+              "label": "Small pump piston",
+              "motion": "slide",
+              "ask": "How can a small pump lift something so heavy?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Oil reservoir",
+              "motion": "none"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.52,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Oil pipe",
+              "motion": "flow",
+              "ask": "Why is oil used in hydraulics?"
+            },
+            {
+              "id": "ram",
+              "kind": "piston",
+              "x": 0.75,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Big lifting ram",
+              "motion": "slide"
+            },
+            {
+              "id": "car",
+              "kind": "weight",
+              "x": 0.75,
+              "y": 0.18,
+              "size": 1.2,
+              "label": "Car on the arms",
+              "motion": "slide"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.52,
+              "y": 0.35,
+              "size": 0.7,
+              "label": "Lowering valve",
+              "motion": "none",
+              "ask": "How does a car lift come back down?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pump",
+              "kind": "energy",
+              "label": "drives"
+            },
+            {
+              "from": "tank",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "oil"
+            },
+            {
+              "from": "pump",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "pipe",
+              "to": "ram",
+              "kind": "fluid",
+              "label": "same pressure"
+            },
+            {
+              "from": "ram",
+              "to": "car",
+              "kind": "force",
+              "label": "big push up"
+            },
+            {
+              "from": "ram",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "back to tank"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The pump piston is small. When it pushes on the oil, the pressure it makes spreads through every part of the oil equally, because oil hardly squashes.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Electric motor",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.3,
+              "y": 0.6,
+              "size": 0.7,
+              "label": "Small pump piston",
+              "motion": "slide",
+              "ask": "How can a small pump lift something so heavy?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Oil reservoir",
+              "motion": "none"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.52,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Oil pipe",
+              "motion": "flow",
+              "ask": "Why is oil used in hydraulics?"
+            },
+            {
+              "id": "ram",
+              "kind": "piston",
+              "x": 0.75,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Big lifting ram",
+              "motion": "slide"
+            },
+            {
+              "id": "car",
+              "kind": "weight",
+              "x": 0.75,
+              "y": 0.18,
+              "size": 1.2,
+              "label": "Car on the arms",
+              "motion": "slide"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.52,
+              "y": 0.35,
+              "size": 0.7,
+              "label": "Lowering valve",
+              "motion": "none",
+              "ask": "How does a car lift come back down?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pump",
+              "kind": "energy",
+              "label": "drives"
+            },
+            {
+              "from": "tank",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "oil"
+            },
+            {
+              "from": "pump",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "pipe",
+              "to": "ram",
+              "kind": "fluid",
+              "label": "same pressure"
+            },
+            {
+              "from": "ram",
+              "to": "car",
+              "kind": "force",
+              "label": "big push up"
+            },
+            {
+              "from": "ram",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "back to tank"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "That same pressure presses on the much bigger area of the ram. A bigger area means a bigger total force, so the ram can push up a whole car.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Electric motor",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "piston",
+              "x": 0.3,
+              "y": 0.6,
+              "size": 0.7,
+              "label": "Small pump piston",
+              "motion": "slide",
+              "ask": "How can a small pump lift something so heavy?"
+            },
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.8,
+              "label": "Oil reservoir",
+              "motion": "none"
+            },
+            {
+              "id": "pipe",
+              "kind": "pipe",
+              "x": 0.52,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Oil pipe",
+              "motion": "flow",
+              "ask": "Why is oil used in hydraulics?"
+            },
+            {
+              "id": "ram",
+              "kind": "piston",
+              "x": 0.75,
+              "y": 0.6,
+              "size": 1.4,
+              "label": "Big lifting ram",
+              "motion": "slide"
+            },
+            {
+              "id": "car",
+              "kind": "weight",
+              "x": 0.75,
+              "y": 0.18,
+              "size": 1.2,
+              "label": "Car on the arms",
+              "motion": "slide"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.52,
+              "y": 0.35,
+              "size": 0.7,
+              "label": "Lowering valve",
+              "motion": "none",
+              "ask": "How does a car lift come back down?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "pump",
+              "kind": "energy",
+              "label": "drives"
+            },
+            {
+              "from": "tank",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "oil"
+            },
+            {
+              "from": "pump",
+              "to": "pipe",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "pipe",
+              "to": "ram",
+              "kind": "fluid",
+              "label": "same pressure"
+            },
+            {
+              "from": "ram",
+              "to": "car",
+              "kind": "force",
+              "label": "big push up"
+            },
+            {
+              "from": "ram",
+              "to": "valve",
+              "kind": "fluid"
+            },
+            {
+              "from": "valve",
+              "to": "tank",
+              "kind": "fluid",
+              "label": "back to tank"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The catch is distance: the small piston must move a long way, many strokes, to raise the ram a little. Opening the lowering valve lets oil flow back to the tank and the car sinks gently.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "items": [
+            {
+              "label": "Push on small piston",
+              "size": 1,
+              "icon": "piston"
+            },
+            {
+              "label": "Lift from big ram",
+              "size": 50,
+              "icon": "car"
+            }
+          ],
+          "unit": "times"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How can a small pump lift something so heavy?",
+      "a": "Pressure in the oil is the same everywhere. The ram has a much larger area than the pump piston, so the same pressure gives it a much larger force, though it moves a shorter distance.",
+      "asks": [
+        "How does a garage lift raise a whole car?",
+        "What is Pascal’s principle?"
+      ]
+    },
+    {
+      "q": "Why is oil used in hydraulics?",
+      "a": "Oil, like other liquids, hardly squashes, so a push at one end arrives at the other straight away. Oil also lubricates the parts and does not rust them like water would.",
+      "asks": [
+        "Why not use air or water in a car lift?"
+      ]
+    },
+    {
+      "q": "How does a car lift come back down?",
+      "a": "Opening the lowering valve lets oil flow out of the ram back into the reservoir. The weight of the car pushes the oil out, so it sinks slowly and smoothly.",
+      "asks": [
+        "What lowers a hydraulic lift?"
+      ]
+    },
+    {
+      "q": "Is there a catch to getting a bigger force?",
+      "a": "Yes. Energy is not created, so the small piston has to move much farther than the ram rises. You trade distance for force, like a lever.",
+      "asks": [
+        "Do hydraulics give you free energy?"
+      ]
+    },
+    {
+      "q": "Where else are hydraulics used?",
+      "a": "In car brakes, diggers, dentist chairs, aircraft controls and the jacks used to change a tyre.",
+      "asks": [
+        "What other machines use hydraulics?"
+      ]
+    }
+  ],
+  "facts": [
+    "Pascal’s principle: pressure applied to an enclosed liquid is passed on equally to every part of it.",
+    "A ram with 50 times the area of the pump piston gives 50 times the force, but moves only one fiftieth as far."
+  ],
+  "quiz": [
+    {
+      "say": "The ram of a hydraulic lift has 20 times the area of the pump piston. How does its force compare?",
+      "show": "The ram of a hydraulic lift has 20 times the area of the pump piston. How does its force compare?",
+      "options": [
+        {
+          "show": "20 times bigger",
+          "say": "20 times bigger"
+        },
+        {
+          "show": "20 times smaller",
+          "say": "20 times smaller"
+        },
+        {
+          "show": "The same",
+          "say": "The same"
+        }
+      ],
+      "answer": 0,
+      "why": "The pressure is the same on both, and force equals pressure times area, so 20 times the area gives 20 times the force.",
+      "wrong": {
+        "1": "A bigger area gives more force, not less.",
+        "2": "The pressure is the same, but the forces differ because the areas differ."
+      }
+    }
+  ]
+}

@@ -1,0 +1,761 @@
+{
+  "id": "ENGX-MECH-43",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How windmill gears turn the millstones",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "windmill",
+    "brake wheel",
+    "wallower",
+    "millstones",
+    "great spur wheel",
+    "stone nut"
+  ],
+  "examples": [
+    "How does a windmill grind flour?",
+    "How do the sails turn the millstones?",
+    "What gears are inside a windmill?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "sails",
+          "kind": "propeller",
+          "x": 0.1,
+          "y": 0.2,
+          "size": 1.3,
+          "label": "Sails",
+          "motion": "spin"
+        },
+        {
+          "id": "windshaft",
+          "kind": "axle",
+          "x": 0.3,
+          "y": 0.2,
+          "size": 0.7,
+          "label": "Windshaft",
+          "motion": "spin"
+        },
+        {
+          "id": "brake",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.2,
+          "size": 1.2,
+          "label": "Brake wheel",
+          "motion": "spin",
+          "ask": "What is the brake wheel?"
+        },
+        {
+          "id": "wallower",
+          "kind": "gear",
+          "x": 0.74,
+          "y": 0.3,
+          "size": 0.7,
+          "label": "Wallower",
+          "motion": "spin",
+          "ask": "What does the wallower do?"
+        },
+        {
+          "id": "main",
+          "kind": "axle",
+          "x": 0.74,
+          "y": 0.55,
+          "size": 0.7,
+          "label": "Upright shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "spur",
+          "kind": "gear",
+          "x": 0.55,
+          "y": 0.78,
+          "size": 1.3,
+          "label": "Great spur wheel",
+          "motion": "spin"
+        },
+        {
+          "id": "nut",
+          "kind": "gear",
+          "x": 0.32,
+          "y": 0.78,
+          "size": 0.6,
+          "label": "Stone nut",
+          "motion": "spin",
+          "ask": "What is a stone nut?"
+        },
+        {
+          "id": "stones",
+          "kind": "wheel",
+          "x": 0.12,
+          "y": 0.78,
+          "size": 1.1,
+          "label": "Millstones",
+          "motion": "spin",
+          "ask": "How does a windmill grind flour?"
+        }
+      ],
+      "links": [
+        {
+          "from": "sails",
+          "to": "windshaft",
+          "kind": "energy",
+          "label": "wind turns"
+        },
+        {
+          "from": "windshaft",
+          "to": "brake",
+          "kind": "energy"
+        },
+        {
+          "from": "brake",
+          "to": "wallower",
+          "kind": "force",
+          "label": "turns a corner"
+        },
+        {
+          "from": "wallower",
+          "to": "main",
+          "kind": "energy"
+        },
+        {
+          "from": "main",
+          "to": "spur",
+          "kind": "energy"
+        },
+        {
+          "from": "spur",
+          "to": "nut",
+          "kind": "force",
+          "label": "speeds up"
+        },
+        {
+          "from": "nut",
+          "to": "stones",
+          "kind": "energy",
+          "label": "grinds grain"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A traditional tower windmill turns the slow, strong push of the wind into fast turning millstones. The sails turn a sloping shaft called the windshaft at the top of the mill.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How windmill gears turn the millstones"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sails",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1.3,
+              "label": "Sails",
+              "motion": "spin"
+            },
+            {
+              "id": "windshaft",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Windshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Brake wheel",
+              "motion": "spin",
+              "ask": "What is the brake wheel?"
+            },
+            {
+              "id": "wallower",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Wallower",
+              "motion": "spin",
+              "ask": "What does the wallower do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Upright shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "spur",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Great spur wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "nut",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Stone nut",
+              "motion": "spin",
+              "ask": "What is a stone nut?"
+            },
+            {
+              "id": "stones",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.1,
+              "label": "Millstones",
+              "motion": "spin",
+              "ask": "How does a windmill grind flour?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sails",
+              "to": "windshaft",
+              "kind": "energy",
+              "label": "wind turns"
+            },
+            {
+              "from": "windshaft",
+              "to": "brake",
+              "kind": "energy"
+            },
+            {
+              "from": "brake",
+              "to": "wallower",
+              "kind": "force",
+              "label": "turns a corner"
+            },
+            {
+              "from": "wallower",
+              "to": "main",
+              "kind": "energy"
+            },
+            {
+              "from": "main",
+              "to": "spur",
+              "kind": "energy"
+            },
+            {
+              "from": "spur",
+              "to": "nut",
+              "kind": "force",
+              "label": "speeds up"
+            },
+            {
+              "from": "nut",
+              "to": "stones",
+              "kind": "energy",
+              "label": "grinds grain"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: gears. Look at the driver gear, the small gear and the third gear. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How windmill gears turn the millstones"
+        },
+        {
+          "op": "image",
+          "render": "gear-train"
+        }
+      ]
+    },
+    {
+      "say": "On the windshaft is a huge wooden gear, the brake wheel, named for the brake band round its rim. It meshes with a smaller gear, the wallower, turning the motion from a near-level shaft to an upright one.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sails",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1.3,
+              "label": "Sails",
+              "motion": "spin"
+            },
+            {
+              "id": "windshaft",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Windshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Brake wheel",
+              "motion": "spin",
+              "ask": "What is the brake wheel?"
+            },
+            {
+              "id": "wallower",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Wallower",
+              "motion": "spin",
+              "ask": "What does the wallower do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Upright shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "spur",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Great spur wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "nut",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Stone nut",
+              "motion": "spin",
+              "ask": "What is a stone nut?"
+            },
+            {
+              "id": "stones",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.1,
+              "label": "Millstones",
+              "motion": "spin",
+              "ask": "How does a windmill grind flour?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sails",
+              "to": "windshaft",
+              "kind": "energy",
+              "label": "wind turns"
+            },
+            {
+              "from": "windshaft",
+              "to": "brake",
+              "kind": "energy"
+            },
+            {
+              "from": "brake",
+              "to": "wallower",
+              "kind": "force",
+              "label": "turns a corner"
+            },
+            {
+              "from": "wallower",
+              "to": "main",
+              "kind": "energy"
+            },
+            {
+              "from": "main",
+              "to": "spur",
+              "kind": "energy"
+            },
+            {
+              "from": "spur",
+              "to": "nut",
+              "kind": "force",
+              "label": "speeds up"
+            },
+            {
+              "from": "nut",
+              "to": "stones",
+              "kind": "energy",
+              "label": "grinds grain"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The upright shaft runs down the mill to the great spur wheel, which drives small gears called stone nuts. Each step speeds things up, so the stones turn several times faster than the sails.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sails",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1.3,
+              "label": "Sails",
+              "motion": "spin"
+            },
+            {
+              "id": "windshaft",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Windshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Brake wheel",
+              "motion": "spin",
+              "ask": "What is the brake wheel?"
+            },
+            {
+              "id": "wallower",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Wallower",
+              "motion": "spin",
+              "ask": "What does the wallower do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Upright shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "spur",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Great spur wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "nut",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Stone nut",
+              "motion": "spin",
+              "ask": "What is a stone nut?"
+            },
+            {
+              "id": "stones",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.1,
+              "label": "Millstones",
+              "motion": "spin",
+              "ask": "How does a windmill grind flour?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sails",
+              "to": "windshaft",
+              "kind": "energy",
+              "label": "wind turns"
+            },
+            {
+              "from": "windshaft",
+              "to": "brake",
+              "kind": "energy"
+            },
+            {
+              "from": "brake",
+              "to": "wallower",
+              "kind": "force",
+              "label": "turns a corner"
+            },
+            {
+              "from": "wallower",
+              "to": "main",
+              "kind": "energy"
+            },
+            {
+              "from": "main",
+              "to": "spur",
+              "kind": "energy"
+            },
+            {
+              "from": "spur",
+              "to": "nut",
+              "kind": "force",
+              "label": "speeds up"
+            },
+            {
+              "from": "nut",
+              "to": "stones",
+              "kind": "energy",
+              "label": "grinds grain"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Each stone nut turns a heavy runner stone above a still bed stone. Grain trickles into the middle, is ground between their grooved faces and comes out as flour at the edge.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sails",
+              "kind": "propeller",
+              "x": 0.1,
+              "y": 0.2,
+              "size": 1.3,
+              "label": "Sails",
+              "motion": "spin"
+            },
+            {
+              "id": "windshaft",
+              "kind": "axle",
+              "x": 0.3,
+              "y": 0.2,
+              "size": 0.7,
+              "label": "Windshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.2,
+              "label": "Brake wheel",
+              "motion": "spin",
+              "ask": "What is the brake wheel?"
+            },
+            {
+              "id": "wallower",
+              "kind": "gear",
+              "x": 0.74,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Wallower",
+              "motion": "spin",
+              "ask": "What does the wallower do?"
+            },
+            {
+              "id": "main",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Upright shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "spur",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.78,
+              "size": 1.3,
+              "label": "Great spur wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "nut",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.78,
+              "size": 0.6,
+              "label": "Stone nut",
+              "motion": "spin",
+              "ask": "What is a stone nut?"
+            },
+            {
+              "id": "stones",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1.1,
+              "label": "Millstones",
+              "motion": "spin",
+              "ask": "How does a windmill grind flour?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sails",
+              "to": "windshaft",
+              "kind": "energy",
+              "label": "wind turns"
+            },
+            {
+              "from": "windshaft",
+              "to": "brake",
+              "kind": "energy"
+            },
+            {
+              "from": "brake",
+              "to": "wallower",
+              "kind": "force",
+              "label": "turns a corner"
+            },
+            {
+              "from": "wallower",
+              "to": "main",
+              "kind": "energy"
+            },
+            {
+              "from": "main",
+              "to": "spur",
+              "kind": "energy"
+            },
+            {
+              "from": "spur",
+              "to": "nut",
+              "kind": "force",
+              "label": "speeds up"
+            },
+            {
+              "from": "nut",
+              "to": "stones",
+              "kind": "energy",
+              "label": "grinds grain"
+            }
+          ],
+          "focus": 7
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the brake wheel?",
+      "a": "The brake wheel is the big gear on the windshaft. A wooden brake band around its rim can be tightened to stop the sails, which is how it got its name.",
+      "asks": [
+        "How do you stop a windmill?"
+      ]
+    },
+    {
+      "q": "What does the wallower do?",
+      "a": "The wallower is the first gear on the upright shaft. Meshing with the brake wheel at an angle, it turns the sails' motion down the length of the mill.",
+      "asks": [
+        "How does the motion get down the mill?"
+      ]
+    },
+    {
+      "q": "What is a stone nut?",
+      "a": "A stone nut is a small gear driven by the great spur wheel. Because it is much smaller, it spins fast and turns a millstone.",
+      "asks": [
+        "Why do millstones turn faster than the sails?"
+      ]
+    },
+    {
+      "q": "How does a windmill grind flour?",
+      "a": "Grain is fed through a hole in the turning runner stone. Grooves on the stones cut and grind it as it moves outward, and flour spills from the edge.",
+      "asks": [
+        "How do millstones work?"
+      ]
+    },
+    {
+      "q": "Why do windmills turn to face the wind?",
+      "a": "The sails work best facing straight into the wind. Many mills have a fantail, a small fan at the back, that turns the cap automatically when the wind changes.",
+      "asks": [
+        "What is a fantail on a windmill?"
+      ]
+    }
+  ],
+  "facts": [
+    "Windmills were grinding grain in Persia by the 9th century and in Europe by the late 12th century.",
+    "The fantail, which turns a mill's cap into the wind automatically, was patented by Edmund Lee in 1745."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a windmill use a big gear driving a small one?",
+      "show": "Why does a windmill use a big gear driving a small one?",
+      "options": [
+        {
+          "show": "To make the millstones turn faster than the sails",
+          "say": "To make the millstones turn faster than the sails"
+        },
+        {
+          "show": "To stop the sails",
+          "say": "To stop the sails"
+        },
+        {
+          "show": "To pump water",
+          "say": "To pump water"
+        }
+      ],
+      "answer": 0,
+      "why": "A big gear driving a small one speeds up the turning, so the stones spin faster than the slow sails.",
+      "wrong": {
+        "1": "The brake band stops the sails, not the gear ratio.",
+        "2": "This mill grinds grain; it is not pumping."
+      }
+    }
+  ]
+}

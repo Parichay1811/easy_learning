@@ -1,0 +1,771 @@
+{
+  "id": "ENGX-ENER-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a coal power station makes electricity",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "coal power station",
+    "coal-fired power plant",
+    "boiler and turbine",
+    "thermal power station",
+    "pulverised coal"
+  ],
+  "examples": [
+    "How does a coal power station work?",
+    "How does burning coal make electricity?",
+    "What happens inside a coal power plant?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "furnace",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.35,
+          "size": 1.1,
+          "label": "Coal furnace",
+          "motion": "pulse",
+          "ask": "What happens to the coal in the furnace?"
+        },
+        {
+          "id": "boiler",
+          "kind": "tank",
+          "x": 0.3,
+          "y": 0.3,
+          "size": 1.2,
+          "label": "Boiler tubes",
+          "motion": "pulse",
+          "ask": "How does the boiler make steam?"
+        },
+        {
+          "id": "turbine",
+          "kind": "fan",
+          "x": 0.52,
+          "y": 0.3,
+          "size": 1.1,
+          "label": "Steam turbine",
+          "motion": "spin",
+          "ask": "How does a steam turbine turn steam into spin?"
+        },
+        {
+          "id": "gen",
+          "kind": "coil",
+          "x": 0.72,
+          "y": 0.3,
+          "label": "Generator",
+          "motion": "spin",
+          "ask": "How does the generator make electricity?"
+        },
+        {
+          "id": "tx",
+          "kind": "box",
+          "x": 0.91,
+          "y": 0.3,
+          "size": 0.8,
+          "label": "Step-up transformer"
+        },
+        {
+          "id": "cond",
+          "kind": "tank",
+          "x": 0.52,
+          "y": 0.72,
+          "label": "Condenser",
+          "motion": "flow",
+          "ask": "What does the condenser do?"
+        },
+        {
+          "id": "pump",
+          "kind": "valve",
+          "x": 0.3,
+          "y": 0.72,
+          "size": 0.8,
+          "label": "Feed pump",
+          "motion": "pulse"
+        },
+        {
+          "id": "tower",
+          "kind": "tank",
+          "x": 0.8,
+          "y": 0.74,
+          "size": 1.2,
+          "label": "Cooling tower",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "furnace",
+          "to": "boiler",
+          "kind": "heat",
+          "label": "flames"
+        },
+        {
+          "from": "boiler",
+          "to": "turbine",
+          "kind": "fluid",
+          "label": "steam"
+        },
+        {
+          "from": "turbine",
+          "to": "gen",
+          "kind": "energy",
+          "label": "spin"
+        },
+        {
+          "from": "gen",
+          "to": "tx",
+          "kind": "power"
+        },
+        {
+          "from": "turbine",
+          "to": "cond",
+          "kind": "fluid",
+          "label": "used steam"
+        },
+        {
+          "from": "cond",
+          "to": "pump",
+          "kind": "fluid",
+          "label": "water"
+        },
+        {
+          "from": "pump",
+          "to": "boiler",
+          "kind": "fluid"
+        },
+        {
+          "from": "cond",
+          "to": "tower",
+          "kind": "heat",
+          "label": "waste heat"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A coal power station is really a giant kettle. Coal is ground to a fine powder and blown into a furnace, where it burns at around 1,500 degrees Celsius, releasing the energy stored in it as heat.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a coal power station makes electricity"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "furnace",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.35,
+              "size": 1.1,
+              "label": "Coal furnace",
+              "motion": "pulse",
+              "ask": "What happens to the coal in the furnace?"
+            },
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Boiler tubes",
+              "motion": "pulse",
+              "ask": "How does the boiler make steam?"
+            },
+            {
+              "id": "turbine",
+              "kind": "fan",
+              "x": 0.52,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "How does a steam turbine turn steam into spin?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "label": "Generator",
+              "motion": "spin",
+              "ask": "How does the generator make electricity?"
+            },
+            {
+              "id": "tx",
+              "kind": "box",
+              "x": 0.91,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Step-up transformer"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.52,
+              "y": 0.72,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "id": "pump",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Feed pump",
+              "motion": "pulse"
+            },
+            {
+              "id": "tower",
+              "kind": "tank",
+              "x": 0.8,
+              "y": 0.74,
+              "size": 1.2,
+              "label": "Cooling tower",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "furnace",
+              "to": "boiler",
+              "kind": "heat",
+              "label": "flames"
+            },
+            {
+              "from": "boiler",
+              "to": "turbine",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turbine",
+              "to": "gen",
+              "kind": "energy",
+              "label": "spin"
+            },
+            {
+              "from": "gen",
+              "to": "tx",
+              "kind": "power"
+            },
+            {
+              "from": "turbine",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cond",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "pump",
+              "to": "boiler",
+              "kind": "fluid"
+            },
+            {
+              "from": "cond",
+              "to": "tower",
+              "kind": "heat",
+              "label": "waste heat"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The heat boils water flowing through thousands of tubes lining the boiler walls, making steam at over 500 degrees Celsius and enormous pressure.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "furnace",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.35,
+              "size": 1.1,
+              "label": "Coal furnace",
+              "motion": "pulse",
+              "ask": "What happens to the coal in the furnace?"
+            },
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Boiler tubes",
+              "motion": "pulse",
+              "ask": "How does the boiler make steam?"
+            },
+            {
+              "id": "turbine",
+              "kind": "fan",
+              "x": 0.52,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "How does a steam turbine turn steam into spin?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "label": "Generator",
+              "motion": "spin",
+              "ask": "How does the generator make electricity?"
+            },
+            {
+              "id": "tx",
+              "kind": "box",
+              "x": 0.91,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Step-up transformer"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.52,
+              "y": 0.72,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "id": "pump",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Feed pump",
+              "motion": "pulse"
+            },
+            {
+              "id": "tower",
+              "kind": "tank",
+              "x": 0.8,
+              "y": 0.74,
+              "size": 1.2,
+              "label": "Cooling tower",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "furnace",
+              "to": "boiler",
+              "kind": "heat",
+              "label": "flames"
+            },
+            {
+              "from": "boiler",
+              "to": "turbine",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turbine",
+              "to": "gen",
+              "kind": "energy",
+              "label": "spin"
+            },
+            {
+              "from": "gen",
+              "to": "tx",
+              "kind": "power"
+            },
+            {
+              "from": "turbine",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cond",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "pump",
+              "to": "boiler",
+              "kind": "fluid"
+            },
+            {
+              "from": "cond",
+              "to": "tower",
+              "kind": "heat",
+              "label": "waste heat"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The steam rushes through a turbine and spins it about 50 times every second. The turbine turns a generator, which changes that spinning into electricity for the grid.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "furnace",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.35,
+              "size": 1.1,
+              "label": "Coal furnace",
+              "motion": "pulse",
+              "ask": "What happens to the coal in the furnace?"
+            },
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Boiler tubes",
+              "motion": "pulse",
+              "ask": "How does the boiler make steam?"
+            },
+            {
+              "id": "turbine",
+              "kind": "fan",
+              "x": 0.52,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "How does a steam turbine turn steam into spin?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "label": "Generator",
+              "motion": "spin",
+              "ask": "How does the generator make electricity?"
+            },
+            {
+              "id": "tx",
+              "kind": "box",
+              "x": 0.91,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Step-up transformer"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.52,
+              "y": 0.72,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "id": "pump",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Feed pump",
+              "motion": "pulse"
+            },
+            {
+              "id": "tower",
+              "kind": "tank",
+              "x": 0.8,
+              "y": 0.74,
+              "size": 1.2,
+              "label": "Cooling tower",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "furnace",
+              "to": "boiler",
+              "kind": "heat",
+              "label": "flames"
+            },
+            {
+              "from": "boiler",
+              "to": "turbine",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turbine",
+              "to": "gen",
+              "kind": "energy",
+              "label": "spin"
+            },
+            {
+              "from": "gen",
+              "to": "tx",
+              "kind": "power"
+            },
+            {
+              "from": "turbine",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cond",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "pump",
+              "to": "boiler",
+              "kind": "fluid"
+            },
+            {
+              "from": "cond",
+              "to": "tower",
+              "kind": "heat",
+              "label": "waste heat"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The used steam is cooled back into water in a condenser and pumped back to the boiler to go round again. The heat taken out goes into a river, the sea or a cooling tower.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "furnace",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.35,
+              "size": 1.1,
+              "label": "Coal furnace",
+              "motion": "pulse",
+              "ask": "What happens to the coal in the furnace?"
+            },
+            {
+              "id": "boiler",
+              "kind": "tank",
+              "x": 0.3,
+              "y": 0.3,
+              "size": 1.2,
+              "label": "Boiler tubes",
+              "motion": "pulse",
+              "ask": "How does the boiler make steam?"
+            },
+            {
+              "id": "turbine",
+              "kind": "fan",
+              "x": 0.52,
+              "y": 0.3,
+              "size": 1.1,
+              "label": "Steam turbine",
+              "motion": "spin",
+              "ask": "How does a steam turbine turn steam into spin?"
+            },
+            {
+              "id": "gen",
+              "kind": "coil",
+              "x": 0.72,
+              "y": 0.3,
+              "label": "Generator",
+              "motion": "spin",
+              "ask": "How does the generator make electricity?"
+            },
+            {
+              "id": "tx",
+              "kind": "box",
+              "x": 0.91,
+              "y": 0.3,
+              "size": 0.8,
+              "label": "Step-up transformer"
+            },
+            {
+              "id": "cond",
+              "kind": "tank",
+              "x": 0.52,
+              "y": 0.72,
+              "label": "Condenser",
+              "motion": "flow",
+              "ask": "What does the condenser do?"
+            },
+            {
+              "id": "pump",
+              "kind": "valve",
+              "x": 0.3,
+              "y": 0.72,
+              "size": 0.8,
+              "label": "Feed pump",
+              "motion": "pulse"
+            },
+            {
+              "id": "tower",
+              "kind": "tank",
+              "x": 0.8,
+              "y": 0.74,
+              "size": 1.2,
+              "label": "Cooling tower",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "furnace",
+              "to": "boiler",
+              "kind": "heat",
+              "label": "flames"
+            },
+            {
+              "from": "boiler",
+              "to": "turbine",
+              "kind": "fluid",
+              "label": "steam"
+            },
+            {
+              "from": "turbine",
+              "to": "gen",
+              "kind": "energy",
+              "label": "spin"
+            },
+            {
+              "from": "gen",
+              "to": "tx",
+              "kind": "power"
+            },
+            {
+              "from": "turbine",
+              "to": "cond",
+              "kind": "fluid",
+              "label": "used steam"
+            },
+            {
+              "from": "cond",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "water"
+            },
+            {
+              "from": "pump",
+              "to": "boiler",
+              "kind": "fluid"
+            },
+            {
+              "from": "cond",
+              "to": "tower",
+              "kind": "heat",
+              "label": "waste heat"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What happens to the coal in the furnace?",
+      "a": "The coal is ground as fine as flour and blown into the furnace with hot air, so it burns quickly and completely. Burning releases the chemical energy stored in the coal as heat, leaving hot gases and ash.",
+      "asks": [
+        "Why is the coal ground into powder?"
+      ]
+    },
+    {
+      "q": "How does the boiler make steam?",
+      "a": "Water is pumped through many kilometres of steel tubes lining the furnace walls. The flames heat the tubes, the water boils, and the steam is heated further to over 500 degrees Celsius at very high pressure.",
+      "asks": [
+        "How hot is the steam in a power station?"
+      ]
+    },
+    {
+      "q": "How does the generator make electricity?",
+      "a": "The turbine spins a large electromagnet inside coils of copper wire. The moving magnetic field pushes electrons back and forth in the coils, making alternating current.",
+      "asks": [
+        "How is spinning turned into electricity?"
+      ]
+    },
+    {
+      "q": "What does the condenser do?",
+      "a": "The condenser cools the used steam with cold water flowing through thousands of tubes, turning it back into water. This lowers the pressure behind the turbine, so the steam gives up more energy, and the clean water can be reused in the boiler.",
+      "asks": [
+        "Why is the steam turned back into water?"
+      ]
+    },
+    {
+      "q": "Why are coal power stations being closed?",
+      "a": "Coal releases more carbon dioxide for each unit of electricity than any other major fuel, about twice as much as a modern gas station, plus soot and sulphur that harm health. Many countries are replacing it with gas, wind, solar and nuclear power.",
+      "asks": [
+        "Is coal power bad for the environment?"
+      ]
+    }
+  ],
+  "facts": [
+    "Britain's last coal-fired power station, Ratcliffe-on-Soar, closed on 30 September 2024.",
+    "In countries with 50 hertz electricity, a big power station turbine and generator spin at 3,000 revolutions per minute.",
+    "Burning coal releases roughly twice as much carbon dioxide per kilowatt-hour of electricity as a modern combined-cycle gas station."
+  ],
+  "quiz": [
+    {
+      "say": "In a coal power station, which part turns the spinning of the turbine into electricity?",
+      "show": "Which part makes the electricity?",
+      "options": [
+        {
+          "show": "The boiler",
+          "say": "The boiler"
+        },
+        {
+          "show": "The generator",
+          "say": "The generator"
+        },
+        {
+          "show": "The condenser",
+          "say": "The condenser"
+        }
+      ],
+      "answer": 1,
+      "why": "The generator spins a magnet inside coils of wire, turning the turbine's motion into electricity.",
+      "wrong": {
+        "0": "The boiler turns water into steam; it makes no electricity.",
+        "2": "The condenser turns used steam back into water."
+      }
+    }
+  ]
+}

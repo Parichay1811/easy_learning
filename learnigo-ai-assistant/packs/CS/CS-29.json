@@ -1,0 +1,254 @@
+{
+  "id": "CS-29",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Compression",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "data compression",
+    "lossy compression",
+    "lossless compression",
+    "rle",
+    "data size reduction"
+  ],
+  "examples": [
+    "What is the difference between lossy and lossless compression?",
+    "Can you give me an example of when RLE is used?",
+    "How does compression actually make files smaller?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we will learn about data compression techniques. Compression helps make digital files smaller. This saves space on your storage device.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Compression"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Makes files smaller",
+            "Saves storage space",
+            "Keeps data usable"
+          ],
+          "at": "files"
+        },
+        {
+          "op": "text",
+          "text": "What is data compression?",
+          "at": "data"
+        }
+      ]
+    },
+    {
+      "say": "First we look at lossless compression. This method removes no original data. When you decompress it, the file is perfect.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Lossless: Perfect reconstruction",
+          "at": "lossless"
+        }
+      ]
+    },
+    {
+      "say": "Next we explore lossy compression. This method throws away some data to save space. You cannot get the original file back.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Lossy: Some data is lost",
+          "at": "lossy"
+        }
+      ]
+    },
+    {
+      "say": "Run Length Encoding is a simple compression method. It counts repeating characters in a sequence. For example, 'AAAAAB' becomes '5A1B'.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "RLE: Counts repeats (5A1B)",
+          "at": "counts"
+        }
+      ]
+    },
+    {
+      "say": "In everyday life, lossy compression is used for JPEGs. Photographs often use this method for smaller file sizes. You notice quality loss sometimes.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "JPEG uses lossy compression",
+          "at": "lossy"
+        }
+      ]
+    },
+    {
+      "say": "A common mistake is assuming all compression is lossless. Sometimes, you must accept some data loss. This is why formats differ.",
+      "draw": [
+        {
+          "op": "bullets",
+          "items": [
+            "Lossless: Text files",
+            "Lossy: Images/Audio",
+            "Choose based on need"
+          ],
+          "at": "lossless"
+        },
+        {
+          "op": "text",
+          "text": "Not all compression is lossless",
+          "at": "compression"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is lossy compression good for music files?",
+      "a": "Generally, no. Music often needs lossless compression like FLAC. Lossy methods can change the sound quality noticeably.",
+      "asks": [
+        "Should I use lossy for music?",
+        "Does quality drop with music compression?"
+      ]
+    },
+    {
+      "q": "What kind of data is best for RLE?",
+      "a": "RLE works best on data with long runs of the same value. Think of simple black and white images or repetitive text.",
+      "asks": [
+        "When does RLE work well?",
+        "What data type suits RLE?"
+      ]
+    },
+    {
+      "q": "Can I use both types of compression together?",
+      "a": "Sometimes, file formats combine techniques. For example, a file might use lossless compression for metadata and lossy for the main image data.",
+      "asks": [
+        "Are there mixed compression types?",
+        "Can I combine compression methods?"
+      ]
+    },
+    {
+      "q": "Does compression always make the file smaller?",
+      "a": "Not always. If the data is already random or highly complex, the compression process might actually make the file slightly larger.",
+      "asks": [
+        "When does compression fail?",
+        "Is there a minimum file size?"
+      ]
+    },
+    {
+      "q": "What is the main difference between JPEG and PNG?",
+      "a": "JPEG is often lossy and great for photos with smooth tones. PNG is usually lossless and excellent for graphics with sharp lines.",
+      "asks": [
+        "Which format is better for logos?",
+        "JPEG vs PNG compression?"
+      ]
+    }
+  ],
+  "facts": [
+    "Lossless compression guarantees perfect reconstruction of the original data.",
+    "Lossy compression achieves smaller sizes by discarding data the human senses are less likely to notice.",
+    "RLE is effective when data contains many sequences of identical symbols.",
+    "JPEG is a common example of a lossy image compression standard."
+  ],
+  "quiz": [
+    {
+      "say": "If you compress a text file containing 'zzzzzzzz' using RLE, what is the most compact representation?",
+      "show": "zzzzzzzz -> 7z",
+      "options": [
+        {
+          "show": "zzzzzzzz",
+          "say": "zzzzzzzz"
+        },
+        {
+          "show": "7z",
+          "say": "7z"
+        },
+        {
+          "show": "z7",
+          "say": "z7"
+        },
+        {
+          "show": "z7z",
+          "say": "z7z"
+        }
+      ],
+      "answer": 1,
+      "why": "RLE counts the number of repeating characters, so seven 'z's becomes 7z.",
+      "wrong": {
+        "0": "This ignores the purpose of compression entirely.",
+        "2": "This swaps the order, suggesting the character is 7 times the number.",
+        "3": "This adds extra characters that are not part of the compression rule."
+      }
+    },
+    {
+      "say": "Which compression type is best for medical X-rays where every detail matters?",
+      "show": "Medical images need perfect data",
+      "options": [
+        {
+          "show": "Lossless",
+          "say": "Lossless"
+        },
+        {
+          "show": "Lossy",
+          "say": "Lossy"
+        },
+        {
+          "show": "RLE only",
+          "say": "RLE only"
+        },
+        {
+          "show": "JPEG",
+          "say": "JPEG"
+        }
+      ],
+      "answer": 0,
+      "why": "Medical data requires perfect fidelity, meaning no data can be lost.",
+      "wrong": {
+        "1": "Lossy compression might remove subtle details critical for diagnosis.",
+        "2": "RLE is a technique, not a comprehensive compression type itself.",
+        "3": "JPEG is inherently lossy and unsuitable for critical records."
+      }
+    },
+    {
+      "say": "When comparing a detailed photograph to a simple black and white line drawing, which format is generally preferred?",
+      "show": "Photo vs Line Art: PNG",
+      "options": [
+        {
+          "show": "PNG",
+          "say": "PNG"
+        },
+        {
+          "show": "JPEG",
+          "say": "JPEG"
+        },
+        {
+          "show": "Lossy",
+          "say": "Lossy"
+        },
+        {
+          "show": "RLE",
+          "say": "RLE"
+        }
+      ],
+      "answer": 0,
+      "why": "PNG is often lossless and handles sharp edges and solid colors better than lossy formats.",
+      "wrong": {
+        "1": "JPEG can create noticeable blurring or artifacts around sharp lines.",
+        "2": "This is a category, not a specific file format choice.",
+        "3": "RLE is too simple a technique for complex photographic data."
+      }
+    }
+  ]
+}

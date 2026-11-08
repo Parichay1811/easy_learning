@@ -1,0 +1,649 @@
+{
+  "id": "ENGX-AERO-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a swashplate steers a helicopter",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "swashplate",
+    "cyclic stick",
+    "collective pitch",
+    "pitch links",
+    "rotor disc tilt"
+  ],
+  "examples": [
+    "How does a helicopter fly forward?",
+    "What is a swashplate?",
+    "What does the cyclic stick do?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "cyc",
+          "kind": "lever",
+          "x": 0.1,
+          "y": 0.7,
+          "label": "Cyclic stick",
+          "motion": "swing",
+          "ask": "What does the cyclic stick do?"
+        },
+        {
+          "id": "col",
+          "kind": "lever",
+          "x": 0.1,
+          "y": 0.3,
+          "label": "Collective lever",
+          "motion": "slide",
+          "ask": "What does the collective lever do?"
+        },
+        {
+          "id": "swash",
+          "kind": "gear",
+          "x": 0.42,
+          "y": 0.55,
+          "label": "Swashplate",
+          "motion": "swing",
+          "ask": "What is a swashplate?"
+        },
+        {
+          "id": "links",
+          "kind": "piston",
+          "x": 0.6,
+          "y": 0.32,
+          "label": "Pitch links",
+          "motion": "slide",
+          "ask": "What are pitch links?"
+        },
+        {
+          "id": "mast",
+          "kind": "axle",
+          "x": 0.72,
+          "y": 0.6,
+          "label": "Rotor mast",
+          "motion": "spin"
+        },
+        {
+          "id": "rotor",
+          "kind": "propeller",
+          "x": 0.82,
+          "y": 0.12,
+          "label": "Rotor blades",
+          "size": 1.3,
+          "motion": "spin",
+          "ask": "Why is it called cyclic?"
+        },
+        {
+          "id": "eng",
+          "kind": "motor",
+          "x": 0.85,
+          "y": 0.88,
+          "label": "Engine",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "cyc",
+          "to": "swash",
+          "kind": "force",
+          "label": "tilts"
+        },
+        {
+          "from": "col",
+          "to": "swash",
+          "kind": "force",
+          "label": "raises"
+        },
+        {
+          "from": "swash",
+          "to": "links",
+          "kind": "force"
+        },
+        {
+          "from": "links",
+          "to": "rotor",
+          "kind": "force",
+          "label": "blade angle"
+        },
+        {
+          "from": "eng",
+          "to": "mast",
+          "kind": "energy"
+        },
+        {
+          "from": "mast",
+          "to": "rotor",
+          "kind": "force",
+          "label": "spins"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Under a helicopter's rotor sits a clever part called the swashplate: two rings, one fixed and one spinning with the blades. Rods called pitch links join the spinning ring to each blade.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a swashplate steers a helicopter"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyc",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.7,
+              "label": "Cyclic stick",
+              "motion": "swing",
+              "ask": "What does the cyclic stick do?"
+            },
+            {
+              "id": "col",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "label": "Collective lever",
+              "motion": "slide",
+              "ask": "What does the collective lever do?"
+            },
+            {
+              "id": "swash",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Swashplate",
+              "motion": "swing",
+              "ask": "What is a swashplate?"
+            },
+            {
+              "id": "links",
+              "kind": "piston",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Pitch links",
+              "motion": "slide",
+              "ask": "What are pitch links?"
+            },
+            {
+              "id": "mast",
+              "kind": "axle",
+              "x": 0.72,
+              "y": 0.6,
+              "label": "Rotor mast",
+              "motion": "spin"
+            },
+            {
+              "id": "rotor",
+              "kind": "propeller",
+              "x": 0.82,
+              "y": 0.12,
+              "label": "Rotor blades",
+              "size": 1.3,
+              "motion": "spin",
+              "ask": "Why is it called cyclic?"
+            },
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.88,
+              "label": "Engine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "cyc",
+              "to": "swash",
+              "kind": "force",
+              "label": "tilts"
+            },
+            {
+              "from": "col",
+              "to": "swash",
+              "kind": "force",
+              "label": "raises"
+            },
+            {
+              "from": "swash",
+              "to": "links",
+              "kind": "force"
+            },
+            {
+              "from": "links",
+              "to": "rotor",
+              "kind": "force",
+              "label": "blade angle"
+            },
+            {
+              "from": "eng",
+              "to": "mast",
+              "kind": "energy"
+            },
+            {
+              "from": "mast",
+              "to": "rotor",
+              "kind": "force",
+              "label": "spins"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Raise the collective lever and the whole swashplate slides up the mast. Every blade twists to a steeper angle by the same amount, so lift rises and the helicopter climbs.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyc",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.7,
+              "label": "Cyclic stick",
+              "motion": "swing",
+              "ask": "What does the cyclic stick do?"
+            },
+            {
+              "id": "col",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "label": "Collective lever",
+              "motion": "slide",
+              "ask": "What does the collective lever do?"
+            },
+            {
+              "id": "swash",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Swashplate",
+              "motion": "swing",
+              "ask": "What is a swashplate?"
+            },
+            {
+              "id": "links",
+              "kind": "piston",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Pitch links",
+              "motion": "slide",
+              "ask": "What are pitch links?"
+            },
+            {
+              "id": "mast",
+              "kind": "axle",
+              "x": 0.72,
+              "y": 0.6,
+              "label": "Rotor mast",
+              "motion": "spin"
+            },
+            {
+              "id": "rotor",
+              "kind": "propeller",
+              "x": 0.82,
+              "y": 0.12,
+              "label": "Rotor blades",
+              "size": 1.3,
+              "motion": "spin",
+              "ask": "Why is it called cyclic?"
+            },
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.88,
+              "label": "Engine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "cyc",
+              "to": "swash",
+              "kind": "force",
+              "label": "tilts"
+            },
+            {
+              "from": "col",
+              "to": "swash",
+              "kind": "force",
+              "label": "raises"
+            },
+            {
+              "from": "swash",
+              "to": "links",
+              "kind": "force"
+            },
+            {
+              "from": "links",
+              "to": "rotor",
+              "kind": "force",
+              "label": "blade angle"
+            },
+            {
+              "from": "eng",
+              "to": "mast",
+              "kind": "energy"
+            },
+            {
+              "from": "mast",
+              "to": "rotor",
+              "kind": "force",
+              "label": "spins"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Push the cyclic stick and the swashplate tilts. Now each blade twists steeper on one side of its circle and flatter on the other, changing angle once every turn.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyc",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.7,
+              "label": "Cyclic stick",
+              "motion": "swing",
+              "ask": "What does the cyclic stick do?"
+            },
+            {
+              "id": "col",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "label": "Collective lever",
+              "motion": "slide",
+              "ask": "What does the collective lever do?"
+            },
+            {
+              "id": "swash",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Swashplate",
+              "motion": "swing",
+              "ask": "What is a swashplate?"
+            },
+            {
+              "id": "links",
+              "kind": "piston",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Pitch links",
+              "motion": "slide",
+              "ask": "What are pitch links?"
+            },
+            {
+              "id": "mast",
+              "kind": "axle",
+              "x": 0.72,
+              "y": 0.6,
+              "label": "Rotor mast",
+              "motion": "spin"
+            },
+            {
+              "id": "rotor",
+              "kind": "propeller",
+              "x": 0.82,
+              "y": 0.12,
+              "label": "Rotor blades",
+              "size": 1.3,
+              "motion": "spin",
+              "ask": "Why is it called cyclic?"
+            },
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.88,
+              "label": "Engine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "cyc",
+              "to": "swash",
+              "kind": "force",
+              "label": "tilts"
+            },
+            {
+              "from": "col",
+              "to": "swash",
+              "kind": "force",
+              "label": "raises"
+            },
+            {
+              "from": "swash",
+              "to": "links",
+              "kind": "force"
+            },
+            {
+              "from": "links",
+              "to": "rotor",
+              "kind": "force",
+              "label": "blade angle"
+            },
+            {
+              "from": "eng",
+              "to": "mast",
+              "kind": "energy"
+            },
+            {
+              "from": "mast",
+              "to": "rotor",
+              "kind": "force",
+              "label": "spins"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "With more lift on part of the circle, the spinning disc tips over and its push tips with it. The controls are set up so the disc tips the way the pilot pushes the stick, and the helicopter flies that way.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyc",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.7,
+              "label": "Cyclic stick",
+              "motion": "swing",
+              "ask": "What does the cyclic stick do?"
+            },
+            {
+              "id": "col",
+              "kind": "lever",
+              "x": 0.1,
+              "y": 0.3,
+              "label": "Collective lever",
+              "motion": "slide",
+              "ask": "What does the collective lever do?"
+            },
+            {
+              "id": "swash",
+              "kind": "gear",
+              "x": 0.42,
+              "y": 0.55,
+              "label": "Swashplate",
+              "motion": "swing",
+              "ask": "What is a swashplate?"
+            },
+            {
+              "id": "links",
+              "kind": "piston",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Pitch links",
+              "motion": "slide",
+              "ask": "What are pitch links?"
+            },
+            {
+              "id": "mast",
+              "kind": "axle",
+              "x": 0.72,
+              "y": 0.6,
+              "label": "Rotor mast",
+              "motion": "spin"
+            },
+            {
+              "id": "rotor",
+              "kind": "propeller",
+              "x": 0.82,
+              "y": 0.12,
+              "label": "Rotor blades",
+              "size": 1.3,
+              "motion": "spin",
+              "ask": "Why is it called cyclic?"
+            },
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.88,
+              "label": "Engine",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "cyc",
+              "to": "swash",
+              "kind": "force",
+              "label": "tilts"
+            },
+            {
+              "from": "col",
+              "to": "swash",
+              "kind": "force",
+              "label": "raises"
+            },
+            {
+              "from": "swash",
+              "to": "links",
+              "kind": "force"
+            },
+            {
+              "from": "links",
+              "to": "rotor",
+              "kind": "force",
+              "label": "blade angle"
+            },
+            {
+              "from": "eng",
+              "to": "mast",
+              "kind": "energy"
+            },
+            {
+              "from": "mast",
+              "to": "rotor",
+              "kind": "force",
+              "label": "spins"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a swashplate?",
+      "a": "A swashplate is a pair of rings around the rotor mast, one fixed and one spinning with the blades. Sliding or tilting it changes the angle of each rotor blade, which is how a helicopter is steered.",
+      "asks": [
+        "How does a helicopter steer?"
+      ]
+    },
+    {
+      "q": "What does the cyclic stick do?",
+      "a": "The cyclic tilts the swashplate, so each blade's angle changes once per turn. That tips the rotor disc, and the helicopter moves the way the disc tips: forward, backward or sideways.",
+      "asks": [
+        "How does a helicopter fly forward?"
+      ]
+    },
+    {
+      "q": "What does the collective lever do?",
+      "a": "The collective raises or lowers the whole swashplate, changing all the blades' angles together. More angle means more lift for climbing; less means descending.",
+      "asks": [
+        "How does a helicopter climb?"
+      ]
+    },
+    {
+      "q": "What are pitch links?",
+      "a": "Pitch links are short rods joining the spinning ring of the swashplate to each blade. As the ring rises, falls or tilts, the links twist the blades to a new angle.",
+      "asks": [
+        "What connects the swashplate to the blades?"
+      ]
+    },
+    {
+      "q": "Why is it called cyclic?",
+      "a": "Because each blade's angle changes in a cycle once every turn of the rotor: steeper on one part of the circle and flatter on the opposite part.",
+      "asks": [
+        "What does cyclic pitch mean?"
+      ]
+    }
+  ],
+  "facts": [
+    "Helicopter main rotors usually turn at a few hundred revolutions per minute.",
+    "Because a spinning rotor behaves like a gyroscope, the blade angle change is timed roughly a quarter turn before the point where the disc should tip."
+  ],
+  "quiz": [
+    {
+      "say": "Which control tilts the swashplate to fly a helicopter forward?",
+      "show": "Which control tilts the swashplate?",
+      "options": [
+        {
+          "show": "Cyclic stick",
+          "say": "Cyclic stick"
+        },
+        {
+          "show": "Collective lever",
+          "say": "Collective lever"
+        },
+        {
+          "show": "Tail rotor pedals",
+          "say": "Tail rotor pedals"
+        }
+      ],
+      "answer": 0,
+      "why": "The cyclic tilts the swashplate, which tips the rotor disc and points its push forward.",
+      "wrong": {
+        "1": "The collective lifts the whole swashplate evenly for climbing.",
+        "2": "The pedals change the tail rotor's push to turn the nose."
+      }
+    }
+  ]
+}

@@ -1,0 +1,605 @@
+{
+  "id": "ENGX-HOME-21",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a garage door opener lifts a heavy door",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "garage door opener",
+    "torsion spring",
+    "garage door",
+    "counterbalance",
+    "safety sensor"
+  ],
+  "examples": [
+    "How does a small motor lift a heavy garage door?",
+    "What do the springs on a garage door do?",
+    "Why does a garage door go back up if something is in the way?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.85,
+          "y": 0.15,
+          "size": 1,
+          "label": "Opener motor",
+          "motion": "spin"
+        },
+        {
+          "id": "chain",
+          "kind": "belt",
+          "x": 0.55,
+          "y": 0.15,
+          "size": 1,
+          "label": "Chain or belt rail",
+          "motion": "slide"
+        },
+        {
+          "id": "arm",
+          "kind": "lever",
+          "x": 0.25,
+          "y": 0.25,
+          "size": 0.8,
+          "label": "Door arm",
+          "motion": "swing"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.3,
+          "y": 0.55,
+          "size": 1,
+          "label": "Torsion spring",
+          "motion": "pulse",
+          "ask": "What do the springs on a garage door do?"
+        },
+        {
+          "id": "door",
+          "kind": "weight",
+          "x": 0.12,
+          "y": 0.7,
+          "size": 1.4,
+          "label": "Heavy door",
+          "motion": "slide",
+          "ask": "How does a small motor lift a heavy garage door?"
+        },
+        {
+          "id": "beam",
+          "kind": "bulb",
+          "x": 0.6,
+          "y": 0.88,
+          "size": 0.7,
+          "label": "Safety beam",
+          "motion": "pulse",
+          "ask": "Why does a garage door go back up if something is in the way?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "chain",
+          "kind": "energy",
+          "label": "drives"
+        },
+        {
+          "from": "chain",
+          "to": "arm",
+          "kind": "force",
+          "label": "pulls"
+        },
+        {
+          "from": "arm",
+          "to": "door",
+          "kind": "force",
+          "label": "lifts"
+        },
+        {
+          "from": "spring",
+          "to": "door",
+          "kind": "force",
+          "label": "balances weight"
+        },
+        {
+          "from": "beam",
+          "to": "motor",
+          "kind": "signal",
+          "label": "stop and reverse"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A garage door can weigh as much as two grown-ups, yet a small motor opens it. The secret is that the motor hardly lifts the weight at all.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a garage door opener lifts a heavy door"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 1,
+              "label": "Opener motor",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.15,
+              "size": 1,
+              "label": "Chain or belt rail",
+              "motion": "slide"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.25,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Door arm",
+              "motion": "swing"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1,
+              "label": "Torsion spring",
+              "motion": "pulse",
+              "ask": "What do the springs on a garage door do?"
+            },
+            {
+              "id": "door",
+              "kind": "weight",
+              "x": 0.12,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Heavy door",
+              "motion": "slide",
+              "ask": "How does a small motor lift a heavy garage door?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.6,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why does a garage door go back up if something is in the way?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "chain",
+              "kind": "energy",
+              "label": "drives"
+            },
+            {
+              "from": "chain",
+              "to": "arm",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "arm",
+              "to": "door",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "spring",
+              "to": "door",
+              "kind": "force",
+              "label": "balances weight"
+            },
+            {
+              "from": "beam",
+              "to": "motor",
+              "kind": "signal",
+              "label": "stop and reverse"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Big springs above the door are wound up tight when it is closed. As the door rises, they unwind and push upwards with almost exactly its weight, so the door is balanced.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 1,
+              "label": "Opener motor",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.15,
+              "size": 1,
+              "label": "Chain or belt rail",
+              "motion": "slide"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.25,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Door arm",
+              "motion": "swing"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1,
+              "label": "Torsion spring",
+              "motion": "pulse",
+              "ask": "What do the springs on a garage door do?"
+            },
+            {
+              "id": "door",
+              "kind": "weight",
+              "x": 0.12,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Heavy door",
+              "motion": "slide",
+              "ask": "How does a small motor lift a heavy garage door?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.6,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why does a garage door go back up if something is in the way?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "chain",
+              "kind": "energy",
+              "label": "drives"
+            },
+            {
+              "from": "chain",
+              "to": "arm",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "arm",
+              "to": "door",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "spring",
+              "to": "door",
+              "kind": "force",
+              "label": "balances weight"
+            },
+            {
+              "from": "beam",
+              "to": "motor",
+              "kind": "signal",
+              "label": "stop and reverse"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "With the door balanced, the motor only has to drive a chain or belt along a rail, pulling the arm that slides the door up its tracks.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 1,
+              "label": "Opener motor",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.15,
+              "size": 1,
+              "label": "Chain or belt rail",
+              "motion": "slide"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.25,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Door arm",
+              "motion": "swing"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1,
+              "label": "Torsion spring",
+              "motion": "pulse",
+              "ask": "What do the springs on a garage door do?"
+            },
+            {
+              "id": "door",
+              "kind": "weight",
+              "x": 0.12,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Heavy door",
+              "motion": "slide",
+              "ask": "How does a small motor lift a heavy garage door?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.6,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why does a garage door go back up if something is in the way?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "chain",
+              "kind": "energy",
+              "label": "drives"
+            },
+            {
+              "from": "chain",
+              "to": "arm",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "arm",
+              "to": "door",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "spring",
+              "to": "door",
+              "kind": "force",
+              "label": "balances weight"
+            },
+            {
+              "from": "beam",
+              "to": "motor",
+              "kind": "signal",
+              "label": "stop and reverse"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Near the floor, a beam of invisible light shines across the doorway. If a child, pet or car breaks the beam, the opener stops and reverses the door.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 1,
+              "label": "Opener motor",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.15,
+              "size": 1,
+              "label": "Chain or belt rail",
+              "motion": "slide"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.25,
+              "y": 0.25,
+              "size": 0.8,
+              "label": "Door arm",
+              "motion": "swing"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1,
+              "label": "Torsion spring",
+              "motion": "pulse",
+              "ask": "What do the springs on a garage door do?"
+            },
+            {
+              "id": "door",
+              "kind": "weight",
+              "x": 0.12,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Heavy door",
+              "motion": "slide",
+              "ask": "How does a small motor lift a heavy garage door?"
+            },
+            {
+              "id": "beam",
+              "kind": "bulb",
+              "x": 0.6,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Safety beam",
+              "motion": "pulse",
+              "ask": "Why does a garage door go back up if something is in the way?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "chain",
+              "kind": "energy",
+              "label": "drives"
+            },
+            {
+              "from": "chain",
+              "to": "arm",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "arm",
+              "to": "door",
+              "kind": "force",
+              "label": "lifts"
+            },
+            {
+              "from": "spring",
+              "to": "door",
+              "kind": "force",
+              "label": "balances weight"
+            },
+            {
+              "from": "beam",
+              "to": "motor",
+              "kind": "signal",
+              "label": "stop and reverse"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What do the springs on a garage door do?",
+      "a": "They balance the door. Twisted torsion springs or stretched springs store energy as the door closes and give it back as it opens, so the door feels almost weightless.",
+      "asks": [
+        "Why are garage door springs dangerous?"
+      ]
+    },
+    {
+      "q": "How does a small motor lift a heavy garage door?",
+      "a": "The springs carry nearly all the weight, so the motor only needs to overcome friction and small differences. A well-balanced door can even be lifted by hand.",
+      "asks": [
+        "How strong is a garage door motor?"
+      ]
+    },
+    {
+      "q": "Why does a garage door go back up if something is in the way?",
+      "a": "A safety beam across the bottom of the doorway is watched by a sensor. If something breaks it while the door is closing, the opener stops and reverses. Many also reverse if they feel too much resistance.",
+      "asks": [
+        "How does the garage door safety sensor work?"
+      ]
+    },
+    {
+      "q": "How does the remote open the garage door?",
+      "a": "The remote sends a coded radio signal. The opener checks the code, which changes each time on modern systems, and runs the motor if it matches.",
+      "asks": [
+        "What is a rolling code?"
+      ]
+    },
+    {
+      "q": "Why should you not fix garage door springs yourself?",
+      "a": "The springs store a huge amount of energy. If one snaps or is released wrongly, it can whip round and cause serious injury, so trained technicians handle them.",
+      "asks": [
+        "Can I replace a garage door spring?"
+      ]
+    }
+  ],
+  "facts": [
+    "Garage door springs counterbalance the door so the opener motor only has to move a nearly weightless load.",
+    "Garage door openers use a photo-eye beam near the floor to reverse the door if something blocks it."
+  ],
+  "quiz": [
+    {
+      "say": "What carries most of the weight of a garage door when it opens?",
+      "show": "What carries most of the weight of a garage door when it opens?",
+      "options": [
+        {
+          "show": "The springs",
+          "say": "The springs"
+        },
+        {
+          "show": "The motor",
+          "say": "The motor"
+        },
+        {
+          "show": "The remote control",
+          "say": "The remote control"
+        }
+      ],
+      "answer": 0,
+      "why": "The springs are wound up to balance the door, so they do most of the lifting.",
+      "wrong": {
+        "1": "The motor only moves a balanced door; it does not lift its full weight.",
+        "2": "The remote only sends a signal."
+      }
+    }
+  ]
+}

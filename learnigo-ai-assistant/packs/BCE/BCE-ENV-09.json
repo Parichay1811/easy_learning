@@ -1,0 +1,826 @@
+{
+  "id": "BCE-ENV-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Sustainable drainage (SuDS): slowing storm water like a sponge",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-ENV — Environmental engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "sustainable drainage systems",
+    "permeable paving",
+    "detention pond",
+    "rain garden",
+    "SuDS management train",
+    "sponge city"
+  ],
+  "examples": [
+    "What is SuDS in drainage?",
+    "How does permeable paving store rainwater?",
+    "Why do towns use detention ponds?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "roof",
+          "label": "Roofs",
+          "icon": "house",
+          "x": 0.08,
+          "y": 0.2
+        },
+        {
+          "id": "garden",
+          "label": "Rain garden",
+          "icon": "flower",
+          "x": 0.33,
+          "y": 0.15
+        },
+        {
+          "id": "road",
+          "label": "Car park",
+          "icon": "car",
+          "x": 0.08,
+          "y": 0.7
+        },
+        {
+          "id": "pave",
+          "label": "Permeable paving",
+          "icon": "rock",
+          "x": 0.32,
+          "y": 0.7,
+          "ask": "How does permeable paving work?"
+        },
+        {
+          "id": "swale",
+          "label": "Grass swale",
+          "icon": "grass",
+          "x": 0.55,
+          "y": 0.42
+        },
+        {
+          "id": "pond",
+          "label": "Detention pond",
+          "icon": "drop",
+          "x": 0.76,
+          "y": 0.68,
+          "ask": "What is a detention pond?"
+        },
+        {
+          "id": "stream",
+          "label": "Stream",
+          "icon": "river",
+          "x": 0.93,
+          "y": 0.35
+        }
+      ],
+      "links": [
+        {
+          "from": "roof",
+          "to": "garden",
+          "kind": "fluid"
+        },
+        {
+          "from": "garden",
+          "to": "swale",
+          "kind": "fluid"
+        },
+        {
+          "from": "road",
+          "to": "pave",
+          "kind": "fluid"
+        },
+        {
+          "from": "pave",
+          "to": "swale",
+          "kind": "fluid"
+        },
+        {
+          "from": "swale",
+          "to": "pond",
+          "kind": "fluid"
+        },
+        {
+          "from": "pond",
+          "to": "stream",
+          "kind": "fluid",
+          "label": "Slow release"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 2015 China launched its sponge city programme: cities that soak up rain like a sponge instead of piping it away fast. Britain calls the same idea SuDS, sustainable drainage systems. On the board, water from roofs and a car park finds its way to a stream, slowly, through green and porous things.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Sustainable drainage (SuDS): slowing storm water like a sponge"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "roof",
+              "label": "Roofs",
+              "icon": "house",
+              "x": 0.08,
+              "y": 0.2
+            },
+            {
+              "id": "garden",
+              "label": "Rain garden",
+              "icon": "flower",
+              "x": 0.33,
+              "y": 0.15
+            },
+            {
+              "id": "road",
+              "label": "Car park",
+              "icon": "car",
+              "x": 0.08,
+              "y": 0.7
+            },
+            {
+              "id": "pave",
+              "label": "Permeable paving",
+              "icon": "rock",
+              "x": 0.32,
+              "y": 0.7,
+              "ask": "How does permeable paving work?"
+            },
+            {
+              "id": "swale",
+              "label": "Grass swale",
+              "icon": "grass",
+              "x": 0.55,
+              "y": 0.42
+            },
+            {
+              "id": "pond",
+              "label": "Detention pond",
+              "icon": "drop",
+              "x": 0.76,
+              "y": 0.68,
+              "ask": "What is a detention pond?"
+            },
+            {
+              "id": "stream",
+              "label": "Stream",
+              "icon": "river",
+              "x": 0.93,
+              "y": 0.35
+            }
+          ],
+          "links": [
+            {
+              "from": "roof",
+              "to": "garden",
+              "kind": "fluid"
+            },
+            {
+              "from": "garden",
+              "to": "swale",
+              "kind": "fluid"
+            },
+            {
+              "from": "road",
+              "to": "pave",
+              "kind": "fluid"
+            },
+            {
+              "from": "pave",
+              "to": "swale",
+              "kind": "fluid"
+            },
+            {
+              "from": "swale",
+              "to": "pond",
+              "kind": "fluid"
+            },
+            {
+              "from": "pond",
+              "to": "stream",
+              "kind": "fluid",
+              "label": "Slow release"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First the problem. Look at the graph. A green field releases rain gently, peaking at about zero point four cubic metres per second after four hours. Pave it and pipe it, and the peak leaps to one point two in just one hour: three times higher, much sooner. That is how streams flood. What would you do to slow it?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Hours after rain",
+            "max": 12
+          },
+          "y": {
+            "label": "Runoff (m³/s)",
+            "max": 1.3
+          },
+          "curves": [
+            {
+              "label": "Green field",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0.05
+                ],
+                [
+                  2,
+                  0.2
+                ],
+                [
+                  3,
+                  0.35
+                ],
+                [
+                  4,
+                  0.4
+                ],
+                [
+                  5,
+                  0.35
+                ],
+                [
+                  6,
+                  0.25
+                ],
+                [
+                  8,
+                  0.12
+                ],
+                [
+                  10,
+                  0.05
+                ],
+                [
+                  12,
+                  0.02
+                ]
+              ]
+            },
+            {
+              "label": "Paved, piped",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.5,
+                  0.3
+                ],
+                [
+                  1,
+                  1.2
+                ],
+                [
+                  1.5,
+                  0.9
+                ],
+                [
+                  2,
+                  0.5
+                ],
+                [
+                  3,
+                  0.2
+                ],
+                [
+                  4,
+                  0.1
+                ],
+                [
+                  6,
+                  0.03
+                ],
+                [
+                  12,
+                  0
+                ]
+              ],
+              "ask": "What is sustainable drainage?"
+            },
+            {
+              "label": "Paved with SuDS",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0.2
+                ],
+                [
+                  2,
+                  0.4
+                ],
+                [
+                  3,
+                  0.45
+                ],
+                [
+                  4,
+                  0.42
+                ],
+                [
+                  6,
+                  0.3
+                ],
+                [
+                  8,
+                  0.15
+                ],
+                [
+                  10,
+                  0.06
+                ],
+                [
+                  12,
+                  0.02
+                ]
+              ],
+              "ask": "What is a SuDS management train?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Store it! Look at the permeable paving: blocks with gaps over a deep bed of stones. Thirty millimetres of rain on a one hectare car park, with ninety percent running off, is two hundred and seventy cubic metres. Stone with thirty percent empty space holds that in just ninety millimetres of depth.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "roof",
+              "label": "Roofs",
+              "icon": "house",
+              "x": 0.08,
+              "y": 0.2
+            },
+            {
+              "id": "garden",
+              "label": "Rain garden",
+              "icon": "flower",
+              "x": 0.33,
+              "y": 0.15
+            },
+            {
+              "id": "road",
+              "label": "Car park",
+              "icon": "car",
+              "x": 0.08,
+              "y": 0.7
+            },
+            {
+              "id": "pave",
+              "label": "Permeable paving",
+              "icon": "rock",
+              "x": 0.32,
+              "y": 0.7,
+              "ask": "How does permeable paving work?"
+            },
+            {
+              "id": "swale",
+              "label": "Grass swale",
+              "icon": "grass",
+              "x": 0.55,
+              "y": 0.42
+            },
+            {
+              "id": "pond",
+              "label": "Detention pond",
+              "icon": "drop",
+              "x": 0.76,
+              "y": 0.68,
+              "ask": "What is a detention pond?"
+            },
+            {
+              "id": "stream",
+              "label": "Stream",
+              "icon": "river",
+              "x": 0.93,
+              "y": 0.35
+            }
+          ],
+          "links": [
+            {
+              "from": "roof",
+              "to": "garden",
+              "kind": "fluid"
+            },
+            {
+              "from": "garden",
+              "to": "swale",
+              "kind": "fluid"
+            },
+            {
+              "from": "road",
+              "to": "pave",
+              "kind": "fluid"
+            },
+            {
+              "from": "pave",
+              "to": "swale",
+              "kind": "fluid"
+            },
+            {
+              "from": "swale",
+              "to": "pond",
+              "kind": "fluid"
+            },
+            {
+              "from": "pond",
+              "to": "stream",
+              "kind": "fluid",
+              "label": "Slow release"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "V = 0.03 × 10,000 × 0.9 = 270 m³ → depth 270/3,000 = 0.09 m"
+        },
+        {
+          "op": "note",
+          "text": "Stone sub-base with 30% voids: 10,000 m² × 0.3 = 3,000 m³ per metre."
+        }
+      ]
+    },
+    {
+      "say": "Now see the third curve, with SuDS. Rain gardens, swales and paving hold and soak up water, so the peak drops back to about zero point four five, close to the green field. As a bonus, plants and soil filter out oil and dirt. Which curve would the people living by the stream prefer?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Hours after rain",
+            "max": 12
+          },
+          "y": {
+            "label": "Runoff (m³/s)",
+            "max": 1.3
+          },
+          "curves": [
+            {
+              "label": "Green field",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0.05
+                ],
+                [
+                  2,
+                  0.2
+                ],
+                [
+                  3,
+                  0.35
+                ],
+                [
+                  4,
+                  0.4
+                ],
+                [
+                  5,
+                  0.35
+                ],
+                [
+                  6,
+                  0.25
+                ],
+                [
+                  8,
+                  0.12
+                ],
+                [
+                  10,
+                  0.05
+                ],
+                [
+                  12,
+                  0.02
+                ]
+              ]
+            },
+            {
+              "label": "Paved, piped",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.5,
+                  0.3
+                ],
+                [
+                  1,
+                  1.2
+                ],
+                [
+                  1.5,
+                  0.9
+                ],
+                [
+                  2,
+                  0.5
+                ],
+                [
+                  3,
+                  0.2
+                ],
+                [
+                  4,
+                  0.1
+                ],
+                [
+                  6,
+                  0.03
+                ],
+                [
+                  12,
+                  0
+                ]
+              ],
+              "ask": "What is sustainable drainage?"
+            },
+            {
+              "label": "Paved with SuDS",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0.2
+                ],
+                [
+                  2,
+                  0.4
+                ],
+                [
+                  3,
+                  0.45
+                ],
+                [
+                  4,
+                  0.42
+                ],
+                [
+                  6,
+                  0.3
+                ],
+                [
+                  8,
+                  0.15
+                ],
+                [
+                  10,
+                  0.06
+                ],
+                [
+                  12,
+                  0.02
+                ]
+              ],
+              "ask": "What is a SuDS management train?"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The SuDS curve! Engineers link these parts into a management train: handle rain where it falls first, then on the site, then in a shared pond like this detention pond, which lets water out slowly. Lovely work! Challenge: how much rain runs off a five thousand square metre roof in a twenty millimetre storm, with ninety five percent runoff?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "roof",
+              "label": "Roofs",
+              "icon": "house",
+              "x": 0.08,
+              "y": 0.2
+            },
+            {
+              "id": "garden",
+              "label": "Rain garden",
+              "icon": "flower",
+              "x": 0.33,
+              "y": 0.15
+            },
+            {
+              "id": "road",
+              "label": "Car park",
+              "icon": "car",
+              "x": 0.08,
+              "y": 0.7
+            },
+            {
+              "id": "pave",
+              "label": "Permeable paving",
+              "icon": "rock",
+              "x": 0.32,
+              "y": 0.7,
+              "ask": "How does permeable paving work?"
+            },
+            {
+              "id": "swale",
+              "label": "Grass swale",
+              "icon": "grass",
+              "x": 0.55,
+              "y": 0.42
+            },
+            {
+              "id": "pond",
+              "label": "Detention pond",
+              "icon": "drop",
+              "x": 0.76,
+              "y": 0.68,
+              "ask": "What is a detention pond?"
+            },
+            {
+              "id": "stream",
+              "label": "Stream",
+              "icon": "river",
+              "x": 0.93,
+              "y": 0.35
+            }
+          ],
+          "links": [
+            {
+              "from": "roof",
+              "to": "garden",
+              "kind": "fluid"
+            },
+            {
+              "from": "garden",
+              "to": "swale",
+              "kind": "fluid"
+            },
+            {
+              "from": "road",
+              "to": "pave",
+              "kind": "fluid"
+            },
+            {
+              "from": "pave",
+              "to": "swale",
+              "kind": "fluid"
+            },
+            {
+              "from": "swale",
+              "to": "pond",
+              "kind": "fluid"
+            },
+            {
+              "from": "pond",
+              "to": "stream",
+              "kind": "fluid",
+              "label": "Slow release"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is sustainable drainage?",
+      "a": "Sustainable drainage systems, SuDS, manage rain close to where it falls using green roofs, rain gardens, swales, permeable paving and ponds, to slow runoff, clean it and make space for nature.",
+      "asks": [
+        "What is SuDS?",
+        "What are sustainable drainage systems?"
+      ]
+    },
+    {
+      "q": "How does permeable paving work?",
+      "a": "Rain passes through gaps in the paving into a sub-base of open-graded stone with about 30 percent voids, which stores it and lets it soak away or drain out slowly.",
+      "asks": [
+        "How does permeable paving store rainwater?"
+      ]
+    },
+    {
+      "q": "What is a detention pond?",
+      "a": "A pond or basin that fills during storms and empties slowly through a small outlet, cutting the peak flow sent to the stream. A retention pond keeps a permanent pool of water as well.",
+      "asks": [
+        "Detention vs retention pond"
+      ]
+    },
+    {
+      "q": "What is a SuDS management train?",
+      "a": "A chain of SuDS features in series: source control where rain lands, then site control, then regional control such as a pond, so each step slows and cleans the water further.",
+      "asks": [
+        "SuDS train"
+      ]
+    },
+    {
+      "q": "What is a sponge city?",
+      "a": "China's programme, launched in 2015, to make cities absorb, store and reuse rain with parks, wetlands, porous paving and green roofs instead of relying only on pipes.",
+      "asks": [
+        "Sponge city China"
+      ]
+    }
+  ],
+  "facts": [
+    "China's sponge city programme started in 2015 with pilot cities including Wuhan.",
+    "The CIRIA SuDS Manual sets four aims for SuDS: water quantity, water quality, amenity and biodiversity."
+  ],
+  "quiz": [
+    {
+      "say": "A 5,000 square metre roof gets 20 millimetres of rain with 95 percent runoff. What volume runs off?",
+      "show": "A 5,000 m² roof gets 20 mm of rain with 95% runoff. Runoff volume?",
+      "options": [
+        {
+          "show": "95 m³",
+          "say": "95 cubic metres"
+        },
+        {
+          "show": "100 m³",
+          "say": "100 cubic metres"
+        },
+        {
+          "show": "950 m³",
+          "say": "950 cubic metres"
+        }
+      ],
+      "answer": 0,
+      "why": "0.02 m × 5,000 m² × 0.95 = 95 m³.",
+      "wrong": {
+        "1": "That forgets the 95 percent runoff factor.",
+        "2": "That slips a factor of ten in the millimetres."
+      }
+    },
+    {
+      "say": "Compared with pipes alone, SuDS make the storm peak…",
+      "show": "Compared with pipes alone, SuDS make the storm peak…",
+      "options": [
+        {
+          "show": "Lower and later",
+          "say": "Lower and later"
+        },
+        {
+          "show": "Higher and sooner",
+          "say": "Higher and sooner"
+        },
+        {
+          "show": "Exactly the same",
+          "say": "Exactly the same"
+        }
+      ],
+      "answer": 0,
+      "why": "Storage and soaking slow the water, lowering and delaying the peak.",
+      "wrong": {
+        "1": "That is what paving with fast pipes does.",
+        "2": "SuDS exist precisely to change the peak."
+      }
+    }
+  ]
+}

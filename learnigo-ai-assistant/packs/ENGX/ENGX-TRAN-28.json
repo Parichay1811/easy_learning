@@ -1,0 +1,645 @@
+{
+  "id": "ENGX-TRAN-28",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How railway points switch a train to another track",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "railway points",
+    "railway switch",
+    "point motor",
+    "switch rails",
+    "interlocking"
+  ],
+  "examples": [
+    "How do trains change tracks?",
+    "What are railway points?",
+    "Who changes the points on a railway?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "box",
+          "kind": "box",
+          "x": 0.12,
+          "y": 0.2,
+          "size": 1,
+          "label": "Signal box",
+          "motion": "pulse",
+          "ask": "Who changes the railway points?"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.3,
+          "y": 0.55,
+          "size": 0.9,
+          "label": "Point motor",
+          "motion": "spin",
+          "ask": "What is a point motor?"
+        },
+        {
+          "id": "rod",
+          "kind": "lever",
+          "x": 0.52,
+          "y": 0.55,
+          "size": 1,
+          "label": "Drive rod",
+          "motion": "slide",
+          "ask": "What does the drive rod do?"
+        },
+        {
+          "id": "switch",
+          "kind": "box",
+          "x": 0.72,
+          "y": 0.28,
+          "size": 1.1,
+          "label": "Moving switch rails",
+          "motion": "slide",
+          "ask": "How do points steer a train?"
+        },
+        {
+          "id": "lock",
+          "kind": "lever",
+          "x": 0.66,
+          "y": 0.84,
+          "size": 0.7,
+          "label": "Lock and detector",
+          "motion": "none",
+          "ask": "How do signals know the points are set?"
+        },
+        {
+          "id": "wheel",
+          "kind": "wheel",
+          "x": 0.92,
+          "y": 0.56,
+          "size": 1,
+          "label": "Train wheel flange",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "box",
+          "to": "motor",
+          "kind": "signal",
+          "label": "command"
+        },
+        {
+          "from": "motor",
+          "to": "rod",
+          "kind": "force",
+          "label": "push or pull"
+        },
+        {
+          "from": "rod",
+          "to": "switch",
+          "kind": "force",
+          "label": "moves rails"
+        },
+        {
+          "from": "switch",
+          "to": "lock",
+          "kind": "force",
+          "label": "locked"
+        },
+        {
+          "from": "lock",
+          "to": "box",
+          "kind": "signal",
+          "label": "proved set"
+        },
+        {
+          "from": "switch",
+          "to": "wheel",
+          "kind": "force",
+          "label": "guides flange"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Points, called switches in America, let a train move from one track to another. A signaller, or a computer in a control centre, decides the route and sends a command.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How railway points switch a train to another track"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "box",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Signal box",
+              "motion": "pulse",
+              "ask": "Who changes the railway points?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Point motor",
+              "motion": "spin",
+              "ask": "What is a point motor?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.52,
+              "y": 0.55,
+              "size": 1,
+              "label": "Drive rod",
+              "motion": "slide",
+              "ask": "What does the drive rod do?"
+            },
+            {
+              "id": "switch",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.28,
+              "size": 1.1,
+              "label": "Moving switch rails",
+              "motion": "slide",
+              "ask": "How do points steer a train?"
+            },
+            {
+              "id": "lock",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Lock and detector",
+              "motion": "none",
+              "ask": "How do signals know the points are set?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.56,
+              "size": 1,
+              "label": "Train wheel flange",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "box",
+              "to": "motor",
+              "kind": "signal",
+              "label": "command"
+            },
+            {
+              "from": "motor",
+              "to": "rod",
+              "kind": "force",
+              "label": "push or pull"
+            },
+            {
+              "from": "rod",
+              "to": "switch",
+              "kind": "force",
+              "label": "moves rails"
+            },
+            {
+              "from": "switch",
+              "to": "lock",
+              "kind": "force",
+              "label": "locked"
+            },
+            {
+              "from": "lock",
+              "to": "box",
+              "kind": "signal",
+              "label": "proved set"
+            },
+            {
+              "from": "switch",
+              "to": "wheel",
+              "kind": "force",
+              "label": "guides flange"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "A point motor beside the track turns that command into movement. It drives a rod that pushes or pulls two tapered rails, called switch rails, across by a few centimetres.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "box",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Signal box",
+              "motion": "pulse",
+              "ask": "Who changes the railway points?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Point motor",
+              "motion": "spin",
+              "ask": "What is a point motor?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.52,
+              "y": 0.55,
+              "size": 1,
+              "label": "Drive rod",
+              "motion": "slide",
+              "ask": "What does the drive rod do?"
+            },
+            {
+              "id": "switch",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.28,
+              "size": 1.1,
+              "label": "Moving switch rails",
+              "motion": "slide",
+              "ask": "How do points steer a train?"
+            },
+            {
+              "id": "lock",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Lock and detector",
+              "motion": "none",
+              "ask": "How do signals know the points are set?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.56,
+              "size": 1,
+              "label": "Train wheel flange",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "box",
+              "to": "motor",
+              "kind": "signal",
+              "label": "command"
+            },
+            {
+              "from": "motor",
+              "to": "rod",
+              "kind": "force",
+              "label": "push or pull"
+            },
+            {
+              "from": "rod",
+              "to": "switch",
+              "kind": "force",
+              "label": "moves rails"
+            },
+            {
+              "from": "switch",
+              "to": "lock",
+              "kind": "force",
+              "label": "locked"
+            },
+            {
+              "from": "lock",
+              "to": "box",
+              "kind": "signal",
+              "label": "proved set"
+            },
+            {
+              "from": "switch",
+              "to": "wheel",
+              "kind": "force",
+              "label": "guides flange"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "One switch rail presses tight against its main rail while the other moves away from its rail. The wheel flanges are guided along the open gap, so the train is steered onto the chosen track.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "box",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Signal box",
+              "motion": "pulse",
+              "ask": "Who changes the railway points?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Point motor",
+              "motion": "spin",
+              "ask": "What is a point motor?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.52,
+              "y": 0.55,
+              "size": 1,
+              "label": "Drive rod",
+              "motion": "slide",
+              "ask": "What does the drive rod do?"
+            },
+            {
+              "id": "switch",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.28,
+              "size": 1.1,
+              "label": "Moving switch rails",
+              "motion": "slide",
+              "ask": "How do points steer a train?"
+            },
+            {
+              "id": "lock",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Lock and detector",
+              "motion": "none",
+              "ask": "How do signals know the points are set?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.56,
+              "size": 1,
+              "label": "Train wheel flange",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "box",
+              "to": "motor",
+              "kind": "signal",
+              "label": "command"
+            },
+            {
+              "from": "motor",
+              "to": "rod",
+              "kind": "force",
+              "label": "push or pull"
+            },
+            {
+              "from": "rod",
+              "to": "switch",
+              "kind": "force",
+              "label": "moves rails"
+            },
+            {
+              "from": "switch",
+              "to": "lock",
+              "kind": "force",
+              "label": "locked"
+            },
+            {
+              "from": "lock",
+              "to": "box",
+              "kind": "signal",
+              "label": "proved set"
+            },
+            {
+              "from": "switch",
+              "to": "wheel",
+              "kind": "force",
+              "label": "guides flange"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The points are then locked, and detectors check that they are fully in place. Only when the points are proved set and locked will the signal let the train through.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "box",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.2,
+              "size": 1,
+              "label": "Signal box",
+              "motion": "pulse",
+              "ask": "Who changes the railway points?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Point motor",
+              "motion": "spin",
+              "ask": "What is a point motor?"
+            },
+            {
+              "id": "rod",
+              "kind": "lever",
+              "x": 0.52,
+              "y": 0.55,
+              "size": 1,
+              "label": "Drive rod",
+              "motion": "slide",
+              "ask": "What does the drive rod do?"
+            },
+            {
+              "id": "switch",
+              "kind": "box",
+              "x": 0.72,
+              "y": 0.28,
+              "size": 1.1,
+              "label": "Moving switch rails",
+              "motion": "slide",
+              "ask": "How do points steer a train?"
+            },
+            {
+              "id": "lock",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Lock and detector",
+              "motion": "none",
+              "ask": "How do signals know the points are set?"
+            },
+            {
+              "id": "wheel",
+              "kind": "wheel",
+              "x": 0.92,
+              "y": 0.56,
+              "size": 1,
+              "label": "Train wheel flange",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "box",
+              "to": "motor",
+              "kind": "signal",
+              "label": "command"
+            },
+            {
+              "from": "motor",
+              "to": "rod",
+              "kind": "force",
+              "label": "push or pull"
+            },
+            {
+              "from": "rod",
+              "to": "switch",
+              "kind": "force",
+              "label": "moves rails"
+            },
+            {
+              "from": "switch",
+              "to": "lock",
+              "kind": "force",
+              "label": "locked"
+            },
+            {
+              "from": "lock",
+              "to": "box",
+              "kind": "signal",
+              "label": "proved set"
+            },
+            {
+              "from": "switch",
+              "to": "wheel",
+              "kind": "force",
+              "label": "guides flange"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Who changes the railway points?",
+      "a": "Points are set by signallers in signal boxes or, today, mostly by computers in large control centres. Old points were worked by hand with long levers and rods.",
+      "asks": [
+        "How are points controlled?"
+      ]
+    },
+    {
+      "q": "What is a point motor?",
+      "a": "A point motor is an electric or hydraulic machine beside the track that moves the switch rails when commanded, then holds them in position.",
+      "asks": [
+        "What moves railway points?"
+      ]
+    },
+    {
+      "q": "What does the drive rod do?",
+      "a": "The drive rod links the point motor to the switch rails and moves both together, so one closes against its rail as the other opens.",
+      "asks": [
+        "How are both switch rails moved?"
+      ]
+    },
+    {
+      "q": "How do points steer a train?",
+      "a": "Trains have no steering, so the track does it. The moved switch rail guides the inside flanges of the wheels, leading the wheelset onto one route or the other.",
+      "asks": [
+        "What are switch rails?"
+      ]
+    },
+    {
+      "q": "How do signals know the points are set?",
+      "a": "Detectors check that the switch rails are fully home and locked. The signalling will not show a proceed signal over points that are not proved in the right position.",
+      "asks": [
+        "Why must points be locked?"
+      ]
+    }
+  ],
+  "facts": [
+    "In North America railway points are called switches or turnouts.",
+    "Many points have electric heaters to stop snow and ice jamming them.",
+    "Signals are interlocked with points, so a signal cannot clear for a route whose points are wrongly set."
+  ],
+  "quiz": [
+    {
+      "say": "What actually guides a train onto the new track at a set of points?",
+      "show": "What actually guides a train onto the new track at a set of points?",
+      "options": [
+        {
+          "show": "The moved switch rail guiding the wheel flanges",
+          "say": "The moved switch rail guiding the wheel flanges"
+        },
+        {
+          "show": "The driver steering the train",
+          "say": "The driver steering the train"
+        },
+        {
+          "show": "A magnet under the train",
+          "say": "A magnet under the train"
+        }
+      ],
+      "answer": 0,
+      "why": "The switch rails steer the wheel flanges, because trains have no steering of their own.",
+      "wrong": {
+        "1": "Train drivers cannot steer; the track decides the route.",
+        "2": "Normal trains are guided by rails and flanges, not magnets."
+      }
+    }
+  ]
+}

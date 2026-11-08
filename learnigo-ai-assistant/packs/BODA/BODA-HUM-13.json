@@ -1,0 +1,603 @@
+{
+  "id": "BODA-HUM-13",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How the stomach churns food into chyme",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "stomach churning",
+    "chyme",
+    "pyloric sphincter",
+    "pepsin",
+    "gastric juice"
+  ],
+  "examples": [
+    "What does the stomach do to food?",
+    "What is chyme?",
+    "How does food leave the stomach?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "oes",
+          "kind": "pipe",
+          "x": 0.2,
+          "y": 0.12,
+          "size": 0.8,
+          "label": "Gullet",
+          "motion": "flow"
+        },
+        {
+          "id": "top",
+          "kind": "valve",
+          "x": 0.32,
+          "y": 0.28,
+          "size": 0.6,
+          "label": "Top ring muscle",
+          "motion": "pulse"
+        },
+        {
+          "id": "stomach",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.52,
+          "size": 1.5,
+          "label": "Stomach",
+          "motion": "pulse",
+          "ask": "What does the stomach do to food?"
+        },
+        {
+          "id": "glands",
+          "kind": "box",
+          "x": 0.18,
+          "y": 0.62,
+          "size": 0.7,
+          "label": "Acid glands",
+          "motion": "none",
+          "ask": "What is in gastric juice?"
+        },
+        {
+          "id": "pylorus",
+          "kind": "valve",
+          "x": 0.75,
+          "y": 0.7,
+          "size": 0.6,
+          "label": "Pyloric valve",
+          "motion": "pulse",
+          "ask": "What is the pyloric valve?"
+        },
+        {
+          "id": "duod",
+          "kind": "pipe",
+          "x": 0.88,
+          "y": 0.88,
+          "size": 0.8,
+          "label": "Small intestine",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "oes",
+          "to": "top",
+          "kind": "food"
+        },
+        {
+          "from": "top",
+          "to": "stomach",
+          "kind": "food",
+          "label": "food in"
+        },
+        {
+          "from": "glands",
+          "to": "stomach",
+          "kind": "fluid",
+          "label": "gastric juice"
+        },
+        {
+          "from": "stomach",
+          "to": "pylorus",
+          "kind": "food",
+          "label": "chyme"
+        },
+        {
+          "from": "pylorus",
+          "to": "duod",
+          "kind": "food",
+          "label": "squirts"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your stomach is a stretchy, muscular bag that works like a food mixer with a gate at each end. It turns lumpy food into a thick soup called chyme.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How the stomach churns food into chyme"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "oes",
+              "kind": "pipe",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Gullet",
+              "motion": "flow"
+            },
+            {
+              "id": "top",
+              "kind": "valve",
+              "x": 0.32,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Top ring muscle",
+              "motion": "pulse"
+            },
+            {
+              "id": "stomach",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.52,
+              "size": 1.5,
+              "label": "Stomach",
+              "motion": "pulse",
+              "ask": "What does the stomach do to food?"
+            },
+            {
+              "id": "glands",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Acid glands",
+              "motion": "none",
+              "ask": "What is in gastric juice?"
+            },
+            {
+              "id": "pylorus",
+              "kind": "valve",
+              "x": 0.75,
+              "y": 0.7,
+              "size": 0.6,
+              "label": "Pyloric valve",
+              "motion": "pulse",
+              "ask": "What is the pyloric valve?"
+            },
+            {
+              "id": "duod",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Small intestine",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "oes",
+              "to": "top",
+              "kind": "food"
+            },
+            {
+              "from": "top",
+              "to": "stomach",
+              "kind": "food",
+              "label": "food in"
+            },
+            {
+              "from": "glands",
+              "to": "stomach",
+              "kind": "fluid",
+              "label": "gastric juice"
+            },
+            {
+              "from": "stomach",
+              "to": "pylorus",
+              "kind": "food",
+              "label": "chyme"
+            },
+            {
+              "from": "pylorus",
+              "to": "duod",
+              "kind": "food",
+              "label": "squirts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Food arrives through the gullet and a ring of muscle closes behind it. Three layers of muscle in the stomach wall squeeze in waves about three times a minute, churning and mashing the food.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "oes",
+              "kind": "pipe",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Gullet",
+              "motion": "flow"
+            },
+            {
+              "id": "top",
+              "kind": "valve",
+              "x": 0.32,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Top ring muscle",
+              "motion": "pulse"
+            },
+            {
+              "id": "stomach",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.52,
+              "size": 1.5,
+              "label": "Stomach",
+              "motion": "pulse",
+              "ask": "What does the stomach do to food?"
+            },
+            {
+              "id": "glands",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Acid glands",
+              "motion": "none",
+              "ask": "What is in gastric juice?"
+            },
+            {
+              "id": "pylorus",
+              "kind": "valve",
+              "x": 0.75,
+              "y": 0.7,
+              "size": 0.6,
+              "label": "Pyloric valve",
+              "motion": "pulse",
+              "ask": "What is the pyloric valve?"
+            },
+            {
+              "id": "duod",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Small intestine",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "oes",
+              "to": "top",
+              "kind": "food"
+            },
+            {
+              "from": "top",
+              "to": "stomach",
+              "kind": "food",
+              "label": "food in"
+            },
+            {
+              "from": "glands",
+              "to": "stomach",
+              "kind": "fluid",
+              "label": "gastric juice"
+            },
+            {
+              "from": "stomach",
+              "to": "pylorus",
+              "kind": "food",
+              "label": "chyme"
+            },
+            {
+              "from": "pylorus",
+              "to": "duod",
+              "kind": "food",
+              "label": "squirts"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Glands in the lining pour in gastric juice: hydrochloric acid, which kills germs, and pepsin, which starts chopping proteins. Mixed with the churning, this turns the meal into chyme.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "oes",
+              "kind": "pipe",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Gullet",
+              "motion": "flow"
+            },
+            {
+              "id": "top",
+              "kind": "valve",
+              "x": 0.32,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Top ring muscle",
+              "motion": "pulse"
+            },
+            {
+              "id": "stomach",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.52,
+              "size": 1.5,
+              "label": "Stomach",
+              "motion": "pulse",
+              "ask": "What does the stomach do to food?"
+            },
+            {
+              "id": "glands",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Acid glands",
+              "motion": "none",
+              "ask": "What is in gastric juice?"
+            },
+            {
+              "id": "pylorus",
+              "kind": "valve",
+              "x": 0.75,
+              "y": 0.7,
+              "size": 0.6,
+              "label": "Pyloric valve",
+              "motion": "pulse",
+              "ask": "What is the pyloric valve?"
+            },
+            {
+              "id": "duod",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Small intestine",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "oes",
+              "to": "top",
+              "kind": "food"
+            },
+            {
+              "from": "top",
+              "to": "stomach",
+              "kind": "food",
+              "label": "food in"
+            },
+            {
+              "from": "glands",
+              "to": "stomach",
+              "kind": "fluid",
+              "label": "gastric juice"
+            },
+            {
+              "from": "stomach",
+              "to": "pylorus",
+              "kind": "food",
+              "label": "chyme"
+            },
+            {
+              "from": "pylorus",
+              "to": "duod",
+              "kind": "food",
+              "label": "squirts"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "At the far end, the pyloric valve, a ring of muscle, opens just a little at a time and squirts small amounts of chyme into the small intestine, where most digestion happens.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "oes",
+              "kind": "pipe",
+              "x": 0.2,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Gullet",
+              "motion": "flow"
+            },
+            {
+              "id": "top",
+              "kind": "valve",
+              "x": 0.32,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Top ring muscle",
+              "motion": "pulse"
+            },
+            {
+              "id": "stomach",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.52,
+              "size": 1.5,
+              "label": "Stomach",
+              "motion": "pulse",
+              "ask": "What does the stomach do to food?"
+            },
+            {
+              "id": "glands",
+              "kind": "box",
+              "x": 0.18,
+              "y": 0.62,
+              "size": 0.7,
+              "label": "Acid glands",
+              "motion": "none",
+              "ask": "What is in gastric juice?"
+            },
+            {
+              "id": "pylorus",
+              "kind": "valve",
+              "x": 0.75,
+              "y": 0.7,
+              "size": 0.6,
+              "label": "Pyloric valve",
+              "motion": "pulse",
+              "ask": "What is the pyloric valve?"
+            },
+            {
+              "id": "duod",
+              "kind": "pipe",
+              "x": 0.88,
+              "y": 0.88,
+              "size": 0.8,
+              "label": "Small intestine",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "oes",
+              "to": "top",
+              "kind": "food"
+            },
+            {
+              "from": "top",
+              "to": "stomach",
+              "kind": "food",
+              "label": "food in"
+            },
+            {
+              "from": "glands",
+              "to": "stomach",
+              "kind": "fluid",
+              "label": "gastric juice"
+            },
+            {
+              "from": "stomach",
+              "to": "pylorus",
+              "kind": "food",
+              "label": "chyme"
+            },
+            {
+              "from": "pylorus",
+              "to": "duod",
+              "kind": "food",
+              "label": "squirts"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the stomach do to food?",
+      "a": "The stomach stores food, mixes it with acid and enzymes, and churns it with muscle waves until it becomes a thick liquid called chyme. Then it releases the chyme slowly into the small intestine.",
+      "asks": [
+        "Tell me about the stomach",
+        "What is the stomach for?"
+      ]
+    },
+    {
+      "q": "What is the pyloric valve?",
+      "a": "The pyloric sphincter is a ring of muscle at the exit of the stomach. It stays mostly closed and opens a little at a time, letting small squirts of chyme into the small intestine.",
+      "asks": [
+        "Tell me about the pyloric valve",
+        "How does food leave the stomach?"
+      ]
+    },
+    {
+      "q": "What is in gastric juice?",
+      "a": "Gastric juice contains hydrochloric acid, the enzyme pepsin that breaks down proteins, mucus that protects the lining, and water.",
+      "asks": [
+        "Tell me about the acid glands"
+      ]
+    },
+    {
+      "q": "What is chyme?",
+      "a": "Chyme is the thick, soupy mix of partly digested food, acid and enzymes that the stomach makes before passing it on to the small intestine.",
+      "asks": [
+        "What does food look like after the stomach?"
+      ]
+    },
+    {
+      "q": "How long does food stay in the stomach?",
+      "a": "Usually a few hours, often about two to four. Fatty meals stay longer than watery or sugary ones.",
+      "asks": [
+        "How long does the stomach take to empty?"
+      ]
+    }
+  ],
+  "facts": [
+    "The stomach wall has three layers of muscle running in different directions.",
+    "Stomach mixing waves happen about three times per minute.",
+    "An adult stomach can stretch to hold about 1 to 1.5 litres after a meal."
+  ],
+  "quiz": [
+    {
+      "say": "What controls how fast chyme leaves the stomach?",
+      "show": "What controls how fast chyme leaves the stomach?",
+      "options": [
+        {
+          "show": "The epiglottis",
+          "say": "The epiglottis"
+        },
+        {
+          "show": "The pyloric sphincter",
+          "say": "The pyloric sphincter"
+        },
+        {
+          "show": "The appendix",
+          "say": "The appendix"
+        }
+      ],
+      "answer": 1,
+      "why": "The pyloric sphincter is the ring of muscle at the stomach exit that lets chyme out in small squirts.",
+      "wrong": {
+        "0": "The epiglottis covers the windpipe when you swallow.",
+        "2": "The appendix is a small pouch off the large intestine."
+      }
+    }
+  ]
+}

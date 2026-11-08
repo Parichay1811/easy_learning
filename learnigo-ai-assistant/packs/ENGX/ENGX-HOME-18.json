@@ -1,0 +1,600 @@
+{
+  "id": "ENGX-HOME-18",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a blender blends food",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "blender",
+    "blender blades",
+    "vortex",
+    "blender motor",
+    "smoothie"
+  ],
+  "examples": [
+    "How does a blender work?",
+    "Why does food swirl down into the blades?",
+    "Why should you add liquid to a blender?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.5,
+          "y": 0.85,
+          "size": 1.2,
+          "label": "Motor in the base",
+          "motion": "spin"
+        },
+        {
+          "id": "coupling",
+          "kind": "gear",
+          "x": 0.5,
+          "y": 0.65,
+          "size": 0.6,
+          "label": "Coupling",
+          "motion": "spin"
+        },
+        {
+          "id": "blades",
+          "kind": "propeller",
+          "x": 0.5,
+          "y": 0.48,
+          "size": 1,
+          "label": "Blades",
+          "motion": "spin",
+          "ask": "How does a blender work?"
+        },
+        {
+          "id": "jug",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.2,
+          "size": 1.5,
+          "label": "Jug and vortex",
+          "motion": "flow",
+          "ask": "Why does food swirl down into the blades?"
+        },
+        {
+          "id": "lid",
+          "kind": "box",
+          "x": 0.85,
+          "y": 0.15,
+          "size": 0.7,
+          "label": "Lid",
+          "motion": "none"
+        },
+        {
+          "id": "ribs",
+          "kind": "lever",
+          "x": 0.15,
+          "y": 0.3,
+          "size": 0.7,
+          "label": "Ribs on jug wall",
+          "motion": "none",
+          "ask": "Why do blender jugs have ridges inside?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "coupling",
+          "kind": "energy",
+          "label": "fast spin"
+        },
+        {
+          "from": "coupling",
+          "to": "blades",
+          "kind": "energy"
+        },
+        {
+          "from": "blades",
+          "to": "jug",
+          "kind": "fluid",
+          "label": "flings outward"
+        },
+        {
+          "from": "jug",
+          "to": "blades",
+          "kind": "fluid",
+          "label": "food pulled down"
+        },
+        {
+          "from": "ribs",
+          "to": "jug",
+          "kind": "force",
+          "label": "breaks the swirl"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A powerful motor in the base spins the blades through a toothed coupling, often more than 20,000 times a minute.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a blender blends food"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Motor in the base",
+              "motion": "spin"
+            },
+            {
+              "id": "coupling",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 0.6,
+              "label": "Coupling",
+              "motion": "spin"
+            },
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How does a blender work?"
+            },
+            {
+              "id": "jug",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.5,
+              "label": "Jug and vortex",
+              "motion": "flow",
+              "ask": "Why does food swirl down into the blades?"
+            },
+            {
+              "id": "lid",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Lid",
+              "motion": "none"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Ribs on jug wall",
+              "motion": "none",
+              "ask": "Why do blender jugs have ridges inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "coupling",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "coupling",
+              "to": "blades",
+              "kind": "energy"
+            },
+            {
+              "from": "blades",
+              "to": "jug",
+              "kind": "fluid",
+              "label": "flings outward"
+            },
+            {
+              "from": "jug",
+              "to": "blades",
+              "kind": "fluid",
+              "label": "food pulled down"
+            },
+            {
+              "from": "ribs",
+              "to": "jug",
+              "kind": "force",
+              "label": "breaks the swirl"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The blades are angled up and down. They chop whatever they hit and fling food outwards and upwards against the sides of the jug.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Motor in the base",
+              "motion": "spin"
+            },
+            {
+              "id": "coupling",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 0.6,
+              "label": "Coupling",
+              "motion": "spin"
+            },
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How does a blender work?"
+            },
+            {
+              "id": "jug",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.5,
+              "label": "Jug and vortex",
+              "motion": "flow",
+              "ask": "Why does food swirl down into the blades?"
+            },
+            {
+              "id": "lid",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Lid",
+              "motion": "none"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Ribs on jug wall",
+              "motion": "none",
+              "ask": "Why do blender jugs have ridges inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "coupling",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "coupling",
+              "to": "blades",
+              "kind": "energy"
+            },
+            {
+              "from": "blades",
+              "to": "jug",
+              "kind": "fluid",
+              "label": "flings outward"
+            },
+            {
+              "from": "jug",
+              "to": "blades",
+              "kind": "fluid",
+              "label": "food pulled down"
+            },
+            {
+              "from": "ribs",
+              "to": "jug",
+              "kind": "force",
+              "label": "breaks the swirl"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The thrown food rises up the walls and falls back down through the middle, making a whirlpool called a vortex that keeps pulling food back into the blades.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Motor in the base",
+              "motion": "spin"
+            },
+            {
+              "id": "coupling",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 0.6,
+              "label": "Coupling",
+              "motion": "spin"
+            },
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How does a blender work?"
+            },
+            {
+              "id": "jug",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.5,
+              "label": "Jug and vortex",
+              "motion": "flow",
+              "ask": "Why does food swirl down into the blades?"
+            },
+            {
+              "id": "lid",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Lid",
+              "motion": "none"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Ribs on jug wall",
+              "motion": "none",
+              "ask": "Why do blender jugs have ridges inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "coupling",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "coupling",
+              "to": "blades",
+              "kind": "energy"
+            },
+            {
+              "from": "blades",
+              "to": "jug",
+              "kind": "fluid",
+              "label": "flings outward"
+            },
+            {
+              "from": "jug",
+              "to": "blades",
+              "kind": "fluid",
+              "label": "food pulled down"
+            },
+            {
+              "from": "ribs",
+              "to": "jug",
+              "kind": "force",
+              "label": "breaks the swirl"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Ridges on the jug wall break up the swirl so the food tumbles instead of just spinning round, and liquid helps everything flow so the vortex can form.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Motor in the base",
+              "motion": "spin"
+            },
+            {
+              "id": "coupling",
+              "kind": "gear",
+              "x": 0.5,
+              "y": 0.65,
+              "size": 0.6,
+              "label": "Coupling",
+              "motion": "spin"
+            },
+            {
+              "id": "blades",
+              "kind": "propeller",
+              "x": 0.5,
+              "y": 0.48,
+              "size": 1,
+              "label": "Blades",
+              "motion": "spin",
+              "ask": "How does a blender work?"
+            },
+            {
+              "id": "jug",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.2,
+              "size": 1.5,
+              "label": "Jug and vortex",
+              "motion": "flow",
+              "ask": "Why does food swirl down into the blades?"
+            },
+            {
+              "id": "lid",
+              "kind": "box",
+              "x": 0.85,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Lid",
+              "motion": "none"
+            },
+            {
+              "id": "ribs",
+              "kind": "lever",
+              "x": 0.15,
+              "y": 0.3,
+              "size": 0.7,
+              "label": "Ribs on jug wall",
+              "motion": "none",
+              "ask": "Why do blender jugs have ridges inside?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "coupling",
+              "kind": "energy",
+              "label": "fast spin"
+            },
+            {
+              "from": "coupling",
+              "to": "blades",
+              "kind": "energy"
+            },
+            {
+              "from": "blades",
+              "to": "jug",
+              "kind": "fluid",
+              "label": "flings outward"
+            },
+            {
+              "from": "jug",
+              "to": "blades",
+              "kind": "fluid",
+              "label": "food pulled down"
+            },
+            {
+              "from": "ribs",
+              "to": "jug",
+              "kind": "force",
+              "label": "breaks the swirl"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a blender work?",
+      "a": "A motor spins sharp, angled blades very fast. They chop the food and throw it outwards, and the swirling flow keeps bringing more food back to the blades until it is smooth.",
+      "asks": [
+        "What spins in a blender?"
+      ]
+    },
+    {
+      "q": "Why does food swirl down into the blades?",
+      "a": "The blades fling food up the sides of the jug, and it falls back down the middle. This vortex keeps carrying food down into the blades again and again.",
+      "asks": [
+        "What is a blender vortex?"
+      ]
+    },
+    {
+      "q": "Why do blender jugs have ridges inside?",
+      "a": "Without them the whole mixture might just spin round with the blades. The ridges break up the spinning so food tumbles back into the blades.",
+      "asks": [
+        "Why is a blender jug not round inside?"
+      ]
+    },
+    {
+      "q": "Why should you add liquid to a blender?",
+      "a": "Liquid lets the food move and flow, so the vortex can form. Without it, food can jam above the blades in an air pocket and not blend.",
+      "asks": [
+        "Why does my blender just spin without blending?"
+      ]
+    },
+    {
+      "q": "Why must the lid be on?",
+      "a": "The vortex throws food upwards, and hot liquids can produce steam pressure. The lid keeps everything in and stops splashes and burns.",
+      "asks": [
+        "Why does hot soup explode in a blender?"
+      ]
+    }
+  ],
+  "facts": [
+    "Blender blades often spin at 20,000 revolutions per minute or more.",
+    "The swirling vortex in a blender repeatedly draws food back down into the blades."
+  ],
+  "quiz": [
+    {
+      "say": "Why can a blender with very thick food and no liquid stop blending?",
+      "show": "Why can a blender with very thick food and no liquid stop blending?",
+      "options": [
+        {
+          "show": "An air pocket forms around the blades so food cannot flow in",
+          "say": "An air pocket forms around the blades so food cannot flow in"
+        },
+        {
+          "show": "The motor stops spinning",
+          "say": "The motor stops spinning"
+        },
+        {
+          "show": "The blades go blunt instantly",
+          "say": "The blades go blunt instantly"
+        }
+      ],
+      "answer": 0,
+      "why": "Without liquid the food cannot flow down into the blades, so they spin in an empty space.",
+      "wrong": {
+        "1": "The motor keeps spinning, just in an air pocket.",
+        "2": "Blades do not blunt instantly; the problem is flow."
+      }
+    }
+  ]
+}

@@ -1,0 +1,616 @@
+{
+  "id": "ENGX-TRAN-13",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a seatbelt locks in a crash",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "seatbelt reel",
+    "inertia reel",
+    "seatbelt pendulum",
+    "locking pawl",
+    "retractor"
+  ],
+  "examples": [
+    "How does a seatbelt know when to lock?",
+    "Why does my seatbelt get stuck when I pull it fast?",
+    "What pulls a seatbelt back in?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "web",
+          "kind": "belt",
+          "x": 0.32,
+          "y": 0.12,
+          "size": 1,
+          "label": "Belt webbing",
+          "motion": "flow"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.1,
+          "y": 0.5,
+          "size": 0.7,
+          "label": "Rewind spring",
+          "motion": "pulse",
+          "ask": "What pulls the seatbelt back in?"
+        },
+        {
+          "id": "reel",
+          "kind": "wheel",
+          "x": 0.32,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Belt reel",
+          "motion": "spin",
+          "ask": "Why does a seatbelt let me lean forward slowly?"
+        },
+        {
+          "id": "ratchet",
+          "kind": "gear",
+          "x": 0.56,
+          "y": 0.32,
+          "size": 0.9,
+          "label": "Toothed ratchet",
+          "motion": "spin",
+          "ask": "Why does my seatbelt lock if I pull it fast?"
+        },
+        {
+          "id": "pawl",
+          "kind": "lever",
+          "x": 0.78,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Locking pawl",
+          "motion": "swing",
+          "ask": "What is the locking pawl?"
+        },
+        {
+          "id": "pend",
+          "kind": "weight",
+          "x": 0.78,
+          "y": 0.84,
+          "size": 0.7,
+          "label": "Pendulum weight",
+          "motion": "swing",
+          "ask": "What does the pendulum in a seatbelt do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "web",
+          "to": "reel",
+          "kind": "force",
+          "label": "pulls out"
+        },
+        {
+          "from": "spring",
+          "to": "reel",
+          "kind": "force",
+          "label": "winds back"
+        },
+        {
+          "from": "reel",
+          "to": "ratchet",
+          "kind": "force",
+          "label": "same shaft"
+        },
+        {
+          "from": "pend",
+          "to": "pawl",
+          "kind": "force",
+          "label": "tips it up"
+        },
+        {
+          "from": "pawl",
+          "to": "ratchet",
+          "kind": "force",
+          "label": "catches teeth"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A seatbelt lets you lean forward slowly, yet locks solid in a crash. The webbing is wound on a reel, and a gentle spring keeps it snug against you.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a seatbelt locks in a crash"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "web",
+              "kind": "belt",
+              "x": 0.32,
+              "y": 0.12,
+              "size": 1,
+              "label": "Belt webbing",
+              "motion": "flow"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Rewind spring",
+              "motion": "pulse",
+              "ask": "What pulls the seatbelt back in?"
+            },
+            {
+              "id": "reel",
+              "kind": "wheel",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Belt reel",
+              "motion": "spin",
+              "ask": "Why does a seatbelt let me lean forward slowly?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.56,
+              "y": 0.32,
+              "size": 0.9,
+              "label": "Toothed ratchet",
+              "motion": "spin",
+              "ask": "Why does my seatbelt lock if I pull it fast?"
+            },
+            {
+              "id": "pawl",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Locking pawl",
+              "motion": "swing",
+              "ask": "What is the locking pawl?"
+            },
+            {
+              "id": "pend",
+              "kind": "weight",
+              "x": 0.78,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Pendulum weight",
+              "motion": "swing",
+              "ask": "What does the pendulum in a seatbelt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "web",
+              "to": "reel",
+              "kind": "force",
+              "label": "pulls out"
+            },
+            {
+              "from": "spring",
+              "to": "reel",
+              "kind": "force",
+              "label": "winds back"
+            },
+            {
+              "from": "reel",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "same shaft"
+            },
+            {
+              "from": "pend",
+              "to": "pawl",
+              "kind": "force",
+              "label": "tips it up"
+            },
+            {
+              "from": "pawl",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "catches teeth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The reel has a toothed ratchet wheel on its side. As long as nothing catches those teeth, the reel turns freely and the belt pays out when you move.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "web",
+              "kind": "belt",
+              "x": 0.32,
+              "y": 0.12,
+              "size": 1,
+              "label": "Belt webbing",
+              "motion": "flow"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Rewind spring",
+              "motion": "pulse",
+              "ask": "What pulls the seatbelt back in?"
+            },
+            {
+              "id": "reel",
+              "kind": "wheel",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Belt reel",
+              "motion": "spin",
+              "ask": "Why does a seatbelt let me lean forward slowly?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.56,
+              "y": 0.32,
+              "size": 0.9,
+              "label": "Toothed ratchet",
+              "motion": "spin",
+              "ask": "Why does my seatbelt lock if I pull it fast?"
+            },
+            {
+              "id": "pawl",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Locking pawl",
+              "motion": "swing",
+              "ask": "What is the locking pawl?"
+            },
+            {
+              "id": "pend",
+              "kind": "weight",
+              "x": 0.78,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Pendulum weight",
+              "motion": "swing",
+              "ask": "What does the pendulum in a seatbelt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "web",
+              "to": "reel",
+              "kind": "force",
+              "label": "pulls out"
+            },
+            {
+              "from": "spring",
+              "to": "reel",
+              "kind": "force",
+              "label": "winds back"
+            },
+            {
+              "from": "reel",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "same shaft"
+            },
+            {
+              "from": "pend",
+              "to": "pawl",
+              "kind": "force",
+              "label": "tips it up"
+            },
+            {
+              "from": "pawl",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "catches teeth"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Below it hangs a small weight on a pivot, a pendulum. When the car brakes hard or crashes, the weight keeps moving forward and swings, tipping up a little catch called a pawl.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "web",
+              "kind": "belt",
+              "x": 0.32,
+              "y": 0.12,
+              "size": 1,
+              "label": "Belt webbing",
+              "motion": "flow"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Rewind spring",
+              "motion": "pulse",
+              "ask": "What pulls the seatbelt back in?"
+            },
+            {
+              "id": "reel",
+              "kind": "wheel",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Belt reel",
+              "motion": "spin",
+              "ask": "Why does a seatbelt let me lean forward slowly?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.56,
+              "y": 0.32,
+              "size": 0.9,
+              "label": "Toothed ratchet",
+              "motion": "spin",
+              "ask": "Why does my seatbelt lock if I pull it fast?"
+            },
+            {
+              "id": "pawl",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Locking pawl",
+              "motion": "swing",
+              "ask": "What is the locking pawl?"
+            },
+            {
+              "id": "pend",
+              "kind": "weight",
+              "x": 0.78,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Pendulum weight",
+              "motion": "swing",
+              "ask": "What does the pendulum in a seatbelt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "web",
+              "to": "reel",
+              "kind": "force",
+              "label": "pulls out"
+            },
+            {
+              "from": "spring",
+              "to": "reel",
+              "kind": "force",
+              "label": "winds back"
+            },
+            {
+              "from": "reel",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "same shaft"
+            },
+            {
+              "from": "pend",
+              "to": "pawl",
+              "kind": "force",
+              "label": "tips it up"
+            },
+            {
+              "from": "pawl",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "catches teeth"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "The pawl jams into the ratchet teeth and locks the reel, so the belt holds you. A second sensor locks the reel if the belt itself is yanked out fast, which is why a sharp tug makes it stick.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "web",
+              "kind": "belt",
+              "x": 0.32,
+              "y": 0.12,
+              "size": 1,
+              "label": "Belt webbing",
+              "motion": "flow"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Rewind spring",
+              "motion": "pulse",
+              "ask": "What pulls the seatbelt back in?"
+            },
+            {
+              "id": "reel",
+              "kind": "wheel",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Belt reel",
+              "motion": "spin",
+              "ask": "Why does a seatbelt let me lean forward slowly?"
+            },
+            {
+              "id": "ratchet",
+              "kind": "gear",
+              "x": 0.56,
+              "y": 0.32,
+              "size": 0.9,
+              "label": "Toothed ratchet",
+              "motion": "spin",
+              "ask": "Why does my seatbelt lock if I pull it fast?"
+            },
+            {
+              "id": "pawl",
+              "kind": "lever",
+              "x": 0.78,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Locking pawl",
+              "motion": "swing",
+              "ask": "What is the locking pawl?"
+            },
+            {
+              "id": "pend",
+              "kind": "weight",
+              "x": 0.78,
+              "y": 0.84,
+              "size": 0.7,
+              "label": "Pendulum weight",
+              "motion": "swing",
+              "ask": "What does the pendulum in a seatbelt do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "web",
+              "to": "reel",
+              "kind": "force",
+              "label": "pulls out"
+            },
+            {
+              "from": "spring",
+              "to": "reel",
+              "kind": "force",
+              "label": "winds back"
+            },
+            {
+              "from": "reel",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "same shaft"
+            },
+            {
+              "from": "pend",
+              "to": "pawl",
+              "kind": "force",
+              "label": "tips it up"
+            },
+            {
+              "from": "pawl",
+              "to": "ratchet",
+              "kind": "force",
+              "label": "catches teeth"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does a seatbelt let me lean forward slowly?",
+      "a": "When you move slowly, nothing catches the ratchet on the reel, so the reel turns freely and the belt pays out. Only a sudden jerk or hard slowdown locks it.",
+      "asks": [
+        "How does a seatbelt reel work?"
+      ]
+    },
+    {
+      "q": "What pulls the seatbelt back in?",
+      "a": "A coiled spring inside the reel, like a clock spring, gently winds the belt back. It keeps the belt snug and rolls it away when you unbuckle.",
+      "asks": [
+        "Why does the seatbelt retract?"
+      ]
+    },
+    {
+      "q": "What does the pendulum in a seatbelt do?",
+      "a": "The small pendulum weight keeps moving when the car slows suddenly, so it swings forward. Its swing tips up the pawl that locks the reel.",
+      "asks": [
+        "How does a seatbelt sense a crash?"
+      ]
+    },
+    {
+      "q": "What is the locking pawl?",
+      "a": "The pawl is a small hooked lever. When it tips up it catches the teeth of the ratchet wheel on the reel and stops the belt unwinding.",
+      "asks": [
+        "What locks the seatbelt?"
+      ]
+    },
+    {
+      "q": "Why does my seatbelt lock if I pull it fast?",
+      "a": "A second sensor in the reel has small weights that fly outward when the reel spins fast. They catch the ratchet teeth too, so a sharp tug locks the belt just as a crash would.",
+      "asks": [
+        "Why does the seatbelt get stuck when I yank it?",
+        "What is the toothed ratchet in a seatbelt?"
+      ]
+    }
+  ],
+  "facts": [
+    "The three-point seatbelt was developed by Volvo engineer Nils Bohlin and introduced in 1959.",
+    "Volvo let other carmakers use the three-point seatbelt design freely.",
+    "Many cars also have pretensioners that pull the belt tight in the first moment of a crash."
+  ],
+  "quiz": [
+    {
+      "say": "What locks a seatbelt reel when the car stops suddenly?",
+      "show": "What locks a seatbelt reel when the car stops suddenly?",
+      "options": [
+        {
+          "show": "A swinging pendulum tips a pawl into a ratchet",
+          "say": "A swinging pendulum tips a pawl into a ratchet"
+        },
+        {
+          "show": "The driver presses a button",
+          "say": "The driver presses a button"
+        },
+        {
+          "show": "The rewind spring snaps",
+          "say": "The rewind spring snaps"
+        }
+      ],
+      "answer": 0,
+      "why": "The pendulum keeps moving when the car slows, swings, and tips the pawl into the ratchet teeth.",
+      "wrong": {
+        "1": "The locking is automatic; there is no button.",
+        "2": "The spring only winds the belt back; it does not lock it."
+      }
+    }
+  ]
+}

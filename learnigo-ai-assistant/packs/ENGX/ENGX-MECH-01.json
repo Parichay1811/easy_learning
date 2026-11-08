@@ -1,0 +1,493 @@
+{
+  "id": "ENGX-MECH-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How gears trade speed for turning force",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "gear ratio",
+    "driver gear",
+    "driven gear",
+    "gear teeth",
+    "torque",
+    "meshing gears"
+  ],
+  "examples": [
+    "Why does a small gear turn a big gear slowly?",
+    "What is a gear ratio?",
+    "How do gears make a machine stronger?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.1,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Motor",
+          "motion": "spin"
+        },
+        {
+          "id": "driver",
+          "kind": "gear",
+          "x": 0.36,
+          "y": 0.45,
+          "size": 0.7,
+          "label": "Driver gear, 10 teeth",
+          "motion": "spin",
+          "ask": "What does the driver gear do?"
+        },
+        {
+          "id": "driven",
+          "kind": "gear",
+          "x": 0.62,
+          "y": 0.5,
+          "size": 1.4,
+          "label": "Driven gear, 30 teeth",
+          "motion": "spin",
+          "ask": "Why does the big gear turn slower but stronger?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.9,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Output shaft",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "driver",
+          "kind": "energy",
+          "label": "turning"
+        },
+        {
+          "from": "driver",
+          "to": "driven",
+          "kind": "force",
+          "label": "teeth push"
+        },
+        {
+          "from": "driven",
+          "to": "shaft",
+          "kind": "energy",
+          "label": "slow but strong"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Gears are wheels with teeth that lock together, so when one turns it pushes the next one round. Here a small driver gear with 10 teeth turns a big driven gear with 30 teeth.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How gears trade speed for turning force"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.36,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Driver gear, 10 teeth",
+              "motion": "spin",
+              "ask": "What does the driver gear do?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven gear, 30 teeth",
+              "motion": "spin",
+              "ask": "Why does the big gear turn slower but stronger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Output shaft",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "driver",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "driver",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "driven",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "slow but strong"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: gears. Look at the driver gear, the small gear and the third gear. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How gears trade speed for turning force"
+        },
+        {
+          "op": "image",
+          "render": "gear-train"
+        }
+      ]
+    },
+    {
+      "say": "Each tooth of the driver moves the big gear on by just one tooth. So the small gear must turn three times to turn the big gear once.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.36,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Driver gear, 10 teeth",
+              "motion": "spin",
+              "ask": "What does the driver gear do?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven gear, 30 teeth",
+              "motion": "spin",
+              "ask": "Why does the big gear turn slower but stronger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Output shaft",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "driver",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "driver",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "driven",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "slow but strong"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The push at the teeth is the same on both gears, but the big gear's teeth are three times further from its centre. So it turns three times slower, with about three times the turning force, called torque.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.36,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Driver gear, 10 teeth",
+              "motion": "spin",
+              "ask": "What does the driver gear do?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven gear, 30 teeth",
+              "motion": "spin",
+              "ask": "Why does the big gear turn slower but stronger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Output shaft",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "driver",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "driver",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "driven",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "slow but strong"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The gear ratio here is 30 divided by 10, which is 3 to 1. Swap the gears round and a big gear driving a small one gives more speed but less force.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "driver",
+              "kind": "gear",
+              "x": 0.36,
+              "y": 0.45,
+              "size": 0.7,
+              "label": "Driver gear, 10 teeth",
+              "motion": "spin",
+              "ask": "What does the driver gear do?"
+            },
+            {
+              "id": "driven",
+              "kind": "gear",
+              "x": 0.62,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Driven gear, 30 teeth",
+              "motion": "spin",
+              "ask": "Why does the big gear turn slower but stronger?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Output shaft",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "driver",
+              "kind": "energy",
+              "label": "turning"
+            },
+            {
+              "from": "driver",
+              "to": "driven",
+              "kind": "force",
+              "label": "teeth push"
+            },
+            {
+              "from": "driven",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "slow but strong"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a gear ratio?",
+      "a": "A gear ratio compares the teeth on the driven gear with the teeth on the driver gear. A 10-tooth gear turning a 30-tooth gear gives 3 to 1: the driver turns three times for every one turn of the driven gear.",
+      "asks": [
+        "How do you work out a gear ratio?",
+        "What does 3 to 1 mean for gears?"
+      ]
+    },
+    {
+      "q": "What does the driver gear do?",
+      "a": "The driver gear is the one turned by the motor or your hand. Its teeth push on the teeth of the next gear and pass the turning motion along.",
+      "asks": [
+        "Which gear is the driver?"
+      ]
+    },
+    {
+      "q": "Why does the big gear turn slower but stronger?",
+      "a": "The big gear needs more teeth to pass before it completes a turn, so it turns slower. Its teeth are further from its centre, so the same push gives a bigger turning force.",
+      "asks": [
+        "Why do big gears have more force?",
+        "Why is the big gear slower?"
+      ]
+    },
+    {
+      "q": "Which way do meshing gears turn?",
+      "a": "Two gears that mesh always turn in opposite directions: if the driver turns clockwise, the driven gear turns anticlockwise.",
+      "asks": [
+        "Do two gears turn the same way?"
+      ]
+    },
+    {
+      "q": "Do gears give you free energy?",
+      "a": "No. Gears trade speed for force or force for speed, but the energy out is never more than the energy in. A little is always lost as heat and sound through friction between the teeth.",
+      "asks": [
+        "Can gears make more power?"
+      ]
+    }
+  ],
+  "facts": [
+    "Two meshing gears always turn in opposite directions.",
+    "A gear ratio is the number of teeth on the driven gear divided by the number on the driver gear.",
+    "The ancient Greek Antikythera mechanism, over 2,000 years old, contains about 30 bronze gears."
+  ],
+  "quiz": [
+    {
+      "say": "A 12-tooth gear drives a 36-tooth gear. How many turns of the small gear make one turn of the big gear?",
+      "show": "A 12-tooth gear drives a 36-tooth gear. How many turns of the small gear make one turn of the big gear?",
+      "options": [
+        {
+          "show": "Once",
+          "say": "Once"
+        },
+        {
+          "show": "Three times",
+          "say": "Three times"
+        },
+        {
+          "show": "Twelve times",
+          "say": "Twelve times"
+        }
+      ],
+      "answer": 1,
+      "why": "36 divided by 12 is 3, so the small gear turns three times for each turn of the big gear.",
+      "wrong": {
+        "0": "Only gears with the same number of teeth turn once each.",
+        "2": "Twelve is the number of teeth on the small gear, not the number of turns."
+      }
+    },
+    {
+      "say": "Which set-up makes the output turn faster than the input?",
+      "show": "Which set-up makes the output turn faster than the input?",
+      "options": [
+        {
+          "show": "A big gear driving a small gear",
+          "say": "A big gear driving a small gear"
+        },
+        {
+          "show": "A small gear driving a big gear",
+          "say": "A small gear driving a big gear"
+        },
+        {
+          "show": "Two gears of the same size",
+          "say": "Two gears of the same size"
+        }
+      ],
+      "answer": 0,
+      "why": "A big driver turns a small driven gear several times for each of its own turns, so it speeds things up.",
+      "wrong": {
+        "1": "A small gear driving a big one slows things down and adds force.",
+        "2": "Equal gears keep the same speed."
+      }
+    }
+  ]
+}

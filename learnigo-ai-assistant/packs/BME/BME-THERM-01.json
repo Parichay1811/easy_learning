@@ -1,0 +1,404 @@
+{
+  "id": "BME-THERM-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Thermodynamic systems: closed, open and isolated, with properties and state",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-THERM — Thermodynamics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "thermodynamic system",
+    "closed system",
+    "open system",
+    "intensive property",
+    "state postulate"
+  ],
+  "examples": [
+    "What is the difference between an open and a closed system?",
+    "What are intensive and extensive properties?",
+    "What does the state of a system mean?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "cyl",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.6,
+          "size": 1.3,
+          "label": "Gas (system)",
+          "ask": "What is a thermodynamic system?"
+        },
+        {
+          "id": "piston",
+          "kind": "piston",
+          "x": 0.5,
+          "y": 0.25,
+          "label": "Piston",
+          "ask": "Why is the piston part of the boundary?"
+        },
+        {
+          "id": "heat",
+          "kind": "box",
+          "x": 0.15,
+          "y": 0.6,
+          "label": "Surroundings"
+        }
+      ],
+      "links": [
+        {
+          "from": "heat",
+          "to": "cyl",
+          "kind": "heat",
+          "label": "Heat"
+        },
+        {
+          "from": "cyl",
+          "to": "piston",
+          "kind": "force",
+          "label": "Work"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Put your thumb over the end of a bicycle pump and push. The trapped air gets squeezed and warm. To study it, thermodynamics first draws a boundary around exactly what we care about, the air, and calls it the system. Everything else is the surroundings. Look at the gas under the piston.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Thermodynamic systems: closed, open and isolated, with properties and state"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyl",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Gas (system)",
+              "ask": "What is a thermodynamic system?"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.25,
+              "label": "Piston",
+              "ask": "Why is the piston part of the boundary?"
+            },
+            {
+              "id": "heat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.6,
+              "label": "Surroundings"
+            }
+          ],
+          "links": [
+            {
+              "from": "heat",
+              "to": "cyl",
+              "kind": "heat",
+              "label": "Heat"
+            },
+            {
+              "from": "cyl",
+              "to": "piston",
+              "kind": "force",
+              "label": "Work"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "System: the stuff inside the boundary. Surroundings: everything else"
+        }
+      ]
+    },
+    {
+      "say": "Systems come in three kinds. A closed system lets energy cross its boundary but no mass, like gas trapped under a piston. See the closed group? A tyre is closed too. Can heat still flow into a closed system?",
+      "draw": [
+        {
+          "name": "x-sort",
+          "question": "Which kind of system is it?",
+          "groups": [
+            {
+              "label": "Closed",
+              "icon": "piston",
+              "items": [
+                "Piston-cylinder",
+                "Sealed tyre",
+                "Rigid gas tank"
+              ]
+            },
+            {
+              "label": "Open",
+              "icon": "turbine",
+              "items": [
+                "Steam turbine",
+                "Jet engine",
+                "Car radiator"
+              ]
+            },
+            {
+              "label": "Isolated",
+              "icon": "thermometer",
+              "items": [
+                "Ideal thermos",
+                "The universe"
+              ]
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Closed: energy crosses, mass does not"
+        }
+      ]
+    },
+    {
+      "say": "Yes, heat and work can cross. An open system, or control volume, lets mass flow through as well, like steam rushing through a turbine. An isolated system lets nothing cross, neither mass nor energy; a perfect thermos flask comes close. Which kind is a car radiator?",
+      "draw": [
+        {
+          "name": "x-sort",
+          "question": "Which kind of system is it?",
+          "groups": [
+            {
+              "label": "Closed",
+              "icon": "piston",
+              "items": [
+                "Piston-cylinder",
+                "Sealed tyre",
+                "Rigid gas tank"
+              ]
+            },
+            {
+              "label": "Open",
+              "icon": "turbine",
+              "items": [
+                "Steam turbine",
+                "Jet engine",
+                "Car radiator"
+              ]
+            },
+            {
+              "label": "Isolated",
+              "icon": "thermometer",
+              "items": [
+                "Ideal thermos",
+                "The universe"
+              ]
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Open: mass flows in and out. Isolated: nothing crosses"
+        }
+      ]
+    },
+    {
+      "say": "Open, coolant flows through it. Now properties, the numbers that describe the system. Cut the system in half: temperature and pressure stay the same in each half, so they are intensive. Mass, volume and energy halve, so they are extensive. See the two columns? Is density intensive?",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Intensive",
+            "icon": "thermometer",
+            "points": [
+              "Temperature",
+              "Pressure",
+              "Density",
+              "Same in each half"
+            ]
+          },
+          "right": {
+            "title": "Extensive",
+            "icon": "scale",
+            "points": [
+              "Mass",
+              "Volume",
+              "Total energy",
+              "Halves when cut"
+            ]
+          },
+          "verdict": "Cut a system in two: intensive stays the same",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Specific volume v = V / m turns extensive into intensive"
+        }
+      ]
+    },
+    {
+      "say": "Yes! The state is the condition described by all the properties. For a simple gas, two independent properties fix the state. For example, 1 kilogram of air at 300 kelvin and 100 kilopascals must fill 0.861 cubic metres, from P V equals m R T. Well done! Exam tip: always draw and name your system boundary first.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "cyl",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.6,
+              "size": 1.3,
+              "label": "Gas (system)",
+              "ask": "What is a thermodynamic system?"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.25,
+              "label": "Piston",
+              "ask": "Why is the piston part of the boundary?"
+            },
+            {
+              "id": "heat",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.6,
+              "label": "Surroundings"
+            }
+          ],
+          "links": [
+            {
+              "from": "heat",
+              "to": "cyl",
+              "kind": "heat",
+              "label": "Heat"
+            },
+            {
+              "from": "cyl",
+              "to": "piston",
+              "kind": "force",
+              "label": "Work"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "V = mRT/P = 1 × 0.287 × 300 / 100 = 0.861 m³"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a thermodynamic system?",
+      "a": "It is the quantity of matter or region of space you choose to study, separated from its surroundings by a boundary, real or imagined.",
+      "asks": [
+        "system and surroundings",
+        "what is a system boundary"
+      ]
+    },
+    {
+      "q": "Why is the piston part of the boundary?",
+      "a": "The piston can move, so the boundary of the gas moves with it. When it moves out, the gas does work on the surroundings. A boundary can move without letting mass cross.",
+      "asks": [
+        "moving boundary work"
+      ]
+    },
+    {
+      "q": "What is the difference between an open and a closed system?",
+      "a": "A closed system lets energy cross its boundary but not mass. An open system, also called a control volume, lets mass flow in and out as well, like a turbine or pump.",
+      "asks": [
+        "open vs closed system",
+        "control volume definition"
+      ]
+    },
+    {
+      "q": "What are intensive and extensive properties?",
+      "a": "Intensive properties, like temperature and pressure, do not depend on the amount of matter. Extensive properties, like mass, volume and energy, scale with the size of the system.",
+      "asks": [
+        "intensive vs extensive"
+      ]
+    },
+    {
+      "q": "What does the state of a system mean?",
+      "a": "The state is the condition of the system described by its properties. For a simple compressible substance, two independent intensive properties fix the state; this is the state postulate.",
+      "asks": [
+        "state postulate",
+        "what is a thermodynamic state"
+      ]
+    }
+  ],
+  "facts": [
+    "A closed system exchanges energy but not mass with its surroundings.",
+    "The gas constant of air is about 0.287 kilojoules per kilogram kelvin."
+  ],
+  "quiz": [
+    {
+      "say": "What volume do 2 kilograms of air fill at 100 kilopascals and 350 kelvin? R for air is 0.287 kilojoules per kilogram kelvin.",
+      "show": "2 kg of air at 100 kPa and 350 K. Volume? (R = 0.287 kJ/kg·K)",
+      "options": [
+        {
+          "show": "2.01 m³",
+          "say": "2.01 cubic metres"
+        },
+        {
+          "show": "1.00 m³",
+          "say": "1.00 cubic metre"
+        },
+        {
+          "show": "0.0287 m³",
+          "say": "0.0287 cubic metres"
+        }
+      ],
+      "answer": 0,
+      "why": "V = mRT/P = 2 × 0.287 × 350 / 100 = 2.01 m³.",
+      "wrong": {
+        "1": "That is for 1 kilogram; the mass is 2 kilograms.",
+        "2": "That leaves out the temperature."
+      }
+    },
+    {
+      "say": "Which of these is an intensive property?",
+      "show": "Which is an intensive property?",
+      "options": [
+        {
+          "show": "Temperature",
+          "say": "Temperature"
+        },
+        {
+          "show": "Volume",
+          "say": "Volume"
+        },
+        {
+          "show": "Internal energy",
+          "say": "Internal energy"
+        }
+      ],
+      "answer": 0,
+      "why": "Temperature does not change if you cut the system in half.",
+      "wrong": {
+        "1": "Volume halves when the system is halved, so it is extensive.",
+        "2": "Total internal energy scales with mass, so it is extensive."
+      }
+    }
+  ]
+}

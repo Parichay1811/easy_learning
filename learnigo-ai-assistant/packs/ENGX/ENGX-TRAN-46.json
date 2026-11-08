@@ -1,0 +1,620 @@
+{
+  "id": "ENGX-TRAN-46",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How traffic lights time a busy junction",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "traffic light timing",
+    "junction phases",
+    "inductive loop",
+    "green wave",
+    "traffic signal controller"
+  ],
+  "examples": [
+    "How do traffic lights know a car is waiting?",
+    "Does pressing the crossing button do anything?",
+    "What is a green wave?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "loop",
+          "label": "Road sensor loop",
+          "icon": "sensor",
+          "x": 0.14,
+          "y": 0.22,
+          "ask": "How do traffic lights know a car is waiting?"
+        },
+        {
+          "id": "button",
+          "label": "Crossing button",
+          "icon": "hand",
+          "x": 0.14,
+          "y": 0.78,
+          "ask": "Does pressing the crossing button do anything?"
+        },
+        {
+          "id": "ctrl",
+          "label": "Controller",
+          "icon": "computer",
+          "x": 0.5,
+          "y": 0.5,
+          "ask": "What does a traffic light controller do?"
+        },
+        {
+          "id": "ns",
+          "label": "North-south lights",
+          "icon": "light",
+          "x": 0.86,
+          "y": 0.22,
+          "ask": "What is a phase at traffic lights?"
+        },
+        {
+          "id": "ew",
+          "label": "East-west lights",
+          "icon": "light",
+          "x": 0.86,
+          "y": 0.78
+        },
+        {
+          "id": "walk",
+          "label": "Green man",
+          "icon": "person",
+          "x": 0.5,
+          "y": 0.9
+        },
+        {
+          "id": "centre",
+          "label": "Traffic centre",
+          "icon": "tower",
+          "x": 0.5,
+          "y": 0.1,
+          "ask": "What is a green wave?"
+        }
+      ],
+      "links": [
+        {
+          "from": "loop",
+          "to": "ctrl",
+          "kind": "data",
+          "label": "car waiting"
+        },
+        {
+          "from": "button",
+          "to": "ctrl",
+          "kind": "data",
+          "label": "request"
+        },
+        {
+          "from": "ctrl",
+          "to": "ns",
+          "kind": "signal",
+          "label": "green"
+        },
+        {
+          "from": "ctrl",
+          "to": "ew",
+          "kind": "signal",
+          "label": "red"
+        },
+        {
+          "from": "ctrl",
+          "to": "walk",
+          "kind": "signal",
+          "label": "walk"
+        },
+        {
+          "from": "centre",
+          "to": "ctrl",
+          "kind": "data",
+          "label": "timing plan"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "At a busy crossroads, a controller in a roadside box runs the lights. It gives each direction a turn, called a phase, and never shows green to two streams of traffic that could crash into each other.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How traffic lights time a busy junction"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "loop",
+              "label": "Road sensor loop",
+              "icon": "sensor",
+              "x": 0.14,
+              "y": 0.22,
+              "ask": "How do traffic lights know a car is waiting?"
+            },
+            {
+              "id": "button",
+              "label": "Crossing button",
+              "icon": "hand",
+              "x": 0.14,
+              "y": 0.78,
+              "ask": "Does pressing the crossing button do anything?"
+            },
+            {
+              "id": "ctrl",
+              "label": "Controller",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "What does a traffic light controller do?"
+            },
+            {
+              "id": "ns",
+              "label": "North-south lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.22,
+              "ask": "What is a phase at traffic lights?"
+            },
+            {
+              "id": "ew",
+              "label": "East-west lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.78
+            },
+            {
+              "id": "walk",
+              "label": "Green man",
+              "icon": "person",
+              "x": 0.5,
+              "y": 0.9
+            },
+            {
+              "id": "centre",
+              "label": "Traffic centre",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What is a green wave?"
+            }
+          ],
+          "links": [
+            {
+              "from": "loop",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "car waiting"
+            },
+            {
+              "from": "button",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "ctrl",
+              "to": "ns",
+              "kind": "signal",
+              "label": "green"
+            },
+            {
+              "from": "ctrl",
+              "to": "ew",
+              "kind": "signal",
+              "label": "red"
+            },
+            {
+              "from": "ctrl",
+              "to": "walk",
+              "kind": "signal",
+              "label": "walk"
+            },
+            {
+              "from": "centre",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "timing plan"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Wire loops buried in the road, or cameras and radar, detect waiting cars. If nobody is waiting on a side road, the controller can skip its turn and keep the main road green longer.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "loop",
+              "label": "Road sensor loop",
+              "icon": "sensor",
+              "x": 0.14,
+              "y": 0.22,
+              "ask": "How do traffic lights know a car is waiting?"
+            },
+            {
+              "id": "button",
+              "label": "Crossing button",
+              "icon": "hand",
+              "x": 0.14,
+              "y": 0.78,
+              "ask": "Does pressing the crossing button do anything?"
+            },
+            {
+              "id": "ctrl",
+              "label": "Controller",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "What does a traffic light controller do?"
+            },
+            {
+              "id": "ns",
+              "label": "North-south lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.22,
+              "ask": "What is a phase at traffic lights?"
+            },
+            {
+              "id": "ew",
+              "label": "East-west lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.78
+            },
+            {
+              "id": "walk",
+              "label": "Green man",
+              "icon": "person",
+              "x": 0.5,
+              "y": 0.9
+            },
+            {
+              "id": "centre",
+              "label": "Traffic centre",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What is a green wave?"
+            }
+          ],
+          "links": [
+            {
+              "from": "loop",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "car waiting"
+            },
+            {
+              "from": "button",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "ctrl",
+              "to": "ns",
+              "kind": "signal",
+              "label": "green"
+            },
+            {
+              "from": "ctrl",
+              "to": "ew",
+              "kind": "signal",
+              "label": "red"
+            },
+            {
+              "from": "ctrl",
+              "to": "walk",
+              "kind": "signal",
+              "label": "walk"
+            },
+            {
+              "from": "centre",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "timing plan"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Each phase has a minimum green so drivers can get moving, and amber and all-red gaps so the junction clears before the next stream goes. Pressing the crossing button asks for a pedestrian phase in the next cycle.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "loop",
+              "label": "Road sensor loop",
+              "icon": "sensor",
+              "x": 0.14,
+              "y": 0.22,
+              "ask": "How do traffic lights know a car is waiting?"
+            },
+            {
+              "id": "button",
+              "label": "Crossing button",
+              "icon": "hand",
+              "x": 0.14,
+              "y": 0.78,
+              "ask": "Does pressing the crossing button do anything?"
+            },
+            {
+              "id": "ctrl",
+              "label": "Controller",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "What does a traffic light controller do?"
+            },
+            {
+              "id": "ns",
+              "label": "North-south lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.22,
+              "ask": "What is a phase at traffic lights?"
+            },
+            {
+              "id": "ew",
+              "label": "East-west lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.78
+            },
+            {
+              "id": "walk",
+              "label": "Green man",
+              "icon": "person",
+              "x": 0.5,
+              "y": 0.9
+            },
+            {
+              "id": "centre",
+              "label": "Traffic centre",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What is a green wave?"
+            }
+          ],
+          "links": [
+            {
+              "from": "loop",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "car waiting"
+            },
+            {
+              "from": "button",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "ctrl",
+              "to": "ns",
+              "kind": "signal",
+              "label": "green"
+            },
+            {
+              "from": "ctrl",
+              "to": "ew",
+              "kind": "signal",
+              "label": "red"
+            },
+            {
+              "from": "ctrl",
+              "to": "walk",
+              "kind": "signal",
+              "label": "walk"
+            },
+            {
+              "from": "centre",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "timing plan"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "In cities, controllers are linked to a traffic centre. Lights along a main road can be timed so cars meet a green wave, and adaptive systems adjust the timings every cycle to match the queues.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "loop",
+              "label": "Road sensor loop",
+              "icon": "sensor",
+              "x": 0.14,
+              "y": 0.22,
+              "ask": "How do traffic lights know a car is waiting?"
+            },
+            {
+              "id": "button",
+              "label": "Crossing button",
+              "icon": "hand",
+              "x": 0.14,
+              "y": 0.78,
+              "ask": "Does pressing the crossing button do anything?"
+            },
+            {
+              "id": "ctrl",
+              "label": "Controller",
+              "icon": "computer",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "What does a traffic light controller do?"
+            },
+            {
+              "id": "ns",
+              "label": "North-south lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.22,
+              "ask": "What is a phase at traffic lights?"
+            },
+            {
+              "id": "ew",
+              "label": "East-west lights",
+              "icon": "light",
+              "x": 0.86,
+              "y": 0.78
+            },
+            {
+              "id": "walk",
+              "label": "Green man",
+              "icon": "person",
+              "x": 0.5,
+              "y": 0.9
+            },
+            {
+              "id": "centre",
+              "label": "Traffic centre",
+              "icon": "tower",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What is a green wave?"
+            }
+          ],
+          "links": [
+            {
+              "from": "loop",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "car waiting"
+            },
+            {
+              "from": "button",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "request"
+            },
+            {
+              "from": "ctrl",
+              "to": "ns",
+              "kind": "signal",
+              "label": "green"
+            },
+            {
+              "from": "ctrl",
+              "to": "ew",
+              "kind": "signal",
+              "label": "red"
+            },
+            {
+              "from": "ctrl",
+              "to": "walk",
+              "kind": "signal",
+              "label": "walk"
+            },
+            {
+              "from": "centre",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "timing plan"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do traffic lights know a car is waiting?",
+      "a": "Many junctions have wire loops buried under the road. A car's metal body changes the loop's magnetic field, which the controller detects. Others use cameras or radar.",
+      "asks": [
+        "What are the lines cut into the road at traffic lights?"
+      ]
+    },
+    {
+      "q": "Does pressing the crossing button do anything?",
+      "a": "At most junctions, yes: it asks the controller for a pedestrian phase. The green man comes when it can safely fit into the cycle, so it may take a while.",
+      "asks": [
+        "Why does the green man take so long?"
+      ]
+    },
+    {
+      "q": "What does a traffic light controller do?",
+      "a": "It is a computer that decides which phase comes next and how long each lasts, using sensor readings and its timing plan. It is built so it can never show conflicting greens.",
+      "asks": [
+        "Who controls traffic lights?"
+      ]
+    },
+    {
+      "q": "What is a phase at traffic lights?",
+      "a": "A phase is a group of movements that can safely go together, like all north-south traffic. The controller cycles through the phases in turn.",
+      "asks": [
+        "Why do traffic lights take turns?"
+      ]
+    },
+    {
+      "q": "What is a green wave?",
+      "a": "A green wave is when lights along a road are timed so that a car driving at the speed limit meets green after green. Traffic centres coordinate the timings.",
+      "asks": [
+        "How are traffic lights linked together?"
+      ]
+    }
+  ],
+  "facts": [
+    "Inductive loops buried in roads detect vehicles by the change their metal makes to the loop's magnetic field.",
+    "Traffic light controllers are designed so that conflicting directions can never show green together.",
+    "Adaptive systems such as SCOOT, used in the UK, keep adjusting signal timings to match the traffic."
+  ],
+  "quiz": [
+    {
+      "say": "Why might a side road at traffic lights get no green at all for a while?",
+      "show": "Why might a side road at traffic lights get no green at all for a while?",
+      "options": [
+        {
+          "show": "No car is waiting there, so its phase is skipped",
+          "say": "No car is waiting there, so its phase is skipped"
+        },
+        {
+          "show": "The lights are broken",
+          "say": "The lights are broken"
+        },
+        {
+          "show": "Side roads never get green",
+          "say": "Side roads never get green"
+        }
+      ],
+      "answer": 0,
+      "why": "Sensors tell the controller nobody is waiting, so it keeps the busy road green instead.",
+      "wrong": {
+        "1": "Skipping an empty phase is normal behaviour, not a fault.",
+        "2": "As soon as a car arrives and is detected, the side road gets its turn."
+      }
+    }
+  ]
+}

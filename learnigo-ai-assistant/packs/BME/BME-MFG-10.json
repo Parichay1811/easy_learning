@@ -1,0 +1,539 @@
+{
+  "id": "BME-MFG-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Metrology and quality control: measuring parts and control charts",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MFG — Materials and manufacturing",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "metrology",
+    "micrometer",
+    "statistical process control",
+    "control chart",
+    "process capability Cp Cpk"
+  ],
+  "examples": [
+    "What is a control chart?",
+    "How do I calculate Cp and Cpk?",
+    "What is the difference between a vernier caliper and a micrometer?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Sample number",
+        "min": 1,
+        "max": 12
+      },
+      "y": {
+        "label": "Diameter (mm)",
+        "min": 24.97,
+        "max": 25.03
+      },
+      "curves": [
+        {
+          "label": "Measured shafts",
+          "type": "points",
+          "points": [
+            [
+              1,
+              25.003
+            ],
+            [
+              2,
+              24.996
+            ],
+            [
+              3,
+              25.006
+            ],
+            [
+              4,
+              24.999
+            ],
+            [
+              5,
+              25.008
+            ],
+            [
+              6,
+              24.994
+            ],
+            [
+              7,
+              25.002
+            ],
+            [
+              8,
+              24.997
+            ],
+            [
+              9,
+              25.005
+            ],
+            [
+              10,
+              25.009
+            ],
+            [
+              11,
+              25.02
+            ],
+            [
+              12,
+              25.004
+            ]
+          ],
+          "ask": "What is a control chart?"
+        },
+        {
+          "label": "UCL 25.015",
+          "type": "line",
+          "c": 25.015,
+          "k": 0,
+          "ask": "What are control limits?"
+        },
+        {
+          "label": "LCL 24.985",
+          "type": "line",
+          "c": 24.985,
+          "k": 0,
+          "ask": "What are control limits?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 11,
+          "label": "Out of control"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A car engine has thousands of parts that must fit, made in different factories in different countries. That only works because everyone measures the same way. Metrology is the science of measurement. Look at the board: how finely common tools can read, from a steel rule down to a coordinate measuring machine.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Metrology and quality control: measuring parts and control charts"
+        },
+        {
+          "name": "x-sizes",
+          "unit": "mm",
+          "items": [
+            {
+              "label": "Steel rule",
+              "size": 0.5,
+              "icon": "ruler"
+            },
+            {
+              "label": "Vernier caliper",
+              "size": 0.02,
+              "icon": "scale"
+            },
+            {
+              "label": "Micrometer",
+              "size": 0.01,
+              "icon": "compass"
+            },
+            {
+              "label": "CMM probe",
+              "size": 0.001,
+              "icon": "robot"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Resolution: the smallest step an instrument can show"
+        }
+      ]
+    },
+    {
+      "say": "A vernier caliper reads to 0.02 millimetres, a micrometer to 0.01, and a CMM to about a micrometre. A good rule of thumb is the rule of ten: the instrument should resolve a tenth of the tolerance. For a shaft of 25 plus or minus 0.03 millimetres, the tolerance band is 0.06, so which tool would you pick?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "mm",
+          "items": [
+            {
+              "label": "Steel rule",
+              "size": 0.5,
+              "icon": "ruler"
+            },
+            {
+              "label": "Vernier caliper",
+              "size": 0.02,
+              "icon": "scale"
+            },
+            {
+              "label": "Micrometer",
+              "size": 0.01,
+              "icon": "compass"
+            },
+            {
+              "label": "CMM probe",
+              "size": 0.001,
+              "icon": "robot"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Rule of ten: resolution ≤ tolerance ÷ 10"
+        }
+      ]
+    },
+    {
+      "say": "A micrometer, since 0.06 over 10 is 0.006, and a caliper is too coarse. Now quality control. Measuring every part tells you about the past; a control chart warns you about the future. See the graph: shaft diameters in order, with control limits three standard deviations either side of the mean.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Sample number",
+            "min": 1,
+            "max": 12
+          },
+          "y": {
+            "label": "Diameter (mm)",
+            "min": 24.97,
+            "max": 25.03
+          },
+          "curves": [
+            {
+              "label": "Measured shafts",
+              "type": "points",
+              "points": [
+                [
+                  1,
+                  25.003
+                ],
+                [
+                  2,
+                  24.996
+                ],
+                [
+                  3,
+                  25.006
+                ],
+                [
+                  4,
+                  24.999
+                ],
+                [
+                  5,
+                  25.008
+                ],
+                [
+                  6,
+                  24.994
+                ],
+                [
+                  7,
+                  25.002
+                ],
+                [
+                  8,
+                  24.997
+                ],
+                [
+                  9,
+                  25.005
+                ],
+                [
+                  10,
+                  25.009
+                ],
+                [
+                  11,
+                  25.02
+                ],
+                [
+                  12,
+                  25.004
+                ]
+              ],
+              "ask": "What is a control chart?"
+            },
+            {
+              "label": "UCL 25.015",
+              "type": "line",
+              "c": 25.015,
+              "k": 0,
+              "ask": "What are control limits?"
+            },
+            {
+              "label": "LCL 24.985",
+              "type": "line",
+              "c": 24.985,
+              "k": 0,
+              "ask": "What are control limits?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 11,
+              "label": "Out of control"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "UCL/LCL = μ ± 3σ = 25.000 ± 0.015 mm"
+        }
+      ]
+    },
+    {
+      "say": "Points wander randomly inside the limits: that is normal variation. Sample 11, at 25.02 millimetres, jumps above the upper limit. It is still inside the 25.03 tolerance, but the process has changed. Maybe the tool is wearing. See it? What should the operator do?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Sample number",
+            "min": 1,
+            "max": 12
+          },
+          "y": {
+            "label": "Diameter (mm)",
+            "min": 24.97,
+            "max": 25.03
+          },
+          "curves": [
+            {
+              "label": "Measured shafts",
+              "type": "points",
+              "points": [
+                [
+                  1,
+                  25.003
+                ],
+                [
+                  2,
+                  24.996
+                ],
+                [
+                  3,
+                  25.006
+                ],
+                [
+                  4,
+                  24.999
+                ],
+                [
+                  5,
+                  25.008
+                ],
+                [
+                  6,
+                  24.994
+                ],
+                [
+                  7,
+                  25.002
+                ],
+                [
+                  8,
+                  24.997
+                ],
+                [
+                  9,
+                  25.005
+                ],
+                [
+                  10,
+                  25.009
+                ],
+                [
+                  11,
+                  25.02
+                ],
+                [
+                  12,
+                  25.004
+                ]
+              ],
+              "ask": "What is a control chart?"
+            },
+            {
+              "label": "UCL 25.015",
+              "type": "line",
+              "c": 25.015,
+              "k": 0,
+              "ask": "What are control limits?"
+            },
+            {
+              "label": "LCL 24.985",
+              "type": "line",
+              "c": 24.985,
+              "k": 0,
+              "ask": "What are control limits?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 11,
+              "label": "Out of control"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "A point outside the limits signals a special cause"
+        }
+      ]
+    },
+    {
+      "say": "Stop, find the cause and fix it, then keep watching: the cycle on the board. Superb. Capability measures how well the process fits the tolerance: Cp is tolerance over 6 sigma, 0.06 over 0.03, which is 2. If the mean drifts to 25.01, Cpk drops to 1.33. Exam tip: Cpk of at least 1.33 is a common target.",
+      "draw": [
+        {
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Measure parts",
+              "icon": "ruler",
+              "note": "Micrometer, gauge or CMM"
+            },
+            {
+              "label": "Plot the chart",
+              "icon": "pencil",
+              "note": "Each sample on the control chart"
+            },
+            {
+              "label": "Spot a signal",
+              "icon": "eye",
+              "note": "A point outside the limits or a trend"
+            },
+            {
+              "label": "Find the cause",
+              "icon": "microscope",
+              "note": "Tool wear, heat, a new batch"
+            },
+            {
+              "label": "Fix the process",
+              "icon": "gear",
+              "note": "Then keep measuring",
+              "ask": "What should I do when a point goes out of control?"
+            }
+          ],
+          "op": "sim",
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "Cpk = (25.03 − 25.01)/(3 × 0.005) = 1.33"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a vernier caliper and a micrometer?",
+      "a": "A vernier caliper reads to about 0.02 millimetres and measures inside, outside and depth. A micrometer uses a fine screw to read to 0.01 millimetres or better, but over a short range.",
+      "asks": [
+        "caliper vs micrometer resolution"
+      ]
+    },
+    {
+      "q": "What is a control chart?",
+      "a": "A graph of a measured feature over time with a centre line and control limits, usually three standard deviations either side. Points outside the limits or odd patterns signal that the process has changed.",
+      "asks": [
+        "statistical process control",
+        "what does a control chart show"
+      ]
+    },
+    {
+      "q": "What are control limits?",
+      "a": "Lines set at the process mean plus and minus three standard deviations. They describe what the process normally does, which is not the same as the tolerance limits on the drawing.",
+      "asks": [
+        "control limits vs specification limits"
+      ]
+    },
+    {
+      "q": "What should I do when a point goes out of control?",
+      "a": "Stop and look for a special cause, such as tool wear, a temperature change or a new material batch, fix it, record it, and carry on charting.",
+      "asks": [
+        "out of control point action"
+      ]
+    },
+    {
+      "q": "How do I calculate Cp and Cpk?",
+      "a": "Cp equals the tolerance width divided by 6 sigma. Cpk equals the distance from the mean to the nearer limit divided by 3 sigma, so it also penalises an off-centre process.",
+      "asks": [
+        "process capability index"
+      ]
+    }
+  ],
+  "facts": [
+    "Control limits are usually set at the mean ± 3 standard deviations.",
+    "A Cpk of 1.33 or more is a common capability target in manufacturing."
+  ],
+  "quiz": [
+    {
+      "say": "A part has limits 10.00 plus or minus 0.05 millimetres. The process has sigma 0.01 and a centred mean. What is Cp?",
+      "show": "Tolerance 10.00 ± 0.05 mm, σ = 0.01 mm, centred. Cp?",
+      "options": [
+        {
+          "show": "1.67",
+          "say": "1.67"
+        },
+        {
+          "show": "0.6",
+          "say": "0.6"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        }
+      ],
+      "answer": 0,
+      "why": "Cp = 0.10/(6 × 0.01) = 1.67.",
+      "wrong": {
+        "1": "That divides 6σ by the tolerance, upside down.",
+        "2": "That uses only σ instead of 6σ."
+      }
+    },
+    {
+      "say": "A point on a control chart falls outside the control limits but inside the drawing tolerance. What does it mean?",
+      "show": "A point is outside the control limits but inside tolerance. It means…",
+      "options": [
+        {
+          "show": "The process has changed and needs checking",
+          "say": "The process has changed and needs checking"
+        },
+        {
+          "show": "Everything is fine because the part passes",
+          "say": "Everything is fine because the part passes"
+        },
+        {
+          "show": "The control limits are wrong",
+          "say": "The control limits are wrong"
+        }
+      ],
+      "answer": 0,
+      "why": "Control limits describe normal variation; a point beyond them signals a special cause even if the part still passes.",
+      "wrong": {
+        "1": "The part passes today, but the process is drifting and may soon make scrap.",
+        "2": "The limits come from the process data; the point is the warning."
+      }
+    }
+  ]
+}

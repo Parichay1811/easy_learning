@@ -1,0 +1,549 @@
+{
+  "id": "BCE-TRAN-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Stopping sight distance: reaction time, braking and PIEV",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-TRAN — Transportation engineering",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "stopping sight distance",
+    "PIEV time",
+    "braking distance",
+    "reaction time",
+    "overtaking sight distance"
+  ],
+  "examples": [
+    "How do you calculate stopping sight distance?",
+    "What is PIEV time in highway engineering?",
+    "Why does braking distance grow with speed squared?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Speed (km/h)",
+        "min": 20,
+        "max": 120
+      },
+      "y": {
+        "label": "Distance (m)",
+        "max": 260
+      },
+      "curves": [
+        {
+          "label": "Stopping distance",
+          "type": "points",
+          "smooth": true,
+          "points": [
+            [
+              20,
+              18.4
+            ],
+            [
+              40,
+              45.8
+            ],
+            [
+              60,
+              82.1
+            ],
+            [
+              80,
+              127.5
+            ],
+            [
+              100,
+              181.8
+            ],
+            [
+              120,
+              245.1
+            ]
+          ],
+          "ask": "What is stopping sight distance?"
+        },
+        {
+          "label": "Reaction distance",
+          "type": "line",
+          "c": 0,
+          "k": 0.6944,
+          "ask": "What is PIEV time?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 60,
+          "label": "60 km/h: 82 m"
+        },
+        {
+          "x": 80,
+          "label": "80 km/h: 127 m",
+          "ask": "How do you calculate braking distance?"
+        },
+        {
+          "x": 120,
+          "label": "120 km/h: 245 m",
+          "ask": "Why does stopping distance grow so fast with speed?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "You come over the top of a hill at eighty kilometres per hour and there, in your lane, sits a broken-down lorry. Will you stop in time? Road designers make sure you can see far enough ahead to stop, on every crest and every bend. That distance is the stopping sight distance, plotted on the board.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Stopping sight distance: reaction time, braking and PIEV"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (km/h)",
+            "min": 20,
+            "max": 120
+          },
+          "y": {
+            "label": "Distance (m)",
+            "max": 260
+          },
+          "curves": [
+            {
+              "label": "Stopping distance",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  20,
+                  18.4
+                ],
+                [
+                  40,
+                  45.8
+                ],
+                [
+                  60,
+                  82.1
+                ],
+                [
+                  80,
+                  127.5
+                ],
+                [
+                  100,
+                  181.8
+                ],
+                [
+                  120,
+                  245.1
+                ]
+              ],
+              "ask": "What is stopping sight distance?"
+            },
+            {
+              "label": "Reaction distance",
+              "type": "line",
+              "c": 0,
+              "k": 0.6944,
+              "ask": "What is PIEV time?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 60,
+              "label": "60 km/h: 82 m"
+            },
+            {
+              "x": 80,
+              "label": "80 km/h: 127 m",
+              "ask": "How do you calculate braking distance?"
+            },
+            {
+              "x": 120,
+              "label": "120 km/h: 245 m",
+              "ask": "Why does stopping distance grow so fast with speed?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Stopping starts in your head. Follow the chain: you perceive something, identify it, decide what to do, then your foot moves. Engineers call it PIEV time and allow two and a half seconds. At eighty kilometres per hour, twenty two point two metres per second, you travel fifty five point six metres before the brakes even touch.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Perception",
+              "icon": "eye",
+              "note": "You see something in the road"
+            },
+            {
+              "label": "Identification",
+              "icon": "brain",
+              "note": "You work out it is a stalled lorry"
+            },
+            {
+              "label": "Emotion",
+              "icon": "heart",
+              "note": "You decide: brake or swerve?"
+            },
+            {
+              "label": "Volition",
+              "icon": "shoe",
+              "note": "Your foot moves to the brake"
+            },
+            {
+              "label": "Braking",
+              "icon": "car",
+              "note": "Tyres grip and the car slows"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "Reaction distance = v t = 22.2 × 2.5 ≈ 55.6 m"
+        }
+      ]
+    },
+    {
+      "say": "Then braking. Braking distance is speed squared over two times g times the friction, here zero point three five. That is four hundred and ninety four over six point eight seven, about seventy two metres. Add the two: about a hundred and twenty seven metres to stop. Is reaction or braking the bigger part at this speed?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (km/h)",
+            "min": 20,
+            "max": 120
+          },
+          "y": {
+            "label": "Distance (m)",
+            "max": 260
+          },
+          "curves": [
+            {
+              "label": "Stopping distance",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  20,
+                  18.4
+                ],
+                [
+                  40,
+                  45.8
+                ],
+                [
+                  60,
+                  82.1
+                ],
+                [
+                  80,
+                  127.5
+                ],
+                [
+                  100,
+                  181.8
+                ],
+                [
+                  120,
+                  245.1
+                ]
+              ],
+              "ask": "What is stopping sight distance?"
+            },
+            {
+              "label": "Reaction distance",
+              "type": "line",
+              "c": 0,
+              "k": 0.6944,
+              "ask": "What is PIEV time?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 60,
+              "label": "60 km/h: 82 m"
+            },
+            {
+              "x": 80,
+              "label": "80 km/h: 127 m",
+              "ask": "How do you calculate braking distance?"
+            },
+            {
+              "x": 120,
+              "label": "120 km/h: 245 m",
+              "ask": "Why does stopping distance grow so fast with speed?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "SSD = vt + v²/2gf = 55.6 + 71.9 ≈ 127 m"
+        }
+      ]
+    },
+    {
+      "say": "Braking, just! Now compare the two curves. Reaction distance, the straight line, grows steadily with speed. Braking grows with speed squared, so the total curves upwards. At sixty you need eighty two metres; double to a hundred and twenty and you need two hundred and forty five, three times as much.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (km/h)",
+            "min": 20,
+            "max": 120
+          },
+          "y": {
+            "label": "Distance (m)",
+            "max": 260
+          },
+          "curves": [
+            {
+              "label": "Stopping distance",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  20,
+                  18.4
+                ],
+                [
+                  40,
+                  45.8
+                ],
+                [
+                  60,
+                  82.1
+                ],
+                [
+                  80,
+                  127.5
+                ],
+                [
+                  100,
+                  181.8
+                ],
+                [
+                  120,
+                  245.1
+                ]
+              ],
+              "ask": "What is stopping sight distance?"
+            },
+            {
+              "label": "Reaction distance",
+              "type": "line",
+              "c": 0,
+              "k": 0.6944,
+              "ask": "What is PIEV time?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 60,
+              "label": "60 km/h: 82 m"
+            },
+            {
+              "x": 80,
+              "label": "80 km/h: 127 m",
+              "ask": "How do you calculate braking distance?"
+            },
+            {
+              "x": 120,
+              "label": "120 km/h: 245 m",
+              "ask": "Why does stopping distance grow so fast with speed?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "So designers flatten hill crests and clear bends of trees until a driver with eyes about a metre above the road can see a small object that far ahead. Overtaking needs much longer sight distances. Superb! Exam tip: change kilometres per hour to metres per second first. Challenge: on a wet road with friction zero point two five, is the stopping distance at eighty longer or shorter?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (km/h)",
+            "min": 20,
+            "max": 120
+          },
+          "y": {
+            "label": "Distance (m)",
+            "max": 260
+          },
+          "curves": [
+            {
+              "label": "Stopping distance",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  20,
+                  18.4
+                ],
+                [
+                  40,
+                  45.8
+                ],
+                [
+                  60,
+                  82.1
+                ],
+                [
+                  80,
+                  127.5
+                ],
+                [
+                  100,
+                  181.8
+                ],
+                [
+                  120,
+                  245.1
+                ]
+              ],
+              "ask": "What is stopping sight distance?"
+            },
+            {
+              "label": "Reaction distance",
+              "type": "line",
+              "c": 0,
+              "k": 0.6944,
+              "ask": "What is PIEV time?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 60,
+              "label": "60 km/h: 82 m"
+            },
+            {
+              "x": 80,
+              "label": "80 km/h: 127 m",
+              "ask": "How do you calculate braking distance?"
+            },
+            {
+              "x": 120,
+              "label": "120 km/h: 245 m",
+              "ask": "Why does stopping distance grow so fast with speed?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is stopping sight distance?",
+      "a": "The distance a driver needs to see ahead to stop safely before an obstacle: the reaction distance plus the braking distance. At 80 kilometres per hour it is about 127 metres.",
+      "asks": [
+        "Define SSD",
+        "How do you calculate stopping sight distance?"
+      ]
+    },
+    {
+      "q": "What is PIEV time?",
+      "a": "PIEV stands for perception, identification, emotion and volition: the time from seeing a hazard to starting to brake. Design standards usually take 2.5 seconds.",
+      "asks": [
+        "Reaction time in highway design"
+      ]
+    },
+    {
+      "q": "How do you calculate braking distance?",
+      "a": "Braking distance is v squared over 2 g f, with v in metres per second and f the longitudinal friction. At 22.2 metres per second with f of 0.35 it is about 72 metres.",
+      "asks": [
+        "Braking distance formula"
+      ]
+    },
+    {
+      "q": "What is overtaking sight distance?",
+      "a": "The clear distance a driver needs on a two-lane road to pull out, pass a slower vehicle and return safely before meeting oncoming traffic. It is several times the stopping sight distance.",
+      "asks": [
+        "OSD"
+      ]
+    },
+    {
+      "q": "Why does stopping distance grow so fast with speed?",
+      "a": "Braking distance depends on speed squared, because kinetic energy does. Double the speed and braking distance becomes four times as long.",
+      "asks": [
+        "Speed squared braking"
+      ]
+    }
+  ],
+  "facts": [
+    "Indian and American road design guides both use a reaction (PIEV) time of 2.5 seconds for stopping sight distance.",
+    "Indian practice takes intermediate sight distance as twice the stopping sight distance."
+  ],
+  "quiz": [
+    {
+      "say": "With a reaction time of 2.5 seconds, how far does a car at 60 kilometres per hour travel before braking starts?",
+      "show": "With a 2.5 s reaction time, how far does a car at 60 km/h travel before braking?",
+      "options": [
+        {
+          "show": "About 42 m",
+          "say": "about 42 metres"
+        },
+        {
+          "show": "150 m",
+          "say": "150 metres"
+        },
+        {
+          "show": "About 24 m",
+          "say": "about 24 metres"
+        }
+      ],
+      "answer": 0,
+      "why": "60 km/h = 16.67 m/s, and 16.67 × 2.5 ≈ 41.7 m.",
+      "wrong": {
+        "1": "That multiplies 60 by 2.5 without changing to metres per second.",
+        "2": "That divides 60 by 2.5."
+      }
+    },
+    {
+      "say": "If speed doubles, braking distance becomes about…",
+      "show": "If speed doubles, braking distance becomes about…",
+      "options": [
+        {
+          "show": "4 times as long",
+          "say": "4 times as long"
+        },
+        {
+          "show": "2 times as long",
+          "say": "2 times as long"
+        },
+        {
+          "show": "The same",
+          "say": "The same"
+        }
+      ],
+      "answer": 0,
+      "why": "Braking distance is proportional to v², and 2² = 4.",
+      "wrong": {
+        "1": "Only the reaction distance doubles.",
+        "2": "More speed always needs more distance."
+      }
+    }
+  ]
+}

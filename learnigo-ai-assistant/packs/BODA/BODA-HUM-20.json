@@ -1,0 +1,640 @@
+{
+  "id": "BODA-HUM-20",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How biceps and triceps take turns to bend your arm",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "biceps",
+    "triceps",
+    "antagonistic muscles",
+    "elbow",
+    "muscle pairs"
+  ],
+  "examples": [
+    "How do muscles bend your arm?",
+    "What do the biceps and triceps do?",
+    "Why do muscles work in pairs?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "shoulder",
+          "kind": "axle",
+          "x": 0.15,
+          "y": 0.2,
+          "size": 0.8,
+          "label": "Shoulder",
+          "motion": "none"
+        },
+        {
+          "id": "upper",
+          "kind": "lever",
+          "x": 0.32,
+          "y": 0.42,
+          "size": 1.2,
+          "label": "Upper arm bone",
+          "motion": "none"
+        },
+        {
+          "id": "biceps",
+          "kind": "spring",
+          "x": 0.4,
+          "y": 0.25,
+          "size": 1,
+          "label": "Biceps",
+          "motion": "pulse",
+          "ask": "What does the biceps do?"
+        },
+        {
+          "id": "triceps",
+          "kind": "spring",
+          "x": 0.3,
+          "y": 0.62,
+          "size": 1,
+          "label": "Triceps",
+          "motion": "pulse",
+          "ask": "What does the triceps do?"
+        },
+        {
+          "id": "elbow",
+          "kind": "axle",
+          "x": 0.55,
+          "y": 0.6,
+          "size": 0.8,
+          "label": "Elbow hinge",
+          "motion": "spin",
+          "speed": 0.3
+        },
+        {
+          "id": "fore",
+          "kind": "lever",
+          "x": 0.75,
+          "y": 0.45,
+          "size": 1.2,
+          "label": "Forearm",
+          "motion": "swing"
+        },
+        {
+          "id": "hand",
+          "kind": "weight",
+          "x": 0.9,
+          "y": 0.25,
+          "size": 0.7,
+          "label": "Hand and load",
+          "motion": "swing"
+        }
+      ],
+      "links": [
+        {
+          "from": "shoulder",
+          "to": "upper",
+          "kind": "force"
+        },
+        {
+          "from": "biceps",
+          "to": "fore",
+          "kind": "force",
+          "label": "pulls up"
+        },
+        {
+          "from": "triceps",
+          "to": "elbow",
+          "kind": "force",
+          "label": "pulls straight"
+        },
+        {
+          "from": "elbow",
+          "to": "fore",
+          "kind": "force"
+        },
+        {
+          "from": "fore",
+          "to": "hand",
+          "kind": "force",
+          "label": "lifts"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your arm is a lever with a hinge at the elbow. Muscles can only pull, so it takes two muscles, working in opposite directions, to bend and straighten it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How biceps and triceps take turns to bend your arm"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shoulder",
+              "kind": "axle",
+              "x": 0.15,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Shoulder",
+              "motion": "none"
+            },
+            {
+              "id": "upper",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "Upper arm bone",
+              "motion": "none"
+            },
+            {
+              "id": "biceps",
+              "kind": "spring",
+              "x": 0.4,
+              "y": 0.25,
+              "size": 1,
+              "label": "Biceps",
+              "motion": "pulse",
+              "ask": "What does the biceps do?"
+            },
+            {
+              "id": "triceps",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.62,
+              "size": 1,
+              "label": "Triceps",
+              "motion": "pulse",
+              "ask": "What does the triceps do?"
+            },
+            {
+              "id": "elbow",
+              "kind": "axle",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Elbow hinge",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "fore",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Forearm",
+              "motion": "swing"
+            },
+            {
+              "id": "hand",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Hand and load",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "shoulder",
+              "to": "upper",
+              "kind": "force"
+            },
+            {
+              "from": "biceps",
+              "to": "fore",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "triceps",
+              "to": "elbow",
+              "kind": "force",
+              "label": "pulls straight"
+            },
+            {
+              "from": "elbow",
+              "to": "fore",
+              "kind": "force"
+            },
+            {
+              "from": "fore",
+              "to": "hand",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The biceps on the front of your upper arm is fixed at the shoulder and attached by a tendon to your forearm just below the elbow. When it contracts it pulls the forearm up: the arm bends.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shoulder",
+              "kind": "axle",
+              "x": 0.15,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Shoulder",
+              "motion": "none"
+            },
+            {
+              "id": "upper",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "Upper arm bone",
+              "motion": "none"
+            },
+            {
+              "id": "biceps",
+              "kind": "spring",
+              "x": 0.4,
+              "y": 0.25,
+              "size": 1,
+              "label": "Biceps",
+              "motion": "pulse",
+              "ask": "What does the biceps do?"
+            },
+            {
+              "id": "triceps",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.62,
+              "size": 1,
+              "label": "Triceps",
+              "motion": "pulse",
+              "ask": "What does the triceps do?"
+            },
+            {
+              "id": "elbow",
+              "kind": "axle",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Elbow hinge",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "fore",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Forearm",
+              "motion": "swing"
+            },
+            {
+              "id": "hand",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Hand and load",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "shoulder",
+              "to": "upper",
+              "kind": "force"
+            },
+            {
+              "from": "biceps",
+              "to": "fore",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "triceps",
+              "to": "elbow",
+              "kind": "force",
+              "label": "pulls straight"
+            },
+            {
+              "from": "elbow",
+              "to": "fore",
+              "kind": "force"
+            },
+            {
+              "from": "fore",
+              "to": "hand",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "To straighten, the biceps relaxes and the triceps on the back of the upper arm contracts. It is attached behind the elbow, so its pull swings the forearm back down.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shoulder",
+              "kind": "axle",
+              "x": 0.15,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Shoulder",
+              "motion": "none"
+            },
+            {
+              "id": "upper",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "Upper arm bone",
+              "motion": "none"
+            },
+            {
+              "id": "biceps",
+              "kind": "spring",
+              "x": 0.4,
+              "y": 0.25,
+              "size": 1,
+              "label": "Biceps",
+              "motion": "pulse",
+              "ask": "What does the biceps do?"
+            },
+            {
+              "id": "triceps",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.62,
+              "size": 1,
+              "label": "Triceps",
+              "motion": "pulse",
+              "ask": "What does the triceps do?"
+            },
+            {
+              "id": "elbow",
+              "kind": "axle",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Elbow hinge",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "fore",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Forearm",
+              "motion": "swing"
+            },
+            {
+              "id": "hand",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Hand and load",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "shoulder",
+              "to": "upper",
+              "kind": "force"
+            },
+            {
+              "from": "biceps",
+              "to": "fore",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "triceps",
+              "to": "elbow",
+              "kind": "force",
+              "label": "pulls straight"
+            },
+            {
+              "from": "elbow",
+              "to": "fore",
+              "kind": "force"
+            },
+            {
+              "from": "fore",
+              "to": "hand",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Pairs like this are called antagonistic muscles: as one contracts, the other relaxes and is stretched. The elbow joint is the pivot, and the forearm is the lever that lifts your hand.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "shoulder",
+              "kind": "axle",
+              "x": 0.15,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Shoulder",
+              "motion": "none"
+            },
+            {
+              "id": "upper",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.42,
+              "size": 1.2,
+              "label": "Upper arm bone",
+              "motion": "none"
+            },
+            {
+              "id": "biceps",
+              "kind": "spring",
+              "x": 0.4,
+              "y": 0.25,
+              "size": 1,
+              "label": "Biceps",
+              "motion": "pulse",
+              "ask": "What does the biceps do?"
+            },
+            {
+              "id": "triceps",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.62,
+              "size": 1,
+              "label": "Triceps",
+              "motion": "pulse",
+              "ask": "What does the triceps do?"
+            },
+            {
+              "id": "elbow",
+              "kind": "axle",
+              "x": 0.55,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Elbow hinge",
+              "motion": "spin",
+              "speed": 0.3
+            },
+            {
+              "id": "fore",
+              "kind": "lever",
+              "x": 0.75,
+              "y": 0.45,
+              "size": 1.2,
+              "label": "Forearm",
+              "motion": "swing"
+            },
+            {
+              "id": "hand",
+              "kind": "weight",
+              "x": 0.9,
+              "y": 0.25,
+              "size": 0.7,
+              "label": "Hand and load",
+              "motion": "swing"
+            }
+          ],
+          "links": [
+            {
+              "from": "shoulder",
+              "to": "upper",
+              "kind": "force"
+            },
+            {
+              "from": "biceps",
+              "to": "fore",
+              "kind": "force",
+              "label": "pulls up"
+            },
+            {
+              "from": "triceps",
+              "to": "elbow",
+              "kind": "force",
+              "label": "pulls straight"
+            },
+            {
+              "from": "elbow",
+              "to": "fore",
+              "kind": "force"
+            },
+            {
+              "from": "fore",
+              "to": "hand",
+              "kind": "force",
+              "label": "lifts"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the biceps do?",
+      "a": "The biceps is the muscle on the front of your upper arm. When it contracts it pulls on the forearm and bends your arm at the elbow. It also helps turn your palm up.",
+      "asks": [
+        "Tell me about the biceps"
+      ]
+    },
+    {
+      "q": "What does the triceps do?",
+      "a": "The triceps is the muscle on the back of your upper arm. When it contracts it straightens your arm at the elbow, the opposite of the biceps.",
+      "asks": [
+        "Tell me about the triceps"
+      ]
+    },
+    {
+      "q": "Why do muscles work in pairs?",
+      "a": "Muscles can only pull, not push. So for each movement there is usually another muscle that pulls the opposite way to undo it, like the biceps bending the arm and the triceps straightening it.",
+      "asks": [
+        "What are antagonistic muscles?"
+      ]
+    },
+    {
+      "q": "What is the elbow hinge?",
+      "a": "The elbow is a hinge joint where the upper arm bone meets the two forearm bones. It lets the forearm swing up and down, like a door on its hinges.",
+      "asks": [
+        "Tell me about the elbow hinge"
+      ]
+    },
+    {
+      "q": "What joins muscles to bones?",
+      "a": "Tendons, tough cords of collagen, attach muscles to bones. When a muscle contracts, its tendon pulls the bone.",
+      "asks": [
+        "How do muscles pull on bones?"
+      ]
+    }
+  ],
+  "facts": [
+    "The biceps has two heads attached at the shoulder; the triceps has three.",
+    "Skeletal muscles can only pull, so they are arranged in opposing pairs."
+  ],
+  "quiz": [
+    {
+      "say": "You straighten your arm. Which muscle is contracting?",
+      "show": "You straighten your arm. Which muscle is contracting?",
+      "options": [
+        {
+          "show": "Biceps",
+          "say": "Biceps"
+        },
+        {
+          "show": "Triceps",
+          "say": "Triceps"
+        },
+        {
+          "show": "Both relax",
+          "say": "Both relax"
+        }
+      ],
+      "answer": 1,
+      "why": "The triceps, at the back of the upper arm, pulls the forearm straight while the biceps relaxes.",
+      "wrong": {
+        "0": "The biceps bends the arm; it relaxes when you straighten.",
+        "2": "A muscle must pull to move the arm against its load."
+      }
+    }
+  ]
+}

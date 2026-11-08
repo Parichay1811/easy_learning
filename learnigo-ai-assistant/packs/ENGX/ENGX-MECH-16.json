@@ -1,0 +1,595 @@
+{
+  "id": "ENGX-MECH-16",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a combination lock works",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "combination lock",
+    "wheel pack",
+    "gate",
+    "fence",
+    "dial lock",
+    "safe lock"
+  ],
+  "examples": [
+    "How does a safe know the right numbers?",
+    "Why do you turn a combination dial back and forth?",
+    "What is inside a combination lock?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "dial",
+          "kind": "wheel",
+          "x": 0.1,
+          "y": 0.55,
+          "size": 1,
+          "label": "Dial",
+          "motion": "spin"
+        },
+        {
+          "id": "spindle",
+          "kind": "axle",
+          "x": 0.28,
+          "y": 0.55,
+          "size": 0.7,
+          "label": "Spindle",
+          "motion": "spin"
+        },
+        {
+          "id": "cam",
+          "kind": "gear",
+          "x": 0.45,
+          "y": 0.55,
+          "size": 0.8,
+          "label": "Drive cam",
+          "motion": "spin",
+          "ask": "What is the drive cam?"
+        },
+        {
+          "id": "wheels",
+          "kind": "gear",
+          "x": 0.66,
+          "y": 0.55,
+          "size": 1.3,
+          "label": "Wheel pack",
+          "motion": "spin",
+          "ask": "What is the wheel pack?"
+        },
+        {
+          "id": "fence",
+          "kind": "lever",
+          "x": 0.66,
+          "y": 0.18,
+          "size": 0.6,
+          "label": "Fence",
+          "motion": "swing",
+          "ask": "What does the fence do?"
+        },
+        {
+          "id": "bolt",
+          "kind": "piston",
+          "x": 0.9,
+          "y": 0.18,
+          "size": 0.8,
+          "label": "Bolt",
+          "motion": "slide"
+        }
+      ],
+      "links": [
+        {
+          "from": "dial",
+          "to": "spindle",
+          "kind": "energy"
+        },
+        {
+          "from": "spindle",
+          "to": "cam",
+          "kind": "energy"
+        },
+        {
+          "from": "cam",
+          "to": "wheels",
+          "kind": "force",
+          "label": "picks up wheels"
+        },
+        {
+          "from": "wheels",
+          "to": "fence",
+          "kind": "force",
+          "label": "gates line up"
+        },
+        {
+          "from": "fence",
+          "to": "bolt",
+          "kind": "force",
+          "label": "pulls back"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A dial combination lock has a stack of loose wheels inside, called the wheel pack, one for each number. Each wheel has a notch in its edge called a gate.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a combination lock works"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "dial",
+              "kind": "wheel",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 1,
+              "label": "Dial",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.28,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Spindle",
+              "motion": "spin"
+            },
+            {
+              "id": "cam",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Drive cam",
+              "motion": "spin",
+              "ask": "What is the drive cam?"
+            },
+            {
+              "id": "wheels",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Wheel pack",
+              "motion": "spin",
+              "ask": "What is the wheel pack?"
+            },
+            {
+              "id": "fence",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Fence",
+              "motion": "swing",
+              "ask": "What does the fence do?"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.9,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "dial",
+              "to": "spindle",
+              "kind": "energy"
+            },
+            {
+              "from": "spindle",
+              "to": "cam",
+              "kind": "energy"
+            },
+            {
+              "from": "cam",
+              "to": "wheels",
+              "kind": "force",
+              "label": "picks up wheels"
+            },
+            {
+              "from": "wheels",
+              "to": "fence",
+              "kind": "force",
+              "label": "gates line up"
+            },
+            {
+              "from": "fence",
+              "to": "bolt",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The dial turns a drive cam. Pins on the cam and wheels pick up one wheel after another, so by turning one way and then reversing, you leave each wheel at a different number.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "dial",
+              "kind": "wheel",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 1,
+              "label": "Dial",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.28,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Spindle",
+              "motion": "spin"
+            },
+            {
+              "id": "cam",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Drive cam",
+              "motion": "spin",
+              "ask": "What is the drive cam?"
+            },
+            {
+              "id": "wheels",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Wheel pack",
+              "motion": "spin",
+              "ask": "What is the wheel pack?"
+            },
+            {
+              "id": "fence",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Fence",
+              "motion": "swing",
+              "ask": "What does the fence do?"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.9,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "dial",
+              "to": "spindle",
+              "kind": "energy"
+            },
+            {
+              "from": "spindle",
+              "to": "cam",
+              "kind": "energy"
+            },
+            {
+              "from": "cam",
+              "to": "wheels",
+              "kind": "force",
+              "label": "picks up wheels"
+            },
+            {
+              "from": "wheels",
+              "to": "fence",
+              "kind": "force",
+              "label": "gates line up"
+            },
+            {
+              "from": "fence",
+              "to": "bolt",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Above the wheels rests a bar called the fence. Only when every gate sits right under it, which happens only with the right numbers in the right order, can the fence drop into the gates.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "dial",
+              "kind": "wheel",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 1,
+              "label": "Dial",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.28,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Spindle",
+              "motion": "spin"
+            },
+            {
+              "id": "cam",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Drive cam",
+              "motion": "spin",
+              "ask": "What is the drive cam?"
+            },
+            {
+              "id": "wheels",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Wheel pack",
+              "motion": "spin",
+              "ask": "What is the wheel pack?"
+            },
+            {
+              "id": "fence",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Fence",
+              "motion": "swing",
+              "ask": "What does the fence do?"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.9,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "dial",
+              "to": "spindle",
+              "kind": "energy"
+            },
+            {
+              "from": "spindle",
+              "to": "cam",
+              "kind": "energy"
+            },
+            {
+              "from": "cam",
+              "to": "wheels",
+              "kind": "force",
+              "label": "picks up wheels"
+            },
+            {
+              "from": "wheels",
+              "to": "fence",
+              "kind": "force",
+              "label": "gates line up"
+            },
+            {
+              "from": "fence",
+              "to": "bolt",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Then the last turn of the dial catches the lever holding the fence and draws back the bolt. With even one wrong number, one wheel holds the fence up and the bolt stays put.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "dial",
+              "kind": "wheel",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 1,
+              "label": "Dial",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.28,
+              "y": 0.55,
+              "size": 0.7,
+              "label": "Spindle",
+              "motion": "spin"
+            },
+            {
+              "id": "cam",
+              "kind": "gear",
+              "x": 0.45,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Drive cam",
+              "motion": "spin",
+              "ask": "What is the drive cam?"
+            },
+            {
+              "id": "wheels",
+              "kind": "gear",
+              "x": 0.66,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Wheel pack",
+              "motion": "spin",
+              "ask": "What is the wheel pack?"
+            },
+            {
+              "id": "fence",
+              "kind": "lever",
+              "x": 0.66,
+              "y": 0.18,
+              "size": 0.6,
+              "label": "Fence",
+              "motion": "swing",
+              "ask": "What does the fence do?"
+            },
+            {
+              "id": "bolt",
+              "kind": "piston",
+              "x": 0.9,
+              "y": 0.18,
+              "size": 0.8,
+              "label": "Bolt",
+              "motion": "slide"
+            }
+          ],
+          "links": [
+            {
+              "from": "dial",
+              "to": "spindle",
+              "kind": "energy"
+            },
+            {
+              "from": "spindle",
+              "to": "cam",
+              "kind": "energy"
+            },
+            {
+              "from": "cam",
+              "to": "wheels",
+              "kind": "force",
+              "label": "picks up wheels"
+            },
+            {
+              "from": "wheels",
+              "to": "fence",
+              "kind": "force",
+              "label": "gates line up"
+            },
+            {
+              "from": "fence",
+              "to": "bolt",
+              "kind": "force",
+              "label": "pulls back"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the wheel pack?",
+      "a": "The wheel pack is a stack of separate wheels, one per number in the combination. They turn freely until a pin on the drive cam or the wheel next to it picks them up.",
+      "asks": [
+        "What is inside a combination lock?"
+      ]
+    },
+    {
+      "q": "What does the fence do?",
+      "a": "The fence is a bar that rests on the edges of the wheels. It can only drop down when all the gates line up beneath it, and it must drop before the bolt can be pulled back.",
+      "asks": [
+        "How does the lock know the numbers are right?"
+      ]
+    },
+    {
+      "q": "What is the drive cam?",
+      "a": "The drive cam is fixed to the dial's spindle and turns whenever you turn the dial. Its pin picks up the first wheel, which picks up the next, and so on.",
+      "asks": [
+        "What turns the wheels?"
+      ]
+    },
+    {
+      "q": "Why do you turn a combination dial back and forth?",
+      "a": "Each change of direction leaves one wheel behind at its number. Turning several times first collects all the wheels; then each reversal sets the next one.",
+      "asks": [
+        "Why turn left then right on a safe?"
+      ]
+    },
+    {
+      "q": "Why is a combination lock hard to guess?",
+      "a": "Three wheels with 100 numbers each give a million combinations. Trying them all would take far too long.",
+      "asks": [
+        "How many combinations does a lock have?"
+      ]
+    }
+  ],
+  "facts": [
+    "A lock with three wheels of 100 numbers each has 1,000,000 possible combinations.",
+    "The gate is a notch in each wheel; the fence drops into the gates only when all are lined up."
+  ],
+  "quiz": [
+    {
+      "say": "In a dial combination lock, what must happen before the bolt can move?",
+      "show": "In a dial combination lock, what must happen before the bolt can move?",
+      "options": [
+        {
+          "show": "All the wheel gates line up under the fence",
+          "say": "All the wheel gates line up under the fence"
+        },
+        {
+          "show": "The dial is turned very fast",
+          "say": "The dial is turned very fast"
+        },
+        {
+          "show": "The wheels stop spinning",
+          "say": "The wheels stop spinning"
+        }
+      ],
+      "answer": 0,
+      "why": "Only when every gate is under the fence can the fence drop and the bolt be pulled back.",
+      "wrong": {
+        "1": "Speed does not matter; position does.",
+        "2": "The wheels stopping is not enough; they must stop in the right places."
+      }
+    }
+  ]
+}

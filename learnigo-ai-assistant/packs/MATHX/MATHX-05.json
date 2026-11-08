@@ -1,0 +1,270 @@
+{
+  "id": "MATHX-05",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "beyond",
+    "enriched": true
+  },
+  "title": "Codes and secret messages",
+  "area": "Maths for Fun",
+  "group": "MATHX — Maths for Curiosity",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "caesar cipher",
+    "secret code",
+    "shift cipher",
+    "decoding",
+    "alphabet shift"
+  ],
+  "examples": [
+    "How does the Caesar cipher actually work step by step?",
+    "Can we use this code for something other than letters?",
+    "If I shift by three, what letter comes after Z?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning about secret messages and codes. We will look at a simple code called the Caesar cipher. This code uses a pattern to change letters.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Codes and secret messages"
+        },
+        {
+          "op": "text",
+          "text": "Caesar Cipher: Letter Shifting",
+          "at": "caesar"
+        }
+      ]
+    },
+    {
+      "say": "The Caesar cipher works by shifting every letter a certain number of places. This number is called the key. For example, if the key is three, we shift each letter three places forward.",
+      "draw": [
+        {
+          "op": "line",
+          "items": [
+            "A: 1",
+            "B: 2",
+            "C: 3",
+            "D: 4"
+          ],
+          "label": "Shift Value (Key)"
+        },
+        {
+          "op": "text",
+          "text": "Shift by 3: A → D",
+          "at": "shift"
+        }
+      ]
+    },
+    {
+      "say": "Let us try a word. If the original letter is 'D' and our key is three, we count three letters from 'D'. That takes us to the letter 'G'.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "D",
+            "E",
+            "F",
+            "G"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "D + 3 = G"
+        }
+      ]
+    },
+    {
+      "say": "What happens when we reach the end of the alphabet? If we are at 'X' with a key of three, we wrap around. Three letters from 'X' is 'A'.",
+      "draw": [
+        {
+          "op": "cycle",
+          "items": [
+            "X",
+            "Y",
+            "Z",
+            "A"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Wrap Around: X → A",
+          "at": "wrap"
+        }
+      ]
+    },
+    {
+      "say": "To decode a message, we must use the key backward. If the coded letter is 'G' and the key is three, we count three letters backward. That takes us back to 'D'.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "G - 3 = D"
+        }
+      ]
+    },
+    {
+      "say": "In real life, people use codes to keep secrets safe. Imagine sending a secret note to a friend across town. A simple shift code makes it look like nonsense to others.",
+      "draw": [
+        {
+          "op": "map",
+          "items": [],
+          "items2": [
+            "Venice > Constantinople"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Secret Messages Use Codes",
+          "at": "secret"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the key in a Caesar cipher?",
+      "a": "The key is simply the number of places you shift every letter in the alphabet. It tells you how far to move forward or backward.",
+      "asks": [
+        "What number do I use for the shift?",
+        "How do I know the key number?"
+      ]
+    },
+    {
+      "q": "Does the key have to be a small number?",
+      "a": "No, the key can be any whole number. Because the alphabet has only twenty-six letters, any key larger than twenty-six is the same as a smaller key.",
+      "asks": [
+        "Can the key be big?",
+        "Does 27 work if 1 works?"
+      ]
+    },
+    {
+      "q": "If I decode a message, do I always subtract the key?",
+      "a": "Yes, decoding means reversing the process. If encoding added the key, decoding must subtract the key.",
+      "asks": [
+        "Is decoding the opposite of encoding?",
+        "If I shift forward to encode, what do I do to decode?"
+      ]
+    },
+    {
+      "q": "What if the coded letter is 'A' and my key is three?",
+      "a": "If you are decoding and land on 'A', you just count back three letters. You will wrap around to the letter 'X'.",
+      "asks": [
+        "What happens if I go below A?",
+        "If the result is A, what was the original letter?"
+      ]
+    },
+    {
+      "q": "Is the Caesar cipher always unbreakable?",
+      "a": "No, because there are only a limited number of keys, someone can try every single possibility. This process is called brute force.",
+      "asks": [
+        "Is it really secret?",
+        "Can a computer break it?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Caesar cipher is a type of substitution cipher.",
+    "The key determines the number of positions each letter is shifted.",
+    "The alphabet is cyclical, meaning Z connects back to A.",
+    "Decoding requires subtracting the key value from the coded letter."
+  ],
+  "quiz": [
+    {
+      "say": "If the key is two, what letter replaces 'P'?",
+      "show": "P + 2 = R",
+      "options": [
+        {
+          "show": "R",
+          "say": "R"
+        },
+        {
+          "show": "Q",
+          "say": "Q"
+        },
+        {
+          "show": "P",
+          "say": "P"
+        },
+        {
+          "show": "S",
+          "say": "S"
+        }
+      ],
+      "answer": 0,
+      "why": "You shift two letters forward from P, which lands you exactly on R.",
+      "wrong": {
+        "1": "This is only shifting one letter back, not two forward.",
+        "2": "This means you shifted zero places, ignoring the key.",
+        "3": "This is shifting three places, which is too many."
+      }
+    },
+    {
+      "say": "A coded letter is 'D', and the key is four. What is the original letter?",
+      "show": "D - 4 = Z",
+      "options": [
+        {
+          "show": "B",
+          "say": "B"
+        },
+        {
+          "show": "Z",
+          "say": "Z"
+        },
+        {
+          "show": "Y",
+          "say": "Y"
+        },
+        {
+          "show": "A",
+          "say": "A"
+        }
+      ],
+      "answer": 1,
+      "why": "You must count four letters backward from D, wrapping around the alphabet to Z.",
+      "wrong": {
+        "0": "This is only shifting two letters back.",
+        "2": "This is only shifting one letter back, not four.",
+        "3": "This is shifting three letters back, which is incorrect."
+      }
+    },
+    {
+      "say": "If the message 'CAT' is encoded with a key of one, what is the code?",
+      "show": "C A T → D B U",
+      "options": [
+        {
+          "show": "DBU",
+          "say": "DBU"
+        },
+        {
+          "show": "D B S",
+          "say": "D B S"
+        },
+        {
+          "show": "D B T",
+          "say": "D B T"
+        },
+        {
+          "show": "E C V",
+          "say": "E C V"
+        }
+      ],
+      "answer": 0,
+      "why": "Each letter shifts one place: C becomes D, A becomes B, and T becomes U.",
+      "wrong": {
+        "1": "You changed the last letter T to S, which is wrong.",
+        "2": "You only shifted the first letter, leaving the others alone.",
+        "3": "This is shifting by two, not by one."
+      }
+    }
+  ]
+}

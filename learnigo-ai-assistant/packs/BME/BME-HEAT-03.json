@@ -1,0 +1,358 @@
+{
+  "id": "BME-HEAT-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Radiation and the Stefan–Boltzmann law: heat that needs no matter",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-HEAT — Heat transfer",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "thermal radiation",
+    "Stefan-Boltzmann law",
+    "emissivity",
+    "black body",
+    "fourth power of temperature"
+  ],
+  "examples": [
+    "What is the Stefan-Boltzmann law?",
+    "What is emissivity?",
+    "How does heat reach us from the Sun?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Temperature (K)",
+        "max": 1500
+      },
+      "y": {
+        "label": "Emitted (kW/m²)",
+        "max": 300
+      },
+      "curves": [
+        {
+          "label": "Black body σT⁴",
+          "type": "power",
+          "a": 5.67e-11,
+          "k": 4,
+          "ask": "What is the Stefan-Boltzmann law?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 300,
+          "label": "Room 0.46 kW/m²"
+        },
+        {
+          "x": 1200,
+          "label": "Red hot 118 kW/m²"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Sit near a campfire and your face glows warm, even though the air between is cold. Sunlight crosses 150 million kilometres of empty space to warm you. That is thermal radiation: every warm surface sends out electromagnetic waves, no matter needed. Look at the graph of how much a perfect emitter sends out.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Radiation and the Stefan–Boltzmann law: heat that needs no matter"
+        },
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Temperature (K)",
+            "max": 1500
+          },
+          "y": {
+            "label": "Emitted (kW/m²)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Black body σT⁴",
+              "type": "power",
+              "a": 5.67e-11,
+              "k": 4,
+              "ask": "What is the Stefan-Boltzmann law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 300,
+              "label": "Room 0.46 kW/m²"
+            },
+            {
+              "x": 1200,
+              "label": "Red hot 118 kW/m²"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Every surface above absolute zero radiates"
+        }
+      ]
+    },
+    {
+      "say": "The Stefan–Boltzmann law says a perfect emitter, a black body, radiates sigma times T to the fourth power per square metre, with T in kelvin and sigma equal to 5.67 times ten to the minus 8. Fourth power is dramatic. See how the curve shoots up? Double the absolute temperature: how much more radiation?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Temperature (K)",
+            "max": 1500
+          },
+          "y": {
+            "label": "Emitted (kW/m²)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Black body σT⁴",
+              "type": "power",
+              "a": 5.67e-11,
+              "k": 4,
+              "ask": "What is the Stefan-Boltzmann law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 300,
+              "label": "Room 0.46 kW/m²"
+            },
+            {
+              "x": 1200,
+              "label": "Red hot 118 kW/m²"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "E_b = σT⁴, σ = 5.67×10⁻⁸ W/m²·K⁴"
+        }
+      ]
+    },
+    {
+      "say": "Sixteen times! At room temperature, 300 kelvin, a black surface emits about 0.46 kilowatts per square metre. At 1200 kelvin, glowing red, it is about 118. Real surfaces emit less, so we multiply by the emissivity, epsilon, between 0 and 1. See the bars: matt black near 0.95, polished aluminium only about 0.05.",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "emissivity",
+          "items": [
+            {
+              "label": "Matt black paint",
+              "size": 0.95,
+              "icon": "paint"
+            },
+            {
+              "label": "Brick",
+              "size": 0.9,
+              "icon": "house"
+            },
+            {
+              "label": "Oxidised steel",
+              "size": 0.8,
+              "icon": "pipe"
+            },
+            {
+              "label": "Polished aluminium",
+              "size": 0.05,
+              "icon": "light"
+            }
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "Good emitters are also good absorbers (Kirchhoff)"
+        }
+      ]
+    },
+    {
+      "say": "A surface also absorbs radiation from its surroundings, so the net loss uses the difference of fourth powers. A steel pipe at 400 kelvin with emissivity 0.8 in a room at 300 kelvin loses 0.8 times sigma times 400 to the fourth minus 300 to the fourth, about 794 watts per square metre. Why not just use the temperature difference?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Temperature (K)",
+            "max": 1500
+          },
+          "y": {
+            "label": "Emitted (kW/m²)",
+            "max": 300
+          },
+          "curves": [
+            {
+              "label": "Black body σT⁴",
+              "type": "power",
+              "a": 5.67e-11,
+              "k": 4,
+              "ask": "What is the Stefan-Boltzmann law?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 300,
+              "label": "Room 0.46 kW/m²"
+            },
+            {
+              "x": 1200,
+              "label": "Red hot 118 kW/m²"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "q = 0.8 × 5.67×10⁻⁸ × (400⁴ − 300⁴) ≈ 794 W/m²"
+        }
+      ]
+    },
+    {
+      "say": "Because radiation goes with T to the fourth, not T! Fantastic. Real link: space blankets and the foil in a vacuum flask are shiny to cut radiation. Exam tip: always convert to kelvin before you raise to the fourth power; using Celsius is the classic mistake.",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "emissivity",
+          "items": [
+            {
+              "label": "Matt black paint",
+              "size": 0.95,
+              "icon": "paint"
+            },
+            {
+              "label": "Brick",
+              "size": 0.9,
+              "icon": "house"
+            },
+            {
+              "label": "Oxidised steel",
+              "size": 0.8,
+              "icon": "pipe"
+            },
+            {
+              "label": "Polished aluminium",
+              "size": 0.05,
+              "icon": "light"
+            }
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "Always use kelvin: T(K) = T(°C) + 273.15"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the Stefan-Boltzmann law?",
+      "a": "A black body emits radiation at sigma times T to the fourth power watts per square metre, with T in kelvin. A real surface emits epsilon times that.",
+      "asks": [
+        "Stefan Boltzmann formula",
+        "what is a black body"
+      ]
+    },
+    {
+      "q": "What is emissivity?",
+      "a": "Emissivity, epsilon, compares how much a surface radiates with a perfect black body at the same temperature. It runs from 0 for a perfect mirror to 1 for a black body.",
+      "asks": [
+        "emissivity values"
+      ]
+    },
+    {
+      "q": "How does heat reach us from the Sun?",
+      "a": "By radiation. Electromagnetic waves need no material, so they cross the vacuum of space and are absorbed when they reach Earth.",
+      "asks": [
+        "radiation through a vacuum"
+      ]
+    },
+    {
+      "q": "How do I calculate net radiation from a surface?",
+      "a": "Use q equals epsilon sigma times T surface to the fourth minus T surroundings to the fourth, all in kelvin.",
+      "asks": [
+        "net radiation heat loss"
+      ]
+    },
+    {
+      "q": "Why is a vacuum flask silvered?",
+      "a": "The shiny walls have very low emissivity, so they emit and absorb little radiation, while the vacuum between them stops conduction and convection.",
+      "asks": [
+        "how does a thermos work"
+      ]
+    }
+  ],
+  "facts": [
+    "The Stefan–Boltzmann constant is 5.67 × 10⁻⁸ W/m²·K⁴.",
+    "Doubling a surface's absolute temperature multiplies its radiation by 16."
+  ],
+  "quiz": [
+    {
+      "say": "A black body at 500 kelvin emits how much radiation per square metre?",
+      "show": "A black body at 500 K emits how much per m²? (σ = 5.67×10⁻⁸)",
+      "options": [
+        {
+          "show": "3.54 kW/m²",
+          "say": "3.54 kilowatts per square metre"
+        },
+        {
+          "show": "28.4 W/m²",
+          "say": "28.4 watts per square metre"
+        },
+        {
+          "show": "7.09 kW/m²",
+          "say": "7.09 kilowatts per square metre"
+        }
+      ],
+      "answer": 0,
+      "why": "500⁴ = 6.25 × 10¹⁰; × 5.67 × 10⁻⁸ = 3544 W/m².",
+      "wrong": {
+        "1": "That uses T instead of T to the fourth power somewhere along the way.",
+        "2": "That is twice the answer; check the fourth power of 500."
+      }
+    },
+    {
+      "say": "Why must temperatures be in kelvin in the Stefan–Boltzmann law?",
+      "show": "Why must you use kelvin in the Stefan–Boltzmann law?",
+      "options": [
+        {
+          "show": "Radiation depends on absolute temperature",
+          "say": "Radiation depends on absolute temperature"
+        },
+        {
+          "show": "Kelvin numbers are smaller",
+          "say": "Kelvin numbers are smaller"
+        },
+        {
+          "show": "Celsius cannot be raised to a power",
+          "say": "Celsius cannot be raised to a power"
+        }
+      ],
+      "answer": 0,
+      "why": "The law is built on absolute temperature: zero kelvin means zero emission.",
+      "wrong": {
+        "1": "Kelvin numbers are actually larger than Celsius ones.",
+        "2": "You can raise any number to a power; it just gives the wrong answer here."
+      }
+    }
+  ]
+}

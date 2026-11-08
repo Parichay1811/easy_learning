@@ -1,0 +1,680 @@
+{
+  "id": "ENGX-MECH-19",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an automatic door closer works",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "door closer",
+    "hydraulic damper",
+    "closing speed",
+    "spring and oil",
+    "overhead closer"
+  ],
+  "examples": [
+    "How does a door close by itself slowly?",
+    "Why do door closers have oil in them?",
+    "How do you stop a door slamming?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "door",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.62,
+          "size": 1.2,
+          "label": "Door",
+          "motion": "swing"
+        },
+        {
+          "id": "arm",
+          "kind": "lever",
+          "x": 0.3,
+          "y": 0.28,
+          "size": 1,
+          "label": "Closer arm",
+          "motion": "swing"
+        },
+        {
+          "id": "pinion",
+          "kind": "gear",
+          "x": 0.48,
+          "y": 0.28,
+          "size": 0.6,
+          "label": "Pinion",
+          "motion": "spin"
+        },
+        {
+          "id": "piston",
+          "kind": "piston",
+          "x": 0.66,
+          "y": 0.28,
+          "size": 1,
+          "label": "Rack piston",
+          "motion": "slide",
+          "ask": "What does the piston do?"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.9,
+          "y": 0.28,
+          "size": 0.8,
+          "label": "Closing spring",
+          "motion": "pulse",
+          "ask": "What closes the door?"
+        },
+        {
+          "id": "oil",
+          "kind": "tank",
+          "x": 0.62,
+          "y": 0.72,
+          "size": 0.9,
+          "label": "Oil chamber",
+          "motion": "flow",
+          "ask": "Why do door closers have oil in them?"
+        },
+        {
+          "id": "valve",
+          "kind": "valve",
+          "x": 0.88,
+          "y": 0.72,
+          "size": 0.6,
+          "label": "Speed valve",
+          "motion": "none",
+          "ask": "How do you change how fast a door closes?"
+        }
+      ],
+      "links": [
+        {
+          "from": "door",
+          "to": "arm",
+          "kind": "force",
+          "label": "opening"
+        },
+        {
+          "from": "arm",
+          "to": "pinion",
+          "kind": "force"
+        },
+        {
+          "from": "pinion",
+          "to": "piston",
+          "kind": "force",
+          "label": "rack and pinion"
+        },
+        {
+          "from": "piston",
+          "to": "spring",
+          "kind": "energy",
+          "label": "squashes"
+        },
+        {
+          "from": "piston",
+          "to": "oil",
+          "kind": "fluid",
+          "label": "pushes oil"
+        },
+        {
+          "from": "oil",
+          "to": "valve",
+          "kind": "fluid",
+          "label": "squeezes through"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An overhead door closer is a box above the door with an arm joined to the frame. When you open the door, the arm turns a small pinion gear inside the box.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an automatic door closer works"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Door",
+              "motion": "swing"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Closer arm",
+              "motion": "swing"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.48,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.66,
+              "y": 0.28,
+              "size": 1,
+              "label": "Rack piston",
+              "motion": "slide",
+              "ask": "What does the piston do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Closing spring",
+              "motion": "pulse",
+              "ask": "What closes the door?"
+            },
+            {
+              "id": "oil",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.72,
+              "size": 0.9,
+              "label": "Oil chamber",
+              "motion": "flow",
+              "ask": "Why do door closers have oil in them?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.72,
+              "size": 0.6,
+              "label": "Speed valve",
+              "motion": "none",
+              "ask": "How do you change how fast a door closes?"
+            }
+          ],
+          "links": [
+            {
+              "from": "door",
+              "to": "arm",
+              "kind": "force",
+              "label": "opening"
+            },
+            {
+              "from": "arm",
+              "to": "pinion",
+              "kind": "force"
+            },
+            {
+              "from": "pinion",
+              "to": "piston",
+              "kind": "force",
+              "label": "rack and pinion"
+            },
+            {
+              "from": "piston",
+              "to": "spring",
+              "kind": "energy",
+              "label": "squashes"
+            },
+            {
+              "from": "piston",
+              "to": "oil",
+              "kind": "fluid",
+              "label": "pushes oil"
+            },
+            {
+              "from": "oil",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "squeezes through"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The pinion drives a toothed piston, like a rack and pinion, which squashes a strong spring. Your opening push is stored as energy in the spring.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Door",
+              "motion": "swing"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Closer arm",
+              "motion": "swing"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.48,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.66,
+              "y": 0.28,
+              "size": 1,
+              "label": "Rack piston",
+              "motion": "slide",
+              "ask": "What does the piston do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Closing spring",
+              "motion": "pulse",
+              "ask": "What closes the door?"
+            },
+            {
+              "id": "oil",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.72,
+              "size": 0.9,
+              "label": "Oil chamber",
+              "motion": "flow",
+              "ask": "Why do door closers have oil in them?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.72,
+              "size": 0.6,
+              "label": "Speed valve",
+              "motion": "none",
+              "ask": "How do you change how fast a door closes?"
+            }
+          ],
+          "links": [
+            {
+              "from": "door",
+              "to": "arm",
+              "kind": "force",
+              "label": "opening"
+            },
+            {
+              "from": "arm",
+              "to": "pinion",
+              "kind": "force"
+            },
+            {
+              "from": "pinion",
+              "to": "piston",
+              "kind": "force",
+              "label": "rack and pinion"
+            },
+            {
+              "from": "piston",
+              "to": "spring",
+              "kind": "energy",
+              "label": "squashes"
+            },
+            {
+              "from": "piston",
+              "to": "oil",
+              "kind": "fluid",
+              "label": "pushes oil"
+            },
+            {
+              "from": "oil",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "squeezes through"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Let go and the spring pushes the piston back to close the door. But the box is full of oil, and the piston can only move as fast as oil can flow from one side to the other.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Door",
+              "motion": "swing"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Closer arm",
+              "motion": "swing"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.48,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.66,
+              "y": 0.28,
+              "size": 1,
+              "label": "Rack piston",
+              "motion": "slide",
+              "ask": "What does the piston do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Closing spring",
+              "motion": "pulse",
+              "ask": "What closes the door?"
+            },
+            {
+              "id": "oil",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.72,
+              "size": 0.9,
+              "label": "Oil chamber",
+              "motion": "flow",
+              "ask": "Why do door closers have oil in them?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.72,
+              "size": 0.6,
+              "label": "Speed valve",
+              "motion": "none",
+              "ask": "How do you change how fast a door closes?"
+            }
+          ],
+          "links": [
+            {
+              "from": "door",
+              "to": "arm",
+              "kind": "force",
+              "label": "opening"
+            },
+            {
+              "from": "arm",
+              "to": "pinion",
+              "kind": "force"
+            },
+            {
+              "from": "pinion",
+              "to": "piston",
+              "kind": "force",
+              "label": "rack and pinion"
+            },
+            {
+              "from": "piston",
+              "to": "spring",
+              "kind": "energy",
+              "label": "squashes"
+            },
+            {
+              "from": "piston",
+              "to": "oil",
+              "kind": "fluid",
+              "label": "pushes oil"
+            },
+            {
+              "from": "oil",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "squeezes through"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "The oil must squeeze through tiny passages with adjustable valves, so the door closes smoothly instead of slamming. Turning a valve screw changes how fast it shuts.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "door",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.62,
+              "size": 1.2,
+              "label": "Door",
+              "motion": "swing"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Closer arm",
+              "motion": "swing"
+            },
+            {
+              "id": "pinion",
+              "kind": "gear",
+              "x": 0.48,
+              "y": 0.28,
+              "size": 0.6,
+              "label": "Pinion",
+              "motion": "spin"
+            },
+            {
+              "id": "piston",
+              "kind": "piston",
+              "x": 0.66,
+              "y": 0.28,
+              "size": 1,
+              "label": "Rack piston",
+              "motion": "slide",
+              "ask": "What does the piston do?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Closing spring",
+              "motion": "pulse",
+              "ask": "What closes the door?"
+            },
+            {
+              "id": "oil",
+              "kind": "tank",
+              "x": 0.62,
+              "y": 0.72,
+              "size": 0.9,
+              "label": "Oil chamber",
+              "motion": "flow",
+              "ask": "Why do door closers have oil in them?"
+            },
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.88,
+              "y": 0.72,
+              "size": 0.6,
+              "label": "Speed valve",
+              "motion": "none",
+              "ask": "How do you change how fast a door closes?"
+            }
+          ],
+          "links": [
+            {
+              "from": "door",
+              "to": "arm",
+              "kind": "force",
+              "label": "opening"
+            },
+            {
+              "from": "arm",
+              "to": "pinion",
+              "kind": "force"
+            },
+            {
+              "from": "pinion",
+              "to": "piston",
+              "kind": "force",
+              "label": "rack and pinion"
+            },
+            {
+              "from": "piston",
+              "to": "spring",
+              "kind": "energy",
+              "label": "squashes"
+            },
+            {
+              "from": "piston",
+              "to": "oil",
+              "kind": "fluid",
+              "label": "pushes oil"
+            },
+            {
+              "from": "oil",
+              "to": "valve",
+              "kind": "fluid",
+              "label": "squeezes through"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What closes the door?",
+      "a": "A strong spring inside the closer. Opening the door squashes it, and when you let go, it pushes back and swings the door shut.",
+      "asks": [
+        "Where does a door closer get its energy?"
+      ]
+    },
+    {
+      "q": "Why do door closers have oil in them?",
+      "a": "The oil slows the door down. The spring can only move the piston as fast as oil squeezes through small passages, so the door closes gently.",
+      "asks": [
+        "Why does the door close slowly?",
+        "How do you stop a door slamming?"
+      ]
+    },
+    {
+      "q": "What does the piston do?",
+      "a": "The piston has teeth along one side, forming a rack that meshes with the pinion. As the door turns the pinion, the piston slides, squashing the spring and pushing oil.",
+      "asks": [
+        "How does the arm move the spring?"
+      ]
+    },
+    {
+      "q": "How do you change how fast a door closes?",
+      "a": "Door closers have adjusting screws that open or close the oil valves. A smaller opening makes the oil flow more slowly, so the door closes more slowly.",
+      "asks": [
+        "What do the screws on a door closer do?"
+      ]
+    },
+    {
+      "q": "Why do fire doors have closers?",
+      "a": "Fire doors must close by themselves to stop smoke and fire spreading through a building, so they are fitted with closers by law in many countries.",
+      "asks": [
+        "Why must fire doors shut?"
+      ]
+    }
+  ],
+  "facts": [
+    "Most overhead door closers combine a spring to close the door with oil to control its speed.",
+    "Many closers have separate valves for the main sweep and the final few degrees, called the latch."
+  ],
+  "quiz": [
+    {
+      "say": "What stops an automatic door closer from slamming the door?",
+      "show": "What stops an automatic door closer from slamming the door?",
+      "options": [
+        {
+          "show": "Oil squeezing through small valves",
+          "say": "Oil squeezing through small valves"
+        },
+        {
+          "show": "A magnet",
+          "say": "A magnet"
+        },
+        {
+          "show": "The weight of the door",
+          "say": "The weight of the door"
+        }
+      ],
+      "answer": 0,
+      "why": "The oil can only flow slowly through the valves, so the spring cannot push the piston fast.",
+      "wrong": {
+        "1": "Some doors are held open by magnets, but closers control speed with oil.",
+        "2": "The door's weight hangs on the hinges; it does not slow the closing."
+      }
+    }
+  ]
+}

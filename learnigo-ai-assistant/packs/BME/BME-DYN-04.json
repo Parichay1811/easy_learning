@@ -1,0 +1,340 @@
+{
+  "id": "BME-DYN-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The work–energy principle: why braking distance grows with speed squared",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-DYN — Dynamics and vibration",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "work-energy principle",
+    "kinetic energy",
+    "work done by a force",
+    "braking distance",
+    "net work"
+  ],
+  "examples": [
+    "What is the work-energy principle?",
+    "Why does doubling speed quadruple braking distance?",
+    "How do I find stopping distance using energy?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "car",
+      "motion": "right",
+      "forces": [
+        {
+          "label": "Brake friction 6 kN",
+          "dir": "left",
+          "size": 4,
+          "ask": "Why do some forces do no work?"
+        },
+        {
+          "label": "Weight",
+          "dir": "down",
+          "size": 3
+        },
+        {
+          "label": "Road reaction",
+          "dir": "up",
+          "size": 3
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Road safety posters say that at twice the speed you need about four times the braking distance. Why four, not two? The work-energy principle explains it: the net work done on a body equals its change in kinetic energy. Look at the car braking: one big friction force acts backwards.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The work–energy principle: why braking distance grows with speed squared"
+        },
+        {
+          "name": "x-forces",
+          "object": "car",
+          "motion": "right",
+          "forces": [
+            {
+              "label": "Brake friction 6 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "Why do some forces do no work?"
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 3
+            },
+            {
+              "label": "Road reaction",
+              "dir": "up",
+              "size": 3
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Car 1200 kg at 20 m/s (72 km/h); brakes give 6 kN"
+        }
+      ]
+    },
+    {
+      "say": "Work is force times distance moved along the force. The weight and the road reaction act at right angles to the motion, so they do no work at all. Only the brake friction does work, and it is negative, because it acts against the motion. See the arrow pointing backwards?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "car",
+          "motion": "right",
+          "forces": [
+            {
+              "label": "Brake friction 6 kN",
+              "dir": "left",
+              "size": 4,
+              "ask": "Why do some forces do no work?"
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 3
+            },
+            {
+              "label": "Road reaction",
+              "dir": "up",
+              "size": 3
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "W = F × s (only forces along the motion do work)"
+        }
+      ]
+    },
+    {
+      "say": "Now the energy to remove. Kinetic energy is a half m v squared: a half times 1200 times 20 squared, which is 240 kilojoules. See the curve? It grows with speed squared, so it bends upwards steeply. How much energy at 40 metres per second?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (m/s)",
+            "max": 30
+          },
+          "y": {
+            "label": "Kinetic energy (kJ)",
+            "max": 600
+          },
+          "curves": [
+            {
+              "label": "KE of 1200 kg car",
+              "type": "power",
+              "a": 0.6,
+              "k": 2,
+              "ask": "Why does kinetic energy grow with speed squared?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "240 kJ"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "KE = ½mv² = ½ × 1200 × 20² = 240 kJ"
+        }
+      ]
+    },
+    {
+      "say": "Four times more, 960 kilojoules! Set the brake work equal to the kinetic energy: 6000 newtons times s equals 240 thousand joules, so s is 40 metres. This curve shows braking distance against speed. At 30 metres per second it is already 90 metres. Do you see the same squared shape?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (m/s)",
+            "max": 30
+          },
+          "y": {
+            "label": "Braking dist. (m)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "With 6 kN braking",
+              "type": "power",
+              "a": 0.1,
+              "k": 2,
+              "ask": "Why does doubling speed quadruple braking distance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "40 m"
+            },
+            {
+              "x": 30,
+              "label": "90 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F s = ½mv²: s = 240 000 / 6000 = 40 m"
+        }
+      ]
+    },
+    {
+      "say": "Yes, braking distance follows speed squared. Brilliant! Real link: that is why speed limits near schools in the UK, Germany or India are kept low; a small speed cut saves a lot of distance. And all that energy becomes heat in the brake discs. Challenge: what braking force stops the car in 20 metres?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (m/s)",
+            "max": 30
+          },
+          "y": {
+            "label": "Braking dist. (m)",
+            "max": 100
+          },
+          "curves": [
+            {
+              "label": "With 6 kN braking",
+              "type": "power",
+              "a": 0.1,
+              "k": 2,
+              "ask": "Why does doubling speed quadruple braking distance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 20,
+              "label": "40 m"
+            },
+            {
+              "x": 30,
+              "label": "90 m"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Halving the distance needs double the force"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the work-energy principle?",
+      "a": "The total work done by all the forces on a body equals the change in its kinetic energy. It lets you link forces and distances to speeds without finding the time.",
+      "asks": [
+        "work energy theorem"
+      ]
+    },
+    {
+      "q": "Why do some forces do no work?",
+      "a": "Work counts only the force component along the motion. Forces at right angles to the motion, like the weight of a car on a flat road, do no work.",
+      "asks": [
+        "when is work zero",
+        "brake friction work"
+      ]
+    },
+    {
+      "q": "Why does kinetic energy grow with speed squared?",
+      "a": "Kinetic energy is a half m v squared. Doubling the speed makes v squared four times bigger, so the energy is four times bigger.",
+      "asks": [
+        "kinetic energy formula"
+      ]
+    },
+    {
+      "q": "Why does doubling speed quadruple braking distance?",
+      "a": "With the same braking force, the distance is the kinetic energy divided by the force. Kinetic energy grows with speed squared, so the distance does too.",
+      "asks": [
+        "braking distance and speed relationship",
+        "how do I find stopping distance using energy"
+      ]
+    },
+    {
+      "q": "Where does the kinetic energy go when a car brakes?",
+      "a": "Friction in the brakes turns it into heat in the discs and pads. Electric and hybrid cars can recover some of it with regenerative braking.",
+      "asks": [
+        "energy in braking"
+      ]
+    }
+  ],
+  "facts": [
+    "The net work done on a body equals its change in kinetic energy.",
+    "With constant braking force, braking distance is proportional to the square of the initial speed."
+  ],
+  "quiz": [
+    {
+      "say": "A 1000 kilogram car at 15 metres per second brakes with a 5 kilonewton force. How far does it go before stopping?",
+      "show": "1000 kg car at 15 m/s, braking force 5 kN. Braking distance?",
+      "options": [
+        {
+          "show": "22.5 m",
+          "say": "22.5 metres"
+        },
+        {
+          "show": "3 m",
+          "say": "3 metres"
+        },
+        {
+          "show": "45 m",
+          "say": "45 metres"
+        }
+      ],
+      "answer": 0,
+      "why": "KE = ½ × 1000 × 15² = 112 500 J; s = 112 500 / 5000 = 22.5 m.",
+      "wrong": {
+        "1": "That is the speed divided by the force in kilonewtons, which is not a distance.",
+        "2": "That forgets the half in the kinetic energy."
+      }
+    },
+    {
+      "say": "A crate slides across a floor. Which force does no work on it?",
+      "show": "A crate slides across a level floor. Which force does no work?",
+      "options": [
+        {
+          "show": "Its weight",
+          "say": "Its weight"
+        },
+        {
+          "show": "Friction from the floor",
+          "say": "Friction from the floor"
+        },
+        {
+          "show": "Your push along the floor",
+          "say": "Your push along the floor"
+        }
+      ],
+      "answer": 0,
+      "why": "The weight is vertical and the motion is horizontal, so it does no work.",
+      "wrong": {
+        "1": "Friction acts along the motion, backwards, so it does negative work.",
+        "2": "Your push acts along the motion, so it does positive work."
+      }
+    }
+  ]
+}

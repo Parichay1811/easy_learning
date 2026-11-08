@@ -1,0 +1,695 @@
+{
+  "id": "SCH-ECO-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "Where does your money go when you put it in a bank?",
+  "area": "School Explainers",
+  "group": "SCH-ECO — Economics and Money (class 3–12)",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "bank",
+    "deposit",
+    "loan",
+    "interest",
+    "central bank",
+    "Grameen Bank"
+  ],
+  "examples": [
+    "What does a bank do with my money?",
+    "How does a bank make money?",
+    "Is my money safe in a bank?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "savers",
+          "label": "Savers",
+          "icon": "family",
+          "x": 0.12,
+          "y": 0.5,
+          "ask": "Is my money safe in a bank?"
+        },
+        {
+          "id": "bank",
+          "label": "Bank",
+          "icon": "house",
+          "x": 0.5,
+          "y": 0.5,
+          "ask": "How does a bank make money?"
+        },
+        {
+          "id": "home",
+          "label": "Home buyer",
+          "icon": "house",
+          "x": 0.88,
+          "y": 0.25,
+          "ask": "What is a loan?"
+        },
+        {
+          "id": "shop",
+          "label": "Small business",
+          "icon": "shop",
+          "x": 0.88,
+          "y": 0.78
+        },
+        {
+          "id": "central",
+          "label": "Central bank",
+          "icon": "scale",
+          "x": 0.5,
+          "y": 0.1,
+          "ask": "What does a central bank do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "savers",
+          "to": "bank",
+          "kind": "fluid",
+          "label": "deposits"
+        },
+        {
+          "from": "bank",
+          "to": "home",
+          "kind": "fluid",
+          "label": "loan"
+        },
+        {
+          "from": "bank",
+          "to": "shop",
+          "kind": "fluid",
+          "label": "loan"
+        },
+        {
+          "from": "home",
+          "to": "bank",
+          "kind": "fluid",
+          "label": "repays + interest"
+        },
+        {
+          "from": "shop",
+          "to": "bank",
+          "kind": "fluid",
+          "label": "repays + interest"
+        },
+        {
+          "from": "bank",
+          "to": "savers",
+          "kind": "fluid",
+          "label": "interest"
+        },
+        {
+          "from": "central",
+          "to": "bank",
+          "kind": "signal",
+          "label": "sets rules"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When you put 100 into a bank, does it sit in a box with your name on it? Not really! Look at the board: your money flows from savers, through the bank, out to borrowers, and back again.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Where does your money go when you put it in a bank?"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "savers",
+              "label": "Savers",
+              "icon": "family",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Is my money safe in a bank?"
+            },
+            {
+              "id": "bank",
+              "label": "Bank",
+              "icon": "house",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does a bank make money?"
+            },
+            {
+              "id": "home",
+              "label": "Home buyer",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is a loan?"
+            },
+            {
+              "id": "shop",
+              "label": "Small business",
+              "icon": "shop",
+              "x": 0.88,
+              "y": 0.78
+            },
+            {
+              "id": "central",
+              "label": "Central bank",
+              "icon": "scale",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What does a central bank do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "savers",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "deposits"
+            },
+            {
+              "from": "bank",
+              "to": "home",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "bank",
+              "to": "shop",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "home",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "shop",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "bank",
+              "to": "savers",
+              "kind": "fluid",
+              "label": "interest"
+            },
+            {
+              "from": "central",
+              "to": "bank",
+              "kind": "signal",
+              "label": "sets rules"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "See the savers on the left? That is you and your family. A deposit means money you put in. The bank keeps a record, and you can take it out when you need it. Where do you keep your savings now?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "savers",
+              "label": "Savers",
+              "icon": "family",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Is my money safe in a bank?"
+            },
+            {
+              "id": "bank",
+              "label": "Bank",
+              "icon": "house",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does a bank make money?"
+            },
+            {
+              "id": "home",
+              "label": "Home buyer",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is a loan?"
+            },
+            {
+              "id": "shop",
+              "label": "Small business",
+              "icon": "shop",
+              "x": 0.88,
+              "y": 0.78
+            },
+            {
+              "id": "central",
+              "label": "Central bank",
+              "icon": "scale",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What does a central bank do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "savers",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "deposits"
+            },
+            {
+              "from": "bank",
+              "to": "home",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "bank",
+              "to": "shop",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "home",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "shop",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "bank",
+              "to": "savers",
+              "kind": "fluid",
+              "label": "interest"
+            },
+            {
+              "from": "central",
+              "to": "bank",
+              "kind": "signal",
+              "label": "sets rules"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Now look right: the bank lends most deposits to borrowers, like a family buying a home in Mexico City or a tailor in Dhaka buying a sewing machine. A loan is borrowed money you must pay back, plus extra called interest. Why would someone borrow?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "savers",
+              "label": "Savers",
+              "icon": "family",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Is my money safe in a bank?"
+            },
+            {
+              "id": "bank",
+              "label": "Bank",
+              "icon": "house",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does a bank make money?"
+            },
+            {
+              "id": "home",
+              "label": "Home buyer",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is a loan?"
+            },
+            {
+              "id": "shop",
+              "label": "Small business",
+              "icon": "shop",
+              "x": 0.88,
+              "y": 0.78
+            },
+            {
+              "id": "central",
+              "label": "Central bank",
+              "icon": "scale",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What does a central bank do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "savers",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "deposits"
+            },
+            {
+              "from": "bank",
+              "to": "home",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "bank",
+              "to": "shop",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "home",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "shop",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "bank",
+              "to": "savers",
+              "kind": "fluid",
+              "label": "interest"
+            },
+            {
+              "from": "central",
+              "to": "bank",
+              "kind": "signal",
+              "label": "sets rules"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "See the bank in the middle? It charges borrowers more interest than it pays savers. Say it pays you 3 percent but charges borrowers 8 percent. Quick check: what is the gap? Yes, 5 percent, and that pays its staff and its profit.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "savers",
+              "label": "Savers",
+              "icon": "family",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Is my money safe in a bank?"
+            },
+            {
+              "id": "bank",
+              "label": "Bank",
+              "icon": "house",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does a bank make money?"
+            },
+            {
+              "id": "home",
+              "label": "Home buyer",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is a loan?"
+            },
+            {
+              "id": "shop",
+              "label": "Small business",
+              "icon": "shop",
+              "x": 0.88,
+              "y": 0.78
+            },
+            {
+              "id": "central",
+              "label": "Central bank",
+              "icon": "scale",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What does a central bank do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "savers",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "deposits"
+            },
+            {
+              "from": "bank",
+              "to": "home",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "bank",
+              "to": "shop",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "home",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "shop",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "bank",
+              "to": "savers",
+              "kind": "fluid",
+              "label": "interest"
+            },
+            {
+              "from": "central",
+              "to": "bank",
+              "kind": "signal",
+              "label": "sets rules"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "And the central bank, like the Reserve Bank of India or the Central Bank of Nigeria, sets rules to keep banks safe. Great work! Wow: Muhammad Yunus's Grameen Bank in Bangladesh lent tiny sums to millions of poor women and won the Nobel Peace Prize in 2006.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "savers",
+              "label": "Savers",
+              "icon": "family",
+              "x": 0.12,
+              "y": 0.5,
+              "ask": "Is my money safe in a bank?"
+            },
+            {
+              "id": "bank",
+              "label": "Bank",
+              "icon": "house",
+              "x": 0.5,
+              "y": 0.5,
+              "ask": "How does a bank make money?"
+            },
+            {
+              "id": "home",
+              "label": "Home buyer",
+              "icon": "house",
+              "x": 0.88,
+              "y": 0.25,
+              "ask": "What is a loan?"
+            },
+            {
+              "id": "shop",
+              "label": "Small business",
+              "icon": "shop",
+              "x": 0.88,
+              "y": 0.78
+            },
+            {
+              "id": "central",
+              "label": "Central bank",
+              "icon": "scale",
+              "x": 0.5,
+              "y": 0.1,
+              "ask": "What does a central bank do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "savers",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "deposits"
+            },
+            {
+              "from": "bank",
+              "to": "home",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "bank",
+              "to": "shop",
+              "kind": "fluid",
+              "label": "loan"
+            },
+            {
+              "from": "home",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "shop",
+              "to": "bank",
+              "kind": "fluid",
+              "label": "repays + interest"
+            },
+            {
+              "from": "bank",
+              "to": "savers",
+              "kind": "fluid",
+              "label": "interest"
+            },
+            {
+              "from": "central",
+              "to": "bank",
+              "kind": "signal",
+              "label": "sets rules"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Is my money safe in a bank?",
+      "a": "Usually yes. Banks are checked by the central bank, and many countries insure deposits up to a limit, such as 5 lakh rupees in India or 250,000 dollars in the USA, if a bank fails.",
+      "asks": [
+        "What if a bank goes bust?"
+      ]
+    },
+    {
+      "q": "How does a bank make money?",
+      "a": "Mainly by charging borrowers a higher interest rate than it pays savers. It also charges fees for services like cards and transfers.",
+      "asks": [
+        "Why do banks pay interest?"
+      ]
+    },
+    {
+      "q": "What is a loan?",
+      "a": "A loan is money you borrow and must pay back over time, usually with interest. People take loans for homes, education, cars or starting a business.",
+      "asks": [
+        "How do loans work?"
+      ]
+    },
+    {
+      "q": "What does a central bank do?",
+      "a": "A central bank, like the Reserve Bank of India, the Bank of Japan or the US Federal Reserve, issues the currency, watches over banks and sets a key interest rate to keep prices steady.",
+      "asks": [
+        "What is the Reserve Bank?"
+      ]
+    },
+    {
+      "q": "What is Islamic banking?",
+      "a": "Islamic banks follow rules that forbid charging or paying interest. Instead, the bank and customer share profits or the bank buys an item and sells it on at an agreed price. It is common in Malaysia, the Gulf and Pakistan.",
+      "asks": [
+        "Can banks work without interest?"
+      ]
+    }
+  ],
+  "facts": [
+    "Muhammad Yunus and Grameen Bank shared the 2006 Nobel Peace Prize for microcredit.",
+    "India's deposit insurance covers up to 5 lakh rupees per depositor per bank."
+  ],
+  "quiz": [
+    {
+      "say": "How does a bank mainly make money?",
+      "show": "How does a bank mainly make money?",
+      "options": [
+        {
+          "show": "Printing its own money",
+          "say": "Printing its own money"
+        },
+        {
+          "show": "Charging borrowers more interest than it pays savers",
+          "say": "Charging borrowers more interest than it pays savers"
+        },
+        {
+          "show": "Selling money boxes",
+          "say": "Selling money boxes"
+        }
+      ],
+      "answer": 1,
+      "why": "The gap between the two interest rates is the bank's main income.",
+      "wrong": {
+        "0": "Only the central bank issues currency.",
+        "2": "Banks do not earn their living from money boxes."
+      }
+    },
+    {
+      "say": "What is a loan?",
+      "show": "What is a loan?",
+      "options": [
+        {
+          "show": "Money borrowed that must be paid back with interest",
+          "say": "Money borrowed that must be paid back with interest"
+        },
+        {
+          "show": "A gift from the bank",
+          "say": "A gift from the bank"
+        },
+        {
+          "show": "A kind of tax",
+          "say": "A kind of tax"
+        }
+      ],
+      "answer": 0,
+      "why": "A loan is borrowed and repaid over time, usually with interest.",
+      "wrong": {
+        "1": "Banks do not give money away; loans must be repaid.",
+        "2": "Taxes are paid to the government, not borrowed."
+      }
+    }
+  ]
+}

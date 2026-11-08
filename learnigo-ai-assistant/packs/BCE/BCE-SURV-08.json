@@ -1,0 +1,448 @@
+{
+  "id": "BCE-SURV-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Setting out a building: pegs, diagonals and profile boards",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-SURV — Surveying and geomatics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "setting out",
+    "profile boards",
+    "diagonal check",
+    "3-4-5 rule",
+    "polar setting out",
+    "temporary benchmark"
+  ],
+  "examples": [
+    "How do you set out a building on site?",
+    "How do you check that a building is square?",
+    "What are profile boards used for?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Control points",
+          "icon": "flag",
+          "note": "Fixed survey stations with coordinates"
+        },
+        {
+          "label": "Peg the corners",
+          "icon": "compass",
+          "note": "By bearing and distance",
+          "ask": "How do you set out a point by bearing and distance?"
+        },
+        {
+          "label": "Check diagonals",
+          "icon": "ruler",
+          "note": "Equal diagonals: truly square",
+          "ask": "How do you check a building is square?"
+        },
+        {
+          "label": "Profile boards",
+          "icon": "door",
+          "note": "Boards outside the dig hold strings",
+          "ask": "What are profile boards?"
+        },
+        {
+          "label": "Transfer levels",
+          "icon": "eye",
+          "note": "Floor and trench heights from a TBM"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "The sides of the Great Pyramid of Giza line up with north, south, east and west to within a small fraction of a degree, more than four and a half thousand years ago. Setting out is putting a design onto the ground that precisely. Here is the order a site engineer follows.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Setting out a building: pegs, diagonals and profile boards"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Control points",
+              "icon": "flag",
+              "note": "Fixed survey stations with coordinates"
+            },
+            {
+              "label": "Peg the corners",
+              "icon": "compass",
+              "note": "By bearing and distance",
+              "ask": "How do you set out a point by bearing and distance?"
+            },
+            {
+              "label": "Check diagonals",
+              "icon": "ruler",
+              "note": "Equal diagonals: truly square",
+              "ask": "How do you check a building is square?"
+            },
+            {
+              "label": "Profile boards",
+              "icon": "door",
+              "note": "Boards outside the dig hold strings",
+              "ask": "What are profile boards?"
+            },
+            {
+              "label": "Transfer levels",
+              "icon": "eye",
+              "note": "Floor and trench heights from a TBM"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Every corner has design coordinates. From a control station S at one hundred, one hundred, corner A is at one hundred and six, one hundred and eight. That is six metres east and eight north: ten metres away on a bearing of thirty six degrees fifty two minutes. The total station turns to that bearing and the pole is moved until the distance reads ten.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": 98,
+            "max": 110
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": 98,
+            "max": 110
+          },
+          "curves": [
+            {
+              "label": "10 m at 36°52′",
+              "type": "points",
+              "points": [
+                [
+                  100,
+                  100
+                ],
+                [
+                  106,
+                  108
+                ]
+              ],
+              "ask": "How do you set out a point by bearing and distance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 100,
+              "label": "Station S"
+            },
+            {
+              "x": 106,
+              "label": "Corner A"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "D = √(6² + 8²) = 10 m; bearing = tan⁻¹(6/8) = 36°52′"
+        }
+      ]
+    },
+    {
+      "say": "Now the check. Our building is twelve metres by nine. If it is truly square, both diagonals are fifteen metres, the old three four five triangle made three times bigger. Look at the diagonal on the board. If one diagonal is longer, which corner do you think is out?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": -2,
+            "max": 14
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": -2,
+            "max": 11
+          },
+          "curves": [
+            {
+              "label": "Building 12 m × 9 m",
+              "type": "points",
+              "closed": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  12,
+                  0
+                ],
+                [
+                  12,
+                  9
+                ],
+                [
+                  0,
+                  9
+                ]
+              ],
+              "ask": "How do you set out a building?"
+            },
+            {
+              "label": "Diagonal 15 m",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  12,
+                  9
+                ]
+              ],
+              "ask": "How do you check a building is square?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Corner A"
+            },
+            {
+              "x": 12,
+              "label": "Corner C"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Diagonal = √(12² + 9²) = √225 = 15 m"
+        }
+      ]
+    },
+    {
+      "say": "The corner on the long diagonal's end is pushed out! Digging would destroy the pegs, so engineers fix profile boards a metre or two outside the trench. Strings stretched between nails on the boards mark each wall line, and levels for floors and trenches are carried from a temporary benchmark.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Control points",
+              "icon": "flag",
+              "note": "Fixed survey stations with coordinates"
+            },
+            {
+              "label": "Peg the corners",
+              "icon": "compass",
+              "note": "By bearing and distance",
+              "ask": "How do you set out a point by bearing and distance?"
+            },
+            {
+              "label": "Check diagonals",
+              "icon": "ruler",
+              "note": "Equal diagonals: truly square",
+              "ask": "How do you check a building is square?"
+            },
+            {
+              "label": "Profile boards",
+              "icon": "door",
+              "note": "Boards outside the dig hold strings",
+              "ask": "What are profile boards?"
+            },
+            {
+              "label": "Transfer levels",
+              "icon": "eye",
+              "note": "Floor and trench heights from a TBM"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Setting out tolerances are often just a few millimetres, so good engineers check every point twice, from a different station. A mistake here is built in concrete! Great work! Challenge: a garage is eight metres by six. What should each diagonal measure?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "equal": true,
+          "x": {
+            "label": "Easting (m)",
+            "min": -2,
+            "max": 14
+          },
+          "y": {
+            "label": "Northing (m)",
+            "min": -2,
+            "max": 11
+          },
+          "curves": [
+            {
+              "label": "Building 12 m × 9 m",
+              "type": "points",
+              "closed": true,
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  12,
+                  0
+                ],
+                [
+                  12,
+                  9
+                ],
+                [
+                  0,
+                  9
+                ]
+              ],
+              "ask": "How do you set out a building?"
+            },
+            {
+              "label": "Diagonal 15 m",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  12,
+                  9
+                ]
+              ],
+              "ask": "How do you check a building is square?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Corner A"
+            },
+            {
+              "x": 12,
+              "label": "Corner C"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you set out a building?",
+      "a": "Establish control points, set out the corners by coordinates or by bearing and distance, check the diagonals, then fix profile boards outside the excavation with strings for wall lines and transfer levels from a benchmark.",
+      "asks": [
+        "Setting out procedure"
+      ]
+    },
+    {
+      "q": "How do you check a building is square?",
+      "a": "Measure both diagonals of the rectangle. If they are equal, and the sides are the right lengths, the corners are right angles. A 12 by 9 metre building has 15 metre diagonals.",
+      "asks": [
+        "Diagonal check",
+        "How do you check that a building is square?"
+      ]
+    },
+    {
+      "q": "What are profile boards?",
+      "a": "Horizontal boards on pegs set a short distance outside the excavation at each corner. Nails or saw cuts on them hold strings that mark the wall and trench lines after the corner pegs are dug out.",
+      "asks": [
+        "Sight rails",
+        "What are profile boards used for?"
+      ]
+    },
+    {
+      "q": "What is the 3-4-5 rule?",
+      "a": "A triangle with sides 3, 4 and 5 units has a right angle, because 3 squared plus 4 squared equals 5 squared. Builders use multiples like 6-8-10 to set out square corners.",
+      "asks": [
+        "Pythagoras on site"
+      ]
+    },
+    {
+      "q": "How do you set out a point by bearing and distance?",
+      "a": "Work out the bearing and distance from a control station to the design coordinates, set the total station on that bearing and move the prism along the line until the distance is correct.",
+      "asks": [
+        "Polar setting out"
+      ]
+    }
+  ],
+  "facts": [
+    "The sides of the Great Pyramid of Giza are aligned to the cardinal directions to within a few minutes of arc.",
+    "A rectangle 12 m by 9 m has 15 m diagonals: three times the 3-4-5 triangle."
+  ],
+  "quiz": [
+    {
+      "say": "A rectangular slab is 16 metres by 12 metres. How long should each diagonal be if it is square?",
+      "show": "A rectangular slab is 16 m by 12 m. Diagonal length when square?",
+      "options": [
+        {
+          "show": "20 m",
+          "say": "20 metres"
+        },
+        {
+          "show": "28 m",
+          "say": "28 metres"
+        },
+        {
+          "show": "14 m",
+          "say": "14 metres"
+        }
+      ],
+      "answer": 0,
+      "why": "√(16² + 12²) = √(256 + 144) = √400 = 20 m.",
+      "wrong": {
+        "1": "That adds the sides instead of using Pythagoras.",
+        "2": "That is the average of the sides."
+      }
+    },
+    {
+      "say": "Why are profile boards placed outside the trench?",
+      "show": "Why are profile boards placed outside the trench?",
+      "options": [
+        {
+          "show": "So the lines survive the digging",
+          "say": "So the lines survive the digging"
+        },
+        {
+          "show": "To keep rain off",
+          "say": "To keep rain off"
+        },
+        {
+          "show": "To hold up the walls",
+          "say": "To hold up the walls"
+        }
+      ],
+      "answer": 0,
+      "why": "Corner pegs are lost when digging; strings on the boards can be re-strung any time.",
+      "wrong": {
+        "1": "They are not shelters.",
+        "2": "They are setting-out aids, not supports."
+      }
+    }
+  ]
+}

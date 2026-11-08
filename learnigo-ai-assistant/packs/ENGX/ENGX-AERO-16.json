@@ -1,0 +1,559 @@
+{
+  "id": "ENGX-AERO-16",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How airships float and steer",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "airship",
+    "blimp",
+    "zeppelin",
+    "helium lift",
+    "ballonet"
+  ],
+  "examples": [
+    "How do airships float?",
+    "What is the difference between a blimp and a zeppelin?",
+    "Why do airships use helium?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "env",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.22,
+          "label": "Helium envelope",
+          "size": 1.5,
+          "motion": "none",
+          "ask": "Why do airships use helium?"
+        },
+        {
+          "id": "ball",
+          "kind": "tank",
+          "x": 0.18,
+          "y": 0.55,
+          "label": "Ballonet",
+          "size": 0.8,
+          "motion": "pulse",
+          "ask": "What is a ballonet?"
+        },
+        {
+          "id": "blow",
+          "kind": "fan",
+          "x": 0.18,
+          "y": 0.88,
+          "label": "Air blower",
+          "motion": "spin"
+        },
+        {
+          "id": "gond",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.65,
+          "label": "Gondola",
+          "motion": "none"
+        },
+        {
+          "id": "prop",
+          "kind": "propeller",
+          "x": 0.8,
+          "y": 0.62,
+          "label": "Swivelling propellers",
+          "motion": "spin",
+          "ask": "How does an airship steer?"
+        },
+        {
+          "id": "fins",
+          "kind": "lever",
+          "x": 0.88,
+          "y": 0.22,
+          "label": "Tail fins and rudder",
+          "motion": "swing",
+          "ask": "How does an airship steer?"
+        }
+      ],
+      "links": [
+        {
+          "from": "blow",
+          "to": "ball",
+          "kind": "fluid",
+          "label": "pumps air"
+        },
+        {
+          "from": "ball",
+          "to": "env",
+          "kind": "force",
+          "label": "keeps it firm"
+        },
+        {
+          "from": "gond",
+          "to": "prop",
+          "kind": "power",
+          "label": "engines"
+        },
+        {
+          "from": "gond",
+          "to": "fins",
+          "kind": "signal",
+          "label": "steer"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An airship floats because its huge envelope is filled with helium, which is about seven times lighter than air. The helium's lift balances the weight of the ship, its engines and its passengers.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How airships float and steer"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "env",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Helium envelope",
+              "size": 1.5,
+              "motion": "none",
+              "ask": "Why do airships use helium?"
+            },
+            {
+              "id": "ball",
+              "kind": "tank",
+              "x": 0.18,
+              "y": 0.55,
+              "label": "Ballonet",
+              "size": 0.8,
+              "motion": "pulse",
+              "ask": "What is a ballonet?"
+            },
+            {
+              "id": "blow",
+              "kind": "fan",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Air blower",
+              "motion": "spin"
+            },
+            {
+              "id": "gond",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.65,
+              "label": "Gondola",
+              "motion": "none"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.8,
+              "y": 0.62,
+              "label": "Swivelling propellers",
+              "motion": "spin",
+              "ask": "How does an airship steer?"
+            },
+            {
+              "id": "fins",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.22,
+              "label": "Tail fins and rudder",
+              "motion": "swing",
+              "ask": "How does an airship steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blow",
+              "to": "ball",
+              "kind": "fluid",
+              "label": "pumps air"
+            },
+            {
+              "from": "ball",
+              "to": "env",
+              "kind": "force",
+              "label": "keeps it firm"
+            },
+            {
+              "from": "gond",
+              "to": "prop",
+              "kind": "power",
+              "label": "engines"
+            },
+            {
+              "from": "gond",
+              "to": "fins",
+              "kind": "signal",
+              "label": "steer"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Inside the envelope are air bags called ballonets. As the helium swells when climbing or shrinks when descending, blowers let air out of or pump air into them, keeping the envelope firm without losing helium.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "env",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Helium envelope",
+              "size": 1.5,
+              "motion": "none",
+              "ask": "Why do airships use helium?"
+            },
+            {
+              "id": "ball",
+              "kind": "tank",
+              "x": 0.18,
+              "y": 0.55,
+              "label": "Ballonet",
+              "size": 0.8,
+              "motion": "pulse",
+              "ask": "What is a ballonet?"
+            },
+            {
+              "id": "blow",
+              "kind": "fan",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Air blower",
+              "motion": "spin"
+            },
+            {
+              "id": "gond",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.65,
+              "label": "Gondola",
+              "motion": "none"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.8,
+              "y": 0.62,
+              "label": "Swivelling propellers",
+              "motion": "spin",
+              "ask": "How does an airship steer?"
+            },
+            {
+              "id": "fins",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.22,
+              "label": "Tail fins and rudder",
+              "motion": "swing",
+              "ask": "How does an airship steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blow",
+              "to": "ball",
+              "kind": "fluid",
+              "label": "pumps air"
+            },
+            {
+              "from": "ball",
+              "to": "env",
+              "kind": "force",
+              "label": "keeps it firm"
+            },
+            {
+              "from": "gond",
+              "to": "prop",
+              "kind": "power",
+              "label": "engines"
+            },
+            {
+              "from": "gond",
+              "to": "fins",
+              "kind": "signal",
+              "label": "steer"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Engine-driven propellers push the airship forward, and on modern airships they can swivel to push up, down or backwards for take-off and landing.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "env",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Helium envelope",
+              "size": 1.5,
+              "motion": "none",
+              "ask": "Why do airships use helium?"
+            },
+            {
+              "id": "ball",
+              "kind": "tank",
+              "x": 0.18,
+              "y": 0.55,
+              "label": "Ballonet",
+              "size": 0.8,
+              "motion": "pulse",
+              "ask": "What is a ballonet?"
+            },
+            {
+              "id": "blow",
+              "kind": "fan",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Air blower",
+              "motion": "spin"
+            },
+            {
+              "id": "gond",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.65,
+              "label": "Gondola",
+              "motion": "none"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.8,
+              "y": 0.62,
+              "label": "Swivelling propellers",
+              "motion": "spin",
+              "ask": "How does an airship steer?"
+            },
+            {
+              "id": "fins",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.22,
+              "label": "Tail fins and rudder",
+              "motion": "swing",
+              "ask": "How does an airship steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blow",
+              "to": "ball",
+              "kind": "fluid",
+              "label": "pumps air"
+            },
+            {
+              "from": "ball",
+              "to": "env",
+              "kind": "force",
+              "label": "keeps it firm"
+            },
+            {
+              "from": "gond",
+              "to": "prop",
+              "kind": "power",
+              "label": "engines"
+            },
+            {
+              "from": "gond",
+              "to": "fins",
+              "kind": "signal",
+              "label": "steer"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Fins with a rudder and elevators at the tail steer it, just like a plane's tail. Airships are slow, around 100 kilometres per hour, but they can stay up quietly for hours on very little fuel.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "env",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.22,
+              "label": "Helium envelope",
+              "size": 1.5,
+              "motion": "none",
+              "ask": "Why do airships use helium?"
+            },
+            {
+              "id": "ball",
+              "kind": "tank",
+              "x": 0.18,
+              "y": 0.55,
+              "label": "Ballonet",
+              "size": 0.8,
+              "motion": "pulse",
+              "ask": "What is a ballonet?"
+            },
+            {
+              "id": "blow",
+              "kind": "fan",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Air blower",
+              "motion": "spin"
+            },
+            {
+              "id": "gond",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.65,
+              "label": "Gondola",
+              "motion": "none"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.8,
+              "y": 0.62,
+              "label": "Swivelling propellers",
+              "motion": "spin",
+              "ask": "How does an airship steer?"
+            },
+            {
+              "id": "fins",
+              "kind": "lever",
+              "x": 0.88,
+              "y": 0.22,
+              "label": "Tail fins and rudder",
+              "motion": "swing",
+              "ask": "How does an airship steer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "blow",
+              "to": "ball",
+              "kind": "fluid",
+              "label": "pumps air"
+            },
+            {
+              "from": "ball",
+              "to": "env",
+              "kind": "force",
+              "label": "keeps it firm"
+            },
+            {
+              "from": "gond",
+              "to": "prop",
+              "kind": "power",
+              "label": "engines"
+            },
+            {
+              "from": "gond",
+              "to": "fins",
+              "kind": "signal",
+              "label": "steer"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do airships use helium?",
+      "a": "Helium is much lighter than air and, unlike hydrogen, it cannot burn. Early airships used hydrogen, which is even lighter, but fires like the Hindenburg disaster in 1937 showed how dangerous it was.",
+      "asks": [
+        "Why don't airships use hydrogen?"
+      ]
+    },
+    {
+      "q": "What is a ballonet?",
+      "a": "A ballonet is an air bag inside the envelope. Pumping air in or letting it out keeps the envelope firm as the helium expands and shrinks with height, and front and back ballonets help tilt the nose up or down.",
+      "asks": [
+        "What are the air bags inside an airship?"
+      ]
+    },
+    {
+      "q": "How does an airship steer?",
+      "a": "Propellers push it along, and the tail fins have a rudder to turn left or right and elevators to point the nose up or down. Some modern airships have swivelling propellers for extra control near the ground.",
+      "asks": [
+        "How do you fly an airship?"
+      ]
+    },
+    {
+      "q": "What is the difference between a blimp and a zeppelin?",
+      "a": "A blimp has no rigid frame; its shape comes from the gas pressure inside. A zeppelin has a rigid skeleton inside the envelope. The modern Zeppelin NT is semi-rigid, with a partial frame.",
+      "asks": [
+        "Is a blimp a zeppelin?"
+      ]
+    },
+    {
+      "q": "Why aren't airships used more today?",
+      "a": "They are slow, easily pushed around by strong winds, and need huge hangars. Today they are used for advertising, sightseeing and research, and some companies are developing them to carry cargo.",
+      "asks": [
+        "Will airships come back?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Hindenburg, filled with flammable hydrogen, was destroyed by fire in 1937 in New Jersey.",
+    "Helium is about seven times less dense than air at the same temperature and pressure."
+  ],
+  "quiz": [
+    {
+      "say": "Why do modern airships use helium instead of hydrogen?",
+      "show": "Why helium, not hydrogen?",
+      "options": [
+        {
+          "show": "Helium cannot burn",
+          "say": "Helium cannot burn"
+        },
+        {
+          "show": "Helium is lighter than hydrogen",
+          "say": "Helium is lighter than hydrogen"
+        },
+        {
+          "show": "Helium is free",
+          "say": "Helium is free"
+        }
+      ],
+      "answer": 0,
+      "why": "Helium does not burn, so it avoids the fires that destroyed hydrogen airships.",
+      "wrong": {
+        "1": "Hydrogen is actually lighter; helium is chosen because it is safe.",
+        "2": "Helium is expensive and in limited supply."
+      }
+    }
+  ]
+}

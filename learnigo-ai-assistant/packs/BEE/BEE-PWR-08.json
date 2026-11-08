@@ -1,0 +1,463 @@
+{
+  "id": "BEE-PWR-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The buck converter: stepping 12 V down to 5 V with a switch and an inductor",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "buck converter",
+    "duty cycle",
+    "switch-mode power supply",
+    "inductor ripple current",
+    "DC-DC step-down"
+  ],
+  "examples": [
+    "How does a buck converter work?",
+    "How do you calculate the duty cycle of a buck converter?",
+    "Why is a buck converter more efficient than a linear regulator?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Input",
+          "value": "12 V",
+          "ask": "Why is a buck converter more efficient than a linear regulator?"
+        },
+        {
+          "kind": "switch",
+          "label": "MOSFET (on)",
+          "value": "D = 0.42",
+          "ask": "How do you calculate the duty cycle of a buck converter?"
+        },
+        {
+          "kind": "inductor",
+          "label": "Inductor",
+          "value": "47 µH",
+          "note": "A diode (not drawn) carries I while the switch is off",
+          "ask": "What does the inductor do in a buck converter?"
+        },
+        {
+          "kind": "capacitor",
+          "label": "Capacitor",
+          "value": "100 µF",
+          "branch": 1
+        },
+        {
+          "kind": "resistor",
+          "label": "Load",
+          "value": "2.5 Ω",
+          "branch": 2,
+          "ask": "How does a buck converter work?"
+        }
+      ],
+      "readouts": [
+        "Vout = 5 V, Iout = 2 A",
+        "Switching at 100 kHz",
+        "Pout = 10 W"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your phone wants 5 volts, but a car socket gives 12. Burn off the extra 7 volts in a resistor and you waste more than half the power. The buck converter does the job almost loss-free with a switch, an inductor and a capacitor. On the board is the converter with its switch on: 12 volts in, and a 2.5 ohm load that wants 5 volts and 2 amps.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The buck converter: stepping 12 V down to 5 V with a switch and an inductor"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "12 V",
+              "ask": "Why is a buck converter more efficient than a linear regulator?"
+            },
+            {
+              "kind": "switch",
+              "label": "MOSFET (on)",
+              "value": "D = 0.42",
+              "ask": "How do you calculate the duty cycle of a buck converter?"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "47 µH",
+              "note": "A diode (not drawn) carries I while the switch is off",
+              "ask": "What does the inductor do in a buck converter?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "100 µF",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "2.5 Ω",
+              "branch": 2,
+              "ask": "How does a buck converter work?"
+            }
+          ],
+          "readouts": [
+            "Vout = 5 V, Iout = 2 A",
+            "Switching at 100 kHz",
+            "Pout = 10 W"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the voltage just after the switch. The MOSFET, a fast transistor switch, flicks on and off 100,000 times a second. On for 4.17 microseconds, the switch node sits at 12 volts; off for the rest of each 10 microsecond period, it is near 0. The fraction of time on is the duty cycle, D, here 0.417. What is the average of that square wave?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (µs)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "max": 13
+          },
+          "curves": [
+            {
+              "label": "Switch node",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  12
+                ],
+                [
+                  4.17,
+                  12
+                ],
+                [
+                  4.17,
+                  0
+                ],
+                [
+                  10,
+                  0
+                ],
+                [
+                  10,
+                  12
+                ],
+                [
+                  14.17,
+                  12
+                ],
+                [
+                  14.17,
+                  0
+                ],
+                [
+                  20,
+                  0
+                ]
+              ],
+              "ask": "How do you calculate the duty cycle of a buck converter?"
+            },
+            {
+              "label": "Average = 5 V",
+              "type": "line",
+              "c": 5,
+              "k": 0
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Average = D × Vin = 0.417 × 12 V = 5 V"
+        }
+      ]
+    },
+    {
+      "say": "Five volts, just what we want. But the load needs smooth DC, not pulses. The inductor smooths the current: while the switch is on, its current ramps up; when it is off, a diode gives it a path and it ramps down. See the triangle between 1.69 and 2.31 amps, centred on the 2 amp load. Why doesn't the current stop when the switch opens?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (µs)",
+            "max": 20
+          },
+          "y": {
+            "label": "Inductor current (A)",
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "Inductor current",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1.69
+                ],
+                [
+                  4.17,
+                  2.31
+                ],
+                [
+                  10,
+                  1.69
+                ],
+                [
+                  14.17,
+                  2.31
+                ],
+                [
+                  20,
+                  1.69
+                ]
+              ],
+              "ask": "What sets the ripple current?"
+            },
+            {
+              "label": "Load 2 A",
+              "type": "line",
+              "c": 2,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 4.17,
+              "label": "Switch off: peak"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ΔI = (Vin − Vout) × D / (L × f) ≈ 0.62 A"
+        }
+      ]
+    },
+    {
+      "say": "Because an inductor fights any change in its current, so it keeps pushing, drawing through the diode. The capacitor irons out what is left of the ripple. Now the beauty: an ideal buck wastes nothing, so 10 watts out means 10 watts in, only 0.83 amps from the 12 volt source. Voltage went down and current went up, like a DC transformer. What does a real one lose?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "12 V",
+              "ask": "Why is a buck converter more efficient than a linear regulator?"
+            },
+            {
+              "kind": "switch",
+              "label": "MOSFET (on)",
+              "value": "D = 0.42",
+              "ask": "How do you calculate the duty cycle of a buck converter?"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "47 µH",
+              "note": "A diode (not drawn) carries I while the switch is off",
+              "ask": "What does the inductor do in a buck converter?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "100 µF",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "2.5 Ω",
+              "branch": 2,
+              "ask": "How does a buck converter work?"
+            }
+          ],
+          "readouts": [
+            "Vout = 5 V, Iout = 2 A",
+            "Switching at 100 kHz",
+            "Pout = 10 W"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Ideal: Pin = Pout → Iin = 10 W / 12 V ≈ 0.83 A"
+        }
+      ]
+    },
+    {
+      "say": "A little in the switch, the diode and the inductor's resistance, so real ones reach about 90 to 95 percent, against at best 42 percent for a linear regulator here. Your laptop's processor is fed by bucks that turn 12 volts into about 1 volt at many amps. Fantastic! Challenge: what duty cycle gives 3.3 volts from 12?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "12 V",
+              "ask": "Why is a buck converter more efficient than a linear regulator?"
+            },
+            {
+              "kind": "switch",
+              "label": "MOSFET (on)",
+              "value": "D = 0.42",
+              "ask": "How do you calculate the duty cycle of a buck converter?"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "47 µH",
+              "note": "A diode (not drawn) carries I while the switch is off",
+              "ask": "What does the inductor do in a buck converter?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "100 µF",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "2.5 Ω",
+              "branch": 2,
+              "ask": "How does a buck converter work?"
+            }
+          ],
+          "readouts": [
+            "Vout = 5 V, Iout = 2 A",
+            "Switching at 100 kHz",
+            "Pout = 10 W"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Linear regulator: at best 5/12 = 42% efficient"
+        },
+        {
+          "op": "note",
+          "text": "Real buck converters reach about 90–95% efficiency"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a buck converter work?",
+      "a": "A transistor switch chops the input voltage into fast pulses, and an inductor and capacitor average them into smooth DC. The output voltage equals the duty cycle times the input voltage, so 42 percent on-time turns 12 volts into 5.",
+      "asks": [
+        "What is a step-down DC-DC converter?"
+      ]
+    },
+    {
+      "q": "How do you calculate the duty cycle of a buck converter?",
+      "a": "For an ideal buck in continuous conduction, D equals V out over V in. For 5 volts from 12 volts, D is 5 over 12, about 0.417, or 41.7 percent.",
+      "asks": [
+        "What is the buck converter formula?"
+      ]
+    },
+    {
+      "q": "What does the inductor do in a buck converter?",
+      "a": "It stores energy while the switch is on and releases it while the switch is off, keeping the load current flowing smoothly. Its current ramps up and down in a small triangle around the average load current.",
+      "asks": [
+        "Why does a buck converter need an inductor?"
+      ]
+    },
+    {
+      "q": "Why is a buck converter more efficient than a linear regulator?",
+      "a": "A linear regulator drops the extra voltage across a transistor and burns it as heat, so going from 12 to 5 volts can never beat 42 percent. A buck switch is either fully on or fully off, so it wastes very little, typically reaching 90 percent or more.",
+      "asks": [
+        "Linear regulator vs switching regulator?"
+      ]
+    },
+    {
+      "q": "What sets the ripple current?",
+      "a": "Ripple equals input minus output voltage, times the duty cycle, divided by inductance times switching frequency. With 7 volts, 0.417, 47 microhenries and 100 kilohertz, it is about 0.62 amps peak to peak; a bigger inductor or a higher frequency makes it smaller.",
+      "asks": [
+        "How do you calculate inductor ripple?"
+      ]
+    }
+  ],
+  "facts": [
+    "An ideal buck converter's output is Vout = D × Vin.",
+    "Buck converters commonly reach 90–95% efficiency.",
+    "A linear regulator dropping 12 V to 5 V can never be more than about 42% efficient."
+  ],
+  "quiz": [
+    {
+      "say": "What duty cycle does an ideal buck converter need for 3.3 volts from 12 volts?",
+      "show": "What duty cycle does an ideal buck converter need for 3.3 V from 12 V?",
+      "options": [
+        {
+          "show": "About 0.28",
+          "say": "about 0.28"
+        },
+        {
+          "show": "About 0.72",
+          "say": "about 0.72"
+        },
+        {
+          "show": "About 3.6",
+          "say": "about 3.6"
+        }
+      ],
+      "answer": 0,
+      "why": "D equals V out over V in: 3.3 over 12 is 0.275, about 28 percent.",
+      "wrong": {
+        "1": "That is 1 minus the right answer: the switch's off-time.",
+        "2": "A duty cycle is a fraction between 0 and 1; this divides the wrong way."
+      }
+    },
+    {
+      "say": "An ideal buck gives 5 volts at 2 amps from 12 volts. What is the input current?",
+      "show": "An ideal buck gives 5 V at 2 A from 12 V. What is the input current?",
+      "options": [
+        {
+          "show": "About 0.83 A",
+          "say": "about 0.83 amps"
+        },
+        {
+          "show": "2 A",
+          "say": "2 amps"
+        },
+        {
+          "show": "4.8 A",
+          "say": "4.8 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "Power in equals power out, 10 watts, so the input current is 10 over 12, about 0.83 amps.",
+      "wrong": {
+        "1": "That would mean 24 watts in for 10 watts out, which is what a linear regulator does.",
+        "2": "That multiplies by the input voltage instead of dividing."
+      }
+    }
+  ]
+}

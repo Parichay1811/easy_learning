@@ -1,0 +1,592 @@
+{
+  "id": "BODA-HUM-50",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How leg muscles pump blood back up to the heart",
+  "area": "Body and Animals",
+  "group": "BODA — How Bodies Work",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "vein valves",
+    "muscle pump",
+    "calf muscle",
+    "venous return",
+    "veins"
+  ],
+  "examples": [
+    "How does blood get from your feet back to your heart?",
+    "Why do veins have valves?",
+    "Why do legs feel stiff after standing still?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "heart",
+          "kind": "motor",
+          "x": 0.5,
+          "y": 0.07,
+          "size": 0.9,
+          "label": "Heart",
+          "motion": "pulse"
+        },
+        {
+          "id": "valveTop",
+          "kind": "valve",
+          "x": 0.5,
+          "y": 0.32,
+          "size": 0.7,
+          "label": "Upper valve",
+          "motion": "pulse",
+          "ask": "Why do veins have valves?"
+        },
+        {
+          "id": "vein",
+          "kind": "pipe",
+          "x": 0.5,
+          "y": 0.55,
+          "size": 1,
+          "label": "Deep leg vein",
+          "motion": "flow"
+        },
+        {
+          "id": "calf",
+          "kind": "piston",
+          "x": 0.18,
+          "y": 0.55,
+          "size": 1.1,
+          "label": "Calf muscle",
+          "motion": "pulse",
+          "ask": "How does the calf muscle pump blood?"
+        },
+        {
+          "id": "valveLow",
+          "kind": "valve",
+          "x": 0.5,
+          "y": 0.76,
+          "size": 0.7,
+          "label": "Lower valve",
+          "motion": "pulse"
+        },
+        {
+          "id": "foot",
+          "kind": "tank",
+          "x": 0.5,
+          "y": 0.93,
+          "size": 0.8,
+          "label": "Blood from foot",
+          "motion": "none"
+        }
+      ],
+      "links": [
+        {
+          "from": "foot",
+          "to": "valveLow",
+          "kind": "blood",
+          "label": "upwards"
+        },
+        {
+          "from": "valveLow",
+          "to": "vein",
+          "kind": "blood"
+        },
+        {
+          "from": "calf",
+          "to": "vein",
+          "kind": "force",
+          "label": "squeeze"
+        },
+        {
+          "from": "vein",
+          "to": "valveTop",
+          "kind": "blood"
+        },
+        {
+          "from": "valveTop",
+          "to": "heart",
+          "kind": "blood",
+          "label": "back to heart"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Blood in your feet has to climb more than a metre back to your heart, against gravity, and by then the heart's push has faded. So your legs have a second pump of their own.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How leg muscles pump blood back up to the heart"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "heart",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.07,
+              "size": 0.9,
+              "label": "Heart",
+              "motion": "pulse"
+            },
+            {
+              "id": "valveTop",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Upper valve",
+              "motion": "pulse",
+              "ask": "Why do veins have valves?"
+            },
+            {
+              "id": "vein",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Deep leg vein",
+              "motion": "flow"
+            },
+            {
+              "id": "calf",
+              "kind": "piston",
+              "x": 0.18,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Calf muscle",
+              "motion": "pulse",
+              "ask": "How does the calf muscle pump blood?"
+            },
+            {
+              "id": "valveLow",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.76,
+              "size": 0.7,
+              "label": "Lower valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "foot",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.93,
+              "size": 0.8,
+              "label": "Blood from foot",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "foot",
+              "to": "valveLow",
+              "kind": "blood",
+              "label": "upwards"
+            },
+            {
+              "from": "valveLow",
+              "to": "vein",
+              "kind": "blood"
+            },
+            {
+              "from": "calf",
+              "to": "vein",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "vein",
+              "to": "valveTop",
+              "kind": "blood"
+            },
+            {
+              "from": "valveTop",
+              "to": "heart",
+              "kind": "blood",
+              "label": "back to heart"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Deep leg veins run between your muscles. When you walk, your calf muscle tightens and bulges, squeezing the vein like a hand squeezing a toothpaste tube.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "heart",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.07,
+              "size": 0.9,
+              "label": "Heart",
+              "motion": "pulse"
+            },
+            {
+              "id": "valveTop",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Upper valve",
+              "motion": "pulse",
+              "ask": "Why do veins have valves?"
+            },
+            {
+              "id": "vein",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Deep leg vein",
+              "motion": "flow"
+            },
+            {
+              "id": "calf",
+              "kind": "piston",
+              "x": 0.18,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Calf muscle",
+              "motion": "pulse",
+              "ask": "How does the calf muscle pump blood?"
+            },
+            {
+              "id": "valveLow",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.76,
+              "size": 0.7,
+              "label": "Lower valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "foot",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.93,
+              "size": 0.8,
+              "label": "Blood from foot",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "foot",
+              "to": "valveLow",
+              "kind": "blood",
+              "label": "upwards"
+            },
+            {
+              "from": "valveLow",
+              "to": "vein",
+              "kind": "blood"
+            },
+            {
+              "from": "calf",
+              "to": "vein",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "vein",
+              "to": "valveTop",
+              "kind": "blood"
+            },
+            {
+              "from": "valveTop",
+              "to": "heart",
+              "kind": "blood",
+              "label": "back to heart"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Inside the vein are one-way valves, little flaps that open upwards. The squeeze pushes blood up through the upper valve, while the lower valve snaps shut so blood can't go back down.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "heart",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.07,
+              "size": 0.9,
+              "label": "Heart",
+              "motion": "pulse"
+            },
+            {
+              "id": "valveTop",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Upper valve",
+              "motion": "pulse",
+              "ask": "Why do veins have valves?"
+            },
+            {
+              "id": "vein",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Deep leg vein",
+              "motion": "flow"
+            },
+            {
+              "id": "calf",
+              "kind": "piston",
+              "x": 0.18,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Calf muscle",
+              "motion": "pulse",
+              "ask": "How does the calf muscle pump blood?"
+            },
+            {
+              "id": "valveLow",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.76,
+              "size": 0.7,
+              "label": "Lower valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "foot",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.93,
+              "size": 0.8,
+              "label": "Blood from foot",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "foot",
+              "to": "valveLow",
+              "kind": "blood",
+              "label": "upwards"
+            },
+            {
+              "from": "valveLow",
+              "to": "vein",
+              "kind": "blood"
+            },
+            {
+              "from": "calf",
+              "to": "vein",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "vein",
+              "to": "valveTop",
+              "kind": "blood"
+            },
+            {
+              "from": "valveTop",
+              "to": "heart",
+              "kind": "blood",
+              "label": "back to heart"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "When the muscle relaxes, the vein refills from below through the lower valve, ready for the next squeeze. Every step pumps blood a little higher, towards the heart.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "heart",
+              "kind": "motor",
+              "x": 0.5,
+              "y": 0.07,
+              "size": 0.9,
+              "label": "Heart",
+              "motion": "pulse"
+            },
+            {
+              "id": "valveTop",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.32,
+              "size": 0.7,
+              "label": "Upper valve",
+              "motion": "pulse",
+              "ask": "Why do veins have valves?"
+            },
+            {
+              "id": "vein",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1,
+              "label": "Deep leg vein",
+              "motion": "flow"
+            },
+            {
+              "id": "calf",
+              "kind": "piston",
+              "x": 0.18,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Calf muscle",
+              "motion": "pulse",
+              "ask": "How does the calf muscle pump blood?"
+            },
+            {
+              "id": "valveLow",
+              "kind": "valve",
+              "x": 0.5,
+              "y": 0.76,
+              "size": 0.7,
+              "label": "Lower valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "foot",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.93,
+              "size": 0.8,
+              "label": "Blood from foot",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "foot",
+              "to": "valveLow",
+              "kind": "blood",
+              "label": "upwards"
+            },
+            {
+              "from": "valveLow",
+              "to": "vein",
+              "kind": "blood"
+            },
+            {
+              "from": "calf",
+              "to": "vein",
+              "kind": "force",
+              "label": "squeeze"
+            },
+            {
+              "from": "vein",
+              "to": "valveTop",
+              "kind": "blood"
+            },
+            {
+              "from": "valveTop",
+              "to": "heart",
+              "kind": "blood",
+              "label": "back to heart"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does the calf muscle pump blood?",
+      "a": "When the calf muscle contracts, it squeezes the deep veins running through it, pushing blood upwards. It is sometimes called the body's second heart.",
+      "asks": [
+        "Tell me about the calf muscle",
+        "What is the muscle pump?"
+      ]
+    },
+    {
+      "q": "Why do veins have valves?",
+      "a": "Blood in veins is under low pressure and in the legs must flow uphill. One-way valves let blood move towards the heart and close if it starts to fall back.",
+      "asks": [
+        "Tell me about the upper valve",
+        "What do vein valves do?"
+      ]
+    },
+    {
+      "q": "Why do legs feel stiff after standing still for a long time?",
+      "a": "Without walking, the calf pump isn't working, so blood pools in the leg veins and fluid can seep into the tissues. Moving restarts the pump.",
+      "asks": [
+        "Why do feet swell when standing still?"
+      ]
+    },
+    {
+      "q": "Do arteries have valves?",
+      "a": "No, apart from the valves at the exits of the heart. Arteries carry blood under high pressure from the heart's beat, so they don't need them; veins carry low-pressure blood and do.",
+      "asks": [
+        "Why don't arteries need valves?"
+      ]
+    },
+    {
+      "q": "What else helps blood return to the heart?",
+      "a": "Breathing helps too: when you breathe in, pressure in the chest falls, drawing blood up into the big veins near the heart.",
+      "asks": [
+        "How does breathing help circulation?"
+      ]
+    }
+  ],
+  "facts": [
+    "Leg veins contain one-way valves that stop blood flowing backwards.",
+    "The calf muscle pump is often called the second heart."
+  ],
+  "quiz": [
+    {
+      "say": "What stops blood falling back down your leg veins?",
+      "show": "What stops blood falling back down your leg veins?",
+      "options": [
+        {
+          "show": "One-way valves in the veins",
+          "say": "One-way valves in the veins"
+        },
+        {
+          "show": "The kneecap",
+          "say": "The kneecap"
+        },
+        {
+          "show": "The skin",
+          "say": "The skin"
+        }
+      ],
+      "answer": 0,
+      "why": "Vein valves open upwards and shut if blood starts to flow back.",
+      "wrong": {
+        "1": "The kneecap protects the knee joint; it does not control blood flow.",
+        "2": "Skin covers the leg but does not stop blood flowing back."
+      }
+    }
+  ]
+}

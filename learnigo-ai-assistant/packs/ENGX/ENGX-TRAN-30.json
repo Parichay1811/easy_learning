@@ -1,0 +1,640 @@
+{
+  "id": "ENGX-TRAN-30",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a pantograph collects power from overhead wires",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "pantograph",
+    "overhead line",
+    "catenary",
+    "25 kV",
+    "electric train power"
+  ],
+  "examples": [
+    "What is the thing on top of an electric train?",
+    "How do electric trains get power from the wires?",
+    "Do the rails carry electricity?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "wire",
+          "kind": "pipe",
+          "x": 0.5,
+          "y": 0.08,
+          "size": 1.5,
+          "label": "Overhead wire",
+          "motion": "flow",
+          "ask": "Why is the overhead wire such a high voltage?"
+        },
+        {
+          "id": "panto",
+          "kind": "lever",
+          "x": 0.35,
+          "y": 0.32,
+          "size": 1.1,
+          "label": "Pantograph arms",
+          "motion": "swing",
+          "ask": "What is a pantograph?"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.13,
+          "y": 0.5,
+          "size": 0.7,
+          "label": "Lifting spring",
+          "motion": "pulse",
+          "ask": "What keeps the pantograph touching the wire?"
+        },
+        {
+          "id": "trans",
+          "kind": "coil",
+          "x": 0.45,
+          "y": 0.64,
+          "size": 1,
+          "label": "Transformer",
+          "motion": "pulse",
+          "ask": "Why does an electric train need a transformer?"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.72,
+          "y": 0.62,
+          "size": 1,
+          "label": "Traction motor",
+          "motion": "spin"
+        },
+        {
+          "id": "wheels",
+          "kind": "wheel",
+          "x": 0.86,
+          "y": 0.86,
+          "size": 1,
+          "label": "Wheels and rails",
+          "motion": "spin",
+          "ask": "How does the electricity get back?"
+        }
+      ],
+      "links": [
+        {
+          "from": "wire",
+          "to": "panto",
+          "kind": "power",
+          "label": "25,000 volts"
+        },
+        {
+          "from": "spring",
+          "to": "panto",
+          "kind": "force",
+          "label": "presses up"
+        },
+        {
+          "from": "panto",
+          "to": "trans",
+          "kind": "power"
+        },
+        {
+          "from": "trans",
+          "to": "motor",
+          "kind": "power",
+          "label": "lower voltage"
+        },
+        {
+          "from": "motor",
+          "to": "wheels",
+          "kind": "energy",
+          "label": "turns"
+        },
+        {
+          "from": "wheels",
+          "to": "trans",
+          "kind": "power",
+          "label": "return via rails"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Many electric trains get their power from a wire hung above the track, called the overhead line or catenary. On most modern main lines it carries 25,000 volts of alternating current.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a pantograph collects power from overhead wires"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wire",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 1.5,
+              "label": "Overhead wire",
+              "motion": "flow",
+              "ask": "Why is the overhead wire such a high voltage?"
+            },
+            {
+              "id": "panto",
+              "kind": "lever",
+              "x": 0.35,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Pantograph arms",
+              "motion": "swing",
+              "ask": "What is a pantograph?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Lifting spring",
+              "motion": "pulse",
+              "ask": "What keeps the pantograph touching the wire?"
+            },
+            {
+              "id": "trans",
+              "kind": "coil",
+              "x": 0.45,
+              "y": 0.64,
+              "size": 1,
+              "label": "Transformer",
+              "motion": "pulse",
+              "ask": "Why does an electric train need a transformer?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.62,
+              "size": 1,
+              "label": "Traction motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.86,
+              "size": 1,
+              "label": "Wheels and rails",
+              "motion": "spin",
+              "ask": "How does the electricity get back?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wire",
+              "to": "panto",
+              "kind": "power",
+              "label": "25,000 volts"
+            },
+            {
+              "from": "spring",
+              "to": "panto",
+              "kind": "force",
+              "label": "presses up"
+            },
+            {
+              "from": "panto",
+              "to": "trans",
+              "kind": "power"
+            },
+            {
+              "from": "trans",
+              "to": "motor",
+              "kind": "power",
+              "label": "lower voltage"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "wheels",
+              "to": "trans",
+              "kind": "power",
+              "label": "return via rails"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "On the roof, a folding frame called a pantograph is pushed upward by springs or air pressure, so its carbon strip presses gently against the wire. The strip slides along, collecting current as the train moves.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wire",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 1.5,
+              "label": "Overhead wire",
+              "motion": "flow",
+              "ask": "Why is the overhead wire such a high voltage?"
+            },
+            {
+              "id": "panto",
+              "kind": "lever",
+              "x": 0.35,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Pantograph arms",
+              "motion": "swing",
+              "ask": "What is a pantograph?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Lifting spring",
+              "motion": "pulse",
+              "ask": "What keeps the pantograph touching the wire?"
+            },
+            {
+              "id": "trans",
+              "kind": "coil",
+              "x": 0.45,
+              "y": 0.64,
+              "size": 1,
+              "label": "Transformer",
+              "motion": "pulse",
+              "ask": "Why does an electric train need a transformer?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.62,
+              "size": 1,
+              "label": "Traction motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.86,
+              "size": 1,
+              "label": "Wheels and rails",
+              "motion": "spin",
+              "ask": "How does the electricity get back?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wire",
+              "to": "panto",
+              "kind": "power",
+              "label": "25,000 volts"
+            },
+            {
+              "from": "spring",
+              "to": "panto",
+              "kind": "force",
+              "label": "presses up"
+            },
+            {
+              "from": "panto",
+              "to": "trans",
+              "kind": "power"
+            },
+            {
+              "from": "trans",
+              "to": "motor",
+              "kind": "power",
+              "label": "lower voltage"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "wheels",
+              "to": "trans",
+              "kind": "power",
+              "label": "return via rails"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "That voltage is far too high for the motors, so it goes to a transformer on the train that steps it down. Electronics then control the current to the traction motors, which turn the wheels.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wire",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 1.5,
+              "label": "Overhead wire",
+              "motion": "flow",
+              "ask": "Why is the overhead wire such a high voltage?"
+            },
+            {
+              "id": "panto",
+              "kind": "lever",
+              "x": 0.35,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Pantograph arms",
+              "motion": "swing",
+              "ask": "What is a pantograph?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Lifting spring",
+              "motion": "pulse",
+              "ask": "What keeps the pantograph touching the wire?"
+            },
+            {
+              "id": "trans",
+              "kind": "coil",
+              "x": 0.45,
+              "y": 0.64,
+              "size": 1,
+              "label": "Transformer",
+              "motion": "pulse",
+              "ask": "Why does an electric train need a transformer?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.62,
+              "size": 1,
+              "label": "Traction motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.86,
+              "size": 1,
+              "label": "Wheels and rails",
+              "motion": "spin",
+              "ask": "How does the electricity get back?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wire",
+              "to": "panto",
+              "kind": "power",
+              "label": "25,000 volts"
+            },
+            {
+              "from": "spring",
+              "to": "panto",
+              "kind": "force",
+              "label": "presses up"
+            },
+            {
+              "from": "panto",
+              "to": "trans",
+              "kind": "power"
+            },
+            {
+              "from": "trans",
+              "to": "motor",
+              "kind": "power",
+              "label": "lower voltage"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "wheels",
+              "to": "trans",
+              "kind": "power",
+              "label": "return via rails"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The current returns through the wheels and the running rails back to the substation, completing the circuit. The wire zigzags slightly from side to side so it does not wear a groove in one spot of the strip.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "wire",
+              "kind": "pipe",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 1.5,
+              "label": "Overhead wire",
+              "motion": "flow",
+              "ask": "Why is the overhead wire such a high voltage?"
+            },
+            {
+              "id": "panto",
+              "kind": "lever",
+              "x": 0.35,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Pantograph arms",
+              "motion": "swing",
+              "ask": "What is a pantograph?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.13,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Lifting spring",
+              "motion": "pulse",
+              "ask": "What keeps the pantograph touching the wire?"
+            },
+            {
+              "id": "trans",
+              "kind": "coil",
+              "x": 0.45,
+              "y": 0.64,
+              "size": 1,
+              "label": "Transformer",
+              "motion": "pulse",
+              "ask": "Why does an electric train need a transformer?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.72,
+              "y": 0.62,
+              "size": 1,
+              "label": "Traction motor",
+              "motion": "spin"
+            },
+            {
+              "id": "wheels",
+              "kind": "wheel",
+              "x": 0.86,
+              "y": 0.86,
+              "size": 1,
+              "label": "Wheels and rails",
+              "motion": "spin",
+              "ask": "How does the electricity get back?"
+            }
+          ],
+          "links": [
+            {
+              "from": "wire",
+              "to": "panto",
+              "kind": "power",
+              "label": "25,000 volts"
+            },
+            {
+              "from": "spring",
+              "to": "panto",
+              "kind": "force",
+              "label": "presses up"
+            },
+            {
+              "from": "panto",
+              "to": "trans",
+              "kind": "power"
+            },
+            {
+              "from": "trans",
+              "to": "motor",
+              "kind": "power",
+              "label": "lower voltage"
+            },
+            {
+              "from": "motor",
+              "to": "wheels",
+              "kind": "energy",
+              "label": "turns"
+            },
+            {
+              "from": "wheels",
+              "to": "trans",
+              "kind": "power",
+              "label": "return via rails"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why is the overhead wire such a high voltage?",
+      "a": "A high voltage lets the line carry lots of power with a smaller current, so less energy is lost as heat and the wire can be thinner. Most modern main lines use 25,000 volts AC.",
+      "asks": [
+        "How many volts is the overhead line?"
+      ]
+    },
+    {
+      "q": "What is a pantograph?",
+      "a": "A pantograph is the folding frame on the roof of an electric train. Its top carries a carbon strip that slides along the overhead wire and collects the current.",
+      "asks": [
+        "What is the thing on top of an electric train?"
+      ]
+    },
+    {
+      "q": "What keeps the pantograph touching the wire?",
+      "a": "Springs or air pressure push the pantograph up with a steady, gentle force. Too little and it would bounce and spark; too much and it would wear the wire.",
+      "asks": [
+        "Why does a pantograph spark?"
+      ]
+    },
+    {
+      "q": "Why does an electric train need a transformer?",
+      "a": "The motors cannot use 25,000 volts directly. A transformer on board steps the voltage down, and power electronics then control the current to the motors.",
+      "asks": [
+        "What does the transformer on a train do?"
+      ]
+    },
+    {
+      "q": "How does the electricity get back?",
+      "a": "Current flows from the wire through the train's equipment and motors, then out through the wheels into the steel rails, which carry it back to the substation.",
+      "asks": [
+        "Do the rails carry electricity?"
+      ]
+    }
+  ],
+  "facts": [
+    "Most modern high-speed and main lines use 25,000 volts AC overhead power.",
+    "The overhead wire is staggered from side to side so it wears the pantograph strip evenly.",
+    "Overhead wires are kept tight by heavy weights or springs so they do not sag in hot weather."
+  ],
+  "quiz": [
+    {
+      "say": "What does the transformer on an electric train do?",
+      "show": "What does the transformer on an electric train do?",
+      "options": [
+        {
+          "show": "Steps the high line voltage down for the motors",
+          "say": "Steps the high line voltage down for the motors"
+        },
+        {
+          "show": "Collects power from the wire",
+          "say": "Collects power from the wire"
+        },
+        {
+          "show": "Brakes the train",
+          "say": "Brakes the train"
+        }
+      ],
+      "answer": 0,
+      "why": "The 25,000 volt supply is far too high for the motors, so it is stepped down on board.",
+      "wrong": {
+        "1": "Collecting power is the pantograph's job.",
+        "2": "Braking is done by brakes and by the motors, not the transformer."
+      }
+    }
+  ]
+}

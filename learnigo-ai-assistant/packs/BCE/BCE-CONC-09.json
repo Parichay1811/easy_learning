@@ -1,0 +1,367 @@
+{
+  "id": "BCE-CONC-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Limit state design: partial safety factors on loads and materials",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONC — Concrete and steel design",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "limit state design",
+    "partial safety factor",
+    "ultimate limit state",
+    "serviceability limit state",
+    "characteristic load"
+  ],
+  "examples": [
+    "What is limit state design?",
+    "What are partial safety factors?",
+    "What is the difference between ULS and SLS?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 6,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "What is a characteristic load?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 20,
+          "label": "Dead G 20 kN/m",
+          "ask": "What is a characteristic load?"
+        },
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 10,
+          "label": "Live Q 10 kN/m",
+          "ask": "What is a characteristic load?"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Engineers once used one big safety factor: keep stresses well below what the material can take. Limit state design is smarter. It asks two questions: will it stand up, and will it behave well in use? Here a six metre beam carries twenty kilonewtons per metre of dead load and ten of live, its characteristic loads.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Limit state design: partial safety factors on loads and materials"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a characteristic load?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 20,
+              "label": "Dead G 20 kN/m",
+              "ask": "What is a characteristic load?"
+            },
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "Live Q 10 kN/m",
+              "ask": "What is a characteristic load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Characteristic means a value with only a small chance, about five percent, of being exceeded. These loads give a moment of a hundred and thirty five kilonewton metres. But we do not design for an ordinary day; we design for a bad one. How might a bad day differ?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a characteristic load?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 20,
+              "label": "Dead G 20 kN/m",
+              "ask": "What is a characteristic load?"
+            },
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 10,
+              "label": "Live Q 10 kN/m",
+              "ask": "What is a characteristic load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M_k = (20 + 10) × 6² / 8 = 135 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "Heavier loads and weaker materials. So we multiply the loads by partial factors: one point three five on dead and one point five on live, because live load is less certain. The design load is forty two kilonewtons per metre and the design moment one hundred and eighty nine kilonewton metres. India's IS 456 uses one point five on both.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 6,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a partial safety factor?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 42,
+              "label": "Design 42 kN/m",
+              "ask": "What is a partial safety factor?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "w_Ed = 1.35×20 + 1.5×10 = 42 kN/m → M_Ed = 189 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "Materials get factors too, dividing their strength: one point one five for steel and one point five for concrete, because concrete made on site varies more. So five hundred megapascal steel is designed at about four hundred and thirty five. All this is the ultimate limit state, the check against collapse.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Ultimate limit state",
+            "icon": "bridge",
+            "ask": "What is the ultimate limit state?",
+            "points": [
+              "Collapse, rupture, buckling",
+              "Loads × 1.35 and × 1.5",
+              "Strengths ÷ 1.15 and ÷ 1.5"
+            ]
+          },
+          "right": {
+            "title": "Serviceability",
+            "icon": "house",
+            "ask": "What is the serviceability limit state?",
+            "points": [
+              "Sag, cracks, vibration",
+              "Normal, unfactored loads",
+              "Comfort and appearance"
+            ]
+          },
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "f_yd = 500 / 1.15 ≈ 435 MPa"
+        },
+        {
+          "op": "note",
+          "text": "Design passes when resistance R_d ≥ effect E_d."
+        }
+      ]
+    },
+    {
+      "say": "Then the serviceability limit state checks everyday life under the normal, unfactored loads: deflection, crack widths and floor bounce. A beam can be safe yet feel like a trampoline. Well done! Exam tip: always state which limit state and which load combination you are checking.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Ultimate limit state",
+            "icon": "bridge",
+            "ask": "What is the ultimate limit state?",
+            "points": [
+              "Collapse, rupture, buckling",
+              "Loads × 1.35 and × 1.5",
+              "Strengths ÷ 1.15 and ÷ 1.5"
+            ]
+          },
+          "right": {
+            "title": "Serviceability",
+            "icon": "house",
+            "ask": "What is the serviceability limit state?",
+            "points": [
+              "Sag, cracks, vibration",
+              "Normal, unfactored loads",
+              "Comfort and appearance"
+            ]
+          },
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a characteristic load?",
+      "a": "A characteristic load is a value with only a small chance of being exceeded in the structure's life, often about 5 percent. It is the starting value before safety factors are applied.",
+      "asks": [
+        "Define characteristic value"
+      ]
+    },
+    {
+      "q": "What is a partial safety factor?",
+      "a": "A number that scales up a load or scales down a material strength to cover uncertainty. Eurocode uses 1.35 on dead load, 1.5 on live load, 1.15 on steel and 1.5 on concrete.",
+      "asks": [
+        "What are gamma factors?",
+        "Why 1.35 and 1.5?"
+      ]
+    },
+    {
+      "q": "What is the ultimate limit state?",
+      "a": "The ultimate limit state covers collapse: breaking, buckling, overturning or sliding. It is checked with factored loads and reduced material strengths.",
+      "asks": [
+        "What is ULS?"
+      ]
+    },
+    {
+      "q": "What is the serviceability limit state?",
+      "a": "It covers behaviour in normal use: deflection, cracking and vibration. It is checked with unfactored loads to keep the structure comfortable and good-looking.",
+      "asks": [
+        "What is SLS?"
+      ]
+    },
+    {
+      "q": "Why does concrete have a bigger material factor than steel?",
+      "a": "Concrete is mixed, placed and cured on site, so its strength varies more than factory-made steel. A factor of 1.5 instead of 1.15 covers that extra uncertainty.",
+      "asks": [
+        "Why is gamma c 1.5?"
+      ]
+    }
+  ],
+  "facts": [
+    "Eurocode 2 uses partial material factors of 1.5 for concrete and 1.15 for reinforcing steel in persistent design situations.",
+    "IS 456 uses a load factor of 1.5 on dead plus imposed load at the ultimate limit state."
+  ],
+  "quiz": [
+    {
+      "say": "Dead load is 10 kilonewtons per metre and live load 8. What is the design load using 1.35 times dead plus 1.5 times live?",
+      "show": "G = 10 kN/m and Q = 8 kN/m. Design load with 1.35G + 1.5Q?",
+      "options": [
+        {
+          "show": "25.5 kN/m",
+          "say": "25.5 kilonewtons per metre"
+        },
+        {
+          "show": "18 kN/m",
+          "say": "18 kilonewtons per metre"
+        },
+        {
+          "show": "27 kN/m",
+          "say": "27 kilonewtons per metre"
+        }
+      ],
+      "answer": 0,
+      "why": "1.35 × 10 = 13.5 and 1.5 × 8 = 12, so 25.5 kilonewtons per metre.",
+      "wrong": {
+        "1": "That is the unfactored total, used for serviceability.",
+        "2": "That puts 1.5 on both loads, as IS 456 does, not 1.35 on dead."
+      }
+    },
+    {
+      "say": "Which check belongs to the serviceability limit state?",
+      "show": "Which check belongs to the serviceability limit state?",
+      "options": [
+        {
+          "show": "Collapse of a beam",
+          "say": "Collapse of a beam"
+        },
+        {
+          "show": "Floor deflection in normal use",
+          "say": "Floor deflection in normal use"
+        },
+        {
+          "show": "Buckling of a column",
+          "say": "Buckling of a column"
+        }
+      ],
+      "answer": 1,
+      "why": "Serviceability is about behaviour in normal use, such as sag.",
+      "wrong": {
+        "0": "Collapse is an ultimate limit state.",
+        "2": "Buckling is a failure, so it is an ultimate limit state."
+      }
+    }
+  ]
+}

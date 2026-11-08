@@ -1,0 +1,442 @@
+{
+  "id": "BEE-PWR-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Load flow: how power finds its way through a grid",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "load flow",
+    "power flow analysis",
+    "slack bus",
+    "PV and PQ buses",
+    "Newton-Raphson method",
+    "DC power flow"
+  ],
+  "examples": [
+    "What is load flow analysis?",
+    "What are slack, PV and PQ buses?",
+    "How does power split between parallel paths?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "b1",
+          "label": "Bus 1 slack 150 MW",
+          "icon": "factory",
+          "x": 0.15,
+          "y": 0.18,
+          "ask": "What are slack, PV and PQ buses?"
+        },
+        {
+          "id": "b2",
+          "label": "Bus 2 gen 50 MW",
+          "icon": "turbine",
+          "x": 0.15,
+          "y": 0.82,
+          "ask": "What is the DC load flow approximation?"
+        },
+        {
+          "id": "b3",
+          "label": "Bus 3 city 200 MW",
+          "icon": "house",
+          "x": 0.82,
+          "y": 0.5,
+          "ask": "What is load flow analysis?"
+        }
+      ],
+      "links": [
+        {
+          "from": "b1",
+          "to": "b2",
+          "kind": "power",
+          "label": "33.3 MW"
+        },
+        {
+          "from": "b1",
+          "to": "b3",
+          "kind": "power",
+          "label": "116.7 MW"
+        },
+        {
+          "from": "b2",
+          "to": "b3",
+          "kind": "power",
+          "label": "83.3 MW"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every few minutes, grid control rooms from India to Brazil run a calculation called load flow, to check that no line is overloaded and every voltage is healthy. On the board is a tiny grid: two generators and a city using 200 megawatts, joined by three identical lines, each 0.1 per unit. How does the power choose its path?",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Load flow: how power finds its way through a grid"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "b1",
+              "label": "Bus 1 slack 150 MW",
+              "icon": "factory",
+              "x": 0.15,
+              "y": 0.18,
+              "ask": "What are slack, PV and PQ buses?"
+            },
+            {
+              "id": "b2",
+              "label": "Bus 2 gen 50 MW",
+              "icon": "turbine",
+              "x": 0.15,
+              "y": 0.82,
+              "ask": "What is the DC load flow approximation?"
+            },
+            {
+              "id": "b3",
+              "label": "Bus 3 city 200 MW",
+              "icon": "house",
+              "x": 0.82,
+              "y": 0.5,
+              "ask": "What is load flow analysis?"
+            }
+          ],
+          "links": [
+            {
+              "from": "b1",
+              "to": "b2",
+              "kind": "power",
+              "label": "33.3 MW"
+            },
+            {
+              "from": "b1",
+              "to": "b3",
+              "kind": "power",
+              "label": "116.7 MW"
+            },
+            {
+              "from": "b2",
+              "to": "b3",
+              "kind": "power",
+              "label": "83.3 MW"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First, each bus, or node, gets a type. Load buses are PQ: we know the real and reactive power they draw. Generator buses are PV: we set their output and voltage. And one generator is the slack bus: it covers whatever is left over, including losses, and its angle is the zero reference. Why do we need one bus that is left free?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Bus types: what is fixed at each?",
+          "groups": [
+            {
+              "label": "Slack bus",
+              "icon": "scale",
+              "items": [
+                "V fixed",
+                "Angle 0°",
+                "Covers losses"
+              ],
+              "ask": "What are slack, PV and PQ buses?"
+            },
+            {
+              "label": "PV bus",
+              "icon": "turbine",
+              "items": [
+                "P fixed",
+                "V fixed",
+                "Generators"
+              ]
+            },
+            {
+              "label": "PQ bus",
+              "icon": "house",
+              "items": [
+                "P fixed",
+                "Q fixed",
+                "Loads"
+              ]
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Slack: V, δ fixed | PV: P, V fixed | PQ: P, Q fixed"
+        }
+      ]
+    },
+    {
+      "say": "Because nobody knows the losses until the answer is found. Now the physics. Real power flows from a higher voltage angle to a lower one, roughly the angle difference divided by the line reactance. Solving our grid gives the city bus about minus 6.7 degrees and bus 2 about minus 1.9. So 116.7 megawatts go straight from bus 1, and 83.3 from bus 2. Why does bus 1 also feed bus 2?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "b1",
+              "label": "Bus 1 slack 150 MW",
+              "icon": "factory",
+              "x": 0.15,
+              "y": 0.18,
+              "ask": "What are slack, PV and PQ buses?"
+            },
+            {
+              "id": "b2",
+              "label": "Bus 2 gen 50 MW",
+              "icon": "turbine",
+              "x": 0.15,
+              "y": 0.82,
+              "ask": "What is the DC load flow approximation?"
+            },
+            {
+              "id": "b3",
+              "label": "Bus 3 city 200 MW",
+              "icon": "house",
+              "x": 0.82,
+              "y": 0.5,
+              "ask": "What is load flow analysis?"
+            }
+          ],
+          "links": [
+            {
+              "from": "b1",
+              "to": "b2",
+              "kind": "power",
+              "label": "33.3 MW"
+            },
+            {
+              "from": "b1",
+              "to": "b3",
+              "kind": "power",
+              "label": "116.7 MW"
+            },
+            {
+              "from": "b2",
+              "to": "b3",
+              "kind": "power",
+              "label": "83.3 MW"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "DC flow: P_ij = (δ_i − δ_j)/X, with X = 0.1 pu"
+        }
+      ]
+    },
+    {
+      "say": "Because power takes every path, shared in inverse proportion to impedance. The route from bus 1 through bus 2 is twice as long as the direct line, so it carries less, but not zero. Check the balance: bus 2 receives 33.3, makes 50, and sends 83.3 to the city. Power in equals power out at every bus. What would happen if the direct line tripped?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "b1",
+              "label": "Bus 1 slack 150 MW",
+              "icon": "factory",
+              "x": 0.15,
+              "y": 0.18,
+              "ask": "What are slack, PV and PQ buses?"
+            },
+            {
+              "id": "b2",
+              "label": "Bus 2 gen 50 MW",
+              "icon": "turbine",
+              "x": 0.15,
+              "y": 0.82,
+              "ask": "What is the DC load flow approximation?"
+            },
+            {
+              "id": "b3",
+              "label": "Bus 3 city 200 MW",
+              "icon": "house",
+              "x": 0.82,
+              "y": 0.5,
+              "ask": "What is load flow analysis?"
+            }
+          ],
+          "links": [
+            {
+              "from": "b1",
+              "to": "b2",
+              "kind": "power",
+              "label": "33.3 MW"
+            },
+            {
+              "from": "b1",
+              "to": "b3",
+              "kind": "power",
+              "label": "116.7 MW"
+            },
+            {
+              "from": "b2",
+              "to": "b3",
+              "kind": "power",
+              "label": "83.3 MW"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Bus 1: 33.3 + 116.7 = 150;  bus 3: 116.7 + 83.3 = 200"
+        }
+      ]
+    },
+    {
+      "say": "All 200 megawatts would squeeze through bus 2's line, which might overload: exactly what load flow studies check. Real grids have thousands of buses, and the full AC equations are non-linear, so computers use Newton–Raphson: guess, find the mismatch, correct, repeat. Superb! Exam tip: the slack bus balances the losses.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-cycle",
+          "stages": [
+            {
+              "label": "Guess V and δ",
+              "icon": "pencil",
+              "note": "Start flat: 1.0 pu and 0° everywhere"
+            },
+            {
+              "label": "Find mismatch",
+              "icon": "scale",
+              "note": "Scheduled minus calculated P and Q"
+            },
+            {
+              "label": "Jacobian solve",
+              "icon": "computer",
+              "note": "Linearise and correct the guess",
+              "ask": "Why is Newton-Raphson used for load flow?"
+            },
+            {
+              "label": "Update",
+              "icon": "arrow",
+              "note": "Repeat until the mismatch is tiny"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Newton–Raphson: usually 3 to 5 iterations"
+        },
+        {
+          "op": "note",
+          "text": "Real AC load flow is non-linear, so it is solved by iteration"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is load flow analysis?",
+      "a": "It calculates the voltage magnitude and angle at every bus of a power network, and from them the real and reactive power in every line, for a given pattern of generation and load. Operators use it to check for overloads and low voltages.",
+      "asks": [
+        "What is a power flow study?"
+      ]
+    },
+    {
+      "q": "What are slack, PV and PQ buses?",
+      "a": "A PQ bus is a load with known real and reactive power. A PV bus is a generator with known real power and voltage. The slack bus is one generator whose voltage and angle are fixed; it supplies whatever power balances the system, including losses.",
+      "asks": [
+        "What is a slack bus?"
+      ]
+    },
+    {
+      "q": "How does power split between parallel paths?",
+      "a": "Power divides among all available paths in inverse proportion to their reactance. A direct line of 0.1 per unit carries twice the share of a two-line route totalling 0.2 per unit.",
+      "asks": [
+        "Why does power take more than one path?"
+      ]
+    },
+    {
+      "q": "What is the DC load flow approximation?",
+      "a": "It assumes flat voltages, no resistance and small angles, so the real power on a line is simply the angle difference divided by its reactance. That makes load flow a set of fast linear equations, good for quick planning studies.",
+      "asks": [
+        "What is DC power flow?"
+      ]
+    },
+    {
+      "q": "Why is Newton-Raphson used for load flow?",
+      "a": "The AC power flow equations are non-linear. Newton-Raphson linearises them with a Jacobian matrix, corrects the guess and repeats, usually converging in a handful of iterations even for thousands of buses.",
+      "asks": [
+        "How is load flow solved?"
+      ]
+    }
+  ],
+  "facts": [
+    "The July 2012 blackouts in northern India affected more than 600 million people.",
+    "In DC load flow, real power on a line is approximately (δi − δj)/X in per unit.",
+    "Newton–Raphson load flow typically converges in about 3 to 5 iterations."
+  ],
+  "quiz": [
+    {
+      "say": "A line has a reactance of 0.1 per unit and an angle difference of 0.05 radians. Using DC load flow on a 100 megavolt-ampere base, what power flows?",
+      "show": "A line has X = 0.1 pu and an angle difference of 0.05 rad. Using DC load flow on a 100 MVA base, what power flows?",
+      "options": [
+        {
+          "show": "50 MW",
+          "say": "50 megawatts"
+        },
+        {
+          "show": "5 MW",
+          "say": "5 megawatts"
+        },
+        {
+          "show": "200 MW",
+          "say": "200 megawatts"
+        }
+      ],
+      "answer": 0,
+      "why": "P equals 0.05 over 0.1, which is 0.5 per unit, times 100 megavolt-amperes: 50 megawatts.",
+      "wrong": {
+        "1": "That multiplies 0.05 by 0.1 instead of dividing.",
+        "2": "That divides 0.1 by 0.05, the wrong way round."
+      }
+    },
+    {
+      "say": "Which bus supplies the network losses in a load flow study?",
+      "show": "Which bus supplies the network losses in a load flow study?",
+      "options": [
+        {
+          "show": "The slack bus",
+          "say": "The slack bus"
+        },
+        {
+          "show": "A PQ bus",
+          "say": "A PQ bus"
+        },
+        {
+          "show": "Every PV bus equally",
+          "say": "Every PV bus equally"
+        }
+      ],
+      "answer": 0,
+      "why": "The slack bus's power is left free so it can balance generation, load and losses.",
+      "wrong": {
+        "1": "PQ buses are loads with fixed power.",
+        "2": "PV buses have their real power fixed in advance."
+      }
+    }
+  ]
+}

@@ -1,0 +1,408 @@
+{
+  "id": "BME-FLUID-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Hydrostatic pressure and manometers: pressure from a column of liquid",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-FLUID — Fluid mechanics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "hydrostatic pressure",
+    "gauge pressure",
+    "absolute pressure",
+    "U-tube manometer",
+    "rho g h"
+  ],
+  "examples": [
+    "Why does pressure increase with depth?",
+    "What is the difference between gauge and absolute pressure?",
+    "How does a U-tube manometer measure pressure?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Depth (m)",
+        "max": 20
+      },
+      "y": {
+        "label": "Pressure (kPa)",
+        "max": 320
+      },
+      "curves": [
+        {
+          "label": "Absolute pressure",
+          "type": "line",
+          "c": 101.3,
+          "k": 9.81,
+          "ask": "What is absolute pressure?"
+        },
+        {
+          "label": "Gauge pressure",
+          "type": "line",
+          "c": 0,
+          "k": 9.81,
+          "ask": "What is gauge pressure?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 10,
+          "label": "Diver at 10 m"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Dive to the bottom of a deep pool and your ears hurt. That is the weight of the water above you pressing in. At ten metres down the water adds about as much pressure as the whole atmosphere. Look at the graph: pressure climbs in a straight line as you go deeper.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Hydrostatic pressure and manometers: pressure from a column of liquid"
+        },
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Depth (m)",
+            "max": 20
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 320
+          },
+          "curves": [
+            {
+              "label": "Absolute pressure",
+              "type": "line",
+              "c": 101.3,
+              "k": 9.81,
+              "ask": "What is absolute pressure?"
+            },
+            {
+              "label": "Gauge pressure",
+              "type": "line",
+              "c": 0,
+              "k": 9.81,
+              "ask": "What is gauge pressure?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "Diver at 10 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Water: 1000 kg/m³, g = 9.81 m/s²"
+        }
+      ]
+    },
+    {
+      "say": "Why a straight line? Pressure is the weight of the liquid column above one square metre. That weight is rho times g times h, where rho is density and h is depth. For water at ten metres: one thousand times nine point eight one times ten, which is 98.1 kilopascals. Double the depth and what happens to the pressure?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Depth (m)",
+            "max": 20
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 320
+          },
+          "curves": [
+            {
+              "label": "Absolute pressure",
+              "type": "line",
+              "c": 101.3,
+              "k": 9.81,
+              "ask": "What is absolute pressure?"
+            },
+            {
+              "label": "Gauge pressure",
+              "type": "line",
+              "c": 0,
+              "k": 9.81,
+              "ask": "What is gauge pressure?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "Diver at 10 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "p = ρgh = 1000 × 9.81 × 10 = 98.1 kPa"
+        }
+      ]
+    },
+    {
+      "say": "It doubles! Now see the two lines. The lower one is gauge pressure, measured above the air around us. The upper one is absolute pressure, which adds the atmosphere, 101.3 kilopascals. So the diver at ten metres feels 199.4 kilopascals absolute. Tyre gauges read gauge pressure.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Depth (m)",
+            "max": 20
+          },
+          "y": {
+            "label": "Pressure (kPa)",
+            "max": 320
+          },
+          "curves": [
+            {
+              "label": "Absolute pressure",
+              "type": "line",
+              "c": 101.3,
+              "k": 9.81,
+              "ask": "What is absolute pressure?"
+            },
+            {
+              "label": "Gauge pressure",
+              "type": "line",
+              "c": 0,
+              "k": 9.81,
+              "ask": "What is gauge pressure?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "Diver at 10 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "p_abs = p_gauge + p_atm = 98.1 + 101.3 = 199.4 kPa"
+        }
+      ]
+    },
+    {
+      "say": "A manometer uses the same idea backwards. Connect a gas tank to a U-tube of mercury. The gas pushes the mercury down on one side and up on the other. Here the difference is 0.2 metres of mercury, which has a density of 13,600. So the tank gauge pressure is 13,600 times 9.81 times 0.2, about 26.7 kilopascals. Why mercury and not water?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.22,
+              "y": 0.45,
+              "size": 1.3,
+              "label": "Gas tank",
+              "ask": "How does a U-tube manometer measure pressure?"
+            },
+            {
+              "id": "tube",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.7,
+              "label": "U-tube (mercury)",
+              "motion": "none",
+              "ask": "How does a U-tube manometer measure pressure?"
+            },
+            {
+              "id": "open",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.35,
+              "label": "Open to air",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "tank",
+              "to": "tube",
+              "kind": "force",
+              "label": "Gas pushes"
+            },
+            {
+              "from": "tube",
+              "to": "open",
+              "kind": "fluid",
+              "label": "Mercury rises 0.2 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "p = 13600 × 9.81 × 0.2 = 26.7 kPa"
+        }
+      ]
+    },
+    {
+      "say": "Mercury is 13.6 times denser, so the column stays short. With water the same pressure needs a 2.7 metre tube! Lovely work. Exam tip: pressure depends only on depth, not on the shape of the container. A thin pipe and a wide dam at the same depth feel the same pressure.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tank",
+              "kind": "tank",
+              "x": 0.22,
+              "y": 0.45,
+              "size": 1.3,
+              "label": "Gas tank",
+              "ask": "How does a U-tube manometer measure pressure?"
+            },
+            {
+              "id": "tube",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.7,
+              "label": "U-tube (mercury)",
+              "motion": "none",
+              "ask": "How does a U-tube manometer measure pressure?"
+            },
+            {
+              "id": "open",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.35,
+              "label": "Open to air",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "tank",
+              "to": "tube",
+              "kind": "force",
+              "label": "Gas pushes"
+            },
+            {
+              "from": "tube",
+              "to": "open",
+              "kind": "fluid",
+              "label": "Mercury rises 0.2 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Same depth, same pressure, whatever the container shape"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does pressure increase with depth?",
+      "a": "The deeper you go, the taller the column of liquid above you, so more weight presses on each square metre. Pressure equals rho times g times h.",
+      "asks": [
+        "why is pressure higher at the bottom"
+      ]
+    },
+    {
+      "q": "What is absolute pressure?",
+      "a": "Absolute pressure is measured from a perfect vacuum. It equals gauge pressure plus atmospheric pressure, about 101.3 kilopascals at sea level.",
+      "asks": [
+        "absolute pressure meaning"
+      ]
+    },
+    {
+      "q": "What is gauge pressure?",
+      "a": "Gauge pressure is the pressure above the surrounding atmosphere. A tyre gauge or a pressure gauge on a tank reads gauge pressure, so it shows zero when open to air.",
+      "asks": [
+        "what does a pressure gauge read"
+      ]
+    },
+    {
+      "q": "How does a U-tube manometer measure pressure?",
+      "a": "The gas pressure pushes the liquid in the U-tube until the difference in height, h, balances it. The gauge pressure is rho times g times h of the manometer liquid.",
+      "asks": [
+        "how to read a manometer",
+        "manometer pressure formula"
+      ]
+    },
+    {
+      "q": "Does the shape of the container change the pressure?",
+      "a": "No. At the same depth in the same liquid the pressure is the same, whatever the shape. This is called the hydrostatic paradox.",
+      "asks": [
+        "hydrostatic paradox"
+      ]
+    }
+  ],
+  "facts": [
+    "Every 10 metres of sea water adds roughly one atmosphere of pressure.",
+    "Standard atmospheric pressure is 101.325 kPa, which supports 760 mm of mercury."
+  ],
+  "quiz": [
+    {
+      "say": "What is the gauge pressure at the bottom of a water tank 5 metres deep? Use g equals 9.81.",
+      "show": "Gauge pressure at the bottom of a 5 m deep water tank? (g = 9.81 m/s²)",
+      "options": [
+        {
+          "show": "49.1 kPa",
+          "say": "49.1 kilopascals"
+        },
+        {
+          "show": "150.4 kPa",
+          "say": "150.4 kilopascals"
+        },
+        {
+          "show": "4.9 kPa",
+          "say": "4.9 kilopascals"
+        }
+      ],
+      "answer": 0,
+      "why": "p = ρgh = 1000 × 9.81 × 5 = 49 050 Pa = 49.1 kPa.",
+      "wrong": {
+        "1": "That is the absolute pressure, which adds the atmosphere. Gauge pressure leaves it out.",
+        "2": "The decimal point slipped: 49 050 pascals is 49.1 kilopascals, not 4.9."
+      }
+    },
+    {
+      "say": "Why is mercury often used in manometers for high pressures?",
+      "show": "Why use mercury in a manometer for high pressures?",
+      "options": [
+        {
+          "show": "It is very dense, so the column stays short",
+          "say": "It is very dense, so the column stays short"
+        },
+        {
+          "show": "It never evaporates",
+          "say": "It never evaporates"
+        },
+        {
+          "show": "It is lighter than water",
+          "say": "It is lighter than water"
+        }
+      ],
+      "answer": 0,
+      "why": "Mercury is 13.6 times denser than water, so the same pressure lifts a column 13.6 times shorter.",
+      "wrong": {
+        "1": "Mercury does give off vapour, which is toxic; that is not why it is chosen.",
+        "2": "Mercury is much heavier than water, not lighter."
+      }
+    }
+  ]
+}

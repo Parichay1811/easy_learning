@@ -1,0 +1,443 @@
+{
+  "id": "BEE-ACC-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Three-phase power: star and delta connections explained",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "three-phase power",
+    "star connection",
+    "delta connection",
+    "line voltage",
+    "phase voltage",
+    "neutral"
+  ],
+  "examples": [
+    "Why is three-phase 400 V when single phase is 230 V?",
+    "What is the difference between star and delta?",
+    "How do I calculate three-phase power?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "rotor",
+          "kind": "magnet",
+          "x": 0.5,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Spinning magnet",
+          "motion": "spin",
+          "ask": "Why are the phases 120 degrees apart?"
+        },
+        {
+          "id": "a",
+          "kind": "coil",
+          "x": 0.5,
+          "y": 0.12,
+          "label": "Coil A",
+          "ask": "What is three-phase power?"
+        },
+        {
+          "id": "b",
+          "kind": "coil",
+          "x": 0.83,
+          "y": 0.75,
+          "label": "Coil B"
+        },
+        {
+          "id": "c",
+          "kind": "coil",
+          "x": 0.17,
+          "y": 0.75,
+          "label": "Coil C"
+        }
+      ],
+      "links": [
+        {
+          "from": "rotor",
+          "to": "a",
+          "kind": "power",
+          "label": "Phase A"
+        },
+        {
+          "from": "rotor",
+          "to": "b",
+          "kind": "power",
+          "label": "Phase B"
+        },
+        {
+          "from": "rotor",
+          "to": "c",
+          "kind": "power",
+          "label": "Phase C"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1891 a 175 kilometre line from Lauffen to Frankfurt in Germany carried three-phase power for the first time, and today almost every power station on Earth makes three phases. On the board is the idea: one spinning magnet sweeps past three coils spaced evenly, 120 degrees apart, round the circle.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Three-phase power: star and delta connections explained"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Spinning magnet",
+              "motion": "spin",
+              "ask": "Why are the phases 120 degrees apart?"
+            },
+            {
+              "id": "a",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.12,
+              "label": "Coil A",
+              "ask": "What is three-phase power?"
+            },
+            {
+              "id": "b",
+              "kind": "coil",
+              "x": 0.83,
+              "y": 0.75,
+              "label": "Coil B"
+            },
+            {
+              "id": "c",
+              "kind": "coil",
+              "x": 0.17,
+              "y": 0.75,
+              "label": "Coil C"
+            }
+          ],
+          "links": [
+            {
+              "from": "rotor",
+              "to": "a",
+              "kind": "power",
+              "label": "Phase A"
+            },
+            {
+              "from": "rotor",
+              "to": "b",
+              "kind": "power",
+              "label": "Phase B"
+            },
+            {
+              "from": "rotor",
+              "to": "c",
+              "kind": "power",
+              "label": "Phase C"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Here is where three-phase power is born, in 3D: a turbine driving a generator. Look at the stator windings around the spinning rotor. Three sets of coils sit 120 degrees apart, so they make three waves at once. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Three-phase power: star and delta connections explained"
+        },
+        {
+          "op": "image",
+          "render": "turbine-generator"
+        }
+      ]
+    },
+    {
+      "say": "Each coil makes its own sine wave, but the magnet reaches them one after another, so the waves are shifted by a third of a cycle, 120 degrees, about 6.7 milliseconds at 50 hertz. Look at the three curves taking turns at the top. Which phase peaks right after phase A?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Phase A",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "ask": "Why are the phases 120 degrees apart?"
+            },
+            {
+              "label": "Phase B (−120°)",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "phase": -120
+            },
+            {
+              "label": "Phase C (−240°)",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "phase": -240,
+              "ask": "Why does the neutral carry almost no current?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "A at peak 325 V"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "v_A: 0°,  v_B: −120°,  v_C: −240°  (325 V peak)"
+        }
+      ]
+    },
+    {
+      "say": "Phase B. Now a beautiful fact. At the dashed line, phase A is at plus 325 volts, while B and C are each at minus 162.5 volts. Add them: zero. That is true at every instant, so in a balanced system the return currents cancel and the neutral wire carries almost nothing. Three wires can do the work of six. Why does that save money?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Phase A",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "ask": "Why are the phases 120 degrees apart?"
+            },
+            {
+              "label": "Phase B (−120°)",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "phase": -120
+            },
+            {
+              "label": "Phase C (−240°)",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05,
+              "phase": -240,
+              "ask": "Why does the neutral carry almost no current?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "A at peak 325 V"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "325 − 162.5 − 162.5 = 0 at every instant"
+        }
+      ]
+    },
+    {
+      "say": "Less copper! Now the two ways to connect. In star, each coil runs from a line to a shared neutral point, and the voltage between two lines is root 3 times a phase voltage: 230 times 1.732 gives the 400 volts of three-phase supplies in Europe and India. In delta, the coils form a triangle: line voltage equals phase voltage, and line current is root 3 times phase current. Which gives you a neutral?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Star (Y)",
+            "icon": "star",
+            "points": [
+              "V_line = √3 × V_phase",
+              "230 V phase → 400 V line",
+              "I_line = I_phase",
+              "Has a neutral wire"
+            ]
+          },
+          "right": {
+            "title": "Delta (Δ)",
+            "icon": "arrow",
+            "points": [
+              "V_line = V_phase",
+              "I_line = √3 × I_phase",
+              "No neutral wire",
+              "Common for big motors"
+            ]
+          },
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Star: V_L = √3 V_ph = 1.732 × 230 ≈ 400 V"
+        }
+      ]
+    },
+    {
+      "say": "Star does. Finally the power: P equals root 3 times line voltage times line current times power factor. A 400 volt motor drawing 10 amps at power factor 0.8 uses 1.732 times 400 times 10 times 0.8, about 5.5 kilowatts. Superb! Bonus: three-phase power flows smoothly, not in pulses, so big motors run without shaking. Challenge: what if the current doubles?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Star (Y)",
+            "icon": "star",
+            "points": [
+              "V_line = √3 × V_phase",
+              "230 V phase → 400 V line",
+              "I_line = I_phase",
+              "Has a neutral wire"
+            ]
+          },
+          "right": {
+            "title": "Delta (Δ)",
+            "icon": "arrow",
+            "points": [
+              "V_line = V_phase",
+              "I_line = √3 × I_phase",
+              "No neutral wire",
+              "Common for big motors"
+            ]
+          },
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "P = √3 V_L I_L cos φ = 1.732×400×10×0.8 ≈ 5.5 kW"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is three-phase power?",
+      "a": "Three AC voltages of the same size and frequency, shifted 120 degrees from each other. It carries more power with less copper than single phase and runs motors smoothly.",
+      "asks": [
+        "Why use three phase?",
+        "What is a 3 phase supply?"
+      ]
+    },
+    {
+      "q": "Why are the phases 120 degrees apart?",
+      "a": "The generator's three coils are spaced evenly, a third of a circle apart, so the spinning magnet reaches each one a third of a cycle later.",
+      "asks": [
+        "Why 120 degrees in three phase?"
+      ]
+    },
+    {
+      "q": "Why does the neutral carry almost no current?",
+      "a": "In a balanced system the three phase currents add to zero at every instant, so nothing needs to return. The neutral only carries any imbalance.",
+      "asks": [
+        "What does the neutral wire do in three phase?"
+      ]
+    },
+    {
+      "q": "What is the difference between star and delta?",
+      "a": "In star, each phase connects between a line and a common neutral, and line voltage is root 3 times phase voltage. In delta, the phases form a triangle: line voltage equals phase voltage and line current is root 3 times phase current.",
+      "asks": [
+        "Star versus delta connection",
+        "Y versus delta"
+      ]
+    },
+    {
+      "q": "How do you calculate three-phase power?",
+      "a": "P equals root 3 times line voltage times line current times the power factor. For 400 volts, 10 amps and 0.8, that is about 5.5 kilowatts.",
+      "asks": [
+        "Three phase power formula"
+      ]
+    }
+  ],
+  "facts": [
+    "The 1891 Lauffen–Frankfurt demonstration carried three-phase power about 175 kilometres.",
+    "In a star connection the line voltage is root 3 times the phase voltage, so 230 volts per phase gives about 400 volts between lines."
+  ],
+  "quiz": [
+    {
+      "say": "A star-connected supply has 240 volts per phase. What is the line voltage?",
+      "show": "A star-connected supply has 240 V per phase. What is the line voltage?",
+      "options": [
+        {
+          "show": "416 V",
+          "say": "416 volts"
+        },
+        {
+          "show": "240 V",
+          "say": "240 volts"
+        },
+        {
+          "show": "720 V",
+          "say": "720 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "In star, line voltage is root 3 times phase voltage: 1.732 times 240 is about 416 volts.",
+      "wrong": {
+        "1": "Line equals phase voltage only in delta.",
+        "2": "That multiplies by 3 instead of root 3."
+      }
+    },
+    {
+      "say": "In a balanced three-phase system, what is the neutral current?",
+      "show": "In a balanced three-phase system, the neutral current is...",
+      "options": [
+        {
+          "show": "About zero",
+          "say": "About zero"
+        },
+        {
+          "show": "Three times a phase current",
+          "say": "Three times a phase current"
+        },
+        {
+          "show": "Equal to one line current",
+          "say": "Equal to one line current"
+        }
+      ],
+      "answer": 0,
+      "why": "The three currents are equal and 120 degrees apart, so they add to zero at every instant.",
+      "wrong": {
+        "1": "The currents cancel rather than add, because they are 120 degrees apart.",
+        "2": "With a balanced load, nothing needs to return through the neutral."
+      }
+    }
+  ]
+}

@@ -1,0 +1,375 @@
+{
+  "id": "BEE-DIG-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Binary, hex and two's complement: how a chip stores minus five",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "two's complement",
+    "binary to hexadecimal",
+    "signed integer",
+    "bit width",
+    "integer overflow"
+  ],
+  "examples": [
+    "How do you write minus 5 in two's complement?",
+    "How do I convert binary to hex?",
+    "What is the range of an 8-bit signed number?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "+5 = 0000 0101",
+          "icon": "chip",
+          "note": "Start with the positive number in 8 bits"
+        },
+        {
+          "label": "Flip: 1111 1010",
+          "icon": "switch",
+          "note": "Invert every bit (the one's complement)",
+          "ask": "Why do you flip the bits and add one?"
+        },
+        {
+          "label": "Add 1: 1111 1011",
+          "icon": "puzzle",
+          "note": "This pattern now means −5",
+          "ask": "What is two's complement?"
+        },
+        {
+          "label": "Hex: FB",
+          "icon": "computer",
+          "note": "Group four bits: 1111 = F, 1011 = B",
+          "ask": "How do I convert binary to hex?"
+        },
+        {
+          "label": "Check: 251 − 256",
+          "icon": "scale",
+          "note": "Read unsigned as 251, minus 2⁸, gives −5"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In December 2014 the Gangnam Style video passed just over 2.1 billion views, the biggest number a signed 32-bit counter can hold, and YouTube had to switch to 64 bits. So how does a chip store numbers, even negative ones, with only ones and zeros? Look at the board: we will turn plus five into minus five.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Binary, hex and two's complement: how a chip stores minus five"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "+5 = 0000 0101",
+              "icon": "chip",
+              "note": "Start with the positive number in 8 bits"
+            },
+            {
+              "label": "Flip: 1111 1010",
+              "icon": "switch",
+              "note": "Invert every bit (the one's complement)",
+              "ask": "Why do you flip the bits and add one?"
+            },
+            {
+              "label": "Add 1: 1111 1011",
+              "icon": "puzzle",
+              "note": "This pattern now means −5",
+              "ask": "What is two's complement?"
+            },
+            {
+              "label": "Hex: FB",
+              "icon": "computer",
+              "note": "Group four bits: 1111 = F, 1011 = B",
+              "ask": "How do I convert binary to hex?"
+            },
+            {
+              "label": "Check: 251 − 256",
+              "icon": "scale",
+              "note": "Read unsigned as 251, minus 2⁸, gives −5"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Start at the first box. Binary is base two: each bit is worth double the bit on its right, so 0000 0101 means four plus one, five. Hexadecimal, or hex, packs four bits into one symbol from 0 to F, which is why engineers love it. What is 1111 in decimal?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "+5 = 0000 0101",
+              "icon": "chip",
+              "note": "Start with the positive number in 8 bits"
+            },
+            {
+              "label": "Flip: 1111 1010",
+              "icon": "switch",
+              "note": "Invert every bit (the one's complement)",
+              "ask": "Why do you flip the bits and add one?"
+            },
+            {
+              "label": "Add 1: 1111 1011",
+              "icon": "puzzle",
+              "note": "This pattern now means −5",
+              "ask": "What is two's complement?"
+            },
+            {
+              "label": "Hex: FB",
+              "icon": "computer",
+              "note": "Group four bits: 1111 = F, 1011 = B",
+              "ask": "How do I convert binary to hex?"
+            },
+            {
+              "label": "Check: 251 − 256",
+              "icon": "scale",
+              "note": "Read unsigned as 251, minus 2⁸, gives −5"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "0000 0101₂ = 4 + 1 = 5"
+        }
+      ]
+    },
+    {
+      "say": "Now the trick. To make minus five, flip every bit, then add one. See the third box: 1111 1011. This is two's complement, and its beauty is that ordinary adding just works: five plus minus five gives 1 0000 0000, the ninth bit falls off, and zero is left. Can you see why the chip needs no separate subtract circuit?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "+5 = 0000 0101",
+              "icon": "chip",
+              "note": "Start with the positive number in 8 bits"
+            },
+            {
+              "label": "Flip: 1111 1010",
+              "icon": "switch",
+              "note": "Invert every bit (the one's complement)",
+              "ask": "Why do you flip the bits and add one?"
+            },
+            {
+              "label": "Add 1: 1111 1011",
+              "icon": "puzzle",
+              "note": "This pattern now means −5",
+              "ask": "What is two's complement?"
+            },
+            {
+              "label": "Hex: FB",
+              "icon": "computer",
+              "note": "Group four bits: 1111 = F, 1011 = B",
+              "ask": "How do I convert binary to hex?"
+            },
+            {
+              "label": "Check: 251 − 256",
+              "icon": "scale",
+              "note": "Read unsigned as 251, minus 2⁸, gives −5"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "−5 = flip(0000 0101) + 1 = 1111 1011"
+        }
+      ]
+    },
+    {
+      "say": "Look at the sorted patterns. In two's complement the leftmost bit, the most significant bit or MSB, shows the sign: 0 for positive, 1 for negative. So 8 bits run from minus 128 up to plus 127. Which pattern in the negative group means minus one?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sort",
+          "question": "Which 8-bit patterns are negative?",
+          "groups": [
+            {
+              "label": "Positive (MSB 0)",
+              "icon": "sun",
+              "items": [
+                "0000 0101 = 5",
+                "0111 1111 = 127"
+              ]
+            },
+            {
+              "label": "Negative (MSB 1)",
+              "icon": "moon",
+              "items": [
+                "1111 1011 = −5",
+                "1000 0000 = −128",
+                "1111 1111 = −1"
+              ],
+              "ask": "What is the range of an 8-bit signed number?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "8-bit signed range: −128 to +127"
+        }
+      ]
+    },
+    {
+      "say": "Last box: group the bits in fours. 1111 is F and 1011 is B, so minus five is FB in hex. As a check, FB read as unsigned is 251, and 251 minus 256 is minus five. Well done! Challenge: what is minus twelve in 8-bit hex? Hint: twelve is 0000 1100.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "+5 = 0000 0101",
+              "icon": "chip",
+              "note": "Start with the positive number in 8 bits"
+            },
+            {
+              "label": "Flip: 1111 1010",
+              "icon": "switch",
+              "note": "Invert every bit (the one's complement)",
+              "ask": "Why do you flip the bits and add one?"
+            },
+            {
+              "label": "Add 1: 1111 1011",
+              "icon": "puzzle",
+              "note": "This pattern now means −5",
+              "ask": "What is two's complement?"
+            },
+            {
+              "label": "Hex: FB",
+              "icon": "computer",
+              "note": "Group four bits: 1111 = F, 1011 = B",
+              "ask": "How do I convert binary to hex?"
+            },
+            {
+              "label": "Check: 251 − 256",
+              "icon": "scale",
+              "note": "Read unsigned as 251, minus 2⁸, gives −5"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "FB₁₆ = 251; 251 − 256 = −5"
+        },
+        {
+          "op": "note",
+          "text": "n bits hold −2ⁿ⁻¹ to 2ⁿ⁻¹ − 1"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is two's complement?",
+      "a": "It is the way almost every processor stores signed whole numbers. To negate a number you flip all its bits and add one, so the same adder circuit handles both adding and subtracting.",
+      "asks": [
+        "How do computers store negative numbers?",
+        "What does two's complement mean?"
+      ]
+    },
+    {
+      "q": "Why do you flip the bits and add one?",
+      "a": "Flipping gives a pattern that adds to the original to make all ones, which is 2 to the n minus 1. Adding one makes the pair sum to exactly 2 to the n, which overflows to zero in n bits, so the pattern behaves as minus the number.",
+      "asks": [
+        "Why add one after inverting the bits?"
+      ]
+    },
+    {
+      "q": "How do I convert binary to hex?",
+      "a": "Split the binary number into groups of four bits from the right, then write each group as one hex digit from 0 to F. For example 1111 1011 is F and B, so FB.",
+      "asks": [
+        "How do you change binary into hexadecimal?"
+      ]
+    },
+    {
+      "q": "What is the range of an 8-bit signed number?",
+      "a": "With two's complement, 8 bits hold minus 128 up to plus 127. In general n bits hold minus 2 to the power n minus 1, up to 2 to the power n minus 1, minus one.",
+      "asks": [
+        "Why is there one more negative number than positive?"
+      ]
+    },
+    {
+      "q": "What is integer overflow?",
+      "a": "Overflow happens when a result is too big for the bits available, so it wraps round. In 8 bits, 127 plus 1 gives 1000 0000, which reads as minus 128. Programmers avoid it by using a wider type or checking results.",
+      "asks": [
+        "What happens when a number is too big for its bits?"
+      ]
+    }
+  ],
+  "facts": [
+    "An 8-bit two's complement number ranges from −128 to +127.",
+    "In December 2014 YouTube moved its view counter to 64-bit integers after Gangnam Style neared 2,147,483,647 views, the 32-bit signed limit.",
+    "One hex digit stands for exactly four bits, so a byte is always two hex digits."
+  ],
+  "quiz": [
+    {
+      "say": "What is minus twelve in 8-bit two's complement?",
+      "show": "What is −12 in 8-bit two's complement?",
+      "options": [
+        {
+          "show": "1111 0100",
+          "say": "1111 0100"
+        },
+        {
+          "show": "1000 1100",
+          "say": "1000 1100"
+        },
+        {
+          "show": "1111 0011",
+          "say": "1111 0011"
+        }
+      ],
+      "answer": 0,
+      "why": "Twelve is 0000 1100. Flip it to 1111 0011, add one to get 1111 0100, which is F4 in hex.",
+      "wrong": {
+        "1": "That is sign and magnitude: a sign bit stuck on 12. Processors do not store integers that way.",
+        "2": "That is only the flip, the one's complement. You still need to add one."
+      }
+    },
+    {
+      "say": "What does 0111 1111 plus 1 give in an 8-bit signed register?",
+      "show": "What does 0111 1111 + 1 give in an 8-bit signed register?",
+      "options": [
+        {
+          "show": "−128",
+          "say": "minus 128"
+        },
+        {
+          "show": "128",
+          "say": "128"
+        },
+        {
+          "show": "0",
+          "say": "zero"
+        }
+      ],
+      "answer": 0,
+      "why": "The sum is 1000 0000. Its top bit is 1, so in two's complement it reads as minus 128: the number has overflowed.",
+      "wrong": {
+        "1": "Plus 128 needs 9 bits as a signed number, so it cannot fit; the pattern wraps round.",
+        "2": "Zero comes from 1111 1111 plus 1, not from 0111 1111 plus 1."
+      }
+    }
+  ]
+}

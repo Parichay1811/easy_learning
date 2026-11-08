@@ -1,0 +1,391 @@
+{
+  "id": "BEE-PWR-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Earthing and electric shock: why the earth wire and the RCD save lives",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "earthing",
+    "grounding",
+    "residual current device",
+    "touch voltage",
+    "electric shock",
+    "fault loop impedance"
+  ],
+  "examples": [
+    "Why do appliances have an earth wire?",
+    "How does an RCD protect you from electric shock?",
+    "How much current is dangerous to the human body?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Supply",
+          "value": "230 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "Loop wiring",
+          "value": "0.8 Ω"
+        },
+        {
+          "kind": "fuse",
+          "label": "Fuse",
+          "value": "13 A",
+          "ask": "Why doesn't the fuse protect you on its own?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Your body",
+          "value": "1 kΩ",
+          "note": "Touching a live metal case",
+          "ask": "How much current is dangerous to the human body?"
+        }
+      ],
+      "readouts": [
+        "No earth wire",
+        "I = 230/1000.8 ≈ 230 mA",
+        "Fuse stays intact"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A kettle's metal body becomes live when a wire inside works loose. Touch it, and you become part of the circuit. On the board there is no earth wire, so the only path is through your body, about 1000 ohms from hand to feet. The current is about 230 milliamps, enough to stop a heart, yet far too small to blow the 13 amp fuse.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Earthing and electric shock: why the earth wire and the RCD save lives"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Supply",
+              "value": "230 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Loop wiring",
+              "value": "0.8 Ω"
+            },
+            {
+              "kind": "fuse",
+              "label": "Fuse",
+              "value": "13 A",
+              "ask": "Why doesn't the fuse protect you on its own?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Your body",
+              "value": "1 kΩ",
+              "note": "Touching a live metal case",
+              "ask": "How much current is dangerous to the human body?"
+            }
+          ],
+          "readouts": [
+            "No earth wire",
+            "I = 230/1000.8 ≈ 230 mA",
+            "Fuse stays intact"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the bars. You can feel about 1 milliamp. Around 10 milliamps your muscles clamp and you cannot let go. From about 50 milliamps the heart can go into fibrillation, a deadly quiver. Our unearthed fault, 230 milliamps, towers over them all. So how could we make the fuse blow instead?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "unit": "mA",
+          "items": [
+            {
+              "label": "Feel a tingle",
+              "size": 1,
+              "icon": "hand"
+            },
+            {
+              "label": "Can't let go",
+              "size": 10,
+              "icon": "muscle"
+            },
+            {
+              "label": "RCD trips",
+              "size": 30,
+              "icon": "switch"
+            },
+            {
+              "label": "Heart risk",
+              "size": 50,
+              "icon": "heart"
+            },
+            {
+              "label": "Unearthed fault",
+              "size": 230,
+              "icon": "lightning"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "Body current: 230 V / ≈1000 Ω ≈ 230 mA"
+        }
+      ]
+    },
+    {
+      "say": "Give the current an easy path. The earth wire bonds the metal case to earth, here just 0.4 ohms. Now a fault drives about 192 amps through the earth wire, nearly 15 times the fuse rating, so the fuse blows quickly and the case goes dead. Your body is in parallel, and for that brief moment the case sits at about 77 volts. Is a brief moment always safe enough?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Supply",
+              "value": "230 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Loop wiring",
+              "value": "0.8 Ω"
+            },
+            {
+              "kind": "fuse",
+              "label": "Fuse",
+              "value": "13 A",
+              "ask": "Why doesn't the fuse protect you on its own?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Earth wire",
+              "value": "0.4 Ω",
+              "branch": 1,
+              "ask": "Why do appliances have an earth wire?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Your body",
+              "value": "1 kΩ",
+              "branch": 2,
+              "ask": "What is touch voltage?"
+            }
+          ],
+          "readouts": [
+            "Fault I ≈ 192 A",
+            "Touch voltage ≈ 77 V",
+            "Fuse blows quickly"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "I = 230 V / (0.8 + 0.4) Ω ≈ 192 A → fuse blows"
+        }
+      ]
+    },
+    {
+      "say": "Not always, so modern homes add an RCD, a residual current device. Follow the chain: live and neutral normally carry equal currents. If some leaks to earth through you, a coil wrapped round both wires senses the imbalance, and at 30 milliamps the RCD trips, within 40 milliseconds for a larger leak. Why choose 30 milliamps?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-why",
+          "question": "How does an RCD catch a shock?",
+          "because": [
+            {
+              "label": "Live and neutral",
+              "icon": "wire",
+              "note": "Normally carry exactly equal currents"
+            },
+            {
+              "label": "Leak through you",
+              "icon": "person",
+              "note": "Some current returns via earth, not neutral"
+            },
+            {
+              "label": "Imbalance sensed",
+              "icon": "sensor",
+              "note": "A coil around both wires feels the difference",
+              "ask": "How does an RCD protect you from electric shock?"
+            },
+            {
+              "label": "Trip at 30 mA",
+              "icon": "switch",
+              "note": "Opens the circuit in a fraction of a second"
+            }
+          ],
+          "answer": "It spots current leaking through you and cuts the supply",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "RCD trips when I_live − I_neutral ≥ 30 mA"
+        }
+      ]
+    },
+    {
+      "say": "Because it stays below the level that usually triggers fibrillation. Earthing and RCDs work as a team: the earth wire makes faults blow fuses, and the RCD catches leaks too small for any fuse. Well done! Safety first: never remove an earth pin or bypass an RCD. Challenge: with no earth wire and no RCD, explain why the fuse cannot save you.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Supply",
+              "value": "230 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "Loop wiring",
+              "value": "0.8 Ω"
+            },
+            {
+              "kind": "fuse",
+              "label": "Fuse",
+              "value": "13 A",
+              "ask": "Why doesn't the fuse protect you on its own?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Earth wire",
+              "value": "0.4 Ω",
+              "branch": 1,
+              "ask": "Why do appliances have an earth wire?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Your body",
+              "value": "1 kΩ",
+              "branch": 2,
+              "ask": "What is touch voltage?"
+            }
+          ],
+          "readouts": [
+            "Fault I ≈ 192 A",
+            "Touch voltage ≈ 77 V",
+            "Fuse blows quickly"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "Touch voltage = 192 A × 0.4 Ω ≈ 77 V, for a moment"
+        },
+        {
+          "op": "note",
+          "text": "The earth wire blows the fuse; the RCD catches small leaks"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why do appliances have an earth wire?",
+      "a": "The earth wire connects the metal case to earth. If a live wire touches the case, a large fault current flows through the earth wire, blowing the fuse or tripping the breaker, so the case cannot stay live and shock someone.",
+      "asks": [
+        "What does the earth pin do?"
+      ]
+    },
+    {
+      "q": "How does an RCD protect you from electric shock?",
+      "a": "It compares the current in the live and neutral wires. Any difference means current is leaking to earth, perhaps through a person, and at 30 milliamps it trips, usually within tens of milliseconds.",
+      "asks": [
+        "What is a residual current device?"
+      ]
+    },
+    {
+      "q": "How much current is dangerous to the human body?",
+      "a": "About 1 milliamp can be felt, around 10 milliamps can stop you letting go, and from roughly 50 milliamps across the chest the heart can fibrillate. The danger also grows the longer the current flows.",
+      "asks": [
+        "How many milliamps can kill?"
+      ]
+    },
+    {
+      "q": "Why doesn't the fuse protect you on its own?",
+      "a": "A fuse protects the wiring from overload, so it needs many amps to blow. A shock current through a body is well under 1 amp, far too small for a 13 amp fuse to notice.",
+      "asks": [
+        "Can a fuse stop an electric shock?"
+      ]
+    },
+    {
+      "q": "What is touch voltage?",
+      "a": "It is the voltage between a faulty metal part and the ground you stand on. With a 192 amp fault through 0.4 ohms of earth wire, the case rises to about 77 volts until the fuse blows.",
+      "asks": [
+        "What voltage appears on an earthed appliance during a fault?"
+      ]
+    }
+  ],
+  "facts": [
+    "Residual current devices for personal protection usually trip at 30 mA.",
+    "Under IEC rules a 30 mA RCD must trip within 300 ms at its rated current and within 40 ms at five times it.",
+    "Currents of roughly 50 mA or more through the chest can trigger ventricular fibrillation."
+  ],
+  "quiz": [
+    {
+      "say": "A person of about 1000 ohms touches an unearthed live case on 230 volts. Roughly what current flows?",
+      "show": "A person of about 1000 Ω touches an unearthed live case on 230 V. Roughly what current flows?",
+      "options": [
+        {
+          "show": "About 230 mA",
+          "say": "about 230 milliamps"
+        },
+        {
+          "show": "About 23 mA",
+          "say": "about 23 milliamps"
+        },
+        {
+          "show": "About 23 A",
+          "say": "about 23 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "I equals V over R: 230 over 1000 is 0.23 amps, 230 milliamps, which is very dangerous.",
+      "wrong": {
+        "1": "That is ten times too small.",
+        "2": "That would need a resistance of only 10 ohms; a body has far more."
+      }
+    },
+    {
+      "say": "What does an RCD compare to detect a shock?",
+      "show": "What does an RCD compare to detect a shock?",
+      "options": [
+        {
+          "show": "Live and neutral currents",
+          "say": "Live and neutral currents"
+        },
+        {
+          "show": "Voltage and frequency",
+          "say": "Voltage and frequency"
+        },
+        {
+          "show": "Fuse rating and load",
+          "say": "Fuse rating and load"
+        }
+      ],
+      "answer": 0,
+      "why": "Equal live and neutral currents mean nothing is leaking; a difference of 30 milliamps trips it.",
+      "wrong": {
+        "1": "An RCD does not measure voltage or frequency.",
+        "2": "Overloads are the job of a fuse or breaker, not leak detection."
+      }
+    }
+  ]
+}

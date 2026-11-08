@@ -1,0 +1,550 @@
+{
+  "id": "BEE-MACH-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The rotating magnetic field: how three phases spin a magnet with no moving parts",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "rotating magnetic field",
+    "three-phase supply",
+    "synchronous speed",
+    "phase displacement 120 degrees",
+    "pole number",
+    "stator winding"
+  ],
+  "examples": [
+    "How do three-phase currents make a rotating field?",
+    "How do you calculate synchronous speed?",
+    "Why are three phases 120 degrees apart?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-plot",
+      "x": {
+        "label": "Time (ms)",
+        "max": 20
+      },
+      "y": {
+        "label": "Current (per unit)",
+        "min": -1.2,
+        "max": 1.2
+      },
+      "curves": [
+        {
+          "label": "Phase A",
+          "type": "sine",
+          "a": 1,
+          "k": 0.05,
+          "phase": 0,
+          "ask": "How do three-phase currents make a rotating field?"
+        },
+        {
+          "label": "Phase B",
+          "type": "sine",
+          "a": 1,
+          "k": 0.05,
+          "phase": -120,
+          "ask": "Why are three phases 120 degrees apart?"
+        },
+        {
+          "label": "Phase C",
+          "type": "sine",
+          "a": 1,
+          "k": 0.05,
+          "phase": -240,
+          "ask": "How do you reverse a three-phase motor?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 5,
+          "label": "5 ms: A at peak"
+        },
+        {
+          "x": 11.67,
+          "label": "11.7 ms: B at peak"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1885 Galileo Ferraris in Turin, and soon after Nikola Tesla, found a way to make a magnetic field spin with no moving parts at all. Today it turns almost every big motor on Earth. On the board are the three currents of a 50 hertz three-phase supply, phases A, B and C, each one a sine wave.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The rotating magnetic field: how three phases spin a magnet with no moving parts"
+        },
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Current (per unit)",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "Phase A",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": 0,
+              "ask": "How do three-phase currents make a rotating field?"
+            },
+            {
+              "label": "Phase B",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -120,
+              "ask": "Why are three phases 120 degrees apart?"
+            },
+            {
+              "label": "Phase C",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -240,
+              "ask": "How do you reverse a three-phase motor?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "5 ms: A at peak"
+            },
+            {
+              "x": 11.67,
+              "label": "11.7 ms: B at peak"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: an induction motor, opened up. Look at the stator windings around the outside. Three-phase current in them makes a magnetic field that spins, with nothing moving but electricity. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The rotating magnetic field: how three phases spin a magnet with no moving parts"
+        },
+        {
+          "op": "image",
+          "render": "induction-motor"
+        }
+      ]
+    },
+    {
+      "say": "Look at phase B. It is the same wave as A, but it peaks one third of a cycle later: 120 degrees, about 6.67 milliseconds at 50 hertz. Phase C peaks another third later. At every moment the three currents add up to zero, which is why three-phase lines need no heavy return wire. At 5 milliseconds A is at its peak. What are B and C then?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Current (per unit)",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "Phase A",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": 0,
+              "ask": "How do three-phase currents make a rotating field?"
+            },
+            {
+              "label": "Phase B",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -120,
+              "ask": "Why are three phases 120 degrees apart?"
+            },
+            {
+              "label": "Phase C",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -240,
+              "ask": "How do you reverse a three-phase motor?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "5 ms: A at peak"
+            },
+            {
+              "x": 11.67,
+              "label": "11.7 ms: B at peak"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "120° = one third of 20 ms ≈ 6.67 ms"
+        }
+      ]
+    },
+    {
+      "say": "Each is minus one half. Now feed those currents to three coils placed 120 degrees apart around a circle. At 5 milliseconds coil A is strongest, so the combined field points towards A. A third of a cycle later it points towards B, then C. The total field keeps a steady strength, 1.5 times one coil's peak, and simply rotates. Look at the rotor magnet. What does it do?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sup",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.15,
+              "label": "3-phase 50 Hz",
+              "ask": "How do you calculate synchronous speed?"
+            },
+            {
+              "id": "a",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.12,
+              "label": "Coil A",
+              "ask": "What is the strength of the rotating field?"
+            },
+            {
+              "id": "b",
+              "kind": "coil",
+              "x": 0.2,
+              "y": 0.8,
+              "label": "Coil B"
+            },
+            {
+              "id": "c",
+              "kind": "coil",
+              "x": 0.8,
+              "y": 0.8,
+              "label": "Coil C"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Rotor magnet",
+              "motion": "spin",
+              "ask": "How do three-phase currents make a rotating field?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sup",
+              "to": "a",
+              "kind": "power"
+            },
+            {
+              "from": "sup",
+              "to": "b",
+              "kind": "power"
+            },
+            {
+              "from": "sup",
+              "to": "c",
+              "kind": "power"
+            },
+            {
+              "from": "a",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Field"
+            },
+            {
+              "from": "b",
+              "to": "rotor",
+              "kind": "energy"
+            },
+            {
+              "from": "c",
+              "to": "rotor",
+              "kind": "energy"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "Resultant field = 1.5 × one phase peak, constant"
+        }
+      ]
+    },
+    {
+      "say": "It follows the field round, like a compass needle chasing a moving magnet. With one set of coils, which makes two poles, the field turns once per cycle: 50 turns a second, 3000 revolutions per minute. Wind the stator with four poles and the field turns half as fast. Now, if you swap any two supply wires, what do you think happens?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "sup",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.15,
+              "label": "3-phase 50 Hz",
+              "ask": "How do you calculate synchronous speed?"
+            },
+            {
+              "id": "a",
+              "kind": "coil",
+              "x": 0.5,
+              "y": 0.12,
+              "label": "Coil A",
+              "ask": "What is the strength of the rotating field?"
+            },
+            {
+              "id": "b",
+              "kind": "coil",
+              "x": 0.2,
+              "y": 0.8,
+              "label": "Coil B"
+            },
+            {
+              "id": "c",
+              "kind": "coil",
+              "x": 0.8,
+              "y": 0.8,
+              "label": "Coil C"
+            },
+            {
+              "id": "rotor",
+              "kind": "magnet",
+              "x": 0.5,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Rotor magnet",
+              "motion": "spin",
+              "ask": "How do three-phase currents make a rotating field?"
+            }
+          ],
+          "links": [
+            {
+              "from": "sup",
+              "to": "a",
+              "kind": "power"
+            },
+            {
+              "from": "sup",
+              "to": "b",
+              "kind": "power"
+            },
+            {
+              "from": "sup",
+              "to": "c",
+              "kind": "power"
+            },
+            {
+              "from": "a",
+              "to": "rotor",
+              "kind": "energy",
+              "label": "Field"
+            },
+            {
+              "from": "b",
+              "to": "rotor",
+              "kind": "energy"
+            },
+            {
+              "from": "c",
+              "to": "rotor",
+              "kind": "energy"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "n_s = 120 f / p = 120 × 50 / 2 = 3000 rpm"
+        }
+      ]
+    },
+    {
+      "say": "The field spins the other way, which is exactly how you reverse a three-phase motor. Wonderful! So a 4-pole motor's field turns at 1500 rpm on 50 hertz, as in India or the UK, and at 1800 rpm on 60 hertz, as in the USA. Challenge: what is the synchronous speed of a 6-pole motor on 50 hertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Current (per unit)",
+            "min": -1.2,
+            "max": 1.2
+          },
+          "curves": [
+            {
+              "label": "Phase A",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": 0,
+              "ask": "How do three-phase currents make a rotating field?"
+            },
+            {
+              "label": "Phase B",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -120,
+              "ask": "Why are three phases 120 degrees apart?"
+            },
+            {
+              "label": "Phase C",
+              "type": "sine",
+              "a": 1,
+              "k": 0.05,
+              "phase": -240,
+              "ask": "How do you reverse a three-phase motor?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 5,
+              "label": "5 ms: A at peak"
+            },
+            {
+              "x": 11.67,
+              "label": "11.7 ms: B at peak"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "4 poles on 50 Hz: n_s = 120 × 50 / 4 = 1500 rpm"
+        },
+        {
+          "op": "note",
+          "text": "Swap any two phases to reverse the direction of rotation"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do three-phase currents make a rotating field?",
+      "a": "Three coils spaced 120 degrees apart carry currents 120 degrees apart in time. Their fields add to one field of constant strength whose direction turns steadily, one revolution per cycle for a 2-pole winding.",
+      "asks": [
+        "What is a rotating magnetic field?"
+      ]
+    },
+    {
+      "q": "Why are three phases 120 degrees apart?",
+      "a": "Spacing the three waves equally, a third of a cycle apart, makes them add to zero at every instant and gives smooth, constant power and a steady rotating field.",
+      "asks": [
+        "Why 120 degrees in three-phase?"
+      ]
+    },
+    {
+      "q": "How do you calculate synchronous speed?",
+      "a": "Synchronous speed in rpm equals 120 times the frequency divided by the number of poles. On 50 hertz, a 2-pole field turns at 3000 rpm, 4 poles at 1500 and 6 poles at 1000.",
+      "asks": [
+        "What is the synchronous speed formula?"
+      ]
+    },
+    {
+      "q": "How do you reverse a three-phase motor?",
+      "a": "Swap any two of the three supply connections. That changes the phase order from A B C to A C B, so the field, and the motor, rotate the other way.",
+      "asks": [
+        "Why does swapping two phases reverse the motor?"
+      ]
+    },
+    {
+      "q": "What is the strength of the rotating field?",
+      "a": "For a balanced three-phase winding the resultant field is constant and equals 1.5 times the peak field of one phase winding.",
+      "asks": [
+        "Is the rotating field strength constant?"
+      ]
+    }
+  ],
+  "facts": [
+    "Galileo Ferraris described the rotating magnetic field in 1885, and Nikola Tesla patented induction motors in 1888.",
+    "Synchronous speed n = 120f/p: 1500 rpm for 4 poles at 50 Hz, 1800 rpm at 60 Hz.",
+    "In a balanced three-phase system the three currents add to zero at every instant."
+  ],
+  "quiz": [
+    {
+      "say": "What is the synchronous speed of a 6-pole motor on 50 hertz?",
+      "show": "What is the synchronous speed of a 6-pole motor on 50 Hz?",
+      "options": [
+        {
+          "show": "1000 rpm",
+          "say": "1000 rpm"
+        },
+        {
+          "show": "1500 rpm",
+          "say": "1500 rpm"
+        },
+        {
+          "show": "3000 rpm",
+          "say": "3000 rpm"
+        }
+      ],
+      "answer": 0,
+      "why": "120 times 50 over 6 is 1000 revolutions per minute.",
+      "wrong": {
+        "1": "1500 rpm is for a 4-pole winding.",
+        "2": "3000 rpm is for a 2-pole winding."
+      }
+    },
+    {
+      "say": "When phase A is at its positive peak, what are phases B and C, per unit?",
+      "show": "When phase A is at its positive peak, what are phases B and C, per unit?",
+      "options": [
+        {
+          "show": "−0.5 each",
+          "say": "minus 0.5 each"
+        },
+        {
+          "show": "+0.5 each",
+          "say": "plus 0.5 each"
+        },
+        {
+          "show": "0 each",
+          "say": "zero each"
+        }
+      ],
+      "answer": 0,
+      "why": "B and C are 120 degrees away, where the sine is minus 0.5, so all three add to zero.",
+      "wrong": {
+        "1": "Then the sum would be 2, but balanced phases always add to zero.",
+        "2": "Then the sum would be 1, not zero."
+      }
+    }
+  ]
+}

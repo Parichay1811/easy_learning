@@ -1,0 +1,311 @@
+{
+  "id": "BME-FLUID-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Buoyancy and stability: why a steel ship floats upright",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-FLUID — Fluid mechanics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "buoyancy",
+    "Archimedes' principle",
+    "metacentre",
+    "metacentric height",
+    "centre of buoyancy"
+  ],
+  "examples": [
+    "Why does a steel ship float?",
+    "What is the metacentric height?",
+    "How do I find how much of a block floats under water?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "ship",
+      "forces": [
+        {
+          "label": "Buoyancy 2943 N",
+          "dir": "up",
+          "size": 3,
+          "ask": "What is Archimedes' principle?"
+        },
+        {
+          "label": "Weight 2943 N",
+          "dir": "down",
+          "size": 3,
+          "ask": "When does an object float?"
+        }
+      ],
+      "motion": "float",
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A big container ship weighs over a hundred thousand tonnes of steel, yet it floats. A steel bolt sinks. What is the difference? Over two thousand years ago Archimedes found the answer: any body in a fluid is pushed up by the weight of the fluid it pushes aside. Look at the two arrows.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Buoyancy and stability: why a steel ship floats upright"
+        },
+        {
+          "name": "x-forces",
+          "object": "ship",
+          "forces": [
+            {
+              "label": "Buoyancy 2943 N",
+              "dir": "up",
+              "size": 3,
+              "ask": "What is Archimedes' principle?"
+            },
+            {
+              "label": "Weight 2943 N",
+              "dir": "down",
+              "size": 3,
+              "ask": "When does an object float?"
+            }
+          ],
+          "motion": "float",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Buoyancy = weight of fluid displaced"
+        }
+      ]
+    },
+    {
+      "say": "Take a block of wood, half a cubic metre, density 600. Its weight is 600 times 0.5 times 9.81, which is 2943 newtons. It sinks until the water it displaces weighs the same. That needs 0.3 cubic metres under water. So sixty percent of the block is submerged. Can you guess why sixty percent?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "ship",
+          "forces": [
+            {
+              "label": "Buoyancy 2943 N",
+              "dir": "up",
+              "size": 3,
+              "ask": "What is Archimedes' principle?"
+            },
+            {
+              "label": "Weight 2943 N",
+              "dir": "down",
+              "size": 3,
+              "ask": "When does an object float?"
+            }
+          ],
+          "motion": "float",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "V_sub = 600 × 0.5 / 1000 = 0.3 m³ (60 %)"
+        }
+      ]
+    },
+    {
+      "say": "Because wood is sixty percent as dense as water! A steel ship works the same way. Its hull is shaped to push aside a huge volume of water, mostly air inside, so its average density is less than water. The bolt is solid steel, nearly eight times denser than water, so it sinks.",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "ship",
+          "forces": [
+            {
+              "label": "Buoyancy 2943 N",
+              "dir": "up",
+              "size": 3,
+              "ask": "What is Archimedes' principle?"
+            },
+            {
+              "label": "Weight 2943 N",
+              "dir": "down",
+              "size": 3,
+              "ask": "When does an object float?"
+            }
+          ],
+          "motion": "float",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F_B = ρ_water g V_sub = 1000 × 9.81 × 0.3 = 2943 N"
+        }
+      ]
+    },
+    {
+      "say": "Floating is not enough; the ship must stay upright. Buoyancy acts at the centre of the displaced water, the centre of buoyancy. When the ship tilts, that centre moves sideways. The point where the new buoyancy line crosses the centre line is the metacentre, M. See the left side: M above the centre of gravity, G.",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Stable: M above G",
+            "icon": "ship",
+            "points": [
+              "Metacentre above gravity",
+              "GM is positive",
+              "Tilt makes a righting couple",
+              "Ship rolls back upright"
+            ]
+          },
+          "right": {
+            "title": "Unstable: M below G",
+            "icon": "wave",
+            "points": [
+              "Weight too high up",
+              "GM is negative",
+              "Tilt makes an upsetting couple",
+              "Ship capsizes"
+            ]
+          },
+          "verdict": "Keep the centre of gravity low",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "GM = metacentric height"
+        }
+      ]
+    },
+    {
+      "say": "If M is above G, a tilt creates a couple that rolls the ship back. If G climbs above M, say from cargo stacked too high, the couple tips it over. Well done! Real link: ships fill ballast tanks low in the hull to keep G down. Challenge: why is a narrow canoe so tippy?",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Stable: M above G",
+            "icon": "ship",
+            "points": [
+              "Metacentre above gravity",
+              "GM is positive",
+              "Tilt makes a righting couple",
+              "Ship rolls back upright"
+            ]
+          },
+          "right": {
+            "title": "Unstable: M below G",
+            "icon": "wave",
+            "points": [
+              "Weight too high up",
+              "GM is negative",
+              "Tilt makes an upsetting couple",
+              "Ship capsizes"
+            ]
+          },
+          "verdict": "Keep the centre of gravity low",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Wide hull: big shift of buoyancy, large GM"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Archimedes' principle?",
+      "a": "A body wholly or partly in a fluid is pushed up by a force equal to the weight of the fluid it displaces. That upward push is the buoyant force.",
+      "asks": [
+        "what is buoyancy",
+        "buoyant force formula"
+      ]
+    },
+    {
+      "q": "When does an object float?",
+      "a": "It floats when it can displace its own weight of fluid before it is fully under. In practice, when its average density is less than the fluid density.",
+      "asks": [
+        "why do things sink or float"
+      ]
+    },
+    {
+      "q": "Why does a steel ship float?",
+      "a": "The hull encloses a lot of air, so the ship displaces a big volume of water for its weight. Its average density is less than water, so it floats with only part of the hull under.",
+      "asks": [
+        "how can a heavy ship float"
+      ]
+    },
+    {
+      "q": "What is the metacentric height?",
+      "a": "It is the distance GM from the centre of gravity G up to the metacentre M. A positive GM means the ship is stable and rolls back upright when tilted.",
+      "asks": [
+        "what is the metacentre",
+        "GM of a ship"
+      ]
+    },
+    {
+      "q": "How do I find how much of a block floats under water?",
+      "a": "Set the buoyant force equal to the weight. The submerged fraction equals the block density divided by the fluid density.",
+      "asks": [
+        "submerged fraction of a floating body"
+      ]
+    }
+  ],
+  "facts": [
+    "A floating body displaces a weight of fluid equal to its own weight.",
+    "A floating ship is stable when its metacentre lies above its centre of gravity."
+  ],
+  "quiz": [
+    {
+      "say": "An ice cube has a density of 917 kilograms per cubic metre. What fraction of it is under water when it floats in fresh water?",
+      "show": "Ice (917 kg/m³) floats in fresh water. What fraction is under water?",
+      "options": [
+        {
+          "show": "About 92 %",
+          "say": "about 92 percent"
+        },
+        {
+          "show": "About 8 %",
+          "say": "about 8 percent"
+        },
+        {
+          "show": "About 50 %",
+          "say": "about 50 percent"
+        }
+      ],
+      "answer": 0,
+      "why": "Submerged fraction = 917/1000 ≈ 0.92, so about 92 % is under.",
+      "wrong": {
+        "1": "About 8 % is the part above the water, not below.",
+        "2": "The fraction depends on the density ratio, not half by default."
+      }
+    },
+    {
+      "say": "A ship becomes unstable when which happens?",
+      "show": "A ship becomes unstable when…",
+      "options": [
+        {
+          "show": "The centre of gravity rises above the metacentre",
+          "say": "The centre of gravity rises above the metacentre"
+        },
+        {
+          "show": "The ship floats lower in the water",
+          "say": "The ship floats lower in the water"
+        },
+        {
+          "show": "The buoyant force equals the weight",
+          "say": "The buoyant force equals the weight"
+        }
+      ],
+      "answer": 0,
+      "why": "With G above M, a small tilt produces a couple that rolls the ship further over.",
+      "wrong": {
+        "1": "Floating lower changes the draught but not by itself the stability.",
+        "2": "Buoyancy always equals weight for any floating ship, stable or not."
+      }
+    }
+  ]
+}

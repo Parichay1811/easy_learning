@@ -1,0 +1,255 @@
+{
+  "id": "CS-33",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Databases: ER & normalisation",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "database",
+    "er diagram",
+    "normalization",
+    "entity",
+    "key",
+    "1nf",
+    "2nf",
+    "3nf"
+  ],
+  "examples": [
+    "What is the difference between a primary key and a candidate key?",
+    "Can you show me an example of a relation that is in 1NF but not 2NF?",
+    "Why is it important to normalize a database?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning about database design concepts. We will look at entities, keys, and normalization forms.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Databases: ER & normalisation"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Entities represent real-world objects.",
+            "Keys uniquely identify records in a table.",
+            "Normalization reduces data redundancy."
+          ],
+          "at": "entities"
+        },
+        {
+          "op": "text",
+          "text": "Entities, Keys, Normal Forms",
+          "at": "entities"
+        }
+      ]
+    },
+    {
+      "say": "An entity is a thing we want to store information about. Think of a student or a course as an entity. We model these things in our database.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Entity: Student, Course",
+          "at": "entity"
+        }
+      ]
+    },
+    {
+      "say": "A key is a column that uniquely identifies every row. The primary key is the main identifier for an entity. It must always have a value.",
+      "draw": [
+        {
+          "op": "table",
+          "items": [
+            "ID | Name | Email",
+            "101 | Alice | a@school.edu"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Primary Key: Unique ID",
+          "at": "primary"
+        }
+      ]
+    },
+    {
+      "say": "First Normal Form means no repeating groups of data. Every cell in the table must hold only one single value. For example, do not list multiple phone numbers in one cell.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "1NF: No repeating groups",
+          "at": "repeating"
+        }
+      ]
+    },
+    {
+      "say": "Second Normal Form requires that all non-key attributes depend on the whole primary key. This means no partial dependencies exist. If you use a composite key, everything must rely on both parts.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "2NF: No partial dependencies",
+          "at": "partial"
+        }
+      ]
+    },
+    {
+      "say": "Third Normal Form means no transitive dependencies. Non-key attributes cannot depend on other non-key attributes. They must depend only on the primary key. For instance, a department name should not determine the department manager's phone number.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "3NF: No transitive dependencies",
+          "at": "transitive"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a primary key and a foreign key?",
+      "a": "A primary key uniquely identifies records within its own table. A foreign key in one table points to the primary key in another table, creating a link.",
+      "asks": [
+        "How do I link two tables?",
+        "What is a linking key?"
+      ]
+    },
+    {
+      "q": "If I remove redundancy, does that mean I lose data?",
+      "a": "No, normalization is about structuring data better, not losing it. It just means storing the same piece of information in only one place.",
+      "asks": [
+        "Is normalization dangerous?",
+        "Does it delete information?"
+      ]
+    },
+    {
+      "q": "When do I need to worry about 2NF versus 3NF?",
+      "a": "You need to check 2NF when your primary key is made up of two or more columns. You check 3NF when you have attributes depending on other attributes.",
+      "asks": [
+        "When is 3NF necessary?",
+        "What triggers the need for 2NF?"
+      ]
+    },
+    {
+      "q": "Is it possible for a database to be in 3NF but not in 2NF?",
+      "a": "No, this is impossible. If a database is in 3NF, it must automatically satisfy the requirements of 2NF and 1NF as well.",
+      "asks": [
+        "Does 3NF imply 2NF?",
+        "Which form is the strictest?"
+      ]
+    },
+    {
+      "q": "What is a composite key?",
+      "a": "A composite key is a primary key made up of two or more attributes combined together. For example, a combination of StudentID and CourseID might form the key.",
+      "asks": [
+        "What makes a key composite?",
+        "Can a key have multiple parts?"
+      ]
+    }
+  ],
+  "facts": [
+    "Entities represent real-world objects or concepts.",
+    "A primary key must contain unique values for every record.",
+    "1NF requires that all attributes contain atomic values.",
+    "2NF addresses partial dependencies on composite keys.",
+    "3NF eliminates transitive dependencies between non-key attributes."
+  ],
+  "quiz": [
+    {
+      "say": "A table has a primary key of {StudentID, CourseID} and includes StudentName, which only depends on StudentID. Which normal form is violated?",
+      "show": "Partial Dependency Violation",
+      "options": [
+        {
+          "show": "Third Normal Form (3NF)",
+          "say": "Third Normal Form (3NF)"
+        },
+        {
+          "show": "Fourth Normal Form (4NF)",
+          "say": "Fourth Normal Form (4NF)"
+        },
+        {
+          "show": "Second Normal Form (2NF)",
+          "say": "Second Normal Form (2NF)"
+        },
+        {
+          "show": "First Normal Form (1NF)",
+          "say": "First Normal Form (1NF)"
+        }
+      ],
+      "answer": 2,
+      "why": "Because StudentName depends only on StudentID, not the full key, it violates 2NF.",
+      "wrong": {
+        "0": "3NF deals with dependencies between non-key attributes, not partial key dependencies.",
+        "1": "4NF deals with multi-valued dependencies, which is a more advanced topic.",
+        "3": "1NF only concerns repeating groups, not partial key dependencies."
+      }
+    },
+    {
+      "say": "If an attribute depends on another non-key attribute, which normal form is violated?",
+      "show": "Transitive Dependency Violation",
+      "options": [
+        {
+          "show": "First Normal Form (1NF)",
+          "say": "First Normal Form (1NF)"
+        },
+        {
+          "show": "Second Normal Form (2NF)",
+          "say": "Second Normal Form (2NF)"
+        },
+        {
+          "show": "Boyce-Codd Normal Form (BCNF)",
+          "say": "Boyce-Codd Normal Form (BCNF)"
+        },
+        {
+          "show": "Third Normal Form (3NF)",
+          "say": "Third Normal Form (3NF)"
+        }
+      ],
+      "answer": 3,
+      "why": "3NF ensures that all non-key attributes depend directly on the primary key, not on other non-key attributes.",
+      "wrong": {
+        "0": "1NF only checks if every cell holds a single value.",
+        "1": "2NF checks for dependencies on only part of a composite key.",
+        "2": "BCNF is a stricter check, but 3NF is the primary concept being tested here."
+      }
+    },
+    {
+      "say": "Which concept requires that every column in a table must be atomic?",
+      "show": "Atomic Values Required",
+      "options": [
+        {
+          "show": "Second Normal Form (2NF)",
+          "say": "Second Normal Form (2NF)"
+        },
+        {
+          "show": "Third Normal Form (3NF)",
+          "say": "Third Normal Form (3NF)"
+        },
+        {
+          "show": "Entity Recognition",
+          "say": "Entity Recognition"
+        },
+        {
+          "show": "First Normal Form (1NF)",
+          "say": "First Normal Form (1NF)"
+        }
+      ],
+      "answer": 3,
+      "why": "1NF is the most basic requirement, ensuring that no cell contains multiple distinct pieces of data.",
+      "wrong": {
+        "0": "2NF is concerned with dependencies across multiple key parts.",
+        "1": "3NF is concerned with dependencies between non-key attributes.",
+        "2": "Entity recognition is about identifying the object, not the structure of the data within it."
+      }
+    }
+  ]
+}

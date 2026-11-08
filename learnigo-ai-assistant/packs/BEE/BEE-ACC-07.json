@@ -1,0 +1,343 @@
+{
+  "id": "BEE-ACC-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Real, reactive and apparent power: the AC power triangle and power factor",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "real power",
+    "reactive power",
+    "apparent power",
+    "power factor",
+    "power triangle",
+    "volt-ampere"
+  ],
+  "examples": [
+    "What is the difference between watts and VA?",
+    "What is reactive power?",
+    "How do I calculate power factor?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Mains",
+          "value": "230 V 50 Hz"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter",
+          "value": "10 A",
+          "ask": "What is apparent power?"
+        },
+        {
+          "kind": "motor",
+          "label": "Motor",
+          "value": "PF 0.8",
+          "ask": "Why does a motor's current lag the voltage?"
+        }
+      ],
+      "readouts": [
+        "S = 230 × 10 = 2300 VA",
+        "P = 1840 W",
+        "Q = 1380 var"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Picture a glass of lassi with froth on top. You pay for the whole glass, but only the liquid fills you up. AC power is similar. On the board, a motor in a Pune workshop runs on 230 volts and draws 10 amps. Is it using 2300 watts? Not quite. Let's split its power into three kinds.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Real, reactive and apparent power: the AC power triangle and power factor"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "10 A",
+              "ask": "What is apparent power?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "PF 0.8",
+              "ask": "Why does a motor's current lag the voltage?"
+            }
+          ],
+          "readouts": [
+            "S = 230 × 10 = 2300 VA",
+            "P = 1840 W",
+            "Q = 1380 var"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Volts times amps, 230 times 10, gives 2300 volt-amperes. This is apparent power, S, the size of the glass, and it decides how thick the cables must be. But the motor's current lags the voltage by about 37 degrees, because its coils need a magnetic field. Do you think all 2300 volt-amperes turn the shaft?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "10 A",
+              "ask": "What is apparent power?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "PF 0.8",
+              "ask": "Why does a motor's current lag the voltage?"
+            }
+          ],
+          "readouts": [
+            "S = 230 × 10 = 2300 VA",
+            "P = 1840 W",
+            "Q = 1380 var"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "S = V × I = 230 × 10 = 2300 VA"
+        }
+      ]
+    },
+    {
+      "say": "No. The part that does real work is real power, P, equal to V times I times the cosine of the phase angle. The cosine of 37 degrees is 0.8, so P is 2300 times 0.8, which is 1840 watts. That is what spins the shaft and shows on the energy meter. What is the rest doing?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "10 A",
+              "ask": "What is apparent power?"
+            },
+            {
+              "kind": "motor",
+              "label": "Motor",
+              "value": "PF 0.8",
+              "ask": "Why does a motor's current lag the voltage?"
+            }
+          ],
+          "readouts": [
+            "S = 230 × 10 = 2300 VA",
+            "P = 1840 W",
+            "Q = 1380 var"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "P = VI cos φ = 2300 × 0.8 = 1840 W"
+        }
+      ]
+    },
+    {
+      "say": "It sloshes back and forth. Reactive power, Q, equal to V times I times the sine of the angle, is energy that flows into the motor's magnetic field and back out again, a hundred times a second, doing no net work. The sine of 37 degrees is 0.6, so Q is 1380 volt-amperes reactive. Real points along, reactive points up. What shape do the three arrows make?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "motor",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "P = 1840 W",
+              "dir": 0,
+              "size": 4,
+              "ask": "What is real power?"
+            },
+            {
+              "label": "Q = 1380 var",
+              "dir": 90,
+              "size": 3,
+              "ask": "What is reactive power?"
+            },
+            {
+              "label": "S = 2300 VA",
+              "dir": 37,
+              "size": 5,
+              "ask": "What is power factor?"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Q = VI sin φ = 2300 × 0.6 = 1380 var"
+        }
+      ]
+    },
+    {
+      "say": "A right-angled triangle, the power triangle: 1840 squared plus 1380 squared equals 2300 squared. The ratio of real to apparent power, 0.8 here, is the power factor. Brilliant! Utilities dislike a low power factor, because the cables carry the full 10 amps while only 80 percent of the power does work. Challenge: find P for 230 volts, 5 amps and a power factor of 0.6.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "motor",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "P = 1840 W",
+              "dir": 0,
+              "size": 4,
+              "ask": "What is real power?"
+            },
+            {
+              "label": "Q = 1380 var",
+              "dir": 90,
+              "size": 3,
+              "ask": "What is reactive power?"
+            },
+            {
+              "label": "S = 2300 VA",
+              "dir": 37,
+              "size": 5,
+              "ask": "What is power factor?"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "S² = P² + Q²,   PF = P/S = cos φ = 0.8"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is real power?",
+      "a": "Real power, P, is the average power that actually does work or makes heat, measured in watts. It equals V times I times the power factor.",
+      "asks": [
+        "What is active power?",
+        "Define real power in AC"
+      ]
+    },
+    {
+      "q": "What is reactive power?",
+      "a": "Reactive power, Q, is energy that surges into magnetic or electric fields and back each cycle, doing no net work. It is measured in volt-amperes reactive, var.",
+      "asks": [
+        "What is var?",
+        "Why does a motor need reactive power?"
+      ]
+    },
+    {
+      "q": "What is apparent power?",
+      "a": "Apparent power, S, is simply RMS volts times RMS amps, measured in volt-amperes. It sets the current that cables, transformers and generators must carry.",
+      "asks": [
+        "What is VA?",
+        "Difference between VA and watts"
+      ]
+    },
+    {
+      "q": "What is power factor?",
+      "a": "Power factor is real power divided by apparent power. For sine waves it equals the cosine of the angle between voltage and current, from 0 to 1.",
+      "asks": [
+        "Define power factor",
+        "What does PF 0.8 lagging mean?"
+      ]
+    },
+    {
+      "q": "Why does a motor's current lag the voltage?",
+      "a": "A motor's windings are inductive: they need current to build their magnetic field, and an inductor's current lags its voltage. So motors usually have a lagging power factor.",
+      "asks": [
+        "Why do motors have a low power factor?"
+      ]
+    }
+  ],
+  "facts": [
+    "Reactive power is measured in volt-amperes reactive, written var.",
+    "A purely resistive load, such as a kettle, has a power factor of 1."
+  ],
+  "quiz": [
+    {
+      "say": "A load draws 5 amps from 230 volts at a power factor of 0.6. What is its real power?",
+      "show": "A load draws 5 A from 230 V at power factor 0.6. What is its real power?",
+      "options": [
+        {
+          "show": "690 W",
+          "say": "690 watts"
+        },
+        {
+          "show": "1150 W",
+          "say": "1150 watts"
+        },
+        {
+          "show": "920 W",
+          "say": "920 watts"
+        }
+      ],
+      "answer": 0,
+      "why": "P is V times I times the power factor: 230 times 5 times 0.6, which is 690 watts.",
+      "wrong": {
+        "1": "1150 is the apparent power in volt-amperes, before the power factor.",
+        "2": "That uses 0.8 instead of the given power factor of 0.6."
+      }
+    },
+    {
+      "say": "What does an ordinary home energy meter bill you for?",
+      "show": "What does an ordinary home energy meter bill you for?",
+      "options": [
+        {
+          "show": "Real energy, in kWh",
+          "say": "Real energy, in kWh"
+        },
+        {
+          "show": "Apparent power",
+          "say": "Apparent power"
+        },
+        {
+          "show": "Reactive power",
+          "say": "Reactive power"
+        }
+      ],
+      "answer": 0,
+      "why": "Home meters measure real energy, the watts that do work, added up over time in kilowatt-hours.",
+      "wrong": {
+        "1": "Apparent power matters to the utility, but homes are billed for real energy.",
+        "2": "Reactive power is charged only to some large industrial users."
+      }
+    }
+  ]
+}

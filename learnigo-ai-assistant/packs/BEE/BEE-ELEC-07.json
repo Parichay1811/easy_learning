@@ -1,0 +1,495 @@
+{
+  "id": "BEE-ELEC-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The MOSFET as a switch and an amplifier: voltage on the gate, current in the channel",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "MOSFET",
+    "threshold voltage",
+    "gate voltage",
+    "R_DS(on)",
+    "transconductance"
+  ],
+  "examples": [
+    "How does a MOSFET work as a switch?",
+    "What is the threshold voltage of a MOSFET?",
+    "How does a MOSFET amplify?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "layout": "transistor",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Supply",
+          "value": "12 V"
+        },
+        {
+          "kind": "led",
+          "label": "LED strip",
+          "value": "12 W",
+          "ask": "What is R_DS(on)?"
+        },
+        {
+          "kind": "nmos",
+          "label": "N-channel MOSFET",
+          "value": "Gate 5 V",
+          "ask": "How does a MOSFET work?"
+        },
+        {
+          "kind": "resistor",
+          "label": "Gate resistor",
+          "value": "100 Ω"
+        },
+        {
+          "kind": "cell",
+          "label": "Microcontroller pin",
+          "value": "5 V"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter",
+          "value": "1 A"
+        }
+      ],
+      "readouts": [
+        "Gate 5 V: ON",
+        "R_DS(on) = 0.05 Ω",
+        "Loss = I²R = 0.05 W"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your phone's processor holds billions of tiny switches called MOSFETs, first demonstrated at Bell Labs in 1959 by Mohamed Atalla and Dawon Kahng. On the board, a 5 volt pin from a microcontroller drives the gate of a MOSFET through a 100 ohm resistor, and the MOSFET switches a 12 volt, 12 watt LED strip.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The MOSFET as a switch and an amplifier: voltage on the gate, current in the channel"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "transistor",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "12 V"
+            },
+            {
+              "kind": "led",
+              "label": "LED strip",
+              "value": "12 W",
+              "ask": "What is R_DS(on)?"
+            },
+            {
+              "kind": "nmos",
+              "label": "N-channel MOSFET",
+              "value": "Gate 5 V",
+              "ask": "How does a MOSFET work?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Gate resistor",
+              "value": "100 Ω"
+            },
+            {
+              "kind": "cell",
+              "label": "Microcontroller pin",
+              "value": "5 V"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "1 A"
+            }
+          ],
+          "readouts": [
+            "Gate 5 V: ON",
+            "R_DS(on) = 0.05 Ω",
+            "Loss = I²R = 0.05 W"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First, gate at 0 volts: the strip is dark. The gate is insulated from the silicon by a thin layer of glass, silicon dioxide, so no steady current flows into it. Instead its voltage pulls electrons up to form a channel between the source and the drain. With too little gate voltage there is no channel at all. So what controls a MOSFET, current or voltage?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "transistor",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "12 V"
+            },
+            {
+              "kind": "led",
+              "label": "LED strip",
+              "value": "12 W",
+              "ask": "What is R_DS(on)?"
+            },
+            {
+              "kind": "nmos",
+              "label": "N-channel MOSFET",
+              "value": "Gate 0 V",
+              "ask": "Why does a MOSFET gate draw no current?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Gate resistor",
+              "value": "100 Ω"
+            },
+            {
+              "kind": "cell",
+              "label": "Microcontroller pin",
+              "value": "0 V"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "0 A"
+            }
+          ],
+          "readouts": [
+            "Gate 0 V: OFF",
+            "No channel, I = 0 A"
+          ],
+          "flow": false,
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "A MOSFET is voltage-controlled; a BJT is current-controlled."
+        }
+      ]
+    },
+    {
+      "say": "Voltage. Above the threshold, about 2 volts here, the channel forms, and with 5 volts on the gate it is wide open, a resistance of just 0.05 ohms. The strip draws 12 watts over 12 volts, which is 1 amp, and the MOSFET wastes only I squared R, 0.05 watts, barely warm. Why does such a low on-resistance matter?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "transistor",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "12 V"
+            },
+            {
+              "kind": "led",
+              "label": "LED strip",
+              "value": "12 W",
+              "ask": "What is R_DS(on)?"
+            },
+            {
+              "kind": "nmos",
+              "label": "N-channel MOSFET",
+              "value": "Gate 5 V",
+              "ask": "How does a MOSFET work?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Gate resistor",
+              "value": "100 Ω"
+            },
+            {
+              "kind": "cell",
+              "label": "Microcontroller pin",
+              "value": "5 V"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "1 A"
+            }
+          ],
+          "readouts": [
+            "Gate 5 V: ON",
+            "R_DS(on) = 0.05 Ω",
+            "Loss = I²R = 0.05 W"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "P_loss = I² R_DS(on) = 1² × 0.05 = 0.05 W"
+        }
+      ]
+    },
+    {
+      "say": "Less heat and less waste. Between off and fully on, the MOSFET is an amplifier. In its saturation region the drain current follows a square law: k times V GS minus the threshold, squared. With k of 0.5 milliamps per volt squared, a gate at 4 volts gives 0.5 times 2 squared, which is 2 milliamps. If the gate rises to 5 volts, what is the drain current?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "V_GS (V)",
+            "max": 6
+          },
+          "y": {
+            "label": "I_D (mA)",
+            "max": 8
+          },
+          "curves": [
+            {
+              "label": "Drain current",
+              "type": "points",
+              "smooth": true,
+              "ask": "What is transconductance?",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  2.5,
+                  0.125
+                ],
+                [
+                  3,
+                  0.5
+                ],
+                [
+                  3.5,
+                  1.125
+                ],
+                [
+                  4,
+                  2
+                ],
+                [
+                  4.5,
+                  3.125
+                ],
+                [
+                  5,
+                  4.5
+                ],
+                [
+                  5.5,
+                  6.125
+                ],
+                [
+                  6,
+                  8
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 2,
+              "label": "Threshold 2 V"
+            },
+            {
+              "x": 4,
+              "label": "Q-point, 2 mA"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "I_D = k(V_GS − V_th)² = 0.5 × (4 − 2)² = 2 mA"
+        }
+      ]
+    },
+    {
+      "say": "4.5 milliamps. The slope of this curve is the transconductance, g m, equal to 2 k times V GS minus the threshold: 2 milliamps per volt at our 4 volt point. Put a 5 kilohm resistor in the drain and a small gate wobble comes out 10 times bigger. Superb! Challenge: what is the gain with a 10 kilohm drain resistor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "V_GS (V)",
+            "max": 6
+          },
+          "y": {
+            "label": "I_D (mA)",
+            "max": 8
+          },
+          "curves": [
+            {
+              "label": "Drain current",
+              "type": "points",
+              "smooth": true,
+              "ask": "What is transconductance?",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  0
+                ],
+                [
+                  2.5,
+                  0.125
+                ],
+                [
+                  3,
+                  0.5
+                ],
+                [
+                  3.5,
+                  1.125
+                ],
+                [
+                  4,
+                  2
+                ],
+                [
+                  4.5,
+                  3.125
+                ],
+                [
+                  5,
+                  4.5
+                ],
+                [
+                  5.5,
+                  6.125
+                ],
+                [
+                  6,
+                  8
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 2,
+              "label": "Threshold 2 V"
+            },
+            {
+              "x": 4,
+              "label": "Q-point, 2 mA"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "g_m = 2k(V_GS − V_th) = 2 mA/V;  A_v = g_m R_D = 10"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a MOSFET work?",
+      "a": "Voltage on the insulated gate attracts carriers to form a conducting channel between source and drain. Above the threshold voltage, more gate voltage means a wider channel and more current.",
+      "asks": [
+        "What is a MOSFET?",
+        "How does a MOSFET switch on?"
+      ]
+    },
+    {
+      "q": "Why does a MOSFET gate draw no current?",
+      "a": "The gate is separated from the channel by a thin insulating layer of silicon dioxide, so it acts like a tiny capacitor. Current flows only briefly to charge it.",
+      "asks": [
+        "Is a MOSFET voltage controlled?"
+      ]
+    },
+    {
+      "q": "What is the threshold voltage?",
+      "a": "The gate-to-source voltage at which the channel starts to form and drain current begins to flow, about 2 volts in this example.",
+      "asks": [
+        "What is Vth of a MOSFET?"
+      ]
+    },
+    {
+      "q": "What is R_DS(on)?",
+      "a": "The drain-to-source resistance when the MOSFET is fully switched on. Power MOSFETs reach a few milliohms, so as switches they waste very little heat.",
+      "asks": [
+        "Why do MOSFETs run cool as switches?"
+      ]
+    },
+    {
+      "q": "What is transconductance?",
+      "a": "Transconductance, g m, is how much the drain current changes per volt of gate voltage, the slope of the transfer curve. The voltage gain is roughly g m times the drain resistance.",
+      "asks": [
+        "How does a MOSFET amplify?"
+      ]
+    }
+  ],
+  "facts": [
+    "Mohamed Atalla and Dawon Kahng demonstrated the first MOSFET at Bell Labs in 1959.",
+    "The MOSFET is the most widely manufactured electronic device in history."
+  ],
+  "quiz": [
+    {
+      "say": "A MOSFET with an on-resistance of 0.02 ohms carries 5 amps. What power does it waste?",
+      "show": "A MOSFET with R_DS(on) = 0.02 Ω carries 5 A. What power does it waste?",
+      "options": [
+        {
+          "show": "0.5 W",
+          "say": "0.5 watts"
+        },
+        {
+          "show": "0.1 W",
+          "say": "0.1 watts"
+        },
+        {
+          "show": "2.5 W",
+          "say": "2.5 watts"
+        }
+      ],
+      "answer": 0,
+      "why": "P is I squared R: 25 times 0.02, which is 0.5 watts.",
+      "wrong": {
+        "1": "That multiplies I by R without squaring the current.",
+        "2": "That slips a factor of five; square the 5 amps to get 25."
+      }
+    },
+    {
+      "say": "Compared with a BJT's base, how much steady current does a MOSFET's gate draw?",
+      "show": "Compared with a BJT's base, a MOSFET's gate draws...",
+      "options": [
+        {
+          "show": "Almost no steady current",
+          "say": "Almost no steady current"
+        },
+        {
+          "show": "Much more current",
+          "say": "Much more current"
+        },
+        {
+          "show": "Exactly the same current",
+          "say": "Exactly the same current"
+        }
+      ],
+      "answer": 0,
+      "why": "The gate is insulated by silicon dioxide, so only tiny charging currents flow.",
+      "wrong": {
+        "1": "It is the BJT that needs a steady base current.",
+        "2": "The two devices are controlled differently: current for the BJT, voltage for the MOSFET."
+      }
+    }
+  ]
+}

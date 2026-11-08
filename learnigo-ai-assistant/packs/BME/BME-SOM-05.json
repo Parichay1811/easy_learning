@@ -1,0 +1,332 @@
+{
+  "id": "BME-SOM-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Thermal stress: what happens when a heated rail cannot expand",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-SOM — Mechanics of materials",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "thermal stress",
+    "coefficient of thermal expansion",
+    "expansion joint",
+    "rail buckling",
+    "restrained expansion"
+  ],
+  "examples": [
+    "How do I calculate thermal stress?",
+    "Why do railway tracks buckle in hot weather?",
+    "Why do bridges have expansion joints?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Temperature rise (°C)",
+        "max": 50
+      },
+      "y": {
+        "label": "Stress (MPa)",
+        "max": 120
+      },
+      "curves": [
+        {
+          "label": "Steel rail",
+          "type": "line",
+          "k": 2.4,
+          "ask": "How do I calculate thermal stress?"
+        },
+        {
+          "label": "Aluminium bar",
+          "type": "line",
+          "k": 1.587
+        }
+      ],
+      "marks": [
+        {
+          "x": 40,
+          "label": "96 MPa"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "During the July 2022 heatwave, rails in Britain buckled into sideways kinks, and trains were slowed or stopped. Steel grows when it warms. If something stops it growing, a huge stress builds up. Look at a rail held between two fixed ends: they push back hard on it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Thermal stress: what happens when a heated rail cannot expand"
+        },
+        {
+          "name": "x-forces",
+          "object": "train",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "End push 96 MPa",
+              "dir": "right",
+              "size": 4,
+              "ask": "Why does the end push grow so large?"
+            },
+            {
+              "label": "End push 96 MPa",
+              "dir": "left",
+              "size": 4,
+              "ask": "Why does the end push grow so large?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Steel rail, ends held, warmed by 40 °C"
+        }
+      ]
+    },
+    {
+      "say": "First imagine the rail is free. Steel expands by about 12 millionths of its length for every degree, its coefficient of thermal expansion, alpha. A 25 metre rail warmed by 40 degrees would grow 12 millionths times 40 times 25 thousand millimetres, about 12 millimetres. Would you have guessed that much?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "train",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "End push 96 MPa",
+              "dir": "right",
+              "size": 4,
+              "ask": "Why does the end push grow so large?"
+            },
+            {
+              "label": "End push 96 MPa",
+              "dir": "left",
+              "size": 4,
+              "ask": "Why does the end push grow so large?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ = α ΔT L = 12×10⁻⁶ × 40 × 25 000 = 12 mm"
+        }
+      ]
+    },
+    {
+      "say": "Now the ends hold it, so the rail must be squashed back by exactly that strain. The stress is E times alpha times delta T: 200 thousand megapascals times 12 millionths times 40, which is 96 megapascals of compression. Notice the length cancels out! See the line on the graph reach 96 at 40 degrees?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Temperature rise (°C)",
+            "max": 50
+          },
+          "y": {
+            "label": "Stress (MPa)",
+            "max": 120
+          },
+          "curves": [
+            {
+              "label": "Steel rail",
+              "type": "line",
+              "k": 2.4,
+              "ask": "How do I calculate thermal stress?"
+            },
+            {
+              "label": "Aluminium bar",
+              "type": "line",
+              "k": 1.587
+            }
+          ],
+          "marks": [
+            {
+              "x": 40,
+              "label": "96 MPa"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "σ = E α ΔT = 200 000 × 12×10⁻⁶ × 40 = 96 MPa"
+        }
+      ]
+    },
+    {
+      "say": "The stress grows in a straight line with temperature. Aluminium expands twice as much but has a third of the stiffness, so its line is lower, about 1.6 megapascals per degree. See the second line? Rails are long and slender, so this compression can make them buckle sideways. Which matters for stress, the rail's length or its temperature rise?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Temperature rise (°C)",
+            "max": 50
+          },
+          "y": {
+            "label": "Stress (MPa)",
+            "max": 120
+          },
+          "curves": [
+            {
+              "label": "Steel rail",
+              "type": "line",
+              "k": 2.4,
+              "ask": "How do I calculate thermal stress?"
+            },
+            {
+              "label": "Aluminium bar",
+              "type": "line",
+              "k": 1.587
+            }
+          ],
+          "marks": [
+            {
+              "x": 40,
+              "label": "96 MPa"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Aluminium: 69 000 × 23×10⁻⁶ = 1.6 MPa per °C"
+        }
+      ]
+    },
+    {
+      "say": "Only the temperature rise! Fantastic. Real link: bridges have expansion joints and old rails had small gaps that clicked under the wheels. Modern welded rail is stretched when laid so it is stress-free at a warm neutral temperature. Exam tip: if the ends can move a little, subtract that gap from the free expansion first. Challenge: what stress at 60 degrees?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "train",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "End push 96 MPa",
+              "dir": "right",
+              "size": 4,
+              "ask": "Why does the end push grow so large?"
+            },
+            {
+              "label": "End push 96 MPa",
+              "dir": "left",
+              "size": 4,
+              "ask": "Why does the end push grow so large?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Tip: allowed movement reduces the restrained strain"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I calculate thermal stress?",
+      "a": "For a bar fully held at both ends, the stress is E times alpha times the temperature change. Heating gives compression; cooling gives tension.",
+      "asks": [
+        "thermal stress formula",
+        "what is the stress in a heated steel rail"
+      ]
+    },
+    {
+      "q": "Why does the end push grow so large?",
+      "a": "Steel is very stiff, so squeezing it back even 0.05 percent needs a big stress. The supports must provide that force on the bar ends.",
+      "asks": [
+        "why are thermal forces big"
+      ]
+    },
+    {
+      "q": "Why do railway tracks buckle in hot weather?",
+      "a": "Welded rails cannot expand freely, so heat builds up compressive stress. If the stress gets too high, the long slender rail buckles sideways.",
+      "asks": [
+        "rail buckling heatwave"
+      ]
+    },
+    {
+      "q": "Why do bridges have expansion joints?",
+      "a": "They let the deck grow and shrink with temperature so large thermal stresses do not build up in the structure.",
+      "asks": [
+        "purpose of expansion joint"
+      ]
+    },
+    {
+      "q": "Does the length of the bar change the thermal stress?",
+      "a": "No. A longer bar would grow more, but the strain is the same, so the restrained stress is the same. Length matters only for the free expansion and for buckling.",
+      "asks": [
+        "thermal stress independent of length"
+      ]
+    }
+  ],
+  "facts": [
+    "The coefficient of thermal expansion of steel is about 12 millionths per degree Celsius.",
+    "A fully restrained bar under a temperature change develops a stress of E times alpha times delta T."
+  ],
+  "quiz": [
+    {
+      "say": "A steel bar with both ends fixed is heated by 25 degrees. E is 200 gigapascals and alpha is 12 millionths per degree. What is the stress?",
+      "show": "Fixed steel bar heated by 25 °C. E = 200 GPa, α = 12×10⁻⁶ /°C. Stress?",
+      "options": [
+        {
+          "show": "60 MPa compression",
+          "say": "60 megapascals compression"
+        },
+        {
+          "show": "60 MPa tension",
+          "say": "60 megapascals tension"
+        },
+        {
+          "show": "600 MPa compression",
+          "say": "600 megapascals compression"
+        }
+      ],
+      "answer": 0,
+      "why": "σ = 200 000 × 12×10⁻⁶ × 25 = 60 MPa; heating a held bar squashes it.",
+      "wrong": {
+        "1": "Heating a restrained bar gives compression; cooling gives tension.",
+        "2": "That is ten times too large; check the powers of ten."
+      }
+    },
+    {
+      "say": "A restrained bar is twice as long as another of the same steel. For the same heating, its thermal stress is…",
+      "show": "Two fixed steel bars, one twice as long, same heating. The longer one's stress is…",
+      "options": [
+        {
+          "show": "The same",
+          "say": "The same"
+        },
+        {
+          "show": "Twice as big",
+          "say": "Twice as big"
+        },
+        {
+          "show": "Half as big",
+          "say": "Half as big"
+        }
+      ],
+      "answer": 0,
+      "why": "Thermal stress is E α ΔT; length does not appear.",
+      "wrong": {
+        "1": "It would expand twice as much if free, but the strain is the same.",
+        "2": "Length does not reduce the restrained strain."
+      }
+    }
+  ]
+}

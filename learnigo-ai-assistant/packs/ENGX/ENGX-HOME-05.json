@@ -1,0 +1,526 @@
+{
+  "id": "ENGX-HOME-05",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an induction hob heats only the pan",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "induction hob",
+    "induction cooking",
+    "eddy currents",
+    "magnetic field",
+    "induction pan"
+  ],
+  "examples": [
+    "How does an induction hob work?",
+    "Why does an induction hob stay cool?",
+    "Why do some pans not work on induction?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "mains",
+          "kind": "battery",
+          "x": 0.1,
+          "y": 0.75,
+          "size": 0.8,
+          "label": "Mains power",
+          "motion": "none"
+        },
+        {
+          "id": "elec",
+          "kind": "box",
+          "x": 0.32,
+          "y": 0.75,
+          "size": 0.9,
+          "label": "Electronics",
+          "motion": "pulse"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.58,
+          "y": 0.75,
+          "size": 1.3,
+          "label": "Copper coil",
+          "motion": "pulse",
+          "ask": "How does an induction hob work?"
+        },
+        {
+          "id": "field",
+          "kind": "magnet",
+          "x": 0.58,
+          "y": 0.45,
+          "size": 0.9,
+          "label": "Changing field",
+          "motion": "pulse"
+        },
+        {
+          "id": "pan",
+          "kind": "box",
+          "x": 0.58,
+          "y": 0.15,
+          "size": 1.3,
+          "label": "Iron pan base",
+          "motion": "pulse",
+          "ask": "Why do some pans not work on induction?"
+        },
+        {
+          "id": "glass",
+          "kind": "box",
+          "x": 0.88,
+          "y": 0.45,
+          "size": 0.8,
+          "label": "Glass top",
+          "motion": "none",
+          "ask": "Why does an induction hob stay cool?"
+        }
+      ],
+      "links": [
+        {
+          "from": "mains",
+          "to": "elec",
+          "kind": "power"
+        },
+        {
+          "from": "elec",
+          "to": "coil",
+          "kind": "power",
+          "label": "fast AC"
+        },
+        {
+          "from": "coil",
+          "to": "field",
+          "kind": "energy"
+        },
+        {
+          "from": "field",
+          "to": "pan",
+          "kind": "energy",
+          "label": "induces currents"
+        },
+        {
+          "from": "pan",
+          "to": "glass",
+          "kind": "heat",
+          "label": "only from the pan"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Under the glass of an induction hob is a flat coil of copper wire. Electronics send a rapidly alternating current through it, tens of thousands of times a second.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an induction hob heats only the pan"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mains",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Mains power",
+              "motion": "none"
+            },
+            {
+              "id": "elec",
+              "kind": "box",
+              "x": 0.32,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Electronics",
+              "motion": "pulse"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.58,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Copper coil",
+              "motion": "pulse",
+              "ask": "How does an induction hob work?"
+            },
+            {
+              "id": "field",
+              "kind": "magnet",
+              "x": 0.58,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Changing field",
+              "motion": "pulse"
+            },
+            {
+              "id": "pan",
+              "kind": "box",
+              "x": 0.58,
+              "y": 0.15,
+              "size": 1.3,
+              "label": "Iron pan base",
+              "motion": "pulse",
+              "ask": "Why do some pans not work on induction?"
+            },
+            {
+              "id": "glass",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Glass top",
+              "motion": "none",
+              "ask": "Why does an induction hob stay cool?"
+            }
+          ],
+          "links": [
+            {
+              "from": "mains",
+              "to": "elec",
+              "kind": "power"
+            },
+            {
+              "from": "elec",
+              "to": "coil",
+              "kind": "power",
+              "label": "fast AC"
+            },
+            {
+              "from": "coil",
+              "to": "field",
+              "kind": "energy"
+            },
+            {
+              "from": "field",
+              "to": "pan",
+              "kind": "energy",
+              "label": "induces currents"
+            },
+            {
+              "from": "pan",
+              "to": "glass",
+              "kind": "heat",
+              "label": "only from the pan"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "That current makes a magnetic field that keeps flipping direction, and it passes straight through the glass.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mains",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Mains power",
+              "motion": "none"
+            },
+            {
+              "id": "elec",
+              "kind": "box",
+              "x": 0.32,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Electronics",
+              "motion": "pulse"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.58,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Copper coil",
+              "motion": "pulse",
+              "ask": "How does an induction hob work?"
+            },
+            {
+              "id": "field",
+              "kind": "magnet",
+              "x": 0.58,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Changing field",
+              "motion": "pulse"
+            },
+            {
+              "id": "pan",
+              "kind": "box",
+              "x": 0.58,
+              "y": 0.15,
+              "size": 1.3,
+              "label": "Iron pan base",
+              "motion": "pulse",
+              "ask": "Why do some pans not work on induction?"
+            },
+            {
+              "id": "glass",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Glass top",
+              "motion": "none",
+              "ask": "Why does an induction hob stay cool?"
+            }
+          ],
+          "links": [
+            {
+              "from": "mains",
+              "to": "elec",
+              "kind": "power"
+            },
+            {
+              "from": "elec",
+              "to": "coil",
+              "kind": "power",
+              "label": "fast AC"
+            },
+            {
+              "from": "coil",
+              "to": "field",
+              "kind": "energy"
+            },
+            {
+              "from": "field",
+              "to": "pan",
+              "kind": "energy",
+              "label": "induces currents"
+            },
+            {
+              "from": "pan",
+              "to": "glass",
+              "kind": "heat",
+              "label": "only from the pan"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "In the base of an iron or steel pan, the flipping field drives swirling electric currents called eddy currents. They heat the metal itself, so the pan becomes the heater.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "mains",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.75,
+              "size": 0.8,
+              "label": "Mains power",
+              "motion": "none"
+            },
+            {
+              "id": "elec",
+              "kind": "box",
+              "x": 0.32,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Electronics",
+              "motion": "pulse"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.58,
+              "y": 0.75,
+              "size": 1.3,
+              "label": "Copper coil",
+              "motion": "pulse",
+              "ask": "How does an induction hob work?"
+            },
+            {
+              "id": "field",
+              "kind": "magnet",
+              "x": 0.58,
+              "y": 0.45,
+              "size": 0.9,
+              "label": "Changing field",
+              "motion": "pulse"
+            },
+            {
+              "id": "pan",
+              "kind": "box",
+              "x": 0.58,
+              "y": 0.15,
+              "size": 1.3,
+              "label": "Iron pan base",
+              "motion": "pulse",
+              "ask": "Why do some pans not work on induction?"
+            },
+            {
+              "id": "glass",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.45,
+              "size": 0.8,
+              "label": "Glass top",
+              "motion": "none",
+              "ask": "Why does an induction hob stay cool?"
+            }
+          ],
+          "links": [
+            {
+              "from": "mains",
+              "to": "elec",
+              "kind": "power"
+            },
+            {
+              "from": "elec",
+              "to": "coil",
+              "kind": "power",
+              "label": "fast AC"
+            },
+            {
+              "from": "coil",
+              "to": "field",
+              "kind": "energy"
+            },
+            {
+              "from": "field",
+              "to": "pan",
+              "kind": "energy",
+              "label": "induces currents"
+            },
+            {
+              "from": "pan",
+              "to": "glass",
+              "kind": "heat",
+              "label": "only from the pan"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Because the heat starts in the pan, very little is wasted: about 85 percent of the energy ends up in the food, much more than with gas.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-energy",
+          "input": {
+            "label": "Electricity",
+            "amount": 100
+          },
+          "outputs": [
+            {
+              "label": "Heat in the pan",
+              "amount": 85,
+              "useful": true
+            },
+            {
+              "label": "Heat lost to air",
+              "amount": 12,
+              "useful": false
+            },
+            {
+              "label": "Electronics and hum",
+              "amount": 3,
+              "useful": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does an induction hob work?",
+      "a": "A coil under the glass makes a rapidly changing magnetic field. It induces swirling currents in the base of a magnetic pan, and those currents heat the pan directly.",
+      "asks": [
+        "What is induction cooking?"
+      ]
+    },
+    {
+      "q": "Why does an induction hob stay cool?",
+      "a": "The glass itself is not heated by the coil. It only gets warm from the hot pan sitting on it, and cools quickly when the pan is removed.",
+      "asks": [
+        "Can you touch an induction hob?"
+      ]
+    },
+    {
+      "q": "Why do some pans not work on induction?",
+      "a": "The pan base must be magnetic, like iron or most steels. Aluminium, copper and glass pans do not heat well unless they have a magnetic plate in the base. If a fridge magnet sticks, it will work.",
+      "asks": [
+        "How do I know if a pan is induction compatible?"
+      ]
+    },
+    {
+      "q": "Why is induction so fast?",
+      "a": "The heat is made directly in the pan instead of in a flame or hot plate that must first warm up and then pass heat across, so less is lost on the way.",
+      "asks": [
+        "Is induction faster than gas?"
+      ]
+    },
+    {
+      "q": "Why does an induction hob buzz?",
+      "a": "The fast-changing magnetic field makes the pan and its layers vibrate slightly, which can cause a hum or buzz, especially on high power.",
+      "asks": [
+        "Why is my induction pan humming?"
+      ]
+    }
+  ],
+  "facts": [
+    "Induction hobs transfer roughly 85 percent of their energy into the pan, compared with about 40 percent for a gas flame.",
+    "Induction only heats pans with a magnetic base, such as cast iron or magnetic stainless steel."
+  ],
+  "quiz": [
+    {
+      "say": "Which pan will heat up on an induction hob?",
+      "show": "Which pan will heat up on an induction hob?",
+      "options": [
+        {
+          "show": "A cast iron pan",
+          "say": "A cast iron pan"
+        },
+        {
+          "show": "A glass dish",
+          "say": "A glass dish"
+        },
+        {
+          "show": "A plain aluminium pan",
+          "say": "A plain aluminium pan"
+        }
+      ],
+      "answer": 0,
+      "why": "Cast iron is magnetic, so the changing field drives strong currents that heat it.",
+      "wrong": {
+        "1": "Glass does not conduct electricity, so no currents flow in it.",
+        "2": "Plain aluminium is not magnetic and heats poorly unless it has a steel base plate."
+      }
+    }
+  ]
+}

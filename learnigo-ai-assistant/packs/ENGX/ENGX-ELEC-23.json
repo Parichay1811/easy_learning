@@ -1,0 +1,739 @@
+{
+  "id": "ENGX-ELEC-23",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a relay lets a small current switch a big one",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "relay",
+    "armature",
+    "relay coil",
+    "switching high current",
+    "relay click"
+  ],
+  "examples": [
+    "What does a relay do?",
+    "Why does my car click when I start it?",
+    "How can a small switch control a big motor?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "small",
+          "kind": "battery",
+          "x": 0.1,
+          "y": 0.28,
+          "size": 0.8,
+          "label": "Small battery"
+        },
+        {
+          "id": "sw",
+          "kind": "lever",
+          "x": 0.3,
+          "y": 0.1,
+          "size": 0.8,
+          "label": "Control switch",
+          "motion": "swing"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.48,
+          "y": 0.32,
+          "size": 1.1,
+          "label": "Relay coil",
+          "motion": "pulse",
+          "ask": "What does the coil in a relay do?"
+        },
+        {
+          "id": "arm",
+          "kind": "lever",
+          "x": 0.7,
+          "y": 0.32,
+          "size": 1,
+          "label": "Armature",
+          "motion": "swing",
+          "ask": "What is the armature in a relay?"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.9,
+          "y": 0.12,
+          "size": 0.7,
+          "label": "Return spring",
+          "motion": "slide",
+          "ask": "Why does a relay have a spring?"
+        },
+        {
+          "id": "contacts",
+          "kind": "box",
+          "x": 0.7,
+          "y": 0.62,
+          "size": 0.9,
+          "label": "Switch contacts",
+          "ask": "Why are the two circuits in a relay kept separate?"
+        },
+        {
+          "id": "big",
+          "kind": "battery",
+          "x": 0.22,
+          "y": 0.82,
+          "size": 1.2,
+          "label": "Big power supply"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.88,
+          "y": 0.85,
+          "size": 1.2,
+          "label": "Big motor",
+          "motion": "spin",
+          "ask": "Where are relays used?"
+        }
+      ],
+      "links": [
+        {
+          "from": "small",
+          "to": "sw",
+          "kind": "power"
+        },
+        {
+          "from": "sw",
+          "to": "coil",
+          "kind": "power",
+          "label": "Small current"
+        },
+        {
+          "from": "coil",
+          "to": "arm",
+          "kind": "force",
+          "label": "Magnetic pull"
+        },
+        {
+          "from": "spring",
+          "to": "arm",
+          "kind": "force",
+          "label": "Pulls back"
+        },
+        {
+          "from": "arm",
+          "to": "contacts",
+          "kind": "force",
+          "label": "Closes"
+        },
+        {
+          "from": "big",
+          "to": "contacts",
+          "kind": "power",
+          "label": "Big current"
+        },
+        {
+          "from": "contacts",
+          "to": "motor",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A relay is a switch worked by an electromagnet. A small, safe current in one circuit switches on a big current in another.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a relay lets a small current switch a big one"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "small",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Small battery"
+            },
+            {
+              "id": "sw",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Control switch",
+              "motion": "swing"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.48,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Relay coil",
+              "motion": "pulse",
+              "ask": "What does the coil in a relay do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.7,
+              "y": 0.32,
+              "size": 1,
+              "label": "Armature",
+              "motion": "swing",
+              "ask": "What is the armature in a relay?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Return spring",
+              "motion": "slide",
+              "ask": "Why does a relay have a spring?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Switch contacts",
+              "ask": "Why are the two circuits in a relay kept separate?"
+            },
+            {
+              "id": "big",
+              "kind": "battery",
+              "x": 0.22,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Big power supply"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Big motor",
+              "motion": "spin",
+              "ask": "Where are relays used?"
+            }
+          ],
+          "links": [
+            {
+              "from": "small",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "coil",
+              "kind": "power",
+              "label": "Small current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "spring",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls back"
+            },
+            {
+              "from": "arm",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Closes"
+            },
+            {
+              "from": "big",
+              "to": "contacts",
+              "kind": "power",
+              "label": "Big current"
+            },
+            {
+              "from": "contacts",
+              "to": "motor",
+              "kind": "power"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Closing the control switch sends a small current through the relay coil, turning it into an electromagnet.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "small",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Small battery"
+            },
+            {
+              "id": "sw",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Control switch",
+              "motion": "swing"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.48,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Relay coil",
+              "motion": "pulse",
+              "ask": "What does the coil in a relay do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.7,
+              "y": 0.32,
+              "size": 1,
+              "label": "Armature",
+              "motion": "swing",
+              "ask": "What is the armature in a relay?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Return spring",
+              "motion": "slide",
+              "ask": "Why does a relay have a spring?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Switch contacts",
+              "ask": "Why are the two circuits in a relay kept separate?"
+            },
+            {
+              "id": "big",
+              "kind": "battery",
+              "x": 0.22,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Big power supply"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Big motor",
+              "motion": "spin",
+              "ask": "Where are relays used?"
+            }
+          ],
+          "links": [
+            {
+              "from": "small",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "coil",
+              "kind": "power",
+              "label": "Small current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "spring",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls back"
+            },
+            {
+              "from": "arm",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Closes"
+            },
+            {
+              "from": "big",
+              "to": "contacts",
+              "kind": "power",
+              "label": "Big current"
+            },
+            {
+              "from": "contacts",
+              "to": "motor",
+              "kind": "power"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The magnet pulls the iron armature, which swings over and presses the contacts together, completing the big circuit so the motor runs.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "small",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Small battery"
+            },
+            {
+              "id": "sw",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Control switch",
+              "motion": "swing"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.48,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Relay coil",
+              "motion": "pulse",
+              "ask": "What does the coil in a relay do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.7,
+              "y": 0.32,
+              "size": 1,
+              "label": "Armature",
+              "motion": "swing",
+              "ask": "What is the armature in a relay?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Return spring",
+              "motion": "slide",
+              "ask": "Why does a relay have a spring?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Switch contacts",
+              "ask": "Why are the two circuits in a relay kept separate?"
+            },
+            {
+              "id": "big",
+              "kind": "battery",
+              "x": 0.22,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Big power supply"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Big motor",
+              "motion": "spin",
+              "ask": "Where are relays used?"
+            }
+          ],
+          "links": [
+            {
+              "from": "small",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "coil",
+              "kind": "power",
+              "label": "Small current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "spring",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls back"
+            },
+            {
+              "from": "arm",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Closes"
+            },
+            {
+              "from": "big",
+              "to": "contacts",
+              "kind": "power",
+              "label": "Big current"
+            },
+            {
+              "from": "contacts",
+              "to": "motor",
+              "kind": "power"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Open the control switch and the magnet lets go; the spring pulls the armature back and the big circuit opens with a click.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "small",
+              "kind": "battery",
+              "x": 0.1,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Small battery"
+            },
+            {
+              "id": "sw",
+              "kind": "lever",
+              "x": 0.3,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Control switch",
+              "motion": "swing"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.48,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "Relay coil",
+              "motion": "pulse",
+              "ask": "What does the coil in a relay do?"
+            },
+            {
+              "id": "arm",
+              "kind": "lever",
+              "x": 0.7,
+              "y": 0.32,
+              "size": 1,
+              "label": "Armature",
+              "motion": "swing",
+              "ask": "What is the armature in a relay?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.9,
+              "y": 0.12,
+              "size": 0.7,
+              "label": "Return spring",
+              "motion": "slide",
+              "ask": "Why does a relay have a spring?"
+            },
+            {
+              "id": "contacts",
+              "kind": "box",
+              "x": 0.7,
+              "y": 0.62,
+              "size": 0.9,
+              "label": "Switch contacts",
+              "ask": "Why are the two circuits in a relay kept separate?"
+            },
+            {
+              "id": "big",
+              "kind": "battery",
+              "x": 0.22,
+              "y": 0.82,
+              "size": 1.2,
+              "label": "Big power supply"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.85,
+              "size": 1.2,
+              "label": "Big motor",
+              "motion": "spin",
+              "ask": "Where are relays used?"
+            }
+          ],
+          "links": [
+            {
+              "from": "small",
+              "to": "sw",
+              "kind": "power"
+            },
+            {
+              "from": "sw",
+              "to": "coil",
+              "kind": "power",
+              "label": "Small current"
+            },
+            {
+              "from": "coil",
+              "to": "arm",
+              "kind": "force",
+              "label": "Magnetic pull"
+            },
+            {
+              "from": "spring",
+              "to": "arm",
+              "kind": "force",
+              "label": "Pulls back"
+            },
+            {
+              "from": "arm",
+              "to": "contacts",
+              "kind": "force",
+              "label": "Closes"
+            },
+            {
+              "from": "big",
+              "to": "contacts",
+              "kind": "power",
+              "label": "Big current"
+            },
+            {
+              "from": "contacts",
+              "to": "motor",
+              "kind": "power"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the coil in a relay do?",
+      "a": "The coil is a small electromagnet. A small control current through it makes a magnetic field that pulls on an iron arm nearby.",
+      "asks": [
+        "How is a relay switched on?"
+      ]
+    },
+    {
+      "q": "What is the armature in a relay?",
+      "a": "The armature is a pivoting iron arm. When the coil pulls it, it swings over and pushes two metal contacts together, closing the second circuit.",
+      "asks": [
+        "What moves inside a relay?"
+      ]
+    },
+    {
+      "q": "Why does a relay have a spring?",
+      "a": "When the control current stops, the coil lets go and the spring pulls the armature back, opening the contacts. That is why a relay clicks off as well as on.",
+      "asks": [
+        "How does a relay switch off?"
+      ]
+    },
+    {
+      "q": "Why are the two circuits in a relay kept separate?",
+      "a": "The control circuit and the power circuit are joined only by magnetism, not by wire. So a delicate low-voltage circuit can safely switch a high-voltage or high-current one.",
+      "asks": [
+        "Is a relay safe for switching mains?"
+      ]
+    },
+    {
+      "q": "Where are relays used?",
+      "a": "In cars to switch the starter motor and headlights, in washing machines, in traffic lights and in home automation, wherever a small signal must switch a big load. You can often hear them click.",
+      "asks": [
+        "What is the clicking sound in a car?"
+      ]
+    }
+  ],
+  "facts": [
+    "Konrad Zuse's Z3 computer of 1941 was built from about 2,600 relays.",
+    "In a relay, the control circuit and the switched circuit are linked only by magnetism."
+  ],
+  "quiz": [
+    {
+      "say": "What pulls the armature across in a relay?",
+      "show": "What pulls the armature across in a relay?",
+      "options": [
+        {
+          "show": "The magnetic field of the relay coil",
+          "say": "The magnetic field of the relay coil"
+        },
+        {
+          "show": "The big motor",
+          "say": "The big motor"
+        },
+        {
+          "show": "The return spring",
+          "say": "The return spring"
+        }
+      ],
+      "answer": 0,
+      "why": "The small current turns the coil into an electromagnet, which pulls the iron armature and closes the contacts.",
+      "wrong": {
+        "1": "The motor is what gets switched; it does not move the armature.",
+        "2": "The spring pulls the armature back, the opposite way."
+      }
+    }
+  ]
+}

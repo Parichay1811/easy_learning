@@ -1,0 +1,485 @@
+{
+  "id": "BME-DYN-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Motion graphs: reading displacement, velocity and acceleration together",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-DYN — Dynamics and vibration",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "velocity-time graph",
+    "displacement-time graph",
+    "acceleration",
+    "area under the curve",
+    "kinematics"
+  ],
+  "examples": [
+    "How do I find distance from a velocity-time graph?",
+    "What does the slope of a velocity graph mean?",
+    "How are displacement, velocity and acceleration graphs related?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Time (s)",
+        "max": 25
+      },
+      "y": {
+        "label": "Velocity (m/s)",
+        "max": 25
+      },
+      "curves": [
+        {
+          "label": "Car velocity",
+          "type": "points",
+          "points": [
+            [
+              0,
+              0
+            ],
+            [
+              10,
+              20
+            ],
+            [
+              20,
+              20
+            ],
+            [
+              25,
+              0
+            ]
+          ],
+          "ask": "What does the slope of a velocity graph mean?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 10,
+          "label": "Top speed"
+        },
+        {
+          "x": 20,
+          "label": "Brakes on"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A car pulls away from a red light, cruises, then brakes for the next light. Engineers track motion like this with three graphs: displacement, velocity and acceleration. They are three views of the same story. Look at the velocity graph: up for 10 seconds, flat for 10, then down for 5.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Motion graphs: reading displacement, velocity and acceleration together"
+        },
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 25
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 25
+          },
+          "curves": [
+            {
+              "label": "Car velocity",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  10,
+                  20
+                ],
+                [
+                  20,
+                  20
+                ],
+                [
+                  25,
+                  0
+                ]
+              ],
+              "ask": "What does the slope of a velocity graph mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "Top speed"
+            },
+            {
+              "x": 20,
+              "label": "Brakes on"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Velocity: 0 to 20 m/s in 10 s, cruise 10 s, stop in 5 s"
+        }
+      ]
+    },
+    {
+      "say": "The slope of a velocity graph is the acceleration. In the first 10 seconds the car gains 20 metres per second, so it accelerates at 2 metres per second squared. While braking it loses 20 in 5 seconds: minus 4. Look at the steep line on the right. Is the car going backwards there?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 25
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 25
+          },
+          "curves": [
+            {
+              "label": "Car velocity",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  10,
+                  20
+                ],
+                [
+                  20,
+                  20
+                ],
+                [
+                  25,
+                  0
+                ]
+              ],
+              "ask": "What does the slope of a velocity graph mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "Top speed"
+            },
+            {
+              "x": 20,
+              "label": "Brakes on"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "a = Δv / Δt = 20 / 10 = 2 m/s²"
+        }
+      ]
+    },
+    {
+      "say": "No! It is still moving forwards, just slowing down. The area under a velocity graph is the displacement. The triangle gives 100 metres, the rectangle 200 and the last triangle 50, so 350 metres in total. Can you spot the three shapes under the line?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 25
+          },
+          "y": {
+            "label": "Velocity (m/s)",
+            "max": 25
+          },
+          "curves": [
+            {
+              "label": "Car velocity",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  10,
+                  20
+                ],
+                [
+                  20,
+                  20
+                ],
+                [
+                  25,
+                  0
+                ]
+              ],
+              "ask": "What does the slope of a velocity graph mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 10,
+              "label": "Top speed"
+            },
+            {
+              "x": 20,
+              "label": "Brakes on"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "s = ½·10·20 + 10·20 + ½·5·20 = 350 m"
+        }
+      ]
+    },
+    {
+      "say": "Now the acceleration graph, drawn from those slopes. It is a step: 2 for the first 10 seconds, zero while cruising, minus 4 while braking. Flat velocity means zero acceleration. See the three flat pieces? What would the velocity graph look like if acceleration were zero all the time?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 25
+          },
+          "y": {
+            "label": "Accel. (m/s²)",
+            "min": -5,
+            "max": 3
+          },
+          "curves": [
+            {
+              "label": "Acceleration",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  2
+                ],
+                [
+                  10,
+                  2
+                ],
+                [
+                  10,
+                  0
+                ],
+                [
+                  20,
+                  0
+                ],
+                [
+                  20,
+                  -4
+                ],
+                [
+                  25,
+                  -4
+                ]
+              ],
+              "ask": "What does a negative acceleration mean?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Velocity is the area under the acceleration graph"
+        }
+      ]
+    },
+    {
+      "say": "A flat line, steady speed. Finally the displacement graph: it curves upwards, runs straight while cruising, then bends over and levels at 350 metres. Its slope is the velocity. Brilliant! Exam tip: slope takes you down the chain, from displacement to velocity to acceleration; area takes you back up.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 25
+          },
+          "y": {
+            "label": "Displacement (m)",
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Distance gone",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  2,
+                  4
+                ],
+                [
+                  4,
+                  16
+                ],
+                [
+                  6,
+                  36
+                ],
+                [
+                  8,
+                  64
+                ],
+                [
+                  10,
+                  100
+                ],
+                [
+                  15,
+                  200
+                ],
+                [
+                  20,
+                  300
+                ],
+                [
+                  22,
+                  332
+                ],
+                [
+                  24,
+                  348
+                ],
+                [
+                  25,
+                  350
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does a curved displacement graph mean?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 25,
+              "label": "350 m"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Slope: s → v → a. Area: a → v → s."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do I find distance from a velocity-time graph?",
+      "a": "Find the area between the graph and the time axis. Split it into triangles and rectangles, or integrate, and add the pieces.",
+      "asks": [
+        "area under velocity time graph"
+      ]
+    },
+    {
+      "q": "What does the slope of a velocity graph mean?",
+      "a": "The slope is the acceleration: the change in velocity divided by the time taken. A downward slope means the object is slowing down if it is moving forwards.",
+      "asks": [
+        "gradient of velocity time graph"
+      ]
+    },
+    {
+      "q": "What does a curved displacement graph mean?",
+      "a": "A curve means the velocity is changing. Getting steeper means speeding up; flattening out means slowing down. A straight line means steady velocity.",
+      "asks": [
+        "what does the slope of a displacement graph show"
+      ]
+    },
+    {
+      "q": "What does a negative acceleration mean?",
+      "a": "It means the acceleration points in the negative direction. If the object moves in the positive direction, it is slowing down; if it moves in the negative direction, it is speeding up.",
+      "asks": [
+        "is negative acceleration deceleration"
+      ]
+    },
+    {
+      "q": "How are displacement, velocity and acceleration graphs related?",
+      "a": "Velocity is the slope of displacement and acceleration is the slope of velocity. Going the other way, velocity is the area under acceleration and displacement is the area under velocity.",
+      "asks": [
+        "link between motion graphs",
+        "derivative and integral of motion"
+      ]
+    }
+  ],
+  "facts": [
+    "The area under a velocity-time graph equals the displacement over that time.",
+    "The gradient of a velocity-time graph equals the acceleration."
+  ],
+  "quiz": [
+    {
+      "say": "A train speeds up evenly from rest to 30 metres per second in 60 seconds. How far does it travel in that time?",
+      "show": "A train accelerates evenly from rest to 30 m/s in 60 s. Distance travelled?",
+      "options": [
+        {
+          "show": "900 m",
+          "say": "900 metres"
+        },
+        {
+          "show": "1800 m",
+          "say": "1800 metres"
+        },
+        {
+          "show": "0.5 m",
+          "say": "0.5 metres"
+        }
+      ],
+      "answer": 0,
+      "why": "Area of the triangle under the graph: ½ × 60 × 30 = 900 m.",
+      "wrong": {
+        "1": "That is the rectangle; the speed rose from zero, so you need half of it.",
+        "2": "That is the acceleration in metres per second squared, not a distance."
+      }
+    },
+    {
+      "say": "On a velocity-time graph, a horizontal line above the time axis means the object is…",
+      "show": "A horizontal line on a v–t graph (above the axis) means…",
+      "options": [
+        {
+          "show": "Moving at constant velocity",
+          "say": "Moving at constant velocity"
+        },
+        {
+          "show": "At rest",
+          "say": "At rest"
+        },
+        {
+          "show": "Accelerating steadily",
+          "say": "Accelerating steadily"
+        }
+      ],
+      "answer": 0,
+      "why": "The velocity does not change, so the acceleration is zero and the speed is steady.",
+      "wrong": {
+        "1": "At rest would be a horizontal line on the time axis, at zero velocity.",
+        "2": "Steady acceleration is a sloping straight line."
+      }
+    }
+  ]
+}

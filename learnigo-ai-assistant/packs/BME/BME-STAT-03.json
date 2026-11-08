@@ -1,0 +1,317 @@
+{
+  "id": "BME-STAT-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Moments and couples: the turning effect of a spanner and a steering wheel",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "moment of a force",
+    "couple",
+    "torque",
+    "principle of moments",
+    "lever arm"
+  ],
+  "examples": [
+    "What is the moment of a force?",
+    "What is a couple in mechanics?",
+    "Why is a long spanner easier to use?"
+  ],
+  "figure": [
+    {
+      "name": "x-balance",
+      "left": [
+        {
+          "label": "300 N at 2 m",
+          "weight": 6,
+          "dist": 2,
+          "ask": "What is the principle of moments?"
+        }
+      ],
+      "right": [
+        {
+          "label": "200 N at 3 m",
+          "weight": 4,
+          "dist": 3,
+          "ask": "What is the principle of moments?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Ever tried to undo a tight wheel nut? You grab the far end of the spanner, not the middle. That is because turning depends on two things: how hard you push and how far from the pivot you push. That turning effect is called a moment. Let us see it on a seesaw.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Moments and couples: the turning effect of a spanner and a steering wheel"
+        },
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "300 N at 2 m",
+              "weight": 6,
+              "dist": 2,
+              "ask": "What is the principle of moments?"
+            }
+          ],
+          "right": [
+            {
+              "label": "200 N at 3 m",
+              "weight": 4,
+              "dist": 3,
+              "ask": "What is the principle of moments?"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Moment = force × perpendicular distance"
+        }
+      ]
+    },
+    {
+      "say": "Here is a moment you can see in 3D: a lever on a fulcrum. The effort distance and the load distance decide who wins the turning contest. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Moments and couples: the turning effect of a spanner and a steering wheel"
+        },
+        {
+          "op": "image",
+          "render": "lever"
+        }
+      ]
+    },
+    {
+      "say": "On the left, 300 newtons sits 2 metres from the pivot: a moment of 600 newton metres, turning anticlockwise. Look at the left side of the balance. How much moment does the right side need to stop the turning?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "300 N at 2 m",
+              "weight": 6,
+              "dist": 2,
+              "ask": "What is the principle of moments?"
+            }
+          ],
+          "right": [
+            {
+              "label": "200 N at 3 m",
+              "weight": 4,
+              "dist": 3,
+              "ask": "What is the principle of moments?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M = F × d = 300 N × 2 m = 600 N·m"
+        }
+      ]
+    },
+    {
+      "say": "Exactly 600 newton metres! The right side has 200 newtons at 3 metres, which is also 600, clockwise. Clockwise equals anticlockwise, so it balances. That is the principle of moments. Could a smaller force balance it from further out?",
+      "draw": [
+        {
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "300 N at 2 m",
+              "weight": 6,
+              "dist": 2,
+              "ask": "What is the principle of moments?"
+            }
+          ],
+          "right": [
+            {
+              "label": "200 N at 3 m",
+              "weight": 4,
+              "dist": 3,
+              "ask": "What is the principle of moments?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "200 N × 3 m = 600 N·m, so it balances"
+        }
+      ]
+    },
+    {
+      "say": "Yes, that is why long spanners help! Now a special case: a couple, two equal forces in opposite directions that do not line up. Your hands on a steering wheel push up on one side and down on the other. Look: the arrows cancel, so the wheel does not move sideways. But does it turn?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "wheel",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Left hand 40 N",
+              "dir": "up",
+              "size": 2,
+              "ask": "What is a couple?"
+            },
+            {
+              "label": "Right hand 40 N",
+              "dir": "down",
+              "size": 2,
+              "ask": "What is a couple?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Couple C = F × d = 40 N × 0.4 m = 16 N·m"
+        },
+        {
+          "op": "note",
+          "text": "The two forces cancel, but the turning does not"
+        }
+      ]
+    },
+    {
+      "say": "It does! A couple gives pure turning and no push. With 40 newtons per hand on a 0.4 metre wheel, that is 16 newton metres. A couple has the same moment about every point, which makes it handy in exams. Challenge: what couple do you make turning a tap with 5 newtons per finger, 4 centimetres apart?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "wheel",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Left hand 40 N",
+              "dir": "up",
+              "size": 2,
+              "ask": "What is a couple?"
+            },
+            {
+              "label": "Right hand 40 N",
+              "dir": "down",
+              "size": 2,
+              "ask": "What is a couple?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the moment of a force?",
+      "a": "It is the turning effect of a force about a point: the force times the perpendicular distance from the point to the force's line of action. Its unit is the newton metre.",
+      "asks": [
+        "define moment",
+        "what is torque"
+      ]
+    },
+    {
+      "q": "What is the principle of moments?",
+      "a": "For a body in balance, the total clockwise moment about any point equals the total anticlockwise moment about that point.",
+      "asks": [
+        "law of moments",
+        "clockwise equals anticlockwise"
+      ]
+    },
+    {
+      "q": "What is a couple?",
+      "a": "Two forces of equal size, opposite direction and different lines of action. Together they produce turning but no overall push, and their moment is one force times the distance between them.",
+      "asks": [
+        "couple in mechanics",
+        "what is a force couple"
+      ]
+    },
+    {
+      "q": "Why is a long spanner easier to use?",
+      "a": "A longer handle gives a bigger perpendicular distance, so the same moment needs a smaller force from your hand.",
+      "asks": [
+        "why do longer levers need less force"
+      ]
+    },
+    {
+      "q": "Does the moment of a couple depend on the point I choose?",
+      "a": "No. A couple has the same moment about every point in the plane, which is why it is called a free vector.",
+      "asks": [
+        "is a couple a free vector"
+      ]
+    }
+  ],
+  "facts": [
+    "A couple produces rotation with zero resultant force.",
+    "The SI unit of moment and of torque is the newton metre."
+  ],
+  "quiz": [
+    {
+      "say": "You push with 150 newtons at right angles to a spanner, 0.3 metres from the nut. What moment do you apply?",
+      "show": "150 N applied at 90° to a spanner, 0.3 m from the nut. Moment?",
+      "options": [
+        {
+          "show": "45 N·m",
+          "say": "45 newton metres"
+        },
+        {
+          "show": "500 N·m",
+          "say": "500 newton metres"
+        },
+        {
+          "show": "150.3 N·m",
+          "say": "150.3 newton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "Moment = force × distance = 150 × 0.3 = 45 N·m.",
+      "wrong": {
+        "1": "That divides the force by the distance instead of multiplying.",
+        "2": "Force and distance are multiplied, not added."
+      }
+    },
+    {
+      "say": "What does a couple do to a body that is free to move?",
+      "show": "A couple acting on a free body causes…",
+      "options": [
+        {
+          "show": "Only rotation",
+          "say": "Only rotation"
+        },
+        {
+          "show": "Only sliding in a straight line",
+          "say": "Only sliding in a straight line"
+        },
+        {
+          "show": "Both sliding and rotation",
+          "say": "Both sliding and rotation"
+        }
+      ],
+      "answer": 0,
+      "why": "The two forces cancel, so there is no overall push, only turning.",
+      "wrong": {
+        "1": "Sliding needs an unbalanced force, and a couple's forces cancel.",
+        "2": "There is no net force, so the centre of mass does not accelerate."
+      }
+    }
+  ]
+}

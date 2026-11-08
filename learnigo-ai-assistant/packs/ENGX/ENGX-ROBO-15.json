@@ -1,0 +1,794 @@
+{
+  "id": "ENGX-ROBO-15",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a 3D printer moves its nozzle",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "3D printer motion",
+    "G-code",
+    "stepper motors and belts",
+    "lead screw",
+    "homing endstops"
+  ],
+  "examples": [
+    "How does a 3D printer move so precisely?",
+    "What is G-code?",
+    "Why did my 3D print shift sideways?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "file",
+          "kind": "box",
+          "x": 0.08,
+          "y": 0.15,
+          "label": "G-code file",
+          "motion": "none",
+          "ask": "What is G-code?"
+        },
+        {
+          "id": "board",
+          "kind": "box",
+          "x": 0.38,
+          "y": 0.15,
+          "label": "Controller board",
+          "motion": "pulse"
+        },
+        {
+          "id": "mz",
+          "kind": "motor",
+          "x": 0.8,
+          "y": 0.15,
+          "label": "Z stepper",
+          "motion": "spin"
+        },
+        {
+          "id": "screw",
+          "kind": "axle",
+          "x": 0.88,
+          "y": 0.48,
+          "label": "Lead screw",
+          "motion": "spin"
+        },
+        {
+          "id": "mx",
+          "kind": "motor",
+          "x": 0.15,
+          "y": 0.5,
+          "label": "X stepper",
+          "motion": "spin",
+          "ask": "How does a 3D printer move so precisely?"
+        },
+        {
+          "id": "belt",
+          "kind": "belt",
+          "x": 0.45,
+          "y": 0.45,
+          "label": "Belts",
+          "motion": "flow",
+          "ask": "How does a 3D printer move so precisely?"
+        },
+        {
+          "id": "noz",
+          "kind": "box",
+          "x": 0.62,
+          "y": 0.72,
+          "label": "Hot nozzle",
+          "motion": "pulse",
+          "ask": "How does the nozzle make an object?"
+        },
+        {
+          "id": "my",
+          "kind": "motor",
+          "x": 0.18,
+          "y": 0.88,
+          "label": "Y stepper",
+          "motion": "spin"
+        },
+        {
+          "id": "bed",
+          "kind": "box",
+          "x": 0.88,
+          "y": 0.88,
+          "label": "Print bed",
+          "motion": "slide",
+          "ask": "What does homing mean on a 3D printer?"
+        }
+      ],
+      "links": [
+        {
+          "from": "file",
+          "to": "board",
+          "kind": "data"
+        },
+        {
+          "from": "board",
+          "to": "mx",
+          "kind": "signal"
+        },
+        {
+          "from": "board",
+          "to": "my",
+          "kind": "signal"
+        },
+        {
+          "from": "board",
+          "to": "mz",
+          "kind": "signal"
+        },
+        {
+          "from": "mx",
+          "to": "belt",
+          "kind": "force"
+        },
+        {
+          "from": "belt",
+          "to": "noz",
+          "kind": "force",
+          "label": "left and right"
+        },
+        {
+          "from": "mz",
+          "to": "screw",
+          "kind": "force"
+        },
+        {
+          "from": "screw",
+          "to": "noz",
+          "kind": "force",
+          "label": "up a layer"
+        },
+        {
+          "from": "my",
+          "to": "bed",
+          "kind": "force",
+          "label": "back and forth"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A 3D printer builds an object by squeezing out a thin line of melted plastic, layer by layer. Its whole job is to move the hot nozzle along exactly the right path.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a 3D printer moves its nozzle"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "file",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.15,
+              "label": "G-code file",
+              "motion": "none",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.15,
+              "label": "Controller board",
+              "motion": "pulse"
+            },
+            {
+              "id": "mz",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.15,
+              "label": "Z stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.88,
+              "y": 0.48,
+              "label": "Lead screw",
+              "motion": "spin"
+            },
+            {
+              "id": "mx",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.5,
+              "label": "X stepper",
+              "motion": "spin",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.45,
+              "label": "Belts",
+              "motion": "flow",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "noz",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Hot nozzle",
+              "motion": "pulse",
+              "ask": "How does the nozzle make an object?"
+            },
+            {
+              "id": "my",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Y stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "bed",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.88,
+              "label": "Print bed",
+              "motion": "slide",
+              "ask": "What does homing mean on a 3D printer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "file",
+              "to": "board",
+              "kind": "data"
+            },
+            {
+              "from": "board",
+              "to": "mx",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "my",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "mz",
+              "kind": "signal"
+            },
+            {
+              "from": "mx",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "noz",
+              "kind": "force",
+              "label": "left and right"
+            },
+            {
+              "from": "mz",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "noz",
+              "kind": "force",
+              "label": "up a layer"
+            },
+            {
+              "from": "my",
+              "to": "bed",
+              "kind": "force",
+              "label": "back and forth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Slicing software cuts the 3D model into hundreds of thin layers and writes G-code, a list of instructions such as move to this point at this speed. The controller board reads them one by one.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "file",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.15,
+              "label": "G-code file",
+              "motion": "none",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.15,
+              "label": "Controller board",
+              "motion": "pulse"
+            },
+            {
+              "id": "mz",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.15,
+              "label": "Z stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.88,
+              "y": 0.48,
+              "label": "Lead screw",
+              "motion": "spin"
+            },
+            {
+              "id": "mx",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.5,
+              "label": "X stepper",
+              "motion": "spin",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.45,
+              "label": "Belts",
+              "motion": "flow",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "noz",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Hot nozzle",
+              "motion": "pulse",
+              "ask": "How does the nozzle make an object?"
+            },
+            {
+              "id": "my",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Y stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "bed",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.88,
+              "label": "Print bed",
+              "motion": "slide",
+              "ask": "What does homing mean on a 3D printer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "file",
+              "to": "board",
+              "kind": "data"
+            },
+            {
+              "from": "board",
+              "to": "mx",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "my",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "mz",
+              "kind": "signal"
+            },
+            {
+              "from": "mx",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "noz",
+              "kind": "force",
+              "label": "left and right"
+            },
+            {
+              "from": "mz",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "noz",
+              "kind": "force",
+              "label": "up a layer"
+            },
+            {
+              "from": "my",
+              "to": "bed",
+              "kind": "force",
+              "label": "back and forth"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Stepper motors drive the movement: belts pull the nozzle and bed left, right, back and forth, while a lead screw lifts it one layer at a time. Counting motor steps tells the printer where it is.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "file",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.15,
+              "label": "G-code file",
+              "motion": "none",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.15,
+              "label": "Controller board",
+              "motion": "pulse"
+            },
+            {
+              "id": "mz",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.15,
+              "label": "Z stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.88,
+              "y": 0.48,
+              "label": "Lead screw",
+              "motion": "spin"
+            },
+            {
+              "id": "mx",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.5,
+              "label": "X stepper",
+              "motion": "spin",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.45,
+              "label": "Belts",
+              "motion": "flow",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "noz",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Hot nozzle",
+              "motion": "pulse",
+              "ask": "How does the nozzle make an object?"
+            },
+            {
+              "id": "my",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Y stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "bed",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.88,
+              "label": "Print bed",
+              "motion": "slide",
+              "ask": "What does homing mean on a 3D printer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "file",
+              "to": "board",
+              "kind": "data"
+            },
+            {
+              "from": "board",
+              "to": "mx",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "my",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "mz",
+              "kind": "signal"
+            },
+            {
+              "from": "mx",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "noz",
+              "kind": "force",
+              "label": "left and right"
+            },
+            {
+              "from": "mz",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "noz",
+              "kind": "force",
+              "label": "up a layer"
+            },
+            {
+              "from": "my",
+              "to": "bed",
+              "kind": "force",
+              "label": "back and forth"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "Each layer is a fraction of a millimetre thick, melted at around 200 degrees Celsius so it fuses to the one below. Before printing, each axis moves until it taps a small switch to find its zero point.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "file",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.15,
+              "label": "G-code file",
+              "motion": "none",
+              "ask": "What is G-code?"
+            },
+            {
+              "id": "board",
+              "kind": "box",
+              "x": 0.38,
+              "y": 0.15,
+              "label": "Controller board",
+              "motion": "pulse"
+            },
+            {
+              "id": "mz",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.15,
+              "label": "Z stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.88,
+              "y": 0.48,
+              "label": "Lead screw",
+              "motion": "spin"
+            },
+            {
+              "id": "mx",
+              "kind": "motor",
+              "x": 0.15,
+              "y": 0.5,
+              "label": "X stepper",
+              "motion": "spin",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.45,
+              "y": 0.45,
+              "label": "Belts",
+              "motion": "flow",
+              "ask": "How does a 3D printer move so precisely?"
+            },
+            {
+              "id": "noz",
+              "kind": "box",
+              "x": 0.62,
+              "y": 0.72,
+              "label": "Hot nozzle",
+              "motion": "pulse",
+              "ask": "How does the nozzle make an object?"
+            },
+            {
+              "id": "my",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.88,
+              "label": "Y stepper",
+              "motion": "spin"
+            },
+            {
+              "id": "bed",
+              "kind": "box",
+              "x": 0.88,
+              "y": 0.88,
+              "label": "Print bed",
+              "motion": "slide",
+              "ask": "What does homing mean on a 3D printer?"
+            }
+          ],
+          "links": [
+            {
+              "from": "file",
+              "to": "board",
+              "kind": "data"
+            },
+            {
+              "from": "board",
+              "to": "mx",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "my",
+              "kind": "signal"
+            },
+            {
+              "from": "board",
+              "to": "mz",
+              "kind": "signal"
+            },
+            {
+              "from": "mx",
+              "to": "belt",
+              "kind": "force"
+            },
+            {
+              "from": "belt",
+              "to": "noz",
+              "kind": "force",
+              "label": "left and right"
+            },
+            {
+              "from": "mz",
+              "to": "screw",
+              "kind": "force"
+            },
+            {
+              "from": "screw",
+              "to": "noz",
+              "kind": "force",
+              "label": "up a layer"
+            },
+            {
+              "from": "my",
+              "to": "bed",
+              "kind": "force",
+              "label": "back and forth"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is G-code?",
+      "a": "G-code is the list of simple instructions a 3D printer or CNC machine follows, like move to X 50, Y 20 at a set speed, or heat the nozzle to 200 degrees. Slicing software writes it from a 3D model.",
+      "asks": [
+        "What does a slicer do?"
+      ]
+    },
+    {
+      "q": "How does a 3D printer move so precisely?",
+      "a": "Stepper motors turn in exact steps, and belts and lead screws turn those steps into tiny straight-line movements, often around a hundredth of a millimetre per step. Counting steps gives the position.",
+      "asks": [
+        "Why do 3D printers use belts?"
+      ]
+    },
+    {
+      "q": "How does the nozzle make an object?",
+      "a": "A motor pushes plastic filament into a hot end that melts it, and the nozzle squeezes out a thin line. Line by line and layer by layer, the plastic cools and fuses into the shape.",
+      "asks": [
+        "How does a 3D printer melt plastic?"
+      ]
+    },
+    {
+      "q": "What does homing mean on a 3D printer?",
+      "a": "Homing is when the printer moves each axis until it presses a small switch at the end. That sets the zero point, because stepper motors cannot sense where they are when switched on.",
+      "asks": [
+        "Why does my 3D printer move to the corner first?"
+      ]
+    },
+    {
+      "q": "Why do 3D prints sometimes shift sideways?",
+      "a": "If a belt is loose or the nozzle snags, a stepper motor can skip steps. The printer carries on without knowing, so later layers print in the wrong place.",
+      "asks": [
+        "Why did my 3D print shift sideways?"
+      ]
+    }
+  ],
+  "facts": [
+    "Common 3D printer layers are about 0.1 to 0.3 millimetres thick.",
+    "PLA plastic is usually printed with the nozzle at about 190 to 220 degrees Celsius."
+  ],
+  "quiz": [
+    {
+      "say": "Why does a 3D printer move each axis to a switch before printing?",
+      "show": "Pressing the end switches before printing…",
+      "options": [
+        {
+          "show": "Finds the zero position",
+          "say": "Finds the zero position"
+        },
+        {
+          "show": "Cools the nozzle",
+          "say": "Cools the nozzle"
+        },
+        {
+          "show": "Loads the G-code",
+          "say": "Loads the G-code"
+        }
+      ],
+      "answer": 0,
+      "why": "Steppers do not know where they are at switch-on, so touching the end switches sets a known starting point.",
+      "wrong": {
+        "1": "Cooling is done by fans; the switches set position.",
+        "2": "G-code is read from the file by the controller board."
+      }
+    }
+  ]
+}

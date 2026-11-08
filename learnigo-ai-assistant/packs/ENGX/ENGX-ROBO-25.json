@@ -1,0 +1,216 @@
+{
+  "id": "ENGX-ROBO-25",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "Why a robot arm can lift less at full stretch",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "robot payload",
+    "robot arm torque",
+    "moment of a load",
+    "robot reach",
+    "counterbalance"
+  ],
+  "examples": [
+    "Why can a robot arm lift less when stretched out?",
+    "What does payload mean for a robot?",
+    "What is torque on a robot arm?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-balance",
+      "left": [
+        {
+          "label": "Motor or counterweight",
+          "weight": 6,
+          "dist": 2
+        }
+      ],
+      "right": [
+        {
+          "label": "Load at full reach",
+          "weight": 3,
+          "dist": 4
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Think of a robot arm's shoulder joint as the pivot of a seesaw. The load in the gripper twists the arm downward, and the shoulder motor, or a counterweight, must twist back just as hard.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Why a robot arm can lift less at full stretch"
+        },
+        {
+          "op": "sim",
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Motor or counterweight",
+              "weight": 6,
+              "dist": 2
+            }
+          ],
+          "right": [
+            {
+              "label": "Load at full reach",
+              "weight": 3,
+              "dist": 4
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "That twisting effect, called torque or moment, is the load's weight times its distance from the joint. Bring the load in to half the distance and the same motor can hold twice the weight.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Motor or counterweight",
+              "weight": 6,
+              "dist": 2
+            }
+          ],
+          "right": [
+            {
+              "label": "Load held close",
+              "weight": 6,
+              "dist": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "That is why robot data sheets give both a payload and a reach, and why heavy parts are kept near the base. Many arms also use counterweights or springs behind the shoulder to balance the arm's own weight.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Counterweight",
+              "weight": 4,
+              "dist": 3
+            }
+          ],
+          "right": [
+            {
+              "label": "Arm's own weight",
+              "weight": 4,
+              "dist": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Speeding up and stopping add even more twist at the start and end of each swing, so heavy loads are moved more gently. Engineers check these moments to choose motors big enough for the job.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-balance",
+          "left": [
+            {
+              "label": "Motor or counterweight",
+              "weight": 6,
+              "dist": 2
+            }
+          ],
+          "right": [
+            {
+              "label": "Load at full reach",
+              "weight": 3,
+              "dist": 4
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is torque on a robot arm?",
+      "a": "Torque is a twisting effect. For a load on a robot arm it is the weight multiplied by the distance from the joint, so the same load twists the shoulder harder the further out it is.",
+      "asks": [
+        "What is a moment?"
+      ]
+    },
+    {
+      "q": "Why does a robot arm have a maximum payload?",
+      "a": "Each joint's motor and gearbox can only make so much torque. The payload rating is the heaviest load the arm can carry at its full reach without overloading them.",
+      "asks": [
+        "What does payload mean for a robot?"
+      ]
+    },
+    {
+      "q": "Why are robot arms bulkier near the base?",
+      "a": "The base and shoulder carry the twist of everything further out, so they need bigger motors and stronger parts. Keeping the forearm and wrist light reduces the torque the shoulder must hold.",
+      "asks": [
+        "Why is the robot's wrist so small?"
+      ]
+    },
+    {
+      "q": "How do counterweights help a robot arm?",
+      "a": "A counterweight or spring behind the shoulder twists the opposite way to the arm's own weight. That balances the arm, so the motors mostly work against the load and the motion.",
+      "asks": [
+        "Why do some robots have a weight on the back?"
+      ]
+    },
+    {
+      "q": "Why do robots move heavy things slowly?",
+      "a": "Speeding up or stopping a load needs extra torque on top of holding it. Moving heavy loads more gently keeps the joints within their limits and the arm accurate.",
+      "asks": [
+        "Why do heavy-duty robots move slower?"
+      ]
+    }
+  ],
+  "facts": [
+    "A moment, or torque, equals the force multiplied by its perpendicular distance from the pivot.",
+    "Industrial robot payloads range from a few kilograms to over a tonne for the largest arms."
+  ],
+  "quiz": [
+    {
+      "say": "A robot arm can just hold 10 kilograms at 1 metre from its shoulder. Ignoring the arm's own weight, roughly how much can it hold at 2 metres?",
+      "show": "Holds 10 kg at 1 m. At 2 m it holds about…",
+      "options": [
+        {
+          "show": "5 kilograms",
+          "say": "5 kilograms"
+        },
+        {
+          "show": "20 kilograms",
+          "say": "20 kilograms"
+        },
+        {
+          "show": "10 kilograms",
+          "say": "10 kilograms"
+        }
+      ],
+      "answer": 0,
+      "why": "Twice the distance doubles the twist for each kilogram, so the same motor torque holds about half the weight.",
+      "wrong": {
+        "1": "Further out means more twist per kilogram, so it holds less, not more.",
+        "2": "The same load twists twice as hard at twice the distance, too much for the motor."
+      }
+    }
+  ]
+}

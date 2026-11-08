@@ -1,0 +1,650 @@
+{
+  "id": "ENGX-ENER-31",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a flow battery stores energy in tanks of liquid",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "flow battery",
+    "vanadium redox battery",
+    "electrolyte tanks",
+    "long-duration storage",
+    "cell stack"
+  ],
+  "examples": [
+    "How does a flow battery work?",
+    "What is a vanadium flow battery?",
+    "Why are flow batteries used for the grid?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "tankA",
+          "kind": "tank",
+          "x": 0.12,
+          "y": 0.68,
+          "size": 1.3,
+          "label": "Positive electrolyte",
+          "ask": "What is the liquid in a flow battery?"
+        },
+        {
+          "id": "tankB",
+          "kind": "tank",
+          "x": 0.88,
+          "y": 0.68,
+          "size": 1.3,
+          "label": "Negative electrolyte"
+        },
+        {
+          "id": "pumpA",
+          "kind": "valve",
+          "x": 0.28,
+          "y": 0.38,
+          "size": 0.8,
+          "label": "Pump A",
+          "motion": "pulse"
+        },
+        {
+          "id": "pumpB",
+          "kind": "valve",
+          "x": 0.72,
+          "y": 0.38,
+          "size": 0.8,
+          "label": "Pump B",
+          "motion": "pulse"
+        },
+        {
+          "id": "stack",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.38,
+          "size": 1.2,
+          "label": "Cell stack",
+          "motion": "pulse",
+          "ask": "What happens in the cell stack?"
+        },
+        {
+          "id": "mem",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.72,
+          "size": 0.7,
+          "label": "Membrane",
+          "ask": "What does the membrane do in a flow battery?"
+        },
+        {
+          "id": "grid",
+          "kind": "bulb",
+          "x": 0.5,
+          "y": 0.08,
+          "size": 0.8,
+          "label": "Grid connection",
+          "motion": "pulse",
+          "ask": "Why are flow batteries good for the grid?"
+        }
+      ],
+      "links": [
+        {
+          "from": "tankA",
+          "to": "pumpA",
+          "kind": "fluid"
+        },
+        {
+          "from": "pumpA",
+          "to": "stack",
+          "kind": "fluid"
+        },
+        {
+          "from": "tankB",
+          "to": "pumpB",
+          "kind": "fluid"
+        },
+        {
+          "from": "pumpB",
+          "to": "stack",
+          "kind": "fluid"
+        },
+        {
+          "from": "mem",
+          "to": "stack",
+          "kind": "fluid",
+          "label": "ions cross"
+        },
+        {
+          "from": "stack",
+          "to": "grid",
+          "kind": "power",
+          "label": "charge and discharge"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A flow battery keeps its energy in two big tanks of liquid called electrolytes, instead of sealing it inside a cell. The most common type uses vanadium dissolved in acid in both tanks.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a flow battery stores energy in tanks of liquid"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tankA",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Positive electrolyte",
+              "ask": "What is the liquid in a flow battery?"
+            },
+            {
+              "id": "tankB",
+              "kind": "tank",
+              "x": 0.88,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Negative electrolyte"
+            },
+            {
+              "id": "pumpA",
+              "kind": "valve",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump A",
+              "motion": "pulse"
+            },
+            {
+              "id": "pumpB",
+              "kind": "valve",
+              "x": 0.72,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump B",
+              "motion": "pulse"
+            },
+            {
+              "id": "stack",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 1.2,
+              "label": "Cell stack",
+              "motion": "pulse",
+              "ask": "What happens in the cell stack?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a flow battery?"
+            },
+            {
+              "id": "grid",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.8,
+              "label": "Grid connection",
+              "motion": "pulse",
+              "ask": "Why are flow batteries good for the grid?"
+            }
+          ],
+          "links": [
+            {
+              "from": "tankA",
+              "to": "pumpA",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpA",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "tankB",
+              "to": "pumpB",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpB",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "mem",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "ions cross"
+            },
+            {
+              "from": "stack",
+              "to": "grid",
+              "kind": "power",
+              "label": "charge and discharge"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Pumps push the two liquids past each other through a cell stack, kept apart by a thin membrane. When charging, electricity changes the vanadium on each side into a different charge state, storing energy.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tankA",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Positive electrolyte",
+              "ask": "What is the liquid in a flow battery?"
+            },
+            {
+              "id": "tankB",
+              "kind": "tank",
+              "x": 0.88,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Negative electrolyte"
+            },
+            {
+              "id": "pumpA",
+              "kind": "valve",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump A",
+              "motion": "pulse"
+            },
+            {
+              "id": "pumpB",
+              "kind": "valve",
+              "x": 0.72,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump B",
+              "motion": "pulse"
+            },
+            {
+              "id": "stack",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 1.2,
+              "label": "Cell stack",
+              "motion": "pulse",
+              "ask": "What happens in the cell stack?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a flow battery?"
+            },
+            {
+              "id": "grid",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.8,
+              "label": "Grid connection",
+              "motion": "pulse",
+              "ask": "Why are flow batteries good for the grid?"
+            }
+          ],
+          "links": [
+            {
+              "from": "tankA",
+              "to": "pumpA",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpA",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "tankB",
+              "to": "pumpB",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpB",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "mem",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "ions cross"
+            },
+            {
+              "from": "stack",
+              "to": "grid",
+              "kind": "power",
+              "label": "charge and discharge"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "When discharging, the reactions run backwards: electrons flow out through the circuit, while ions cross the membrane to keep the charges balanced.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tankA",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Positive electrolyte",
+              "ask": "What is the liquid in a flow battery?"
+            },
+            {
+              "id": "tankB",
+              "kind": "tank",
+              "x": 0.88,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Negative electrolyte"
+            },
+            {
+              "id": "pumpA",
+              "kind": "valve",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump A",
+              "motion": "pulse"
+            },
+            {
+              "id": "pumpB",
+              "kind": "valve",
+              "x": 0.72,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump B",
+              "motion": "pulse"
+            },
+            {
+              "id": "stack",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 1.2,
+              "label": "Cell stack",
+              "motion": "pulse",
+              "ask": "What happens in the cell stack?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a flow battery?"
+            },
+            {
+              "id": "grid",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.8,
+              "label": "Grid connection",
+              "motion": "pulse",
+              "ask": "Why are flow batteries good for the grid?"
+            }
+          ],
+          "links": [
+            {
+              "from": "tankA",
+              "to": "pumpA",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpA",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "tankB",
+              "to": "pumpB",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpB",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "mem",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "ions cross"
+            },
+            {
+              "from": "stack",
+              "to": "grid",
+              "kind": "power",
+              "label": "charge and discharge"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "To store more energy you simply build bigger tanks, and the liquids hardly wear out, lasting 20 years or more. That makes flow batteries good for storing many hours of energy for the grid, though they are bulky.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "tankA",
+              "kind": "tank",
+              "x": 0.12,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Positive electrolyte",
+              "ask": "What is the liquid in a flow battery?"
+            },
+            {
+              "id": "tankB",
+              "kind": "tank",
+              "x": 0.88,
+              "y": 0.68,
+              "size": 1.3,
+              "label": "Negative electrolyte"
+            },
+            {
+              "id": "pumpA",
+              "kind": "valve",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump A",
+              "motion": "pulse"
+            },
+            {
+              "id": "pumpB",
+              "kind": "valve",
+              "x": 0.72,
+              "y": 0.38,
+              "size": 0.8,
+              "label": "Pump B",
+              "motion": "pulse"
+            },
+            {
+              "id": "stack",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.38,
+              "size": 1.2,
+              "label": "Cell stack",
+              "motion": "pulse",
+              "ask": "What happens in the cell stack?"
+            },
+            {
+              "id": "mem",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.72,
+              "size": 0.7,
+              "label": "Membrane",
+              "ask": "What does the membrane do in a flow battery?"
+            },
+            {
+              "id": "grid",
+              "kind": "bulb",
+              "x": 0.5,
+              "y": 0.08,
+              "size": 0.8,
+              "label": "Grid connection",
+              "motion": "pulse",
+              "ask": "Why are flow batteries good for the grid?"
+            }
+          ],
+          "links": [
+            {
+              "from": "tankA",
+              "to": "pumpA",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpA",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "tankB",
+              "to": "pumpB",
+              "kind": "fluid"
+            },
+            {
+              "from": "pumpB",
+              "to": "stack",
+              "kind": "fluid"
+            },
+            {
+              "from": "mem",
+              "to": "stack",
+              "kind": "fluid",
+              "label": "ions cross"
+            },
+            {
+              "from": "stack",
+              "to": "grid",
+              "kind": "power",
+              "label": "charge and discharge"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the liquid in a flow battery?",
+      "a": "In the most common type, both tanks hold vanadium dissolved in sulphuric acid, with the vanadium in different charge states on each side. Other types use zinc and bromine, or iron salts.",
+      "asks": [
+        "What is an electrolyte?"
+      ]
+    },
+    {
+      "q": "What happens in the cell stack?",
+      "a": "The two liquids flow past electrodes on either side of a membrane. Charging and discharging change the charge of the vanadium ions, sending electrons through the outside circuit.",
+      "asks": [
+        "How does a flow battery make electricity?"
+      ]
+    },
+    {
+      "q": "What does the membrane do in a flow battery?",
+      "a": "It keeps the two liquids from mixing while letting small ions, such as hydrogen ions, pass through to balance the charges. Without it, the battery would simply discharge itself.",
+      "asks": [
+        "Why don't the two liquids mix?"
+      ]
+    },
+    {
+      "q": "Why are flow batteries good for the grid?",
+      "a": "Energy and power can be sized separately: bigger tanks store more hours, and a bigger cell stack gives more power. They last for decades with little wear and their water-based liquids do not burn.",
+      "asks": [
+        "Why use flow batteries instead of lithium?"
+      ]
+    },
+    {
+      "q": "Why aren't flow batteries used in phones or cars?",
+      "a": "The liquids store far less energy for their weight than lithium-ion cells, so a flow battery is large and heavy. That is fine in a building beside a substation, but useless in your pocket.",
+      "asks": [
+        "Are flow batteries heavy?"
+      ]
+    }
+  ],
+  "facts": [
+    "In a flow battery, the energy stored depends on the size of the tanks, while the power depends on the size of the cell stack.",
+    "Vanadium flow batteries use vanadium on both sides, so liquid crossing the membrane does not permanently spoil the electrolytes."
+  ],
+  "quiz": [
+    {
+      "say": "A company wants its flow battery to run for twice as many hours at the same power. What should it enlarge?",
+      "show": "For twice the hours at the same power, enlarge…",
+      "options": [
+        {
+          "show": "The electrolyte tanks",
+          "say": "The electrolyte tanks"
+        },
+        {
+          "show": "The cell stack",
+          "say": "The cell stack"
+        },
+        {
+          "show": "The grid connection",
+          "say": "The grid connection"
+        }
+      ],
+      "answer": 0,
+      "why": "The energy is stored in the liquids, so twice the tank volume gives twice the hours.",
+      "wrong": {
+        "1": "A bigger cell stack gives more power, not more hours.",
+        "2": "The grid connection limits power, not how much energy is stored."
+      }
+    }
+  ]
+}

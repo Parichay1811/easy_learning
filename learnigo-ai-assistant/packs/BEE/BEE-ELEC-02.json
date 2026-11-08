@@ -1,0 +1,420 @@
+{
+  "id": "BEE-ELEC-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The p-n junction and the diode's I–V curve: why current flows one way",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "p-n junction",
+    "depletion region",
+    "diode I-V curve",
+    "forward bias",
+    "reverse bias",
+    "Shockley equation"
+  ],
+  "examples": [
+    "How does a p-n junction diode work?",
+    "Why does a silicon diode turn on at 0.7 V?",
+    "How do I calculate current through a diode and resistor?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Supply",
+          "value": "5 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R",
+          "value": "430 Ω",
+          "ask": "What is the constant-voltage diode model?"
+        },
+        {
+          "kind": "diode",
+          "label": "Silicon diode",
+          "value": "≈ 0.7 V",
+          "ask": "What is a p-n junction?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "Ammeter",
+          "value": "10 mA"
+        }
+      ],
+      "readouts": [
+        "V_D ≈ 0.7 V",
+        "V_R = 4.3 V",
+        "I = 4.3/430 = 10 mA"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Every phone charger, solar panel and LED relies on one simple device that lets current flow in only one direction: the diode. Inside it is a p-n junction, where p-type silicon meets n-type. On the board, a 5 volt supply pushes current through a 430 ohm resistor and a silicon diode.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The p-n junction and the diode's I–V curve: why current flows one way"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "430 Ω",
+              "ask": "What is the constant-voltage diode model?"
+            },
+            {
+              "kind": "diode",
+              "label": "Silicon diode",
+              "value": "≈ 0.7 V",
+              "ask": "What is a p-n junction?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "10 mA"
+            }
+          ],
+          "readouts": [
+            "V_D ≈ 0.7 V",
+            "V_R = 4.3 V",
+            "I = 4.3/430 = 10 mA"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "At the junction, electrons from the n side wander across and fill holes on the p side. That leaves a thin layer with no free carriers at all, the depletion region, and a built-in voltage across it, like a small hill. To get current flowing you must push the p side positive enough to flatten that hill. What do you think happens if you push the other way?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "430 Ω",
+              "ask": "What is the constant-voltage diode model?"
+            },
+            {
+              "kind": "diode",
+              "label": "Silicon diode",
+              "value": "≈ 0.7 V",
+              "ask": "What is a p-n junction?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "10 mA"
+            }
+          ],
+          "readouts": [
+            "V_D ≈ 0.7 V",
+            "V_R = 4.3 V",
+            "I = 4.3/430 = 10 mA"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Depletion region: no free carriers, and a built-in barrier."
+        }
+      ]
+    },
+    {
+      "say": "The hill grows, and almost nothing flows. Here's the diode's I–V curve, current against voltage. Below about 0.6 volts, hardly any current. Then the curve shoots up: by 0.7 volts several milliamps flow, and by 0.75 volts about 40. That bend is the knee. The rise is exponential: every extra 60 millivolts multiplies the current by about ten. Where would you say the diode turns on?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Diode voltage (V)",
+            "min": -1,
+            "max": 0.8
+          },
+          "y": {
+            "label": "Current (mA)",
+            "max": 40
+          },
+          "curves": [
+            {
+              "label": "Silicon diode",
+              "type": "points",
+              "smooth": true,
+              "ask": "Why is the turn-on voltage of a silicon diode 0.7 V?",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -0.5,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ],
+                [
+                  0.3,
+                  0
+                ],
+                [
+                  0.5,
+                  0
+                ],
+                [
+                  0.6,
+                  0.12
+                ],
+                [
+                  0.65,
+                  0.83
+                ],
+                [
+                  0.68,
+                  2.66
+                ],
+                [
+                  0.7,
+                  5.76
+                ],
+                [
+                  0.72,
+                  12.49
+                ],
+                [
+                  0.74,
+                  27.07
+                ],
+                [
+                  0.75,
+                  39.85
+                ]
+              ]
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.7,
+              "label": "Knee ≈ 0.7 V"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "I = I_S (e^(V/V_T) − 1),   V_T ≈ 26 mV"
+        }
+      ]
+    },
+    {
+      "say": "Around 0.7 volts, the knee. Now flip the diode round, which is called reverse bias. The depletion region widens, and only a tiny leakage current of nanoamps flows. The diode is a one-way valve. Push hard enough in reverse, though, and it breaks down, which a special diode, the Zener, uses on purpose. Why might a one-way valve help in a charger?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "430 Ω",
+              "ask": "What is the constant-voltage diode model?"
+            },
+            {
+              "kind": "diode",
+              "label": "Diode (reversed)",
+              "value": "−5 V",
+              "ask": "What happens when a diode is reverse biased?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "≈ 0 mA"
+            }
+          ],
+          "readouts": [
+            "Reverse biased",
+            "I ≈ 0 (nanoamps)"
+          ],
+          "flow": false,
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Reverse bias: I ≈ −I_S, a few nanoamps"
+        }
+      ]
+    },
+    {
+      "say": "To turn AC into DC, coming soon! Now the worked example. Engineers model a silicon diode as a fixed 0.7 volt drop once it is on. So the resistor gets 5 minus 0.7, which is 4.3 volts, and the current is 4.3 over 430 ohms, 10 milliamps, just as the ammeter reads. Well done! Challenge: what resistor gives 20 milliamps from the same 5 volts?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Supply",
+              "value": "5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R",
+              "value": "430 Ω",
+              "ask": "What is the constant-voltage diode model?"
+            },
+            {
+              "kind": "diode",
+              "label": "Silicon diode",
+              "value": "≈ 0.7 V",
+              "ask": "What is a p-n junction?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "Ammeter",
+              "value": "10 mA"
+            }
+          ],
+          "readouts": [
+            "V_D ≈ 0.7 V",
+            "V_R = 4.3 V",
+            "I = 4.3/430 = 10 mA"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "I = (5 − 0.7)/430 = 4.3/430 = 10 mA"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a p-n junction?",
+      "a": "The boundary where p-type and n-type silicon meet in one crystal. Carriers cross and recombine there, leaving a depletion region with a built-in voltage that lets current flow easily only one way.",
+      "asks": [
+        "How does a diode work?",
+        "What happens at a pn junction?"
+      ]
+    },
+    {
+      "q": "What is the depletion region?",
+      "a": "A thin layer either side of the junction that has lost its free electrons and holes. It acts as an insulating barrier with a built-in voltage.",
+      "asks": [
+        "Define depletion layer"
+      ]
+    },
+    {
+      "q": "Why is the turn-on voltage of a silicon diode 0.7 V?",
+      "a": "The current rises exponentially with voltage. Below about 0.6 volts it is tiny; by about 0.7 volts it reaches the milliamps real circuits use, so 0.7 volts is the practical knee.",
+      "asks": [
+        "What is the knee voltage?",
+        "Why 0.7 volts?"
+      ]
+    },
+    {
+      "q": "What is the constant-voltage diode model?",
+      "a": "Treat the diode as off below 0.7 volts and as a fixed 0.7 volt drop when on. It makes hand calculations quick and is usually accurate to a few percent.",
+      "asks": [
+        "How do I calculate current through a diode?"
+      ]
+    },
+    {
+      "q": "What happens when a diode is reverse biased?",
+      "a": "The depletion region widens and only a tiny leakage current flows, nanoamps for a small silicon diode, until the voltage reaches breakdown.",
+      "asks": [
+        "Does current flow backwards through a diode?"
+      ]
+    }
+  ],
+  "facts": [
+    "William Shockley derived the ideal diode equation in 1949.",
+    "A forward-biased silicon diode typically drops about 0.6 to 0.7 volts, while a red LED drops about 1.8 to 2 volts."
+  ],
+  "quiz": [
+    {
+      "say": "A 9 volt battery drives a silicon diode and an 830 ohm resistor in series. What current flows?",
+      "show": "A 9 V battery drives a silicon diode and an 830 Ω resistor in series. What current flows?",
+      "options": [
+        {
+          "show": "10 mA",
+          "say": "10 milliamps"
+        },
+        {
+          "show": "10.8 mA",
+          "say": "10.8 milliamps"
+        },
+        {
+          "show": "0.84 mA",
+          "say": "0.84 milliamps"
+        }
+      ],
+      "answer": 0,
+      "why": "The resistor gets 9 minus 0.7, which is 8.3 volts, and 8.3 over 830 is 10 milliamps.",
+      "wrong": {
+        "1": "That forgets the 0.7 volt diode drop.",
+        "2": "That divides only the diode drop by the resistor."
+      }
+    },
+    {
+      "say": "A silicon diode is reverse biased by 5 volts. What is the current, roughly?",
+      "show": "A silicon diode is reverse biased by 5 V. The current is about...",
+      "options": [
+        {
+          "show": "A few nanoamps",
+          "say": "A few nanoamps"
+        },
+        {
+          "show": "5 milliamps",
+          "say": "5 milliamps"
+        },
+        {
+          "show": "Unlimited",
+          "say": "Unlimited"
+        }
+      ],
+      "answer": 0,
+      "why": "In reverse the depletion region widens and only a tiny leakage current flows.",
+      "wrong": {
+        "1": "Milliamps flow only in forward bias, above the knee.",
+        "2": "Current only rises sharply at reverse breakdown, far above 5 volts for an ordinary diode."
+      }
+    }
+  ]
+}

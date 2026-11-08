@@ -1,0 +1,680 @@
+{
+  "id": "ENGX-MECH-14",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How clock gears turn the hour and minute hands",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "motion work",
+    "hour hand",
+    "minute hand",
+    "12 to 1 gear ratio",
+    "clock gear train"
+  ],
+  "examples": [
+    "Why does the hour hand move 12 times slower than the minute hand?",
+    "How do both clock hands turn from the same centre?",
+    "What gears are inside a clock?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "drive",
+          "kind": "gear",
+          "x": 0.1,
+          "y": 0.5,
+          "size": 0.9,
+          "label": "From the escapement",
+          "motion": "spin"
+        },
+        {
+          "id": "minute",
+          "kind": "gear",
+          "x": 0.32,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Minute wheel",
+          "motion": "spin",
+          "ask": "What turns the minute hand?"
+        },
+        {
+          "id": "mhand",
+          "kind": "lever",
+          "x": 0.32,
+          "y": 0.15,
+          "size": 0.8,
+          "label": "Minute hand",
+          "motion": "spin"
+        },
+        {
+          "id": "pair1",
+          "kind": "gear",
+          "x": 0.55,
+          "y": 0.32,
+          "size": 1.1,
+          "label": "3 to 1 gear pair",
+          "motion": "spin",
+          "ask": "Why use two pairs of gears?"
+        },
+        {
+          "id": "pair2",
+          "kind": "gear",
+          "x": 0.55,
+          "y": 0.75,
+          "size": 1.1,
+          "label": "4 to 1 gear pair",
+          "motion": "spin",
+          "ask": "Why use two pairs of gears?"
+        },
+        {
+          "id": "hour",
+          "kind": "gear",
+          "x": 0.8,
+          "y": 0.5,
+          "size": 1.3,
+          "label": "Hour wheel",
+          "motion": "spin",
+          "ask": "How do both hands turn from the same centre?"
+        },
+        {
+          "id": "hhand",
+          "kind": "lever",
+          "x": 0.8,
+          "y": 0.15,
+          "size": 0.7,
+          "label": "Hour hand",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "drive",
+          "to": "minute",
+          "kind": "energy"
+        },
+        {
+          "from": "minute",
+          "to": "mhand",
+          "kind": "energy",
+          "label": "1 turn an hour"
+        },
+        {
+          "from": "minute",
+          "to": "pair1",
+          "kind": "force"
+        },
+        {
+          "from": "pair1",
+          "to": "pair2",
+          "kind": "force"
+        },
+        {
+          "from": "pair2",
+          "to": "hour",
+          "kind": "force"
+        },
+        {
+          "from": "hour",
+          "to": "hhand",
+          "kind": "energy",
+          "label": "1 turn in 12 hours"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In a clock, the hour hand must turn exactly 12 times slower than the minute hand. A small set of gears behind the face, called the motion work, does this.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How clock gears turn the hour and minute hands"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "From the escapement",
+              "motion": "spin"
+            },
+            {
+              "id": "minute",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Minute wheel",
+              "motion": "spin",
+              "ask": "What turns the minute hand?"
+            },
+            {
+              "id": "mhand",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Minute hand",
+              "motion": "spin"
+            },
+            {
+              "id": "pair1",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "3 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "pair2",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.1,
+              "label": "4 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "hour",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Hour wheel",
+              "motion": "spin",
+              "ask": "How do both hands turn from the same centre?"
+            },
+            {
+              "id": "hhand",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hour hand",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "drive",
+              "to": "minute",
+              "kind": "energy"
+            },
+            {
+              "from": "minute",
+              "to": "mhand",
+              "kind": "energy",
+              "label": "1 turn an hour"
+            },
+            {
+              "from": "minute",
+              "to": "pair1",
+              "kind": "force"
+            },
+            {
+              "from": "pair1",
+              "to": "pair2",
+              "kind": "force"
+            },
+            {
+              "from": "pair2",
+              "to": "hour",
+              "kind": "force"
+            },
+            {
+              "from": "hour",
+              "to": "hhand",
+              "kind": "energy",
+              "label": "1 turn in 12 hours"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now let me show you the real thing in 3D: an analogue clock. Look at the hour hand, the minute hand and the second hand. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How clock gears turn the hour and minute hands"
+        },
+        {
+          "op": "image",
+          "render": "clock"
+        }
+      ]
+    },
+    {
+      "say": "The escapement controls a shaft that turns exactly once an hour. The minute hand is fixed to it.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "From the escapement",
+              "motion": "spin"
+            },
+            {
+              "id": "minute",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Minute wheel",
+              "motion": "spin",
+              "ask": "What turns the minute hand?"
+            },
+            {
+              "id": "mhand",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Minute hand",
+              "motion": "spin"
+            },
+            {
+              "id": "pair1",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "3 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "pair2",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.1,
+              "label": "4 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "hour",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Hour wheel",
+              "motion": "spin",
+              "ask": "How do both hands turn from the same centre?"
+            },
+            {
+              "id": "hhand",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hour hand",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "drive",
+              "to": "minute",
+              "kind": "energy"
+            },
+            {
+              "from": "minute",
+              "to": "mhand",
+              "kind": "energy",
+              "label": "1 turn an hour"
+            },
+            {
+              "from": "minute",
+              "to": "pair1",
+              "kind": "force"
+            },
+            {
+              "from": "pair1",
+              "to": "pair2",
+              "kind": "force"
+            },
+            {
+              "from": "pair2",
+              "to": "hour",
+              "kind": "force"
+            },
+            {
+              "from": "hour",
+              "to": "hhand",
+              "kind": "energy",
+              "label": "1 turn in 12 hours"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "One gear wheel can't easily give a 12 to 1 slow-down, so the clock uses two steps: a pair of gears that slows it 3 times, then another that slows it 4 times. 3 times 4 makes 12.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "From the escapement",
+              "motion": "spin"
+            },
+            {
+              "id": "minute",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Minute wheel",
+              "motion": "spin",
+              "ask": "What turns the minute hand?"
+            },
+            {
+              "id": "mhand",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Minute hand",
+              "motion": "spin"
+            },
+            {
+              "id": "pair1",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "3 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "pair2",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.1,
+              "label": "4 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "hour",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Hour wheel",
+              "motion": "spin",
+              "ask": "How do both hands turn from the same centre?"
+            },
+            {
+              "id": "hhand",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hour hand",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "drive",
+              "to": "minute",
+              "kind": "energy"
+            },
+            {
+              "from": "minute",
+              "to": "mhand",
+              "kind": "energy",
+              "label": "1 turn an hour"
+            },
+            {
+              "from": "minute",
+              "to": "pair1",
+              "kind": "force"
+            },
+            {
+              "from": "pair1",
+              "to": "pair2",
+              "kind": "force"
+            },
+            {
+              "from": "pair2",
+              "to": "hour",
+              "kind": "force"
+            },
+            {
+              "from": "hour",
+              "to": "hhand",
+              "kind": "energy",
+              "label": "1 turn in 12 hours"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "The last gear, the hour wheel, sits on a tube that slides over the minute shaft. So both hands turn about the same centre, the hour hand going round once every 12 hours.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.1,
+              "y": 0.5,
+              "size": 0.9,
+              "label": "From the escapement",
+              "motion": "spin"
+            },
+            {
+              "id": "minute",
+              "kind": "gear",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Minute wheel",
+              "motion": "spin",
+              "ask": "What turns the minute hand?"
+            },
+            {
+              "id": "mhand",
+              "kind": "lever",
+              "x": 0.32,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Minute hand",
+              "motion": "spin"
+            },
+            {
+              "id": "pair1",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.32,
+              "size": 1.1,
+              "label": "3 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "pair2",
+              "kind": "gear",
+              "x": 0.55,
+              "y": 0.75,
+              "size": 1.1,
+              "label": "4 to 1 gear pair",
+              "motion": "spin",
+              "ask": "Why use two pairs of gears?"
+            },
+            {
+              "id": "hour",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Hour wheel",
+              "motion": "spin",
+              "ask": "How do both hands turn from the same centre?"
+            },
+            {
+              "id": "hhand",
+              "kind": "lever",
+              "x": 0.8,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Hour hand",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "drive",
+              "to": "minute",
+              "kind": "energy"
+            },
+            {
+              "from": "minute",
+              "to": "mhand",
+              "kind": "energy",
+              "label": "1 turn an hour"
+            },
+            {
+              "from": "minute",
+              "to": "pair1",
+              "kind": "force"
+            },
+            {
+              "from": "pair1",
+              "to": "pair2",
+              "kind": "force"
+            },
+            {
+              "from": "pair2",
+              "to": "hour",
+              "kind": "force"
+            },
+            {
+              "from": "hour",
+              "to": "hhand",
+              "kind": "energy",
+              "label": "1 turn in 12 hours"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What turns the minute hand?",
+      "a": "The minute hand is fixed to a shaft that the clock's gear train turns exactly once an hour, at a speed controlled by the escapement.",
+      "asks": [
+        "How does the minute hand move?"
+      ]
+    },
+    {
+      "q": "Why use two pairs of gears?",
+      "a": "A 12 to 1 slow-down in one step would need a huge gear and a tiny one. Two steps, such as 3 to 1 and 4 to 1, multiply to 12 to 1 with gears that fit behind the face.",
+      "asks": [
+        "What is a compound gear train?"
+      ]
+    },
+    {
+      "q": "How do both hands turn from the same centre?",
+      "a": "The hour wheel is mounted on a hollow tube that fits over the minute hand's shaft. The minute hand fits on the shaft and the hour hand on the tube, so they share a centre but turn at different speeds.",
+      "asks": [
+        "Why are the clock hands on one spindle?"
+      ]
+    },
+    {
+      "q": "Why does the hour hand move 12 times slower than the minute hand?",
+      "a": "The minute hand goes round once an hour, and the hour hand must go round once in 12 hours. So the gears between them slow the motion by 12 times.",
+      "asks": [
+        "What is the gear ratio between clock hands?"
+      ]
+    },
+    {
+      "q": "What turns the second hand?",
+      "a": "In many pendulum clocks the escape wheel turns once a minute, so the second hand is fixed to its shaft. Another set of gears links it to the minute shaft with a 60 to 1 slow-down.",
+      "asks": [
+        "How does the second hand work?"
+      ]
+    }
+  ],
+  "facts": [
+    "In a two-step gear train, the overall ratio is the two ratios multiplied together.",
+    "The minute hand turns 12 times faster than the hour hand and 60 times slower than a second hand."
+  ],
+  "quiz": [
+    {
+      "say": "A gear pair slows motion 3 times and the next slows it 4 times. What is the total slow-down?",
+      "show": "A gear pair slows motion 3 times and the next slows it 4 times. What is the total slow-down?",
+      "options": [
+        {
+          "show": "7 times",
+          "say": "7 times"
+        },
+        {
+          "show": "12 times",
+          "say": "12 times"
+        },
+        {
+          "show": "1 time",
+          "say": "1 time"
+        }
+      ],
+      "answer": 1,
+      "why": "Gear ratios in a train multiply: 3 times 4 is 12.",
+      "wrong": {
+        "0": "Ratios multiply; they do not add.",
+        "2": "Both pairs slow the motion, so it gets much slower."
+      }
+    }
+  ]
+}

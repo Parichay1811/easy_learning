@@ -1,0 +1,444 @@
+{
+  "id": "BME-FLUID-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Centrifugal pumps: reading pump curves and finding the operating point",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-FLUID — Fluid mechanics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "centrifugal pump",
+    "pump curve",
+    "system curve",
+    "operating point",
+    "impeller"
+  ],
+  "examples": [
+    "How does a centrifugal pump work?",
+    "How do I find the operating point of a pump?",
+    "What is a system curve?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Flow Q (L/s)",
+        "max": 50
+      },
+      "y": {
+        "label": "Head H (m)",
+        "max": 60
+      },
+      "curves": [
+        {
+          "label": "Pump curve",
+          "type": "power",
+          "c": 40,
+          "a": -0.01,
+          "k": 2,
+          "ask": "What is a pump curve?"
+        },
+        {
+          "label": "System curve",
+          "type": "power",
+          "c": 10,
+          "a": 0.02,
+          "k": 2,
+          "ask": "What is a system curve?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 31.6,
+          "label": "Operating point"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Almost every building, farm and factory moves water with a centrifugal pump. Look inside: a motor spins an impeller, a wheel of curved vanes. Water enters at the centre, the eye, and is flung outwards, gaining speed. The spiral casing, the volute, slows it down and turns that speed into pressure.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Centrifugal pumps: reading pump curves and finding the operating point"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "label": "Electric motor"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.32,
+              "y": 0.5,
+              "label": "Shaft"
+            },
+            {
+              "id": "imp",
+              "kind": "fan",
+              "x": 0.55,
+              "y": 0.5,
+              "size": 1.3,
+              "label": "Impeller",
+              "ask": "How does a centrifugal pump work?"
+            },
+            {
+              "id": "in",
+              "kind": "pipe",
+              "x": 0.55,
+              "y": 0.85,
+              "label": "Inlet (eye)"
+            },
+            {
+              "id": "out",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.25,
+              "label": "Volute outlet"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power"
+            },
+            {
+              "from": "shaft",
+              "to": "imp",
+              "kind": "power"
+            },
+            {
+              "from": "in",
+              "to": "imp",
+              "kind": "fluid",
+              "label": "Water in"
+            },
+            {
+              "from": "imp",
+              "to": "out",
+              "kind": "fluid",
+              "label": "Water flung out"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Spinning vanes give the water speed; the volute turns it into head"
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a centrifugal pump, cut open. Water enters at the eye, the spinning impeller flings it outwards, and the volute casing slows it down into pressure at the outlet. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Centrifugal pumps: reading pump curves and finding the operating point"
+        },
+        {
+          "op": "image",
+          "render": "centrifugal-pump"
+        }
+      ]
+    },
+    {
+      "say": "Every pump has a pump curve: the head it can give at each flow rate. Head is the height the pump could lift the water. See the falling curve? This pump gives 40 metres with the valve shut, and less as more water flows through it. At 50 litres per second it only gives 15 metres.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Flow Q (L/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Head H (m)",
+            "max": 60
+          },
+          "curves": [
+            {
+              "label": "Pump curve",
+              "type": "power",
+              "c": 40,
+              "a": -0.01,
+              "k": 2,
+              "ask": "What is a pump curve?"
+            },
+            {
+              "label": "System curve",
+              "type": "power",
+              "c": 10,
+              "a": 0.02,
+              "k": 2,
+              "ask": "What is a system curve?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 31.6,
+              "label": "Operating point"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Pump: H = 40 − 0.01 Q²"
+        }
+      ]
+    },
+    {
+      "say": "Your pipes have their own curve, the system curve. It starts at the static lift, here 10 metres, and rises with flow squared because of pipe friction. See the rising curve? Where do you think the pump will actually run?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Flow Q (L/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Head H (m)",
+            "max": 60
+          },
+          "curves": [
+            {
+              "label": "Pump curve",
+              "type": "power",
+              "c": 40,
+              "a": -0.01,
+              "k": 2,
+              "ask": "What is a pump curve?"
+            },
+            {
+              "label": "System curve",
+              "type": "power",
+              "c": 10,
+              "a": 0.02,
+              "k": 2,
+              "ask": "What is a system curve?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 31.6,
+              "label": "Operating point"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "System: H = 10 + 0.02 Q²"
+        }
+      ]
+    },
+    {
+      "say": "Exactly where the two curves cross: the operating point. Setting them equal, 40 minus 0.01 Q squared equals 10 plus 0.02 Q squared, gives Q squared equal to 1000, so Q is 31.6 litres per second at a head of 30 metres. The water power is rho g Q H, about 9.3 kilowatts.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Flow Q (L/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Head H (m)",
+            "max": 60
+          },
+          "curves": [
+            {
+              "label": "Pump curve",
+              "type": "power",
+              "c": 40,
+              "a": -0.01,
+              "k": 2,
+              "ask": "What is a pump curve?"
+            },
+            {
+              "label": "System curve",
+              "type": "power",
+              "c": 10,
+              "a": 0.02,
+              "k": 2,
+              "ask": "What is a system curve?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 31.6,
+              "label": "Operating point"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P = ρgQH = 1000 × 9.81 × 0.0316 × 30 ≈ 9.3 kW"
+        }
+      ]
+    },
+    {
+      "say": "At 75 percent efficiency the motor must supply about 12.4 kilowatts. Excellent work! Real link: closing a valve steepens the system curve and moves the operating point left. Exam tip: the affinity laws say flow goes with speed, and head with speed squared.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Flow Q (L/s)",
+            "max": 50
+          },
+          "y": {
+            "label": "Head H (m)",
+            "max": 60
+          },
+          "curves": [
+            {
+              "label": "Pump curve",
+              "type": "power",
+              "c": 40,
+              "a": -0.01,
+              "k": 2,
+              "ask": "What is a pump curve?"
+            },
+            {
+              "label": "System curve",
+              "type": "power",
+              "c": 10,
+              "a": 0.02,
+              "k": 2,
+              "ask": "What is a system curve?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 31.6,
+              "label": "Operating point"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Shaft power = 9.3 / 0.75 ≈ 12.4 kW"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a centrifugal pump work?",
+      "a": "A motor spins an impeller. Water enters at the eye in the centre and the vanes fling it outwards, adding speed. The volute casing then slows it and converts the speed into pressure, or head.",
+      "asks": [
+        "what does the impeller do",
+        "impeller"
+      ]
+    },
+    {
+      "q": "What is a pump curve?",
+      "a": "A graph from the maker showing the head a pump delivers at each flow rate, at a fixed speed. Head is highest at zero flow and falls as flow rises.",
+      "asks": [
+        "pump characteristic curve",
+        "head flow curve"
+      ]
+    },
+    {
+      "q": "What is a system curve?",
+      "a": "A graph of the head your pipework needs at each flow: the static lift plus friction losses, which rise with flow squared.",
+      "asks": [
+        "system resistance curve"
+      ]
+    },
+    {
+      "q": "How do I find the operating point of a pump?",
+      "a": "Draw the pump curve and the system curve on the same axes. The pump runs where they cross, because there the head it gives equals the head the pipes need.",
+      "asks": [
+        "duty point of a pump"
+      ]
+    },
+    {
+      "q": "What are the pump affinity laws?",
+      "a": "For the same pump at a new speed, flow scales with speed, head with speed squared and power with speed cubed.",
+      "asks": [
+        "affinity laws"
+      ]
+    }
+  ],
+  "facts": [
+    "A pump runs where its head–flow curve crosses the system curve.",
+    "By the affinity laws, a 10 % cut in pump speed cuts power by about 27 %."
+  ],
+  "quiz": [
+    {
+      "say": "A pump delivers 20 litres per second against a head of 25 metres. What is the water power? Use g equals 9.81.",
+      "show": "Pump: Q = 20 L/s, H = 25 m. Water power? (g = 9.81)",
+      "options": [
+        {
+          "show": "4.9 kW",
+          "say": "4.9 kilowatts"
+        },
+        {
+          "show": "490 W",
+          "say": "490 watts"
+        },
+        {
+          "show": "49 kW",
+          "say": "49 kilowatts"
+        }
+      ],
+      "answer": 0,
+      "why": "P = ρgQH = 1000 × 9.81 × 0.020 × 25 = 4905 W ≈ 4.9 kW.",
+      "wrong": {
+        "1": "A factor of ten is lost; 20 L/s is 0.020 m³/s.",
+        "2": "That uses 0.2 m³/s; 20 litres is 0.020 m³."
+      }
+    },
+    {
+      "say": "You partly close a valve in the delivery pipe. What happens to the operating point?",
+      "show": "You partly close a delivery valve. The operating point moves to…",
+      "options": [
+        {
+          "show": "Lower flow and higher head",
+          "say": "Lower flow and higher head"
+        },
+        {
+          "show": "Higher flow and higher head",
+          "say": "Higher flow and higher head"
+        },
+        {
+          "show": "Higher flow and lower head",
+          "say": "Higher flow and lower head"
+        }
+      ],
+      "answer": 0,
+      "why": "The valve adds loss, steepening the system curve, so it meets the falling pump curve at a lower flow and higher head.",
+      "wrong": {
+        "1": "The pump curve falls with flow, so flow and head cannot both rise.",
+        "2": "That would need a flatter system curve, as if you opened the valve."
+      }
+    }
+  ]
+}

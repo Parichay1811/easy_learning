@@ -1,0 +1,589 @@
+{
+  "id": "BME-FLUID-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Reynolds number: when pipe flow turns from laminar to turbulent",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-FLUID — Fluid mechanics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Reynolds number",
+    "laminar flow",
+    "turbulent flow",
+    "transition",
+    "velocity profile"
+  ],
+  "examples": [
+    "What is the Reynolds number?",
+    "When does pipe flow become turbulent?",
+    "What is the difference between laminar and turbulent flow?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Radius r/R",
+        "min": -1,
+        "max": 1
+      },
+      "y": {
+        "label": "Speed u/u_max",
+        "max": 1.1
+      },
+      "curves": [
+        {
+          "label": "Laminar (parabola)",
+          "type": "points",
+          "points": [
+            [
+              -1,
+              0
+            ],
+            [
+              -0.75,
+              0.438
+            ],
+            [
+              -0.5,
+              0.75
+            ],
+            [
+              -0.25,
+              0.938
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0.25,
+              0.938
+            ],
+            [
+              0.5,
+              0.75
+            ],
+            [
+              0.75,
+              0.438
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "smooth": true,
+          "ask": "What does the laminar velocity profile look like?"
+        },
+        {
+          "label": "Turbulent (flat)",
+          "type": "points",
+          "points": [
+            [
+              -1,
+              0
+            ],
+            [
+              -0.95,
+              0.652
+            ],
+            [
+              -0.75,
+              0.82
+            ],
+            [
+              -0.5,
+              0.906
+            ],
+            [
+              -0.25,
+              0.96
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              0.25,
+              0.96
+            ],
+            [
+              0.5,
+              0.906
+            ],
+            [
+              0.75,
+              0.82
+            ],
+            [
+              0.95,
+              0.652
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "smooth": true,
+          "ask": "What does the turbulent velocity profile look like?"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1883 Osborne Reynolds let a thin thread of dye into water flowing through a glass pipe. At low speed the dye stayed a neat line. Speed it up and suddenly the dye burst into swirls. He found one number that predicts which will happen. Look at the two flows side by side.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Reynolds number: when pipe flow turns from laminar to turbulent"
+        },
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Laminar, Re < 2300",
+            "icon": "wave",
+            "points": [
+              "Smooth layers slide",
+              "Dye stays a thin line",
+              "Parabolic speed profile",
+              "Oil in a 25 mm pipe: 220"
+            ]
+          },
+          "right": {
+            "title": "Turbulent, Re > 4000",
+            "icon": "wind",
+            "points": [
+              "Swirling eddies mix",
+              "Dye spreads at once",
+              "Flat speed profile",
+              "Water in 25 mm pipe: 25,000"
+            ]
+          },
+          "verdict": "Between 2300 and 4000: transition",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Re = inertia forces / viscous forces"
+        }
+      ]
+    },
+    {
+      "say": "The Reynolds number is rho times V times D over mu: how strongly the fluid keeps moving compared with how strongly viscosity calms it down. Water at 1 metre per second in a 25 millimetre pipe: 1000 times 1 times 0.025 over 0.001 gives 25,000. That is well over 4000, so it is turbulent.",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Laminar, Re < 2300",
+            "icon": "wave",
+            "points": [
+              "Smooth layers slide",
+              "Dye stays a thin line",
+              "Parabolic speed profile",
+              "Oil in a 25 mm pipe: 220"
+            ]
+          },
+          "right": {
+            "title": "Turbulent, Re > 4000",
+            "icon": "wind",
+            "points": [
+              "Swirling eddies mix",
+              "Dye spreads at once",
+              "Flat speed profile",
+              "Water in 25 mm pipe: 25,000"
+            ]
+          },
+          "verdict": "Between 2300 and 4000: transition",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Re = ρVD/μ = 1000 × 1 × 0.025 / 0.001 = 25 000"
+        }
+      ]
+    },
+    {
+      "say": "Now pump engine oil, a hundred times more viscous, through the same pipe at the same speed. Re is 880 times 1 times 0.025 over 0.1, only 220. Below 2300, so the flow is laminar. See the curved parabola on the graph? In laminar flow the centre moves twice as fast as the average.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Radius r/R",
+            "min": -1,
+            "max": 1
+          },
+          "y": {
+            "label": "Speed u/u_max",
+            "max": 1.1
+          },
+          "curves": [
+            {
+              "label": "Laminar (parabola)",
+              "type": "points",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -0.75,
+                  0.438
+                ],
+                [
+                  -0.5,
+                  0.75
+                ],
+                [
+                  -0.25,
+                  0.938
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.25,
+                  0.938
+                ],
+                [
+                  0.5,
+                  0.75
+                ],
+                [
+                  0.75,
+                  0.438
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the laminar velocity profile look like?"
+            },
+            {
+              "label": "Turbulent (flat)",
+              "type": "points",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -0.95,
+                  0.652
+                ],
+                [
+                  -0.75,
+                  0.82
+                ],
+                [
+                  -0.5,
+                  0.906
+                ],
+                [
+                  -0.25,
+                  0.96
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.25,
+                  0.96
+                ],
+                [
+                  0.5,
+                  0.906
+                ],
+                [
+                  0.75,
+                  0.82
+                ],
+                [
+                  0.95,
+                  0.652
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the turbulent velocity profile look like?"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Re_oil = 880 × 1 × 0.025 / 0.1 = 220"
+        }
+      ]
+    },
+    {
+      "say": "In turbulent flow, eddies mix fast fluid from the middle with slow fluid near the wall. That flattens the profile: see the blunt curve that drops steeply at the wall. Steep speed change at the wall means more friction. Which flow do you think loses more energy?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Radius r/R",
+            "min": -1,
+            "max": 1
+          },
+          "y": {
+            "label": "Speed u/u_max",
+            "max": 1.1
+          },
+          "curves": [
+            {
+              "label": "Laminar (parabola)",
+              "type": "points",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -0.75,
+                  0.438
+                ],
+                [
+                  -0.5,
+                  0.75
+                ],
+                [
+                  -0.25,
+                  0.938
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.25,
+                  0.938
+                ],
+                [
+                  0.5,
+                  0.75
+                ],
+                [
+                  0.75,
+                  0.438
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the laminar velocity profile look like?"
+            },
+            {
+              "label": "Turbulent (flat)",
+              "type": "points",
+              "points": [
+                [
+                  -1,
+                  0
+                ],
+                [
+                  -0.95,
+                  0.652
+                ],
+                [
+                  -0.75,
+                  0.82
+                ],
+                [
+                  -0.5,
+                  0.906
+                ],
+                [
+                  -0.25,
+                  0.96
+                ],
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.25,
+                  0.96
+                ],
+                [
+                  0.5,
+                  0.906
+                ],
+                [
+                  0.75,
+                  0.82
+                ],
+                [
+                  0.95,
+                  0.652
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "smooth": true,
+              "ask": "What does the turbulent velocity profile look like?"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Turbulent: flatter middle, steep near the wall"
+        }
+      ]
+    },
+    {
+      "say": "Turbulent flow, by far. Superb work! Real link: most water pipes, rivers and air ducts are turbulent, while blood in tiny capillaries and oil in bearings are laminar. Exam tip: use the pipe diameter in Re for pipes, and remember 2300 and 4000 as the usual limits.",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Laminar, Re < 2300",
+            "icon": "wave",
+            "points": [
+              "Smooth layers slide",
+              "Dye stays a thin line",
+              "Parabolic speed profile",
+              "Oil in a 25 mm pipe: 220"
+            ]
+          },
+          "right": {
+            "title": "Turbulent, Re > 4000",
+            "icon": "wind",
+            "points": [
+              "Swirling eddies mix",
+              "Dye spreads at once",
+              "Flat speed profile",
+              "Water in 25 mm pipe: 25,000"
+            ]
+          },
+          "verdict": "Between 2300 and 4000: transition",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Pipes: laminar below about 2300, turbulent above about 4000"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the Reynolds number?",
+      "a": "Re equals rho V D over mu, the ratio of inertia forces to viscous forces. It has no units and tells you whether a flow will be laminar or turbulent.",
+      "asks": [
+        "Reynolds number formula",
+        "Reynolds number meaning"
+      ]
+    },
+    {
+      "q": "What does the laminar velocity profile look like?",
+      "a": "In laminar pipe flow the speed varies as a parabola across the pipe: zero at the wall and fastest in the middle, at twice the mean speed.",
+      "asks": [
+        "parabolic velocity profile"
+      ]
+    },
+    {
+      "q": "What does the turbulent velocity profile look like?",
+      "a": "It is much flatter across the middle because eddies mix the flow, then drops steeply to zero in a thin layer at the wall.",
+      "asks": [
+        "turbulent velocity profile",
+        "one seventh power law"
+      ]
+    },
+    {
+      "q": "When does pipe flow become turbulent?",
+      "a": "In a round pipe the flow is usually laminar below a Reynolds number of about 2300 and turbulent above about 4000, with a transition region in between.",
+      "asks": [
+        "critical Reynolds number"
+      ]
+    },
+    {
+      "q": "What is the difference between laminar and turbulent flow?",
+      "a": "Laminar flow moves in smooth layers that do not mix. Turbulent flow is full of swirling eddies that mix the fluid and raise friction.",
+      "asks": [
+        "laminar vs turbulent"
+      ]
+    }
+  ],
+  "facts": [
+    "Osborne Reynolds published his dye experiments on pipe flow in 1883.",
+    "In laminar pipe flow the centreline speed is twice the mean speed."
+  ],
+  "quiz": [
+    {
+      "say": "Air with density 1.2 and viscosity 1.8 times ten to the minus 5 flows at 3 metres per second in a 0.1 metre duct. What is the Reynolds number?",
+      "show": "Air: ρ = 1.2 kg/m³, μ = 1.8×10⁻⁵ Pa·s, V = 3 m/s, D = 0.1 m. Re?",
+      "options": [
+        {
+          "show": "20 000",
+          "say": "20 000"
+        },
+        {
+          "show": "2000",
+          "say": "2000"
+        },
+        {
+          "show": "200 000",
+          "say": "200 000"
+        }
+      ],
+      "answer": 0,
+      "why": "Re = 1.2 × 3 × 0.1 / 1.8×10⁻⁵ = 0.36 / 0.000018 = 20 000, so it is turbulent.",
+      "wrong": {
+        "1": "One factor of ten has gone missing; check the 10⁻⁵.",
+        "2": "One factor of ten too many; recheck 0.36 divided by 0.000018."
+      }
+    },
+    {
+      "say": "Why does turbulent pipe flow have more friction than laminar flow at the same mean speed?",
+      "show": "Why is friction higher in turbulent pipe flow?",
+      "options": [
+        {
+          "show": "Eddies make the speed change very steeply at the wall",
+          "say": "Eddies make the speed change very steeply at the wall"
+        },
+        {
+          "show": "The fluid becomes more viscous",
+          "say": "The fluid becomes more viscous"
+        },
+        {
+          "show": "The pipe gets narrower",
+          "say": "The pipe gets narrower"
+        }
+      ],
+      "answer": 0,
+      "why": "Mixing flattens the profile, so the velocity drops to zero in a thin layer and the wall shear stress is high.",
+      "wrong": {
+        "1": "Viscosity is a property of the fluid; it does not change with the flow type.",
+        "2": "The pipe stays the same size."
+      }
+    }
+  ]
+}

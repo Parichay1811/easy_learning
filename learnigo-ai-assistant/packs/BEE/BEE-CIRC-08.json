@@ -1,0 +1,400 @@
+{
+  "id": "BEE-CIRC-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Thevenin's theorem: a whole circuit as one battery and one resistor",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "Thevenin's theorem",
+    "Thevenin equivalent",
+    "open-circuit voltage",
+    "Thevenin resistance",
+    "load"
+  ],
+  "examples": [
+    "How do I find a Thevenin equivalent circuit?",
+    "How do you calculate Rth?",
+    "Why is Thevenin's theorem useful?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Source",
+          "value": "12 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "3 Ω",
+          "ask": "How do I find the Thevenin resistance?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R2",
+          "value": "6 Ω",
+          "branch": 1,
+          "ask": "How do I find the Thevenin voltage?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R3",
+          "value": "2 Ω",
+          "branch": 2
+        },
+        {
+          "kind": "resistor",
+          "label": "Load R_L",
+          "value": "4 Ω",
+          "branch": 2,
+          "ask": "Why is Thevenin's theorem useful?"
+        }
+      ],
+      "readouts": [
+        "Load current = 1 A",
+        "Load voltage = 4 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Léon Thévenin, a French telegraph engineer, showed in 1883 that any network of sources and resistors, seen from two terminals, behaves exactly like one battery in series with one resistor. On the board: a 12 volt source, R1 of 3 ohms, R2 of 6 ohms and R3 of 2 ohms feed a 4 ohm load. Let's shrink everything except the load.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Thevenin's theorem: a whole circuit as one battery and one resistor"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "ask": "How do I find the Thevenin resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "How do I find the Thevenin voltage?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "2 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "4 Ω",
+              "branch": 2,
+              "ask": "Why is Thevenin's theorem useful?"
+            }
+          ],
+          "readouts": [
+            "Load current = 1 A",
+            "Load voltage = 4 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Step one: take the load away and measure the open-circuit voltage, called the Thevenin voltage. With no load current, R3 carries nothing and drops nothing, so the voltmeter sees the voltage across R2. That is a divider: 12 times 6 over 9, which is 8 volts. Why does R3 drop no voltage here?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "ask": "How do I find the Thevenin resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "How do I find the Thevenin voltage?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "2 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "voltmeter",
+              "label": "Open-circuit V",
+              "value": "8 V",
+              "branch": 2,
+              "ask": "How do I find the Thevenin voltage?"
+            }
+          ],
+          "readouts": [
+            "Load removed",
+            "V_th = 8 V"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "V_th = 12 × 6/(3+6) = 8 V"
+        }
+      ]
+    },
+    {
+      "say": "Because no current flows through it. Step two: find the Thevenin resistance. Switch the source off, which for a voltage source means replacing it with a plain wire, and look back in from the load terminals. You see R1 and R2 in parallel, which is 2 ohms, then R3 in series: 2 plus 2 makes 4 ohms. Would a bigger R3 raise or lower R th?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "3 Ω",
+              "ask": "How do I find the Thevenin resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "How do I find the Thevenin voltage?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "2 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "4 Ω",
+              "branch": 2,
+              "ask": "Why is Thevenin's theorem useful?"
+            }
+          ],
+          "readouts": [
+            "Load current = 1 A",
+            "Load voltage = 4 V"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "R_th = (3 ∥ 6) + 2 = 2 + 2 = 4 Ω"
+        },
+        {
+          "op": "note",
+          "text": "Sources off: a voltage source becomes a wire, a current source an open."
+        }
+      ]
+    },
+    {
+      "say": "Raise it. So here is the whole network squeezed down: an 8 volt source with 4 ohms in series. Put the 4 ohm load back and the current is 8 over 8, which is 1 amp, with 4 volts across the load. Exactly what the original circuit gives, without solving it again. Which parts of this little circuit stay the same when you swap loads?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Thevenin source",
+              "value": "8 V",
+              "ask": "What is Thevenin's theorem?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_th",
+              "value": "4 Ω",
+              "ask": "How do I find the Thevenin resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "4 Ω",
+              "ask": "Why is Thevenin's theorem useful?"
+            }
+          ],
+          "readouts": [
+            "I = 8 V / 8 Ω = 1 A",
+            "V_L = 4 V"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "I_L = 8 V / (4 Ω + 4 Ω) = 1 A"
+        }
+      ]
+    },
+    {
+      "say": "The source and R th never change. That is the power of Thevenin: try a 12 ohm load and you get 8 over 16, half an amp, in one line. Brilliant work! Real batteries are Thevenin models too: a charged car battery is about 12.6 volts behind a tiny internal resistance. Challenge: what current flows if you short the terminals?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Thevenin source",
+              "value": "8 V",
+              "ask": "What is Thevenin's theorem?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_th",
+              "value": "4 Ω",
+              "ask": "How do I find the Thevenin resistance?"
+            },
+            {
+              "kind": "resistor",
+              "label": "Load R_L",
+              "value": "12 Ω",
+              "ask": "Why is Thevenin's theorem useful?"
+            }
+          ],
+          "readouts": [
+            "I = 8 V / 16 Ω = 0.5 A",
+            "V_L = 6 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "I_L = 8 / (4 + 12) = 0.5 A"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is Thevenin's theorem?",
+      "a": "Any linear network of sources and resistors, seen from two terminals, can be replaced by one voltage source V th in series with one resistance R th, and the load cannot tell the difference.",
+      "asks": [
+        "State Thevenin's theorem",
+        "What is a Thevenin equivalent?"
+      ]
+    },
+    {
+      "q": "How do I find the Thevenin voltage?",
+      "a": "Remove the load and work out the voltage across the open terminals. Here R3 carries no current, so V th is the divider voltage across R2, which is 8 volts.",
+      "asks": [
+        "What is open-circuit voltage?",
+        "How to calculate Vth"
+      ]
+    },
+    {
+      "q": "How do I find the Thevenin resistance?",
+      "a": "Turn off every independent source, so voltage sources become wires and current sources become open circuits, then find the resistance looking back into the terminals.",
+      "asks": [
+        "How to calculate Rth",
+        "What does turning off the sources mean?"
+      ]
+    },
+    {
+      "q": "Why is Thevenin's theorem useful?",
+      "a": "It lets you test many different loads without re-solving the whole network each time. It is also how engineers model batteries, sensors and amplifier outputs.",
+      "asks": [
+        "Why use a Thevenin equivalent?"
+      ]
+    },
+    {
+      "q": "Does Thevenin's theorem work for any circuit?",
+      "a": "It works for linear circuits: resistors, linear sources and, in AC, inductors and capacitors. It does not hold exactly for nonlinear parts like diodes.",
+      "asks": [
+        "Can Thevenin be used with diodes?"
+      ]
+    }
+  ],
+  "facts": [
+    "Léon Charles Thévenin published his equivalent-circuit theorem in 1883.",
+    "Hermann von Helmholtz described the same idea in 1853, so it is sometimes called the Helmholtz–Thévenin theorem."
+  ],
+  "quiz": [
+    {
+      "say": "A network has a Thevenin voltage of 10 volts and a Thevenin resistance of 2 ohms. What current flows into a 3 ohm load?",
+      "show": "A network has V_th = 10 V and R_th = 2 Ω. What current flows into a 3 Ω load?",
+      "options": [
+        {
+          "show": "2 A",
+          "say": "2 amps"
+        },
+        {
+          "show": "5 A",
+          "say": "5 amps"
+        },
+        {
+          "show": "3.3 A",
+          "say": "3.3 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "The load sees 10 volts behind 2 plus 3 ohms, so the current is 10 over 5, which is 2 amps.",
+      "wrong": {
+        "1": "10 over 2 ignores the load resistance.",
+        "2": "10 over 3 forgets R th in series with the load."
+      }
+    },
+    {
+      "say": "When finding the Thevenin resistance, what do you replace an ideal voltage source with?",
+      "show": "When finding R_th, what do you replace an ideal voltage source with?",
+      "options": [
+        {
+          "show": "A short circuit (a wire)",
+          "say": "A short circuit (a wire)"
+        },
+        {
+          "show": "An open circuit",
+          "say": "An open circuit"
+        },
+        {
+          "show": "A 1 Ω resistor",
+          "say": "A 1 ohm resistor"
+        }
+      ],
+      "answer": 0,
+      "why": "An ideal voltage source has zero internal resistance, so switching it off leaves a plain wire.",
+      "wrong": {
+        "1": "An open circuit replaces a current source, not a voltage source.",
+        "2": "There is no resistor; an ideal voltage source has zero resistance."
+      }
+    }
+  ]
+}

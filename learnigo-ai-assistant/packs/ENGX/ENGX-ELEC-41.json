@@ -1,0 +1,291 @@
+{
+  "id": "ENGX-ELEC-41",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "Series or parallel: why one dead bulb matters",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "series circuit",
+    "parallel circuit",
+    "fairy lights",
+    "branches",
+    "dead bulb"
+  ],
+  "examples": [
+    "What is the difference between series and parallel circuits?",
+    "Why do all the lights go out when one bulb breaks?",
+    "Why are houses wired in parallel?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-compare",
+      "left": {
+        "title": "Series",
+        "icon": "wire",
+        "ask": "What is a series circuit?",
+        "points": [
+          "One single loop",
+          "Bulbs share the voltage",
+          "One breaks: all go out",
+          "Bulbs glow dimmer"
+        ]
+      },
+      "right": {
+        "title": "Parallel",
+        "icon": "house",
+        "ask": "What is a parallel circuit?",
+        "points": [
+          "Separate branches",
+          "Each bulb gets full voltage",
+          "One breaks: others stay lit",
+          "Bulbs glow brighter"
+        ]
+      },
+      "verdict": "Homes are wired in parallel so each device works alone."
+    }
+  ],
+  "explain": [
+    {
+      "say": "There are two ways to join several bulbs to one battery: in series, one after another, or in parallel, each on its own branch.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Series or parallel: why one dead bulb matters"
+        },
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Series",
+            "icon": "wire",
+            "ask": "What is a series circuit?",
+            "points": [
+              "One single loop",
+              "Bulbs share the voltage",
+              "One breaks: all go out",
+              "Bulbs glow dimmer"
+            ]
+          },
+          "right": {
+            "title": "Parallel",
+            "icon": "house",
+            "ask": "What is a parallel circuit?",
+            "points": [
+              "Separate branches",
+              "Each bulb gets full voltage",
+              "One breaks: others stay lit",
+              "Bulbs glow brighter"
+            ]
+          },
+          "verdict": "Homes are wired in parallel so each device works alone."
+        }
+      ]
+    },
+    {
+      "say": "In series there is one single loop, so the bulbs share the battery's voltage and glow dimmer, and if one breaks, the loop is broken and they all go out.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Series",
+            "icon": "wire",
+            "ask": "What is a series circuit?",
+            "points": [
+              "One single loop",
+              "Bulbs share the voltage",
+              "One breaks: all go out",
+              "Bulbs glow dimmer"
+            ]
+          },
+          "right": {
+            "title": "Parallel",
+            "icon": "house",
+            "ask": "What is a parallel circuit?",
+            "points": [
+              "Separate branches",
+              "Each bulb gets full voltage",
+              "One breaks: others stay lit",
+              "Bulbs glow brighter"
+            ]
+          },
+          "verdict": "Homes are wired in parallel so each device works alone.",
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "In parallel each bulb has its own branch straight to the battery, so each gets the full voltage and glows brightly.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Series",
+            "icon": "wire",
+            "ask": "What is a series circuit?",
+            "points": [
+              "One single loop",
+              "Bulbs share the voltage",
+              "One breaks: all go out",
+              "Bulbs glow dimmer"
+            ]
+          },
+          "right": {
+            "title": "Parallel",
+            "icon": "house",
+            "ask": "What is a parallel circuit?",
+            "points": [
+              "Separate branches",
+              "Each bulb gets full voltage",
+              "One breaks: others stay lit",
+              "Bulbs glow brighter"
+            ]
+          },
+          "verdict": "Homes are wired in parallel so each device works alone.",
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "And if one bulb in parallel breaks, only its branch stops; current still flows through the others. That is why homes are wired in parallel.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "bat",
+              "label": "Battery",
+              "icon": "battery",
+              "x": 0.12,
+              "y": 0.5
+            },
+            {
+              "id": "b1",
+              "label": "Bulb 1",
+              "icon": "bulb",
+              "x": 0.65,
+              "y": 0.15
+            },
+            {
+              "id": "b2",
+              "label": "Bulb 2",
+              "icon": "bulb",
+              "x": 0.65,
+              "y": 0.5
+            },
+            {
+              "id": "b3",
+              "label": "Broken bulb",
+              "icon": "bulb",
+              "x": 0.65,
+              "y": 0.85,
+              "ask": "What happens if one bulb breaks in a parallel circuit?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "b1",
+              "kind": "power",
+              "label": "Own branch"
+            },
+            {
+              "from": "bat",
+              "to": "b2",
+              "kind": "power",
+              "label": "Own branch"
+            },
+            {
+              "from": "bat",
+              "to": "b3",
+              "kind": "power",
+              "label": "Branch broken"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a series circuit?",
+      "a": "In a series circuit the parts are joined one after another in a single loop. The same current flows through every part, and they share the battery's voltage.",
+      "asks": [
+        "Why do all the lights go out in series?"
+      ]
+    },
+    {
+      "q": "What is a parallel circuit?",
+      "a": "In a parallel circuit each part sits on its own branch across the battery. Each branch gets the full voltage, and the branch currents add up to the total.",
+      "asks": [
+        "Why are houses wired in parallel?"
+      ]
+    },
+    {
+      "q": "What happens if one bulb breaks in a parallel circuit?",
+      "a": "Only that branch stops. The other branches still make complete loops with the battery, so their bulbs stay lit.",
+      "asks": [
+        "Do the other bulbs stay on in parallel?"
+      ]
+    },
+    {
+      "q": "Why are bulbs dimmer in series?",
+      "a": "Two identical bulbs in series share the voltage, so each gets half. With less push, less current flows and each glows more dimly than a bulb on its own.",
+      "asks": [
+        "Why does adding bulbs in series make them dimmer?"
+      ]
+    },
+    {
+      "q": "Does a parallel circuit drain the battery faster?",
+      "a": "Yes. Each branch draws its own current, so the total current is bigger and the battery runs down faster, even though every bulb is bright.",
+      "asks": [
+        "Which circuit makes a battery last longer?"
+      ]
+    }
+  ],
+  "facts": [
+    "In a series circuit the current is the same everywhere; in a parallel circuit each branch has the same voltage.",
+    "Old-style fairy lights wired in series would all go out when one bulb failed."
+  ],
+  "quiz": [
+    {
+      "say": "Two bulbs are wired in parallel and one breaks. What happens to the other?",
+      "show": "Two bulbs are wired in parallel and one breaks. What happens to the other?",
+      "options": [
+        {
+          "show": "It stays lit",
+          "say": "It stays lit"
+        },
+        {
+          "show": "It goes out",
+          "say": "It goes out"
+        },
+        {
+          "show": "It gets much dimmer",
+          "say": "It gets much dimmer"
+        }
+      ],
+      "answer": 0,
+      "why": "The other bulb is on its own branch, which is still a complete loop with the battery.",
+      "wrong": {
+        "1": "That happens in series, where there is only one loop.",
+        "2": "Its branch still gets the full battery voltage, so its brightness hardly changes."
+      }
+    }
+  ]
+}

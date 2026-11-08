@@ -1,0 +1,385 @@
+{
+  "id": "BEE-ELEC-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Op-amps: the inverting amplifier and the virtual earth",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ELEC — Analog electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "op-amp",
+    "inverting amplifier",
+    "virtual earth",
+    "negative feedback",
+    "closed-loop gain"
+  ],
+  "examples": [
+    "How does an inverting op-amp amplifier work?",
+    "What is a virtual earth?",
+    "What is the gain of an inverting amplifier?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "layout": "inverting",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Input",
+          "value": "0.5 V"
+        },
+        {
+          "kind": "resistor",
+          "label": "R_in",
+          "value": "10 kΩ",
+          "ask": "What is an inverting amplifier?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R_f (feedback)",
+          "value": "100 kΩ",
+          "ask": "Why is the output of an inverting amplifier negative?"
+        },
+        {
+          "kind": "opamp",
+          "label": "Op-amp",
+          "value": "gain 10⁵+",
+          "ask": "What are the golden rules of op-amps?"
+        }
+      ],
+      "readouts": [
+        "I_in = 50 µA",
+        "V− ≈ 0 V (virtual earth)",
+        "V_out = −5 V"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1968 Fairchild released the 741, a whole amplifier on one chip, and op-amps have been in mixers, sensors and instruments ever since. On the board, a 0.5 volt input feeds a 10 kilohm resistor into the op-amp's minus input, and a 100 kilohm feedback resistor runs from the output back to that same input. The plus input is grounded.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Op-amps: the inverting amplifier and the virtual earth"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "inverting",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "0.5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_in",
+              "value": "10 kΩ",
+              "ask": "What is an inverting amplifier?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_f (feedback)",
+              "value": "100 kΩ",
+              "ask": "Why is the output of an inverting amplifier negative?"
+            },
+            {
+              "kind": "opamp",
+              "label": "Op-amp",
+              "value": "gain 10⁵+",
+              "ask": "What are the golden rules of op-amps?"
+            }
+          ],
+          "readouts": [
+            "I_in = 50 µA",
+            "V− ≈ 0 V (virtual earth)",
+            "V_out = −5 V"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "An op-amp is an amplifier with enormous gain, a hundred thousand or more. Wrap negative feedback round it and two golden rules appear. One: no current flows into its inputs. Two: the output does whatever it takes to make the two inputs equal. The plus input is grounded, so the minus input sits at 0 volts too, a virtual earth. Is it actually wired to ground?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "inverting",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "0.5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_in",
+              "value": "10 kΩ",
+              "ask": "What is an inverting amplifier?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_f (feedback)",
+              "value": "100 kΩ",
+              "ask": "Why is the output of an inverting amplifier negative?"
+            },
+            {
+              "kind": "opamp",
+              "label": "Op-amp",
+              "value": "gain 10⁵+",
+              "ask": "What are the golden rules of op-amps?"
+            }
+          ],
+          "readouts": [
+            "I_in = 50 µA",
+            "V− ≈ 0 V (virtual earth)",
+            "V_out = −5 V"
+          ],
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "With negative feedback: no input current, and V+ = V−."
+        }
+      ]
+    },
+    {
+      "say": "No, the feedback holds it there. Now follow the current. The input resistor has 0.5 volts across it, so 50 microamps flow through 10 kilohms. That current can't enter the op-amp, so all of it continues through the feedback resistor. 50 microamps through 100 kilohms drops 5 volts, and with one end at 0 volts the output must be minus 5 volts. Why minus?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "inverting",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "0.5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_in",
+              "value": "10 kΩ",
+              "ask": "What is an inverting amplifier?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_f (feedback)",
+              "value": "100 kΩ",
+              "ask": "Why is the output of an inverting amplifier negative?"
+            },
+            {
+              "kind": "opamp",
+              "label": "Op-amp",
+              "value": "gain 10⁵+",
+              "ask": "What are the golden rules of op-amps?"
+            }
+          ],
+          "readouts": [
+            "I_in = 50 µA",
+            "V− ≈ 0 V (virtual earth)",
+            "V_out = −5 V"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "I = 0.5 V/10 kΩ = 50 µA;  V_out = −50 µA × 100 kΩ = −5 V"
+        }
+      ]
+    },
+    {
+      "say": "The current flows from the virtual earth towards the output, so the output sits below zero. The gain is minus R f over R in, minus 10, set only by two resistors, not by the op-amp's wild internal gain. On the plot, the output is ten times bigger and upside down. What would the gain be with a 47 kilohm feedback resistor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 2
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -6,
+            "max": 6
+          },
+          "curves": [
+            {
+              "label": "Input 0.5 V",
+              "type": "sine",
+              "a": 0.5,
+              "k": 1
+            },
+            {
+              "label": "Output, gain −10",
+              "type": "sine",
+              "a": 5,
+              "k": 1,
+              "phase": 180,
+              "ask": "Why is the output of an inverting amplifier negative?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.25,
+              "label": "Inverted, ×10"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "A_v = −R_f / R_in = −100 kΩ / 10 kΩ = −10"
+        }
+      ]
+    },
+    {
+      "say": "Minus 4.7. Superb! Add more input resistors to the virtual earth and their currents simply add: that is the summing amplifier at the heart of an audio mixer. One limit: the output can't go beyond the supply. On plus and minus 12 volts, a 1.5 volt input asks for minus 15 and clips near minus 12. Challenge: choose R f for a gain of minus 20 with a 4.7 kilohm input resistor.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "layout": "inverting",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "0.5 V"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_in",
+              "value": "10 kΩ",
+              "ask": "What is an inverting amplifier?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R_f (feedback)",
+              "value": "100 kΩ",
+              "ask": "Why is the output of an inverting amplifier negative?"
+            },
+            {
+              "kind": "opamp",
+              "label": "Op-amp",
+              "value": "gain 10⁵+",
+              "ask": "What are the golden rules of op-amps?"
+            }
+          ],
+          "readouts": [
+            "I_in = 50 µA",
+            "V− ≈ 0 V (virtual earth)",
+            "V_out = −5 V"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "The output can never go beyond the supply rails."
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is an inverting amplifier?",
+      "a": "An op-amp circuit where the input goes through R in to the minus input and R f feeds back from the output. Its gain is minus R f over R in.",
+      "asks": [
+        "Inverting amplifier gain formula",
+        "How does an inverting op amp work?"
+      ]
+    },
+    {
+      "q": "What is a virtual earth?",
+      "a": "With the plus input grounded and negative feedback, the op-amp holds its minus input at almost exactly 0 volts, even though it is not wired to ground.",
+      "asks": [
+        "What is virtual ground?"
+      ]
+    },
+    {
+      "q": "What are the golden rules of op-amps?",
+      "a": "With negative feedback: no current flows into either input, and the output does whatever it takes to make the two input voltages equal.",
+      "asks": [
+        "Op-amp ideal assumptions"
+      ]
+    },
+    {
+      "q": "Why is the output of an inverting amplifier negative?",
+      "a": "The input current flows through R f away from the virtual earth towards the output, so for a positive input the output must sit below 0 volts.",
+      "asks": [
+        "Why does an inverting amplifier invert?"
+      ]
+    },
+    {
+      "q": "What limits an op-amp's output?",
+      "a": "The output cannot go beyond its supply rails, and usually stops a volt or so short of them. Asking for more causes clipping.",
+      "asks": [
+        "What is op-amp clipping?"
+      ]
+    }
+  ],
+  "facts": [
+    "Fairchild Semiconductor introduced the µA741 op-amp in 1968.",
+    "Real op-amps have open-loop gains of around 100,000 or more, which is why feedback resistors alone set the closed-loop gain."
+  ],
+  "quiz": [
+    {
+      "say": "An inverting amplifier has an input resistor of 2 kilohms, a feedback resistor of 20 kilohms, and an input of 0.3 volts. What is the output?",
+      "show": "R_in = 2 kΩ, R_f = 20 kΩ and the input is 0.3 V. What is the output of the inverting amplifier?",
+      "options": [
+        {
+          "show": "−3 V",
+          "say": "minus 3 volts"
+        },
+        {
+          "show": "+3 V",
+          "say": "plus 3 volts"
+        },
+        {
+          "show": "−0.03 V",
+          "say": "minus 0.03 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "The gain is minus 20 over 2, minus 10, so 0.3 volts becomes minus 3 volts.",
+      "wrong": {
+        "1": "An inverting amplifier flips the sign.",
+        "2": "That divides by 10 instead of multiplying."
+      }
+    },
+    {
+      "say": "In an inverting amplifier with its plus input grounded, what voltage does the minus input sit at?",
+      "show": "In an inverting amplifier with its + input grounded, the − input sits at...",
+      "options": [
+        {
+          "show": "About 0 V",
+          "say": "About zero volts"
+        },
+        {
+          "show": "The input voltage",
+          "say": "The input voltage"
+        },
+        {
+          "show": "The supply voltage",
+          "say": "The supply voltage"
+        }
+      ],
+      "answer": 0,
+      "why": "Negative feedback makes the two inputs equal, and the plus input is at 0 volts: a virtual earth.",
+      "wrong": {
+        "1": "The input voltage is across R in, not at the minus pin.",
+        "2": "The minus pin stays near zero while the output does the work."
+      }
+    }
+  ]
+}

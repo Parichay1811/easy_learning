@@ -1,0 +1,464 @@
+{
+  "id": "BCE-CONS-10",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Earthquake-resistant design: base shear, response spectrum and ductility",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-CONS — Construction, materials and management",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "earthquake-resistant design",
+    "base shear",
+    "response spectrum",
+    "IS 1893",
+    "ductile detailing",
+    "base isolation"
+  ],
+  "examples": [
+    "How do you calculate base shear for an earthquake?",
+    "What is a response spectrum?",
+    "How does base isolation protect a building?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-forces",
+      "object": "house",
+      "objectAsk": "How is earthquake force distributed over a building's height?",
+      "motion": "still",
+      "forces": [
+        {
+          "label": "Roof: 640 kN",
+          "dir": "right",
+          "size": 5,
+          "ask": "How is earthquake force distributed over a building's height?"
+        },
+        {
+          "label": "Floor 3: 360 kN",
+          "dir": "right",
+          "size": 4
+        },
+        {
+          "label": "Floor 2: 160 kN",
+          "dir": "right",
+          "size": 2
+        },
+        {
+          "label": "Floor 1: 40 kN",
+          "dir": "right",
+          "size": 1
+        },
+        {
+          "label": "Base shear 1200 kN",
+          "dir": "left",
+          "size": 5,
+          "ask": "What is base shear in earthquake design?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "On the twenty sixth of January 2001 an earthquake of magnitude seven point seven struck Bhuj in Gujarat, India, and around twenty thousand people died, many in collapsing buildings. Earthquakes rarely kill by themselves; buildings do. On the board, a four storey concrete frame, and the sideways forces an earthquake puts on it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Earthquake-resistant design: base shear, response spectrum and ductility"
+        },
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "house",
+          "objectAsk": "How is earthquake force distributed over a building's height?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Roof: 640 kN",
+              "dir": "right",
+              "size": 5,
+              "ask": "How is earthquake force distributed over a building's height?"
+            },
+            {
+              "label": "Floor 3: 360 kN",
+              "dir": "right",
+              "size": 4
+            },
+            {
+              "label": "Floor 2: 160 kN",
+              "dir": "right",
+              "size": 2
+            },
+            {
+              "label": "Floor 1: 40 kN",
+              "dir": "right",
+              "size": 1
+            },
+            {
+              "label": "Base shear 1200 kN",
+              "dir": "left",
+              "size": 5,
+              "ask": "What is base shear in earthquake design?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "When the ground lurches, the building's mass wants to stay put: inertia. The total sideways force at the base is the base shear, the design acceleration coefficient times the weight. In India's seismic zone four, with ductile frames and a period in the flat part of the spectrum, the coefficient is zero point zero six. For a twenty thousand kilonewton building: twelve hundred.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "house",
+          "objectAsk": "How is earthquake force distributed over a building's height?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Roof: 640 kN",
+              "dir": "right",
+              "size": 5,
+              "ask": "How is earthquake force distributed over a building's height?"
+            },
+            {
+              "label": "Floor 3: 360 kN",
+              "dir": "right",
+              "size": 4
+            },
+            {
+              "label": "Floor 2: 160 kN",
+              "dir": "right",
+              "size": 2
+            },
+            {
+              "label": "Floor 1: 40 kN",
+              "dir": "right",
+              "size": 1
+            },
+            {
+              "label": "Base shear 1200 kN",
+              "dir": "left",
+              "size": 5,
+              "ask": "What is base shear in earthquake design?"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "A_h = (Z/2)(I/R)(Sa/g) = 0.12 × (1/5) × 2.5 = 0.06"
+        },
+        {
+          "op": "note",
+          "text": "V = A_h × W = 0.06 × 20,000 kN = 1200 kN (zone IV, Z = 0.24, R = 5)"
+        }
+      ]
+    },
+    {
+      "say": "Why two point five? Look at the response spectrum. Every building sways at its own natural period. A twelve metre concrete frame has about zero point four eight seconds, in the flat top of the curve, where shaking is amplified two and a half times. A tall tower swaying every two seconds feels much less. Which is safer from strong amplification here, short or tall?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Natural period (s)",
+            "max": 4
+          },
+          "y": {
+            "label": "Sa/g",
+            "max": 2.8
+          },
+          "curves": [
+            {
+              "label": "Medium soil (IS 1893)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  1
+                ],
+                [
+                  0.1,
+                  2.5
+                ],
+                [
+                  0.55,
+                  2.5
+                ],
+                [
+                  0.8,
+                  1.7
+                ],
+                [
+                  1,
+                  1.36
+                ],
+                [
+                  1.5,
+                  0.907
+                ],
+                [
+                  2,
+                  0.68
+                ],
+                [
+                  3,
+                  0.453
+                ],
+                [
+                  4,
+                  0.34
+                ]
+              ],
+              "ask": "What is a response spectrum?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0.48,
+              "label": "Our building 0.48 s",
+              "ask": "What is a response spectrum?"
+            },
+            {
+              "x": 2,
+              "label": "Tall tower 2 s"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "T_a = 0.075 h^0.75 = 0.075 × 12^0.75 ≈ 0.48 s"
+        }
+      ]
+    },
+    {
+      "say": "The tall tower, on this curve! Now share the twelve hundred up the building. Higher floors swing further, so each floor gets weight times height squared. With equal floors at three, six, nine and twelve metres, the roof takes six hundred and forty kilonewtons, then three sixty, one sixty and forty. Look at the arrows growing upwards.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-forces",
+          "object": "house",
+          "objectAsk": "How is earthquake force distributed over a building's height?",
+          "motion": "still",
+          "forces": [
+            {
+              "label": "Roof: 640 kN",
+              "dir": "right",
+              "size": 5,
+              "ask": "How is earthquake force distributed over a building's height?"
+            },
+            {
+              "label": "Floor 3: 360 kN",
+              "dir": "right",
+              "size": 4
+            },
+            {
+              "label": "Floor 2: 160 kN",
+              "dir": "right",
+              "size": 2
+            },
+            {
+              "label": "Floor 1: 40 kN",
+              "dir": "right",
+              "size": 1
+            },
+            {
+              "label": "Base shear 1200 kN",
+              "dir": "left",
+              "size": 5,
+              "ask": "What is base shear in earthquake design?"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Q_roof = 1200 × 144 / 270 = 640 kN"
+        }
+      ]
+    },
+    {
+      "say": "Engineers also make frames ductile: strong columns, weaker beams, and closely spaced steel ties with bent hooks, so the frame bends without collapsing. Or they isolate the building on rubber bearings that let the ground slide underneath. Brilliant! Challenge: in zone five, with Z of zero point three six, what would the base shear be?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bld",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.3,
+              "size": 1.6,
+              "label": "Building"
+            },
+            {
+              "id": "i1",
+              "kind": "spring",
+              "x": 0.3,
+              "y": 0.66,
+              "label": "Rubber isolator",
+              "ask": "What is base isolation?"
+            },
+            {
+              "id": "i2",
+              "kind": "spring",
+              "x": 0.7,
+              "y": 0.66,
+              "label": "Rubber isolator"
+            },
+            {
+              "id": "dmp",
+              "kind": "piston",
+              "x": 0.5,
+              "y": 0.68,
+              "label": "Damper"
+            },
+            {
+              "id": "gnd",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.9,
+              "size": 1.6,
+              "motion": "slide",
+              "label": "Shaking ground"
+            }
+          ],
+          "links": [
+            {
+              "from": "gnd",
+              "to": "i1",
+              "kind": "force"
+            },
+            {
+              "from": "gnd",
+              "to": "i2",
+              "kind": "force"
+            },
+            {
+              "from": "i1",
+              "to": "bld",
+              "kind": "force"
+            },
+            {
+              "from": "i2",
+              "to": "bld",
+              "kind": "force"
+            },
+            {
+              "from": "dmp",
+              "to": "bld",
+              "kind": "force"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is base shear in earthquake design?",
+      "a": "The total horizontal earthquake force at the base of a building: the design horizontal acceleration coefficient times the seismic weight. Here 0.06 times 20,000 kilonewtons gives 1,200 kilonewtons.",
+      "asks": [
+        "How do you calculate base shear for an earthquake?",
+        "V = Ah W"
+      ]
+    },
+    {
+      "q": "What is a response spectrum?",
+      "a": "A graph of the peak response of simple structures to an earthquake against their natural period. Design codes give smoothed spectra; in IS 1893 for medium soil, Sa over g is 2.5 from 0.1 to 0.55 seconds and then falls.",
+      "asks": [
+        "Design spectrum",
+        "Sa/g"
+      ]
+    },
+    {
+      "q": "How is earthquake force distributed over a building's height?",
+      "a": "In the equivalent static method each floor gets a share proportional to its weight times its height squared, so upper floors take more. Equal floors at 3, 6, 9 and 12 metres get 40, 160, 360 and 640 of 1,200 kilonewtons.",
+      "asks": [
+        "Lateral force distribution",
+        "Storey forces"
+      ]
+    },
+    {
+      "q": "What is ductile detailing?",
+      "a": "Reinforcement detailing that lets concrete members bend a lot without breaking: closely spaced ties with 135 degree hooks, good laps and anchorage, and strong columns with weaker beams so beams yield first.",
+      "asks": [
+        "Strong column weak beam",
+        "IS 13920"
+      ]
+    },
+    {
+      "q": "What is base isolation?",
+      "a": "Placing flexible bearings, usually laminated rubber, sometimes with dampers, between a building and its foundation, so the ground can move under it while the building above sways gently.",
+      "asks": [
+        "How does base isolation protect a building?"
+      ]
+    }
+  ],
+  "facts": [
+    "The Bhuj earthquake of 26 January 2001 in Gujarat, India, had a moment magnitude of about 7.7.",
+    "In IS 1893 (2016), A_h = (Z/2)(I/R)(Sa/g), with Z = 0.24 for zone IV and 0.36 for zone V.",
+    "Taipei 101 has a tuned mass damper weighing about 660 tonnes to reduce swaying."
+  ],
+  "quiz": [
+    {
+      "say": "A building has a seismic weight of 10,000 kilonewtons and a design coefficient A h of 0.08. What is the base shear?",
+      "show": "A building weighs 10,000 kN and A_h = 0.08. Base shear?",
+      "options": [
+        {
+          "show": "800 kN",
+          "say": "800 kilonewtons"
+        },
+        {
+          "show": "125,000 kN",
+          "say": "125,000 kilonewtons"
+        },
+        {
+          "show": "80 kN",
+          "say": "80 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "V = A_h × W = 0.08 × 10,000 = 800 kN.",
+      "wrong": {
+        "1": "That divides by the coefficient.",
+        "2": "That slips a factor of ten."
+      }
+    },
+    {
+      "say": "In the equivalent static method, which floor gets the largest force?",
+      "show": "In the equivalent static method, which floor gets the largest force?",
+      "options": [
+        {
+          "show": "The roof",
+          "say": "The roof"
+        },
+        {
+          "show": "The ground floor",
+          "say": "The ground floor"
+        },
+        {
+          "show": "All equal",
+          "say": "All equal"
+        }
+      ],
+      "answer": 0,
+      "why": "Force is shared by weight times height squared, so the top floor gets the most.",
+      "wrong": {
+        "1": "The lowest floor has the smallest height, so the smallest share.",
+        "2": "Shares grow with height squared."
+      }
+    }
+  ]
+}

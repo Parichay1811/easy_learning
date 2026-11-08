@@ -1,0 +1,651 @@
+{
+  "id": "BEE-MACH-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The ideal transformer: how the turns ratio trades voltage for current",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-MACH — Electrical machines",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "turns ratio",
+    "ideal transformer",
+    "primary and secondary",
+    "step-down transformer",
+    "reflected impedance"
+  ],
+  "examples": [
+    "How do you calculate transformer secondary voltage?",
+    "Why does current go up when a transformer steps voltage down?",
+    "Why does a transformer not work on DC?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "src",
+          "kind": "box",
+          "x": 0.08,
+          "y": 0.5,
+          "label": "230 V AC in",
+          "ask": "Why does a transformer not work on DC?"
+        },
+        {
+          "id": "p",
+          "kind": "coil",
+          "x": 0.3,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Primary 1000 turns",
+          "ask": "How do you calculate transformer secondary voltage?"
+        },
+        {
+          "id": "core",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.5,
+          "size": 1.4,
+          "label": "Iron core",
+          "motion": "none",
+          "ask": "What does the iron core do?"
+        },
+        {
+          "id": "s",
+          "kind": "coil",
+          "x": 0.7,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Secondary 50 turns",
+          "ask": "Why does current go up when a transformer steps voltage down?"
+        },
+        {
+          "id": "load",
+          "kind": "bulb",
+          "x": 0.92,
+          "y": 0.5,
+          "label": "Load 2.3 Ω",
+          "ask": "What is reflected impedance?"
+        }
+      ],
+      "links": [
+        {
+          "from": "src",
+          "to": "p",
+          "kind": "power",
+          "label": "0.25 A"
+        },
+        {
+          "from": "p",
+          "to": "core",
+          "kind": "energy",
+          "label": "Changing flux"
+        },
+        {
+          "from": "core",
+          "to": "s",
+          "kind": "energy",
+          "label": "Same flux"
+        },
+        {
+          "from": "s",
+          "to": "load",
+          "kind": "power",
+          "label": "11.5 V, 5 A"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Old phone chargers hid a heavy little transformer, and the box at the end of your street is a giant one. It is the simplest machine in electrical engineering: two coils, an iron core and no moving parts. On the board, 230 volts from the mains feeds a primary coil of 1000 turns, and a secondary coil of 50 turns lights a load.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The ideal transformer: how the turns ratio trades voltage for current"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "src",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.5,
+              "label": "230 V AC in",
+              "ask": "Why does a transformer not work on DC?"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Primary 1000 turns",
+              "ask": "How do you calculate transformer secondary voltage?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Iron core",
+              "motion": "none",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Secondary 50 turns",
+              "ask": "Why does current go up when a transformer steps voltage down?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.5,
+              "label": "Load 2.3 Ω",
+              "ask": "What is reflected impedance?"
+            }
+          ],
+          "links": [
+            {
+              "from": "src",
+              "to": "p",
+              "kind": "power",
+              "label": "0.25 A"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing flux"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Same flux"
+            },
+            {
+              "from": "s",
+              "to": "load",
+              "kind": "power",
+              "label": "11.5 V, 5 A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Now the real thing in 3D: a transformer. Look at the iron core, the primary coil on one side and the secondary coil on the other. They never touch; the changing magnetic flux in the core links them. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The ideal transformer: how the turns ratio trades voltage for current"
+        },
+        {
+          "op": "image",
+          "render": "transformer"
+        }
+      ]
+    },
+    {
+      "say": "Look at the iron core. AC in the primary makes a magnetic flux that grows, shrinks and reverses 50 times a second. The core carries that same flux through the secondary, and a changing flux induces a voltage in every turn it passes through: Faraday's law. So every turn on either coil gets the same voltage. What happens if the flux stops changing, as with DC?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "src",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.5,
+              "label": "230 V AC in",
+              "ask": "Why does a transformer not work on DC?"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Primary 1000 turns",
+              "ask": "How do you calculate transformer secondary voltage?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Iron core",
+              "motion": "none",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Secondary 50 turns",
+              "ask": "Why does current go up when a transformer steps voltage down?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.5,
+              "label": "Load 2.3 Ω",
+              "ask": "What is reflected impedance?"
+            }
+          ],
+          "links": [
+            {
+              "from": "src",
+              "to": "p",
+              "kind": "power",
+              "label": "0.25 A"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing flux"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Same flux"
+            },
+            {
+              "from": "s",
+              "to": "load",
+              "kind": "power",
+              "label": "11.5 V, 5 A"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "AC → changing flux Φ → the same EMF in every turn"
+        }
+      ]
+    },
+    {
+      "say": "With DC nothing is induced at all. Now count turns. Every turn gets the same voltage, so voltage goes with the number of turns: V s over V p equals N s over N p. The secondary has 50 turns against 1000, one twentieth, so 230 volts becomes 11.5 volts. What would 2000 secondary turns give?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "src",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.5,
+              "label": "230 V AC in",
+              "ask": "Why does a transformer not work on DC?"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Primary 1000 turns",
+              "ask": "How do you calculate transformer secondary voltage?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Iron core",
+              "motion": "none",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Secondary 50 turns",
+              "ask": "Why does current go up when a transformer steps voltage down?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.5,
+              "label": "Load 2.3 Ω",
+              "ask": "What is reflected impedance?"
+            }
+          ],
+          "links": [
+            {
+              "from": "src",
+              "to": "p",
+              "kind": "power",
+              "label": "0.25 A"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing flux"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Same flux"
+            },
+            {
+              "from": "s",
+              "to": "load",
+              "kind": "power",
+              "label": "11.5 V, 5 A"
+            }
+          ],
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "Vs = Vp × Ns/Np = 230 × 50/1000 = 11.5 V"
+        }
+      ]
+    },
+    {
+      "say": "Twice the primary turns gives twice the voltage, 460 volts: a step-up. Now the load: 11.5 volts across 2.3 ohms drives 5 amps. An ideal transformer wastes nothing, so power in equals power out: 230 volts times 0.25 amps is 57.5 watts, and 11.5 times 5 is 57.5 watts too. Voltage went down 20 times, so current went up 20 times. Which coil needs the thicker wire?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "src",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.5,
+              "label": "230 V AC in",
+              "ask": "Why does a transformer not work on DC?"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Primary 1000 turns",
+              "ask": "How do you calculate transformer secondary voltage?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Iron core",
+              "motion": "none",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Secondary 50 turns",
+              "ask": "Why does current go up when a transformer steps voltage down?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.5,
+              "label": "Load 2.3 Ω",
+              "ask": "What is reflected impedance?"
+            }
+          ],
+          "links": [
+            {
+              "from": "src",
+              "to": "p",
+              "kind": "power",
+              "label": "0.25 A"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing flux"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Same flux"
+            },
+            {
+              "from": "s",
+              "to": "load",
+              "kind": "power",
+              "label": "11.5 V, 5 A"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "Is = 11.5 V / 2.3 Ω = 5 A;  Ip = 5 A / 20 = 0.25 A"
+        }
+      ]
+    },
+    {
+      "say": "The secondary, carrying 5 amps. Here is the wow: from the mains side, the 2.3 ohm load looks 400 times bigger, 920 ohms, the turns ratio squared. Audio amplifiers use this trick to match loudspeakers. Superb! Exam tip: voltage scales with the turns ratio, current with its inverse, and impedance with its square.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "src",
+              "kind": "box",
+              "x": 0.08,
+              "y": 0.5,
+              "label": "230 V AC in",
+              "ask": "Why does a transformer not work on DC?"
+            },
+            {
+              "id": "p",
+              "kind": "coil",
+              "x": 0.3,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Primary 1000 turns",
+              "ask": "How do you calculate transformer secondary voltage?"
+            },
+            {
+              "id": "core",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Iron core",
+              "motion": "none",
+              "ask": "What does the iron core do?"
+            },
+            {
+              "id": "s",
+              "kind": "coil",
+              "x": 0.7,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Secondary 50 turns",
+              "ask": "Why does current go up when a transformer steps voltage down?"
+            },
+            {
+              "id": "load",
+              "kind": "bulb",
+              "x": 0.92,
+              "y": 0.5,
+              "label": "Load 2.3 Ω",
+              "ask": "What is reflected impedance?"
+            }
+          ],
+          "links": [
+            {
+              "from": "src",
+              "to": "p",
+              "kind": "power",
+              "label": "0.25 A"
+            },
+            {
+              "from": "p",
+              "to": "core",
+              "kind": "energy",
+              "label": "Changing flux"
+            },
+            {
+              "from": "core",
+              "to": "s",
+              "kind": "energy",
+              "label": "Same flux"
+            },
+            {
+              "from": "s",
+              "to": "load",
+              "kind": "power",
+              "label": "11.5 V, 5 A"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "Z seen by mains = (Np/Ns)² × R = 400 × 2.3 = 920 Ω"
+        },
+        {
+          "op": "note",
+          "text": "Check: 230 V ÷ 0.25 A = 920 Ω"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How do you calculate transformer secondary voltage?",
+      "a": "Multiply the primary voltage by the turns ratio, secondary turns over primary turns. For 230 volts, 1000 primary turns and 50 secondary turns, that is 230 times 50 over 1000, which is 11.5 volts.",
+      "asks": [
+        "What is the transformer turns ratio formula?"
+      ]
+    },
+    {
+      "q": "Why does current go up when a transformer steps voltage down?",
+      "a": "An ideal transformer cannot create energy, so power in equals power out. If the voltage is divided by 20, the current must be multiplied by 20 to carry the same power.",
+      "asks": [
+        "Why is the secondary current bigger in a step-down transformer?"
+      ]
+    },
+    {
+      "q": "Why does a transformer not work on DC?",
+      "a": "A transformer needs a changing magnetic flux to induce voltage in the secondary. Steady DC makes a steady flux, so nothing is induced, and the primary just acts as a low-resistance coil that overheats.",
+      "asks": [
+        "Can you use a transformer with DC?"
+      ]
+    },
+    {
+      "q": "What does the iron core do?",
+      "a": "Iron is easily magnetised, so it guides almost all the flux from the primary through the secondary. That tight coupling means the same flux links every turn of both coils.",
+      "asks": [
+        "Why do transformers have an iron core?"
+      ]
+    },
+    {
+      "q": "What is reflected impedance?",
+      "a": "A load seen through a transformer looks bigger or smaller by the turns ratio squared. A 2.3 ohm load behind a 20 to 1 step-down transformer looks like 920 ohms from the primary side.",
+      "asks": [
+        "How does a transformer change impedance?"
+      ]
+    }
+  ],
+  "facts": [
+    "In an ideal transformer, Vs/Vp = Ns/Np and Is/Ip = Np/Ns.",
+    "Michael Faraday discovered electromagnetic induction in 1831.",
+    "Large power transformers can exceed 99% efficiency."
+  ],
+  "quiz": [
+    {
+      "say": "A transformer has 400 primary turns and 1200 secondary turns. With 120 volts in, what is the output voltage?",
+      "show": "A transformer has 400 primary turns and 1200 secondary turns. With 120 V in, what is the output voltage?",
+      "options": [
+        {
+          "show": "360 V",
+          "say": "360 volts"
+        },
+        {
+          "show": "40 V",
+          "say": "40 volts"
+        },
+        {
+          "show": "120 V",
+          "say": "120 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "The ratio is 1200 over 400, which is 3, so the output is 3 times 120, 360 volts. It is a step-up transformer.",
+      "wrong": {
+        "1": "That divides by 3; the ratio has been used upside down.",
+        "2": "The voltage stays the same only if both coils have the same number of turns."
+      }
+    },
+    {
+      "say": "An ideal step-down transformer has a turns ratio of 20 to 1 and a secondary current of 5 amps. What is the primary current?",
+      "show": "An ideal step-down transformer has Np : Ns = 20 : 1 and a secondary current of 5 A. What is the primary current?",
+      "options": [
+        {
+          "show": "0.25 A",
+          "say": "0.25 amps"
+        },
+        {
+          "show": "100 A",
+          "say": "100 amps"
+        },
+        {
+          "show": "5 A",
+          "say": "5 amps"
+        }
+      ],
+      "answer": 0,
+      "why": "Current scales with the inverse of the turns ratio: 5 amps divided by 20 is 0.25 amps, so power is equal on both sides.",
+      "wrong": {
+        "1": "That multiplies by 20; the high-voltage primary carries less current, not more.",
+        "2": "Equal currents with unequal voltages would mean more power out than in."
+      }
+    }
+  ]
+}

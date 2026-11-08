@@ -1,0 +1,250 @@
+{
+  "id": "MATH-DISC-03",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Critical path analysis",
+  "area": "Mathematics",
+  "group": "MATH-DISC — Discrete Mathematics & Networks",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "critical path",
+    "activity network",
+    "float",
+    "earliest time",
+    "latest time"
+  ],
+  "examples": [
+    "How do I draw the activity network correctly?",
+    "What exactly is the float value telling me?",
+    "Can you show me an example with more than three activities?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn about critical path analysis. This helps plan projects efficiently. We use activity networks to map tasks.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Critical path analysis"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Activity Networks",
+            "Tasks & Dependencies"
+          ],
+          "at": "activity"
+        },
+        {
+          "op": "formula",
+          "text": "Activity Networks: Tasks & Dependencies",
+          "at": "activity"
+        }
+      ]
+    },
+    {
+      "say": "An activity network shows tasks and their order. Arrows show which task must finish first. Think of building a simple model.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Task A",
+            "ightarrow",
+            "Task B"
+          ],
+          "at": "task"
+        },
+        {
+          "op": "formula",
+          "text": "Task A $\\rightarrow$ Task B",
+          "at": "task"
+        }
+      ]
+    },
+    {
+      "say": "The earliest start time is the soonest a task can begin. It depends on the finish time of its predecessors. This sets the minimum schedule.",
+      "draw": [
+        {
+          "op": "formula",
+          "text": "ES = Max(EF of predecessors)",
+          "at": "predecessors"
+        }
+      ]
+    },
+    {
+      "say": "The float is how much a task can delay without delaying the project. It is the difference between latest and earliest times. This gives flexibility.",
+      "draw": [
+        {
+          "op": "formula",
+          "text": "Float = LS - ES",
+          "at": "float"
+        }
+      ]
+    },
+    {
+      "say": "The critical path is the longest sequence of dependent tasks. Any delay here delays the entire project completion. These tasks have zero float.",
+      "draw": [
+        {
+          "op": "bullets",
+          "items": [
+            "Critical Path",
+            "Zero Float",
+            "Longest Sequence"
+          ],
+          "at": "critical"
+        },
+        {
+          "op": "formula",
+          "text": "Critical Path: Zero Float",
+          "at": "critical"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between the earliest and latest times?",
+      "a": "The earliest time is the soonest a task can possibly start or finish. The latest time is the last it can start or finish without issues.",
+      "asks": [
+        "What does ES mean?",
+        "What is the latest allowable time?"
+      ]
+    },
+    {
+      "q": "If a task has zero float, what does that mean for the project?",
+      "a": "It means the task must start and finish exactly on schedule. Any delay to this task delays the whole project.",
+      "asks": [
+        "Why is zero float bad?",
+        "Does zero float mean it's critical?"
+      ]
+    },
+    {
+      "q": "Do I need to calculate the critical path for every single project?",
+      "a": "No, you calculate it when you need to manage time constraints. It helps find the project's minimum completion time.",
+      "asks": [
+        "When should I use this method?",
+        "Is this only for building projects?"
+      ]
+    },
+    {
+      "q": "How do I know which tasks are dependent on each other?",
+      "a": "The activity network diagram shows these dependencies using arrows. An arrow from A to B means B needs A to finish first.",
+      "asks": [
+        "What do the arrows represent?",
+        "How do I map out the sequence?"
+      ]
+    },
+    {
+      "q": "Is the critical path always the longest path?",
+      "a": "Yes, by definition, the critical path represents the longest sequence of dependent activities. This sets the minimum project duration.",
+      "asks": [
+        "Is it always the longest path?",
+        "Does length equal time here?"
+      ]
+    }
+  ],
+  "facts": [
+    "The critical path determines the shortest possible time to complete a project.",
+    "Float represents the amount of time a task can be delayed without delaying the project end date.",
+    "Tasks on the critical path have a float value of zero.",
+    "The earliest finish time of a task is its earliest start time plus its duration."
+  ],
+  "quiz": [
+    {
+      "say": "If Task A finishes at time five, what is the earliest start time for Task B that follows it?",
+      "show": "ESB = EFA",
+      "options": [
+        {
+          "show": "zero",
+          "say": "zero"
+        },
+        {
+          "show": "ten",
+          "say": "ten"
+        },
+        {
+          "show": "five plus duration of B",
+          "say": "five plus duration of B"
+        },
+        {
+          "show": "five",
+          "say": "five"
+        }
+      ],
+      "answer": 3,
+      "why": "The earliest start time for Task B must be at least the time Task A finishes.",
+      "wrong": {
+        "0": "This ignores the dependency; Task B cannot start before Task A finishes.",
+        "1": "This assumes a fixed gap, which is incorrect for dependency scheduling.",
+        "2": "This calculates the finish time, not the start time."
+      }
+    },
+    {
+      "say": "A task has an earliest time of three and a latest time of five. What is its float?",
+      "show": "Float = LS - ES",
+      "options": [
+        {
+          "show": "five",
+          "say": "five"
+        },
+        {
+          "show": "two",
+          "say": "two"
+        },
+        {
+          "show": "eight",
+          "say": "eight"
+        },
+        {
+          "show": "three",
+          "say": "three"
+        }
+      ],
+      "answer": 1,
+      "why": "Float is the difference between the latest time and the earliest time, so five minus three is two.",
+      "wrong": {
+        "0": "This only uses the latest time, ignoring the earliest time constraint.",
+        "2": "This incorrectly adds the two times together.",
+        "3": "This only uses the earliest time, ignoring the latest time constraint."
+      }
+    },
+    {
+      "say": "In a sequence A $\\rightarrow$ B $\\rightarrow$ C, if A is critical, which statement must be true?",
+      "show": "If A is critical, FloatA = 0",
+      "options": [
+        {
+          "show": "Task C must have zero float",
+          "say": "Task C must have zero float"
+        },
+        {
+          "show": "The total project time is unknown",
+          "say": "The total project time is unknown"
+        },
+        {
+          "show": "Float for Task A is zero",
+          "say": "Float for Task A is zero"
+        },
+        {
+          "show": "Task B must also be critical",
+          "say": "Task B must also be critical"
+        }
+      ],
+      "answer": 2,
+      "why": "If a task is on the critical path, it has no slack, meaning its float must be zero.",
+      "wrong": {
+        "0": "The critical path must be checked end-to-end, not just based on the first task.",
+        "1": "Knowing one critical task helps determine the overall minimum project time.",
+        "3": "While often true, Task B could have float if Task C is very short."
+      }
+    }
+  ]
+}

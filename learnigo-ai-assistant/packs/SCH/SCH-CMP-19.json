@@ -1,0 +1,362 @@
+{
+  "id": "SCH-CMP-19",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-26",
+    "source": "explainers-2"
+  },
+  "title": "Binary search: the guess-my-number trick",
+  "area": "School Explainers",
+  "group": "SCH-CMP — Computing (class 1–12)",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "binary search",
+    "linear search",
+    "halving",
+    "sorted list",
+    "search algorithm"
+  ],
+  "examples": [
+    "What is binary search?",
+    "How do you win guess the number?",
+    "Why must the list be sorted for binary search?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-chain",
+      "loop": false,
+      "stages": [
+        {
+          "label": "Guess 16: higher",
+          "icon": "arrow",
+          "note": "Now only 17 to 32 can be right"
+        },
+        {
+          "label": "Guess 24: lower",
+          "icon": "arrow",
+          "note": "Now only 17 to 23 are left"
+        },
+        {
+          "label": "Guess 20: higher",
+          "icon": "arrow",
+          "note": "Now only 21, 22 or 23"
+        },
+        {
+          "label": "Guess 22: higher",
+          "icon": "arrow",
+          "note": "Only 23 is left"
+        },
+        {
+          "label": "Guess 23: got it!",
+          "icon": "star",
+          "note": "Found in 5 guesses, not 23",
+          "ask": "What is binary search?"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Let us play a game. I am thinking of a number from 1 to 32, and after each guess I will say higher or lower. You could guess 1, 2, 3 and so on, but that might take 32 guesses! Here is a cleverer trick. Look at the first box: always guess the middle, 16.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Binary search: the guess-my-number trick"
+        },
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Guess 16: higher",
+              "icon": "arrow",
+              "note": "Now only 17 to 32 can be right"
+            },
+            {
+              "label": "Guess 24: lower",
+              "icon": "arrow",
+              "note": "Now only 17 to 23 are left"
+            },
+            {
+              "label": "Guess 20: higher",
+              "icon": "arrow",
+              "note": "Now only 21, 22 or 23"
+            },
+            {
+              "label": "Guess 22: higher",
+              "icon": "arrow",
+              "note": "Only 23 is left"
+            },
+            {
+              "label": "Guess 23: got it!",
+              "icon": "star",
+              "note": "Found in 5 guesses, not 23",
+              "ask": "What is binary search?"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "I say higher! So in one guess you threw away 16 numbers. Look at the board: 32 numbers left at the start, then just 16. Each guess cuts what is left in half. How many would be left after the next guess?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "items": [
+            {
+              "label": "Start: 32 left",
+              "size": 32,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 1: 16 left",
+              "size": 16,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 2: 8 left",
+              "size": 8,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 3: 4 left",
+              "size": 4,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 4: 2 left",
+              "size": 2,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 5: 1 left",
+              "size": 1,
+              "icon": "ball",
+              "ask": "How many guesses does binary search need?"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Right, 8! Then 4, then 2, then 1. Follow the real game on the board: guess 24, lower, guess 20, higher, guess 22, higher, then guess 23, yes! What was the secret number?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "loop": false,
+          "stages": [
+            {
+              "label": "Guess 16: higher",
+              "icon": "arrow",
+              "note": "Now only 17 to 32 can be right"
+            },
+            {
+              "label": "Guess 24: lower",
+              "icon": "arrow",
+              "note": "Now only 17 to 23 are left"
+            },
+            {
+              "label": "Guess 20: higher",
+              "icon": "arrow",
+              "note": "Now only 21, 22 or 23"
+            },
+            {
+              "label": "Guess 22: higher",
+              "icon": "arrow",
+              "note": "Only 23 is left"
+            },
+            {
+              "label": "Guess 23: got it!",
+              "icon": "star",
+              "note": "Found in 5 guesses, not 23",
+              "ask": "What is binary search?"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "It was 23, found in just 5 guesses. Checking one by one would have taken 23 guesses. That one by one way is called linear search. Look at the board to compare them. Which would you choose for a list of a million names?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-compare",
+          "left": {
+            "title": "Linear search",
+            "icon": "eye",
+            "points": [
+              "Check items one by one",
+              "Works on any list",
+              "Up to 32 guesses for 32"
+            ]
+          },
+          "right": {
+            "title": "Binary search",
+            "icon": "scale",
+            "points": [
+              "Check the middle, drop half",
+              "List must be sorted first",
+              "At most 6 guesses for 32"
+            ],
+            "ask": "Why must the list be sorted for binary search?"
+          },
+          "verdict": "Halving wins on big sorted lists",
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Super thinking! Binary search is how you find a word in a dictionary: open in the middle, then go left or right. Wow fact: for a number from 1 to a million, binary search never needs more than 20 guesses! Challenge: play it with a friend from 1 to 100. You need at most 7.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-sizes",
+          "items": [
+            {
+              "label": "Start: 32 left",
+              "size": 32,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 1: 16 left",
+              "size": 16,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 2: 8 left",
+              "size": 8,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 3: 4 left",
+              "size": 4,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 4: 2 left",
+              "size": 2,
+              "icon": "ball"
+            },
+            {
+              "label": "Guess 5: 1 left",
+              "size": 1,
+              "icon": "ball",
+              "ask": "How many guesses does binary search need?"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is binary search?",
+      "a": "Binary search finds an item in a sorted list by checking the middle, then throwing away the half where it cannot be, again and again, until it is found.",
+      "asks": [
+        "How does binary search work?",
+        "Explain binary search"
+      ]
+    },
+    {
+      "q": "How many guesses does binary search need?",
+      "a": "Each guess halves what is left. For 32 items it needs at most 6 guesses, for 100 at most 7, and for a million at most 20.",
+      "asks": [
+        "How fast is binary search?",
+        "Why only 20 guesses for a million?"
+      ]
+    },
+    {
+      "q": "Why must the list be sorted for binary search?",
+      "a": "Binary search decides which half to throw away by knowing whether the target is bigger or smaller than the middle. That only works if the items are in order.",
+      "asks": [
+        "Does binary search work on unsorted lists?",
+        "Why sort before searching?"
+      ]
+    },
+    {
+      "q": "What is linear search?",
+      "a": "Linear search checks every item, one after another, from the start until it finds the one you want. It is simple and works on any list, but it is slow for big lists.",
+      "asks": [
+        "What is sequential search?",
+        "Linear vs binary search"
+      ]
+    },
+    {
+      "q": "How do you win guess the number?",
+      "a": "Always guess the middle of the numbers that are still possible. Each answer of higher or lower cuts the possibilities in half.",
+      "asks": [
+        "Best strategy for guessing a number",
+        "How to guess a number from 1 to 100"
+      ]
+    }
+  ],
+  "facts": [
+    "Binary search needs at most 20 comparisons to find an item among about a million (2 to the power 20 is 1,048,576).",
+    "Binary search only works on a list that is already sorted."
+  ],
+  "quiz": [
+    {
+      "say": "You are searching a sorted list of 64 names with binary search. Which name do you check first?",
+      "show": "Binary search checks first…",
+      "options": [
+        {
+          "show": "The middle name",
+          "say": "The middle name"
+        },
+        {
+          "show": "The first name",
+          "say": "The first name"
+        },
+        {
+          "show": "The last name",
+          "say": "The last name"
+        }
+      ],
+      "answer": 0,
+      "why": "Checking the middle lets you throw away half the list at once.",
+      "wrong": {
+        "1": "Starting at the beginning is linear search.",
+        "2": "The last name only rules out one name."
+      }
+    },
+    {
+      "say": "Binary search does not work on which list?",
+      "show": "Binary search will not work on…",
+      "options": [
+        {
+          "show": "3, 9, 1, 7, 4",
+          "say": "3, 9, 1, 7, 4"
+        },
+        {
+          "show": "1, 3, 4, 7, 9",
+          "say": "1, 3, 4, 7, 9"
+        },
+        {
+          "show": "Ana, Ben, Chen, Dev",
+          "say": "Ana, Ben, Chen, Dev"
+        }
+      ],
+      "answer": 0,
+      "why": "That list is not sorted, so you cannot tell which half to throw away.",
+      "wrong": {
+        "1": "These numbers are in order, so binary search works.",
+        "2": "These names are in alphabetical order, so binary search works."
+      }
+    }
+  ]
+}

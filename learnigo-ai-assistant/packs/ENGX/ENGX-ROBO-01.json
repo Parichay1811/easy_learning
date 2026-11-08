@@ -1,0 +1,624 @@
+{
+  "id": "ENGX-ROBO-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a robot arm moves its joints",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "robot arm",
+    "robot joints",
+    "actuator",
+    "end effector",
+    "six degrees of freedom"
+  ],
+  "examples": [
+    "How does a robot arm move?",
+    "What is an end effector?",
+    "How many joints does a robot arm have?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "ctrl",
+          "kind": "box",
+          "x": 0.1,
+          "y": 0.18,
+          "label": "Controller",
+          "motion": "pulse",
+          "ask": "How does a robot arm know where to move?"
+        },
+        {
+          "id": "base",
+          "kind": "gear",
+          "x": 0.2,
+          "y": 0.85,
+          "label": "Rotating base",
+          "motion": "spin",
+          "ask": "What is an actuator?"
+        },
+        {
+          "id": "sh",
+          "kind": "motor",
+          "x": 0.38,
+          "y": 0.6,
+          "label": "Shoulder joint",
+          "motion": "spin",
+          "ask": "What is a robot joint?"
+        },
+        {
+          "id": "el",
+          "kind": "motor",
+          "x": 0.6,
+          "y": 0.32,
+          "label": "Elbow joint",
+          "motion": "spin",
+          "ask": "What is a robot joint?"
+        },
+        {
+          "id": "wr",
+          "kind": "gear",
+          "x": 0.8,
+          "y": 0.45,
+          "label": "Wrist",
+          "motion": "spin",
+          "ask": "What does six degrees of freedom mean?"
+        },
+        {
+          "id": "ee",
+          "kind": "lever",
+          "x": 0.9,
+          "y": 0.78,
+          "label": "End effector",
+          "motion": "swing",
+          "ask": "What is an end effector?"
+        }
+      ],
+      "links": [
+        {
+          "from": "ctrl",
+          "to": "base",
+          "kind": "signal"
+        },
+        {
+          "from": "ctrl",
+          "to": "sh",
+          "kind": "signal"
+        },
+        {
+          "from": "ctrl",
+          "to": "el",
+          "kind": "signal"
+        },
+        {
+          "from": "base",
+          "to": "sh",
+          "kind": "force"
+        },
+        {
+          "from": "sh",
+          "to": "el",
+          "kind": "force",
+          "label": "upper arm"
+        },
+        {
+          "from": "el",
+          "to": "wr",
+          "kind": "force",
+          "label": "forearm"
+        },
+        {
+          "from": "wr",
+          "to": "ee",
+          "kind": "force"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An industrial robot arm is built a lot like a human arm: a base, a shoulder, an elbow and a wrist, joined in a chain. Each joint is turned by its own electric motor, called an actuator.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a robot arm moves its joints"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a robot arm know where to move?"
+            },
+            {
+              "id": "base",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.85,
+              "label": "Rotating base",
+              "motion": "spin",
+              "ask": "What is an actuator?"
+            },
+            {
+              "id": "sh",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.6,
+              "label": "Shoulder joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "el",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Elbow joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "wr",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.45,
+              "label": "Wrist",
+              "motion": "spin",
+              "ask": "What does six degrees of freedom mean?"
+            },
+            {
+              "id": "ee",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.78,
+              "label": "End effector",
+              "motion": "swing",
+              "ask": "What is an end effector?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "sh",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "el",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "sh",
+              "kind": "force"
+            },
+            {
+              "from": "sh",
+              "to": "el",
+              "kind": "force",
+              "label": "upper arm"
+            },
+            {
+              "from": "el",
+              "to": "wr",
+              "kind": "force",
+              "label": "forearm"
+            },
+            {
+              "from": "wr",
+              "to": "ee",
+              "kind": "force"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Most arms have six joints, which lets the tool reach any point and tilt in any direction, just as your arm can. These are its six degrees of freedom.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a robot arm know where to move?"
+            },
+            {
+              "id": "base",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.85,
+              "label": "Rotating base",
+              "motion": "spin",
+              "ask": "What is an actuator?"
+            },
+            {
+              "id": "sh",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.6,
+              "label": "Shoulder joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "el",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Elbow joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "wr",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.45,
+              "label": "Wrist",
+              "motion": "spin",
+              "ask": "What does six degrees of freedom mean?"
+            },
+            {
+              "id": "ee",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.78,
+              "label": "End effector",
+              "motion": "swing",
+              "ask": "What is an end effector?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "sh",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "el",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "sh",
+              "kind": "force"
+            },
+            {
+              "from": "sh",
+              "to": "el",
+              "kind": "force",
+              "label": "upper arm"
+            },
+            {
+              "from": "el",
+              "to": "wr",
+              "kind": "force",
+              "label": "forearm"
+            },
+            {
+              "from": "wr",
+              "to": "ee",
+              "kind": "force"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "At the end is the end effector, the robot's hand: a gripper, a suction cup, a welding torch or a paint sprayer, swapped to suit each job.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a robot arm know where to move?"
+            },
+            {
+              "id": "base",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.85,
+              "label": "Rotating base",
+              "motion": "spin",
+              "ask": "What is an actuator?"
+            },
+            {
+              "id": "sh",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.6,
+              "label": "Shoulder joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "el",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Elbow joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "wr",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.45,
+              "label": "Wrist",
+              "motion": "spin",
+              "ask": "What does six degrees of freedom mean?"
+            },
+            {
+              "id": "ee",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.78,
+              "label": "End effector",
+              "motion": "swing",
+              "ask": "What is an end effector?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "sh",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "el",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "sh",
+              "kind": "force"
+            },
+            {
+              "from": "sh",
+              "to": "el",
+              "kind": "force",
+              "label": "upper arm"
+            },
+            {
+              "from": "el",
+              "to": "wr",
+              "kind": "force",
+              "label": "forearm"
+            },
+            {
+              "from": "wr",
+              "to": "ee",
+              "kind": "force"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "The controller works out the angle each joint needs to put the tool in the right place. Sensors called encoders report the real angles back, so the arm corrects itself to a fraction of a millimetre.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.1,
+              "y": 0.18,
+              "label": "Controller",
+              "motion": "pulse",
+              "ask": "How does a robot arm know where to move?"
+            },
+            {
+              "id": "base",
+              "kind": "gear",
+              "x": 0.2,
+              "y": 0.85,
+              "label": "Rotating base",
+              "motion": "spin",
+              "ask": "What is an actuator?"
+            },
+            {
+              "id": "sh",
+              "kind": "motor",
+              "x": 0.38,
+              "y": 0.6,
+              "label": "Shoulder joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "el",
+              "kind": "motor",
+              "x": 0.6,
+              "y": 0.32,
+              "label": "Elbow joint",
+              "motion": "spin",
+              "ask": "What is a robot joint?"
+            },
+            {
+              "id": "wr",
+              "kind": "gear",
+              "x": 0.8,
+              "y": 0.45,
+              "label": "Wrist",
+              "motion": "spin",
+              "ask": "What does six degrees of freedom mean?"
+            },
+            {
+              "id": "ee",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.78,
+              "label": "End effector",
+              "motion": "swing",
+              "ask": "What is an end effector?"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "base",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "sh",
+              "kind": "signal"
+            },
+            {
+              "from": "ctrl",
+              "to": "el",
+              "kind": "signal"
+            },
+            {
+              "from": "base",
+              "to": "sh",
+              "kind": "force"
+            },
+            {
+              "from": "sh",
+              "to": "el",
+              "kind": "force",
+              "label": "upper arm"
+            },
+            {
+              "from": "el",
+              "to": "wr",
+              "kind": "force",
+              "label": "forearm"
+            },
+            {
+              "from": "wr",
+              "to": "ee",
+              "kind": "force"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a robot joint?",
+      "a": "A joint is where two parts of the arm meet and move. Most robot arm joints rotate, turned by an electric motor through a gearbox, and six of them give the arm full freedom to reach and point.",
+      "asks": [
+        "How many joints does a robot arm have?"
+      ]
+    },
+    {
+      "q": "What is an end effector?",
+      "a": "It is whatever is fitted on the end of the robot arm to do the work: grippers, suction cups, welding torches, paint guns or screwdrivers. Changing it lets one arm do many jobs.",
+      "asks": [
+        "What is a robot hand called?"
+      ]
+    },
+    {
+      "q": "How does a robot arm know where to move?",
+      "a": "The controller uses the arm's lengths and geometry to calculate each joint angle needed to reach a target, called inverse kinematics. Encoders measure the real joint angles so it can correct any error.",
+      "asks": [
+        "What is inverse kinematics?"
+      ]
+    },
+    {
+      "q": "What is an actuator?",
+      "a": "An actuator is the part that makes something move. In robot arms it is usually an electric servo motor with a gearbox, though some very strong robots use hydraulic or air-powered cylinders.",
+      "asks": [
+        "What moves a robot's joints?"
+      ]
+    },
+    {
+      "q": "What does six degrees of freedom mean?",
+      "a": "It means six independent ways to move. To place a tool anywhere and tilt it any way, you need three for position, up-down, left-right and forward-back, and three for its angle.",
+      "asks": [
+        "Why do robot arms have six axes?"
+      ]
+    }
+  ],
+  "facts": [
+    "Unimate, the first industrial robot, began work at a General Motors plant in 1961.",
+    "Most industrial robot arms have six rotating joints."
+  ],
+  "quiz": [
+    {
+      "say": "What is a robot arm's end effector?",
+      "show": "The end effector is…",
+      "options": [
+        {
+          "show": "The tool on the end, such as a gripper",
+          "say": "The tool on the end, such as a gripper"
+        },
+        {
+          "show": "The motor in the base",
+          "say": "The motor in the base"
+        },
+        {
+          "show": "The power cable",
+          "say": "The power cable"
+        }
+      ],
+      "answer": 0,
+      "why": "The end effector is the working tool at the tip of the arm, changed to suit the job.",
+      "wrong": {
+        "1": "The base motor turns the whole arm; it is not the tool.",
+        "2": "The cable powers the robot but does no work on objects."
+      }
+    }
+  ]
+}

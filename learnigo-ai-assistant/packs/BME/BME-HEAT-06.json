@@ -1,0 +1,740 @@
+{
+  "id": "BME-HEAT-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Heat exchangers: parallel flow versus counter flow and the LMTD",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-HEAT — Heat transfer",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "heat exchanger",
+    "counter flow",
+    "parallel flow",
+    "log mean temperature difference",
+    "overall heat transfer coefficient U"
+  ],
+  "examples": [
+    "What is the difference between parallel and counter flow heat exchangers?",
+    "How do I calculate the LMTD?",
+    "Why is counter flow more efficient?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Along exchanger",
+        "max": 1
+      },
+      "y": {
+        "label": "Temperature (°C)",
+        "max": 160
+      },
+      "curves": [
+        {
+          "label": "Hot oil",
+          "type": "points",
+          "points": [
+            [
+              0,
+              150
+            ],
+            [
+              0.1,
+              137.9
+            ],
+            [
+              0.2,
+              127.9
+            ],
+            [
+              0.35,
+              115.9
+            ],
+            [
+              0.5,
+              106.9
+            ],
+            [
+              0.7,
+              98.2
+            ],
+            [
+              1,
+              90
+            ]
+          ],
+          "smooth": true,
+          "ask": "What happens in a parallel flow heat exchanger?"
+        },
+        {
+          "label": "Cold water",
+          "type": "points",
+          "points": [
+            [
+              0,
+              20
+            ],
+            [
+              0.1,
+              30.1
+            ],
+            [
+              0.2,
+              38.5
+            ],
+            [
+              0.35,
+              48.4
+            ],
+            [
+              0.5,
+              55.9
+            ],
+            [
+              0.7,
+              63.2
+            ],
+            [
+              1,
+              70
+            ]
+          ],
+          "smooth": true,
+          "ask": "What happens in a parallel flow heat exchanger?"
+        }
+      ],
+      "marks": [
+        {
+          "x": 0,
+          "label": "Gap 130 °C"
+        },
+        {
+          "x": 1,
+          "label": "Gap 20 °C"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your car radiator, a power-station condenser and the coil behind your fridge are all heat exchangers: two fluids, kept apart by a metal wall, swapping heat. Here hot oil cools from 150 to 90 degrees while heating water from 20 to 70. Look at the shell and tubes, and which way each fluid goes.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Heat exchangers: parallel flow versus counter flow and the LMTD"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hin",
+              "kind": "pipe",
+              "x": 0.15,
+              "y": 0.3,
+              "label": "Hot oil in 150 °C"
+            },
+            {
+              "id": "tube",
+              "kind": "tank",
+              "x": 0.5,
+              "y": 0.5,
+              "size": 1.4,
+              "label": "Shell and tubes"
+            },
+            {
+              "id": "hout",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.3,
+              "label": "Oil out 90 °C"
+            },
+            {
+              "id": "cin",
+              "kind": "pipe",
+              "x": 0.85,
+              "y": 0.75,
+              "label": "Water in 20 °C"
+            },
+            {
+              "id": "cout",
+              "kind": "pipe",
+              "x": 0.15,
+              "y": 0.75,
+              "label": "Water out 70 °C"
+            }
+          ],
+          "links": [
+            {
+              "from": "hin",
+              "to": "tube",
+              "kind": "fluid"
+            },
+            {
+              "from": "tube",
+              "to": "hout",
+              "kind": "fluid"
+            },
+            {
+              "from": "cin",
+              "to": "tube",
+              "kind": "fluid"
+            },
+            {
+              "from": "tube",
+              "to": "cout",
+              "kind": "fluid"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Oil 150 → 90 °C, water 20 → 70 °C, water 0.5 kg/s"
+        }
+      ]
+    },
+    {
+      "say": "Here is a shell-and-tube heat exchanger in 3D. The hot fluid runs through the tubes, the cold fluid flows around them in the shell, and the baffles make it zigzag for better contact. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Heat exchangers: parallel flow versus counter flow and the LMTD"
+        },
+        {
+          "op": "image",
+          "render": "heat-exchanger"
+        }
+      ]
+    },
+    {
+      "say": "In parallel flow both fluids enter at the same end. See the graph: the gap starts huge, 130 degrees, but shrinks to just 20 at the exit, as the two curves squeeze together. The heat flow at each point depends on that gap. Could the water ever leave hotter than the oil leaves?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Along exchanger",
+            "max": 1
+          },
+          "y": {
+            "label": "Temperature (°C)",
+            "max": 160
+          },
+          "curves": [
+            {
+              "label": "Hot oil",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  150
+                ],
+                [
+                  0.1,
+                  137.9
+                ],
+                [
+                  0.2,
+                  127.9
+                ],
+                [
+                  0.35,
+                  115.9
+                ],
+                [
+                  0.5,
+                  106.9
+                ],
+                [
+                  0.7,
+                  98.2
+                ],
+                [
+                  1,
+                  90
+                ]
+              ],
+              "smooth": true,
+              "ask": "What happens in a parallel flow heat exchanger?"
+            },
+            {
+              "label": "Cold water",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  20
+                ],
+                [
+                  0.1,
+                  30.1
+                ],
+                [
+                  0.2,
+                  38.5
+                ],
+                [
+                  0.35,
+                  48.4
+                ],
+                [
+                  0.5,
+                  55.9
+                ],
+                [
+                  0.7,
+                  63.2
+                ],
+                [
+                  1,
+                  70
+                ]
+              ],
+              "smooth": true,
+              "ask": "What happens in a parallel flow heat exchanger?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Gap 130 °C"
+            },
+            {
+              "x": 1,
+              "label": "Gap 20 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Parallel flow: big gap at the inlet, tiny gap at the exit"
+        }
+      ]
+    },
+    {
+      "say": "Not in parallel flow. Now counter flow: the water enters at the far end and runs the other way. See how the curves stay roughly parallel? The gap is 80 degrees at one end and 70 at the other. That steady, healthy gap drives heat all the way along. Counter flow can even heat the water above the oil outlet temperature.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Along exchanger",
+            "max": 1
+          },
+          "y": {
+            "label": "Temperature (°C)",
+            "max": 160
+          },
+          "curves": [
+            {
+              "label": "Hot oil",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  150
+                ],
+                [
+                  0.1,
+                  143.6
+                ],
+                [
+                  0.2,
+                  137.4
+                ],
+                [
+                  0.35,
+                  128.1
+                ],
+                [
+                  0.5,
+                  119
+                ],
+                [
+                  0.7,
+                  107.2
+                ],
+                [
+                  1,
+                  90
+                ]
+              ],
+              "smooth": true,
+              "ask": "Why is counter flow more efficient?"
+            },
+            {
+              "label": "Cold water (←)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  70
+                ],
+                [
+                  0.1,
+                  64.7
+                ],
+                [
+                  0.2,
+                  59.5
+                ],
+                [
+                  0.35,
+                  51.8
+                ],
+                [
+                  0.5,
+                  44.2
+                ],
+                [
+                  0.7,
+                  34.3
+                ],
+                [
+                  1,
+                  20
+                ]
+              ],
+              "smooth": true,
+              "ask": "Why is counter flow more efficient?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Gap 80 °C"
+            },
+            {
+              "x": 1,
+              "label": "Gap 70 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Counter flow: nearly even gap along the whole length"
+        }
+      ]
+    },
+    {
+      "say": "To size an exchanger we use Q equals U A times the log mean temperature difference, LMTD. It is the end gaps difference divided by the natural log of their ratio. Counter flow: 80 minus 70 over ln of 80 over 70, which is 74.9 degrees. Parallel flow: 130 minus 20 over ln 6.5, only 58.8. Which needs the bigger exchanger?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Along exchanger",
+            "max": 1
+          },
+          "y": {
+            "label": "Temperature (°C)",
+            "max": 160
+          },
+          "curves": [
+            {
+              "label": "Hot oil",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  150
+                ],
+                [
+                  0.1,
+                  143.6
+                ],
+                [
+                  0.2,
+                  137.4
+                ],
+                [
+                  0.35,
+                  128.1
+                ],
+                [
+                  0.5,
+                  119
+                ],
+                [
+                  0.7,
+                  107.2
+                ],
+                [
+                  1,
+                  90
+                ]
+              ],
+              "smooth": true,
+              "ask": "Why is counter flow more efficient?"
+            },
+            {
+              "label": "Cold water (←)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  70
+                ],
+                [
+                  0.1,
+                  64.7
+                ],
+                [
+                  0.2,
+                  59.5
+                ],
+                [
+                  0.35,
+                  51.8
+                ],
+                [
+                  0.5,
+                  44.2
+                ],
+                [
+                  0.7,
+                  34.3
+                ],
+                [
+                  1,
+                  20
+                ]
+              ],
+              "smooth": true,
+              "ask": "Why is counter flow more efficient?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Gap 80 °C"
+            },
+            {
+              "x": 1,
+              "label": "Gap 70 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "LMTD = (ΔT₁ − ΔT₂)/ln(ΔT₁/ΔT₂) = 74.9 K"
+        }
+      ]
+    },
+    {
+      "say": "Parallel flow! The duty is 0.5 times 4.18 times 50, 104.5 kilowatts. With U equal to 300, counter flow needs 4.65 square metres, parallel flow 5.92: about 27 percent more metal. Superb. Exam tip: work out the end gaps carefully; for counter flow, pair each hot end with the cold fluid at that same end.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Along exchanger",
+            "max": 1
+          },
+          "y": {
+            "label": "Temperature (°C)",
+            "max": 160
+          },
+          "curves": [
+            {
+              "label": "Hot oil",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  150
+                ],
+                [
+                  0.1,
+                  143.6
+                ],
+                [
+                  0.2,
+                  137.4
+                ],
+                [
+                  0.35,
+                  128.1
+                ],
+                [
+                  0.5,
+                  119
+                ],
+                [
+                  0.7,
+                  107.2
+                ],
+                [
+                  1,
+                  90
+                ]
+              ],
+              "smooth": true,
+              "ask": "Why is counter flow more efficient?"
+            },
+            {
+              "label": "Cold water (←)",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  70
+                ],
+                [
+                  0.1,
+                  64.7
+                ],
+                [
+                  0.2,
+                  59.5
+                ],
+                [
+                  0.35,
+                  51.8
+                ],
+                [
+                  0.5,
+                  44.2
+                ],
+                [
+                  0.7,
+                  34.3
+                ],
+                [
+                  1,
+                  20
+                ]
+              ],
+              "smooth": true,
+              "ask": "Why is counter flow more efficient?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 0,
+              "label": "Gap 80 °C"
+            },
+            {
+              "x": 1,
+              "label": "Gap 70 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "A = Q/(U·LMTD) = 104 500/(300 × 74.9) = 4.65 m²"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What happens in a parallel flow heat exchanger?",
+      "a": "Both fluids enter at the same end and flow the same way. The temperature gap is large at the inlet and shrinks along the length, so the cold outlet can never exceed the hot outlet.",
+      "asks": [
+        "parallel flow heat exchanger"
+      ]
+    },
+    {
+      "q": "Why is counter flow more efficient?",
+      "a": "The fluids flow in opposite directions, so the temperature gap stays more even along the length. That gives a bigger mean driving difference, so less area is needed, and the cold fluid can leave hotter than the hot fluid leaves.",
+      "asks": [
+        "counter flow heat exchanger",
+        "what is the difference between parallel and counter flow heat exchangers"
+      ]
+    },
+    {
+      "q": "How do I calculate the LMTD?",
+      "a": "Find the temperature gap at each end, delta T1 and delta T2. LMTD equals delta T1 minus delta T2 divided by the natural log of delta T1 over delta T2.",
+      "asks": [
+        "log mean temperature difference formula"
+      ]
+    },
+    {
+      "q": "What is the overall heat transfer coefficient U?",
+      "a": "U combines the convection on both sides and the conduction through the wall into one coefficient, so Q equals U A LMTD. It is one over the total resistance per square metre.",
+      "asks": [
+        "U value heat exchanger"
+      ]
+    },
+    {
+      "q": "How do I size a heat exchanger?",
+      "a": "Find the duty Q from m times c p times the temperature change of one fluid, work out the LMTD, then the area is Q divided by U times LMTD.",
+      "asks": [
+        "heat exchanger area calculation"
+      ]
+    }
+  ],
+  "facts": [
+    "For the same end temperatures, counter flow always has a larger LMTD than parallel flow.",
+    "Only in counter flow can the cold fluid leave hotter than the hot fluid leaves."
+  ],
+  "quiz": [
+    {
+      "say": "A counter flow exchanger has end temperature gaps of 40 and 20 degrees. What is the LMTD?",
+      "show": "Counter flow: end gaps 40 K and 20 K. LMTD?",
+      "options": [
+        {
+          "show": "28.9 K",
+          "say": "28.9 kelvin"
+        },
+        {
+          "show": "30 K",
+          "say": "30 kelvin"
+        },
+        {
+          "show": "20 K",
+          "say": "20 kelvin"
+        }
+      ],
+      "answer": 0,
+      "why": "LMTD = (40 − 20)/ln(2) = 20/0.693 = 28.9 K.",
+      "wrong": {
+        "1": "That is the plain average, which overestimates the mean gap.",
+        "2": "That is just the smaller end gap."
+      }
+    },
+    {
+      "say": "Why can counter flow heat the cold fluid above the hot outlet temperature?",
+      "show": "How can counter flow heat the cold fluid above the hot outlet temperature?",
+      "options": [
+        {
+          "show": "The cold fluid leaves next to where the hot fluid enters",
+          "say": "The cold fluid leaves next to where the hot fluid enters"
+        },
+        {
+          "show": "Counter flow uses a heat pump",
+          "say": "Counter flow uses a heat pump"
+        },
+        {
+          "show": "The wall stores extra heat",
+          "say": "The wall stores extra heat"
+        }
+      ],
+      "answer": 0,
+      "why": "The cold outlet meets the hottest oil at the hot inlet, so it can warm well above the hot outlet temperature.",
+      "wrong": {
+        "1": "No work input is involved; heat still flows from hot to cold everywhere.",
+        "2": "In steady operation the wall stores no extra heat."
+      }
+    }
+  ]
+}

@@ -1,0 +1,415 @@
+{
+  "id": "BME-DYN-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Mass moment of inertia: why a flywheel resists changes in its spin",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-DYN — Dynamics and vibration",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "mass moment of inertia",
+    "flywheel",
+    "angular acceleration",
+    "torque",
+    "rotational kinetic energy"
+  ],
+  "examples": [
+    "What is mass moment of inertia?",
+    "Why does a ring have more inertia than a disc?",
+    "How much energy does a flywheel store?"
+  ],
+  "figure": [
+    {
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.18,
+          "y": 0.5,
+          "size": 0.8,
+          "label": "Motor 9 N·m",
+          "ask": "What is the rotational version of F = ma?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.45,
+          "y": 0.5,
+          "label": "Shaft"
+        },
+        {
+          "id": "fly",
+          "kind": "wheel",
+          "x": 0.75,
+          "y": 0.5,
+          "size": 1.5,
+          "label": "Flywheel 50 kg",
+          "ask": "What is mass moment of inertia?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "shaft",
+          "kind": "power"
+        },
+        {
+          "from": "shaft",
+          "to": "fly",
+          "kind": "power"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A potter's wheel keeps turning after a kick, and a car engine has a heavy flywheel that smooths out the jerky push of each cylinder. Both rely on rotational inertia: spinning things resist changes to their spin. Mass alone is not the whole story. Look at the flywheel on its shaft.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Mass moment of inertia: why a flywheel resists changes in its spin"
+        },
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor 9 N·m",
+              "ask": "What is the rotational version of F = ma?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.5,
+              "label": "Shaft"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.5,
+              "label": "Flywheel 50 kg",
+              "ask": "What is mass moment of inertia?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power"
+            },
+            {
+              "from": "shaft",
+              "to": "fly",
+              "kind": "power"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Flywheel: solid steel disc, 50 kg, radius 0.3 m"
+        }
+      ]
+    },
+    {
+      "say": "For rotation, what counts is the mass moment of inertia, I: each bit of mass times its distance from the axle squared, all added up. Mass far from the axle counts much more. For a solid disc, I is a half m r squared: a half times 50 times 0.3 squared, which is 2.25 kilogram metres squared. See the big wheel?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor 9 N·m",
+              "ask": "What is the rotational version of F = ma?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.5,
+              "label": "Shaft"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.5,
+              "label": "Flywheel 50 kg",
+              "ask": "What is mass moment of inertia?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power"
+            },
+            {
+              "from": "shaft",
+              "to": "fly",
+              "kind": "power"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Disc: I = ½mr² = ½ × 50 × 0.3² = 2.25 kg·m²"
+        }
+      ]
+    },
+    {
+      "say": "Now compare. Put the same 50 kilograms in a thin ring at 0.3 metres, and I doubles to 4.5, because every bit is at the rim. Shrink the disc to 0.15 metres and I drops to a quarter. Look at the bars. Why do racing bikes use light rims?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "kg·m²",
+          "items": [
+            {
+              "label": "Disc, r = 0.15 m",
+              "size": 0.5625,
+              "icon": "wheel"
+            },
+            {
+              "label": "Disc, r = 0.3 m",
+              "size": 2.25,
+              "icon": "wheel"
+            },
+            {
+              "label": "Ring, r = 0.3 m",
+              "size": 4.5,
+              "icon": "wheel"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "Ring: I = mr² = 50 × 0.3² = 4.5 kg·m²"
+        }
+      ]
+    },
+    {
+      "say": "So the wheels speed up easily! Newton's second law for rotation is torque equals I times alpha, the angular acceleration. Our motor gives 9 newton metres to the 2.25 disc, so alpha equals 9 over 2.25, which is 4 radians per second squared. See the motor driving the shaft? How long to reach 31.4 radians per second?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor 9 N·m",
+              "ask": "What is the rotational version of F = ma?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.5,
+              "label": "Shaft"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.5,
+              "label": "Flywheel 50 kg",
+              "ask": "What is mass moment of inertia?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power"
+            },
+            {
+              "from": "shaft",
+              "to": "fly",
+              "kind": "power"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "T = Iα: α = 9 / 2.25 = 4 rad/s²"
+        }
+      ]
+    },
+    {
+      "say": "About 7.9 seconds. At that speed, 300 revolutions per minute, the flywheel stores a half I omega squared: a half times 2.25 times 31.4 squared, about 1.1 kilojoules. Well done! Real link: flywheels store energy in some city buses and racing cars. Challenge: how much energy at twice the speed?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.18,
+              "y": 0.5,
+              "size": 0.8,
+              "label": "Motor 9 N·m",
+              "ask": "What is the rotational version of F = ma?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.5,
+              "label": "Shaft"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.75,
+              "y": 0.5,
+              "size": 1.5,
+              "label": "Flywheel 50 kg",
+              "ask": "What is mass moment of inertia?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "shaft",
+              "kind": "power"
+            },
+            {
+              "from": "shaft",
+              "to": "fly",
+              "kind": "power"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "KE = ½Iω² = ½ × 2.25 × 31.4² = 1.11 kJ"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is mass moment of inertia?",
+      "a": "It measures how hard it is to change a body's rotation about an axis: the sum of each small mass times its distance from the axis squared. Its unit is kilogram metre squared.",
+      "asks": [
+        "define moment of inertia",
+        "rotational inertia meaning"
+      ]
+    },
+    {
+      "q": "Why does a ring have more inertia than a disc?",
+      "a": "All of a ring's mass sits at the full radius, while a disc has mass spread from the centre outwards. Since distance is squared, the ring's I is m r squared, twice the disc's half m r squared.",
+      "asks": [
+        "ring vs disc moment of inertia"
+      ]
+    },
+    {
+      "q": "How much energy does a flywheel store?",
+      "a": "Rotational kinetic energy is a half times I times omega squared, with omega in radians per second. Doubling the speed stores four times the energy.",
+      "asks": [
+        "flywheel energy formula"
+      ]
+    },
+    {
+      "q": "What is the rotational version of F = ma?",
+      "a": "Torque equals moment of inertia times angular acceleration. Torque plays the role of force and I plays the role of mass.",
+      "asks": [
+        "torque equals I alpha"
+      ]
+    },
+    {
+      "q": "What does a flywheel do in an engine?",
+      "a": "It stores energy during the power strokes and gives it back between them, so the crankshaft turns at a smoother speed.",
+      "asks": [
+        "purpose of flywheel"
+      ]
+    }
+  ],
+  "facts": [
+    "A solid disc has a mass moment of inertia of one half m r squared about its axis; a thin ring has m r squared.",
+    "Rotational kinetic energy equals one half I omega squared."
+  ],
+  "quiz": [
+    {
+      "say": "A solid disc of mass 20 kilograms and radius 0.5 metres spins about its axis. What is its moment of inertia?",
+      "show": "Solid disc: m = 20 kg, r = 0.5 m. Moment of inertia?",
+      "options": [
+        {
+          "show": "2.5 kg·m²",
+          "say": "2.5 kilogram metres squared"
+        },
+        {
+          "show": "5 kg·m²",
+          "say": "5 kilogram metres squared"
+        },
+        {
+          "show": "10 kg·m²",
+          "say": "10 kilogram metres squared"
+        }
+      ],
+      "answer": 0,
+      "why": "I = ½mr² = ½ × 20 × 0.25 = 2.5 kg·m².",
+      "wrong": {
+        "1": "That is m r squared, the formula for a thin ring.",
+        "2": "That uses r instead of r squared."
+      }
+    },
+    {
+      "say": "A torque of 12 newton metres acts on a wheel with I equals 3 kilogram metres squared. What is its angular acceleration?",
+      "show": "Torque 12 N·m on a wheel with I = 3 kg·m². Angular acceleration?",
+      "options": [
+        {
+          "show": "4 rad/s²",
+          "say": "4 radians per second squared"
+        },
+        {
+          "show": "36 rad/s²",
+          "say": "36 radians per second squared"
+        },
+        {
+          "show": "0.25 rad/s²",
+          "say": "0.25 radians per second squared"
+        }
+      ],
+      "answer": 0,
+      "why": "α = T / I = 12 / 3 = 4 rad/s².",
+      "wrong": {
+        "1": "That multiplies torque by inertia instead of dividing.",
+        "2": "That divides the inertia by the torque, upside down."
+      }
+    }
+  ]
+}

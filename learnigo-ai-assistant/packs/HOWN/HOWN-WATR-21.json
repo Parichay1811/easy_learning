@@ -1,0 +1,570 @@
+{
+  "id": "HOWN-WATR-21",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How do winds drive ocean currents?",
+  "area": "How Nature Works",
+  "group": "HOWN — How and Why in Nature",
+  "levels": [
+    "P2",
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "surface currents",
+    "ocean gyre",
+    "trade winds",
+    "Gulf Stream",
+    "garbage patch"
+  ],
+  "examples": [
+    "What makes ocean currents move?",
+    "What is a gyre?",
+    "Why does plastic collect in the middle of the ocean?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "trade",
+          "label": "Trade winds",
+          "icon": "wind",
+          "x": 0.5,
+          "y": 0.94
+        },
+        {
+          "id": "west",
+          "label": "Westerly winds",
+          "icon": "wind",
+          "x": 0.5,
+          "y": 0.06
+        },
+        {
+          "id": "equ",
+          "label": "Equatorial current",
+          "icon": "wave",
+          "x": 0.5,
+          "y": 0.72,
+          "ask": "What makes surface ocean currents?"
+        },
+        {
+          "id": "gulf",
+          "label": "Gulf Stream",
+          "icon": "wave",
+          "x": 0.14,
+          "y": 0.5,
+          "ask": "Why do currents curve?"
+        },
+        {
+          "id": "drift",
+          "label": "North Atlantic Drift",
+          "icon": "wave",
+          "x": 0.5,
+          "y": 0.28
+        },
+        {
+          "id": "canary",
+          "label": "Canary Current",
+          "icon": "wave",
+          "x": 0.86,
+          "y": 0.5,
+          "ask": "What is a gyre?"
+        }
+      ],
+      "links": [
+        {
+          "from": "trade",
+          "to": "equ",
+          "kind": "force",
+          "label": "pushes west"
+        },
+        {
+          "from": "equ",
+          "to": "gulf",
+          "kind": "fluid",
+          "label": "warm water"
+        },
+        {
+          "from": "gulf",
+          "to": "drift",
+          "kind": "fluid",
+          "label": "turns east"
+        },
+        {
+          "from": "west",
+          "to": "drift",
+          "kind": "force",
+          "label": "pushes east"
+        },
+        {
+          "from": "drift",
+          "to": "canary",
+          "kind": "fluid"
+        },
+        {
+          "from": "canary",
+          "to": "equ",
+          "kind": "fluid",
+          "label": "cool water"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Surface ocean currents are pushed mainly by wind. Steady winds drag on the sea surface, setting roughly the top 100 metres of water in motion.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How do winds drive ocean currents?"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "trade",
+              "label": "Trade winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.94
+            },
+            {
+              "id": "west",
+              "label": "Westerly winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.06
+            },
+            {
+              "id": "equ",
+              "label": "Equatorial current",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.72,
+              "ask": "What makes surface ocean currents?"
+            },
+            {
+              "id": "gulf",
+              "label": "Gulf Stream",
+              "icon": "wave",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "Why do currents curve?"
+            },
+            {
+              "id": "drift",
+              "label": "North Atlantic Drift",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.28
+            },
+            {
+              "id": "canary",
+              "label": "Canary Current",
+              "icon": "wave",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is a gyre?"
+            }
+          ],
+          "links": [
+            {
+              "from": "trade",
+              "to": "equ",
+              "kind": "force",
+              "label": "pushes west"
+            },
+            {
+              "from": "equ",
+              "to": "gulf",
+              "kind": "fluid",
+              "label": "warm water"
+            },
+            {
+              "from": "gulf",
+              "to": "drift",
+              "kind": "fluid",
+              "label": "turns east"
+            },
+            {
+              "from": "west",
+              "to": "drift",
+              "kind": "force",
+              "label": "pushes east"
+            },
+            {
+              "from": "drift",
+              "to": "canary",
+              "kind": "fluid"
+            },
+            {
+              "from": "canary",
+              "to": "equ",
+              "kind": "fluid",
+              "label": "cool water"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Near the equator the trade winds blow from the east, driving warm water westward across the Atlantic in the North Equatorial Current.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "trade",
+              "label": "Trade winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.94
+            },
+            {
+              "id": "west",
+              "label": "Westerly winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.06
+            },
+            {
+              "id": "equ",
+              "label": "Equatorial current",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.72,
+              "ask": "What makes surface ocean currents?"
+            },
+            {
+              "id": "gulf",
+              "label": "Gulf Stream",
+              "icon": "wave",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "Why do currents curve?"
+            },
+            {
+              "id": "drift",
+              "label": "North Atlantic Drift",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.28
+            },
+            {
+              "id": "canary",
+              "label": "Canary Current",
+              "icon": "wave",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is a gyre?"
+            }
+          ],
+          "links": [
+            {
+              "from": "trade",
+              "to": "equ",
+              "kind": "force",
+              "label": "pushes west"
+            },
+            {
+              "from": "equ",
+              "to": "gulf",
+              "kind": "fluid",
+              "label": "warm water"
+            },
+            {
+              "from": "gulf",
+              "to": "drift",
+              "kind": "fluid",
+              "label": "turns east"
+            },
+            {
+              "from": "west",
+              "to": "drift",
+              "kind": "force",
+              "label": "pushes east"
+            },
+            {
+              "from": "drift",
+              "to": "canary",
+              "kind": "fluid"
+            },
+            {
+              "from": "canary",
+              "to": "equ",
+              "kind": "fluid",
+              "label": "cool water"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "When that water reaches the Americas it turns north as the Gulf Stream. Earth's spin bends currents to the right in the northern hemisphere, and further north the westerly winds push the water east towards Europe.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "trade",
+              "label": "Trade winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.94
+            },
+            {
+              "id": "west",
+              "label": "Westerly winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.06
+            },
+            {
+              "id": "equ",
+              "label": "Equatorial current",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.72,
+              "ask": "What makes surface ocean currents?"
+            },
+            {
+              "id": "gulf",
+              "label": "Gulf Stream",
+              "icon": "wave",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "Why do currents curve?"
+            },
+            {
+              "id": "drift",
+              "label": "North Atlantic Drift",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.28
+            },
+            {
+              "id": "canary",
+              "label": "Canary Current",
+              "icon": "wave",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is a gyre?"
+            }
+          ],
+          "links": [
+            {
+              "from": "trade",
+              "to": "equ",
+              "kind": "force",
+              "label": "pushes west"
+            },
+            {
+              "from": "equ",
+              "to": "gulf",
+              "kind": "fluid",
+              "label": "warm water"
+            },
+            {
+              "from": "gulf",
+              "to": "drift",
+              "kind": "fluid",
+              "label": "turns east"
+            },
+            {
+              "from": "west",
+              "to": "drift",
+              "kind": "force",
+              "label": "pushes east"
+            },
+            {
+              "from": "drift",
+              "to": "canary",
+              "kind": "fluid"
+            },
+            {
+              "from": "canary",
+              "to": "equ",
+              "kind": "fluid",
+              "label": "cool water"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Off Africa the water turns south again as the cool Canary Current, closing a giant loop called a gyre. Each big ocean has gyres like this, and floating rubbish collects in their calm centres.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "trade",
+              "label": "Trade winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.94
+            },
+            {
+              "id": "west",
+              "label": "Westerly winds",
+              "icon": "wind",
+              "x": 0.5,
+              "y": 0.06
+            },
+            {
+              "id": "equ",
+              "label": "Equatorial current",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.72,
+              "ask": "What makes surface ocean currents?"
+            },
+            {
+              "id": "gulf",
+              "label": "Gulf Stream",
+              "icon": "wave",
+              "x": 0.14,
+              "y": 0.5,
+              "ask": "Why do currents curve?"
+            },
+            {
+              "id": "drift",
+              "label": "North Atlantic Drift",
+              "icon": "wave",
+              "x": 0.5,
+              "y": 0.28
+            },
+            {
+              "id": "canary",
+              "label": "Canary Current",
+              "icon": "wave",
+              "x": 0.86,
+              "y": 0.5,
+              "ask": "What is a gyre?"
+            }
+          ],
+          "links": [
+            {
+              "from": "trade",
+              "to": "equ",
+              "kind": "force",
+              "label": "pushes west"
+            },
+            {
+              "from": "equ",
+              "to": "gulf",
+              "kind": "fluid",
+              "label": "warm water"
+            },
+            {
+              "from": "gulf",
+              "to": "drift",
+              "kind": "fluid",
+              "label": "turns east"
+            },
+            {
+              "from": "west",
+              "to": "drift",
+              "kind": "force",
+              "label": "pushes east"
+            },
+            {
+              "from": "drift",
+              "to": "canary",
+              "kind": "fluid"
+            },
+            {
+              "from": "canary",
+              "to": "equ",
+              "kind": "fluid",
+              "label": "cool water"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What makes surface ocean currents?",
+      "a": "Mainly steady winds dragging on the water, like the trade winds and the westerlies. Earth's spin and the shapes of the continents then steer the currents into giant loops.",
+      "asks": [
+        "How does wind move the ocean?"
+      ]
+    },
+    {
+      "q": "What is a gyre?",
+      "a": "A gyre is a huge loop of ocean currents circling an ocean basin, driven by winds and Earth's spin. There are five main gyres: in the North and South Atlantic, the North and South Pacific, and the Indian Ocean.",
+      "asks": [
+        "What is the North Atlantic Gyre?"
+      ]
+    },
+    {
+      "q": "What is the Great Pacific Garbage Patch?",
+      "a": "An area in the calm middle of the North Pacific gyre where floating plastic collects, carried there by the circling currents. It is mostly tiny bits of plastic, not a solid island.",
+      "asks": [
+        "Why does plastic collect in the ocean?"
+      ]
+    },
+    {
+      "q": "Why do currents curve?",
+      "a": "Earth spins under the moving water, which makes currents curve to the right in the northern hemisphere and to the left in the southern. This is the Coriolis effect; continents also block and turn them.",
+      "asks": [
+        "Why does the Gulf Stream turn?"
+      ]
+    },
+    {
+      "q": "How do we know where currents go?",
+      "a": "Scientists track drifting buoys and use satellites. Spilled cargo has helped too: plastic bath toys lost from a ship in the Pacific in 1992 later washed up on beaches far away.",
+      "asks": [
+        "What were the rubber ducks lost at sea?"
+      ]
+    }
+  ],
+  "facts": [
+    "In 1992 a ship lost about 28,000 plastic bath toys in the Pacific, and their drift helped scientists study ocean currents.",
+    "There are five major ocean gyres."
+  ],
+  "quiz": [
+    {
+      "say": "What mainly drives surface ocean currents?",
+      "show": "Surface ocean currents are mainly driven by…",
+      "options": [
+        {
+          "show": "Wind",
+          "say": "Wind"
+        },
+        {
+          "show": "The Moon",
+          "say": "The Moon"
+        },
+        {
+          "show": "Fish swimming",
+          "say": "Fish swimming"
+        }
+      ],
+      "answer": 0,
+      "why": "Steady winds drag on the sea surface, and Earth's spin and the continents steer the moving water into loops.",
+      "wrong": {
+        "1": "The Moon causes tides, which rise and fall, rather than the steady surface currents.",
+        "2": "Fish are far too small to move ocean currents."
+      }
+    }
+  ]
+}

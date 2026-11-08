@@ -1,0 +1,685 @@
+{
+  "id": "ENGX-ENER-43",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a Stirling engine runs on outside heat",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "Stirling engine",
+    "external combustion engine",
+    "displacer piston",
+    "regenerator",
+    "hot air engine"
+  ],
+  "examples": [
+    "How does a Stirling engine work?",
+    "Can an engine run on the heat of your hand?",
+    "What is an external combustion engine?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "hot",
+          "kind": "box",
+          "x": 0.15,
+          "y": 0.8,
+          "label": "Hot end",
+          "motion": "pulse",
+          "ask": "What can heat a Stirling engine?"
+        },
+        {
+          "id": "cold",
+          "kind": "box",
+          "x": 0.15,
+          "y": 0.2,
+          "label": "Cold end"
+        },
+        {
+          "id": "disp",
+          "kind": "piston",
+          "x": 0.32,
+          "y": 0.5,
+          "size": 1.1,
+          "label": "Displacer piston",
+          "motion": "slide",
+          "ask": "What does the displacer piston do?"
+        },
+        {
+          "id": "power",
+          "kind": "piston",
+          "x": 0.56,
+          "y": 0.28,
+          "label": "Power piston",
+          "motion": "slide",
+          "ask": "How does a Stirling engine make the power piston move?"
+        },
+        {
+          "id": "crank",
+          "kind": "axle",
+          "x": 0.74,
+          "y": 0.55,
+          "size": 0.8,
+          "label": "Crankshaft",
+          "motion": "spin"
+        },
+        {
+          "id": "fly",
+          "kind": "wheel",
+          "x": 0.9,
+          "y": 0.28,
+          "size": 1.3,
+          "label": "Flywheel",
+          "motion": "spin",
+          "ask": "Why does a Stirling engine need a flywheel?"
+        },
+        {
+          "id": "regen",
+          "kind": "box",
+          "x": 0.52,
+          "y": 0.75,
+          "size": 0.7,
+          "label": "Regenerator",
+          "ask": "What is a regenerator?"
+        }
+      ],
+      "links": [
+        {
+          "from": "hot",
+          "to": "disp",
+          "kind": "heat",
+          "label": "heats gas"
+        },
+        {
+          "from": "disp",
+          "to": "cold",
+          "kind": "heat",
+          "label": "cools gas"
+        },
+        {
+          "from": "disp",
+          "to": "power",
+          "kind": "fluid",
+          "label": "pressure"
+        },
+        {
+          "from": "power",
+          "to": "crank",
+          "kind": "force"
+        },
+        {
+          "from": "crank",
+          "to": "fly",
+          "kind": "energy"
+        },
+        {
+          "from": "fly",
+          "to": "disp",
+          "kind": "force",
+          "label": "quarter turn behind"
+        },
+        {
+          "from": "regen",
+          "to": "disp",
+          "kind": "heat",
+          "label": "stores heat"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A Stirling engine is a heat engine with no burning inside it. A fixed amount of gas is sealed in, and one end is heated, by a flame, the sun or even a warm hand, while the other end is kept cool.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a Stirling engine runs on outside heat"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hot",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.8,
+              "label": "Hot end",
+              "motion": "pulse",
+              "ask": "What can heat a Stirling engine?"
+            },
+            {
+              "id": "cold",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.2,
+              "label": "Cold end"
+            },
+            {
+              "id": "disp",
+              "kind": "piston",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Displacer piston",
+              "motion": "slide",
+              "ask": "What does the displacer piston do?"
+            },
+            {
+              "id": "power",
+              "kind": "piston",
+              "x": 0.56,
+              "y": 0.28,
+              "label": "Power piston",
+              "motion": "slide",
+              "ask": "How does a Stirling engine make the power piston move?"
+            },
+            {
+              "id": "crank",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Crankshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin",
+              "ask": "Why does a Stirling engine need a flywheel?"
+            },
+            {
+              "id": "regen",
+              "kind": "box",
+              "x": 0.52,
+              "y": 0.75,
+              "size": 0.7,
+              "label": "Regenerator",
+              "ask": "What is a regenerator?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "disp",
+              "kind": "heat",
+              "label": "heats gas"
+            },
+            {
+              "from": "disp",
+              "to": "cold",
+              "kind": "heat",
+              "label": "cools gas"
+            },
+            {
+              "from": "disp",
+              "to": "power",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "power",
+              "to": "crank",
+              "kind": "force"
+            },
+            {
+              "from": "crank",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "disp",
+              "kind": "force",
+              "label": "quarter turn behind"
+            },
+            {
+              "from": "regen",
+              "to": "disp",
+              "kind": "heat",
+              "label": "stores heat"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "A loose-fitting displacer piston shuffles the trapped gas back and forth between the hot end and the cold end. Gas at the hot end expands and its pressure rises; at the cold end it contracts and its pressure falls.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hot",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.8,
+              "label": "Hot end",
+              "motion": "pulse",
+              "ask": "What can heat a Stirling engine?"
+            },
+            {
+              "id": "cold",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.2,
+              "label": "Cold end"
+            },
+            {
+              "id": "disp",
+              "kind": "piston",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Displacer piston",
+              "motion": "slide",
+              "ask": "What does the displacer piston do?"
+            },
+            {
+              "id": "power",
+              "kind": "piston",
+              "x": 0.56,
+              "y": 0.28,
+              "label": "Power piston",
+              "motion": "slide",
+              "ask": "How does a Stirling engine make the power piston move?"
+            },
+            {
+              "id": "crank",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Crankshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin",
+              "ask": "Why does a Stirling engine need a flywheel?"
+            },
+            {
+              "id": "regen",
+              "kind": "box",
+              "x": 0.52,
+              "y": 0.75,
+              "size": 0.7,
+              "label": "Regenerator",
+              "ask": "What is a regenerator?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "disp",
+              "kind": "heat",
+              "label": "heats gas"
+            },
+            {
+              "from": "disp",
+              "to": "cold",
+              "kind": "heat",
+              "label": "cools gas"
+            },
+            {
+              "from": "disp",
+              "to": "power",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "power",
+              "to": "crank",
+              "kind": "force"
+            },
+            {
+              "from": "crank",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "disp",
+              "kind": "force",
+              "label": "quarter turn behind"
+            },
+            {
+              "from": "regen",
+              "to": "disp",
+              "kind": "heat",
+              "label": "stores heat"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The changing pressure pushes a tight-fitting power piston out and pulls it back, turning a crankshaft. A flywheel keeps it turning and moves the displacer a quarter turn behind, so the cycle repeats.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hot",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.8,
+              "label": "Hot end",
+              "motion": "pulse",
+              "ask": "What can heat a Stirling engine?"
+            },
+            {
+              "id": "cold",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.2,
+              "label": "Cold end"
+            },
+            {
+              "id": "disp",
+              "kind": "piston",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Displacer piston",
+              "motion": "slide",
+              "ask": "What does the displacer piston do?"
+            },
+            {
+              "id": "power",
+              "kind": "piston",
+              "x": 0.56,
+              "y": 0.28,
+              "label": "Power piston",
+              "motion": "slide",
+              "ask": "How does a Stirling engine make the power piston move?"
+            },
+            {
+              "id": "crank",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Crankshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin",
+              "ask": "Why does a Stirling engine need a flywheel?"
+            },
+            {
+              "id": "regen",
+              "kind": "box",
+              "x": 0.52,
+              "y": 0.75,
+              "size": 0.7,
+              "label": "Regenerator",
+              "ask": "What is a regenerator?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "disp",
+              "kind": "heat",
+              "label": "heats gas"
+            },
+            {
+              "from": "disp",
+              "to": "cold",
+              "kind": "heat",
+              "label": "cools gas"
+            },
+            {
+              "from": "disp",
+              "to": "power",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "power",
+              "to": "crank",
+              "kind": "force"
+            },
+            {
+              "from": "crank",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "disp",
+              "kind": "force",
+              "label": "quarter turn behind"
+            },
+            {
+              "from": "regen",
+              "to": "disp",
+              "kind": "heat",
+              "label": "stores heat"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Many engines pass the gas through a regenerator, a mesh that stores heat as the gas cools and gives it back as it warms. Stirling engines are quiet and work with any heat source, but they are bulky and slow to change speed.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "hot",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.8,
+              "label": "Hot end",
+              "motion": "pulse",
+              "ask": "What can heat a Stirling engine?"
+            },
+            {
+              "id": "cold",
+              "kind": "box",
+              "x": 0.15,
+              "y": 0.2,
+              "label": "Cold end"
+            },
+            {
+              "id": "disp",
+              "kind": "piston",
+              "x": 0.32,
+              "y": 0.5,
+              "size": 1.1,
+              "label": "Displacer piston",
+              "motion": "slide",
+              "ask": "What does the displacer piston do?"
+            },
+            {
+              "id": "power",
+              "kind": "piston",
+              "x": 0.56,
+              "y": 0.28,
+              "label": "Power piston",
+              "motion": "slide",
+              "ask": "How does a Stirling engine make the power piston move?"
+            },
+            {
+              "id": "crank",
+              "kind": "axle",
+              "x": 0.74,
+              "y": 0.55,
+              "size": 0.8,
+              "label": "Crankshaft",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.9,
+              "y": 0.28,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin",
+              "ask": "Why does a Stirling engine need a flywheel?"
+            },
+            {
+              "id": "regen",
+              "kind": "box",
+              "x": 0.52,
+              "y": 0.75,
+              "size": 0.7,
+              "label": "Regenerator",
+              "ask": "What is a regenerator?"
+            }
+          ],
+          "links": [
+            {
+              "from": "hot",
+              "to": "disp",
+              "kind": "heat",
+              "label": "heats gas"
+            },
+            {
+              "from": "disp",
+              "to": "cold",
+              "kind": "heat",
+              "label": "cools gas"
+            },
+            {
+              "from": "disp",
+              "to": "power",
+              "kind": "fluid",
+              "label": "pressure"
+            },
+            {
+              "from": "power",
+              "to": "crank",
+              "kind": "force"
+            },
+            {
+              "from": "crank",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "disp",
+              "kind": "force",
+              "label": "quarter turn behind"
+            },
+            {
+              "from": "regen",
+              "to": "disp",
+              "kind": "heat",
+              "label": "stores heat"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What can heat a Stirling engine?",
+      "a": "Any heat source: a gas flame, burning wood, concentrated sunlight, waste heat or radioactive decay. Small toy ones even run on the warmth of a hand or a cup of hot coffee.",
+      "asks": [
+        "Can a Stirling engine run on sunlight?"
+      ]
+    },
+    {
+      "q": "What does the displacer piston do?",
+      "a": "It does not push the crank itself. It moves the trapped gas between the hot and cold ends, so the gas is heated and cooled in turn, making its pressure rise and fall.",
+      "asks": [
+        "Why does a Stirling engine have two pistons?"
+      ]
+    },
+    {
+      "q": "How does a Stirling engine make the power piston move?",
+      "a": "When most of the gas is at the hot end, it expands and pushes the power piston out. When the displacer moves the gas to the cold end, it contracts and the piston is pulled back in.",
+      "asks": [
+        "How does heat make a Stirling engine turn?"
+      ]
+    },
+    {
+      "q": "Why does a Stirling engine need a flywheel?",
+      "a": "The pushes come in pulses, so the heavy flywheel stores energy to carry the engine smoothly through each cycle and to keep the displacer moving at the right moment.",
+      "asks": [
+        "What does the flywheel do?"
+      ]
+    },
+    {
+      "q": "What is a regenerator?",
+      "a": "It is a mesh of fine wire or metal between the hot and cold sides. It soaks up heat from gas heading to the cold end and gives it back to gas heading to the hot end, so less fuel is needed.",
+      "asks": [
+        "How does a Stirling engine save heat?"
+      ]
+    }
+  ],
+  "facts": [
+    "Robert Stirling, a Scottish minister, patented the Stirling engine in 1816.",
+    "Some Swedish submarines use Stirling engines to run quietly underwater without surfacing."
+  ],
+  "quiz": [
+    {
+      "say": "What makes the pressure of the gas inside a Stirling engine rise and fall?",
+      "show": "The gas pressure changes because…",
+      "options": [
+        {
+          "show": "It is moved between the hot and cold ends",
+          "say": "It is moved between the hot and cold ends"
+        },
+        {
+          "show": "Fuel burns inside the cylinder",
+          "say": "Fuel burns inside the cylinder"
+        },
+        {
+          "show": "Fresh air is sucked in each turn",
+          "say": "Fresh air is sucked in each turn"
+        }
+      ],
+      "answer": 0,
+      "why": "The displacer moves the sealed gas between hot and cold ends, so it is heated and cooled in turn.",
+      "wrong": {
+        "1": "The heat comes from outside; that is why it is an external combustion engine.",
+        "2": "The gas is sealed in and is never replaced."
+      }
+    }
+  ]
+}

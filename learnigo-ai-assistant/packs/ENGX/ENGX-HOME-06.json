@@ -1,0 +1,671 @@
+{
+  "id": "ENGX-HOME-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a washing machine washes and spins clothes",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "washing machine",
+    "washing machine drum",
+    "spin cycle",
+    "drain pump",
+    "drum paddles"
+  ],
+  "examples": [
+    "How does a washing machine clean clothes?",
+    "How does the spin cycle get water out?",
+    "Why does a washing machine shake when it spins?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "valve",
+          "kind": "valve",
+          "x": 0.12,
+          "y": 0.15,
+          "size": 0.8,
+          "label": "Water inlet valve",
+          "motion": "pulse"
+        },
+        {
+          "id": "heater",
+          "kind": "coil",
+          "x": 0.12,
+          "y": 0.6,
+          "size": 0.8,
+          "label": "Heater",
+          "motion": "pulse"
+        },
+        {
+          "id": "drum",
+          "kind": "wheel",
+          "x": 0.45,
+          "y": 0.4,
+          "size": 1.5,
+          "label": "Drum with holes",
+          "motion": "spin",
+          "ask": "How does the spin cycle get water out?"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.8,
+          "y": 0.75,
+          "size": 0.9,
+          "label": "Motor",
+          "motion": "spin"
+        },
+        {
+          "id": "belt",
+          "kind": "belt",
+          "x": 0.8,
+          "y": 0.4,
+          "size": 0.7,
+          "label": "Belt",
+          "motion": "spin"
+        },
+        {
+          "id": "pump",
+          "kind": "fan",
+          "x": 0.45,
+          "y": 0.88,
+          "size": 0.7,
+          "label": "Drain pump",
+          "motion": "spin"
+        },
+        {
+          "id": "weight",
+          "kind": "weight",
+          "x": 0.82,
+          "y": 0.1,
+          "size": 0.8,
+          "label": "Concrete weight",
+          "motion": "none",
+          "ask": "Why does a washing machine shake when it spins?"
+        }
+      ],
+      "links": [
+        {
+          "from": "valve",
+          "to": "drum",
+          "kind": "fluid",
+          "label": "water in"
+        },
+        {
+          "from": "heater",
+          "to": "drum",
+          "kind": "heat",
+          "label": "warms water"
+        },
+        {
+          "from": "motor",
+          "to": "belt",
+          "kind": "energy"
+        },
+        {
+          "from": "belt",
+          "to": "drum",
+          "kind": "force",
+          "label": "turns drum"
+        },
+        {
+          "from": "drum",
+          "to": "pump",
+          "kind": "fluid",
+          "label": "dirty water out"
+        },
+        {
+          "from": "weight",
+          "to": "drum",
+          "kind": "force",
+          "label": "steadies it"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A washing machine fills its drum through an electric valve, and a heater warms the water while detergent mixes in.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a washing machine washes and spins clothes"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.12,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Water inlet valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Heater",
+              "motion": "pulse"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.4,
+              "size": 1.5,
+              "label": "Drum with holes",
+              "motion": "spin",
+              "ask": "How does the spin cycle get water out?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.8,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Belt",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.45,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Drain pump",
+              "motion": "spin"
+            },
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Concrete weight",
+              "motion": "none",
+              "ask": "Why does a washing machine shake when it spins?"
+            }
+          ],
+          "links": [
+            {
+              "from": "valve",
+              "to": "drum",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "heater",
+              "to": "drum",
+              "kind": "heat",
+              "label": "warms water"
+            },
+            {
+              "from": "motor",
+              "to": "belt",
+              "kind": "energy"
+            },
+            {
+              "from": "belt",
+              "to": "drum",
+              "kind": "force",
+              "label": "turns drum"
+            },
+            {
+              "from": "drum",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "dirty water out"
+            },
+            {
+              "from": "weight",
+              "to": "drum",
+              "kind": "force",
+              "label": "steadies it"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "The motor turns the drum slowly one way, then the other. Paddles inside lift the clothes and drop them back into the soapy water, which works the dirt loose.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.12,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Water inlet valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Heater",
+              "motion": "pulse"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.4,
+              "size": 1.5,
+              "label": "Drum with holes",
+              "motion": "spin",
+              "ask": "How does the spin cycle get water out?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.8,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Belt",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.45,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Drain pump",
+              "motion": "spin"
+            },
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Concrete weight",
+              "motion": "none",
+              "ask": "Why does a washing machine shake when it spins?"
+            }
+          ],
+          "links": [
+            {
+              "from": "valve",
+              "to": "drum",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "heater",
+              "to": "drum",
+              "kind": "heat",
+              "label": "warms water"
+            },
+            {
+              "from": "motor",
+              "to": "belt",
+              "kind": "energy"
+            },
+            {
+              "from": "belt",
+              "to": "drum",
+              "kind": "force",
+              "label": "turns drum"
+            },
+            {
+              "from": "drum",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "dirty water out"
+            },
+            {
+              "from": "weight",
+              "to": "drum",
+              "kind": "force",
+              "label": "steadies it"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "To spin, the drum whirls very fast, often over 1,000 turns a minute. The drum wall keeps pushing the clothes round in a circle, but the water is free to fly straight on through the holes.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.12,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Water inlet valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Heater",
+              "motion": "pulse"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.4,
+              "size": 1.5,
+              "label": "Drum with holes",
+              "motion": "spin",
+              "ask": "How does the spin cycle get water out?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.8,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Belt",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.45,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Drain pump",
+              "motion": "spin"
+            },
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Concrete weight",
+              "motion": "none",
+              "ask": "Why does a washing machine shake when it spins?"
+            }
+          ],
+          "links": [
+            {
+              "from": "valve",
+              "to": "drum",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "heater",
+              "to": "drum",
+              "kind": "heat",
+              "label": "warms water"
+            },
+            {
+              "from": "motor",
+              "to": "belt",
+              "kind": "energy"
+            },
+            {
+              "from": "belt",
+              "to": "drum",
+              "kind": "force",
+              "label": "turns drum"
+            },
+            {
+              "from": "drum",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "dirty water out"
+            },
+            {
+              "from": "weight",
+              "to": "drum",
+              "kind": "force",
+              "label": "steadies it"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "A drain pump sends the dirty water away. Heavy concrete blocks bolted to the drum stop the whole machine from shaking across the floor during the spin.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "valve",
+              "kind": "valve",
+              "x": 0.12,
+              "y": 0.15,
+              "size": 0.8,
+              "label": "Water inlet valve",
+              "motion": "pulse"
+            },
+            {
+              "id": "heater",
+              "kind": "coil",
+              "x": 0.12,
+              "y": 0.6,
+              "size": 0.8,
+              "label": "Heater",
+              "motion": "pulse"
+            },
+            {
+              "id": "drum",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.4,
+              "size": 1.5,
+              "label": "Drum with holes",
+              "motion": "spin",
+              "ask": "How does the spin cycle get water out?"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.8,
+              "y": 0.75,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            },
+            {
+              "id": "belt",
+              "kind": "belt",
+              "x": 0.8,
+              "y": 0.4,
+              "size": 0.7,
+              "label": "Belt",
+              "motion": "spin"
+            },
+            {
+              "id": "pump",
+              "kind": "fan",
+              "x": 0.45,
+              "y": 0.88,
+              "size": 0.7,
+              "label": "Drain pump",
+              "motion": "spin"
+            },
+            {
+              "id": "weight",
+              "kind": "weight",
+              "x": 0.82,
+              "y": 0.1,
+              "size": 0.8,
+              "label": "Concrete weight",
+              "motion": "none",
+              "ask": "Why does a washing machine shake when it spins?"
+            }
+          ],
+          "links": [
+            {
+              "from": "valve",
+              "to": "drum",
+              "kind": "fluid",
+              "label": "water in"
+            },
+            {
+              "from": "heater",
+              "to": "drum",
+              "kind": "heat",
+              "label": "warms water"
+            },
+            {
+              "from": "motor",
+              "to": "belt",
+              "kind": "energy"
+            },
+            {
+              "from": "belt",
+              "to": "drum",
+              "kind": "force",
+              "label": "turns drum"
+            },
+            {
+              "from": "drum",
+              "to": "pump",
+              "kind": "fluid",
+              "label": "dirty water out"
+            },
+            {
+              "from": "weight",
+              "to": "drum",
+              "kind": "force",
+              "label": "steadies it"
+            }
+          ],
+          "focus": 6
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a washing machine clean clothes?",
+      "a": "Detergent loosens grease and dirt, warm water helps dissolve it, and the drum keeps lifting and dropping the clothes so water is pushed through the fabric again and again.",
+      "asks": [
+        "What does the drum do in a washing machine?"
+      ]
+    },
+    {
+      "q": "How does the spin cycle get water out?",
+      "a": "The drum spins so fast that the clothes are held against its wall, while the water keeps going in a straight line through the holes. It then drains away.",
+      "asks": [
+        "Why does the drum have holes?",
+        "How does spinning dry clothes?"
+      ]
+    },
+    {
+      "q": "Why does a washing machine shake when it spins?",
+      "a": "If the clothes bunch up on one side, the spinning drum is unbalanced and wobbles. Heavy concrete weights and springs help steady it, and many machines rebalance the load before spinning.",
+      "asks": [
+        "Why is there concrete in a washing machine?"
+      ]
+    },
+    {
+      "q": "Why does the drum turn both ways?",
+      "a": "Turning back and forth stops the clothes tangling into a knot and keeps tumbling them through the water.",
+      "asks": [
+        "Why does my washing machine keep changing direction?"
+      ]
+    },
+    {
+      "q": "Why can you not open the door during a wash?",
+      "a": "A door lock stays closed while there is water in the drum or it is spinning, so water cannot flood out and fingers cannot get caught.",
+      "asks": [
+        "Why is my washing machine door locked?"
+      ]
+    }
+  ],
+  "facts": [
+    "Many washing machines have concrete blocks attached to the drum to steady it during the spin.",
+    "At 1,400 revolutions per minute, the wall of a typical drum pushes clothes with a force several hundred times their weight."
+  ],
+  "quiz": [
+    {
+      "say": "During the spin cycle, why does water leave the clothes?",
+      "show": "During the spin cycle, why does water leave the clothes?",
+      "options": [
+        {
+          "show": "The drum holds the clothes in but water flies through the holes",
+          "say": "The drum holds the clothes in but water flies through the holes"
+        },
+        {
+          "show": "The water is heated until it vanishes",
+          "say": "The water is heated until it vanishes"
+        },
+        {
+          "show": "A fan blows it out",
+          "say": "A fan blows it out"
+        }
+      ],
+      "answer": 0,
+      "why": "The drum wall keeps pushing the clothes round, but the water keeps moving straight and escapes through the holes.",
+      "wrong": {
+        "1": "The spin does not boil the water away.",
+        "2": "There is no fan; the spinning drum does the work."
+      }
+    }
+  ]
+}

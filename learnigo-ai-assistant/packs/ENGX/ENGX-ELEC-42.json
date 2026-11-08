@@ -1,0 +1,614 @@
+{
+  "id": "ENGX-ELEC-42",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How the wiring inside a house is laid out",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "house wiring",
+    "consumer unit",
+    "fuse box",
+    "ring main",
+    "lighting circuit"
+  ],
+  "examples": [
+    "How is a house wired?",
+    "What is a consumer unit?",
+    "Why are lights on a different circuit from sockets?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "street",
+          "label": "Supply cable",
+          "icon": "tower",
+          "x": 0.1,
+          "y": 0.15
+        },
+        {
+          "id": "meter",
+          "label": "Electricity meter",
+          "icon": "clock",
+          "x": 0.1,
+          "y": 0.55,
+          "ask": "What does the electricity meter do?"
+        },
+        {
+          "id": "cu",
+          "label": "Consumer unit",
+          "icon": "switch",
+          "x": 0.38,
+          "y": 0.5,
+          "ask": "What is a consumer unit?"
+        },
+        {
+          "id": "lights",
+          "label": "Lighting circuit",
+          "icon": "bulb",
+          "x": 0.75,
+          "y": 0.12,
+          "ask": "Why are lights on a separate circuit from sockets?"
+        },
+        {
+          "id": "sockets",
+          "label": "Socket ring",
+          "icon": "plug",
+          "x": 0.8,
+          "y": 0.42
+        },
+        {
+          "id": "cooker",
+          "label": "Cooker circuit",
+          "icon": "fire",
+          "x": 0.75,
+          "y": 0.72
+        },
+        {
+          "id": "earth",
+          "label": "Earth connection",
+          "icon": "soil",
+          "x": 0.38,
+          "y": 0.9,
+          "ask": "Why is the house wiring connected to earth?"
+        }
+      ],
+      "links": [
+        {
+          "from": "street",
+          "to": "meter",
+          "kind": "power",
+          "label": "From the street"
+        },
+        {
+          "from": "meter",
+          "to": "cu",
+          "kind": "power",
+          "label": "Counts kWh"
+        },
+        {
+          "from": "cu",
+          "to": "lights",
+          "kind": "power",
+          "label": "6 A breaker"
+        },
+        {
+          "from": "cu",
+          "to": "sockets",
+          "kind": "power",
+          "label": "32 A breaker"
+        },
+        {
+          "from": "cu",
+          "to": "cooker",
+          "kind": "power",
+          "label": "Own breaker"
+        },
+        {
+          "from": "cu",
+          "to": "earth",
+          "kind": "power",
+          "label": "Safety earth"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Electricity enters a house through one cable, then splits into separate circuits, all wired in parallel so each room and device works on its own.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How the wiring inside a house is laid out"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "street",
+              "label": "Supply cable",
+              "icon": "tower",
+              "x": 0.1,
+              "y": 0.15
+            },
+            {
+              "id": "meter",
+              "label": "Electricity meter",
+              "icon": "clock",
+              "x": 0.1,
+              "y": 0.55,
+              "ask": "What does the electricity meter do?"
+            },
+            {
+              "id": "cu",
+              "label": "Consumer unit",
+              "icon": "switch",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What is a consumer unit?"
+            },
+            {
+              "id": "lights",
+              "label": "Lighting circuit",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.12,
+              "ask": "Why are lights on a separate circuit from sockets?"
+            },
+            {
+              "id": "sockets",
+              "label": "Socket ring",
+              "icon": "plug",
+              "x": 0.8,
+              "y": 0.42
+            },
+            {
+              "id": "cooker",
+              "label": "Cooker circuit",
+              "icon": "fire",
+              "x": 0.75,
+              "y": 0.72
+            },
+            {
+              "id": "earth",
+              "label": "Earth connection",
+              "icon": "soil",
+              "x": 0.38,
+              "y": 0.9,
+              "ask": "Why is the house wiring connected to earth?"
+            }
+          ],
+          "links": [
+            {
+              "from": "street",
+              "to": "meter",
+              "kind": "power",
+              "label": "From the street"
+            },
+            {
+              "from": "meter",
+              "to": "cu",
+              "kind": "power",
+              "label": "Counts kWh"
+            },
+            {
+              "from": "cu",
+              "to": "lights",
+              "kind": "power",
+              "label": "6 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "sockets",
+              "kind": "power",
+              "label": "32 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "cooker",
+              "kind": "power",
+              "label": "Own breaker"
+            },
+            {
+              "from": "cu",
+              "to": "earth",
+              "kind": "power",
+              "label": "Safety earth"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "First the supply passes through the meter, which counts the energy you use in kilowatt-hours.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "street",
+              "label": "Supply cable",
+              "icon": "tower",
+              "x": 0.1,
+              "y": 0.15
+            },
+            {
+              "id": "meter",
+              "label": "Electricity meter",
+              "icon": "clock",
+              "x": 0.1,
+              "y": 0.55,
+              "ask": "What does the electricity meter do?"
+            },
+            {
+              "id": "cu",
+              "label": "Consumer unit",
+              "icon": "switch",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What is a consumer unit?"
+            },
+            {
+              "id": "lights",
+              "label": "Lighting circuit",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.12,
+              "ask": "Why are lights on a separate circuit from sockets?"
+            },
+            {
+              "id": "sockets",
+              "label": "Socket ring",
+              "icon": "plug",
+              "x": 0.8,
+              "y": 0.42
+            },
+            {
+              "id": "cooker",
+              "label": "Cooker circuit",
+              "icon": "fire",
+              "x": 0.75,
+              "y": 0.72
+            },
+            {
+              "id": "earth",
+              "label": "Earth connection",
+              "icon": "soil",
+              "x": 0.38,
+              "y": 0.9,
+              "ask": "Why is the house wiring connected to earth?"
+            }
+          ],
+          "links": [
+            {
+              "from": "street",
+              "to": "meter",
+              "kind": "power",
+              "label": "From the street"
+            },
+            {
+              "from": "meter",
+              "to": "cu",
+              "kind": "power",
+              "label": "Counts kWh"
+            },
+            {
+              "from": "cu",
+              "to": "lights",
+              "kind": "power",
+              "label": "6 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "sockets",
+              "kind": "power",
+              "label": "32 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "cooker",
+              "kind": "power",
+              "label": "Own breaker"
+            },
+            {
+              "from": "cu",
+              "to": "earth",
+              "kind": "power",
+              "label": "Safety earth"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "Then it reaches the consumer unit, often called the fuse box, where it splits into separate circuits, each with its own circuit breaker.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "street",
+              "label": "Supply cable",
+              "icon": "tower",
+              "x": 0.1,
+              "y": 0.15
+            },
+            {
+              "id": "meter",
+              "label": "Electricity meter",
+              "icon": "clock",
+              "x": 0.1,
+              "y": 0.55,
+              "ask": "What does the electricity meter do?"
+            },
+            {
+              "id": "cu",
+              "label": "Consumer unit",
+              "icon": "switch",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What is a consumer unit?"
+            },
+            {
+              "id": "lights",
+              "label": "Lighting circuit",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.12,
+              "ask": "Why are lights on a separate circuit from sockets?"
+            },
+            {
+              "id": "sockets",
+              "label": "Socket ring",
+              "icon": "plug",
+              "x": 0.8,
+              "y": 0.42
+            },
+            {
+              "id": "cooker",
+              "label": "Cooker circuit",
+              "icon": "fire",
+              "x": 0.75,
+              "y": 0.72
+            },
+            {
+              "id": "earth",
+              "label": "Earth connection",
+              "icon": "soil",
+              "x": 0.38,
+              "y": 0.9,
+              "ask": "Why is the house wiring connected to earth?"
+            }
+          ],
+          "links": [
+            {
+              "from": "street",
+              "to": "meter",
+              "kind": "power",
+              "label": "From the street"
+            },
+            {
+              "from": "meter",
+              "to": "cu",
+              "kind": "power",
+              "label": "Counts kWh"
+            },
+            {
+              "from": "cu",
+              "to": "lights",
+              "kind": "power",
+              "label": "6 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "sockets",
+              "kind": "power",
+              "label": "32 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "cooker",
+              "kind": "power",
+              "label": "Own breaker"
+            },
+            {
+              "from": "cu",
+              "to": "earth",
+              "kind": "power",
+              "label": "Safety earth"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Lights, sockets and big appliances like cookers get their own circuits, with cables and breakers sized for their current, and every circuit is earthed for safety.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "street",
+              "label": "Supply cable",
+              "icon": "tower",
+              "x": 0.1,
+              "y": 0.15
+            },
+            {
+              "id": "meter",
+              "label": "Electricity meter",
+              "icon": "clock",
+              "x": 0.1,
+              "y": 0.55,
+              "ask": "What does the electricity meter do?"
+            },
+            {
+              "id": "cu",
+              "label": "Consumer unit",
+              "icon": "switch",
+              "x": 0.38,
+              "y": 0.5,
+              "ask": "What is a consumer unit?"
+            },
+            {
+              "id": "lights",
+              "label": "Lighting circuit",
+              "icon": "bulb",
+              "x": 0.75,
+              "y": 0.12,
+              "ask": "Why are lights on a separate circuit from sockets?"
+            },
+            {
+              "id": "sockets",
+              "label": "Socket ring",
+              "icon": "plug",
+              "x": 0.8,
+              "y": 0.42
+            },
+            {
+              "id": "cooker",
+              "label": "Cooker circuit",
+              "icon": "fire",
+              "x": 0.75,
+              "y": 0.72
+            },
+            {
+              "id": "earth",
+              "label": "Earth connection",
+              "icon": "soil",
+              "x": 0.38,
+              "y": 0.9,
+              "ask": "Why is the house wiring connected to earth?"
+            }
+          ],
+          "links": [
+            {
+              "from": "street",
+              "to": "meter",
+              "kind": "power",
+              "label": "From the street"
+            },
+            {
+              "from": "meter",
+              "to": "cu",
+              "kind": "power",
+              "label": "Counts kWh"
+            },
+            {
+              "from": "cu",
+              "to": "lights",
+              "kind": "power",
+              "label": "6 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "sockets",
+              "kind": "power",
+              "label": "32 A breaker"
+            },
+            {
+              "from": "cu",
+              "to": "cooker",
+              "kind": "power",
+              "label": "Own breaker"
+            },
+            {
+              "from": "cu",
+              "to": "earth",
+              "kind": "power",
+              "label": "Safety earth"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What does the electricity meter do?",
+      "a": "It measures how much energy your home uses, in kilowatt-hours, so the supplier can bill you. One kilowatt-hour is a 1000 watt heater running for an hour.",
+      "asks": [
+        "What is a kilowatt-hour?"
+      ]
+    },
+    {
+      "q": "What is a consumer unit?",
+      "a": "It is the fuse box: the panel where the supply splits into separate circuits, each protected by its own circuit breaker, usually with RCDs to protect people from shocks.",
+      "asks": [
+        "What is in a fuse box?"
+      ]
+    },
+    {
+      "q": "Why are lights on a separate circuit from sockets?",
+      "a": "Lights use little current, so they have thinner cables and a smaller breaker, often 6 amps. Keeping them separate also means a faulty kettle tripping the sockets will not leave you in the dark.",
+      "asks": [
+        "Why do the lights stay on when the sockets trip?"
+      ]
+    },
+    {
+      "q": "What is a ring main?",
+      "a": "In many UK homes, sockets are wired in a loop called a ring circuit, which starts and ends at the consumer unit. Current can reach each socket by two routes, so the cable can be thinner.",
+      "asks": [
+        "Why are UK sockets wired in a ring?"
+      ]
+    },
+    {
+      "q": "Why is the house wiring connected to earth?",
+      "a": "The earth connection gives fault currents a safe path to the ground, so breakers trip quickly and metal parts never stay live.",
+      "asks": [
+        "What does earthing a house do?"
+      ]
+    }
+  ],
+  "facts": [
+    "One kilowatt-hour is the energy used by a 1000 watt appliance running for one hour.",
+    "UK ring circuits for sockets are typically protected by a 32 amp breaker."
+  ],
+  "quiz": [
+    {
+      "say": "Why are household circuits wired in parallel?",
+      "show": "Why are household circuits wired in parallel?",
+      "options": [
+        {
+          "show": "So each device works on its own at full voltage",
+          "say": "So each device works on its own at full voltage"
+        },
+        {
+          "show": "So one switch turns everything off",
+          "say": "So one switch turns everything off"
+        },
+        {
+          "show": "So the meter runs slower",
+          "say": "So the meter runs slower"
+        }
+      ],
+      "answer": 0,
+      "why": "In parallel every branch gets the full mains voltage and can be switched or fail without affecting the others.",
+      "wrong": {
+        "1": "Parallel wiring does the opposite: each device has its own switch.",
+        "2": "The meter counts whatever energy is used, however it is wired."
+      }
+    }
+  ]
+}

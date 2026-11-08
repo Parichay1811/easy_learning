@@ -1,0 +1,270 @@
+{
+  "id": "CS-21",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Trace tables",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "M",
+    "U"
+  ],
+  "keywords": [
+    "trace table",
+    "variable tracking",
+    "dry run",
+    "algorithm execution"
+  ],
+  "examples": [
+    "How do I know what the variable will be at the end?",
+    "Is it always necessary to use a trace table?",
+    "What is the difference between tracing and testing code?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we are learning about trace tables for code.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Trace tables"
+        },
+        {
+          "op": "bullets",
+          "items": [
+            "Trace tables help track variable values.",
+            "They show what changes during code running.",
+            "This helps find errors in logic."
+          ],
+          "at": "trace"
+        },
+        {
+          "op": "text",
+          "text": "Trace Tables: Variable Tracking",
+          "at": "trace"
+        }
+      ]
+    },
+    {
+      "say": "First we look at variable tracking. This means watching the memory.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Variables: Storing Values"
+        }
+      ]
+    },
+    {
+      "say": "Next we do a dry run. A dry run means pretending to run the code.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Start: Read code line by line",
+            "Process: Manually calculate results",
+            "End: Record final variable states"
+          ],
+          "at": "code"
+        },
+        {
+          "op": "text",
+          "text": "Dry Run: Pretend Execution"
+        }
+      ]
+    },
+    {
+      "say": "Let us trace a simple loop. Imagine a variable starts at zero.",
+      "draw": [
+        {
+          "op": "table",
+          "items": [
+            "Line | Variable 'x' | Value",
+            "x = 0 | 0 | 0",
+            "x = x + 1 | 1 | 1"
+          ],
+          "at": "variable"
+        },
+        {
+          "op": "text",
+          "text": "Example: Counter Loop",
+          "at": "loop"
+        }
+      ]
+    },
+    {
+      "say": "For a real-life example consider counting items in a shop. You track the total count.",
+      "draw": [
+        {
+          "op": "line",
+          "items": [
+            "Start: 0",
+            "Item 1: 1",
+            "Item 2: 2",
+            "Item 3: 3"
+          ],
+          "label": "Total Count"
+        },
+        {
+          "op": "text",
+          "text": "Real Life: Counting Items",
+          "at": "counting"
+        }
+      ]
+    },
+    {
+      "say": "A common mistake is forgetting to update all variables. Always check every single one.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Mistake: Missing Updates",
+          "at": "mistake"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Do I need to write down every single step?",
+      "a": "You need to write down the state of the variables at key points. This shows what the computer 'remembers' at that moment.",
+      "asks": [
+        "How many steps should I write?",
+        "Should I write for every line?"
+      ]
+    },
+    {
+      "q": "What if the code has an 'if' statement?",
+      "a": "You must trace both paths. If the condition is true, follow that path and update variables accordingly. If false, follow the other path.",
+      "asks": [
+        "How do I handle choices in code?",
+        "What if the condition is false?"
+      ]
+    },
+    {
+      "q": "Does tracking variables help me find bugs?",
+      "a": "Yes, it is the best way to find bugs. If the final variable value is wrong, the trace table shows exactly where the logic failed.",
+      "asks": [
+        "Is this like debugging?",
+        "Can I find errors this way?"
+      ]
+    },
+    {
+      "q": "Is this only for loops?",
+      "a": "No, you use it for any sequence of instructions. It is a general method for understanding program flow.",
+      "asks": [
+        "Does it work for simple code too?",
+        "Can I use it outside of loops?"
+      ]
+    },
+    {
+      "q": "What is the best way to organize the table?",
+      "a": "Use columns for each variable name. Write the line number or instruction in the first column.",
+      "asks": [
+        "What should the columns be?",
+        "How do I structure the table?"
+      ]
+    }
+  ],
+  "facts": [
+    "A variable acts like a named box in the computer's memory.",
+    "A dry run simulates the execution of code without actually running it.",
+    "When tracing, you must record the value of every variable that changes.",
+    "Conditional statements require tracing multiple potential paths."
+  ],
+  "quiz": [
+    {
+      "say": "If the code is: set score to 10; score = score + 5; what is the final score?",
+      "show": "score = 10; score = score + 5;",
+      "options": [
+        {
+          "show": "150",
+          "say": "150"
+        },
+        {
+          "show": "15",
+          "say": "15"
+        },
+        {
+          "show": "10",
+          "say": "10"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        }
+      ],
+      "answer": 1,
+      "why": "The score starts at 10, and then 5 is added to it, making the final value 15.",
+      "wrong": {
+        "0": "This incorrectly multiplies the numbers together instead of adding them.",
+        "2": "This forgets to add the extra 5 points.",
+        "3": "This only records the last operation and ignores the starting value."
+      }
+    },
+    {
+      "say": "When tracing an 'if' statement, what must you do if the condition is false?",
+      "show": "If condition then A else B",
+      "options": [
+        {
+          "show": "Follow both paths.",
+          "say": "Follow both paths."
+        },
+        {
+          "show": "Ignore the 'else' path.",
+          "say": "Ignore the 'else' path."
+        },
+        {
+          "show": "Follow the 'else' path instructions.",
+          "say": "Follow the 'else' path instructions."
+        },
+        {
+          "show": "Stop execution.",
+          "say": "Stop execution."
+        }
+      ],
+      "answer": 2,
+      "why": "If the condition is false, the program skips the 'then' block and executes the 'else' block instead.",
+      "wrong": {
+        "0": "The program only follows one path based on the condition's truth.",
+        "1": "If the condition is false, the 'else' path is usually the next thing to run.",
+        "3": "The program does not stop; it continues with the next instruction."
+      }
+    },
+    {
+      "say": "If a variable 'total' starts at 0, and the code is: total = total + 2; total = total + 3; what is the final total?",
+      "show": "total = 0; total = total + 2; total = total + 3;",
+      "options": [
+        {
+          "show": "6",
+          "say": "6"
+        },
+        {
+          "show": "5",
+          "say": "5"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        },
+        {
+          "show": "3",
+          "say": "3"
+        }
+      ],
+      "answer": 1,
+      "why": "First, 2 is added to 0 making it 2. Then, 3 is added to 2 making the final total 5.",
+      "wrong": {
+        "0": "This wrongly adds the starting zero three times.",
+        "2": "This only records the result of the first addition.",
+        "3": "This incorrectly uses the initial 0 and only adds the last number."
+      }
+    }
+  ]
+}

@@ -1,0 +1,630 @@
+{
+  "id": "ENGX-MATL-11",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How arc welding joins metal",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "arc welding",
+    "welding",
+    "electrode",
+    "weld pool",
+    "shielding gas"
+  ],
+  "examples": [
+    "How does welding work?",
+    "How hot is a welding arc?",
+    "Why do welders wear dark masks?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "power",
+          "kind": "battery",
+          "x": 0.12,
+          "y": 0.3,
+          "size": 0.9,
+          "label": "Welding power supply",
+          "motion": "pulse",
+          "ask": "Why does welding need so much current?"
+        },
+        {
+          "id": "rod",
+          "kind": "piston",
+          "x": 0.45,
+          "y": 0.28,
+          "size": 0.8,
+          "label": "Electrode",
+          "motion": "slide",
+          "ask": "What is a welding electrode?"
+        },
+        {
+          "id": "arc",
+          "kind": "bulb",
+          "x": 0.45,
+          "y": 0.58,
+          "size": 0.7,
+          "label": "Electric arc",
+          "motion": "pulse",
+          "ask": "How hot is a welding arc?"
+        },
+        {
+          "id": "work",
+          "kind": "box",
+          "x": 0.45,
+          "y": 0.87,
+          "size": 1.3,
+          "label": "Metal pieces",
+          "motion": "none",
+          "ask": "How does a weld join two pieces?"
+        },
+        {
+          "id": "gas",
+          "kind": "tank",
+          "x": 0.82,
+          "y": 0.3,
+          "size": 0.9,
+          "label": "Shielding gas",
+          "motion": "none",
+          "ask": "Why do welders use shielding gas?"
+        },
+        {
+          "id": "clamp",
+          "kind": "lever",
+          "x": 0.85,
+          "y": 0.82,
+          "size": 0.6,
+          "label": "Earth clamp",
+          "motion": "none"
+        }
+      ],
+      "links": [
+        {
+          "from": "power",
+          "to": "rod",
+          "kind": "power"
+        },
+        {
+          "from": "rod",
+          "to": "arc",
+          "kind": "energy"
+        },
+        {
+          "from": "arc",
+          "to": "work",
+          "kind": "heat",
+          "label": "melts"
+        },
+        {
+          "from": "gas",
+          "to": "arc",
+          "kind": "fluid",
+          "label": "shields"
+        },
+        {
+          "from": "work",
+          "to": "clamp",
+          "kind": "power",
+          "label": "current returns"
+        },
+        {
+          "from": "clamp",
+          "to": "power",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Welding joins two pieces of metal by melting their edges together so they become one. In arc welding, a power supply drives a large current between a metal rod, called the electrode, and the metal being joined.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How arc welding joins metal"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "power",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Welding power supply",
+              "motion": "pulse",
+              "ask": "Why does welding need so much current?"
+            },
+            {
+              "id": "rod",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Electrode",
+              "motion": "slide",
+              "ask": "What is a welding electrode?"
+            },
+            {
+              "id": "arc",
+              "kind": "bulb",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.7,
+              "label": "Electric arc",
+              "motion": "pulse",
+              "ask": "How hot is a welding arc?"
+            },
+            {
+              "id": "work",
+              "kind": "box",
+              "x": 0.45,
+              "y": 0.87,
+              "size": 1.3,
+              "label": "Metal pieces",
+              "motion": "none",
+              "ask": "How does a weld join two pieces?"
+            },
+            {
+              "id": "gas",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Shielding gas",
+              "motion": "none",
+              "ask": "Why do welders use shielding gas?"
+            },
+            {
+              "id": "clamp",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Earth clamp",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "power",
+              "to": "rod",
+              "kind": "power"
+            },
+            {
+              "from": "rod",
+              "to": "arc",
+              "kind": "energy"
+            },
+            {
+              "from": "arc",
+              "to": "work",
+              "kind": "heat",
+              "label": "melts"
+            },
+            {
+              "from": "gas",
+              "to": "arc",
+              "kind": "fluid",
+              "label": "shields"
+            },
+            {
+              "from": "work",
+              "to": "clamp",
+              "kind": "power",
+              "label": "current returns"
+            },
+            {
+              "from": "clamp",
+              "to": "power",
+              "kind": "power"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The current jumps a small gap as an electric arc, a spark that does not stop, reaching several thousand degrees Celsius. That is hot enough to melt steel in a moment.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "power",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Welding power supply",
+              "motion": "pulse",
+              "ask": "Why does welding need so much current?"
+            },
+            {
+              "id": "rod",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Electrode",
+              "motion": "slide",
+              "ask": "What is a welding electrode?"
+            },
+            {
+              "id": "arc",
+              "kind": "bulb",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.7,
+              "label": "Electric arc",
+              "motion": "pulse",
+              "ask": "How hot is a welding arc?"
+            },
+            {
+              "id": "work",
+              "kind": "box",
+              "x": 0.45,
+              "y": 0.87,
+              "size": 1.3,
+              "label": "Metal pieces",
+              "motion": "none",
+              "ask": "How does a weld join two pieces?"
+            },
+            {
+              "id": "gas",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Shielding gas",
+              "motion": "none",
+              "ask": "Why do welders use shielding gas?"
+            },
+            {
+              "id": "clamp",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Earth clamp",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "power",
+              "to": "rod",
+              "kind": "power"
+            },
+            {
+              "from": "rod",
+              "to": "arc",
+              "kind": "energy"
+            },
+            {
+              "from": "arc",
+              "to": "work",
+              "kind": "heat",
+              "label": "melts"
+            },
+            {
+              "from": "gas",
+              "to": "arc",
+              "kind": "fluid",
+              "label": "shields"
+            },
+            {
+              "from": "work",
+              "to": "clamp",
+              "kind": "power",
+              "label": "current returns"
+            },
+            {
+              "from": "clamp",
+              "to": "power",
+              "kind": "power"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The edges melt into a little puddle called the weld pool, often with metal from the electrode dripping in to fill the gap. When the pool cools and freezes, the two parts are joined almost as if they had always been one piece.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "power",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Welding power supply",
+              "motion": "pulse",
+              "ask": "Why does welding need so much current?"
+            },
+            {
+              "id": "rod",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Electrode",
+              "motion": "slide",
+              "ask": "What is a welding electrode?"
+            },
+            {
+              "id": "arc",
+              "kind": "bulb",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.7,
+              "label": "Electric arc",
+              "motion": "pulse",
+              "ask": "How hot is a welding arc?"
+            },
+            {
+              "id": "work",
+              "kind": "box",
+              "x": 0.45,
+              "y": 0.87,
+              "size": 1.3,
+              "label": "Metal pieces",
+              "motion": "none",
+              "ask": "How does a weld join two pieces?"
+            },
+            {
+              "id": "gas",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Shielding gas",
+              "motion": "none",
+              "ask": "Why do welders use shielding gas?"
+            },
+            {
+              "id": "clamp",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Earth clamp",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "power",
+              "to": "rod",
+              "kind": "power"
+            },
+            {
+              "from": "rod",
+              "to": "arc",
+              "kind": "energy"
+            },
+            {
+              "from": "arc",
+              "to": "work",
+              "kind": "heat",
+              "label": "melts"
+            },
+            {
+              "from": "gas",
+              "to": "arc",
+              "kind": "fluid",
+              "label": "shields"
+            },
+            {
+              "from": "work",
+              "to": "clamp",
+              "kind": "power",
+              "label": "current returns"
+            },
+            {
+              "from": "clamp",
+              "to": "power",
+              "kind": "power"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Molten metal reacts with oxygen and nitrogen in the air and turns weak and bubbly, so it must be shielded, by a gas such as argon or by a coating on the rod that melts into protective smoke and slag. A dark mask protects the welder's eyes from the dazzling light.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "power",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Welding power supply",
+              "motion": "pulse",
+              "ask": "Why does welding need so much current?"
+            },
+            {
+              "id": "rod",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.28,
+              "size": 0.8,
+              "label": "Electrode",
+              "motion": "slide",
+              "ask": "What is a welding electrode?"
+            },
+            {
+              "id": "arc",
+              "kind": "bulb",
+              "x": 0.45,
+              "y": 0.58,
+              "size": 0.7,
+              "label": "Electric arc",
+              "motion": "pulse",
+              "ask": "How hot is a welding arc?"
+            },
+            {
+              "id": "work",
+              "kind": "box",
+              "x": 0.45,
+              "y": 0.87,
+              "size": 1.3,
+              "label": "Metal pieces",
+              "motion": "none",
+              "ask": "How does a weld join two pieces?"
+            },
+            {
+              "id": "gas",
+              "kind": "tank",
+              "x": 0.82,
+              "y": 0.3,
+              "size": 0.9,
+              "label": "Shielding gas",
+              "motion": "none",
+              "ask": "Why do welders use shielding gas?"
+            },
+            {
+              "id": "clamp",
+              "kind": "lever",
+              "x": 0.85,
+              "y": 0.82,
+              "size": 0.6,
+              "label": "Earth clamp",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "power",
+              "to": "rod",
+              "kind": "power"
+            },
+            {
+              "from": "rod",
+              "to": "arc",
+              "kind": "energy"
+            },
+            {
+              "from": "arc",
+              "to": "work",
+              "kind": "heat",
+              "label": "melts"
+            },
+            {
+              "from": "gas",
+              "to": "arc",
+              "kind": "fluid",
+              "label": "shields"
+            },
+            {
+              "from": "work",
+              "to": "clamp",
+              "kind": "power",
+              "label": "current returns"
+            },
+            {
+              "from": "clamp",
+              "to": "power",
+              "kind": "power"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does welding need so much current?",
+      "a": "A big current, often 50 to 300 amps at a low voltage, is needed to keep the arc burning and to deliver enough heat to melt thick metal quickly. The welding machine turns mains power into this safe, high current.",
+      "asks": [
+        "How many amps does a welder use?"
+      ]
+    },
+    {
+      "q": "What is a welding electrode?",
+      "a": "The electrode carries current to the arc. In stick welding it is a metal rod with a flux coating that melts into the joint; in MIG welding it is a wire fed continuously from a reel; in TIG welding it is tungsten that does not melt.",
+      "asks": [
+        "What are welding rods made of?"
+      ]
+    },
+    {
+      "q": "How hot is a welding arc?",
+      "a": "A welding arc reaches several thousand degrees Celsius, hotter than the melting point of any common metal. It also gives off intense ultraviolet light that can burn eyes and skin, so welders wear dark masks and covered clothing.",
+      "asks": [
+        "Why do welders wear dark masks?"
+      ]
+    },
+    {
+      "q": "How does a weld join two pieces?",
+      "a": "The edges of both pieces melt and flow together with any filler metal into one weld pool. As it freezes, the crystals grow across from one piece into the other, so they become one continuous piece of metal.",
+      "asks": [
+        "Is a weld as strong as the metal?"
+      ]
+    },
+    {
+      "q": "Why do welders use shielding gas?",
+      "a": "Air contains oxygen and nitrogen that react with hot molten metal, making the weld brittle and full of holes. A flow of gas like argon or carbon dioxide pushes the air away from the weld pool.",
+      "asks": [
+        "What does flux do in welding?"
+      ]
+    }
+  ],
+  "facts": [
+    "Welding arcs give off intense ultraviolet light that can cause a painful eye injury called arc eye.",
+    "A typical stick welder works at about 50 to 300 amps."
+  ],
+  "quiz": [
+    {
+      "say": "Why is argon gas blown over a weld?",
+      "show": "Shielding gas is used to…",
+      "options": [
+        {
+          "show": "Keep air away from the molten metal",
+          "say": "Keep air away from the molten metal"
+        },
+        {
+          "show": "Make the arc colder",
+          "say": "Make the arc colder"
+        },
+        {
+          "show": "Glue the metal together",
+          "say": "Glue the metal together"
+        }
+      ],
+      "answer": 0,
+      "why": "Oxygen and nitrogen in air would make the weld brittle and porous, so gas shields the pool.",
+      "wrong": {
+        "1": "The arc still needs to be very hot; the gas only protects the metal.",
+        "2": "The metal joins by melting together, not by glue."
+      }
+    }
+  ]
+}

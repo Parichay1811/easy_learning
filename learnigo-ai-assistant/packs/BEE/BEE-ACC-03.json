@@ -1,0 +1,488 @@
+{
+  "id": "BEE-ACC-03",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Impedance of a resistor, inductor and capacitor: resistance for AC",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-ACC — AC circuits",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "impedance",
+    "inductive reactance",
+    "capacitive reactance",
+    "jωL",
+    "phase shift"
+  ],
+  "examples": [
+    "What is impedance?",
+    "Why does a capacitor block DC but pass AC?",
+    "How does reactance change with frequency?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "ac",
+          "label": "Mains",
+          "value": "230 V 50 Hz"
+        },
+        {
+          "kind": "resistor",
+          "label": "Resistor",
+          "value": "100 Ω",
+          "branch": 1,
+          "ask": "What is impedance?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "I_R",
+          "value": "2.3 A",
+          "branch": 1
+        },
+        {
+          "kind": "inductor",
+          "label": "Inductor",
+          "value": "0.318 H",
+          "branch": 2,
+          "ask": "What is inductive reactance?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "I_L",
+          "value": "2.3 A",
+          "branch": 2,
+          "ask": "Why does inductor current lag the voltage?"
+        },
+        {
+          "kind": "capacitor",
+          "label": "Capacitor",
+          "value": "31.8 µF",
+          "branch": 3,
+          "ask": "What is capacitive reactance?"
+        },
+        {
+          "kind": "ammeter",
+          "label": "I_C",
+          "value": "2.3 A",
+          "branch": 3,
+          "ask": "Why does capacitor current lead the voltage?"
+        }
+      ],
+      "readouts": [
+        "Each is 100 Ω at 50 Hz",
+        "I_L lags V by 90°",
+        "I_C leads V by 90°"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Why does a capacitor block a battery but pass music, and why does a coil choke high notes? The answer is impedance, which is resistance for AC, measured in ohms. On the board, India's 230 volt, 50 hertz mains drives three branches: a 100 ohm resistor, a 0.318 henry inductor and a 31.8 microfarad capacitor.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Impedance of a resistor, inductor and capacitor: resistance for AC"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "100 Ω",
+              "branch": 1,
+              "ask": "What is impedance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_R",
+              "value": "2.3 A",
+              "branch": 1
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "0.318 H",
+              "branch": 2,
+              "ask": "What is inductive reactance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_L",
+              "value": "2.3 A",
+              "branch": 2,
+              "ask": "Why does inductor current lag the voltage?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "31.8 µF",
+              "branch": 3,
+              "ask": "What is capacitive reactance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_C",
+              "value": "2.3 A",
+              "branch": 3,
+              "ask": "Why does capacitor current lead the voltage?"
+            }
+          ],
+          "readouts": [
+            "Each is 100 Ω at 50 Hz",
+            "I_L lags V by 90°",
+            "I_C leads V by 90°"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Start with the resistor. Its impedance is just R, 100 ohms, at every frequency, and its current, 230 over 100, which is 2.3 amps, rises and falls exactly in step with the voltage. We say it is in phase. Would the resistor's current change if the frequency doubled?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "100 Ω",
+              "branch": 1,
+              "ask": "What is impedance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_R",
+              "value": "2.3 A",
+              "branch": 1
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "0.318 H",
+              "branch": 2,
+              "ask": "What is inductive reactance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_L",
+              "value": "2.3 A",
+              "branch": 2,
+              "ask": "Why does inductor current lag the voltage?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "31.8 µF",
+              "branch": 3,
+              "ask": "What is capacitive reactance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_C",
+              "value": "2.3 A",
+              "branch": 3,
+              "ask": "Why does capacitor current lead the voltage?"
+            }
+          ],
+          "readouts": [
+            "Each is 100 Ω at 50 Hz",
+            "I_L lags V by 90°",
+            "I_C leads V by 90°"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Z_R = R = 100 Ω,   I = 230/100 = 2.3 A"
+        }
+      ]
+    },
+    {
+      "say": "No, a resistor ignores frequency. A coil is different: changing current makes it push back, and the faster the change, the harder the push. Its opposition, called inductive reactance, is 2 pi f L. At 50 hertz that is 2 pi times 50 times 0.318, about 100 ohms. See the rising straight line? What happens to it at 100 hertz?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency (Hz)",
+            "min": 10,
+            "max": 200
+          },
+          "y": {
+            "label": "Opposition (Ω)",
+            "max": 500
+          },
+          "curves": [
+            {
+              "label": "R = 100 Ω",
+              "type": "line",
+              "c": 100,
+              "k": 0,
+              "ask": "What is impedance?"
+            },
+            {
+              "label": "X_L = 2πfL",
+              "type": "line",
+              "c": 0,
+              "k": 1.9980529276831085,
+              "ask": "What is inductive reactance?"
+            },
+            {
+              "label": "X_C = 1/(2πfC)",
+              "type": "power",
+              "a": 5004.9,
+              "k": -1,
+              "ask": "What is capacitive reactance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "50 Hz: all 100 Ω"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "X_L = 2πfL = 2π × 50 × 0.318 ≈ 100 Ω"
+        }
+      ]
+    },
+    {
+      "say": "It doubles, to 200 ohms. The capacitor does the opposite: its reactance is 1 over 2 pi f C, which falls as frequency rises. At 50 hertz that is again about 100 ohms. At DC, zero hertz, it is infinite, which is why a capacitor blocks a battery. Which one wins at high frequency, the coil or the capacitor?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Frequency (Hz)",
+            "min": 10,
+            "max": 200
+          },
+          "y": {
+            "label": "Opposition (Ω)",
+            "max": 500
+          },
+          "curves": [
+            {
+              "label": "R = 100 Ω",
+              "type": "line",
+              "c": 100,
+              "k": 0,
+              "ask": "What is impedance?"
+            },
+            {
+              "label": "X_L = 2πfL",
+              "type": "line",
+              "c": 0,
+              "k": 1.9980529276831085,
+              "ask": "What is inductive reactance?"
+            },
+            {
+              "label": "X_C = 1/(2πfC)",
+              "type": "power",
+              "a": 5004.9,
+              "k": -1,
+              "ask": "What is capacitive reactance?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 50,
+              "label": "50 Hz: all 100 Ω"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "X_C = 1/(2πfC) = 1/(2π × 50 × 31.8 µF) ≈ 100 Ω"
+        }
+      ]
+    },
+    {
+      "say": "The coil's opposition keeps rising while the capacitor's falls towards zero. Back on the circuit, all three branches draw 2.3 amps, but the inductor's current lags the voltage by 90 degrees and the capacitor's leads by 90 degrees. With j for that quarter turn, the impedances are R, j omega L and 1 over j omega C. Superb! Challenge: find both reactances at 100 hertz.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "ac",
+              "label": "Mains",
+              "value": "230 V 50 Hz"
+            },
+            {
+              "kind": "resistor",
+              "label": "Resistor",
+              "value": "100 Ω",
+              "branch": 1,
+              "ask": "What is impedance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_R",
+              "value": "2.3 A",
+              "branch": 1
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "0.318 H",
+              "branch": 2,
+              "ask": "What is inductive reactance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_L",
+              "value": "2.3 A",
+              "branch": 2,
+              "ask": "Why does inductor current lag the voltage?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "31.8 µF",
+              "branch": 3,
+              "ask": "What is capacitive reactance?"
+            },
+            {
+              "kind": "ammeter",
+              "label": "I_C",
+              "value": "2.3 A",
+              "branch": 3,
+              "ask": "Why does capacitor current lead the voltage?"
+            }
+          ],
+          "readouts": [
+            "Each is 100 Ω at 50 Hz",
+            "I_L lags V by 90°",
+            "I_C leads V by 90°"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "Z_R = R,   Z_L = jωL,   Z_C = 1/(jωC)"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is impedance?",
+      "a": "Impedance is the total opposition a part offers to alternating current, measured in ohms. It combines resistance with reactance and also tells you the phase shift between voltage and current.",
+      "asks": [
+        "Define impedance",
+        "Is impedance the same as resistance?"
+      ]
+    },
+    {
+      "q": "What is inductive reactance?",
+      "a": "It is an inductor's opposition to AC: X L equals 2 pi f L. It grows with frequency because a faster-changing current induces a bigger back voltage.",
+      "asks": [
+        "Formula for XL",
+        "Why does an inductor block high frequencies?"
+      ]
+    },
+    {
+      "q": "What is capacitive reactance?",
+      "a": "It is a capacitor's opposition to AC: X C equals 1 over 2 pi f C. It falls as frequency rises, because the capacitor charges and discharges more often, letting more current flow.",
+      "asks": [
+        "Formula for XC",
+        "Why does a capacitor block DC?"
+      ]
+    },
+    {
+      "q": "Why does inductor current lag the voltage?",
+      "a": "The voltage across an inductor is set by how fast its current changes. The current changes fastest as it crosses zero, so the voltage peaks a quarter cycle before the current.",
+      "asks": [
+        "Why does current lag in an inductor?"
+      ]
+    },
+    {
+      "q": "Why does capacitor current lead the voltage?",
+      "a": "Current flows into a capacitor fastest when its voltage is changing fastest, at the zero crossing. So the current peaks a quarter cycle before the voltage.",
+      "asks": [
+        "Why does current lead in a capacitor?"
+      ]
+    }
+  ],
+  "facts": [
+    "The unit of inductance, the henry, is named after the American scientist Joseph Henry.",
+    "A capacitor's reactance halves every time the frequency doubles, while an inductor's doubles."
+  ],
+  "quiz": [
+    {
+      "say": "What is the reactance of a 10 millihenry inductor at 1 kilohertz?",
+      "show": "What is the reactance of a 10 mH inductor at 1 kHz?",
+      "options": [
+        {
+          "show": "62.8 Ω",
+          "say": "62.8 ohms"
+        },
+        {
+          "show": "10 Ω",
+          "say": "10 ohms"
+        },
+        {
+          "show": "6.28 Ω",
+          "say": "6.28 ohms"
+        }
+      ],
+      "answer": 0,
+      "why": "X L is 2 pi f L: 2 pi times 1000 times 0.01, which is about 62.8 ohms.",
+      "wrong": {
+        "1": "That just multiplies f by L and forgets the 2 pi.",
+        "2": "That slips a factor of ten, perhaps using 100 hertz."
+      }
+    },
+    {
+      "say": "As the frequency rises, what happens to a capacitor's reactance?",
+      "show": "As the frequency rises, a capacitor's reactance...",
+      "options": [
+        {
+          "show": "Falls",
+          "say": "Falls"
+        },
+        {
+          "show": "Rises",
+          "say": "Rises"
+        },
+        {
+          "show": "Stays the same",
+          "say": "Stays the same"
+        }
+      ],
+      "answer": 0,
+      "why": "X C equals 1 over 2 pi f C, so a bigger f gives a smaller reactance.",
+      "wrong": {
+        "1": "Rising with frequency is an inductor's behaviour.",
+        "2": "Only a resistor's opposition ignores frequency."
+      }
+    }
+  ]
+}

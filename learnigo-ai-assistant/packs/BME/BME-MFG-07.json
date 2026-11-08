@@ -1,0 +1,504 @@
+{
+  "id": "BME-MFG-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "CNC machines and G-code: how a computer drives a machine tool",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-MFG — Materials and manufacturing",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "CNC",
+    "G-code",
+    "G01 linear interpolation",
+    "servo motor",
+    "CAM software",
+    "ball screw"
+  ],
+  "examples": [
+    "What does G01 mean in G-code?",
+    "How does a CNC machine work?",
+    "What is the difference between G00 and G01?"
+  ],
+  "figure": [
+    {
+      "name": "x-chain",
+      "stages": [
+        {
+          "label": "CAD model",
+          "icon": "computer",
+          "note": "The 3D design of the part"
+        },
+        {
+          "label": "CAM toolpaths",
+          "icon": "map",
+          "note": "Software plans every tool move"
+        },
+        {
+          "label": "G-code program",
+          "icon": "scroll",
+          "note": "G01 X50 Y0 F200 …",
+          "ask": "What does G01 mean in G-code?"
+        },
+        {
+          "label": "Controller",
+          "icon": "chip",
+          "note": "Turns each line into motor commands"
+        },
+        {
+          "label": "Servo motors",
+          "icon": "motor",
+          "note": "Move each axis to the micrometre",
+          "ask": "What does a ball screw do?"
+        },
+        {
+          "label": "Finished part",
+          "icon": "gear",
+          "note": "Same result every time"
+        }
+      ],
+      "loop": false,
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "In 1952 engineers at MIT showed off the first numerically controlled milling machine, driven by punched tape. Today a CNC machine in Pune, Stuttgart or Nagoya follows a program to cut a part to a few micrometres, again and again. Look at the chain from design to part.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "CNC machines and G-code: how a computer drives a machine tool"
+        },
+        {
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "CAD model",
+              "icon": "computer",
+              "note": "The 3D design of the part"
+            },
+            {
+              "label": "CAM toolpaths",
+              "icon": "map",
+              "note": "Software plans every tool move"
+            },
+            {
+              "label": "G-code program",
+              "icon": "scroll",
+              "note": "G01 X50 Y0 F200 …",
+              "ask": "What does G01 mean in G-code?"
+            },
+            {
+              "label": "Controller",
+              "icon": "chip",
+              "note": "Turns each line into motor commands"
+            },
+            {
+              "label": "Servo motors",
+              "icon": "motor",
+              "note": "Move each axis to the micrometre",
+              "ask": "What does a ball screw do?"
+            },
+            {
+              "label": "Finished part",
+              "icon": "gear",
+              "note": "Same result every time"
+            }
+          ],
+          "loop": false,
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "CNC: computer numerical control"
+        }
+      ]
+    },
+    {
+      "say": "Here is a lathe in 3D. On a CNC lathe, motors turn the lead screw and move the carriage exactly where the G-code tells them, instead of a person turning handwheels. Tap any part, and I will tell you what it does.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "CNC machines and G-code: how a computer drives a machine tool"
+        },
+        {
+          "op": "image",
+          "render": "lathe"
+        }
+      ]
+    },
+    {
+      "say": "A designer draws the part in CAD. CAM software then plans the tool path and writes it as G-code: simple lines of letters and numbers. G00 means move fast, not cutting. G01 means cut in a straight line at the feed rate F. G02 and G03 cut arcs, clockwise and anticlockwise. M03 starts the spindle. Which code moves the tool fastest?",
+      "draw": [
+        {
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "CAD model",
+              "icon": "computer",
+              "note": "The 3D design of the part"
+            },
+            {
+              "label": "CAM toolpaths",
+              "icon": "map",
+              "note": "Software plans every tool move"
+            },
+            {
+              "label": "G-code program",
+              "icon": "scroll",
+              "note": "G01 X50 Y0 F200 …",
+              "ask": "What does G01 mean in G-code?"
+            },
+            {
+              "label": "Controller",
+              "icon": "chip",
+              "note": "Turns each line into motor commands"
+            },
+            {
+              "label": "Servo motors",
+              "icon": "motor",
+              "note": "Move each axis to the micrometre",
+              "ask": "What does a ball screw do?"
+            },
+            {
+              "label": "Finished part",
+              "icon": "gear",
+              "note": "Same result every time"
+            }
+          ],
+          "loop": false,
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "G00 rapid, G01 line, G02/G03 arcs, M03 spindle on, M05 stop"
+        }
+      ]
+    },
+    {
+      "say": "G00, the rapid move, for travel through air. Now a real line: G01 X50 Y0 F200 means cut in a straight line to X 50, Y 0 at 200 millimetres per minute. A 50 millimetre move at that feed takes 50 over 200 minutes: 15 seconds. S1000 M03 would spin the cutter at 1000 rpm.",
+      "draw": [
+        {
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "CAD model",
+              "icon": "computer",
+              "note": "The 3D design of the part"
+            },
+            {
+              "label": "CAM toolpaths",
+              "icon": "map",
+              "note": "Software plans every tool move"
+            },
+            {
+              "label": "G-code program",
+              "icon": "scroll",
+              "note": "G01 X50 Y0 F200 …",
+              "ask": "What does G01 mean in G-code?"
+            },
+            {
+              "label": "Controller",
+              "icon": "chip",
+              "note": "Turns each line into motor commands"
+            },
+            {
+              "label": "Servo motors",
+              "icon": "motor",
+              "note": "Move each axis to the micrometre",
+              "ask": "What does a ball screw do?"
+            },
+            {
+              "label": "Finished part",
+              "icon": "gear",
+              "note": "Same result every time"
+            }
+          ],
+          "loop": false,
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "t = 50 mm / 200 mm/min = 0.25 min = 15 s"
+        }
+      ]
+    },
+    {
+      "say": "How does the machine obey? See the board: the controller sends each axis a command, a servo motor turns a ball screw, and the screw drives the table. An encoder on the motor reports the true position back, so the controller corrects any error. That loop is closed-loop control. Why is that feedback important?",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.25,
+              "label": "CNC controller",
+              "motion": "none"
+            },
+            {
+              "id": "mx",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.7,
+              "label": "X servo"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.4,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Ball screw",
+              "ask": "What does a ball screw do?"
+            },
+            {
+              "id": "table",
+              "kind": "box",
+              "x": 0.68,
+              "y": 0.7,
+              "size": 1.2,
+              "label": "Table",
+              "motion": "slide"
+            },
+            {
+              "id": "spin",
+              "kind": "motor",
+              "x": 0.68,
+              "y": 0.25,
+              "label": "Spindle S1000"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "mx",
+              "kind": "signal",
+              "label": "Move"
+            },
+            {
+              "from": "mx",
+              "to": "screw",
+              "kind": "power"
+            },
+            {
+              "from": "screw",
+              "to": "table",
+              "kind": "force"
+            },
+            {
+              "from": "table",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "Encoder"
+            },
+            {
+              "from": "ctrl",
+              "to": "spin",
+              "kind": "signal"
+            }
+          ],
+          "op": "sim",
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Ball screw: rolling balls give smooth motion with no backlash"
+        }
+      ]
+    },
+    {
+      "say": "Without it, a heavy cut could push the table off and nobody would know! Wonderful. Real link: 5-axis CNC machines tilt the part too, to carve turbine blades in one setup. Exam tip: G90 means absolute coordinates, G91 incremental, so check which mode a program is in.",
+      "draw": [
+        {
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "ctrl",
+              "kind": "box",
+              "x": 0.12,
+              "y": 0.25,
+              "label": "CNC controller",
+              "motion": "none"
+            },
+            {
+              "id": "mx",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.7,
+              "label": "X servo"
+            },
+            {
+              "id": "screw",
+              "kind": "axle",
+              "x": 0.4,
+              "y": 0.7,
+              "size": 1.4,
+              "label": "Ball screw",
+              "ask": "What does a ball screw do?"
+            },
+            {
+              "id": "table",
+              "kind": "box",
+              "x": 0.68,
+              "y": 0.7,
+              "size": 1.2,
+              "label": "Table",
+              "motion": "slide"
+            },
+            {
+              "id": "spin",
+              "kind": "motor",
+              "x": 0.68,
+              "y": 0.25,
+              "label": "Spindle S1000"
+            }
+          ],
+          "links": [
+            {
+              "from": "ctrl",
+              "to": "mx",
+              "kind": "signal",
+              "label": "Move"
+            },
+            {
+              "from": "mx",
+              "to": "screw",
+              "kind": "power"
+            },
+            {
+              "from": "screw",
+              "to": "table",
+              "kind": "force"
+            },
+            {
+              "from": "table",
+              "to": "ctrl",
+              "kind": "data",
+              "label": "Encoder"
+            },
+            {
+              "from": "ctrl",
+              "to": "spin",
+              "kind": "signal"
+            }
+          ],
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "note",
+          "text": "G90 absolute, G91 incremental coordinates"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a CNC machine work?",
+      "a": "A controller reads a program of G-code, works out the motion for each axis, and drives servo motors through ball screws. Encoders feed the real position back so errors are corrected.",
+      "asks": [
+        "CNC meaning"
+      ]
+    },
+    {
+      "q": "What does G01 mean in G-code?",
+      "a": "G01 is linear interpolation: move in a straight line to the given coordinates while cutting at the programmed feed rate F.",
+      "asks": [
+        "what is G-code",
+        "G01 command"
+      ]
+    },
+    {
+      "q": "What is the difference between G00 and G01?",
+      "a": "G00 is a rapid move at the machine's top speed, used when the tool is not cutting. G01 is a controlled straight-line cut at the feed rate you set.",
+      "asks": [
+        "rapid vs feed move"
+      ]
+    },
+    {
+      "q": "What does a ball screw do?",
+      "a": "It turns the motor's rotation into straight-line motion of the table. Balls roll between the screw and nut, so it moves smoothly, precisely and with almost no backlash. A servo motor with an encoder drives it.",
+      "asks": [
+        "servo motor in CNC",
+        "ball screw vs lead screw"
+      ]
+    },
+    {
+      "q": "What is CAM software?",
+      "a": "Computer-aided manufacturing software takes a CAD model, plans tool paths, speeds and feeds, and writes the G-code program for the machine.",
+      "asks": [
+        "CAD CAM"
+      ]
+    }
+  ],
+  "facts": [
+    "The first numerically controlled milling machine was demonstrated at MIT in 1952.",
+    "In G-code, G00 is a rapid move and G01 a straight-line cutting move."
+  ],
+  "quiz": [
+    {
+      "say": "A G01 move of 120 millimetres runs at a feed of F300, in millimetres per minute. How long does it take?",
+      "show": "G01 move of 120 mm at F300 (mm/min). Time?",
+      "options": [
+        {
+          "show": "24 s",
+          "say": "24 seconds"
+        },
+        {
+          "show": "2.5 s",
+          "say": "2.5 seconds"
+        },
+        {
+          "show": "0.4 s",
+          "say": "0.4 seconds"
+        }
+      ],
+      "answer": 0,
+      "why": "120/300 = 0.4 min = 24 s.",
+      "wrong": {
+        "1": "That divides 300 by 120 and misses the minutes to seconds step.",
+        "2": "That is the time in minutes, not seconds."
+      }
+    },
+    {
+      "say": "Which G-code would you use to cut a clockwise arc?",
+      "show": "Which G-code cuts a clockwise arc?",
+      "options": [
+        {
+          "show": "G02",
+          "say": "G02"
+        },
+        {
+          "show": "G03",
+          "say": "G03"
+        },
+        {
+          "show": "G00",
+          "say": "G00"
+        }
+      ],
+      "answer": 0,
+      "why": "G02 is clockwise circular interpolation.",
+      "wrong": {
+        "1": "G03 cuts an anticlockwise arc.",
+        "2": "G00 is a rapid, non-cutting move."
+      }
+    }
+  ]
+}

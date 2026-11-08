@@ -1,0 +1,251 @@
+{
+  "id": "CS-37",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-25",
+    "source": "brief",
+    "enriched": true
+  },
+  "title": "Hash tables",
+  "area": "Computer Science & Digital Literacy",
+  "group": "CS — Computer Science",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "hash table",
+    "hashing",
+    "key-value pair",
+    "collision",
+    "hash function"
+  ],
+  "examples": [
+    "How does a hash table decide where to put the data?",
+    "What happens if two different keys hash to the same spot?",
+    "Is a hash table faster than a regular list?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we learn about hash tables for storing data. A hash table uses keys to find values quickly.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Hash tables"
+        },
+        {
+          "op": "text",
+          "text": "Hash Tables: Key $\\rightarrow$ Value",
+          "at": "hash"
+        }
+      ]
+    },
+    {
+      "say": "The first step is hashing, which turns a key into a number. This number tells us the location.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Key Input",
+            "Hash Function Process",
+            "Index (Location)"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Key $\\xrightarrow{\\text{hash function}}$ Index"
+        }
+      ]
+    },
+    {
+      "say": "A simple example is using the key 'apple'. The hash function might return the number thirty-two.",
+      "draw": [
+        {
+          "op": "numberline",
+          "items": [
+            "Label: 0",
+            "Label: 10",
+            "Label: 32",
+            "Label: 50"
+          ]
+        },
+        {
+          "op": "text",
+          "text": "Key 'apple' $\\rightarrow$ Index 32",
+          "at": "'apple'"
+        }
+      ]
+    },
+    {
+      "say": "Sometimes two different keys produce the same index number. This problem is called a collision.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Collision: Different keys $\\rightarrow$ Same index",
+          "at": "collision"
+        }
+      ]
+    },
+    {
+      "say": "To handle collisions, we often use separate chaining. We store a linked list at that index.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Chaining: Index $\\rightarrow$ List",
+          "at": "chaining"
+        }
+      ]
+    },
+    {
+      "say": "In real life, think about a library catalog system. The book title is the key. The shelf number is the index.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Book Title $\\rightarrow$ Shelf Number",
+          "at": "book"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the difference between a key and a value?",
+      "a": "The key is what you use to look something up. The value is the actual information you want to retrieve.",
+      "asks": [
+        "What is the purpose of the key in a hash table?",
+        "Can I use the value as the key?"
+      ]
+    },
+    {
+      "q": "How does the hash function work exactly?",
+      "a": "A hash function takes an input of any size and always outputs a fixed-size number. This keeps the location manageable.",
+      "asks": [
+        "Is the hash function reversible?",
+        "What inputs can the hash function accept?"
+      ]
+    },
+    {
+      "q": "If I get a collision, does the program crash?",
+      "a": "No, good data structures handle this gracefully. They use methods like chaining to store multiple items at one spot.",
+      "asks": [
+        "What is the worst thing that can happen?",
+        "How do you fix a collision?"
+      ]
+    },
+    {
+      "q": "Are hash tables always faster than arrays?",
+      "a": "On average, yes, because they offer near constant time access. However, performance depends heavily on the hash function.",
+      "asks": [
+        "When are they slow?",
+        "Is the speed guaranteed?"
+      ]
+    },
+    {
+      "q": "What is the time complexity for retrieval?",
+      "a": "Ideally, retrieval is very fast, often considered constant time, or O of one.",
+      "asks": [
+        "What is the best-case time?",
+        "How fast is it usually?"
+      ]
+    }
+  ],
+  "facts": [
+    "A hash table maps keys to values using a hash function.",
+    "The hash function converts keys into array indices.",
+    "A collision occurs when two different keys map to the same index.",
+    "Separate chaining is a common method for resolving collisions."
+  ],
+  "quiz": [
+    {
+      "say": "If the key is 'zebra' and the hash function returns 42, what is the next step?",
+      "show": "Key 'zebra' $\\rightarrow$ Index 42",
+      "options": [
+        {
+          "show": "Store it at index zero.",
+          "say": "Store it at index zero."
+        },
+        {
+          "show": "Store the value at index 42.",
+          "say": "Store the value at index 42."
+        },
+        {
+          "show": "Use the key 'zebra' as the index.",
+          "say": "Use the key 'zebra' as the index."
+        },
+        {
+          "show": "Recalculate the hash function.",
+          "say": "Recalculate the hash function."
+        }
+      ],
+      "answer": 1,
+      "why": "The index tells the system exactly where to place the data in the underlying array structure.",
+      "wrong": {
+        "0": "This ignores the calculated hash value entirely.",
+        "2": "The key might be too large or not suitable for an array index.",
+        "3": "The hash function has already provided the intended index for this key."
+      }
+    },
+    {
+      "say": "Two keys, 'apple' and 'grape', both result in the index 10. What is this situation called?",
+      "show": "Collision at Index 10",
+      "options": [
+        {
+          "show": "A perfect hash.",
+          "say": "A perfect hash."
+        },
+        {
+          "show": "An overflow error.",
+          "say": "An overflow error."
+        },
+        {
+          "show": "A hash function failure.",
+          "say": "A hash function failure."
+        },
+        {
+          "show": "A collision.",
+          "say": "A collision."
+        }
+      ],
+      "answer": 3,
+      "why": "A collision happens when the hash function outputs the same index for different inputs.",
+      "wrong": {
+        "0": "A perfect hash means no collisions occur at all.",
+        "1": "Overflow usually relates to data size, not key mapping.",
+        "2": "The function itself is working; the problem is the input keys."
+      }
+    },
+    {
+      "say": "If a hash table uses separate chaining, what structure is typically placed at an index?",
+      "show": "Index $\\rightarrow$ Linked List",
+      "options": [
+        {
+          "show": "A linked list.",
+          "say": "A linked list."
+        },
+        {
+          "show": "A new hash table.",
+          "say": "A new hash table."
+        },
+        {
+          "show": "An error message.",
+          "say": "An error message."
+        },
+        {
+          "show": "Overwriting the previous item.",
+          "say": "Overwriting the previous item."
+        }
+      ],
+      "answer": 0,
+      "why": "Chaining resolves collisions by linking all items that map to the same index together.",
+      "wrong": {
+        "1": "This would create an inefficient, nested structure.",
+        "2": "The system is designed to handle this situation gracefully.",
+        "3": "Overwriting would cause data loss, which is what chaining prevents."
+      }
+    }
+  ]
+}

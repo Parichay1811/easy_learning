@@ -1,0 +1,345 @@
+{
+  "id": "BCE-STRA-04",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Bending moment diagrams: where a beam bends hardest",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "bending moment diagram",
+    "sagging moment",
+    "maximum moment",
+    "wL²/8",
+    "PL/4"
+  ],
+  "examples": [
+    "How do you draw a bending moment diagram?",
+    "What is the maximum bending moment for a UDL?",
+    "Why is the moment zero at a simple support?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 8,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "Why is the bending moment zero at a simple support?"
+        },
+        {
+          "kind": "roller",
+          "at": 1
+        }
+      ],
+      "loads": [
+        {
+          "kind": "udl",
+          "at": 0,
+          "to": 1,
+          "size": 5,
+          "label": "5 kN/m",
+          "ask": "What is the maximum bending moment for a uniformly distributed load?"
+        }
+      ],
+      "show": [
+        "beam",
+        "moment"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Stand in the middle of a plank across a stream and it sags most right under your feet. That bending is measured by the bending moment, force times distance, in kilonewton metres. A bending moment diagram shows it at every point. Here is an eight metre beam with five kilonewtons per metre spread along it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Bending moment diagrams: where a beam bends hardest"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why is the bending moment zero at a simple support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "What is the maximum bending moment for a uniformly distributed load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the curve below the beam. It is zero at both ends, because a pin and a roller cannot resist turning, and it rises to a peak in the middle. For a spread load the shape is a parabola, a smooth arch. Where is the beam working hardest?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why is the bending moment zero at a simple support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "What is the maximum bending moment for a uniformly distributed load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "In the middle. The peak is w L squared over eight: five times sixty four, over eight, which is forty kilonewton metres. Positive here means sagging, a smile shape, with the bottom stretched and the top squashed. Which face of the beam is in tension?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why is the bending moment zero at a simple support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "What is the maximum bending moment for a uniformly distributed load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M_max = wL²/8 = 5 × 8² / 8 = 40 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "The bottom face! Now gather the same forty kilonewtons into one point at midspan. The diagram becomes a triangle with a peak of P L over four: forty times eight over four, eighty kilonewton metres. Twice as much! Concentrated loads are much harsher than spread ones.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why is the bending moment zero at a simple support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 40,
+              "label": "40 kN",
+              "ask": "What is the maximum bending moment for a uniformly distributed load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "M_max = PL/4 = 40 × 8 / 4 = 80 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "That is why heavy machines sit on wide spreader plates. Great job. Remember the pattern: point loads give straight lines with corners, spread loads give curves, and the area under the shear diagram adds up to the moment. Exam tip: w L squared over eight is worth knowing by heart.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "Why is the bending moment zero at a simple support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "udl",
+              "at": 0,
+              "to": 1,
+              "size": 5,
+              "label": "5 kN/m",
+              "ask": "What is the maximum bending moment for a uniformly distributed load?"
+            }
+          ],
+          "show": [
+            "beam",
+            "moment"
+          ]
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a bending moment?",
+      "a": "A bending moment is the turning effect of the forces on one side of a section, force times distance, in kilonewton metres. It is what makes a beam curve.",
+      "asks": [
+        "Define bending moment"
+      ]
+    },
+    {
+      "q": "Why is the bending moment zero at a simple support?",
+      "a": "A pin or a roller lets the beam rotate freely, so it cannot hold any turning effect. The moment there is zero.",
+      "asks": [
+        "Why is moment zero at a pin?"
+      ]
+    },
+    {
+      "q": "What is the maximum bending moment for a uniformly distributed load?",
+      "a": "For a simply supported beam it is w L squared over eight, at midspan. Five kilonewtons per metre over eight metres gives 40 kilonewton metres.",
+      "asks": [
+        "wL²/8 formula",
+        "Max moment for UDL"
+      ]
+    },
+    {
+      "q": "What is the difference between sagging and hogging?",
+      "a": "Sagging bends the beam into a smile, with tension at the bottom. Hogging bends it into a frown, with tension at the top, as over a support or in a cantilever.",
+      "asks": [
+        "Sagging vs hogging moment"
+      ]
+    },
+    {
+      "q": "How is the bending moment diagram related to the shear force diagram?",
+      "a": "The moment at a point equals the area under the shear diagram up to that point, and the slope of the moment curve equals the shear.",
+      "asks": [
+        "Link between shear and moment"
+      ]
+    }
+  ],
+  "facts": [
+    "For a simply supported beam, a central point load P gives a maximum moment PL/4 and a uniform load w gives wL²/8.",
+    "Bending stress follows σ = My/I, so the fibres farthest from the neutral axis carry the most stress."
+  ],
+  "quiz": [
+    {
+      "say": "A six metre simply supported beam carries 10 kilonewtons per metre. What is the maximum bending moment?",
+      "show": "A 6 m simply supported beam carries 10 kN/m. Maximum bending moment?",
+      "options": [
+        {
+          "show": "45 kN·m",
+          "say": "45 kilonewton metres"
+        },
+        {
+          "show": "90 kN·m",
+          "say": "90 kilonewton metres"
+        },
+        {
+          "show": "30 kN·m",
+          "say": "30 kilonewton metres"
+        }
+      ],
+      "answer": 0,
+      "why": "w L squared over eight: 10 × 36 / 8 = 45 kilonewton metres.",
+      "wrong": {
+        "1": "That divides by four instead of eight.",
+        "2": "Thirty kilonewtons is the support reaction, not a moment."
+      }
+    },
+    {
+      "say": "Under a uniform load, the bending moment diagram of a simply supported beam is a…",
+      "show": "Under a uniform load, the bending moment diagram of a simply supported beam is a…",
+      "options": [
+        {
+          "show": "Triangle",
+          "say": "Triangle"
+        },
+        {
+          "show": "Parabola",
+          "say": "Parabola"
+        },
+        {
+          "show": "Rectangle",
+          "say": "Rectangle"
+        }
+      ],
+      "answer": 1,
+      "why": "A uniform load makes the shear slope linearly, so the moment is a parabola.",
+      "wrong": {
+        "0": "A triangle comes from a single point load.",
+        "2": "A constant moment needs equal end couples, not a spread load."
+      }
+    }
+  ]
+}

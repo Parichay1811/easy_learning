@@ -1,0 +1,433 @@
+{
+  "id": "BEE-CIRC-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Mesh analysis step by step: solving a circuit with loop currents",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-CIRC — DC circuit analysis",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "mesh analysis",
+    "mesh current",
+    "loop analysis",
+    "KVL equations",
+    "planar circuit"
+  ],
+  "examples": [
+    "How do I do mesh analysis?",
+    "What current flows in a resistor shared by two meshes?",
+    "Should I use nodal or mesh analysis?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Source",
+          "value": "12 V",
+          "ask": "Should I use nodal or mesh analysis?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R1",
+          "value": "2 Ω",
+          "ask": "What is mesh analysis?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R2 (shared)",
+          "value": "6 Ω",
+          "branch": 1,
+          "ask": "What current flows in a shared resistor?"
+        },
+        {
+          "kind": "resistor",
+          "label": "R3",
+          "value": "1 Ω",
+          "branch": 2
+        },
+        {
+          "kind": "resistor",
+          "label": "R4",
+          "value": "2 Ω",
+          "branch": 2,
+          "ask": "What is a mesh?"
+        }
+      ],
+      "readouts": [
+        "I1 = 3 A (left mesh)",
+        "I2 = 2 A (right mesh)",
+        "I in R2 = 1 A"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Nodal analysis counts nodes; mesh analysis counts windows. Look at the circuit like the front of a house: it has two window panes, called meshes. A 12 volt source and R1, 2 ohms, frame the left pane. R3 and R4, 1 and 2 ohms, frame the right one. And R2, 6 ohms, is the shared wall between them.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Mesh analysis step by step: solving a circuit with loop currents"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "Should I use nodal or mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "What is mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (shared)",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What current flows in a shared resistor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "1 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "resistor",
+              "label": "R4",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "What is a mesh?"
+            }
+          ],
+          "readouts": [
+            "I1 = 3 A (left mesh)",
+            "I2 = 2 A (right mesh)",
+            "I in R2 = 1 A"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Step one: give each mesh its own imaginary current, circling clockwise. Call them I1 on the left and I2 on the right. The real current in R2, the shared wall, is the difference, I1 minus I2, because the two mesh currents pass through it in opposite directions. Which resistors carry only I2?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "Should I use nodal or mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "What is mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (shared)",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What current flows in a shared resistor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "1 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "resistor",
+              "label": "R4",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "What is a mesh?"
+            }
+          ],
+          "readouts": [
+            "I1 = 3 A (left mesh)",
+            "I2 = 2 A (right mesh)",
+            "I in R2 = 1 A"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "note",
+          "text": "Mesh currents: I1 in the left loop, I2 in the right, both clockwise."
+        }
+      ]
+    },
+    {
+      "say": "R3 and R4. Step two: Kirchhoff's voltage law round each mesh. Left: 12 volts equals 2 I1 plus 6 times I1 minus I2, so 8 I1 minus 6 I2 equals 12. Right: no source, so 6 times I2 minus I1, plus 1 I2, plus 2 I2, equals zero, which gives 9 I2 equals 6 I1. What does that tell you about I1 compared with I2?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "Should I use nodal or mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "What is mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (shared)",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What current flows in a shared resistor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "1 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "resistor",
+              "label": "R4",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "What is a mesh?"
+            }
+          ],
+          "readouts": [
+            "I1 = 3 A (left mesh)",
+            "I2 = 2 A (right mesh)",
+            "I in R2 = 1 A"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "8I1 − 6I2 = 12;   −6I1 + 9I2 = 0"
+        }
+      ]
+    },
+    {
+      "say": "I1 is one and a half times I2. Substitute: 8 times 1.5 I2 is 12 I2, minus 6 I2, gives 6 I2 equals 12. So I2 is 2 amps and I1 is 3 amps. The shared resistor R2 carries the difference, 1 amp. What voltage is across R2 then?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "Should I use nodal or mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "What is mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (shared)",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What current flows in a shared resistor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "1 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "resistor",
+              "label": "R4",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "What is a mesh?"
+            }
+          ],
+          "readouts": [
+            "I1 = 3 A (left mesh)",
+            "I2 = 2 A (right mesh)",
+            "I in R2 = 1 A"
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "I2 = 2 A, I1 = 3 A, I in R2 = 1 A"
+        }
+      ]
+    },
+    {
+      "say": "6 volts, and that matches the right branch too: 2 amps through 3 ohms is 6 volts. Lovely check! Exam tip: mesh analysis needs one equation per window, so choose it when a circuit has fewer meshes than nodes, and nodal analysis when it has fewer nodes. Challenge: redo this with a 24 volt source. Does every current simply double?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Source",
+              "value": "12 V",
+              "ask": "Should I use nodal or mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R1",
+              "value": "2 Ω",
+              "ask": "What is mesh analysis?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R2 (shared)",
+              "value": "6 Ω",
+              "branch": 1,
+              "ask": "What current flows in a shared resistor?"
+            },
+            {
+              "kind": "resistor",
+              "label": "R3",
+              "value": "1 Ω",
+              "branch": 2
+            },
+            {
+              "kind": "resistor",
+              "label": "R4",
+              "value": "2 Ω",
+              "branch": 2,
+              "ask": "What is a mesh?"
+            }
+          ],
+          "readouts": [
+            "I1 = 3 A (left mesh)",
+            "I2 = 2 A (right mesh)",
+            "I in R2 = 1 A"
+          ]
+        },
+        {
+          "op": "formula",
+          "text": "V_R2 = 1 A × 6 Ω = 6 V = 2 A × 3 Ω"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is mesh analysis?",
+      "a": "Mesh analysis gives each window of a flat circuit its own loop current, writes Kirchhoff's voltage law round each window and solves for those currents.",
+      "asks": [
+        "Explain the mesh current method",
+        "How does loop analysis work?"
+      ]
+    },
+    {
+      "q": "What is a mesh?",
+      "a": "A mesh is a loop with no other loop inside it, like a single pane in a window. A circuit drawn flat has one mesh per pane.",
+      "asks": [
+        "Define a mesh",
+        "Mesh versus loop"
+      ]
+    },
+    {
+      "q": "What current flows in a shared resistor?",
+      "a": "The difference of the two mesh currents through it, because they flow through it in opposite directions. Here 3 amps minus 2 amps gives 1 amp.",
+      "asks": [
+        "Current in the common branch in mesh analysis"
+      ]
+    },
+    {
+      "q": "Should I use nodal or mesh analysis?",
+      "a": "Count both. Use mesh analysis when there are fewer meshes than non-ground nodes, and nodal analysis when there are fewer nodes. Current sources favour nodal; voltage sources favour mesh.",
+      "asks": [
+        "Nodal or mesh, which is easier?"
+      ]
+    },
+    {
+      "q": "What if a mesh current comes out negative?",
+      "a": "Nothing is wrong: the clockwise direction was only a guess. A negative answer means that current really flows anticlockwise.",
+      "asks": [
+        "Why do all mesh currents go clockwise?"
+      ]
+    }
+  ],
+  "facts": [
+    "Mesh analysis applies only to planar circuits, which can be drawn flat with no wires crossing.",
+    "Mesh analysis is built on Kirchhoff's voltage law; nodal analysis is built on Kirchhoff's current law."
+  ],
+  "quiz": [
+    {
+      "say": "Mesh currents of 5 amps and 3 amps flow in opposite directions through a shared 4 ohm resistor. What is the voltage across it?",
+      "show": "Mesh currents I1 = 5 A and I2 = 3 A flow in opposite directions through a shared 4 Ω resistor. What is the voltage across it?",
+      "options": [
+        {
+          "show": "8 V",
+          "say": "8 volts"
+        },
+        {
+          "show": "32 V",
+          "say": "32 volts"
+        },
+        {
+          "show": "20 V",
+          "say": "20 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "The real current is 5 minus 3, which is 2 amps, and 2 times 4 gives 8 volts.",
+      "wrong": {
+        "1": "That adds the mesh currents; opposite currents subtract.",
+        "2": "That uses only I1 and forgets I2 flowing the other way."
+      }
+    },
+    {
+      "say": "A flat circuit has 3 meshes and 5 non-ground nodes. Which method gives fewer equations?",
+      "show": "A flat circuit has 3 meshes and 5 non-ground nodes. Which method gives fewer equations?",
+      "options": [
+        {
+          "show": "Mesh analysis",
+          "say": "Mesh analysis"
+        },
+        {
+          "show": "Nodal analysis",
+          "say": "Nodal analysis"
+        },
+        {
+          "show": "They give the same number",
+          "say": "They give the same number"
+        }
+      ],
+      "answer": 0,
+      "why": "Mesh analysis needs 3 equations, nodal analysis needs 5.",
+      "wrong": {
+        "1": "Nodal analysis would need one equation per non-ground node, which is 5.",
+        "2": "The counts differ: 3 meshes against 5 nodes."
+      }
+    }
+  ]
+}

@@ -1,0 +1,625 @@
+{
+  "id": "ENGX-ROBO-23",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a drone keeps itself level",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "drone stabilisation",
+    "quadcopter flight controller",
+    "gyroscope IMU",
+    "motor speed control",
+    "counter-rotating propellers"
+  ],
+  "examples": [
+    "How does a drone stay level?",
+    "Why do drone propellers spin in different directions?",
+    "How does a drone turn around?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "p1",
+          "kind": "propeller",
+          "x": 0.15,
+          "y": 0.15,
+          "label": "Front-left rotor",
+          "motion": "spin"
+        },
+        {
+          "id": "p2",
+          "kind": "propeller",
+          "x": 0.85,
+          "y": 0.15,
+          "label": "Front-right rotor",
+          "motion": "spin",
+          "ask": "How does a drone turn around?"
+        },
+        {
+          "id": "p3",
+          "kind": "propeller",
+          "x": 0.15,
+          "y": 0.85,
+          "label": "Back-left rotor",
+          "motion": "spin",
+          "ask": "How does a drone fly forward?"
+        },
+        {
+          "id": "p4",
+          "kind": "propeller",
+          "x": 0.85,
+          "y": 0.85,
+          "label": "Back-right rotor",
+          "motion": "spin"
+        },
+        {
+          "id": "fc",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.52,
+          "label": "Flight controller",
+          "motion": "pulse",
+          "ask": "What does a drone flight controller do?"
+        },
+        {
+          "id": "imu",
+          "kind": "box",
+          "x": 0.5,
+          "y": 0.2,
+          "label": "Gyro sensors",
+          "motion": "pulse",
+          "ask": "How does a drone know it is tilting?"
+        },
+        {
+          "id": "bat",
+          "kind": "battery",
+          "x": 0.5,
+          "y": 0.84,
+          "label": "Battery",
+          "motion": "none"
+        }
+      ],
+      "links": [
+        {
+          "from": "imu",
+          "to": "fc",
+          "kind": "data",
+          "label": "tilt"
+        },
+        {
+          "from": "fc",
+          "to": "p1",
+          "kind": "signal"
+        },
+        {
+          "from": "fc",
+          "to": "p2",
+          "kind": "signal"
+        },
+        {
+          "from": "fc",
+          "to": "p3",
+          "kind": "signal"
+        },
+        {
+          "from": "fc",
+          "to": "p4",
+          "kind": "signal"
+        },
+        {
+          "from": "bat",
+          "to": "fc",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A quadcopter is naturally unstable, a bit like balancing a plate on a stick. It stays level only because a flight controller adjusts its four motors hundreds of times a second.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a drone keeps itself level"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p1",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.15,
+              "label": "Front-left rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "p2",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Front-right rotor",
+              "motion": "spin",
+              "ask": "How does a drone turn around?"
+            },
+            {
+              "id": "p3",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "Back-left rotor",
+              "motion": "spin",
+              "ask": "How does a drone fly forward?"
+            },
+            {
+              "id": "p4",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Back-right rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "fc",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.52,
+              "label": "Flight controller",
+              "motion": "pulse",
+              "ask": "What does a drone flight controller do?"
+            },
+            {
+              "id": "imu",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Gyro sensors",
+              "motion": "pulse",
+              "ask": "How does a drone know it is tilting?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.5,
+              "y": 0.84,
+              "label": "Battery",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "imu",
+              "to": "fc",
+              "kind": "data",
+              "label": "tilt"
+            },
+            {
+              "from": "fc",
+              "to": "p1",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p2",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p3",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p4",
+              "kind": "signal"
+            },
+            {
+              "from": "bat",
+              "to": "fc",
+              "kind": "power"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "Tiny gyroscopes and accelerometers on a chip measure every tilt and turn. If a gust lifts one side, the sensors notice almost instantly.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p1",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.15,
+              "label": "Front-left rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "p2",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Front-right rotor",
+              "motion": "spin",
+              "ask": "How does a drone turn around?"
+            },
+            {
+              "id": "p3",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "Back-left rotor",
+              "motion": "spin",
+              "ask": "How does a drone fly forward?"
+            },
+            {
+              "id": "p4",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Back-right rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "fc",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.52,
+              "label": "Flight controller",
+              "motion": "pulse",
+              "ask": "What does a drone flight controller do?"
+            },
+            {
+              "id": "imu",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Gyro sensors",
+              "motion": "pulse",
+              "ask": "How does a drone know it is tilting?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.5,
+              "y": 0.84,
+              "label": "Battery",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "imu",
+              "to": "fc",
+              "kind": "data",
+              "label": "tilt"
+            },
+            {
+              "from": "fc",
+              "to": "p1",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p2",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p3",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p4",
+              "kind": "signal"
+            },
+            {
+              "from": "bat",
+              "to": "fc",
+              "kind": "power"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "The controller then speeds up the rotors on the low side and slows those on the high side. The extra lift on the low side tips the drone back to level.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p1",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.15,
+              "label": "Front-left rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "p2",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Front-right rotor",
+              "motion": "spin",
+              "ask": "How does a drone turn around?"
+            },
+            {
+              "id": "p3",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "Back-left rotor",
+              "motion": "spin",
+              "ask": "How does a drone fly forward?"
+            },
+            {
+              "id": "p4",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Back-right rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "fc",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.52,
+              "label": "Flight controller",
+              "motion": "pulse",
+              "ask": "What does a drone flight controller do?"
+            },
+            {
+              "id": "imu",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Gyro sensors",
+              "motion": "pulse",
+              "ask": "How does a drone know it is tilting?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.5,
+              "y": 0.84,
+              "label": "Battery",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "imu",
+              "to": "fc",
+              "kind": "data",
+              "label": "tilt"
+            },
+            {
+              "from": "fc",
+              "to": "p1",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p2",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p3",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p4",
+              "kind": "signal"
+            },
+            {
+              "from": "bat",
+              "to": "fc",
+              "kind": "power"
+            }
+          ],
+          "focus": 0
+        }
+      ]
+    },
+    {
+      "say": "Two rotors spin clockwise and two anticlockwise, so their twists cancel out. To turn, the drone speeds up one pair and slows the other, and to fly forward it tilts slightly so some of its lift pushes it along.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "p1",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.15,
+              "label": "Front-left rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "p2",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.15,
+              "label": "Front-right rotor",
+              "motion": "spin",
+              "ask": "How does a drone turn around?"
+            },
+            {
+              "id": "p3",
+              "kind": "propeller",
+              "x": 0.15,
+              "y": 0.85,
+              "label": "Back-left rotor",
+              "motion": "spin",
+              "ask": "How does a drone fly forward?"
+            },
+            {
+              "id": "p4",
+              "kind": "propeller",
+              "x": 0.85,
+              "y": 0.85,
+              "label": "Back-right rotor",
+              "motion": "spin"
+            },
+            {
+              "id": "fc",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.52,
+              "label": "Flight controller",
+              "motion": "pulse",
+              "ask": "What does a drone flight controller do?"
+            },
+            {
+              "id": "imu",
+              "kind": "box",
+              "x": 0.5,
+              "y": 0.2,
+              "label": "Gyro sensors",
+              "motion": "pulse",
+              "ask": "How does a drone know it is tilting?"
+            },
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.5,
+              "y": 0.84,
+              "label": "Battery",
+              "motion": "none"
+            }
+          ],
+          "links": [
+            {
+              "from": "imu",
+              "to": "fc",
+              "kind": "data",
+              "label": "tilt"
+            },
+            {
+              "from": "fc",
+              "to": "p1",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p2",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p3",
+              "kind": "signal"
+            },
+            {
+              "from": "fc",
+              "to": "p4",
+              "kind": "signal"
+            },
+            {
+              "from": "bat",
+              "to": "fc",
+              "kind": "power"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a drone know it is tilting?",
+      "a": "A small chip called an inertial measurement unit holds gyroscopes that sense turning and accelerometers that sense which way is down. It reports the drone's angle many times a second.",
+      "asks": [
+        "What is an IMU?"
+      ]
+    },
+    {
+      "q": "What does a drone flight controller do?",
+      "a": "It is the drone's brain: it reads the sensors and the pilot's commands, then uses PID control to set each motor's speed hundreds of times a second, keeping the drone steady.",
+      "asks": [
+        "What is a flight controller?"
+      ]
+    },
+    {
+      "q": "How does a drone turn around?",
+      "a": "Two rotors spin clockwise and two anticlockwise. Speeding up one pair and slowing the other leaves a little leftover twist, which rotates the drone on the spot while total lift stays the same.",
+      "asks": [
+        "Why do drone propellers spin in different directions?"
+      ]
+    },
+    {
+      "q": "How does a drone fly forward?",
+      "a": "The controller speeds up the back rotors slightly, tilting the drone nose-down. Part of the rotors' push now points backwards, which pushes the drone forwards.",
+      "asks": [
+        "How does a quadcopter move sideways?"
+      ]
+    },
+    {
+      "q": "How does a drone hold its position outdoors?",
+      "a": "GPS tells it where it is, and a barometer or downward sensors track its height. If wind pushes it off the spot, the controller tilts it back.",
+      "asks": [
+        "How does a drone hover in the wind?"
+      ]
+    }
+  ],
+  "facts": [
+    "Most quadcopters have two propellers spinning clockwise and two anticlockwise so that their turning forces cancel.",
+    "Drone flight controllers typically update motor speeds hundreds or thousands of times per second."
+  ],
+  "quiz": [
+    {
+      "say": "Wind lifts a hovering drone's left side. What does the flight controller do?",
+      "show": "Left side lifted: the controller…",
+      "options": [
+        {
+          "show": "Speeds up the right rotors and slows the left",
+          "say": "Speeds up the right rotors and slows the left"
+        },
+        {
+          "show": "Turns all the motors off",
+          "say": "Turns all the motors off"
+        },
+        {
+          "show": "Speeds up the left rotors",
+          "say": "Speeds up the left rotors"
+        }
+      ],
+      "answer": 0,
+      "why": "The right side is now low, so more lift there and less on the left brings the drone back to level.",
+      "wrong": {
+        "1": "Stopping the motors would make it fall.",
+        "2": "That would tip the left side even higher."
+      }
+    }
+  ]
+}

@@ -1,0 +1,685 @@
+{
+  "id": "ENGX-TRAN-36",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an escalator moves its steps",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "escalator",
+    "moving staircase",
+    "step chain",
+    "escalator handrail",
+    "step tracks"
+  ],
+  "examples": [
+    "How does an escalator work?",
+    "Why do escalator steps flatten at the top?",
+    "Why does the handrail move?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.88,
+          "y": 0.12,
+          "size": 1,
+          "label": "Electric motor",
+          "motion": "spin",
+          "ask": "What powers an escalator?"
+        },
+        {
+          "id": "drive",
+          "kind": "gear",
+          "x": 0.7,
+          "y": 0.2,
+          "size": 1,
+          "label": "Drive gear",
+          "motion": "spin"
+        },
+        {
+          "id": "chain",
+          "kind": "belt",
+          "x": 0.48,
+          "y": 0.48,
+          "size": 1.5,
+          "label": "Step chain",
+          "motion": "flow",
+          "ask": "What is the step chain?"
+        },
+        {
+          "id": "steps",
+          "kind": "box",
+          "x": 0.3,
+          "y": 0.28,
+          "size": 1,
+          "label": "Steps on tracks",
+          "motion": "slide",
+          "ask": "How do escalator steps flatten at the top?"
+        },
+        {
+          "id": "rail",
+          "kind": "belt",
+          "x": 0.55,
+          "y": 0.84,
+          "size": 1.1,
+          "label": "Handrail",
+          "motion": "flow",
+          "ask": "Why does the handrail move?"
+        },
+        {
+          "id": "ret",
+          "kind": "wheel",
+          "x": 0.12,
+          "y": 0.8,
+          "size": 0.9,
+          "label": "Return wheel",
+          "motion": "spin"
+        },
+        {
+          "id": "brake",
+          "kind": "lever",
+          "x": 0.9,
+          "y": 0.5,
+          "size": 0.7,
+          "label": "Safety brake",
+          "motion": "none",
+          "ask": "How does an escalator stop safely?"
+        }
+      ],
+      "links": [
+        {
+          "from": "motor",
+          "to": "drive",
+          "kind": "energy"
+        },
+        {
+          "from": "drive",
+          "to": "chain",
+          "kind": "force",
+          "label": "pulls"
+        },
+        {
+          "from": "chain",
+          "to": "steps",
+          "kind": "force",
+          "label": "carries"
+        },
+        {
+          "from": "chain",
+          "to": "ret",
+          "kind": "force",
+          "label": "loops round"
+        },
+        {
+          "from": "drive",
+          "to": "rail",
+          "kind": "force",
+          "label": "same speed"
+        },
+        {
+          "from": "brake",
+          "to": "drive",
+          "kind": "force",
+          "label": "stops it"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An escalator is a moving staircase driven by an electric motor, usually at the top. The motor turns a drive gear, which pulls a pair of chains in a loop up the slope and back down underneath.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an escalator moves its steps"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.12,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "What powers an escalator?"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Drive gear",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.48,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Step chain",
+              "motion": "flow",
+              "ask": "What is the step chain?"
+            },
+            {
+              "id": "steps",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Steps on tracks",
+              "motion": "slide",
+              "ask": "How do escalator steps flatten at the top?"
+            },
+            {
+              "id": "rail",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.84,
+              "size": 1.1,
+              "label": "Handrail",
+              "motion": "flow",
+              "ask": "Why does the handrail move?"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Safety brake",
+              "motion": "none",
+              "ask": "How does an escalator stop safely?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "chain",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "chain",
+              "to": "steps",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "chain",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "drive",
+              "to": "rail",
+              "kind": "force",
+              "label": "same speed"
+            },
+            {
+              "from": "brake",
+              "to": "drive",
+              "kind": "force",
+              "label": "stops it"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The steps are fixed to the chains, so they all move together at the same speed, usually about half a metre a second. At the bottom the chains wrap around a return wheel and come back up.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.12,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "What powers an escalator?"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Drive gear",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.48,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Step chain",
+              "motion": "flow",
+              "ask": "What is the step chain?"
+            },
+            {
+              "id": "steps",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Steps on tracks",
+              "motion": "slide",
+              "ask": "How do escalator steps flatten at the top?"
+            },
+            {
+              "id": "rail",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.84,
+              "size": 1.1,
+              "label": "Handrail",
+              "motion": "flow",
+              "ask": "Why does the handrail move?"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Safety brake",
+              "motion": "none",
+              "ask": "How does an escalator stop safely?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "chain",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "chain",
+              "to": "steps",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "chain",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "drive",
+              "to": "rail",
+              "kind": "force",
+              "label": "same speed"
+            },
+            {
+              "from": "brake",
+              "to": "drive",
+              "kind": "force",
+              "label": "stops it"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Each step has two pairs of wheels running in separate tracks. Near the landings the tracks line up so the steps flatten into a level walkway; on the slope the tracks part, so each step rises to form a stair.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.12,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "What powers an escalator?"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Drive gear",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.48,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Step chain",
+              "motion": "flow",
+              "ask": "What is the step chain?"
+            },
+            {
+              "id": "steps",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Steps on tracks",
+              "motion": "slide",
+              "ask": "How do escalator steps flatten at the top?"
+            },
+            {
+              "id": "rail",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.84,
+              "size": 1.1,
+              "label": "Handrail",
+              "motion": "flow",
+              "ask": "Why does the handrail move?"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Safety brake",
+              "motion": "none",
+              "ask": "How does an escalator stop safely?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "chain",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "chain",
+              "to": "steps",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "chain",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "drive",
+              "to": "rail",
+              "kind": "force",
+              "label": "same speed"
+            },
+            {
+              "from": "brake",
+              "to": "drive",
+              "kind": "force",
+              "label": "stops it"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "A rubber handrail is driven by the same motor at matching speed, so your hand moves with your feet. Safety switches stop the escalator and apply a brake if anything gets caught or the steps run too fast.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.88,
+              "y": 0.12,
+              "size": 1,
+              "label": "Electric motor",
+              "motion": "spin",
+              "ask": "What powers an escalator?"
+            },
+            {
+              "id": "drive",
+              "kind": "gear",
+              "x": 0.7,
+              "y": 0.2,
+              "size": 1,
+              "label": "Drive gear",
+              "motion": "spin"
+            },
+            {
+              "id": "chain",
+              "kind": "belt",
+              "x": 0.48,
+              "y": 0.48,
+              "size": 1.5,
+              "label": "Step chain",
+              "motion": "flow",
+              "ask": "What is the step chain?"
+            },
+            {
+              "id": "steps",
+              "kind": "box",
+              "x": 0.3,
+              "y": 0.28,
+              "size": 1,
+              "label": "Steps on tracks",
+              "motion": "slide",
+              "ask": "How do escalator steps flatten at the top?"
+            },
+            {
+              "id": "rail",
+              "kind": "belt",
+              "x": 0.55,
+              "y": 0.84,
+              "size": 1.1,
+              "label": "Handrail",
+              "motion": "flow",
+              "ask": "Why does the handrail move?"
+            },
+            {
+              "id": "ret",
+              "kind": "wheel",
+              "x": 0.12,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Return wheel",
+              "motion": "spin"
+            },
+            {
+              "id": "brake",
+              "kind": "lever",
+              "x": 0.9,
+              "y": 0.5,
+              "size": 0.7,
+              "label": "Safety brake",
+              "motion": "none",
+              "ask": "How does an escalator stop safely?"
+            }
+          ],
+          "links": [
+            {
+              "from": "motor",
+              "to": "drive",
+              "kind": "energy"
+            },
+            {
+              "from": "drive",
+              "to": "chain",
+              "kind": "force",
+              "label": "pulls"
+            },
+            {
+              "from": "chain",
+              "to": "steps",
+              "kind": "force",
+              "label": "carries"
+            },
+            {
+              "from": "chain",
+              "to": "ret",
+              "kind": "force",
+              "label": "loops round"
+            },
+            {
+              "from": "drive",
+              "to": "rail",
+              "kind": "force",
+              "label": "same speed"
+            },
+            {
+              "from": "brake",
+              "to": "drive",
+              "kind": "force",
+              "label": "stops it"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What powers an escalator?",
+      "a": "An electric motor, usually at the top, turns a drive gear that pulls the step chains round in a loop.",
+      "asks": [
+        "Where is the escalator motor?"
+      ]
+    },
+    {
+      "q": "What is the step chain?",
+      "a": "Two strong chains, one on each side, carry the steps in a continuous loop. The drive gear pulls them up and they return upside down underneath.",
+      "asks": [
+        "What carries escalator steps?"
+      ]
+    },
+    {
+      "q": "How do escalator steps flatten at the top?",
+      "a": "Each step has two sets of wheels on separate tracks. At the ends the tracks are level, so the step lies flat; on the slope the tracks separate, lifting the back of each step into a stair.",
+      "asks": [
+        "Why do escalator steps disappear?"
+      ]
+    },
+    {
+      "q": "Why does the handrail move?",
+      "a": "The handrail is a rubber loop driven by the same motor, so it moves at about the same speed as the steps and you can hold on safely. Small speed differences can appear as it wears.",
+      "asks": [
+        "Why is the handrail sometimes faster than the steps?"
+      ]
+    },
+    {
+      "q": "How does an escalator stop safely?",
+      "a": "Safety switches watch for things caught at the comb plates or handrail, broken chains and overspeed. Any fault cuts the motor and applies a brake, and there are emergency stop buttons at each end.",
+      "asks": [
+        "What makes an escalator stop?"
+      ]
+    }
+  ],
+  "facts": [
+    "Escalators typically move at about 0.5 metres per second.",
+    "Escalator was once a trademark of the Otis Elevator Company before it became an ordinary word.",
+    "Escalator steps travel back down upside down underneath the visible stairs."
+  ],
+  "quiz": [
+    {
+      "say": "Why do escalator steps flatten out at the top and bottom?",
+      "show": "Why do escalator steps flatten out at the top and bottom?",
+      "options": [
+        {
+          "show": "Their two sets of wheels run on tracks that line up there",
+          "say": "Their two sets of wheels run on tracks that line up there"
+        },
+        {
+          "show": "The steps fold in half",
+          "say": "The steps fold in half"
+        },
+        {
+          "show": "The motor slows down",
+          "say": "The motor slows down"
+        }
+      ],
+      "answer": 0,
+      "why": "Separate tracks for each pair of wheels come level at the landings, so the step lies flat.",
+      "wrong": {
+        "1": "The steps are rigid; it is the tracks that change.",
+        "2": "The steps move at a constant speed the whole way."
+      }
+    }
+  ]
+}

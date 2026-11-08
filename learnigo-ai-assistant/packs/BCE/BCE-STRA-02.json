@@ -1,0 +1,335 @@
+{
+  "id": "BCE-STRA-02",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Pins, rollers and fixed ends: finding beam support reactions",
+  "area": "Civil Engineering (Bachelor's)",
+  "group": "BCE-STRA — Structural analysis",
+  "levels": [
+    "H",
+    "U"
+  ],
+  "keywords": [
+    "support reactions",
+    "pin support",
+    "roller support",
+    "fixed support",
+    "equilibrium equations"
+  ],
+  "examples": [
+    "How do you find the reactions of a simply supported beam?",
+    "What is the difference between a pin and a roller support?",
+    "What reactions does a fixed support give?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-beam",
+      "length": 8,
+      "supports": [
+        {
+          "kind": "pin",
+          "at": 0,
+          "ask": "What is a pin support?"
+        },
+        {
+          "kind": "roller",
+          "at": 1,
+          "ask": "What is a roller support?"
+        }
+      ],
+      "loads": [
+        {
+          "kind": "point",
+          "at": 0.25,
+          "size": 40,
+          "label": "40 kN",
+          "ask": "How do you calculate support reactions?"
+        }
+      ],
+      "show": "beam"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A bridge rests on its supports the way a plank rests on two bricks. The ground must push back exactly as hard as the load pushes down, and those push-backs are called reactions. On the board, forty kilonewtons sits two metres along an eight metre beam. Let us find what each support feels.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Pins, rollers and fixed ends: finding beam support reactions"
+        },
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a pin support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "What is a roller support?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 40,
+              "label": "40 kN",
+              "ask": "How do you calculate support reactions?"
+            }
+          ],
+          "show": "beam"
+        }
+      ]
+    },
+    {
+      "say": "Look at the left support, a pin. A pin is like a door hinge: it stops the beam moving up, down or sideways, but lets it rotate, so it can push both up and sideways. The right one is a roller, which only pushes straight up and lets the beam slide as it warms and grows. Why might a long bridge need a roller?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a pin support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "What is a roller support?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 40,
+              "label": "40 kN",
+              "ask": "How do you calculate support reactions?"
+            }
+          ],
+          "show": "beam",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Pin: 2 reactions (up, sideways). Roller: 1 reaction (up)."
+        }
+      ]
+    },
+    {
+      "say": "So it can expand freely in the sun. Now balance the turning. Take moments about the pin: the load turns the beam with forty times two, eighty kilonewton metres. The roller, eight metres away, must cancel that, so it pushes up with ten kilonewtons. The pin takes the rest, thirty. Which support carries more?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a pin support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "What is a roller support?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 40,
+              "label": "40 kN",
+              "ask": "How do you calculate support reactions?"
+            }
+          ],
+          "show": "beam",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "ΣM_A = 0: R_B × 8 = 40 × 2 → R_B = 10 kN"
+        },
+        {
+          "op": "note",
+          "text": "ΣF_y = 0: R_A = 40 − 10 = 30 kN"
+        }
+      ]
+    },
+    {
+      "say": "The nearer one, like the friend at the heavy end of a sofa. Now a third kind: a fixed support, built solidly into a wall. It stops both movement and rotation, so it gives a force and a moment. For this three metre balcony with ten kilonewtons at its tip, the wall pushes up ten kilonewtons and resists thirty kilonewton metres.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 3,
+          "supports": [
+            {
+              "kind": "fixed",
+              "at": 0,
+              "ask": "What is a fixed support?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 1,
+              "size": 10,
+              "label": "10 kN at tip",
+              "ask": "How do you calculate support reactions?"
+            }
+          ],
+          "show": "beam",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "M_wall = 10 kN × 3 m = 30 kN·m"
+        }
+      ]
+    },
+    {
+      "say": "Lovely work. Remember the count: a pin gives two reactions, a roller one, a fixed end three. Three equations of balance, vertical forces, sideways forces and moments all summing to zero, can find three unknowns. Challenge: slide the forty kilonewton load to the middle. What does each support carry now?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-beam",
+          "length": 8,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0,
+              "ask": "What is a pin support?"
+            },
+            {
+              "kind": "roller",
+              "at": 1,
+              "ask": "What is a roller support?"
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.25,
+              "size": 40,
+              "label": "40 kN",
+              "ask": "How do you calculate support reactions?"
+            }
+          ],
+          "show": "beam",
+          "focus": 2
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a pin support?",
+      "a": "A pin support holds the beam in place like a hinge. It stops movement up, down and sideways, so it gives a vertical and a horizontal reaction, but it lets the beam rotate, so it gives no moment.",
+      "asks": [
+        "What does a hinged support do?",
+        "How many reactions does a pin have?"
+      ]
+    },
+    {
+      "q": "What is a roller support?",
+      "a": "A roller support only pushes at right angles to the surface it sits on, usually straight up. It lets the beam slide along, which allows for expansion with temperature.",
+      "asks": [
+        "What does a roller support allow?"
+      ]
+    },
+    {
+      "q": "What is a fixed support?",
+      "a": "A fixed support, or built-in end, stops movement in every direction and also stops rotation. So it gives a vertical force, a horizontal force and a resisting moment.",
+      "asks": [
+        "What is a built-in support?",
+        "What reactions does a fixed end have?"
+      ]
+    },
+    {
+      "q": "How do you calculate support reactions?",
+      "a": "Use equilibrium. Take moments about one support to find the other reaction, then make the vertical forces add up to zero to find the first. Here 40 times 2 equals R_B times 8, so R_B is 10 kilonewtons and R_A is 30.",
+      "asks": [
+        "How do you find reactions in a beam?",
+        "Method for beam reactions"
+      ]
+    },
+    {
+      "q": "Why do bridges have rollers or bearings?",
+      "a": "Bridges grow and shrink with temperature. Rollers and sliding bearings let the deck move without pushing the piers over or cracking.",
+      "asks": [
+        "What are bridge bearings for?"
+      ]
+    }
+  ],
+  "facts": [
+    "A beam on one pin and one roller is statically determinate: its three reactions follow from the three equations of equilibrium.",
+    "A 100 metre steel span changes length by about 4 centimetres over a 35 °C temperature swing, which is why bridges need bearings that let them move."
+  ],
+  "quiz": [
+    {
+      "say": "A six metre simply supported beam has 60 kilonewtons at two metres from the left support. What is the right-hand reaction?",
+      "show": "A 6 m simply supported beam has 60 kN at 2 m from the left support. Right reaction?",
+      "options": [
+        {
+          "show": "20 kN",
+          "say": "20 kilonewtons"
+        },
+        {
+          "show": "40 kN",
+          "say": "40 kilonewtons"
+        },
+        {
+          "show": "30 kN",
+          "say": "30 kilonewtons"
+        }
+      ],
+      "answer": 0,
+      "why": "Moments about the left support: R_B × 6 = 60 × 2, so R_B = 20 kilonewtons.",
+      "wrong": {
+        "1": "That is the left reaction, the support nearer the load.",
+        "2": "Half the load would only be right if the load sat in the middle."
+      }
+    },
+    {
+      "say": "How many reaction components does a fixed support give in a 2D beam?",
+      "show": "How many reaction components does a fixed support give in a 2D beam?",
+      "options": [
+        {
+          "show": "One",
+          "say": "One"
+        },
+        {
+          "show": "Two",
+          "say": "Two"
+        },
+        {
+          "show": "Three",
+          "say": "Three"
+        }
+      ],
+      "answer": 2,
+      "why": "A fixed end resists vertical and horizontal movement and rotation: two forces and a moment.",
+      "wrong": {
+        "0": "One reaction is a roller.",
+        "1": "Two reactions is a pin, which still lets the beam rotate."
+      }
+    }
+  ]
+}

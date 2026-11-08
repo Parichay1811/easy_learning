@@ -1,0 +1,699 @@
+{
+  "id": "BEE-PWR-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Power system protection: how relays and breakers clear a fault in a blink",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "protection relay",
+    "circuit breaker",
+    "IDMT relay",
+    "discrimination",
+    "current transformer",
+    "grading margin"
+  ],
+  "examples": [
+    "How does a protection relay work?",
+    "What is relay coordination or discrimination?",
+    "What is an IDMT relay curve?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "src",
+          "label": "Substation 11 kV",
+          "icon": "factory",
+          "x": 0.08,
+          "y": 0.45
+        },
+        {
+          "id": "ra",
+          "label": "Relay A + breaker",
+          "icon": "switch",
+          "x": 0.3,
+          "y": 0.45,
+          "ask": "What is relay coordination or discrimination?"
+        },
+        {
+          "id": "bus",
+          "label": "Feeder bus",
+          "icon": "wire",
+          "x": 0.5,
+          "y": 0.45
+        },
+        {
+          "id": "rb",
+          "label": "Relay B + breaker",
+          "icon": "switch",
+          "x": 0.7,
+          "y": 0.45,
+          "ask": "How does a protection relay work?"
+        },
+        {
+          "id": "fault",
+          "label": "Fault 4 kA",
+          "icon": "lightning",
+          "x": 0.91,
+          "y": 0.45,
+          "ask": "What is a fault of 4 kA?"
+        },
+        {
+          "id": "town",
+          "label": "Village loads",
+          "icon": "house",
+          "x": 0.5,
+          "y": 0.85
+        }
+      ],
+      "links": [
+        {
+          "from": "src",
+          "to": "ra",
+          "kind": "power"
+        },
+        {
+          "from": "ra",
+          "to": "bus",
+          "kind": "power"
+        },
+        {
+          "from": "bus",
+          "to": "rb",
+          "kind": "power"
+        },
+        {
+          "from": "rb",
+          "to": "fault",
+          "kind": "power",
+          "label": "Fault current"
+        },
+        {
+          "from": "bus",
+          "to": "town",
+          "kind": "power"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "When lightning strikes a line, the fault must be cut off within a fraction of a second, but only the faulty part, so everyone else keeps their lights. That is the job of protection. On the board, a substation feeds a bus through relay and breaker A, and a feeder through relay and breaker B. A fault of 4 kiloamps has just struck beyond B.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Power system protection: how relays and breakers clear a fault in a blink"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "src",
+              "label": "Substation 11 kV",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.45
+            },
+            {
+              "id": "ra",
+              "label": "Relay A + breaker",
+              "icon": "switch",
+              "x": 0.3,
+              "y": 0.45,
+              "ask": "What is relay coordination or discrimination?"
+            },
+            {
+              "id": "bus",
+              "label": "Feeder bus",
+              "icon": "wire",
+              "x": 0.5,
+              "y": 0.45
+            },
+            {
+              "id": "rb",
+              "label": "Relay B + breaker",
+              "icon": "switch",
+              "x": 0.7,
+              "y": 0.45,
+              "ask": "How does a protection relay work?"
+            },
+            {
+              "id": "fault",
+              "label": "Fault 4 kA",
+              "icon": "lightning",
+              "x": 0.91,
+              "y": 0.45,
+              "ask": "What is a fault of 4 kA?"
+            },
+            {
+              "id": "town",
+              "label": "Village loads",
+              "icon": "house",
+              "x": 0.5,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "src",
+              "to": "ra",
+              "kind": "power"
+            },
+            {
+              "from": "ra",
+              "to": "bus",
+              "kind": "power"
+            },
+            {
+              "from": "bus",
+              "to": "rb",
+              "kind": "power"
+            },
+            {
+              "from": "rb",
+              "to": "fault",
+              "kind": "power",
+              "label": "Fault current"
+            },
+            {
+              "from": "bus",
+              "to": "town",
+              "kind": "power"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Follow the chain. A current transformer around the conductor scales the huge current down to a few amps, safe for the relay. The relay compares it with its setting and, if it is too high for too long, sends a trip signal. The breaker's contacts spring apart, an arc forms, and it is quenched at the next current zero. Why not just use a fuse?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "Current transformer",
+              "icon": "sensor",
+              "note": "Scales 4000 A down to a few amps",
+              "ask": "What does a current transformer do?"
+            },
+            {
+              "label": "Relay measures",
+              "icon": "chip",
+              "note": "Compares the current with its setting"
+            },
+            {
+              "label": "Trip signal",
+              "icon": "lightning",
+              "note": "Energises the breaker's trip coil"
+            },
+            {
+              "label": "Breaker opens",
+              "icon": "switch",
+              "note": "Contacts part and an arc forms"
+            },
+            {
+              "label": "Arc quenched",
+              "icon": "wind",
+              "note": "The arc dies at a current zero: cleared"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "CT 400 : 1 turns a 4000 A fault into 10 A"
+        }
+      ]
+    },
+    {
+      "say": "Fuses suit small circuits, but they melt once and cannot be coordinated so finely. Look at the network: both relays see the fault current, because it flows through A and then through B. If both tripped, the whole village would go dark. We want only B to trip. How can two relays seeing the same current act differently?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "src",
+              "label": "Substation 11 kV",
+              "icon": "factory",
+              "x": 0.08,
+              "y": 0.45
+            },
+            {
+              "id": "ra",
+              "label": "Relay A + breaker",
+              "icon": "switch",
+              "x": 0.3,
+              "y": 0.45,
+              "ask": "What is relay coordination or discrimination?"
+            },
+            {
+              "id": "bus",
+              "label": "Feeder bus",
+              "icon": "wire",
+              "x": 0.5,
+              "y": 0.45
+            },
+            {
+              "id": "rb",
+              "label": "Relay B + breaker",
+              "icon": "switch",
+              "x": 0.7,
+              "y": 0.45,
+              "ask": "How does a protection relay work?"
+            },
+            {
+              "id": "fault",
+              "label": "Fault 4 kA",
+              "icon": "lightning",
+              "x": 0.91,
+              "y": 0.45,
+              "ask": "What is a fault of 4 kA?"
+            },
+            {
+              "id": "town",
+              "label": "Village loads",
+              "icon": "house",
+              "x": 0.5,
+              "y": 0.85
+            }
+          ],
+          "links": [
+            {
+              "from": "src",
+              "to": "ra",
+              "kind": "power"
+            },
+            {
+              "from": "ra",
+              "to": "bus",
+              "kind": "power"
+            },
+            {
+              "from": "bus",
+              "to": "rb",
+              "kind": "power"
+            },
+            {
+              "from": "rb",
+              "to": "fault",
+              "kind": "power",
+              "label": "Fault current"
+            },
+            {
+              "from": "bus",
+              "to": "town",
+              "kind": "power"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Breakers clear in about 3 to 5 cycles: 60 to 100 ms at 50 Hz"
+        }
+      ]
+    },
+    {
+      "say": "With time. These are inverse-time curves: the bigger the current, the faster the trip. Relay B, nearest the fault, has the lower setting, so at 4 kiloamps it trips in about 0.23 seconds. Relay A, further back, is set slower and would take about 0.59 seconds. Can you see the gap between the curves at 4 kiloamps?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Fault current (A)",
+            "min": 500,
+            "max": 5000
+          },
+          "y": {
+            "label": "Trip time (s)",
+            "max": 4
+          },
+          "curves": [
+            {
+              "label": "Relay B (near fault)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  600,
+                  0.63
+                ],
+                [
+                  700,
+                  0.55
+                ],
+                [
+                  800,
+                  0.5
+                ],
+                [
+                  1000,
+                  0.43
+                ],
+                [
+                  1250,
+                  0.38
+                ],
+                [
+                  1500,
+                  0.34
+                ],
+                [
+                  2000,
+                  0.3
+                ],
+                [
+                  2500,
+                  0.27
+                ],
+                [
+                  3000,
+                  0.25
+                ],
+                [
+                  4000,
+                  0.23
+                ],
+                [
+                  5000,
+                  0.21
+                ]
+              ],
+              "ask": "What is an IDMT relay curve?"
+            },
+            {
+              "label": "Relay A (backup)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  600,
+                  3.44
+                ],
+                [
+                  700,
+                  2.49
+                ],
+                [
+                  800,
+                  2.01
+                ],
+                [
+                  1000,
+                  1.51
+                ],
+                [
+                  1250,
+                  1.21
+                ],
+                [
+                  1500,
+                  1.05
+                ],
+                [
+                  2000,
+                  0.86
+                ],
+                [
+                  2500,
+                  0.75
+                ],
+                [
+                  3000,
+                  0.68
+                ],
+                [
+                  4000,
+                  0.59
+                ],
+                [
+                  5000,
+                  0.54
+                ]
+              ],
+              "ask": "What is relay coordination or discrimination?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 4000,
+              "label": "Fault 4 kA"
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "t = TMS × 0.14 / ((I/Is)^0.02 − 1)"
+        }
+      ]
+    },
+    {
+      "say": "That gap, about 0.36 seconds, is the grading margin. B clears the fault first, and A trips only if B fails, as backup. This is discrimination, also called coordination. Superb work! Exam tip: margins of about 0.3 to 0.4 seconds allow for breaker time and relay errors. Challenge: why must A's curve stay above B's at every current?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Fault current (A)",
+            "min": 500,
+            "max": 5000
+          },
+          "y": {
+            "label": "Trip time (s)",
+            "max": 4
+          },
+          "curves": [
+            {
+              "label": "Relay B (near fault)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  600,
+                  0.63
+                ],
+                [
+                  700,
+                  0.55
+                ],
+                [
+                  800,
+                  0.5
+                ],
+                [
+                  1000,
+                  0.43
+                ],
+                [
+                  1250,
+                  0.38
+                ],
+                [
+                  1500,
+                  0.34
+                ],
+                [
+                  2000,
+                  0.3
+                ],
+                [
+                  2500,
+                  0.27
+                ],
+                [
+                  3000,
+                  0.25
+                ],
+                [
+                  4000,
+                  0.23
+                ],
+                [
+                  5000,
+                  0.21
+                ]
+              ],
+              "ask": "What is an IDMT relay curve?"
+            },
+            {
+              "label": "Relay A (backup)",
+              "type": "points",
+              "smooth": true,
+              "points": [
+                [
+                  600,
+                  3.44
+                ],
+                [
+                  700,
+                  2.49
+                ],
+                [
+                  800,
+                  2.01
+                ],
+                [
+                  1000,
+                  1.51
+                ],
+                [
+                  1250,
+                  1.21
+                ],
+                [
+                  1500,
+                  1.05
+                ],
+                [
+                  2000,
+                  0.86
+                ],
+                [
+                  2500,
+                  0.75
+                ],
+                [
+                  3000,
+                  0.68
+                ],
+                [
+                  4000,
+                  0.59
+                ],
+                [
+                  5000,
+                  0.54
+                ]
+              ],
+              "ask": "What is relay coordination or discrimination?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 4000,
+              "label": "Fault 4 kA"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Grading margin = 0.59 − 0.23 = 0.36 s"
+        },
+        {
+          "op": "note",
+          "text": "B: Is 200 A, TMS 0.1.  A: Is 400 A, TMS 0.2 (IEC standard inverse)"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a protection relay work?",
+      "a": "A current transformer feeds a scaled copy of the line current to the relay. If the current exceeds the relay's setting for longer than its time curve allows, the relay energises the circuit breaker's trip coil, and the breaker opens.",
+      "asks": [
+        "What does a relay do in a substation?"
+      ]
+    },
+    {
+      "q": "What is relay coordination or discrimination?",
+      "a": "Relays are set so the one nearest the fault trips first and those further back wait a little longer, as backup. Only the faulty section is disconnected, and customers upstream keep their supply.",
+      "asks": [
+        "What is protection grading?"
+      ]
+    },
+    {
+      "q": "What is an IDMT relay curve?",
+      "a": "Inverse definite minimum time means the relay trips faster for bigger currents but never quicker than a minimum. The IEC standard inverse curve is t equals TMS times 0.14, over I over I s to the power 0.02, minus 1.",
+      "asks": [
+        "What is an inverse time overcurrent relay?"
+      ]
+    },
+    {
+      "q": "What does a current transformer do?",
+      "a": "It is a ring-shaped transformer around the conductor that produces a small current, usually 1 or 5 amps at rated current, in proportion to the large primary current, so relays and meters can measure it safely.",
+      "asks": [
+        "Why do relays need CTs?"
+      ]
+    },
+    {
+      "q": "What is a fault of 4 kA?",
+      "a": "It is a short-circuit current of 4000 amps, many times the normal load current of a feeder. At that level the relay nearest the fault should trip within a fraction of a second.",
+      "asks": [
+        "How big is a typical feeder fault current?"
+      ]
+    }
+  ],
+  "facts": [
+    "Distribution circuit breakers typically interrupt a fault within about 3 to 5 cycles, 60 to 100 ms at 50 Hz.",
+    "The IEC standard inverse relay curve is t = TMS × 0.14 / ((I/Is)^0.02 − 1).",
+    "Grading margins between overcurrent relays are typically about 0.3 to 0.4 seconds."
+  ],
+  "quiz": [
+    {
+      "say": "Relay B trips in 0.23 seconds and the grading margin is 0.35 seconds. When should relay A trip for the same fault?",
+      "show": "Relay B trips in 0.23 s and the grading margin is 0.35 s. When should relay A trip for the same fault?",
+      "options": [
+        {
+          "show": "About 0.58 s",
+          "say": "about 0.58 seconds"
+        },
+        {
+          "show": "About 0.12 s",
+          "say": "about 0.12 seconds"
+        },
+        {
+          "show": "0.23 s",
+          "say": "0.23 seconds, the same time"
+        }
+      ],
+      "answer": 0,
+      "why": "The backup relay waits B's time plus the margin: 0.23 plus 0.35, about 0.58 seconds.",
+      "wrong": {
+        "1": "Tripping before B would disconnect far too much of the network.",
+        "2": "Tripping together would black out the whole feeder bus."
+      }
+    },
+    {
+      "say": "Why do overcurrent relays use inverse-time curves?",
+      "show": "Why do overcurrent relays use inverse-time curves?",
+      "options": [
+        {
+          "show": "Bigger faults are cleared faster",
+          "say": "Bigger faults are cleared faster"
+        },
+        {
+          "show": "They never trip on large currents",
+          "say": "They never trip on large currents"
+        },
+        {
+          "show": "They trip all relays at once",
+          "say": "They trip all relays at once"
+        }
+      ],
+      "answer": 0,
+      "why": "A larger current does more damage, so an inverse curve trips sooner as the current rises, while still allowing grading.",
+      "wrong": {
+        "1": "They do trip on large currents, and faster than on small ones.",
+        "2": "The point of grading is that relays trip one at a time, nearest first."
+      }
+    }
+  ]
+}

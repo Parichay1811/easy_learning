@@ -1,0 +1,589 @@
+{
+  "id": "ENGX-ELEC-11",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How an electric motor spins",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "electric motor",
+    "commutator",
+    "motor coil",
+    "brushes",
+    "DC motor"
+  ],
+  "examples": [
+    "How does an electric motor work?",
+    "Why does the coil in a motor keep spinning?",
+    "How do you make a motor go the other way?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "bat",
+          "kind": "battery",
+          "x": 0.12,
+          "y": 0.78,
+          "size": 1,
+          "label": "Battery",
+          "ask": "How do you make a motor spin the other way?"
+        },
+        {
+          "id": "magN",
+          "kind": "magnet",
+          "x": 0.28,
+          "y": 0.38,
+          "size": 1.1,
+          "label": "North magnet",
+          "ask": "How can you make a motor spin faster or stronger?"
+        },
+        {
+          "id": "coil",
+          "kind": "coil",
+          "x": 0.55,
+          "y": 0.38,
+          "size": 1.3,
+          "label": "Spinning coil",
+          "motion": "spin",
+          "ask": "Why does the coil spin in a motor?"
+        },
+        {
+          "id": "magS",
+          "kind": "magnet",
+          "x": 0.82,
+          "y": 0.38,
+          "size": 1.1,
+          "label": "South magnet"
+        },
+        {
+          "id": "comm",
+          "kind": "wheel",
+          "x": 0.5,
+          "y": 0.8,
+          "size": 0.7,
+          "label": "Commutator & brushes",
+          "motion": "spin",
+          "ask": "What does the commutator do?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.85,
+          "y": 0.8,
+          "size": 0.9,
+          "label": "Output shaft",
+          "motion": "spin",
+          "ask": "What does the shaft of a motor do?"
+        }
+      ],
+      "links": [
+        {
+          "from": "bat",
+          "to": "comm",
+          "kind": "power",
+          "label": "Current"
+        },
+        {
+          "from": "comm",
+          "to": "coil",
+          "kind": "power"
+        },
+        {
+          "from": "magN",
+          "to": "coil",
+          "kind": "force",
+          "label": "Magnetic push"
+        },
+        {
+          "from": "magS",
+          "to": "coil",
+          "kind": "force"
+        },
+        {
+          "from": "coil",
+          "to": "shaft",
+          "kind": "force",
+          "label": "Turning force"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An electric motor turns electricity into spinning movement. A coil of wire on a shaft sits between two magnets.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How an electric motor spins"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery",
+              "ask": "How do you make a motor spin the other way?"
+            },
+            {
+              "id": "magN",
+              "kind": "magnet",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "North magnet",
+              "ask": "How can you make a motor spin faster or stronger?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.55,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Spinning coil",
+              "motion": "spin",
+              "ask": "Why does the coil spin in a motor?"
+            },
+            {
+              "id": "magS",
+              "kind": "magnet",
+              "x": 0.82,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "South magnet"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Commutator & brushes",
+              "motion": "spin",
+              "ask": "What does the commutator do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Output shaft",
+              "motion": "spin",
+              "ask": "What does the shaft of a motor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "magN",
+              "to": "coil",
+              "kind": "force",
+              "label": "Magnetic push"
+            },
+            {
+              "from": "magS",
+              "to": "coil",
+              "kind": "force"
+            },
+            {
+              "from": "coil",
+              "to": "shaft",
+              "kind": "force",
+              "label": "Turning force"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Current flowing through the coil makes it into a magnet. The fixed magnets push one side of the coil up and the other side down, so it turns.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery",
+              "ask": "How do you make a motor spin the other way?"
+            },
+            {
+              "id": "magN",
+              "kind": "magnet",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "North magnet",
+              "ask": "How can you make a motor spin faster or stronger?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.55,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Spinning coil",
+              "motion": "spin",
+              "ask": "Why does the coil spin in a motor?"
+            },
+            {
+              "id": "magS",
+              "kind": "magnet",
+              "x": 0.82,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "South magnet"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Commutator & brushes",
+              "motion": "spin",
+              "ask": "What does the commutator do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Output shaft",
+              "motion": "spin",
+              "ask": "What does the shaft of a motor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "magN",
+              "to": "coil",
+              "kind": "force",
+              "label": "Magnetic push"
+            },
+            {
+              "from": "magS",
+              "to": "coil",
+              "kind": "force"
+            },
+            {
+              "from": "coil",
+              "to": "shaft",
+              "kind": "force",
+              "label": "Turning force"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Every half turn, the commutator swaps the coil's connections and reverses the current. That keeps the push going the same way, so the coil spins round and round.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery",
+              "ask": "How do you make a motor spin the other way?"
+            },
+            {
+              "id": "magN",
+              "kind": "magnet",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "North magnet",
+              "ask": "How can you make a motor spin faster or stronger?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.55,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Spinning coil",
+              "motion": "spin",
+              "ask": "Why does the coil spin in a motor?"
+            },
+            {
+              "id": "magS",
+              "kind": "magnet",
+              "x": 0.82,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "South magnet"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Commutator & brushes",
+              "motion": "spin",
+              "ask": "What does the commutator do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Output shaft",
+              "motion": "spin",
+              "ask": "What does the shaft of a motor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "magN",
+              "to": "coil",
+              "kind": "force",
+              "label": "Magnetic push"
+            },
+            {
+              "from": "magS",
+              "to": "coil",
+              "kind": "force"
+            },
+            {
+              "from": "coil",
+              "to": "shaft",
+              "kind": "force",
+              "label": "Turning force"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "The spinning coil turns the shaft, which can drive a fan, a toy car's wheels or a drill. More current or stronger magnets give a stronger turn.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "bat",
+              "kind": "battery",
+              "x": 0.12,
+              "y": 0.78,
+              "size": 1,
+              "label": "Battery",
+              "ask": "How do you make a motor spin the other way?"
+            },
+            {
+              "id": "magN",
+              "kind": "magnet",
+              "x": 0.28,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "North magnet",
+              "ask": "How can you make a motor spin faster or stronger?"
+            },
+            {
+              "id": "coil",
+              "kind": "coil",
+              "x": 0.55,
+              "y": 0.38,
+              "size": 1.3,
+              "label": "Spinning coil",
+              "motion": "spin",
+              "ask": "Why does the coil spin in a motor?"
+            },
+            {
+              "id": "magS",
+              "kind": "magnet",
+              "x": 0.82,
+              "y": 0.38,
+              "size": 1.1,
+              "label": "South magnet"
+            },
+            {
+              "id": "comm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.8,
+              "size": 0.7,
+              "label": "Commutator & brushes",
+              "motion": "spin",
+              "ask": "What does the commutator do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.85,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Output shaft",
+              "motion": "spin",
+              "ask": "What does the shaft of a motor do?"
+            }
+          ],
+          "links": [
+            {
+              "from": "bat",
+              "to": "comm",
+              "kind": "power",
+              "label": "Current"
+            },
+            {
+              "from": "comm",
+              "to": "coil",
+              "kind": "power"
+            },
+            {
+              "from": "magN",
+              "to": "coil",
+              "kind": "force",
+              "label": "Magnetic push"
+            },
+            {
+              "from": "magS",
+              "to": "coil",
+              "kind": "force"
+            },
+            {
+              "from": "coil",
+              "to": "shaft",
+              "kind": "force",
+              "label": "Turning force"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Why does the coil spin in a motor?",
+      "a": "Current in the coil makes it a magnet. Its poles are pushed and pulled by the fixed magnets around it, one side up and the other down, so the coil turns.",
+      "asks": [
+        "What makes a motor turn?"
+      ]
+    },
+    {
+      "q": "What does the commutator do?",
+      "a": "Every half turn, the commutator swaps the connections to the coil and reverses its current. That flips the coil's magnetism just in time, so it keeps turning the same way instead of rocking back.",
+      "asks": [
+        "Why does a motor keep spinning the same way?"
+      ]
+    },
+    {
+      "q": "What does the shaft of a motor do?",
+      "a": "The coil is fixed to the shaft, so the shaft spins with it. Gears, wheels, fan blades or a drill bit are attached to the shaft to use the turning force.",
+      "asks": [
+        "How does a motor drive things?"
+      ]
+    },
+    {
+      "q": "How can you make a motor spin faster or stronger?",
+      "a": "Use a bigger current, a stronger magnet or more turns of wire on the coil. Each one makes the turning force stronger.",
+      "asks": [
+        "How do you make a motor more powerful?"
+      ]
+    },
+    {
+      "q": "How do you make a motor spin the other way?",
+      "a": "Swap the battery connections. The current through the coil reverses, the forces flip, and the motor turns the opposite way.",
+      "asks": [
+        "How do you reverse a motor?"
+      ]
+    }
+  ],
+  "facts": [
+    "Michael Faraday demonstrated the first electric motor in 1821.",
+    "In simple motors, carbon brushes press on the commutator to carry current into the spinning coil."
+  ],
+  "quiz": [
+    {
+      "say": "What keeps a simple motor's coil spinning in the same direction?",
+      "show": "What keeps a simple motor's coil spinning in the same direction?",
+      "options": [
+        {
+          "show": "The commutator reversing the current every half turn",
+          "say": "The commutator reversing the current every half turn"
+        },
+        {
+          "show": "The battery getting hotter",
+          "say": "The battery getting hotter"
+        },
+        {
+          "show": "Gravity pulling the coil round",
+          "say": "Gravity pulling the coil round"
+        }
+      ],
+      "answer": 0,
+      "why": "Without the commutator the coil would rock back; reversing the current each half turn keeps the push going the same way.",
+      "wrong": {
+        "1": "Heat does not turn the coil; it is wasted energy.",
+        "2": "Gravity would pull the coil down, not keep it spinning."
+      }
+    }
+  ]
+}

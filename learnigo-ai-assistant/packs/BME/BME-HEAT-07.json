@@ -1,0 +1,382 @@
+{
+  "id": "BME-HEAT-07",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Lumped capacitance cooling: when a hot part cools as one temperature",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-HEAT — Heat transfer",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "lumped capacitance",
+    "Biot number",
+    "time constant",
+    "transient cooling",
+    "exponential decay"
+  ],
+  "examples": [
+    "What is the lumped capacitance method?",
+    "What is the Biot number?",
+    "How long does a hot steel ball take to cool?"
+  ],
+  "figure": [
+    {
+      "name": "x-plot",
+      "x": {
+        "label": "Time (s)",
+        "max": 300
+      },
+      "y": {
+        "label": "Ball temp (°C)",
+        "max": 520
+      },
+      "curves": [
+        {
+          "label": "Steel ball 10 mm",
+          "type": "decay",
+          "c": 25,
+          "a": 475,
+          "k": 61.1,
+          "ask": "What does the lumped cooling curve look like?"
+        },
+        {
+          "label": "Air 25 °C",
+          "type": "line",
+          "c": 25,
+          "k": 0
+        }
+      ],
+      "marks": [
+        {
+          "x": 61.1,
+          "label": "τ = 61 s: 200 °C"
+        },
+        {
+          "x": 120,
+          "label": "2 min: 92 °C"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "A blacksmith pulls a small steel ball bearing out of the furnace at 500 degrees and leaves it in a 25 degree breeze. How fast does it cool? For small metal parts there is a lovely shortcut: treat the whole part as one temperature. Look at the two cases on the board.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Lumped capacitance cooling: when a hot part cools as one temperature"
+        },
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Small steel ball",
+            "icon": "ball",
+            "points": [
+              "Bi = 0.004",
+              "Inside stays even",
+              "Lumped method works",
+              "One exponential curve"
+            ]
+          },
+          "right": {
+            "title": "Thick concrete block",
+            "icon": "rock",
+            "points": [
+              "Bi much more than 0.1",
+              "Hot core, cool skin",
+              "Lumped method fails",
+              "Need full conduction"
+            ]
+          },
+          "verdict": "Use the lumped method only when Bi < 0.1",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Steel ball, D = 10 mm, from 500 °C in air at 25 °C, h = 100"
+        }
+      ]
+    },
+    {
+      "say": "The shortcut works when heat moves through the inside far more easily than it leaves the surface. The Biot number measures that: h times the volume over area, divided by k. For our ball, 100 times 1.67 millimetres over 45 gives 0.004. Under 0.1, so the inside stays almost even. What about a thick concrete block?",
+      "draw": [
+        {
+          "name": "x-compare",
+          "left": {
+            "title": "Small steel ball",
+            "icon": "ball",
+            "points": [
+              "Bi = 0.004",
+              "Inside stays even",
+              "Lumped method works",
+              "One exponential curve"
+            ]
+          },
+          "right": {
+            "title": "Thick concrete block",
+            "icon": "rock",
+            "points": [
+              "Bi much more than 0.1",
+              "Hot core, cool skin",
+              "Lumped method fails",
+              "Need full conduction"
+            ]
+          },
+          "verdict": "Use the lumped method only when Bi < 0.1",
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Bi = h(V/A)/k = 100 × 0.00167/45 = 0.0037"
+        }
+      ]
+    },
+    {
+      "say": "Its Biot number is large, so its core stays hot while the skin cools: no shortcut. For the ball, an energy balance gives an exponential decay. The time constant, tau, is rho c V over h A: 7800 times 470 times 0.00167 over 100, about 61 seconds. See the curve fall?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 300
+          },
+          "y": {
+            "label": "Ball temp (°C)",
+            "max": 520
+          },
+          "curves": [
+            {
+              "label": "Steel ball 10 mm",
+              "type": "decay",
+              "c": 25,
+              "a": 475,
+              "k": 61.1,
+              "ask": "What does the lumped cooling curve look like?"
+            },
+            {
+              "label": "Air 25 °C",
+              "type": "line",
+              "c": 25,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 61.1,
+              "label": "τ = 61 s: 200 °C"
+            },
+            {
+              "x": 120,
+              "label": "2 min: 92 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "τ = ρcV/(hA) = 7800 × 470 × 0.00167/100 = 61 s"
+        }
+      ]
+    },
+    {
+      "say": "After one time constant, the ball has lost 63 percent of its excess temperature: it is about 200 degrees. After two minutes, the temperature is 25 plus 475 times e to the minus 120 over 61, about 92 degrees. See the second mark? How would a fan, which doubles h, change tau?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 300
+          },
+          "y": {
+            "label": "Ball temp (°C)",
+            "max": 520
+          },
+          "curves": [
+            {
+              "label": "Steel ball 10 mm",
+              "type": "decay",
+              "c": 25,
+              "a": 475,
+              "k": 61.1,
+              "ask": "What does the lumped cooling curve look like?"
+            },
+            {
+              "label": "Air 25 °C",
+              "type": "line",
+              "c": 25,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 61.1,
+              "label": "τ = 61 s: 200 °C"
+            },
+            {
+              "x": 120,
+              "label": "2 min: 92 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "T = 25 + 475 e^(−120/61) ≈ 92 °C"
+        }
+      ]
+    },
+    {
+      "say": "It would halve tau, so it cools twice as fast! Wonderful. Real link: thermocouples are made tiny so their tau is short and they respond quickly. Exam tip: always check Bi below 0.1 first, and use V over A, which is D over 6 for a sphere.",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Time (s)",
+            "max": 300
+          },
+          "y": {
+            "label": "Ball temp (°C)",
+            "max": 520
+          },
+          "curves": [
+            {
+              "label": "Steel ball 10 mm",
+              "type": "decay",
+              "c": 25,
+              "a": 475,
+              "k": 61.1,
+              "ask": "What does the lumped cooling curve look like?"
+            },
+            {
+              "label": "Air 25 °C",
+              "type": "line",
+              "c": 25,
+              "k": 0
+            }
+          ],
+          "marks": [
+            {
+              "x": 61.1,
+              "label": "τ = 61 s: 200 °C"
+            },
+            {
+              "x": 120,
+              "label": "2 min: 92 °C"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Sphere: V/A = D/6; cylinder: V/A = D/4 (long)"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the lumped capacitance method?",
+      "a": "Treating a cooling or heating body as one uniform temperature, so its temperature decays exponentially towards the surroundings. It works when the Biot number is below 0.1.",
+      "asks": [
+        "lumped system analysis"
+      ]
+    },
+    {
+      "q": "What does the lumped cooling curve look like?",
+      "a": "An exponential decay towards the surrounding temperature: T minus T infinity equals the initial difference times e to the minus t over tau.",
+      "asks": [
+        "lumped cooling formula",
+        "how long does a hot steel ball take to cool"
+      ]
+    },
+    {
+      "q": "What is the Biot number?",
+      "a": "Bi equals h times the characteristic length, volume over surface area, divided by the conductivity of the solid. It compares resistance inside the body with resistance at its surface.",
+      "asks": [
+        "Biot number formula"
+      ]
+    },
+    {
+      "q": "What is the time constant in lumped cooling?",
+      "a": "Tau equals rho c V over h A. After one tau, 63 percent of the temperature difference has gone; after about five, the body has practically reached the surroundings.",
+      "asks": [
+        "thermal time constant"
+      ]
+    },
+    {
+      "q": "Why are thermocouples made very small?",
+      "a": "A small bead has little mass for its surface area, so its time constant is short and it follows temperature changes quickly.",
+      "asks": [
+        "thermocouple response time"
+      ]
+    }
+  ],
+  "facts": [
+    "The lumped method is accurate to about 5 % when the Biot number is below 0.1.",
+    "After one time constant, an exponential cooling has completed 63 % of its change."
+  ],
+  "quiz": [
+    {
+      "say": "A part has a time constant of 50 seconds and starts 200 degrees above the air. Roughly how far above the air is it after 50 seconds?",
+      "show": "τ = 50 s; starts 200 K above the air. Excess temperature after 50 s?",
+      "options": [
+        {
+          "show": "About 74 K",
+          "say": "about 74 kelvin"
+        },
+        {
+          "show": "About 126 K",
+          "say": "about 126 kelvin"
+        },
+        {
+          "show": "100 K",
+          "say": "100 kelvin"
+        }
+      ],
+      "answer": 0,
+      "why": "200 × e⁻¹ = 200 × 0.368 ≈ 74 K.",
+      "wrong": {
+        "1": "That is how much it has dropped, 63 %, not what is left.",
+        "2": "Exponential decay is not a straight halving in one time constant."
+      }
+    },
+    {
+      "say": "When is the lumped capacitance method valid?",
+      "show": "The lumped capacitance method is valid when…",
+      "options": [
+        {
+          "show": "The Biot number is below about 0.1",
+          "say": "The Biot number is below about 0.1"
+        },
+        {
+          "show": "The body is larger than 1 metre",
+          "say": "The body is larger than 1 metre"
+        },
+        {
+          "show": "The Reynolds number is above 4000",
+          "say": "The Reynolds number is above 4000"
+        }
+      ],
+      "answer": 0,
+      "why": "A small Biot number means the inside conducts heat far more easily than the surface loses it.",
+      "wrong": {
+        "1": "Large bodies usually have large Biot numbers, the opposite.",
+        "2": "The Reynolds number describes the flow, not the temperature inside the body."
+      }
+    }
+  ]
+}

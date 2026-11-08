@@ -1,0 +1,363 @@
+{
+  "id": "BME-FLUID-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Drag and lift: the air forces on cars and aircraft wings",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-FLUID — Fluid mechanics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "drag force",
+    "drag coefficient",
+    "lift coefficient",
+    "frontal area",
+    "aerofoil"
+  ],
+  "examples": [
+    "How do I calculate drag on a car?",
+    "What is the drag coefficient?",
+    "How does a wing make lift?"
+  ],
+  "figure": [
+    {
+      "name": "x-forces",
+      "object": "plane",
+      "forces": [
+        {
+          "label": "Lift",
+          "dir": "up",
+          "size": 4,
+          "ask": "How does a wing make lift?"
+        },
+        {
+          "label": "Weight",
+          "dir": "down",
+          "size": 4
+        },
+        {
+          "label": "Thrust",
+          "dir": "right",
+          "size": 3
+        },
+        {
+          "label": "Drag",
+          "dir": "left",
+          "size": 3,
+          "ask": "What is drag?"
+        }
+      ],
+      "motion": "right",
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Stick your hand out of a car window at motorway speed and feel it pushed back and lifted. Those are drag and lift, the two forces every car designer and aircraft engineer fights or uses. Look at the aircraft: lift balances weight, thrust balances drag.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Drag and lift: the air forces on cars and aircraft wings"
+        },
+        {
+          "name": "x-forces",
+          "object": "plane",
+          "forces": [
+            {
+              "label": "Lift",
+              "dir": "up",
+              "size": 4,
+              "ask": "How does a wing make lift?"
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Thrust",
+              "dir": "right",
+              "size": 3
+            },
+            {
+              "label": "Drag",
+              "dir": "left",
+              "size": 3,
+              "ask": "What is drag?"
+            }
+          ],
+          "motion": "right",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "note",
+          "text": "Steady level flight: lift = weight, thrust = drag"
+        }
+      ]
+    },
+    {
+      "say": "Drag is the force along the flow. We write it as half rho V squared, the dynamic pressure, times the frontal area A, times a drag coefficient C D that captures the shape. A flat plate has C D about 1.2; a modern car about 0.3; a teardrop about 0.04. Which shape slips through most easily?",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "plane",
+          "forces": [
+            {
+              "label": "Lift",
+              "dir": "up",
+              "size": 4,
+              "ask": "How does a wing make lift?"
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Thrust",
+              "dir": "right",
+              "size": 3
+            },
+            {
+              "label": "Drag",
+              "dir": "left",
+              "size": 3,
+              "ask": "What is drag?"
+            }
+          ],
+          "motion": "right",
+          "op": "sim",
+          "focus": 3
+        },
+        {
+          "op": "formula",
+          "text": "F_D = ½ρV² C_D A"
+        }
+      ]
+    },
+    {
+      "say": "The teardrop! Now a worked example: a car with C D 0.3 and frontal area 2.2 square metres at 30 metres per second, that is 108 kilometres per hour, in air of density 1.2. Drag is half times 1.2 times 900 times 0.3 times 2.2: about 356 newtons. See the curve on the graph?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (m/s)",
+            "max": 40
+          },
+          "y": {
+            "label": "Drag force (N)",
+            "max": 700
+          },
+          "curves": [
+            {
+              "label": "Car Cd 0.3, A 2.2 m²",
+              "type": "power",
+              "a": 0.396,
+              "k": 2,
+              "ask": "How do I calculate drag on a car?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 15,
+              "label": "54 km/h: 89 N"
+            },
+            {
+              "x": 30,
+              "label": "108 km/h: 356 N"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F_D = ½ × 1.2 × 30² × 0.3 × 2.2 = 356 N"
+        }
+      ]
+    },
+    {
+      "say": "The curve bends up because drag goes with speed squared. At half the speed, 15 metres per second, drag is only a quarter, 89 newtons. The power to push through the air is drag times speed: 356 times 30, about 10.7 kilowatts. Power goes with speed cubed! What does that mean for fuel use on the motorway?",
+      "draw": [
+        {
+          "name": "x-plot",
+          "x": {
+            "label": "Speed (m/s)",
+            "max": 40
+          },
+          "y": {
+            "label": "Drag force (N)",
+            "max": 700
+          },
+          "curves": [
+            {
+              "label": "Car Cd 0.3, A 2.2 m²",
+              "type": "power",
+              "a": 0.396,
+              "k": 2,
+              "ask": "How do I calculate drag on a car?"
+            }
+          ],
+          "marks": [
+            {
+              "x": 15,
+              "label": "54 km/h: 89 N"
+            },
+            {
+              "x": 30,
+              "label": "108 km/h: 356 N"
+            }
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "P = F_D V = 356 × 30 ≈ 10.7 kW"
+        }
+      ]
+    },
+    {
+      "say": "Driving fast burns far more fuel. Lift uses the same formula with a lift coefficient: a wing is shaped and tilted to turn the air downwards, and the air pushes the wing up in return. Fantastic work. Exam tip: A for drag on a car is the frontal area, but for a wing it is the plan area.",
+      "draw": [
+        {
+          "name": "x-forces",
+          "object": "plane",
+          "forces": [
+            {
+              "label": "Lift",
+              "dir": "up",
+              "size": 4,
+              "ask": "How does a wing make lift?"
+            },
+            {
+              "label": "Weight",
+              "dir": "down",
+              "size": 4
+            },
+            {
+              "label": "Thrust",
+              "dir": "right",
+              "size": 3
+            },
+            {
+              "label": "Drag",
+              "dir": "left",
+              "size": 3,
+              "ask": "What is drag?"
+            }
+          ],
+          "motion": "right",
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "F_L = ½ρV² C_L A"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is drag?",
+      "a": "Drag is the force a fluid exerts on a body along the direction of flow, resisting motion. It comes from surface friction and from the pressure difference between front and back.",
+      "asks": [
+        "drag force meaning"
+      ]
+    },
+    {
+      "q": "How do I calculate drag on a car?",
+      "a": "Use F D equals half rho V squared times C D times frontal area. For a car with C D 0.3 and area 2.2 square metres at 30 metres per second, that is about 356 newtons.",
+      "asks": [
+        "drag force formula",
+        "drag equation"
+      ]
+    },
+    {
+      "q": "What is the drag coefficient?",
+      "a": "C D is a number with no units that describes how streamlined a shape is. A flat plate is about 1.2, a modern car about 0.3, a teardrop about 0.04.",
+      "asks": [
+        "typical drag coefficients"
+      ]
+    },
+    {
+      "q": "How does a wing make lift?",
+      "a": "The aerofoil shape and its angle of attack turn the passing air downwards and create lower pressure on top than below. The net force upwards is lift, half rho V squared times C L times wing area.",
+      "asks": [
+        "what is lift",
+        "lift equation"
+      ]
+    },
+    {
+      "q": "Why does drag power go with speed cubed?",
+      "a": "Drag force rises with speed squared, and power is force times speed, so the power needed rises with speed cubed.",
+      "asks": [
+        "drag power speed cubed"
+      ]
+    }
+  ],
+  "facts": [
+    "Drag force grows with the square of speed; the power to overcome it grows with the cube.",
+    "Many modern cars have drag coefficients between about 0.25 and 0.35."
+  ],
+  "quiz": [
+    {
+      "say": "A cyclist has C D times A equal to 0.4 square metres and rides at 10 metres per second in air of density 1.2. What is the drag force?",
+      "show": "Cyclist: C_D·A = 0.4 m², V = 10 m/s, ρ = 1.2 kg/m³. Drag?",
+      "options": [
+        {
+          "show": "24 N",
+          "say": "24 newtons"
+        },
+        {
+          "show": "48 N",
+          "say": "48 newtons"
+        },
+        {
+          "show": "2.4 N",
+          "say": "2.4 newtons"
+        }
+      ],
+      "answer": 0,
+      "why": "F_D = ½ × 1.2 × 10² × 0.4 = 0.6 × 100 × 0.4 = 24 N.",
+      "wrong": {
+        "1": "That forgets the half in half rho V squared.",
+        "2": "That uses V instead of V squared."
+      }
+    },
+    {
+      "say": "If a car doubles its speed, what happens to the aerodynamic drag force?",
+      "show": "A car doubles its speed. The drag force becomes…",
+      "options": [
+        {
+          "show": "Four times larger",
+          "say": "Four times larger"
+        },
+        {
+          "show": "Twice as large",
+          "say": "Twice as large"
+        },
+        {
+          "show": "Eight times larger",
+          "say": "Eight times larger"
+        }
+      ],
+      "answer": 0,
+      "why": "Drag goes with V squared, and 2 squared is 4.",
+      "wrong": {
+        "1": "Drag is not proportional to speed but to speed squared.",
+        "2": "Eight times is what happens to the power, not the force."
+      }
+    }
+  ]
+}

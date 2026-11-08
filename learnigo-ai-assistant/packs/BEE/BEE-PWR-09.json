@@ -1,0 +1,401 @@
+{
+  "id": "BEE-PWR-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "The boost converter and the inverter: raising DC and turning it into AC",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-PWR — Power systems and power electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "boost converter",
+    "step-up converter",
+    "inverter",
+    "H-bridge",
+    "pulse-width modulation",
+    "solar inverter"
+  ],
+  "examples": [
+    "How does a boost converter step up voltage?",
+    "How does an inverter turn DC into AC?",
+    "What is the boost converter formula?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-circuit",
+      "parts": [
+        {
+          "kind": "cell",
+          "label": "Input",
+          "value": "12 V"
+        },
+        {
+          "kind": "inductor",
+          "label": "Inductor",
+          "value": "100 µH",
+          "ask": "Why does the inductor voltage add to the input?"
+        },
+        {
+          "kind": "diode",
+          "label": "Diode",
+          "ask": "How does a boost converter step up voltage?"
+        },
+        {
+          "kind": "capacitor",
+          "label": "Capacitor",
+          "value": "220 µF",
+          "branch": 1
+        },
+        {
+          "kind": "resistor",
+          "label": "Load",
+          "value": "24 Ω",
+          "branch": 2,
+          "ask": "What is the boost converter formula?"
+        }
+      ],
+      "readouts": [
+        "Switch off: L + 12 V",
+        "Vout = 24 V, Iout = 1 A"
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A solar panel or an electric car battery gives DC, often at the wrong voltage, and your home runs on AC. Two converters fix that. On the board is a boost converter, which steps DC up: 12 volts in, 24 volts out to a 24 ohm load. Right now its switch is off, and current flows through the inductor and the diode to the output.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "The boost converter and the inverter: raising DC and turning it into AC"
+        },
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "12 V"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "100 µH",
+              "ask": "Why does the inductor voltage add to the input?"
+            },
+            {
+              "kind": "diode",
+              "label": "Diode",
+              "ask": "How does a boost converter step up voltage?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "220 µF",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "24 Ω",
+              "branch": 2,
+              "ask": "What is the boost converter formula?"
+            }
+          ],
+          "readouts": [
+            "Switch off: L + 12 V",
+            "Vout = 24 V, Iout = 1 A"
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Rewind to the switch-on part of the cycle. Now the switch connects the inductor straight across the 12 volt input, so its current ramps up and it stores energy in its magnetic field. The diode blocks the way back, and the capacitor keeps the load fed meanwhile. What do you think the inductor does when the switch opens again?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "12 V"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "100 µH",
+              "ask": "Why does the inductor voltage add to the input?"
+            },
+            {
+              "kind": "switch",
+              "label": "MOSFET (on)",
+              "value": "D = 0.5",
+              "note": "The capacitor feeds the load meanwhile",
+              "ask": "What is the boost converter formula?"
+            }
+          ],
+          "readouts": [
+            "Switch on: L charges",
+            "Current ramps up"
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Switch on: the inductor stores energy ½LI²"
+        }
+      ]
+    },
+    {
+      "say": "It refuses to let its current stop, so its voltage flips round and adds to the 12 volt source, pushing current through the diode into the output at a higher voltage. Repeat that 100,000 times a second. With the switch on half the time, D of 0.5, the output is 12 over 1 minus 0.5: 24 volts. So what happens to the input current?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-circuit",
+          "parts": [
+            {
+              "kind": "cell",
+              "label": "Input",
+              "value": "12 V"
+            },
+            {
+              "kind": "inductor",
+              "label": "Inductor",
+              "value": "100 µH",
+              "ask": "Why does the inductor voltage add to the input?"
+            },
+            {
+              "kind": "diode",
+              "label": "Diode",
+              "ask": "How does a boost converter step up voltage?"
+            },
+            {
+              "kind": "capacitor",
+              "label": "Capacitor",
+              "value": "220 µF",
+              "branch": 1
+            },
+            {
+              "kind": "resistor",
+              "label": "Load",
+              "value": "24 Ω",
+              "branch": 2,
+              "ask": "What is the boost converter formula?"
+            }
+          ],
+          "readouts": [
+            "Switch off: L + 12 V",
+            "Vout = 24 V, Iout = 1 A"
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Vout = Vin / (1 − D) = 12 / (1 − 0.5) = 24 V"
+        }
+      ]
+    },
+    {
+      "say": "It is double the output's 1 amp: 2 amps in for 24 watts out. Now, AC. An inverter starts from DC, say 400 volts from a battery. Follow the chain: an H-bridge of four switches connects the DC one way, then the other, reversing the polarity 50 times a second. Pulse-width modulation shapes the pulses, and a filter smooths them. What would you get without the filter?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-chain",
+          "stages": [
+            {
+              "label": "DC 400 V",
+              "icon": "battery",
+              "note": "From a battery or solar panels"
+            },
+            {
+              "label": "H-bridge",
+              "icon": "switch",
+              "note": "Four switches flip the polarity",
+              "ask": "How does an inverter turn DC into AC?"
+            },
+            {
+              "label": "PWM pulses",
+              "icon": "chip",
+              "note": "Pulse widths follow a sine shape"
+            },
+            {
+              "label": "LC filter",
+              "icon": "wave",
+              "note": "Smooths the pulses into a sine wave"
+            },
+            {
+              "label": "230 V 50 Hz AC",
+              "icon": "plug",
+              "note": "Peak 325 V, ready for the home or grid"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "Ideal boost: Iin = 24 W / 12 V = 2 A"
+        }
+      ]
+    },
+    {
+      "say": "A harsh square wave, the first curve here, full of harmonics that make motors hum and heat up. With PWM and filtering you get the smooth sine: 230 volts rms, with a 325 volt peak. Every rooftop solar system and electric car has an inverter like this. Brilliant! Challenge: what duty cycle would boost 12 volts to 48?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-plot",
+          "x": {
+            "label": "Time (ms)",
+            "max": 20
+          },
+          "y": {
+            "label": "Voltage (V)",
+            "min": -400,
+            "max": 400
+          },
+          "curves": [
+            {
+              "label": "Square wave ±325 V",
+              "type": "points",
+              "points": [
+                [
+                  0,
+                  325
+                ],
+                [
+                  10,
+                  325
+                ],
+                [
+                  10,
+                  -325
+                ],
+                [
+                  20,
+                  -325
+                ]
+              ],
+              "ask": "Why not use a square wave inverter?"
+            },
+            {
+              "label": "Sine 230 V rms",
+              "type": "sine",
+              "a": 325,
+              "k": 0.05
+            }
+          ],
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "230 V rms → peak = 230 × √2 ≈ 325 V"
+        },
+        {
+          "op": "note",
+          "text": "Solar and EV inverters switch at kilohertz to make clean sine waves"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a boost converter step up voltage?",
+      "a": "When the switch is on, the inductor charges from the input. When it turns off, the inductor's voltage adds to the input voltage and drives current through a diode to the output capacitor, which sits at a higher voltage.",
+      "asks": [
+        "What is a step-up converter?"
+      ]
+    },
+    {
+      "q": "What is the boost converter formula?",
+      "a": "For an ideal boost in continuous conduction, V out equals V in divided by 1 minus D. With D of 0.5, 12 volts becomes 24; with D of 0.75, it becomes 48.",
+      "asks": [
+        "How do you calculate boost output voltage?"
+      ]
+    },
+    {
+      "q": "Why does the inductor voltage add to the input?",
+      "a": "An inductor resists changes in its current. When the switch opens, the inductor's voltage reverses to keep the current flowing, so it acts like a second source in series with the input.",
+      "asks": [
+        "Where does the extra voltage come from?"
+      ]
+    },
+    {
+      "q": "How does an inverter turn DC into AC?",
+      "a": "An H-bridge of four transistor switches connects the DC supply to the load first one way and then the other. Switching quickly with pulse-width modulation and filtering the output produces a smooth sine wave at 50 or 60 hertz.",
+      "asks": [
+        "What is an inverter?"
+      ]
+    },
+    {
+      "q": "Why not use a square wave inverter?",
+      "a": "A square wave contains strong harmonics at 3, 5 and 7 times the frequency, which heat motors and transformers and upset electronics. PWM with filtering makes a near-pure sine wave instead.",
+      "asks": [
+        "What is wrong with a square wave?"
+      ]
+    }
+  ],
+  "facts": [
+    "An ideal boost converter gives Vout = Vin / (1 − D).",
+    "A 230 V rms sine wave peaks at about 325 V.",
+    "Grid-tied solar inverters turn panel DC into AC synchronised with the grid's 50 or 60 Hz."
+  ],
+  "quiz": [
+    {
+      "say": "What duty cycle boosts 12 volts to 48 volts in an ideal boost converter?",
+      "show": "What duty cycle boosts 12 V to 48 V in an ideal boost converter?",
+      "options": [
+        {
+          "show": "0.75",
+          "say": "0.75"
+        },
+        {
+          "show": "0.25",
+          "say": "0.25"
+        },
+        {
+          "show": "4",
+          "say": "4"
+        }
+      ],
+      "answer": 0,
+      "why": "48 equals 12 over 1 minus D, so 1 minus D is 0.25 and D is 0.75.",
+      "wrong": {
+        "1": "0.25 is 1 minus D, the fraction of time the switch is off.",
+        "2": "4 is the voltage gain; a duty cycle must lie between 0 and 1."
+      }
+    },
+    {
+      "say": "What is the peak of a 230 volt rms sine wave?",
+      "show": "What is the peak of a 230 V rms sine wave?",
+      "options": [
+        {
+          "show": "About 325 V",
+          "say": "about 325 volts"
+        },
+        {
+          "show": "230 V",
+          "say": "230 volts"
+        },
+        {
+          "show": "About 163 V",
+          "say": "about 163 volts"
+        }
+      ],
+      "answer": 0,
+      "why": "Peak equals rms times root 2: 230 times 1.414 is about 325 volts.",
+      "wrong": {
+        "1": "230 volts is the rms value, not the peak.",
+        "2": "That divides by root 2 instead of multiplying."
+      }
+    }
+  ]
+}

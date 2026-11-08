@@ -1,0 +1,599 @@
+{
+  "id": "ENGX-MECH-35",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a clutch connects and disconnects an engine",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "clutch",
+    "clutch plate",
+    "friction plate",
+    "pressure plate",
+    "clutch pedal"
+  ],
+  "examples": [
+    "What does a clutch do?",
+    "Why do you press the clutch to change gear?",
+    "How does a clutch slip?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "engine",
+          "kind": "motor",
+          "x": 0.1,
+          "y": 0.55,
+          "size": 0.9,
+          "label": "Engine",
+          "motion": "spin"
+        },
+        {
+          "id": "fly",
+          "kind": "wheel",
+          "x": 0.3,
+          "y": 0.55,
+          "size": 1.3,
+          "label": "Flywheel",
+          "motion": "spin"
+        },
+        {
+          "id": "plate",
+          "kind": "wheel",
+          "x": 0.48,
+          "y": 0.55,
+          "size": 1.1,
+          "label": "Clutch plate",
+          "motion": "spin",
+          "ask": "What is a clutch plate?"
+        },
+        {
+          "id": "spring",
+          "kind": "spring",
+          "x": 0.65,
+          "y": 0.55,
+          "size": 0.9,
+          "label": "Pressure spring",
+          "motion": "pulse",
+          "ask": "What do the clutch springs do?"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.87,
+          "y": 0.55,
+          "size": 0.9,
+          "label": "Gearbox shaft",
+          "motion": "spin"
+        },
+        {
+          "id": "pedal",
+          "kind": "lever",
+          "x": 0.65,
+          "y": 0.15,
+          "size": 0.7,
+          "label": "Clutch pedal",
+          "motion": "swing",
+          "ask": "Why do you press the clutch to change gear?"
+        }
+      ],
+      "links": [
+        {
+          "from": "engine",
+          "to": "fly",
+          "kind": "energy"
+        },
+        {
+          "from": "fly",
+          "to": "plate",
+          "kind": "force",
+          "label": "friction grip"
+        },
+        {
+          "from": "spring",
+          "to": "plate",
+          "kind": "force",
+          "label": "clamps"
+        },
+        {
+          "from": "pedal",
+          "to": "spring",
+          "kind": "force",
+          "label": "lifts off"
+        },
+        {
+          "from": "plate",
+          "to": "shaft",
+          "kind": "energy",
+          "label": "to the gears"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "An engine is always spinning, but a car must be able to stop or change gear without stalling it. The clutch connects and disconnects the engine from the gearbox.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a clutch connects and disconnects an engine"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "engine",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "plate",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Clutch plate",
+              "motion": "spin",
+              "ask": "What is a clutch plate?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Pressure spring",
+              "motion": "pulse",
+              "ask": "What do the clutch springs do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.87,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Gearbox shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Clutch pedal",
+              "motion": "swing",
+              "ask": "Why do you press the clutch to change gear?"
+            }
+          ],
+          "links": [
+            {
+              "from": "engine",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "plate",
+              "kind": "force",
+              "label": "friction grip"
+            },
+            {
+              "from": "spring",
+              "to": "plate",
+              "kind": "force",
+              "label": "clamps"
+            },
+            {
+              "from": "pedal",
+              "to": "spring",
+              "kind": "force",
+              "label": "lifts off"
+            },
+            {
+              "from": "plate",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "to the gears"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The clutch plate is a disc covered in rough friction material, fixed to the gearbox shaft. It sits between the engine's flywheel and a pressure plate.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "engine",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "plate",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Clutch plate",
+              "motion": "spin",
+              "ask": "What is a clutch plate?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Pressure spring",
+              "motion": "pulse",
+              "ask": "What do the clutch springs do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.87,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Gearbox shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Clutch pedal",
+              "motion": "swing",
+              "ask": "Why do you press the clutch to change gear?"
+            }
+          ],
+          "links": [
+            {
+              "from": "engine",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "plate",
+              "kind": "force",
+              "label": "friction grip"
+            },
+            {
+              "from": "spring",
+              "to": "plate",
+              "kind": "force",
+              "label": "clamps"
+            },
+            {
+              "from": "pedal",
+              "to": "spring",
+              "kind": "force",
+              "label": "lifts off"
+            },
+            {
+              "from": "plate",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "to the gears"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Strong springs clamp the clutch plate between the flywheel and the pressure plate. Friction locks them together, so the engine turns the gearbox.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "engine",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "plate",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Clutch plate",
+              "motion": "spin",
+              "ask": "What is a clutch plate?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Pressure spring",
+              "motion": "pulse",
+              "ask": "What do the clutch springs do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.87,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Gearbox shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Clutch pedal",
+              "motion": "swing",
+              "ask": "Why do you press the clutch to change gear?"
+            }
+          ],
+          "links": [
+            {
+              "from": "engine",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "plate",
+              "kind": "force",
+              "label": "friction grip"
+            },
+            {
+              "from": "spring",
+              "to": "plate",
+              "kind": "force",
+              "label": "clamps"
+            },
+            {
+              "from": "pedal",
+              "to": "spring",
+              "kind": "force",
+              "label": "lifts off"
+            },
+            {
+              "from": "plate",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "to the gears"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    },
+    {
+      "say": "Press the clutch pedal and a lever pulls the pressure plate back against its springs. The clutch plate is freed, the engine spins on alone, and you can change gear. Releasing it slowly lets the plate slip and grip gently.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "engine",
+              "kind": "motor",
+              "x": 0.1,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Engine",
+              "motion": "spin"
+            },
+            {
+              "id": "fly",
+              "kind": "wheel",
+              "x": 0.3,
+              "y": 0.55,
+              "size": 1.3,
+              "label": "Flywheel",
+              "motion": "spin"
+            },
+            {
+              "id": "plate",
+              "kind": "wheel",
+              "x": 0.48,
+              "y": 0.55,
+              "size": 1.1,
+              "label": "Clutch plate",
+              "motion": "spin",
+              "ask": "What is a clutch plate?"
+            },
+            {
+              "id": "spring",
+              "kind": "spring",
+              "x": 0.65,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Pressure spring",
+              "motion": "pulse",
+              "ask": "What do the clutch springs do?"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.87,
+              "y": 0.55,
+              "size": 0.9,
+              "label": "Gearbox shaft",
+              "motion": "spin"
+            },
+            {
+              "id": "pedal",
+              "kind": "lever",
+              "x": 0.65,
+              "y": 0.15,
+              "size": 0.7,
+              "label": "Clutch pedal",
+              "motion": "swing",
+              "ask": "Why do you press the clutch to change gear?"
+            }
+          ],
+          "links": [
+            {
+              "from": "engine",
+              "to": "fly",
+              "kind": "energy"
+            },
+            {
+              "from": "fly",
+              "to": "plate",
+              "kind": "force",
+              "label": "friction grip"
+            },
+            {
+              "from": "spring",
+              "to": "plate",
+              "kind": "force",
+              "label": "clamps"
+            },
+            {
+              "from": "pedal",
+              "to": "spring",
+              "kind": "force",
+              "label": "lifts off"
+            },
+            {
+              "from": "plate",
+              "to": "shaft",
+              "kind": "energy",
+              "label": "to the gears"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a clutch plate?",
+      "a": "The clutch plate is a disc faced with high-friction material, joined to the gearbox shaft. When it is squeezed against the spinning flywheel, friction makes it turn too.",
+      "asks": [
+        "What is a friction plate?"
+      ]
+    },
+    {
+      "q": "What do the clutch springs do?",
+      "a": "The springs press the pressure plate hard against the clutch plate, clamping it to the flywheel. Without the pedal pressed, the clutch is always engaged.",
+      "asks": [
+        "What holds a clutch together?"
+      ]
+    },
+    {
+      "q": "Why do you press the clutch to change gear?",
+      "a": "Pressing the pedal disconnects the engine from the gearbox, so no turning force passes through while the gears are swapped. Otherwise the gears would grind.",
+      "asks": [
+        "What happens when you press the clutch?"
+      ]
+    },
+    {
+      "q": "Why does a clutch slip?",
+      "a": "When the plate is only lightly pressed, it slides against the flywheel while being dragged round. This slipping lets a car move off smoothly, but too much wears the plate and makes heat.",
+      "asks": [
+        "What is clutch slip?"
+      ]
+    },
+    {
+      "q": "Do other machines have clutches?",
+      "a": "Yes. Motorbikes, lawnmowers, some drills and cordless screwdrivers have clutches. A screwdriver's clutch slips at a set force so it does not drive screws too far.",
+      "asks": [
+        "Why does a drill have a clutch?"
+      ]
+    }
+  ],
+  "facts": [
+    "A friction clutch transmits turning force by clamping a friction disc between two spinning surfaces.",
+    "A car's clutch is engaged when the pedal is up and disengaged when it is pressed down."
+  ],
+  "quiz": [
+    {
+      "say": "When you press a car's clutch pedal, what happens?",
+      "show": "When you press a car's clutch pedal, what happens?",
+      "options": [
+        {
+          "show": "The engine is disconnected from the gearbox",
+          "say": "The engine is disconnected from the gearbox"
+        },
+        {
+          "show": "The car brakes",
+          "say": "The car brakes"
+        },
+        {
+          "show": "The engine turns off",
+          "say": "The engine turns off"
+        }
+      ],
+      "answer": 0,
+      "why": "The pedal pulls the pressure plate back so the clutch plate no longer grips the flywheel.",
+      "wrong": {
+        "1": "The brakes are separate; the clutch only connects the engine.",
+        "2": "The engine keeps running; it just stops driving the gearbox."
+      }
+    }
+  ]
+}

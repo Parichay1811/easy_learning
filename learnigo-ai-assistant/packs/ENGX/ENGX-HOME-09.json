@@ -1,0 +1,601 @@
+{
+  "id": "ENGX-HOME-09",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a cyclone vacuum cleaner separates dust",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "vacuum cleaner",
+    "cyclone vacuum",
+    "bagless vacuum",
+    "suction",
+    "vacuum filter"
+  ],
+  "examples": [
+    "How does a vacuum cleaner suck up dirt?",
+    "How does a bagless vacuum work?",
+    "Why does a vacuum lose suction?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "nozzle",
+          "kind": "pipe",
+          "x": 0.1,
+          "y": 0.8,
+          "size": 0.9,
+          "label": "Floor head and hose",
+          "motion": "flow",
+          "ask": "How does a vacuum cleaner suck up dirt?"
+        },
+        {
+          "id": "cyclone",
+          "kind": "tank",
+          "x": 0.4,
+          "y": 0.35,
+          "size": 1.3,
+          "label": "Cyclone chamber",
+          "motion": "spin",
+          "ask": "How does a bagless vacuum work?"
+        },
+        {
+          "id": "bin",
+          "kind": "box",
+          "x": 0.4,
+          "y": 0.82,
+          "size": 0.9,
+          "label": "Dust bin",
+          "motion": "none"
+        },
+        {
+          "id": "filter",
+          "kind": "box",
+          "x": 0.66,
+          "y": 0.2,
+          "size": 0.8,
+          "label": "Filter",
+          "motion": "none",
+          "ask": "Why does a vacuum lose suction?"
+        },
+        {
+          "id": "fan",
+          "kind": "fan",
+          "x": 0.86,
+          "y": 0.45,
+          "size": 1,
+          "label": "Fan",
+          "motion": "spin"
+        },
+        {
+          "id": "motor",
+          "kind": "motor",
+          "x": 0.86,
+          "y": 0.8,
+          "size": 0.9,
+          "label": "Motor",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "nozzle",
+          "to": "cyclone",
+          "kind": "fluid",
+          "label": "dirty air"
+        },
+        {
+          "from": "cyclone",
+          "to": "bin",
+          "kind": "force",
+          "label": "dust falls"
+        },
+        {
+          "from": "cyclone",
+          "to": "filter",
+          "kind": "fluid",
+          "label": "cleaner air"
+        },
+        {
+          "from": "filter",
+          "to": "fan",
+          "kind": "fluid"
+        },
+        {
+          "from": "motor",
+          "to": "fan",
+          "kind": "energy",
+          "label": "spins fast"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "A motor spins a fan very fast, throwing air out of the back of the vacuum. That lowers the air pressure inside, so outside air rushes in through the floor head, carrying dust with it.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a cyclone vacuum cleaner separates dust"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nozzle",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Floor head and hose",
+              "motion": "flow",
+              "ask": "How does a vacuum cleaner suck up dirt?"
+            },
+            {
+              "id": "cyclone",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.35,
+              "size": 1.3,
+              "label": "Cyclone chamber",
+              "motion": "spin",
+              "ask": "How does a bagless vacuum work?"
+            },
+            {
+              "id": "bin",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Dust bin",
+              "motion": "none"
+            },
+            {
+              "id": "filter",
+              "kind": "box",
+              "x": 0.66,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Filter",
+              "motion": "none",
+              "ask": "Why does a vacuum lose suction?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.45,
+              "size": 1,
+              "label": "Fan",
+              "motion": "spin"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.86,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "nozzle",
+              "to": "cyclone",
+              "kind": "fluid",
+              "label": "dirty air"
+            },
+            {
+              "from": "cyclone",
+              "to": "bin",
+              "kind": "force",
+              "label": "dust falls"
+            },
+            {
+              "from": "cyclone",
+              "to": "filter",
+              "kind": "fluid",
+              "label": "cleaner air"
+            },
+            {
+              "from": "filter",
+              "to": "fan",
+              "kind": "fluid"
+            },
+            {
+              "from": "motor",
+              "to": "fan",
+              "kind": "energy",
+              "label": "spins fast"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    },
+    {
+      "say": "In a bagless vacuum the dirty air enters a cyclone chamber sideways, so it whirls round and round at high speed like a tiny tornado.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nozzle",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Floor head and hose",
+              "motion": "flow",
+              "ask": "How does a vacuum cleaner suck up dirt?"
+            },
+            {
+              "id": "cyclone",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.35,
+              "size": 1.3,
+              "label": "Cyclone chamber",
+              "motion": "spin",
+              "ask": "How does a bagless vacuum work?"
+            },
+            {
+              "id": "bin",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Dust bin",
+              "motion": "none"
+            },
+            {
+              "id": "filter",
+              "kind": "box",
+              "x": 0.66,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Filter",
+              "motion": "none",
+              "ask": "Why does a vacuum lose suction?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.45,
+              "size": 1,
+              "label": "Fan",
+              "motion": "spin"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.86,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "nozzle",
+              "to": "cyclone",
+              "kind": "fluid",
+              "label": "dirty air"
+            },
+            {
+              "from": "cyclone",
+              "to": "bin",
+              "kind": "force",
+              "label": "dust falls"
+            },
+            {
+              "from": "cyclone",
+              "to": "filter",
+              "kind": "fluid",
+              "label": "cleaner air"
+            },
+            {
+              "from": "filter",
+              "to": "fan",
+              "kind": "fluid"
+            },
+            {
+              "from": "motor",
+              "to": "fan",
+              "kind": "energy",
+              "label": "spins fast"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The dust is heavier than air and cannot follow the tight spin. It is flung out against the wall, slows down and drops into the bin.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nozzle",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Floor head and hose",
+              "motion": "flow",
+              "ask": "How does a vacuum cleaner suck up dirt?"
+            },
+            {
+              "id": "cyclone",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.35,
+              "size": 1.3,
+              "label": "Cyclone chamber",
+              "motion": "spin",
+              "ask": "How does a bagless vacuum work?"
+            },
+            {
+              "id": "bin",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Dust bin",
+              "motion": "none"
+            },
+            {
+              "id": "filter",
+              "kind": "box",
+              "x": 0.66,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Filter",
+              "motion": "none",
+              "ask": "Why does a vacuum lose suction?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.45,
+              "size": 1,
+              "label": "Fan",
+              "motion": "spin"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.86,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "nozzle",
+              "to": "cyclone",
+              "kind": "fluid",
+              "label": "dirty air"
+            },
+            {
+              "from": "cyclone",
+              "to": "bin",
+              "kind": "force",
+              "label": "dust falls"
+            },
+            {
+              "from": "cyclone",
+              "to": "filter",
+              "kind": "fluid",
+              "label": "cleaner air"
+            },
+            {
+              "from": "filter",
+              "to": "fan",
+              "kind": "fluid"
+            },
+            {
+              "from": "motor",
+              "to": "fan",
+              "kind": "energy",
+              "label": "spins fast"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "The cleaned air leaves through the middle and passes a fine filter before the fan. If the filter clogs, less air can flow and the vacuum loses suction.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "nozzle",
+              "kind": "pipe",
+              "x": 0.1,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Floor head and hose",
+              "motion": "flow",
+              "ask": "How does a vacuum cleaner suck up dirt?"
+            },
+            {
+              "id": "cyclone",
+              "kind": "tank",
+              "x": 0.4,
+              "y": 0.35,
+              "size": 1.3,
+              "label": "Cyclone chamber",
+              "motion": "spin",
+              "ask": "How does a bagless vacuum work?"
+            },
+            {
+              "id": "bin",
+              "kind": "box",
+              "x": 0.4,
+              "y": 0.82,
+              "size": 0.9,
+              "label": "Dust bin",
+              "motion": "none"
+            },
+            {
+              "id": "filter",
+              "kind": "box",
+              "x": 0.66,
+              "y": 0.2,
+              "size": 0.8,
+              "label": "Filter",
+              "motion": "none",
+              "ask": "Why does a vacuum lose suction?"
+            },
+            {
+              "id": "fan",
+              "kind": "fan",
+              "x": 0.86,
+              "y": 0.45,
+              "size": 1,
+              "label": "Fan",
+              "motion": "spin"
+            },
+            {
+              "id": "motor",
+              "kind": "motor",
+              "x": 0.86,
+              "y": 0.8,
+              "size": 0.9,
+              "label": "Motor",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "nozzle",
+              "to": "cyclone",
+              "kind": "fluid",
+              "label": "dirty air"
+            },
+            {
+              "from": "cyclone",
+              "to": "bin",
+              "kind": "force",
+              "label": "dust falls"
+            },
+            {
+              "from": "cyclone",
+              "to": "filter",
+              "kind": "fluid",
+              "label": "cleaner air"
+            },
+            {
+              "from": "filter",
+              "to": "fan",
+              "kind": "fluid"
+            },
+            {
+              "from": "motor",
+              "to": "fan",
+              "kind": "energy",
+              "label": "spins fast"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a vacuum cleaner suck up dirt?",
+      "a": "It does not really suck. The fan pushes air out, lowering the pressure inside, and the higher air pressure outside pushes air and dust in through the nozzle.",
+      "asks": [
+        "What makes a vacuum cleaner suck?"
+      ]
+    },
+    {
+      "q": "How does a bagless vacuum work?",
+      "a": "Air full of dust spins round in a cyclone. The heavier dust is thrown outwards against the wall and falls into the bin, while the lighter air escapes through the centre.",
+      "asks": [
+        "How does a cyclone separate dust?",
+        "How does a Dyson work?"
+      ]
+    },
+    {
+      "q": "Why does a vacuum lose suction?",
+      "a": "Usually a clogged filter, a full bin or a blocked hose. Anything that stops air flowing reduces the pressure difference that pulls the dust in.",
+      "asks": [
+        "Why is my vacuum not picking up?"
+      ]
+    },
+    {
+      "q": "Why does a vacuum have a filter if it has a cyclone?",
+      "a": "The cyclone removes most dust, but the finest particles can follow the air. The filter catches them so they do not blow back into the room.",
+      "asks": [
+        "What does a HEPA filter do in a vacuum?"
+      ]
+    },
+    {
+      "q": "Why are vacuum cleaners so loud?",
+      "a": "The fan spins at tens of thousands of turns a minute, and the fast-moving air rushing through narrow parts makes a lot of noise.",
+      "asks": [
+        "What makes a vacuum noisy?"
+      ]
+    }
+  ],
+  "facts": [
+    "James Dyson built 5,127 prototypes before perfecting his first bagless cyclone vacuum cleaner.",
+    "Cyclone separators are also used in factories and sawmills to remove dust from air."
+  ],
+  "quiz": [
+    {
+      "say": "In a cyclone vacuum, why does the dust end up in the bin while air goes on?",
+      "show": "In a cyclone vacuum, why does the dust end up in the bin while air goes on?",
+      "options": [
+        {
+          "show": "Heavy dust is flung to the wall and falls, light air escapes through the centre",
+          "say": "Heavy dust is flung to the wall and falls, light air escapes through the centre"
+        },
+        {
+          "show": "The dust is magnetic",
+          "say": "The dust is magnetic"
+        },
+        {
+          "show": "The air is filtered through a bag first",
+          "say": "The air is filtered through a bag first"
+        }
+      ],
+      "answer": 0,
+      "why": "The spinning air throws the heavier dust outwards against the wall, where it slows and drops into the bin.",
+      "wrong": {
+        "1": "Household dust is not magnetic.",
+        "2": "Bagless vacuums have no bag; the cyclone does the separating."
+      }
+    }
+  ]
+}

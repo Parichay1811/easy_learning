@@ -1,0 +1,680 @@
+{
+  "id": "ENGX-TRAN-38",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a ship's propeller and rudder drive and steer it",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "ship propeller",
+    "rudder",
+    "propeller shaft",
+    "steering gear",
+    "bow thruster"
+  ],
+  "examples": [
+    "How does a propeller push a ship?",
+    "How does a rudder steer a ship?",
+    "How do big ships dock?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "eng",
+          "kind": "motor",
+          "x": 0.12,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Diesel engine",
+          "motion": "spin"
+        },
+        {
+          "id": "shaft",
+          "kind": "axle",
+          "x": 0.36,
+          "y": 0.5,
+          "size": 1,
+          "label": "Propeller shaft",
+          "motion": "spin",
+          "ask": "What is a propeller shaft?"
+        },
+        {
+          "id": "prop",
+          "kind": "propeller",
+          "x": 0.58,
+          "y": 0.5,
+          "size": 1.2,
+          "label": "Propeller",
+          "motion": "spin",
+          "ask": "How does a propeller push a ship?"
+        },
+        {
+          "id": "water",
+          "kind": "pipe",
+          "x": 0.84,
+          "y": 0.84,
+          "size": 1,
+          "label": "Water pushed back",
+          "motion": "flow",
+          "ask": "Why is the rudder right behind the propeller?"
+        },
+        {
+          "id": "rudder",
+          "kind": "lever",
+          "x": 0.82,
+          "y": 0.5,
+          "size": 1,
+          "label": "Rudder",
+          "motion": "swing",
+          "ask": "How does a rudder steer a ship?"
+        },
+        {
+          "id": "gear",
+          "kind": "piston",
+          "x": 0.82,
+          "y": 0.14,
+          "size": 0.8,
+          "label": "Steering gear",
+          "motion": "slide",
+          "ask": "What is the steering gear?"
+        },
+        {
+          "id": "helm",
+          "kind": "wheel",
+          "x": 0.5,
+          "y": 0.14,
+          "size": 0.8,
+          "label": "Helm on the bridge",
+          "motion": "spin"
+        }
+      ],
+      "links": [
+        {
+          "from": "eng",
+          "to": "shaft",
+          "kind": "energy"
+        },
+        {
+          "from": "shaft",
+          "to": "prop",
+          "kind": "energy"
+        },
+        {
+          "from": "prop",
+          "to": "water",
+          "kind": "fluid",
+          "label": "pushes back"
+        },
+        {
+          "from": "water",
+          "to": "rudder",
+          "kind": "fluid",
+          "label": "flows past"
+        },
+        {
+          "from": "helm",
+          "to": "gear",
+          "kind": "signal",
+          "label": "order"
+        },
+        {
+          "from": "gear",
+          "to": "rudder",
+          "kind": "force",
+          "label": "turns"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Most big ships are pushed by a propeller at the stern, turned by a huge diesel engine or electric motor through a long propeller shaft.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a ship's propeller and rudder drive and steer it"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Diesel engine",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.36,
+              "y": 0.5,
+              "size": 1,
+              "label": "Propeller shaft",
+              "motion": "spin",
+              "ask": "What is a propeller shaft?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.58,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Propeller",
+              "motion": "spin",
+              "ask": "How does a propeller push a ship?"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.84,
+              "y": 0.84,
+              "size": 1,
+              "label": "Water pushed back",
+              "motion": "flow",
+              "ask": "Why is the rudder right behind the propeller?"
+            },
+            {
+              "id": "rudder",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 1,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "How does a rudder steer a ship?"
+            },
+            {
+              "id": "gear",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Steering gear",
+              "motion": "slide",
+              "ask": "What is the steering gear?"
+            },
+            {
+              "id": "helm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Helm on the bridge",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "prop",
+              "kind": "energy"
+            },
+            {
+              "from": "prop",
+              "to": "water",
+              "kind": "fluid",
+              "label": "pushes back"
+            },
+            {
+              "from": "water",
+              "to": "rudder",
+              "kind": "fluid",
+              "label": "flows past"
+            },
+            {
+              "from": "helm",
+              "to": "gear",
+              "kind": "signal",
+              "label": "order"
+            },
+            {
+              "from": "gear",
+              "to": "rudder",
+              "kind": "force",
+              "label": "turns"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "The propeller's blades are twisted, like part of a screw. As they spin they throw water backwards, and by Newton's third law the water pushes the ship forwards.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Diesel engine",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.36,
+              "y": 0.5,
+              "size": 1,
+              "label": "Propeller shaft",
+              "motion": "spin",
+              "ask": "What is a propeller shaft?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.58,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Propeller",
+              "motion": "spin",
+              "ask": "How does a propeller push a ship?"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.84,
+              "y": 0.84,
+              "size": 1,
+              "label": "Water pushed back",
+              "motion": "flow",
+              "ask": "Why is the rudder right behind the propeller?"
+            },
+            {
+              "id": "rudder",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 1,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "How does a rudder steer a ship?"
+            },
+            {
+              "id": "gear",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Steering gear",
+              "motion": "slide",
+              "ask": "What is the steering gear?"
+            },
+            {
+              "id": "helm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Helm on the bridge",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "prop",
+              "kind": "energy"
+            },
+            {
+              "from": "prop",
+              "to": "water",
+              "kind": "fluid",
+              "label": "pushes back"
+            },
+            {
+              "from": "water",
+              "to": "rudder",
+              "kind": "fluid",
+              "label": "flows past"
+            },
+            {
+              "from": "helm",
+              "to": "gear",
+              "kind": "signal",
+              "label": "order"
+            },
+            {
+              "from": "gear",
+              "to": "rudder",
+              "kind": "force",
+              "label": "turns"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Right behind the propeller sits the rudder, a flat blade that can swing from side to side. When it is angled, the fast water from the propeller pushes on it sideways, swinging the stern one way and the bow the other.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Diesel engine",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.36,
+              "y": 0.5,
+              "size": 1,
+              "label": "Propeller shaft",
+              "motion": "spin",
+              "ask": "What is a propeller shaft?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.58,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Propeller",
+              "motion": "spin",
+              "ask": "How does a propeller push a ship?"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.84,
+              "y": 0.84,
+              "size": 1,
+              "label": "Water pushed back",
+              "motion": "flow",
+              "ask": "Why is the rudder right behind the propeller?"
+            },
+            {
+              "id": "rudder",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 1,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "How does a rudder steer a ship?"
+            },
+            {
+              "id": "gear",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Steering gear",
+              "motion": "slide",
+              "ask": "What is the steering gear?"
+            },
+            {
+              "id": "helm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Helm on the bridge",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "prop",
+              "kind": "energy"
+            },
+            {
+              "from": "prop",
+              "to": "water",
+              "kind": "fluid",
+              "label": "pushes back"
+            },
+            {
+              "from": "water",
+              "to": "rudder",
+              "kind": "fluid",
+              "label": "flows past"
+            },
+            {
+              "from": "helm",
+              "to": "gear",
+              "kind": "signal",
+              "label": "order"
+            },
+            {
+              "from": "gear",
+              "to": "rudder",
+              "kind": "force",
+              "label": "turns"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "On the bridge, turning the helm sends an order to powerful hydraulic rams called the steering gear, which turn the rudder. Big ships turn slowly, so for docking they also use bow thrusters, small propellers in tunnels across the bow.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "eng",
+              "kind": "motor",
+              "x": 0.12,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Diesel engine",
+              "motion": "spin"
+            },
+            {
+              "id": "shaft",
+              "kind": "axle",
+              "x": 0.36,
+              "y": 0.5,
+              "size": 1,
+              "label": "Propeller shaft",
+              "motion": "spin",
+              "ask": "What is a propeller shaft?"
+            },
+            {
+              "id": "prop",
+              "kind": "propeller",
+              "x": 0.58,
+              "y": 0.5,
+              "size": 1.2,
+              "label": "Propeller",
+              "motion": "spin",
+              "ask": "How does a propeller push a ship?"
+            },
+            {
+              "id": "water",
+              "kind": "pipe",
+              "x": 0.84,
+              "y": 0.84,
+              "size": 1,
+              "label": "Water pushed back",
+              "motion": "flow",
+              "ask": "Why is the rudder right behind the propeller?"
+            },
+            {
+              "id": "rudder",
+              "kind": "lever",
+              "x": 0.82,
+              "y": 0.5,
+              "size": 1,
+              "label": "Rudder",
+              "motion": "swing",
+              "ask": "How does a rudder steer a ship?"
+            },
+            {
+              "id": "gear",
+              "kind": "piston",
+              "x": 0.82,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Steering gear",
+              "motion": "slide",
+              "ask": "What is the steering gear?"
+            },
+            {
+              "id": "helm",
+              "kind": "wheel",
+              "x": 0.5,
+              "y": 0.14,
+              "size": 0.8,
+              "label": "Helm on the bridge",
+              "motion": "spin"
+            }
+          ],
+          "links": [
+            {
+              "from": "eng",
+              "to": "shaft",
+              "kind": "energy"
+            },
+            {
+              "from": "shaft",
+              "to": "prop",
+              "kind": "energy"
+            },
+            {
+              "from": "prop",
+              "to": "water",
+              "kind": "fluid",
+              "label": "pushes back"
+            },
+            {
+              "from": "water",
+              "to": "rudder",
+              "kind": "fluid",
+              "label": "flows past"
+            },
+            {
+              "from": "helm",
+              "to": "gear",
+              "kind": "signal",
+              "label": "order"
+            },
+            {
+              "from": "gear",
+              "to": "rudder",
+              "kind": "force",
+              "label": "turns"
+            }
+          ],
+          "focus": 5
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is a propeller shaft?",
+      "a": "It is the long steel shaft that carries the engine's turning force through a sealed hole in the hull to the propeller at the back.",
+      "asks": [
+        "How does the engine turn the propeller?"
+      ]
+    },
+    {
+      "q": "How does a propeller push a ship?",
+      "a": "Its twisted blades push water backwards as they spin. By Newton's third law the water pushes the propeller, and the ship, forwards.",
+      "asks": [
+        "Why are propeller blades twisted?"
+      ]
+    },
+    {
+      "q": "How does a rudder steer a ship?",
+      "a": "When the rudder is turned, water flowing past pushes on its side. That sideways push swings the stern across, so the ship turns. It only works while water flows past it.",
+      "asks": [
+        "Can a stopped ship steer?"
+      ]
+    },
+    {
+      "q": "Why is the rudder right behind the propeller?",
+      "a": "The propeller sends a fast stream of water straight over the rudder, which makes the rudder much more effective, even at low speed.",
+      "asks": [
+        "Why is water from the propeller important for steering?"
+      ]
+    },
+    {
+      "q": "What is the steering gear?",
+      "a": "The steering gear is a set of powerful hydraulic rams or motors near the rudder that turn it on orders from the bridge. A big rudder needs an enormous force to move.",
+      "asks": [
+        "How is a ship's rudder turned?"
+      ]
+    }
+  ],
+  "facts": [
+    "A ship's propeller is often called a screw.",
+    "The largest ship propellers are around 10 metres across and weigh over 100 tonnes.",
+    "Bow thrusters help big ships move sideways when docking."
+  ],
+  "quiz": [
+    {
+      "say": "When a ship turns its rudder, what actually makes it turn?",
+      "show": "When a ship turns its rudder, what actually makes it turn?",
+      "options": [
+        {
+          "show": "Water pushing sideways on the angled rudder",
+          "say": "Water pushing sideways on the angled rudder"
+        },
+        {
+          "show": "The propeller stopping",
+          "say": "The propeller stopping"
+        },
+        {
+          "show": "The anchor dragging",
+          "say": "The anchor dragging"
+        }
+      ],
+      "answer": 0,
+      "why": "Water flowing past the angled rudder pushes it sideways, swinging the stern round.",
+      "wrong": {
+        "1": "The propeller keeps turning; its flow actually helps the rudder work.",
+        "2": "Anchors hold a ship still; they are not used for normal steering."
+      }
+    }
+  ]
+}

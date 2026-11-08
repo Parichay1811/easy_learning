@@ -1,0 +1,231 @@
+{
+  "id": "MATH-STAT-17",
+  "status": "draft",
+  "generator": {
+    "model": "gemma4:e4b",
+    "date": "2026-10-24",
+    "source": "brief"
+  },
+  "title": "Chi-squared tests",
+  "area": "Mathematics",
+  "group": "MATH-STAT — Statistics",
+  "levels": [
+    "U"
+  ],
+  "keywords": [
+    "chi-squared",
+    "goodness of fit",
+    "independence",
+    "degrees of freedom"
+  ],
+  "examples": [
+    "When should I use a chi-squared test instead of another test?",
+    "What is the difference between goodness of fit and independence tests?",
+    "How do I calculate the degrees of freedom correctly for these tests?"
+  ],
+  "figure": [],
+  "explain": [
+    {
+      "say": "Today we look at chi-squared tests for data. We use these tests to compare observed counts to expected counts. This helps us check if data fits a pattern. For example, we might test if a die is fair.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Chi-squared tests"
+        },
+        {
+          "op": "text",
+          "text": "Chi-squared tests: Goodness of Fit",
+          "at": "chisquared"
+        }
+      ]
+    },
+    {
+      "say": "The goodness of fit test checks if observed data matches a theoretical distribution. You count how many times each category appears. Then you calculate the chi-squared statistic using the formula. This tells you the overall fit of the data.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Count observed category appearances",
+            "Calculate chi-squared statistic",
+            "Determine overall data fit"
+          ],
+          "at": "count"
+        },
+        {
+          "op": "text",
+          "text": "Observed vs. Expected Counts",
+          "at": "observed"
+        }
+      ]
+    },
+    {
+      "say": "Next, we test for independence using a contingency table. This checks if two categorical variables are related. We calculate expected counts assuming no relationship exists. A significant result suggests the variables are not independent.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Set up contingency table",
+            "Calculate expected counts (no relation)",
+            "Check for variable relationship"
+          ],
+          "at": "contingency"
+        },
+        {
+          "op": "text",
+          "text": "Chi-squared: Testing Independence",
+          "at": "independence"
+        }
+      ]
+    },
+    {
+      "say": "Finally, we need degrees of freedom. For goodness of fit, it is the number of categories minus one. For independence, it is the product of the number of rows minus one, times the number of columns minus one. This value determines the critical value.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Degrees of Freedom: df",
+          "at": "degrees"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "When should I use a chi-squared test?",
+      "a": "You use it when your data is counts in categories. It checks if observed counts match expected counts or if variables are related.",
+      "asks": [
+        "What kind of data works with chi-squared?",
+        "Can I use this for continuous data?"
+      ]
+    },
+    {
+      "q": "What is the difference between goodness of fit and independence?",
+      "a": "Goodness of fit compares one set of counts to expected probabilities. Independence uses two variables in a table to check for association.",
+      "asks": [
+        "Are these tests similar?",
+        "Do I need two variables for both tests?"
+      ]
+    },
+    {
+      "q": "How do I calculate the expected count?",
+      "a": "The expected count is found by multiplying the row total by the column total, then dividing by the grand total. This assumes no relationship exists.",
+      "asks": [
+        "What is the formula for expected values?",
+        "How do I find the expected counts in a table?"
+      ]
+    },
+    {
+      "q": "What do the degrees of freedom mean?",
+      "a": "Degrees of freedom tell you how many values in the final calculation are free to vary. They help you find the correct critical value from the chi-squared table.",
+      "asks": [
+        "Why do I need degrees of freedom?",
+        "Does df change the test result?"
+      ]
+    },
+    {
+      "q": "What are the assumptions for these tests?",
+      "a": "The expected counts in each cell should generally be at least five. Also, the data must be counts in categories, not measurements.",
+      "asks": [
+        "Are there any rules for using this test?",
+        "What if some expected counts are very small?"
+      ]
+    }
+  ],
+  "facts": [
+    "The chi-squared test compares observed frequencies to expected frequencies.",
+    "For goodness of fit, degrees of freedom equal categories minus one.",
+    "For independence, degrees of freedom are (rows minus one) times (columns minus one).",
+    "The test is used for categorical data, not continuous measurements."
+  ],
+  "quiz": [
+    {
+      "say": "A student tests if a bag of marbles is fair. They count 10 red, 15 blue, and 15 green. The expected count for each color is 20. What are the degrees of freedom?",
+      "show": "df = k - 1",
+      "options": [
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "1",
+          "say": "1"
+        },
+        {
+          "show": "0",
+          "say": "0"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        }
+      ],
+      "answer": 3,
+      "why": "There are three categories, so you subtract one from three to get two degrees of freedom.",
+      "wrong": {
+        "0": "This is tempting because you might count all the categories.",
+        "1": "This is wrong because you must account for all categories minus one.",
+        "2": "This is incorrect because you must have at least one degree of freedom if there are multiple categories."
+      }
+    },
+    {
+      "say": "A student uses a table with three rows and four columns to test for independence. What are the degrees of freedom?",
+      "show": "df = (r-1)(c-1)",
+      "options": [
+        {
+          "show": "11",
+          "say": "11"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        },
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "6",
+          "say": "6"
+        }
+      ],
+      "answer": 3,
+      "why": "The formula is (3 minus 1) times (4 minus 1), which equals two times three, or six.",
+      "wrong": {
+        "0": "This mistake comes from simply subtracting one from the total number of cells.",
+        "1": "This only uses the row count minus one, ignoring the column count.",
+        "2": "This incorrectly uses the number of columns minus one as the answer."
+      }
+    },
+    {
+      "say": "A student compares the observed votes for three candidates against the expected votes assuming equal support. The observed counts are 50, 30, and 20. What is the correct degrees of freedom?",
+      "show": "df = k - 1",
+      "options": [
+        {
+          "show": "0",
+          "say": "0"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        },
+        {
+          "show": "3",
+          "say": "3"
+        },
+        {
+          "show": "1",
+          "say": "1"
+        }
+      ],
+      "answer": 1,
+      "why": "There are three categories, so the degrees of freedom is three minus one, which is two.",
+      "wrong": {
+        "0": "This is wrong because having multiple categories requires more than zero degrees of freedom.",
+        "2": "This is wrong because you must subtract one from the number of categories.",
+        "3": "This is incorrect because you must account for all categories minus one."
+      }
+    }
+  ]
+}

@@ -1,0 +1,637 @@
+{
+  "id": "ENGX-FLUD-01",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-25",
+    "source": "explainers"
+  },
+  "title": "How a tap turns water on and off",
+  "area": "Engineering",
+  "group": "ENGX — How Machines Work",
+  "levels": [
+    "L",
+    "M"
+  ],
+  "keywords": [
+    "tap",
+    "tap washer",
+    "valve seat",
+    "spindle",
+    "dripping tap",
+    "ceramic disc tap"
+  ],
+  "examples": [
+    "How does a tap stop the water?",
+    "Why does my tap drip?",
+    "Where does the water in a tap come from?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-machine",
+      "parts": [
+        {
+          "id": "handle",
+          "kind": "wheel",
+          "x": 0.45,
+          "y": 0.12,
+          "size": 0.8,
+          "label": "Handle",
+          "motion": "spin"
+        },
+        {
+          "id": "spindle",
+          "kind": "axle",
+          "x": 0.45,
+          "y": 0.36,
+          "size": 0.7,
+          "label": "Threaded spindle",
+          "motion": "spin",
+          "ask": "What does the spindle do?"
+        },
+        {
+          "id": "washer",
+          "kind": "piston",
+          "x": 0.45,
+          "y": 0.6,
+          "size": 0.7,
+          "label": "Rubber washer",
+          "motion": "slide",
+          "ask": "Why does my tap drip?"
+        },
+        {
+          "id": "seat",
+          "kind": "valve",
+          "x": 0.45,
+          "y": 0.84,
+          "size": 0.8,
+          "label": "Valve seat",
+          "motion": "none",
+          "ask": "What is the valve seat?"
+        },
+        {
+          "id": "supply",
+          "kind": "pipe",
+          "x": 0.13,
+          "y": 0.84,
+          "size": 0.9,
+          "label": "Mains supply pipe",
+          "motion": "flow",
+          "ask": "Where does the water in a tap come from?"
+        },
+        {
+          "id": "spout",
+          "kind": "pipe",
+          "x": 0.82,
+          "y": 0.6,
+          "size": 0.9,
+          "label": "Spout",
+          "motion": "flow"
+        }
+      ],
+      "links": [
+        {
+          "from": "handle",
+          "to": "spindle",
+          "kind": "force",
+          "label": "turning"
+        },
+        {
+          "from": "spindle",
+          "to": "washer",
+          "kind": "force",
+          "label": "lifts or presses"
+        },
+        {
+          "from": "supply",
+          "to": "seat",
+          "kind": "fluid",
+          "label": "water under pressure"
+        },
+        {
+          "from": "washer",
+          "to": "seat",
+          "kind": "force",
+          "label": "seals the hole"
+        },
+        {
+          "from": "seat",
+          "to": "spout",
+          "kind": "fluid",
+          "label": "water out"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Water in the pipe behind a tap is always pushing, because the mains keeps it under pressure. The tap is just a gate that holds that water back or lets it through.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "How a tap turns water on and off"
+        },
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Handle",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.36,
+              "size": 0.7,
+              "label": "Threaded spindle",
+              "motion": "spin",
+              "ask": "What does the spindle do?"
+            },
+            {
+              "id": "washer",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.6,
+              "size": 0.7,
+              "label": "Rubber washer",
+              "motion": "slide",
+              "ask": "Why does my tap drip?"
+            },
+            {
+              "id": "seat",
+              "kind": "valve",
+              "x": 0.45,
+              "y": 0.84,
+              "size": 0.8,
+              "label": "Valve seat",
+              "motion": "none",
+              "ask": "What is the valve seat?"
+            },
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.13,
+              "y": 0.84,
+              "size": 0.9,
+              "label": "Mains supply pipe",
+              "motion": "flow",
+              "ask": "Where does the water in a tap come from?"
+            },
+            {
+              "id": "spout",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.6,
+              "size": 0.9,
+              "label": "Spout",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "spindle",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "spindle",
+              "to": "washer",
+              "kind": "force",
+              "label": "lifts or presses"
+            },
+            {
+              "from": "supply",
+              "to": "seat",
+              "kind": "fluid",
+              "label": "water under pressure"
+            },
+            {
+              "from": "washer",
+              "to": "seat",
+              "kind": "force",
+              "label": "seals the hole"
+            },
+            {
+              "from": "seat",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "water out"
+            }
+          ],
+          "focus": 4
+        }
+      ]
+    },
+    {
+      "say": "When you turn the handle, a threaded spindle screws upwards, like a bolt coming out of a nut.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Handle",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.36,
+              "size": 0.7,
+              "label": "Threaded spindle",
+              "motion": "spin",
+              "ask": "What does the spindle do?"
+            },
+            {
+              "id": "washer",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.6,
+              "size": 0.7,
+              "label": "Rubber washer",
+              "motion": "slide",
+              "ask": "Why does my tap drip?"
+            },
+            {
+              "id": "seat",
+              "kind": "valve",
+              "x": 0.45,
+              "y": 0.84,
+              "size": 0.8,
+              "label": "Valve seat",
+              "motion": "none",
+              "ask": "What is the valve seat?"
+            },
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.13,
+              "y": 0.84,
+              "size": 0.9,
+              "label": "Mains supply pipe",
+              "motion": "flow",
+              "ask": "Where does the water in a tap come from?"
+            },
+            {
+              "id": "spout",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.6,
+              "size": 0.9,
+              "label": "Spout",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "spindle",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "spindle",
+              "to": "washer",
+              "kind": "force",
+              "label": "lifts or presses"
+            },
+            {
+              "from": "supply",
+              "to": "seat",
+              "kind": "fluid",
+              "label": "water under pressure"
+            },
+            {
+              "from": "washer",
+              "to": "seat",
+              "kind": "force",
+              "label": "seals the hole"
+            },
+            {
+              "from": "seat",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "water out"
+            }
+          ],
+          "focus": 1
+        }
+      ]
+    },
+    {
+      "say": "The spindle lifts a rubber washer off a round hole called the valve seat, and the pressurised water rushes through the gap and out of the spout.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Handle",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.36,
+              "size": 0.7,
+              "label": "Threaded spindle",
+              "motion": "spin",
+              "ask": "What does the spindle do?"
+            },
+            {
+              "id": "washer",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.6,
+              "size": 0.7,
+              "label": "Rubber washer",
+              "motion": "slide",
+              "ask": "Why does my tap drip?"
+            },
+            {
+              "id": "seat",
+              "kind": "valve",
+              "x": 0.45,
+              "y": 0.84,
+              "size": 0.8,
+              "label": "Valve seat",
+              "motion": "none",
+              "ask": "What is the valve seat?"
+            },
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.13,
+              "y": 0.84,
+              "size": 0.9,
+              "label": "Mains supply pipe",
+              "motion": "flow",
+              "ask": "Where does the water in a tap come from?"
+            },
+            {
+              "id": "spout",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.6,
+              "size": 0.9,
+              "label": "Spout",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "spindle",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "spindle",
+              "to": "washer",
+              "kind": "force",
+              "label": "lifts or presses"
+            },
+            {
+              "from": "supply",
+              "to": "seat",
+              "kind": "fluid",
+              "label": "water under pressure"
+            },
+            {
+              "from": "washer",
+              "to": "seat",
+              "kind": "force",
+              "label": "seals the hole"
+            },
+            {
+              "from": "seat",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "water out"
+            }
+          ],
+          "focus": 2
+        }
+      ]
+    },
+    {
+      "say": "Turn the handle back and the spindle presses the washer down onto the seat, sealing the hole. If the washer wears out, the seal leaks and the tap drips.",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-machine",
+          "parts": [
+            {
+              "id": "handle",
+              "kind": "wheel",
+              "x": 0.45,
+              "y": 0.12,
+              "size": 0.8,
+              "label": "Handle",
+              "motion": "spin"
+            },
+            {
+              "id": "spindle",
+              "kind": "axle",
+              "x": 0.45,
+              "y": 0.36,
+              "size": 0.7,
+              "label": "Threaded spindle",
+              "motion": "spin",
+              "ask": "What does the spindle do?"
+            },
+            {
+              "id": "washer",
+              "kind": "piston",
+              "x": 0.45,
+              "y": 0.6,
+              "size": 0.7,
+              "label": "Rubber washer",
+              "motion": "slide",
+              "ask": "Why does my tap drip?"
+            },
+            {
+              "id": "seat",
+              "kind": "valve",
+              "x": 0.45,
+              "y": 0.84,
+              "size": 0.8,
+              "label": "Valve seat",
+              "motion": "none",
+              "ask": "What is the valve seat?"
+            },
+            {
+              "id": "supply",
+              "kind": "pipe",
+              "x": 0.13,
+              "y": 0.84,
+              "size": 0.9,
+              "label": "Mains supply pipe",
+              "motion": "flow",
+              "ask": "Where does the water in a tap come from?"
+            },
+            {
+              "id": "spout",
+              "kind": "pipe",
+              "x": 0.82,
+              "y": 0.6,
+              "size": 0.9,
+              "label": "Spout",
+              "motion": "flow"
+            }
+          ],
+          "links": [
+            {
+              "from": "handle",
+              "to": "spindle",
+              "kind": "force",
+              "label": "turning"
+            },
+            {
+              "from": "spindle",
+              "to": "washer",
+              "kind": "force",
+              "label": "lifts or presses"
+            },
+            {
+              "from": "supply",
+              "to": "seat",
+              "kind": "fluid",
+              "label": "water under pressure"
+            },
+            {
+              "from": "washer",
+              "to": "seat",
+              "kind": "force",
+              "label": "seals the hole"
+            },
+            {
+              "from": "seat",
+              "to": "spout",
+              "kind": "fluid",
+              "label": "water out"
+            }
+          ],
+          "focus": 3
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "Where does the water in a tap come from?",
+      "a": "It comes along a mains pipe from the water company, already under pressure. The tap does not pump the water; it only opens or closes a gate so the pressure can push water out.",
+      "asks": [
+        "Why does water come out when I open a tap?",
+        "What pushes water out of the tap?"
+      ]
+    },
+    {
+      "q": "What does the spindle do?",
+      "a": "The spindle is a threaded rod joined to the handle. Turning the handle screws it up or down, which lifts the washer off the seat or presses it back on.",
+      "asks": [
+        "What is inside a tap?"
+      ]
+    },
+    {
+      "q": "Why does my tap drip?",
+      "a": "Usually the rubber washer or the seat is worn or dirty, so the washer cannot make a perfect seal. A little water squeezes past all the time, and replacing the washer normally stops it.",
+      "asks": [
+        "How do you fix a dripping tap?",
+        "Why does a tap leak when it is turned off?"
+      ]
+    },
+    {
+      "q": "What is the valve seat?",
+      "a": "The valve seat is the smooth ring around the hole the water must pass through. When the washer is pressed firmly onto it, no water can get past.",
+      "asks": [
+        "What does the washer press against?"
+      ]
+    },
+    {
+      "q": "How does a quarter-turn tap work?",
+      "a": "Many modern taps use two hard ceramic discs with holes in them instead of a washer. A quarter turn of the handle slides the holes into line to let water through, or out of line to stop it.",
+      "asks": [
+        "What is a ceramic disc tap?"
+      ]
+    }
+  ],
+  "facts": [
+    "In a traditional compression tap, a rubber washer pressed onto a valve seat stops the flow.",
+    "Ceramic disc taps open and close with a quarter turn, because two discs slide their holes in or out of line."
+  ],
+  "quiz": [
+    {
+      "say": "What pushes the water out when you open a tap?",
+      "show": "What pushes the water out when you open a tap?",
+      "options": [
+        {
+          "show": "The pressure in the mains pipe",
+          "say": "The pressure in the mains pipe"
+        },
+        {
+          "show": "A small pump inside the tap",
+          "say": "A small pump inside the tap"
+        },
+        {
+          "show": "The weight of the handle",
+          "say": "The weight of the handle"
+        }
+      ],
+      "answer": 0,
+      "why": "The mains keeps water under pressure all the time; opening the tap just lets that pressure push water out.",
+      "wrong": {
+        "1": "A normal tap has no pump inside; it is only a valve.",
+        "2": "The handle only turns the spindle; its weight does nothing to the water."
+      }
+    },
+    {
+      "say": "A tap keeps dripping even when turned off hard. What is the most likely cause?",
+      "show": "A tap keeps dripping even when turned off hard. What is the most likely cause?",
+      "options": [
+        {
+          "show": "The pipe is too wide",
+          "say": "The pipe is too wide"
+        },
+        {
+          "show": "A worn washer",
+          "say": "A worn washer"
+        },
+        {
+          "show": "The water is too cold",
+          "say": "The water is too cold"
+        }
+      ],
+      "answer": 1,
+      "why": "A worn or damaged washer cannot seal against the seat, so water leaks past.",
+      "wrong": {
+        "0": "Pipe width does not stop a tap sealing.",
+        "2": "Water temperature does not make a tap drip."
+      }
+    }
+  ]
+}

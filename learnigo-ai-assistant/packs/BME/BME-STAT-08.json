@@ -1,0 +1,322 @@
+{
+  "id": "BME-STAT-08",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Second moment of area: why an I-beam is so stiff for its weight",
+  "area": "Mechanical Engineering (Bachelor's)",
+  "group": "BME-STAT — Statics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "second moment of area",
+    "area moment of inertia",
+    "I-beam",
+    "bending stiffness",
+    "parallel axis theorem"
+  ],
+  "examples": [
+    "What is the second moment of area?",
+    "Why is a plank stiffer on its edge?",
+    "Why are steel beams shaped like an I?"
+  ],
+  "figure": [
+    {
+      "name": "x-sizes",
+      "unit": "× 10⁶ mm⁴",
+      "items": [
+        {
+          "label": "Plank laid flat",
+          "size": 0.133,
+          "icon": "ruler"
+        },
+        {
+          "label": "Plank on edge",
+          "size": 13.3,
+          "icon": "ruler"
+        },
+        {
+          "label": "I-beam, same area",
+          "size": 22.9,
+          "icon": "bridge"
+        }
+      ],
+      "op": "sim"
+    }
+  ],
+  "explain": [
+    {
+      "say": "Take a plastic ruler. Lay it flat across two books and it sags easily. Turn it on its edge and it barely bends. Same material, same area. The difference is the second moment of area, I, which measures how far the material sits from the bending axis. Look at the three bars.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Second moment of area: why an I-beam is so stiff for its weight"
+        },
+        {
+          "name": "x-sizes",
+          "unit": "× 10⁶ mm⁴",
+          "items": [
+            {
+              "label": "Plank laid flat",
+              "size": 0.133,
+              "icon": "ruler"
+            },
+            {
+              "label": "Plank on edge",
+              "size": 13.3,
+              "icon": "ruler"
+            },
+            {
+              "label": "I-beam, same area",
+              "size": 22.9,
+              "icon": "bridge"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "note",
+          "text": "Same plank: 200 × 20 mm, area 4000 mm²"
+        }
+      ]
+    },
+    {
+      "say": "For a rectangle, I equals b times h cubed over 12, where h is the depth in the bending direction. Flat, the plank is 20 millimetres deep: I is only 0.13 million millimetres to the fourth. On edge it is 200 deep: 13.3 million, a hundred times more! Why does depth matter so much?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "× 10⁶ mm⁴",
+          "items": [
+            {
+              "label": "Plank laid flat",
+              "size": 0.133,
+              "icon": "ruler"
+            },
+            {
+              "label": "Plank on edge",
+              "size": 13.3,
+              "icon": "ruler"
+            },
+            {
+              "label": "I-beam, same area",
+              "size": 22.9,
+              "icon": "bridge"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "I = bh³/12: 200×20³/12 = 0.13×10⁶ mm⁴"
+        }
+      ]
+    },
+    {
+      "say": "Because depth is cubed. Material far from the middle stretches and squashes the most, so it resists bending the most. An I-beam puts most of its steel in two flanges far from the middle. With 3800 square millimetres, less than the plank, a 200 millimetre I-beam reaches about 22.9 million. Which shape wins?",
+      "draw": [
+        {
+          "name": "x-sizes",
+          "unit": "× 10⁶ mm⁴",
+          "items": [
+            {
+              "label": "Plank laid flat",
+              "size": 0.133,
+              "icon": "ruler"
+            },
+            {
+              "label": "Plank on edge",
+              "size": 13.3,
+              "icon": "ruler"
+            },
+            {
+              "label": "I-beam, same area",
+              "size": 22.9,
+              "icon": "bridge"
+            }
+          ],
+          "op": "sim"
+        },
+        {
+          "op": "formula",
+          "text": "I-beam: 2(100×10³/12 + 1000×95²) + 10×180³/12"
+        }
+      ]
+    },
+    {
+      "say": "The I-beam! Stiffness shows up in deflection. Put a 2 kilonewton load in the middle of a 3 metre span. The sag is P L cubed over 48 E I. With steel, E equals 200 gigapascals, the I-beam sags only about a quarter of a millimetre. See the gentle curve under the beam? What happens to the sag if I is halved?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 3,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 2,
+              "label": "Load 2 kN",
+              "ask": "How does I affect the deflection of a beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "deflection"
+          ],
+          "op": "sim",
+          "focus": 0
+        },
+        {
+          "op": "formula",
+          "text": "δ = PL³/48EI = 0.25 mm for the I-beam"
+        }
+      ]
+    },
+    {
+      "say": "It doubles. Superb! Real link: bridges, cranes and the steel frames of tall buildings use I-sections and hollow boxes for exactly this reason. Exam tip: for built-up shapes, use the parallel axis theorem, I plus A times d squared, for each part. Challenge: how much stiffer is a plank on edge if it is twice as deep?",
+      "draw": [
+        {
+          "name": "x-beam",
+          "length": 3,
+          "supports": [
+            {
+              "kind": "pin",
+              "at": 0
+            },
+            {
+              "kind": "roller",
+              "at": 1
+            }
+          ],
+          "loads": [
+            {
+              "kind": "point",
+              "at": 0.5,
+              "size": 2,
+              "label": "Load 2 kN",
+              "ask": "How does I affect the deflection of a beam?"
+            }
+          ],
+          "show": [
+            "beam",
+            "deflection"
+          ],
+          "op": "sim",
+          "focus": 1
+        },
+        {
+          "op": "note",
+          "text": "Parallel axis theorem: I = I_c + A d²"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "What is the second moment of area?",
+      "a": "It is a property of a cross-section that measures how its area is spread around the bending axis: the sum of each small area times its distance squared. Bigger I means a stiffer beam.",
+      "asks": [
+        "area moment of inertia",
+        "what does I mean in beam formulas"
+      ]
+    },
+    {
+      "q": "Why is a plank stiffer on its edge?",
+      "a": "For a rectangle, I equals b h cubed over 12. Turning the plank on edge makes its depth h ten times bigger here, so I grows a thousand times from h cubed but shrinks ten times from b, a hundred times stiffer overall.",
+      "asks": [
+        "why does depth matter in beams"
+      ]
+    },
+    {
+      "q": "Why are steel beams shaped like an I?",
+      "a": "The flanges put most of the material far from the neutral axis, where it resists bending best, while the thin web joins them and carries shear. That gives a high I for little weight.",
+      "asks": [
+        "why I beams",
+        "advantage of I section"
+      ]
+    },
+    {
+      "q": "How does I affect the deflection of a beam?",
+      "a": "Deflection is inversely proportional to E times I, the bending stiffness. For a central point load on a simple span it is P L cubed over 48 E I.",
+      "asks": [
+        "beam deflection formula central load"
+      ]
+    },
+    {
+      "q": "What is the parallel axis theorem?",
+      "a": "The second moment of a part about any axis equals its own I about its centroid plus its area times the distance between the axes squared.",
+      "asks": [
+        "parallel axis theorem for area"
+      ]
+    }
+  ],
+  "facts": [
+    "For a rectangle of width b and depth h, the second moment of area about its centroid is b h cubed over 12.",
+    "The midspan deflection of a simply supported beam with a central point load P is P L cubed over 48 E I."
+  ],
+  "quiz": [
+    {
+      "say": "A rectangular beam is 50 millimetres wide and 100 millimetres deep. What is its second moment of area about the horizontal centroid axis?",
+      "show": "Rectangle 50 mm wide, 100 mm deep. I about the horizontal centroid axis?",
+      "options": [
+        {
+          "show": "4.17 × 10⁶ mm⁴",
+          "say": "4.17 million millimetres to the fourth"
+        },
+        {
+          "show": "1.04 × 10⁶ mm⁴",
+          "say": "1.04 million millimetres to the fourth"
+        },
+        {
+          "show": "0.42 × 10⁶ mm⁴",
+          "say": "0.42 million millimetres to the fourth"
+        }
+      ],
+      "answer": 0,
+      "why": "I = 50 × 100³ / 12 = 4.17 × 10⁶ mm⁴.",
+      "wrong": {
+        "1": "That swaps b and h, using 100 × 50³ / 12.",
+        "2": "That divides by 120 instead of 12."
+      }
+    },
+    {
+      "say": "If you double the depth of a rectangular beam, its bending stiffness becomes…",
+      "show": "Doubling the depth of a rectangular beam multiplies its I by…",
+      "options": [
+        {
+          "show": "8",
+          "say": "8"
+        },
+        {
+          "show": "2",
+          "say": "2"
+        },
+        {
+          "show": "4",
+          "say": "4"
+        }
+      ],
+      "answer": 0,
+      "why": "I depends on depth cubed, and 2 cubed is 8.",
+      "wrong": {
+        "1": "Doubling the width gives 2, but depth is cubed.",
+        "2": "Depth is cubed, not squared."
+      }
+    }
+  ]
+}

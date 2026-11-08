@@ -1,0 +1,707 @@
+{
+  "id": "BEE-DIG-06",
+  "status": "draft",
+  "generator": {
+    "model": "claude (agent)",
+    "date": "2026-10-27",
+    "source": "bachelors-1"
+  },
+  "title": "Multiplexers and decoders: how a chip picks one line out of many",
+  "area": "Electrical Engineering (Bachelor's)",
+  "group": "BEE-DIG — Digital electronics",
+  "levels": [
+    "H"
+  ],
+  "keywords": [
+    "multiplexer",
+    "select lines",
+    "decoder",
+    "address decoding",
+    "demultiplexer"
+  ],
+  "examples": [
+    "How does a 4-to-1 multiplexer work?",
+    "What does a 2-to-4 decoder do?",
+    "How many select lines does an 8-input mux need?"
+  ],
+  "figure": [
+    {
+      "op": "sim",
+      "name": "x-network",
+      "nodes": [
+        {
+          "id": "d0",
+          "label": "D0 temperature",
+          "icon": "thermometer",
+          "x": 0.1,
+          "y": 0.12
+        },
+        {
+          "id": "d1",
+          "label": "D1 light",
+          "icon": "light",
+          "x": 0.1,
+          "y": 0.38
+        },
+        {
+          "id": "d2",
+          "label": "D2 sound",
+          "icon": "sound",
+          "x": 0.1,
+          "y": 0.63
+        },
+        {
+          "id": "d3",
+          "label": "D3 pressure",
+          "icon": "sensor",
+          "x": 0.1,
+          "y": 0.88
+        },
+        {
+          "id": "mux",
+          "label": "4-to-1 MUX",
+          "icon": "switch",
+          "x": 0.52,
+          "y": 0.5,
+          "ask": "How does a 4-to-1 multiplexer work?"
+        },
+        {
+          "id": "sel",
+          "label": "Select S1S0 = 10",
+          "icon": "chip",
+          "x": 0.52,
+          "y": 0.1,
+          "ask": "How many select lines does an 8-input mux need?"
+        },
+        {
+          "id": "out",
+          "label": "Y = D2 (sound)",
+          "icon": "computer",
+          "x": 0.88,
+          "y": 0.5
+        }
+      ],
+      "links": [
+        {
+          "from": "d0",
+          "to": "mux",
+          "kind": "data"
+        },
+        {
+          "from": "d1",
+          "to": "mux",
+          "kind": "data"
+        },
+        {
+          "from": "d2",
+          "to": "mux",
+          "kind": "data",
+          "label": "Passes"
+        },
+        {
+          "from": "d3",
+          "to": "mux",
+          "kind": "data"
+        },
+        {
+          "from": "sel",
+          "to": "mux",
+          "kind": "signal",
+          "label": "Select"
+        },
+        {
+          "from": "mux",
+          "to": "out",
+          "kind": "data",
+          "label": "One output"
+        }
+      ]
+    }
+  ],
+  "explain": [
+    {
+      "say": "Your phone has one analog-to-digital converter but many sensors to read. How? With a multiplexer, or mux, a kind of digital rotary switch. Look at the board: four sensor signals come in on the left, one wire goes out on the right, and the select lines at the top choose which input gets through.",
+      "draw": [
+        {
+          "op": "clear"
+        },
+        {
+          "op": "title",
+          "text": "Multiplexers and decoders: how a chip picks one line out of many"
+        },
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "d0",
+              "label": "D0 temperature",
+              "icon": "thermometer",
+              "x": 0.1,
+              "y": 0.12
+            },
+            {
+              "id": "d1",
+              "label": "D1 light",
+              "icon": "light",
+              "x": 0.1,
+              "y": 0.38
+            },
+            {
+              "id": "d2",
+              "label": "D2 sound",
+              "icon": "sound",
+              "x": 0.1,
+              "y": 0.63
+            },
+            {
+              "id": "d3",
+              "label": "D3 pressure",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.88
+            },
+            {
+              "id": "mux",
+              "label": "4-to-1 MUX",
+              "icon": "switch",
+              "x": 0.52,
+              "y": 0.5,
+              "ask": "How does a 4-to-1 multiplexer work?"
+            },
+            {
+              "id": "sel",
+              "label": "Select S1S0 = 10",
+              "icon": "chip",
+              "x": 0.52,
+              "y": 0.1,
+              "ask": "How many select lines does an 8-input mux need?"
+            },
+            {
+              "id": "out",
+              "label": "Y = D2 (sound)",
+              "icon": "computer",
+              "x": 0.88,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "d0",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "d1",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "d2",
+              "to": "mux",
+              "kind": "data",
+              "label": "Passes"
+            },
+            {
+              "from": "d3",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "sel",
+              "to": "mux",
+              "kind": "signal",
+              "label": "Select"
+            },
+            {
+              "from": "mux",
+              "to": "out",
+              "kind": "data",
+              "label": "One output"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "say": "Look at the select lines. With two select bits, S1 and S0, you can count 00, 01, 10 and 11, four codes for four inputs. In general n select bits choose among 2 to the n inputs. Here S1 S0 is 1 0, which is binary two. So which input passes?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "d0",
+              "label": "D0 temperature",
+              "icon": "thermometer",
+              "x": 0.1,
+              "y": 0.12
+            },
+            {
+              "id": "d1",
+              "label": "D1 light",
+              "icon": "light",
+              "x": 0.1,
+              "y": 0.38
+            },
+            {
+              "id": "d2",
+              "label": "D2 sound",
+              "icon": "sound",
+              "x": 0.1,
+              "y": 0.63
+            },
+            {
+              "id": "d3",
+              "label": "D3 pressure",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.88
+            },
+            {
+              "id": "mux",
+              "label": "4-to-1 MUX",
+              "icon": "switch",
+              "x": 0.52,
+              "y": 0.5,
+              "ask": "How does a 4-to-1 multiplexer work?"
+            },
+            {
+              "id": "sel",
+              "label": "Select S1S0 = 10",
+              "icon": "chip",
+              "x": 0.52,
+              "y": 0.1,
+              "ask": "How many select lines does an 8-input mux need?"
+            },
+            {
+              "id": "out",
+              "label": "Y = D2 (sound)",
+              "icon": "computer",
+              "x": 0.88,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "d0",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "d1",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "d2",
+              "to": "mux",
+              "kind": "data",
+              "label": "Passes"
+            },
+            {
+              "from": "d3",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "sel",
+              "to": "mux",
+              "kind": "signal",
+              "label": "Select"
+            },
+            {
+              "from": "mux",
+              "to": "out",
+              "kind": "data",
+              "label": "One output"
+            }
+          ],
+          "focus": 5
+        },
+        {
+          "op": "formula",
+          "text": "4 inputs need 2 select bits, since 2² = 4"
+        }
+      ]
+    },
+    {
+      "say": "Input D2, the sound sensor, lights up. Inside, the mux is a set of AND gates, one per input, each opened by one select code, and an OR gate that collects them. Only the AND gate for 1 0 is open, so Y equals D2. If the processor counts S1 S0 from 00 to 11, how many sensors does it read per sweep?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "d0",
+              "label": "D0 temperature",
+              "icon": "thermometer",
+              "x": 0.1,
+              "y": 0.12
+            },
+            {
+              "id": "d1",
+              "label": "D1 light",
+              "icon": "light",
+              "x": 0.1,
+              "y": 0.38
+            },
+            {
+              "id": "d2",
+              "label": "D2 sound",
+              "icon": "sound",
+              "x": 0.1,
+              "y": 0.63
+            },
+            {
+              "id": "d3",
+              "label": "D3 pressure",
+              "icon": "sensor",
+              "x": 0.1,
+              "y": 0.88
+            },
+            {
+              "id": "mux",
+              "label": "4-to-1 MUX",
+              "icon": "switch",
+              "x": 0.52,
+              "y": 0.5,
+              "ask": "How does a 4-to-1 multiplexer work?"
+            },
+            {
+              "id": "sel",
+              "label": "Select S1S0 = 10",
+              "icon": "chip",
+              "x": 0.52,
+              "y": 0.1,
+              "ask": "How many select lines does an 8-input mux need?"
+            },
+            {
+              "id": "out",
+              "label": "Y = D2 (sound)",
+              "icon": "computer",
+              "x": 0.88,
+              "y": 0.5
+            }
+          ],
+          "links": [
+            {
+              "from": "d0",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "d1",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "d2",
+              "to": "mux",
+              "kind": "data",
+              "label": "Passes"
+            },
+            {
+              "from": "d3",
+              "to": "mux",
+              "kind": "data"
+            },
+            {
+              "from": "sel",
+              "to": "mux",
+              "kind": "signal",
+              "label": "Select"
+            },
+            {
+              "from": "mux",
+              "to": "out",
+              "kind": "data",
+              "label": "One output"
+            }
+          ],
+          "focus": 2
+        },
+        {
+          "op": "formula",
+          "text": "Y = S1'S0'D0 + S1'S0D1 + S1S0'D2 + S1S0D3"
+        }
+      ]
+    },
+    {
+      "say": "Now the mirror-image circuit, a decoder. It takes a 2-bit address and turns on exactly one of four output lines. See the address 1 0 from the processor: only output Y2 goes active, waking the display chip, while the RAM, ROM and keypad stay quiet. That is address decoding, how a computer picks which chip to talk to. Which output would 1 1 wake?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "cpu",
+              "label": "CPU address 10",
+              "icon": "computer",
+              "x": 0.1,
+              "y": 0.5,
+              "ask": "What is address decoding?"
+            },
+            {
+              "id": "dec",
+              "label": "2-to-4 decoder",
+              "icon": "chip",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "What does a 2-to-4 decoder do?"
+            },
+            {
+              "id": "y0",
+              "label": "Y0 RAM",
+              "icon": "chip",
+              "x": 0.85,
+              "y": 0.12
+            },
+            {
+              "id": "y1",
+              "label": "Y1 ROM",
+              "icon": "book",
+              "x": 0.85,
+              "y": 0.38
+            },
+            {
+              "id": "y2",
+              "label": "Y2 display",
+              "icon": "light",
+              "x": 0.85,
+              "y": 0.63,
+              "ask": "What is the difference between a multiplexer and a demultiplexer?"
+            },
+            {
+              "id": "y3",
+              "label": "Y3 keypad",
+              "icon": "hand",
+              "x": 0.85,
+              "y": 0.88
+            }
+          ],
+          "links": [
+            {
+              "from": "cpu",
+              "to": "dec",
+              "kind": "signal",
+              "label": "A1A0 = 10"
+            },
+            {
+              "from": "dec",
+              "to": "y0",
+              "kind": "signal"
+            },
+            {
+              "from": "dec",
+              "to": "y1",
+              "kind": "signal"
+            },
+            {
+              "from": "dec",
+              "to": "y2",
+              "kind": "signal",
+              "label": "Active"
+            },
+            {
+              "from": "dec",
+              "to": "y3",
+              "kind": "signal"
+            }
+          ],
+          "focus": 4
+        },
+        {
+          "op": "formula",
+          "text": "2 inputs → 4 outputs, exactly one active"
+        }
+      ]
+    },
+    {
+      "say": "Here is the wow: feed data into a decoder's enable pin and it becomes a demultiplexer, sending one stream out to many places, the reverse of a mux. Memory chips and phone networks are packed with both. Well done! Challenge: how many select lines does a 16-input multiplexer need?",
+      "draw": [
+        {
+          "op": "sim",
+          "name": "x-network",
+          "nodes": [
+            {
+              "id": "cpu",
+              "label": "CPU address 10",
+              "icon": "computer",
+              "x": 0.1,
+              "y": 0.5,
+              "ask": "What is address decoding?"
+            },
+            {
+              "id": "dec",
+              "label": "2-to-4 decoder",
+              "icon": "chip",
+              "x": 0.45,
+              "y": 0.5,
+              "ask": "What does a 2-to-4 decoder do?"
+            },
+            {
+              "id": "y0",
+              "label": "Y0 RAM",
+              "icon": "chip",
+              "x": 0.85,
+              "y": 0.12
+            },
+            {
+              "id": "y1",
+              "label": "Y1 ROM",
+              "icon": "book",
+              "x": 0.85,
+              "y": 0.38
+            },
+            {
+              "id": "y2",
+              "label": "Y2 display",
+              "icon": "light",
+              "x": 0.85,
+              "y": 0.63,
+              "ask": "What is the difference between a multiplexer and a demultiplexer?"
+            },
+            {
+              "id": "y3",
+              "label": "Y3 keypad",
+              "icon": "hand",
+              "x": 0.85,
+              "y": 0.88
+            }
+          ],
+          "links": [
+            {
+              "from": "cpu",
+              "to": "dec",
+              "kind": "signal",
+              "label": "A1A0 = 10"
+            },
+            {
+              "from": "dec",
+              "to": "y0",
+              "kind": "signal"
+            },
+            {
+              "from": "dec",
+              "to": "y1",
+              "kind": "signal"
+            },
+            {
+              "from": "dec",
+              "to": "y2",
+              "kind": "signal",
+              "label": "Active"
+            },
+            {
+              "from": "dec",
+              "to": "y3",
+              "kind": "signal"
+            }
+          ],
+          "focus": 1
+        },
+        {
+          "op": "formula",
+          "text": "3-to-8 decoder: 2³ = 8 outputs"
+        },
+        {
+          "op": "note",
+          "text": "A demultiplexer is a decoder whose enable pin carries the data"
+        }
+      ]
+    }
+  ],
+  "faq": [
+    {
+      "q": "How does a 4-to-1 multiplexer work?",
+      "a": "It has four data inputs, two select lines and one output. The 2-bit select code opens one of four AND gates, and an OR gate passes that input to the output, so select 1 0 sends D2 through.",
+      "asks": [
+        "What is a mux?"
+      ]
+    },
+    {
+      "q": "How many select lines does an 8-input mux need?",
+      "a": "Three, because 2 to the power 3 is 8. In general a multiplexer with 2 to the n inputs needs n select lines.",
+      "asks": [
+        "How many select bits does a multiplexer need?"
+      ]
+    },
+    {
+      "q": "What does a 2-to-4 decoder do?",
+      "a": "It turns a 2-bit binary code into one active line out of four. Input 0 0 activates Y0, 0 1 activates Y1, 1 0 activates Y2 and 1 1 activates Y3.",
+      "asks": [
+        "What is a decoder in digital electronics?"
+      ]
+    },
+    {
+      "q": "What is address decoding?",
+      "a": "A processor puts an address on its bus, and decoders turn the top address bits into chip-select signals, so exactly one memory or device chip responds while the others ignore the bus.",
+      "asks": [
+        "How does a CPU choose which chip to use?"
+      ]
+    },
+    {
+      "q": "What is the difference between a multiplexer and a demultiplexer?",
+      "a": "A multiplexer chooses one of many inputs and sends it to one output. A demultiplexer does the reverse, sending one input to one of many outputs, chosen by the select lines.",
+      "asks": [
+        "Mux vs demux?"
+      ]
+    }
+  ],
+  "facts": [
+    "A multiplexer with n select lines chooses among 2ⁿ inputs.",
+    "The 74HC138 is a common 3-to-8 line decoder chip.",
+    "Many microcontrollers share one ADC between several input pins through an analog multiplexer."
+  ],
+  "quiz": [
+    {
+      "say": "A 4-to-1 multiplexer has S1 S0 equal to 0 1. Which input reaches the output?",
+      "show": "A 4-to-1 mux has S1 S0 = 0 1. Which input reaches the output?",
+      "options": [
+        {
+          "show": "D1",
+          "say": "D1"
+        },
+        {
+          "show": "D2",
+          "say": "D2"
+        },
+        {
+          "show": "D0",
+          "say": "D0"
+        }
+      ],
+      "answer": 0,
+      "why": "0 1 is binary one, so input D1 is passed.",
+      "wrong": {
+        "1": "D2 would need select 1 0, binary two.",
+        "2": "D0 would need select 0 0."
+      }
+    },
+    {
+      "say": "How many select lines does a 16-input multiplexer need?",
+      "show": "How many select lines does a 16-input multiplexer need?",
+      "options": [
+        {
+          "show": "4",
+          "say": "4"
+        },
+        {
+          "show": "8",
+          "say": "8"
+        },
+        {
+          "show": "16",
+          "say": "16"
+        }
+      ],
+      "answer": 0,
+      "why": "2 to the power 4 is 16, so 4 select bits can name every input.",
+      "wrong": {
+        "1": "8 select lines could choose among 256 inputs, far more than needed.",
+        "2": "One line per input is how a decoder's outputs work, not a mux's select lines."
+      }
+    }
+  ]
+}
