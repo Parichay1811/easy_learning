@@ -11,6 +11,7 @@ import {
 import { RiBarChart2Fill } from "react-icons/ri";
 import { useAuth } from "../../context/AuthContext";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import AIAssistantWidget from "../AIAssistantWidget/AIAssistantWidget";
 
 const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -87,15 +88,19 @@ const Navbar = () => {
           </div>
         </div>
 
-        <button
-          className={`${styles.hamburger} ${mobileOpen ? styles.hamburgerOpen : ""}`}
-          onClick={() => setMobileOpen((prev) => !prev)}
-          aria-label="Toggle menu"
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
+        <div className={styles.actions}>
+          <AIAssistantWidget />
+
+          <button
+            className={`${styles.hamburger} ${mobileOpen ? styles.hamburgerOpen : ""}`}
+            onClick={() => setMobileOpen((prev) => !prev)}
+            aria-label="Toggle menu"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
       </div>
     </nav>
   );

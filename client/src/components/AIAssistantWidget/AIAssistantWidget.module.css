@@ -1,0 +1,137 @@
+.fab {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+  z-index: 950;
+  width: 64px;
+  height: 64px;
+  padding: 4px;
+  border: none;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(108, 99, 255, 0.35), rgba(6, 9, 18, 0.1));
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 0 18px rgba(108, 99, 255, 0.55),
+    0 0 40px rgba(67, 192, 160, 0.3),
+    0 6px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease;
+}
+.fab canvas { border-radius: 50%; display: block; }
+.fab:hover { transform: scale(1.08); }
+.fab:active { transform: scale(0.96); }
+
+.fabLabel {
+  display: none;
+}
+
+.fabIcon {
+  display: none;
+}
+
+/* Below 430px the fixed circle would overlap page content, so it drops out
+   of the fixed overlay and sits inline in the navbar as a compact pill. */
+@media (max-width: 429px) {
+  .fab {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    flex-shrink: 0;
+    width: auto;
+    height: 40px;
+    padding: 5px 14px 5px 6px;
+    border-radius: 999px;
+    gap: 6px;
+    box-shadow:
+      0 0 14px rgba(108, 99, 255, 0.5),
+      0 0 28px rgba(67, 192, 160, 0.25);
+  }
+  .fabIcon {
+    display: block;
+    width: 20px;
+    height: 20px;
+    color: #43c0a0;
+    flex-shrink: 0;
+  }
+  .fabLabel {
+    display: inline-flex;
+    align-items: center;
+    color: #f1f1f6;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2100;
+  background: rgba(6, 9, 18, 0.72);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.panel {
+  width: min(960px, 100%);
+  height: min(680px, 90vh);
+  background: #0c1326;
+  border: 1px solid rgba(108, 99, 255, 0.35);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 40px rgba(67, 192, 160, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(108, 99, 255, 0.18), rgba(67, 192, 160, 0.1));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.headerBadge { width: 32px; height: 32px; flex-shrink: 0; display: flex; }
+.headerBadge canvas { border-radius: 50%; }
+
+.title {
+  flex: 1;
+  margin: 0;
+  font-size: 17px;
+  color: #f1f1f6;
+}
+
+.closeBtn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f1f1f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.closeBtn:hover { background: rgba(255, 255, 255, 0.18); }
+
+.frame {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background: #060912;
+}
+
+@media (max-width: 720px) {
+  .backdrop { padding: 0; }
+  .panel { width: 100%; height: 100%; border-radius: 0; }
+}
