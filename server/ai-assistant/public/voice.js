@@ -38,6 +38,9 @@ export class Voice {
     this.speed = 1;
     this.src = null;
     this.sfxCache = new Map();
+    // false when the server has no voice (LT_TTS=browser, small servers): every
+    // line is then null at once and the page speaks with the browser's voice.
+    this.server = true;
   }
 
   // Pops dip while the teacher talks and come back up in the pauses.
@@ -47,6 +50,7 @@ export class Voice {
 
   // An AudioBuffer of the text (a promise), fetched once.
   load(text, signal) {
+    if (!this.server) return Promise.resolve(null);
     const key = this.key(text);
     if (this.cache.has(key)) return this.cache.get(key);
     const url = `/api/ai-assistant/tts?${new URLSearchParams({ text, speed: String(this.speed) })}`;
