@@ -55,8 +55,11 @@
         </div>
       </div>
       <form id="ask" class="ask">
-        <input id="text" autocomplete="off" placeholder="Type a question, or just talk…" aria-label="Your question">
+        <input id="text" autocomplete="off" placeholder="Type a question, or just talk…" aria-label="Your question or a topic"
+          role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="suggest">
         <button type="submit" aria-label="Ask">Ask</button>
+        <!-- Topics matching what is typed (GET /api/ai-assistant/topics): pick one to open its lesson. -->
+        <ul id="suggest" class="suggest" role="listbox" aria-label="Topics" hidden></ul>
       </form>
       <div id="chips" class="chips"></div>
       <div id="videos" class="videos" hidden><span class="v-head">Learn more</span><div class="v-row"></div></div>
@@ -69,10 +72,10 @@
     <div class="orb-slot hero-orb"><canvas id="orb" class="orb" aria-hidden="true"></canvas></div>
     <div class="hero-card">
       <h1>Your AI teacher</h1>
-      <p class="sub">Ask anything out loud. It draws, explains and tests you, and stops the moment you talk.</p>
+      <p class="sub" id="hero-sub">Ask anything out loud. It draws, explains and tests you, and stops the moment you talk.</p>
       <button id="start" class="start" type="button"><span>Start the lesson</span></button>
       <p id="warm" class="warm">Warming up the voice…</p>
-      <p class="tip">Best with headphones · your voice stays on Learnigo</p>
+      <p class="tip" id="hero-tip">Best with headphones · your voice stays on Learnigo</p>
     </div>
   </section>
 

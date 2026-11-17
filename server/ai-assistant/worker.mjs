@@ -23,10 +23,9 @@ const SMALL = {
   // the lesson packs, the maths rules, Wikipedia and open data; anything else
   // is a TODO for a new pack, as before.
   LT_LLM: "off",
-  // The smaller Moonshine for hearing, with 2 guesses instead of 4: a few
-  // times less CPU per question; the lesson-word checks still run.
-  LT_ASR: "moonshine-tiny",
-  LT_ASR_BEAMS: "2",
+  // No speech recognition: students type, with topic suggestions as they go
+  // (/topics). Saves the hearing model (~250 MB) and its CPU per question.
+  LT_ASR: "off",
 };
 const profile =
   process.env.AI_ASSISTANT_PROFILE ||

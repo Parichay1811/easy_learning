@@ -100,6 +100,7 @@ body[data-mode='hearing'] .chip .dot, body[data-mode='thinking'] .chip .dot { an
 #stop svg { background: #ffe5e3; color: var(--red-2); }
 #stop:hover { background: linear-gradient(180deg, var(--red), var(--red-2)); box-shadow: 0 4px 0 var(--red-edge); }
 .ctl[aria-pressed='false'] { color: var(--ink-faint); }
+.ctl[hidden] { display: none; }
 .ctl[aria-pressed='false'] svg { background: rgba(255, 255, 255, 0.22); color: var(--ink-faint); }
 :focus-visible { outline: 3px solid #ffd166; outline-offset: 2px; }
 
@@ -146,7 +147,15 @@ body[data-mode='hearing'] .chip .dot, body[data-mode='thinking'] .chip .dot { an
 .meter { height: 6px; border-radius: 6px; background: #e5e7eb; overflow: hidden; }
 .meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 80ms linear; }
 
-.ask { flex: none; display: flex; gap: 8px; }
+.ask { flex: none; display: flex; gap: 8px; position: relative; z-index: 6; }
+/* Topic suggestions under the question box: a white card like the site's menus. */
+.suggest { position: absolute; left: 0; right: 0; top: calc(100% + 6px); margin: 0; padding: 6px; list-style: none; border-radius: 18px; background: #fff; color: var(--text); box-shadow: 0 16px 40px rgba(10, 30, 15, 0.35); max-height: min(340px, 50vh); overflow-y: auto; overscroll-behavior: contain; }
+.suggest[hidden] { display: none; }
+.suggest li { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 12px; cursor: pointer; font-size: 15px; }
+.suggest li[aria-selected='true'] { background: #ecebff; }
+.suggest .sg-title { min-width: 0; }
+.suggest .sg-title b { color: var(--purple-2); font-weight: 700; }
+.suggest .sg-area { flex: none; max-width: 45%; font-size: 12px; font-weight: 600; color: var(--text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ask input { flex: 1; min-width: 0; padding: 12px 18px; border-radius: 999px; border: 2px solid transparent; background: var(--card); color: var(--text); outline: none; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); transition: border-color 0.2s, box-shadow 0.2s; }
 .ask input::placeholder { color: var(--text-faint); }
 .ask input:focus { border-color: var(--brand); box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.25); }
