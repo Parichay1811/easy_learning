@@ -58,7 +58,7 @@ success "Client dependencies installed."
 echo ""
 
 # ── Server dependencies ───────────────────────────────────────────────────────
-info "[3/3] Installing server dependencies (Express + dotenv)…"
+info "[3/3] Installing server dependencies (Express + the AI assistant)…"
 npm install --prefix server
 success "Server dependencies installed."
 echo ""
@@ -86,6 +86,6 @@ echo -e "${GREEN}${BOLD}   ✅  Setup complete!                          ${RESET
 echo -e "${GREEN}${BOLD}================================================${RESET}"
 echo ""
 echo -e "  ${BOLD}npm run dev${RESET}     — start both client + server"
-echo -e "  ${BOLD}npm run client${RESET}  — React frontend  →  http://localhost:3000"
-echo -e "  ${BOLD}npm run server${RESET}  — Express API     →  http://localhost:5000"
+echo -e "  ${BOLD}npm run client${RESET}  — React site      →  https://localhost:5173"
+echo -e "  ${BOLD}npm run server${RESET}  — Express API     →  http://localhost:5001 (incl. the AI assistant)"
 echo ""

@@ -1,11 +1,29 @@
-import { defineConfig } from 'vite'
+import process from 'node:process'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import basicSsl from '@vitejs/plugin-basic-ssl'
+import aiAssistantStatic from './scripts/ai-assistant-static.mjs'
 
-export default defineConfig({
-  plugins: [react(), basicSsl()],
-  server: {
-    https: true,
-    host: true,
-  },
+// In dev, same-origin /api/* requests (the AI assistant's page makes these) go
+// to the Express server named by VITE_API_BASE_URL, as Nginx does in production.
+function apiOrigin(env) {
+  try {
+    return new URL(env.VITE_API_BASE_URL).origin
+  } catch {
+    return 'http://localhost:5001'
+  }
+}
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  return {
+    plugins: [react(), basicSsl(), aiAssistantStatic()],
+    server: {
+      https: true,
+      host: true,
+      proxy: {
+        '/api': { target: apiOrigin(env), changeOrigin: false },
+      },
+    },
+  }
 })
