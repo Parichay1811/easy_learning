@@ -142,21 +142,25 @@ function fitBoard() {
   const box = document.querySelector('.holo-box');
   const holo = document.querySelector('.holo');
   if (!box || !holo) return;
-  const caption = document.getElementById('caption');
+  // A caption under the board counts against its height (one inside the box).
+  const caption = box.querySelector('#caption');
   const column = matchMedia('(max-width: 860px) and (orientation: portrait), (max-width: 640px)');
   const fit = () => {
     const { width, height } = box.getBoundingClientRect();
     const cap = caption ? caption.offsetHeight + parseFloat(getComputedStyle(caption).marginTop || 0) : 0;
-    let w = width;
+    // The board's frame (its border) sits outside the 16:9 drawing area.
+    const frame = parseFloat(getComputedStyle(holo).borderLeftWidth) || 0;
+    let w = width - 2 * frame;
     // In one column (a phone upright) the board is nearly square, so the
     // figure can fill it; side by side it keeps 16:9.
     let h = column.matches ? Math.min(w * 0.9, window.innerHeight * 0.38) : (w * 9) / 16;
     // Side by side the board fills the height left above its caption; in a
     // single column it takes the full width and the page below adapts.
-    if (!column.matches && height > 0 && h > height - cap) { h = Math.max(120, height - cap); w = (h * 16) / 9; }
-    holo.style.width = `${Math.floor(w)}px`;
-    holo.style.height = `${Math.floor(h)}px`;
-    if (caption) caption.style.width = `${Math.floor(w)}px`;
+    const room = height - cap - 2 * frame;
+    if (!column.matches && height > 0 && h > room) { h = Math.max(120, room); w = (h * 16) / 9; }
+    holo.style.width = `${Math.floor(w + 2 * frame)}px`;
+    holo.style.height = `${Math.floor(h + 2 * frame)}px`;
+    if (caption) caption.style.width = `${Math.floor(w + 2 * frame)}px`;
   };
   new ResizeObserver(fit).observe(box);
   fit();

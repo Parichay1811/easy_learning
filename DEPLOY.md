@@ -294,11 +294,11 @@ The assistant picks a profile from the machine (override with `AI_ASSISTANT_PROF
 
 | | **small** (≤ 2 CPUs or < 6 GB RAM — this VPS) | **full** |
 |---|---|---|
-| Teacher's voice | the student's browser (`speechSynthesis`) — no server CPU | Supertonic on the server |
+| Teacher's voice | Supertonic on the server (natural; several times faster than real time on this VPS once warm; cached per sentence) — also the whole site's narrator | same |
 | Language model | off: answers from lesson packs, maths rules, Wikipedia, open data; misses become TODOs | Qwen3.5 0.8B for questions outside the packs |
 | Hearing | off: students type, with topic suggestions as they go | Moonshine base, 4 guesses (microphone) |
 | CPU priority | normal (it's light) | nice 10 (the API and other apps first) |
-| RAM (assistant processes) | ~0.8 GB | ~2.5 GB |
+| RAM (assistant processes) | ~1.5 GB | ~2.5 GB |
 
 **Search vectors and their index — copy them, don't make them on the VPS.** Meaning-based search needs vectors for ~90,000 phrasings (minutes on a laptop, days on a small busy server) and a clustered index over them that makes each search ~10x cheaper (15 s on a laptop, a while on the VPS, which otherwise builds it in the background). After running the assistant once locally (`npm run dev`, wait for "clustered":true in `/api/ai-assistant/health`), copy them over; until the vectors are there, a small server searches by words only (and says so in `pm2 logs easy-learn`):
 

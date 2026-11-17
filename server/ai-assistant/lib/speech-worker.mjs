@@ -55,8 +55,8 @@ async function loadVoice(engine) {
     return styles.get(n);
   };
   const steps = Number(process.env.LT_TTS_STEPS || 5);
-  return async (text, voice, speed) => {
-    const out = await tts.call(text, 'en', style(voice), steps, 1.05 * (speed || 1), 0.15);
+  return async (text, voice, speed, lang = 'en') => {
+    const out = await tts.call(text, lang, style(voice), steps, 1.05 * (speed || 1), 0.15);
     return { audio: Float32Array.from(out.wav), rate: tts.sampleRate };
   };
 }
@@ -67,12 +67,12 @@ console.log = (...a) => { if (!/^Using CPU|^Loaded/.test(String(a[0]))) origLog(
 const run = tts ? await loadVoice(process.env.LT_TTS || 'supertonic') : await loadHearing(process.env.LT_ASR || 'moonshine');
 process.send({ ready: true, engine: tts ? (process.env.LT_TTS || 'supertonic') : (process.env.LT_ASR || 'moonshine') });
 
-process.on('message', async ({ id, text, voice, speed, samples, prompt, beams, keep, texts }) => {
+process.on('message', async ({ id, text, voice, speed, lang, samples, prompt, beams, keep, texts }) => {
   try {
     if (texts) {
       process.send({ id, scores: await run.score(keep, texts) });
     } else if (tts) {
-      const { audio, rate } = await run(text, voice, speed);
+      const { audio, rate } = await run(text, voice, speed, lang);
       process.send({ id, audio, rate });
     } else {
       process.send({ id, hyps: await run(Float32Array.from(samples), { prompt, beams, keep }) });

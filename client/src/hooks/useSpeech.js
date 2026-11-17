@@ -2,55 +2,13 @@ import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { getSpeechLang } from "../utils/speechLang";
 import { getQuestionLang } from "../utils/questionLang";
+import { narrate, stopNarration } from "../utils/narrator";
 
-// Picks the best matching voice for `langCode`, then speaks `text`. Works
-// around the Chrome bug where synthesis pauses after ~15s. Calls onNoVoice
-// when no matching voice is installed in the browser.
-function speakText(text, langCode, { onStart, onEnd, onError, onNoVoice } = {}) {
-  const synth = window.speechSynthesis;
-  synth.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.85;
-  utterance.pitch = 1.1;
-  utterance.lang = langCode;
-
-  const voices = synth.getVoices();
-  if (voices.length > 0) {
-    const baseLang = langCode.split("-")[0];
-    const match =
-      voices.find((v) => v.lang === langCode) ||
-      voices.find((v) => v.lang.startsWith(baseLang));
-    if (match) {
-      utterance.voice = match;
-    } else {
-      onNoVoice?.();
-      const fallback = voices.find((v) => v.lang.startsWith("en"));
-      if (fallback) utterance.voice = fallback;
-    }
-  }
-
-  let resumeTimer = null;
-  const keepAlive = () => {
-    if (!synth.speaking) return;
-    synth.pause();
-    synth.resume();
-    resumeTimer = setTimeout(keepAlive, 10000);
-  };
-  resumeTimer = setTimeout(keepAlive, 10000);
-
-  const safetyTimer = setTimeout(() => { cleanup(); onEnd?.(); }, 30000);
-  const cleanup = () => { clearTimeout(resumeTimer); clearTimeout(safetyTimer); };
-
-  utterance.onend = () => { cleanup(); onEnd?.(); };
-  utterance.onerror = (e) => {
-    cleanup();
-    if (e.error === "interrupted" || e.error === "canceled") { onEnd?.(); return; }
-    onError?.(e);
-  };
-
-  onStart?.();
-  synth.speak(utterance);
+// Speaks `text` through the site's narrator (utils/narrator.js): the natural
+// server voice, or the browser's best voice for the language. A little slower
+// than normal for young readers.
+function speakText(text, langCode, callbacks = {}) {
+  narrate(text, { lang: langCode, rate: 0.85, ...callbacks });
 }
 
 // Shared TTS + SpeechRecognition wiring for question audio playback
@@ -62,7 +20,7 @@ export function useSpeech(subject) {
 
   useEffect(() => {
     return () => {
-      window.speechSynthesis.cancel();
+      stopNarration();
       if (recognitionRef.current) recognitionRef.current.abort();
     };
   }, []);

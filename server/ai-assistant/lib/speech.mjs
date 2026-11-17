@@ -19,6 +19,8 @@ import { writeWhole } from './files.mjs';
 // speaks with the browser's own voice. Small servers use it (worker.mjs).
 export const ENGINE = process.env.LT_TTS || 'supertonic';
 const BROWSER_VOICE = ENGINE === 'browser';
+// The languages Supertonic speaks (lib/vendor/supertonic.js AVAILABLE_LANGS).
+export const VOICE_LANGS = new Set(['en', 'ko', 'ja', 'ar', 'bg', 'cs', 'da', 'de', 'el', 'es', 'et', 'fi', 'fr', 'hi', 'hr', 'hu', 'id', 'it', 'lt', 'lv', 'nl', 'pl', 'pt', 'ro', 'ru', 'sk', 'sl', 'sv', 'tr', 'uk', 'vi']);
 // LT_ASR=off: no hearing on the server (no model, no CPU); students type.
 const HEARING = (process.env.LT_ASR || 'moonshine') !== 'off';
 const noHearing = () => Object.assign(new Error('speech recognition is off: type the question'), { code: 503 });
@@ -130,11 +132,16 @@ export function createSpeech({ dataDir, log = () => {} }) {
   }
 
   // WAV bytes of the text in that voice and speed.
-  async function speak(text, { voice = VOICE, speed = 1, priority = 'live', cancelled } = {}) {
+  // lang: the language of the text (two letters; Supertonic speaks 31, see
+  // VOICE_LANGS). English keeps its old cache keys, so cached lines stay valid.
+  async function speak(text, { voice = VOICE, speed = 1, priority = 'live', cancelled, lang = 'en' } = {}) {
     if (BROWSER_VOICE) throw Object.assign(new Error('the voice is made in the browser'), { code: 503 });
     if (!(ENGINE === 'kokoro' ? isKokoroVoice(voice) : isSupertonicVoice(voice))) voice = VOICE;
-    const clean = speakable(text);
-    const key = crypto.createHash('sha1').update(`${ENGINE}|${voice}|${speed}|${clean}`).digest('hex');
+    if (lang !== 'en' && (ENGINE !== 'supertonic' || !VOICE_LANGS.has(lang)))
+      throw Object.assign(new Error(`no voice for language ${lang}`), { code: 422 });
+    // Symbols said as words are English words: other languages are only tidied.
+    const clean = lang === 'en' ? speakable(text) : String(text).replace(/\s+/g, ' ').trim();
+    const key = crypto.createHash('sha1').update(`${ENGINE}|${voice}|${speed}|${clean}${lang === 'en' ? '' : `|${lang}`}`).digest('hex');
     if (memory.has(key)) { stats.cached++; return memory.get(key); }
     const file = path.join(dir, `${key}.wav`);
     if (fs.existsSync(file)) { const b = fs.readFileSync(file); remember(key, b); stats.cached++; return b; }
@@ -149,13 +156,13 @@ export function createSpeech({ dataDir, log = () => {} }) {
       return shared.p;
     }
     const entry = { cancels: [mine], live: () => {} };
-    entry.p = make(key, file, clean, voice, speed, priority, entry);
+    entry.p = make(key, file, clean, voice, speed, priority, entry, lang);
     inflight.set(key, entry);
     entry.p.finally(() => inflight.delete(key)).catch(() => {});
     return entry.p;
   }
 
-  async function make(key, file, clean, voice, speed, priority, entry) {
+  async function make(key, file, clean, voice, speed, priority, entry, lang) {
     await ready;
     return new Promise((resolve, reject) => {
       const job = {
@@ -163,7 +170,7 @@ export function createSpeech({ dataDir, log = () => {} }) {
         run: async () => {
           if (memory.has(key)) return memory.get(key);
           const t0 = performance.now();
-          const out = await tts.call({ text: clean, voice, speed });
+          const out = await tts.call({ text: clean, voice, speed, lang });
           const b = wav(out.audio, out.rate);
           stats.made++; stats.ms += performance.now() - t0;
           writeWhole(file, b).catch(() => {});
