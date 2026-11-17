@@ -668,7 +668,8 @@ In `server/.env`: `AI_ASSISTANT=off` (leave the module out of the API),
 fewer or under 6 GB of RAM: the browser's voice (`LT_TTS=browser`), no LLM
 (`LT_LLM=off`), Moonshine tiny with 2 guesses (`LT_ASR=moonshine-tiny`,
 `LT_ASR_BEAMS=2`), and word search only until the saved search vectors are
-copied in — see DEPLOY.md), `AI_ASSISTANT_NICE` (10, the process's CPU priority),
+copied in — see DEPLOY.md), `AI_ASSISTANT_NICE` (the process's CPU priority:
+10 on the full profile, 0 on the small one),
 `LT_TTS` (`supertonic`, `kokoro` or `browser`), `LT_ASR_BEAMS` (4), `LT_LLM` (`local`, the default: the model
 inside the server; `ollama` to use an Ollama server; `off` for packs only),
 `LT_LOCAL_MODEL` (a GGUF on Hugging Face, default

@@ -9,9 +9,88 @@
 // 0.5B chat model asked to pick from the top 5 got 3 in 14 in a second
 // (eval-kb.mjs). The words the teacher says always come from the card,
 // written and checked by people.
+import crypto from "node:crypto";
+import fs from "node:fs";
+import path from "node:path";
 import { tokens } from "./packs.mjs";
 import { TEMPLATES } from "../shared/solvers.js";
 import { DIMS } from "./embed.mjs";
+import { writeWholeSync } from "./files.mjs";
+
+// Clustered meaning search (an "IVF" index): the phrasing vectors are grouped
+// round LISTS centres, and a question is compared with the rows of only its
+// PROBE nearest groups (and of its word hits) instead of every row: about 6%
+// of the work, which on a small, busy server is the difference between half a
+// second and several. Built once in the background (a sample trains the
+// centres, then every row is placed) and kept in dataDir, keyed by the exact
+// phrasings; until it is there, every row is compared as before.
+const LISTS = 256;
+const PROBE = 16;
+const MIN_ROWS = 20000; // smaller indexes are quick enough as they are
+const TRAIN = 20000; // rows that train the centres
+const yieldNow = () => new Promise((resolve) => setImmediate(resolve));
+
+function dot(a, ao, b, bo) {
+  let s = 0;
+  for (let k = 0; k < DIMS; k++) s += a[ao + k] * b[bo + k];
+  return s;
+}
+
+// The nearest centre of row r of m.
+function nearest(m, r, centres) {
+  let best = 0;
+  let top = -Infinity;
+  const o = r * DIMS;
+  for (let c = 0; c < LISTS; c++) {
+    const s = dot(m, o, centres, c * DIMS);
+    if (s > top) { top = s; best = c; }
+  }
+  return best;
+}
+
+// Centres from a sample (two rounds of spherical k-means), then each row's
+// group. Yields every few hundred rows so requests keep being answered.
+async function trainIvf(m, rows) {
+  const step = Math.max(1, Math.floor(rows / TRAIN));
+  const sample = [];
+  for (let r = 0; r < rows; r += step) sample.push(r);
+  const centres = new Float32Array(LISTS * DIMS);
+  for (let c = 0; c < LISTS; c++)
+    centres.set(m.subarray(sample[Math.floor((c * sample.length) / LISTS)] * DIMS, (sample[Math.floor((c * sample.length) / LISTS)] + 1) * DIMS), c * DIMS);
+  for (let round = 0; round < 2; round++) {
+    const sums = new Float32Array(LISTS * DIMS);
+    for (let j = 0; j < sample.length; j++) {
+      const r = sample[j];
+      const c = nearest(m, r, centres);
+      for (let k = 0; k < DIMS; k++) sums[c * DIMS + k] += m[r * DIMS + k];
+      if (j % 200 === 0) await yieldNow();
+    }
+    for (let c = 0; c < LISTS; c++) {
+      let n = 0;
+      for (let k = 0; k < DIMS; k++) n += sums[c * DIMS + k] ** 2;
+      if (n === 0) continue; // an empty group keeps its old centre
+      n = Math.sqrt(n);
+      for (let k = 0; k < DIMS; k++) centres[c * DIMS + k] = sums[c * DIMS + k] / n;
+    }
+  }
+  const group = new Uint16Array(rows);
+  for (let r = 0; r < rows; r++) {
+    group[r] = nearest(m, r, centres);
+    if (r % 200 === 0) await yieldNow();
+  }
+  return { centres, group };
+}
+
+// The rows of each group, in one array: rows[start[c] .. start[c + 1]).
+function lists(group) {
+  const start = new Int32Array(LISTS + 1);
+  for (const c of group) start[c + 1]++;
+  for (let c = 0; c < LISTS; c++) start[c + 1] += start[c];
+  const fill = start.slice(0, LISTS);
+  const rows = new Int32Array(group.length);
+  group.forEach((c, r) => (rows[fill[c]++] = r));
+  return { start, rows };
+}
 
 // Extra words for the maths tools, so "carpet for my bedroom" finds rect_area.
 const TOOL_WORDS = {
@@ -101,7 +180,7 @@ export function buildCards(packs) {
 
 export function createIndex(
   cards,
-  { k1 = 1.4, b = 0.75, embedder = null, log = null } = {},
+  { k1 = 1.4, b = 0.75, embedder = null, log = null, dataDir = null } = {},
 ) {
   // Word search: an inverted index (word -> [card, count]), so a query only
   // touches the cards that share its words.
@@ -150,6 +229,8 @@ export function createIndex(
   // Meaning search: every phrasing's vector in one matrix, row -> card.
   let matrix = null;
   let rowCard = null;
+  let cardRows = null; // card -> its first row; its rows run to the next card's
+  let ivf = null; // { centres, start, rows } once the clustered index is ready
   const embedded = embedder
     ? (async () => {
         const texts = [];
@@ -167,15 +248,51 @@ export function createIndex(
         vecs.forEach((v, r) => m.set(v, r * DIMS));
         matrix = m;
         rowCard = Int32Array.from(owners);
+        cardRows = new Int32Array(cards.length + 1);
+        for (const i of owners) cardRows[i + 1]++;
+        for (let i = 0; i < cards.length; i++) cardRows[i + 1] += cardRows[i];
         log?.(
           `knowledge base: ${cards.length} cards, ${texts.length} phrasings embedded in ${Date.now() - t0} ms`,
         );
+        if (texts.length >= MIN_ROWS)
+          loadIvf(texts).catch((e) => log?.(`knowledge base: no clustered index (${e.message})`));
       })()
     : Promise.resolve();
 
+  // The clustered index for these exact phrasings: from disk, or made now.
+  async function loadIvf(texts) {
+    const id = crypto.createHash("sha1").update(texts.join("\n")).digest("hex").slice(0, 16);
+    const file = dataDir ? path.join(dataDir, `kb-ivf-${LISTS}-${id}.bin`) : null;
+    const rows = texts.length;
+    let centres;
+    let group;
+    if (file && fs.existsSync(file)) {
+      const buf = fs.readFileSync(file);
+      if (buf.byteLength === LISTS * DIMS * 4 + rows * 2) {
+        const copy = new Uint8Array(buf); // aligned, owned
+        centres = new Float32Array(copy.buffer, 0, LISTS * DIMS);
+        group = new Uint16Array(copy.buffer, LISTS * DIMS * 4, rows);
+      }
+    }
+    if (!centres) {
+      const t0 = Date.now();
+      ({ centres, group } = await trainIvf(matrix, rows));
+      if (file) {
+        fs.mkdirSync(path.dirname(file), { recursive: true });
+        for (const old of fs.readdirSync(dataDir)) if (/^kb-ivf-.*\.bin$/.test(old)) fs.rmSync(path.join(dataDir, old), { force: true });
+        writeWholeSync(file, Buffer.concat([Buffer.from(centres.buffer), Buffer.from(group.buffer, group.byteOffset, group.byteLength)]));
+      }
+      log?.(`knowledge base: clustered index made in ${Math.round((Date.now() - t0) / 1000)} s`);
+    }
+    ivf = { centres, ...lists(group) };
+  }
+
+  const index = new Map(cards.map((c, i) => [c, i]));
+
   // Hybrid search: { card, score } best first; score 0..1. Word search
   // alone while there is no embedder or it is still loading.
-  async function find(query, limit = 5) {
+  // exhaustive: compare every row even when the clustered index is ready (evaluation).
+  async function find(query, limit = 5, { exhaustive = false } = {}) {
     const words = search(query, 50);
     if (!matrix)
       return words
@@ -189,11 +306,24 @@ export function createIndex(
     const lexical = new Map(words.map((w) => [w.card, w.score / top]));
     const v = await embedder.embed(query, { query: true });
     const best = new Float32Array(cards.length).fill(-1);
-    for (let r = 0, o = 0; r < rowCard.length; r++, o += DIMS) {
-      let s = 0;
-      for (let k = 0; k < DIMS; k++) s += v[k] * matrix[o + k];
+    const score = (r) => {
+      const s = dot(v, 0, matrix, r * DIMS);
       if (s > best[rowCard[r]]) best[rowCard[r]] = s;
-    }
+    };
+    if (ivf && !exhaustive) {
+      // The rows of the nearest groups, and every row of the word hits.
+      const near = [];
+      for (let c = 0; c < LISTS; c++) near.push([dot(v, 0, ivf.centres, c * DIMS), c]);
+      near.sort((x, y) => y[0] - x[0]);
+      for (let j = 0; j < PROBE; j++) {
+        const c = near[j][1];
+        for (let p = ivf.start[c]; p < ivf.start[c + 1]; p++) score(ivf.rows[p]);
+      }
+      for (const w of words) {
+        const i = index.get(w.card);
+        for (let r = cardRows[i]; r < cardRows[i + 1]; r++) score(r);
+      }
+    } else for (let r = 0; r < rowCard.length; r++) score(r);
     const out = [];
     for (let i = 0; i < cards.length; i++) {
       const score = 0.65 * best[i] + 0.35 * (lexical.get(cards[i]) || 0);
@@ -208,7 +338,6 @@ export function createIndex(
   // hits of every version and the cards of the given packs. One embedding
   // batch and a few thousand rows instead of a full search per version.
   // -> [{ card, score }] for each version (its best card, or null).
-  const index = new Map(cards.map((c, i) => [c, i]));
   const byPack = new Map();
   cards.forEach((c, i) => {
     if (!byPack.has(c.pack)) byPack.set(c.pack, []);
@@ -261,6 +390,9 @@ export function createIndex(
     cards,
     get hybrid() {
       return !!matrix;
+    },
+    get clustered() {
+      return !!ivf;
     },
   };
 }

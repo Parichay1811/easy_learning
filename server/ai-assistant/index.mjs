@@ -298,6 +298,7 @@ export async function createAIAssistant() {
   function index() {
     const next = createIndex(buildCards(packs), {
       embedder,
+      dataDir: DATA,
       log: (m) => console.log(m),
     });
     next.embedded.catch((e) => console.error("embeddings:", e.message));
@@ -389,7 +390,7 @@ export async function createAIAssistant() {
         voice: speech.voice,
         llm: llm ? await llm.available() : false,
         model: llm?.model || null,
-        kb: { cards: kb.size, hybrid: kb.hybrid },
+        kb: { cards: kb.size, hybrid: kb.hybrid, clustered: kb.clustered },
         packCount: packs.size,
         packs: sample.map((p) => ({
           id: p.id,
