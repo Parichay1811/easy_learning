@@ -207,6 +207,7 @@ body[data-mode='thinking'] .presence .robot .eye { animation: blinkEye 0.9s ease
 .ai-icon.green { background: #e3f6e5; }
 .ai-icon.purple { background: #efe9ff; }
 .ai-icon.gold { background: #fff4d6; }
+.ai-icon.lilac { background: #fff4d6; }
 .chips[hidden], .chips:empty { display: none; }
 .chips { flex: none; display: flex; flex-wrap: wrap; gap: 6px; }
 .chips button { border: 0; border-radius: 999px; padding: 6px 12px; background: var(--card-soft); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12); }
@@ -286,35 +287,99 @@ body:not(.started) .stage, body:not(.started) .controls, body:not(.started) .ask
 }
 /* Tablets: the menu becomes a row of pills above the board. */
 @media (max-width: 1100px) {
-  html, body { overflow: auto; height: auto; }
-  body { height: auto; min-height: 100dvh; }
+  /* The page scrolls. Only the root scrolls: were the body a scroll box of its
+     own (overflow on both), a swipe would land on it, find nothing to scroll
+     and, with overscroll-behavior: none, never reach the page. */
+  html { height: auto; overflow-x: hidden; overflow-y: auto; overscroll-behavior: auto; }
+  body { height: auto; min-height: 100dvh; overflow: visible; overscroll-behavior: auto; }
   .stage { grid-template-columns: minmax(0, 1fr) clamp(260px, 32vw, 330px); grid-template-rows: auto auto auto; grid-template-areas: "rail rail" "board side" "cards cards"; }
   .rail { flex-direction: row; align-items: stretch; }
   .subject { flex: none; width: clamp(220px, 30vw, 280px); }
   .menu { display: flex; gap: 6px; overflow-x: auto; padding: 6px; scrollbar-width: none; flex: 1; }
   .menu li + li .menu-item { margin-top: 0; }
   .menu-item { white-space: nowrap; padding: 8px 12px; }
-  .holo-box { height: clamp(300px, 52vw, 560px); }
+  .holo-box { height: clamp(300px, 52vw, 560px); justify-content: flex-start; }
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .card { max-height: none; }
 }
-/* Phones: one column — bar, menu, board, teacher, cards. */
+/* Phones: one column, in reading order: the question bar, the subject, the
+   board, four quick asks, then the lesson cards. The rail and the teacher's
+   panel open up (display: contents) so their parts can be placed one by one. */
+.action.phone-only { display: none; }
 @media (max-width: 700px) {
-  .hud { padding: 8px 10px 2px; gap: 8px; }
-  .ask { padding: 4px 4px 4px 12px; }
+  .hud { padding: 10px 12px 2px; gap: 8px; }
+  .ask { padding: 4px 4px 4px 14px; border-width: 2px; }
+  .ask input { font-size: 17px; }
+  .ask input::placeholder { color: var(--text-faint); }
   .metric { display: none; }
-  .ctl { width: 36px; height: 36px; }
-  #haptic { display: none; }
-  .stage { grid-template-columns: 1fr; grid-template-areas: "rail" "board" "side" "cards"; padding: 8px 10px 14px; }
-  .rail { flex-direction: column; }
-  .subject { width: 100%; }
-  .holo-box { height: auto; }
-  .holo { border-width: 8px; border-radius: 16px; }
-  .sticky { top: 8px; right: 8px; font-size: 12px; padding: 5px 10px 6px; }
-  .chat { max-height: 46vh; }
-  .cards { grid-template-columns: 1fr; }
+  .ctl { width: 40px; height: 40px; }
+  #haptic, #sounds { display: none; }
   .brand .logo { width: 84px; }
   .brand .tag { display: none; }
+
+  body { grid-template-rows: auto auto; }
+  .stage { display: flex; flex-direction: column; gap: 12px; padding: 10px 12px 18px; }
+  /* Everything keeps its own height: the page scrolls, nothing is squeezed. */
+  .stage > *, .rail > *, .side > * { flex-shrink: 0; }
+  .rail, .side { display: contents; }
+  .subject { order: 1; width: 100%; }
+  .subject-btn { padding: 10px 12px; border-radius: 18px; }
+  .subject-icon { width: 42px; height: 42px; font-size: 24px; }
+  .holo-wrap { order: 2; }
+  .actions { order: 3; }
+  .chat { order: 4; }
+  .cards { order: 5; }
+  .videos { order: 6; }
+  .chips { order: 7; }
+  .menu { order: 8; }
+  .presence { display: none; }
+
+  /* The board: the sticky note sits on the frame, clear of the title. */
+  .holo-box { height: auto; }
+  .holo { border-width: 9px; border-radius: 18px; overflow: visible; }
+  #board, .holo::before { border-radius: 9px; }
+  .sticky { top: -14px; right: 6px; max-width: none; white-space: nowrap; font-size: 12px; padding: 4px 10px 5px; }
+  .sticky::before { top: -6px; width: 26px; height: 10px; }
+
+  /* Four colourful tiles in a row, as on the cards below. */
+  .actions { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .action.phone-only { display: flex; }
+  .action { justify-content: flex-start; gap: 5px; padding: 10px 4px 9px; border: 2px solid rgba(255, 255, 255, 0.9); font-size: 12.5px; letter-spacing: 0.02em; }
+  .action:nth-child(1) { background: #e6f7e9; }
+  .action:nth-child(2) { background: #efeafe; }
+  .action:nth-child(3) { background: #fff6dc; }
+  .action:nth-child(4) { background: #ffe8f1; }
+  .ai-icon { width: 34px; height: 34px; background: rgba(255, 255, 255, 0.7); }
+  .ai-icon svg { width: 27px; height: 27px; }
+
+  /* The conversation: as tall as what is in it. */
+  .chat { flex: none; padding: 10px; }
+  .chat:not(:has(.log li)):has(.saying[hidden]) { display: none; }
+  .log { flex: none; min-height: 0; max-height: 34vh; }
+  .log:empty { display: none; }
+  .caption { max-height: 12em; }
+
+  /* The cards, full width; the real-life picture sits beside its text. */
+  .cards { grid-template-columns: 1fr; gap: 12px; }
+  .card { padding: 14px 16px; }
+  .card h3 { font-size: 19px; }
+  .card p, .ticks li { font-size: 15px; -webkit-line-clamp: 4; }
+  .card.real:has(#real-img:not([hidden])) { display: grid; grid-template-columns: minmax(0, 1fr) 40%; grid-template-rows: auto auto; column-gap: 12px; row-gap: 8px; }
+  .card.real:has(#real-img:not([hidden])) h3 { grid-column: 1 / -1; }
+  .card.real:has(#real-img:not([hidden])) p { grid-column: 1; align-self: center; -webkit-line-clamp: 5; }
+  .card.real #real-img { grid-column: 2; grid-row: 2; height: 96px; }
+  .card.quiz { flex-direction: row; flex-wrap: wrap; text-align: left; align-items: center; }
+  .card.quiz p { flex: 1 1 60%; }
+
+  /* The lesson menu last: the extras (notes, practice, games) as a grid of tiles. */
+  .menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px; }
+  .menu li:first-child { display: none; }
+  .menu li + li .menu-item { margin-top: 0; }
+  .menu-item { padding: 9px 10px; font-size: 14px; gap: 8px; white-space: normal; line-height: 1.2; }
+  .mi-icon { width: 26px; height: 26px; }
+  .mi-icon svg { width: 24px; height: 24px; }
+
+  .side .videos .v-card, .v-card { width: min(78vw, 260px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .start, .hero h1, body[data-mode] .edge-glow, .ask .spark, .robot .eye { animation: none !important; }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import * as FramerMotion from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaTimes } from "react-icons/fa";
@@ -18,12 +18,16 @@ const ASSISTANT_URL = "/ai-assistant/";
 // The AI voice assistant trigger. At 430px and up it floats bottom-right over
 // the page; below that it sits inline in the navbar next to the hamburger,
 // since a fixed circle would otherwise overlap small-screen content.
-// Clicking it opens the live assistant in an embedded panel.
+// Clicking it opens the live assistant in an embedded panel; on a phone,
+// where that panel would fill the screen anyway, it opens the AI Teacher page
+// instead (the site's navbar above, the whole lesson scrolling below).
 const COMPACT_QUERY = "(max-width: 429px)";
+const PHONE_QUERY = "(max-width: 720px)";
 
 const AIAssistantWidget = () => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [isCompact, setIsCompact] = useState(
     () => typeof window !== "undefined" && window.matchMedia?.(COMPACT_QUERY).matches
@@ -52,7 +56,11 @@ const AIAssistantWidget = () => {
   // The AI Teacher page already is the assistant: no second way in on top of it.
   if (pathname === "/ai-teacher") return null;
 
-  const handleOpen = () => { playSlide(); setOpen(true); };
+  const handleOpen = () => {
+    playSlide();
+    if (window.matchMedia?.(PHONE_QUERY).matches) navigate("/ai-teacher");
+    else setOpen(true);
+  };
   const handleClose = () => { playSlide(); setOpen(false); };
 
   const trigger = (

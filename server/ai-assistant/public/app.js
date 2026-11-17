@@ -177,6 +177,7 @@ window.teacher = {
   },
 };
 
+const PHONE = matchMedia("(max-width: 700px)");
 let quietTimer = null;
 function setMode(m) {
   const prev = mode;
@@ -193,8 +194,9 @@ function setMode(m) {
   }
   els.status.textContent =
     m === "idle" && mic?.muted ? "Mic off: type your question" : STATUS[m];
-  // The question bar shows it too, as its placeholder ("Ready: type a question").
-  els.input.placeholder = els.status.textContent;
+  // The question bar shows it too, as its placeholder ("Ready: type a question");
+  // on a phone the bar is too short for that, and simply invites a question.
+  els.input.placeholder = PHONE.matches ? "Ask a question…" : els.status.textContent;
   if (!mic) return;
   // The bar for an interruption stays high a moment after the teacher stops,
   // while the room still echoes the last words.
@@ -1077,9 +1079,13 @@ function boardFrom(title, rows) {
   return true;
 }
 
-// The three quick asks under the conversation.
+// The quick asks under the conversation (and, on phones, "Try it yourself").
 for (const b of document.querySelectorAll(".action"))
-  b.addEventListener("click", () => (b.dataset.ask === "test" ? testMe() : askNow(b.dataset.ask)));
+  b.addEventListener("click", () => {
+    if (b.dataset.go) MENU[b.dataset.go]();
+    else if (b.dataset.ask === "test") testMe();
+    else askNow(b.dataset.ask);
+  });
 els.quizBtn.addEventListener("click", testMe);
 els.tryBtn.addEventListener("click", testMe);
 

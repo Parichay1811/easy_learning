@@ -153,7 +153,7 @@ function fitBoard() {
     let w = width - 2 * frame;
     // In one column (a phone upright) the board is nearly square, so the
     // figure can fill it; side by side it keeps 16:9.
-    let h = column.matches ? Math.min(w * 0.9, window.innerHeight * 0.38) : (w * 9) / 16;
+    let h = column.matches ? Math.min(w * 0.92, Math.max(240, window.innerHeight * 0.46)) : (w * 9) / 16;
     // Side by side the board fills the height left above its caption; in a
     // single column it takes the full width and the page below adapts.
     const room = height - cap - 2 * frame;
