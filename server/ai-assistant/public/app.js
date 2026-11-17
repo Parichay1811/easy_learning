@@ -55,6 +55,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 let ctx = null;
 let voice = null;
 let serverVoice = true; // false: the server has no voice, the browser speaks (health)
+let serverHearing = true; // false: no speech recognition on the server; questions are typed (health)
 let mic = null;
 let run = null;
 let mode = "off";
@@ -718,7 +719,8 @@ function heardLine(li, text, spokenAs) {
 // Sends the question and acts on the answer as it streams in: an 'ack' is
 // said at once ("Ooh, the Mona Lisa. Let me think."), the 'plan' follows it,
 // and a spoken answer arrives sentence by sentence ('step', then 'end').
-async function ask(text, seq = ++askSeq, spokenAs = null) {
+// open: a lesson's id, picked from the topic suggestions: that lesson, as it is.
+async function ask(text, seq = ++askSeq, spokenAs = null, open = null) {
   if (prefix && Date.now() - prefixAt < 8000) text = `${prefix} ${text}`;
   prefix = null;
   log("you", text, spokenAs);
@@ -735,6 +737,7 @@ async function ask(text, seq = ++askSeq, spokenAs = null) {
           awaiting,
           test: !!test,
           history: talk.slice(-3),
+          ...(open && { open }),
         },
       }),
     });
@@ -862,7 +865,7 @@ async function begin() {
   scene.enter();
   scene.enableTilt();
   haptics.fire("start");
-  try {
+  if (serverHearing) try {
     mic = await startMic(ctx, {
       onStart: () => {
         if (mode === "teaching") interrupt();
@@ -886,13 +889,15 @@ async function begin() {
     title: "Hello!",
     steps: [
       {
-        say: GREETING,
+        say: serverHearing ? GREETING : GREETING_TYPED,
         draw: [
           { op: "clear" },
           { op: "title", text: "Ask me anything" },
           {
             op: "text",
-            text: "Say or type a question. Talk any time to interrupt me.",
+            text: serverHearing
+              ? "Say or type a question. Talk any time to interrupt me."
+              : "Type a question, or a topic and pick it from the list.",
             at: "Ask",
           },
           { op: "chips", items: examples, at: "topic" },
@@ -903,11 +908,128 @@ async function begin() {
   return true;
 }
 
+const GREETING_TYPED =
+  "Hi, I'm your Learnigo teacher. Type any question, or start typing a topic and pick it from the list. Type test me for some questions.";
+
+// No speech recognition on this server (LT_ASR=off): no microphone, and
+// everything on the page asks for typing instead of talking.
+function typedOnly() {
+  serverHearing = false;
+  els.mic.hidden = true;
+  els.input.placeholder = "Type a question or a topic…";
+  Object.assign(STATUS, {
+    off: "Press Start to begin",
+    idle: "Ready: type a question",
+    hearing: "Ready: type a question",
+    teaching: "Teaching: press Stop to interrupt",
+    paused: "Paused",
+  });
+  Object.assign(STATE, { idle: "Ready", hearing: "Ready" });
+  $("hero-sub").textContent =
+    "Type any question or topic. It draws, explains and tests you.";
+  $("hero-tip").textContent = "Pick a topic as you type, or tap an example";
+  setMode(mode);
+}
+
+// Topic suggestions in the question box: as the student types, the lessons
+// whose titles match (GET /topics, titles only, cheap) appear under it; arrow
+// keys or a tap pick one, which opens that lesson straight away.
+const suggest = { el: $("suggest"), items: [], at: -1, seq: 0, timer: null };
+const escapeHtml = (s) => s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+function hideSuggest() {
+  suggest.el.hidden = true;
+  suggest.items = [];
+  suggest.at = -1;
+  els.input.setAttribute("aria-expanded", "false");
+  els.input.removeAttribute("aria-activedescendant");
+}
+function markSuggest(at) {
+  suggest.at = at;
+  [...suggest.el.children].forEach((li, i) => li.setAttribute("aria-selected", String(i === at)));
+  if (at >= 0) els.input.setAttribute("aria-activedescendant", `suggest-${at}`);
+  else els.input.removeAttribute("aria-activedescendant");
+}
+function showSuggest(topics, typed) {
+  if (!topics.length) return hideSuggest();
+  // Bold the start of each word that matches a typed word.
+  const words = typed.toLowerCase().split(/\s+/).filter(Boolean);
+  const bold = (title) =>
+    title
+      .split(/(\s+)/)
+      .map((w) => {
+        const n = Math.max(0, ...words.filter((t) => w.toLowerCase().startsWith(t)).map((t) => t.length));
+        return n ? `<b>${escapeHtml(w.slice(0, n))}</b>${escapeHtml(w.slice(n))}` : escapeHtml(w);
+      })
+      .join("");
+  suggest.items = topics;
+  suggest.el.innerHTML = topics
+    .map(
+      (t, i) =>
+        `<li id="suggest-${i}" role="option" aria-selected="false"><span class="sg-title">${bold(t.title)}</span>` +
+        (t.area ? `<span class="sg-area">${escapeHtml(t.area.split(":")[0])}</span>` : "") +
+        "</li>",
+    )
+    .join("");
+  suggest.el.hidden = false;
+  els.input.setAttribute("aria-expanded", "true");
+  markSuggest(-1);
+}
+async function fetchSuggest(typed) {
+  const seq = ++suggest.seq;
+  try {
+    const r = await fetch(`/api/ai-assistant/topics?q=${encodeURIComponent(typed)}`);
+    const { topics = [] } = await r.json();
+    if (seq === suggest.seq && els.input.value.trim() === typed) showSuggest(topics, typed);
+  } catch {
+    /* no suggestions: the question can still be asked */
+  }
+}
+async function pickSuggest(i) {
+  const t = suggest.items[i];
+  if (!t) return;
+  hideSuggest();
+  els.input.value = "";
+  await start();
+  if (mode === "teaching") interrupt();
+  ask(`Teach me about ${t.title}`, ++askSeq, null, t.id);
+}
+els.input.addEventListener("input", () => {
+  clearTimeout(suggest.timer);
+  const typed = els.input.value.trim();
+  if (typed.length < 2) {
+    suggest.seq++;
+    return hideSuggest();
+  }
+  suggest.timer = setTimeout(() => fetchSuggest(typed), 120);
+});
+els.input.addEventListener("keydown", (e) => {
+  if (suggest.el.hidden) return;
+  const n = suggest.items.length;
+  if (e.key === "ArrowDown") { e.preventDefault(); markSuggest((suggest.at + 1) % n); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); markSuggest((suggest.at - 1 + n) % n); }
+  else if (e.key === "Escape") { e.preventDefault(); hideSuggest(); }
+  else if (e.key === "Enter" && suggest.at >= 0) { e.preventDefault(); pickSuggest(suggest.at); }
+});
+// pointerdown, not click: picked before the input loses focus and hides the list.
+suggest.el.addEventListener("pointerdown", (e) => {
+  const li = e.target.closest("li");
+  if (!li) return;
+  e.preventDefault();
+  pickSuggest([...suggest.el.children].indexOf(li));
+});
+suggest.el.addEventListener("pointermove", (e) => {
+  const li = e.target.closest("li");
+  if (li) markSuggest([...suggest.el.children].indexOf(li));
+});
+els.input.addEventListener("blur", () => setTimeout(hideSuggest, 100));
+
 els.start.addEventListener("click", start);
 els.form.addEventListener("submit", async (e) => {
   e.preventDefault();
   const text = els.input.value.trim();
   if (!text) return;
+  hideSuggest();
+  suggest.seq++;
   els.input.value = "";
   await start();
   if (mode === "teaching") interrupt();
@@ -973,8 +1095,9 @@ let captionAt = "";
     }
   } else if (mode === "idle" && awaiting && captionAt !== "answer") {
     captionAt = "answer";
-    els.caption.textContent =
-      "Your turn: say your answer, or tap an option (or press A to D).";
+    els.caption.textContent = serverHearing
+      ? "Your turn: say your answer, or tap an option (or press A to D)."
+      : "Your turn: tap an option, or press A to D.";
   }
   requestAnimationFrame(animate);
 })();
@@ -1004,6 +1127,7 @@ async function health() {
     const h = await (await fetch("/api/ai-assistant/health")).json();
     serverVoice = h.voice !== "browser";
     if (voice) voice.server = serverVoice;
+    if (h.hearing === false && serverHearing) typedOnly();
     examples = [
       ...h.packs.flatMap((p) =>
         p.examples.slice(0, h.packs.length > 3 ? 1 : 2),

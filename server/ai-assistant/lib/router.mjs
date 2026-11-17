@@ -368,6 +368,9 @@ export async function respond(text, options = {}) {
 
 async function answer(text, { context = {}, history = [], packs, kb, llm, fast, wiki, opendata, videos, onTodo, emit, signal, seed = Date.now() } = {}) {
   text = fixHeard(String(text).trim());
+  // A topic picked from the question box's suggestions: that lesson, as it is.
+  const picked = context.open ? packs.get(context.open) : null;
+  if (picked) { emit({ type: 'plan', ...packPlan(picked, 'explain', seed), tier: 'packs' }); return 'packs'; }
   // Follow-ups ("when was he born?", "tell me more", "why?") made whole questions.
   const follow = followUp(text, { ...context, history });
   text = follow.text;

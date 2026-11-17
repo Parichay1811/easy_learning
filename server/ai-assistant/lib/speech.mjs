@@ -19,6 +19,9 @@ import { writeWhole } from './files.mjs';
 // speaks with the browser's own voice. Small servers use it (worker.mjs).
 export const ENGINE = process.env.LT_TTS || 'supertonic';
 const BROWSER_VOICE = ENGINE === 'browser';
+// LT_ASR=off: no hearing on the server (no model, no CPU); students type.
+const HEARING = (process.env.LT_ASR || 'moonshine') !== 'off';
+const noHearing = () => Object.assign(new Error('speech recognition is off: type the question'), { code: 503 });
 const VOICE = process.env.LT_VOICE || (ENGINE === 'kokoro' ? 'af_heart' : 'F1');
 
 // A model in a child process: call(message) resolves with its reply. A
@@ -103,9 +106,12 @@ export function createSpeech({ dataDir, log = () => {} }) {
   const dir = path.join(dataDir, 'tts');
   fs.mkdirSync(dir, { recursive: true });
   const tts = BROWSER_VOICE ? null : modelWorker('tts', log);
-  const asr = modelWorker('asr', log);
+  const asr = HEARING ? modelWorker('asr', log) : null;
   let loaded = false;
-  const ready = Promise.all([tts?.ready, asr.ready]).then(() => { loaded = true; log(BROWSER_VOICE ? 'speech model ready (the voice is the browser\'s)' : 'voice and speech models ready'); });
+  const ready = Promise.all([tts?.ready, asr?.ready]).then(() => {
+    loaded = true;
+    log(`speech ready: voice ${BROWSER_VOICE ? 'in the browser' : ENGINE}, hearing ${HEARING ? process.env.LT_ASR || 'moonshine' : 'off (typed questions)'}`);
+  });
   const queues = { live: [], warm: [] };
   const memory = new Map();
   const inflight = new Map();
@@ -184,6 +190,7 @@ export function createSpeech({ dataDir, log = () => {} }) {
   // ("Thank you.") on noise. prompt: the lesson's words, for Whisper.
   // keep: a name for the recording, to score sentences against it after.
   async function transcribe(samples, { prompt = '', beams = 4, keep = null } = {}) {
+    if (!HEARING) throw noHearing();
     await ready;
     const r = await asr.call({ samples, prompt, beams, keep });
     const hyps = r.hyps.map((h) => ({ ...h, text: h.text.trim() }));
@@ -192,6 +199,7 @@ export function createSpeech({ dataDir, log = () => {} }) {
 
   // How well each sentence fits a kept recording (hearing.mjs hear.score).
   async function score(keep, texts) {
+    if (!HEARING) throw noHearing();
     return (await asr.call({ keep, texts })).scores;
   }
 
@@ -200,5 +208,5 @@ export function createSpeech({ dataDir, log = () => {} }) {
     for (const t of new Set(texts)) speak(t, { voice, priority: 'warm' }).catch(() => {});
   }
 
-  return { ready, speak, transcribe, score, warm, stats, voice: BROWSER_VOICE ? 'browser' : 'server', isReady: () => loaded };
+  return { ready, speak, transcribe, score, warm, stats, voice: BROWSER_VOICE ? 'browser' : 'server', hearing: HEARING, isReady: () => loaded };
 }

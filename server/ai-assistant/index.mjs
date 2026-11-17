@@ -157,6 +157,41 @@ function readBody(req, limit) {
   });
 }
 
+// The question box's topic suggestions: every lesson pack's title, matched as
+// the student types. The exact title comes first, then titles that start with it,
+// then titles whose words start with each typed word, then titles that
+// contain it; reviewed lessons and shorter titles break ties.
+const fold = (s) => String(s).toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+let topicIndex = null;
+let topicIndexFor = null;
+function suggestFrom(packs, q, n) {
+  if (topicIndexFor !== packs) {
+    const seen = new Set();
+    topicIndex = [];
+    for (const p of packs.values()) {
+      const key = fold(p.title);
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      topicIndex.push({ id: p.id, title: p.title, area: p.area || "", key, words: key.split(" "), reviewed: p.status === "reviewed" });
+    }
+    topicIndexFor = packs;
+  }
+  const t = fold(q);
+  if (t.length < 2) return [];
+  const typed = t.split(" ");
+  const out = [];
+  for (const e of topicIndex) {
+    let score = 0;
+    if (e.key === t) score = 120;
+    else if (e.key.startsWith(t)) score = 100;
+    else if (typed.every((w) => e.words.some((x) => x.startsWith(w)))) score = 60 + (e.words[0].startsWith(typed[0]) ? 10 : 0);
+    else if (e.key.includes(t)) score = 40;
+    if (!score) continue;
+    out.push({ e, score: score + (e.reviewed ? 5 : 0) - e.key.length / 100 });
+  }
+  return out.sort((a, b) => b.score - a.score).slice(0, n).map(({ e }) => ({ id: e.id, title: e.title, area: e.area }));
+}
+
 // Anything that changes something (a POST) must come from this site's own
 // pages or a local tool, never from another website the student has open:
 // that page could plant a "correction" or fill the TODO list. A browser
@@ -381,6 +416,7 @@ export async function createAIAssistant() {
 
   const MAX_QUESTION = 500; // characters of a typed or heard question
   let heardCount = 0;
+  const suggestTopics = (q, n) => suggestFrom(packs, q, n);
   const api = {
     async "GET /health"() {
       const sample = exampleSpread(packs, 6);
@@ -388,6 +424,8 @@ export async function createAIAssistant() {
         ready: speech.isReady(),
         // "browser": the page speaks with the browser's own voice (LT_TTS=browser).
         voice: speech.voice,
+        // false: no speech recognition (LT_ASR=off); the page asks for typing.
+        hearing: speech.hearing,
         llm: llm ? await llm.available() : false,
         model: llm?.model || null,
         kb: { cards: kb.size, hybrid: kb.hybrid, clustered: kb.clustered },
@@ -455,6 +493,13 @@ export async function createAIAssistant() {
       return {
         learned: heard.learn(String(body.heard || ""), String(body.text || "")),
       };
+    },
+
+    // Topics for the question box as the student types: GET /topics?q=photo
+    // -> { topics: [{ id, title, area }] }, best first. Titles only, from
+    // memory, so it is cheap enough for every keystroke on a small server.
+    async "GET /topics"(req, res, url) {
+      return { topics: suggestTopics(url.searchParams.get("q") || "", 8) };
     },
 
     // Videos to watch next on a topic: GET /api/videos?q=Newton's laws
