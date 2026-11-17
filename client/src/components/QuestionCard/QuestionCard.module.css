@@ -1,63 +1,109 @@
+/* The question on a chalkboard in a wooden frame, like the AI Teacher's board:
+   white chalk on dark slate for the question, white cards for the answers. */
 .card {
   width: 100%;
-  max-width: 700px;
-  background: rgba(15, 15, 30, 0.9);
-  border: 5px solid #dedc5c;
-  border-radius: 28px;
-  padding: 28px 36px;
+  max-width: 720px;
+  border: 14px solid transparent;
+  border-radius: 26px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #22346b 0%, #16234a 45%, #0d1530 100%) padding-box,
+    repeating-linear-gradient(100deg, rgba(255, 255, 255, 0.07) 0 3px, transparent 3px 11px) border-box,
+    linear-gradient(145deg, #e09245, #b5612a 35%, #d07a35 65%, #9a4c1d) border-box;
+  box-shadow:
+    inset 0 0 0 2px rgba(0, 0, 0, 0.35),
+    0 0 0 2px rgba(120, 60, 20, 0.6),
+    0 18px 40px rgba(20, 10, 0, 0.45);
+  padding: 26px 34px 30px;
   text-align: center;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.28);
+}
+/* A faint chalk haze across the board. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(520px 220px at 50% 0%, rgba(255, 255, 255, 0.06), transparent 70%);
 }
 
 .stimulus { position: relative; z-index: 1; }
 
+/* The instruction: a chalk heading with a short underline. */
 .instruction {
-  background: #1a1a2e;
-  border-radius: 16px;
-  padding: 10px 16px;
-  font-size: 19px;
+  margin: 0 auto 18px;
+  font-size: 21px;
   font-weight: 700;
-  color: white;
-  margin: 0 0 14px;
+  line-height: 1.35;
+  color: #ffffff;
+}
+.instruction::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 5px;
+  margin: 10px auto 0;
+  border-radius: 3px;
+  background: #4dd9ff;
+  box-shadow: 0 0 10px rgba(77, 217, 255, 0.6);
 }
 
-.emoji { font-size: 44px; margin-bottom: 10px; }
+.emoji {
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 16px;
+  display: grid;
+  place-items: center;
+  font-size: 46px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px dashed rgba(255, 255, 255, 0.25);
+}
 
+/* The question itself: the biggest, clearest text on the board. */
 .promptBox {
-  background: rgba(207, 207, 207, 0.18);
-  padding: 14px 18px;
-  border-radius: 16px;
-  font-size: 20px;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 20px;
+  margin: 0 0 20px;
+  padding: 16px 20px;
+  border-radius: 18px;
+  border: 2px dashed rgba(77, 217, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #fff7d6;
 }
 
-.toolRow { display: flex; justify-content: center; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.toolRow { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
 
 .toolBtn {
-  background: rgba(255,255,255,0.12);
-  border: 2px solid rgba(255,255,255,0.3);
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.45);
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 8px 18px;
+  border-radius: 999px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
   font-family: "Fredoka", sans-serif;
   font-weight: 600;
+  transition: background 0.15s, transform 0.15s;
 }
+.toolBtn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
 .toolBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 
+/* A hint: a sticky note pinned on the board. */
 .hintBubble {
-  background: rgba(255,215,0,0.12);
-  border: 1px solid rgba(255,215,0,0.4);
-  border-radius: 12px;
-  padding: 10px 14px;
-  color: #ffe17a;
-  font-size: 15px;
-  margin-bottom: 16px;
+  margin: 0 auto 18px;
+  max-width: 90%;
+  padding: 10px 16px 12px;
+  transform: rotate(-1deg);
+  border-radius: 4px 4px 12px 4px;
+  background: linear-gradient(170deg, #ffe680, #ffd23f);
+  color: #3b2f00;
+  font-size: 16px;
+  font-weight: 600;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
 }
 
 .feedback { margin-top: 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; z-index: 1; }
@@ -82,7 +128,8 @@
 .legacyText { color: white; font-size: 19px; margin-bottom: 20px; }
 
 @media (max-width: 480px) {
-  .card { padding: 18px 14px; border-width: 4px; }
-  .instruction { font-size: 16px; }
-  .promptBox { font-size: 16px; padding: 12px 14px; }
+  .card { padding: 18px 14px 20px; border-width: 9px; border-radius: 20px; }
+  .instruction { font-size: 17px; margin-bottom: 14px; }
+  .emoji { width: 66px; height: 66px; font-size: 36px; margin-bottom: 12px; }
+  .promptBox { font-size: 19px; padding: 12px 14px; }
 }
