@@ -1,23 +1,28 @@
 .options { display: flex; flex-direction: column; gap: 12px; }
 
+/* Answers: white cards on the board, easy to read and easy to tap. */
 .option {
   padding: 14px 18px;
-  border-radius: 14px;
-  border: none;
-  background: rgba(197, 197, 197, 0.88);
-  font-size: 17px;
+  border-radius: 16px;
+  border: 3px solid transparent;
+  background: #ffffff;
+  font-size: 18px;
   font-family: "Fredoka", sans-serif;
-  color: #1a1a2e;
+  color: #1f2937;
   cursor: pointer;
   font-weight: 600;
+  line-height: 1.35;
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: all 0.2s ease;
+  gap: 14px;
   text-align: left;
+  box-shadow: 0 4px 0 #c7cde0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
-.option:disabled { cursor: not-allowed; opacity: 0.7; }
-.option.selected { background: rgba(108, 92, 231, 0.55); color: white; }
+.option:hover:not(:disabled) { transform: translateY(-2px); background: #f4f2ff; }
+.option:active:not(:disabled) { transform: translateY(2px); box-shadow: 0 1px 0 #c7cde0; }
+.option:disabled { cursor: not-allowed; opacity: 0.75; }
+.option.selected { background: #ecebff; border-color: #6c5ce7; color: #2d2580; box-shadow: 0 4px 0 #4527a0; }
 
 .letter {
   background: #6c5ce7;
@@ -88,17 +93,18 @@
   padding: 12px 16px;
   border-radius: 12px;
   border: 2px solid transparent;
-  background: rgba(197,197,197,0.88);
-  color: #1a1a2e;
+  background: #ffffff;
+  color: #1f2937;
   font-weight: 600;
   font-size: 17px;
+  box-shadow: 0 3px 0 #c7cde0;
   cursor: pointer;
   font-family: "Fredoka", sans-serif;
 }
 .matchItem:disabled { cursor: not-allowed; }
-.matchSelected { border-color: #6c5ce7; background: rgba(108,92,231,0.35); }
-.matchSolved { background: rgba(46,204,113,0.5); opacity: 0.85; }
-.matchWrong { background: rgba(231,76,60,0.6) !important; animation: shakeChip 0.3s; }
+.matchSelected { border-color: #6c5ce7; background: #ecebff; }
+.matchSolved { background: #d9f5e3; color: #1b5e20; opacity: 0.9; }
+.matchWrong { background: #ffd9d6 !important; animation: shakeChip 0.3s; }
 
 @keyframes shakeChip {
   0% { transform: translateX(0); } 25% { transform: translateX(-5px); }
@@ -117,7 +123,7 @@
   cursor: pointer;
   min-height: 90px;
 }
-.binLabel { color: #dedc5c; font-weight: 700; text-align: center; margin-bottom: 8px; font-size: 15px; }
+.binLabel { color: #ffe680; font-weight: 700; text-align: center; margin-bottom: 8px; font-size: 15px; }
 .binItems { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
 .binChip {
   background: #6c5ce7;
