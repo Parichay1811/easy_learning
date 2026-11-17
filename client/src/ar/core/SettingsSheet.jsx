@@ -187,6 +187,12 @@ export default function SettingsSheet({ onClose, getTracker, inGame = false }) {
                 on={s.showSkeleton}
                 onChange={(v) => set({ showSkeleton: v })}
               />
+              <Toggle
+                label={t('ar.settings.vision.compatTracking', 'Compatibility tracking')}
+                hint={t('ar.settings.vision.compatTrackingHint', 'Turn on if hand tracking does not work, or is slow, on this device. Uses the lighter model that works on the most phones and tablets.')}
+                on={s.compatTracking}
+                onChange={(v) => set({ compatTracking: v })}
+              />
             </>
           )}
 

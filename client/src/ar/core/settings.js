@@ -48,6 +48,10 @@ export const DEFAULT_SETTINGS = {
   showMetrics: false, // live latency/accuracy HUD for the therapist
   mirrorView: true,
   showSkeleton: true,
+  // Runs hand/body tracking on the CPU instead of the GPU. Slower, but works
+  // on phones whose WebGL driver cannot run the model (see vision.js). Normally
+  // the switch happens automatically; this is the manual override.
+  compatTracking: false,
 
   // ── data ──
   telemetry: true, // record trial-level analysis data

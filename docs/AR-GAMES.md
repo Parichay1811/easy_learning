@@ -138,6 +138,66 @@ directly and React only hears about coarse status changes.
   with a three-second "raise your right hand" check that auto-corrects it, and
   a therapist can flip it in Settings → Body.
 
+### Phones and tablets (`core/vision.js`, `core/visionWorker.js`, `core/tracker.js`)
+
+**Inference runs in a Web Worker.** `detectForVideo()` is synchronous. On a
+phone one call can take hundreds of milliseconds, and the GPU path can stall
+for seconds on its first real frame. On the main thread that froze the page the
+moment tracking started. Now the main thread draws each camera frame into a
+640 px canvas, posts it to the worker as an `ImageBitmap` (one frame in flight
+at a time), and keeps rendering at camera rate. A slow device just gets fewer
+tracking updates, and hold windows stretch to cover the gaps. Browsers that
+can't run MediaPipe in a worker (they need module workers and WebGL on an
+`OffscreenCanvas`, so iOS 16 and older don't qualify) fall back to the main
+thread with a strict time budget.
+
+**Phones use light models on the CPU delegate.**
+
+| Game type | Phone / tablet | Desktop |
+|---|---|---|
+| Hands only | `hand_landmarker_lite.task`: full palm detector + **lite** landmark network (4.4 MB; per-hand network 2.2× faster) | full `hand_landmarker.task` |
+| Hands + body | full hand model (the child stands back; the lite network loses small hands) + `pose_landmarker_lite` | same |
+| Delegate | CPU (XNNPACK, WASM SIMD) — avoids the mobile WebGL delegate entirely | GPU, verified by a warm-up frame, auto-switch to CPU on runtime failure or > 160 ms/frame |
+
+The lite bundle is committed under `client/scripts/models/`. See the README
+there for why and how it is built. Google ships the lite network without the
+metadata the Tasks API needs.
+
+Other phone failures this code handles:
+
+| What went wrong | What happens now |
+|---|---|
+| GPU delegate *built* fine, then threw on every frame | warm-up inference before use; 3 consecutive failures → rebuilt on CPU mid-game; remembered in `localStorage: ar_vision_gpu_failed_v1` |
+| Worker crashed or hung (GPU stall) | 8 s detect timeout → worker restarted on CPU. After 3 crashes → main thread |
+| `requestVideoFrameCallback` stalls for camera streams on some WebKit builds | watchdog falls back to `requestAnimationFrame` |
+| `loadedmetadata` already fired / `play()` refused (Low Power Mode) | size awaited via every event + polling with timeout; `play()` retried on next tap |
+| Camera died after backgrounding / screen lock | track re-acquired on `visibilitychange` / `ended` |
+| "Camera busy" right after the previous game (Android) | `getUserMedia` retries, then loosens constraints; own error message |
+| Missing vendored assets "found" because the SPA fallback answers 200 with `index.html` | probe rejects `text/html`, falls back to CDN |
+
+Overrides for support cases: **Settings → Vision → Compatibility tracking**
+(CPU + lite; turning it off forgets a remembered GPU failure), or on the game
+URL for one visit: `?arDelegate=cpu|gpu`, `?arModel=lite|full`, `?arWorker=0`.
+`latencyReport()` records `inferenceThread`, `handModel`, `delegate`,
+`delegateFellBack` and `detectRatio` (the share of camera frames analysed).
+
+---|---|
+| The GPU delegate *built* fine and then threw (or did nothing) on every real frame, on many Mali/PowerVR GPUs, older iPhones and in-app browsers | A GPU task must pass a warm-up inference before it is used. If it throws 3 frames in a row mid-game, it is rebuilt on the CPU (XNNPACK) delegate without stopping the game, and the device is remembered (`localStorage: ar_vision_gpu_failed_v1`) |
+| Inference ran on every camera frame, on the main thread; a 60–150 ms CPU inference froze touch and drawing | Inference gets a time budget (≤ ~60 % of the main thread on phones, ~35 % on desktops). Hand + body alternate frames on phones. Hold windows stretch with the real detection interval so cursors don't flicker |
+| Camera `<video>` → WebGL upload bugs in WebKit, and full-resolution uploads | Frames go to MediaPipe through a 640 px 2D canvas; the child still sees the full-resolution camera |
+| `requestVideoFrameCallback` stalls for camera streams on some WebKit builds | A watchdog falls back to `requestAnimationFrame` |
+| Waiting for `loadedmetadata` hung if it had already fired; `play()` refusal (Low Power Mode) was reported as "camera blocked" | Size is awaited via every event plus polling, with a timeout; a refused `play()` retries on the next tap |
+| Camera died after backgrounding the app or locking the screen | The track is re-acquired on `visibilitychange` / `ended` |
+| "Camera busy" right after the previous game released it (Android) | `getUserMedia` retries, then loosens constraints. A persistent failure shows its own message |
+| Two WASM heaps (hand + pose) warmed on the hub crashed iOS tabs | Phones only pre-warm the hand model. Model boots are serialised |
+| Missing vendored assets were "found" because the SPA fallback answers 200 with `index.html` | The probe rejects `text/html` and falls back to the CDN |
+
+Overrides for support cases: **Settings → Vision → Compatibility tracking**
+pins the CPU delegate (and turning it off forgets a remembered GPU failure), and
+`?arDelegate=cpu` / `?arDelegate=gpu` on the game URL pins it for one visit.
+`latencyReport()` now also records `delegateFellBack` and `detectRatio` (the
+share of camera frames that were analysed).
+
 ---
 
 ## 3. The ten interaction primitives
