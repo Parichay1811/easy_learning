@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+import { useLocation } from "react-router-dom";
 import * as FramerMotion from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaTimes } from "react-icons/fa";
@@ -22,6 +23,7 @@ const COMPACT_QUERY = "(max-width: 429px)";
 
 const AIAssistantWidget = () => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
   const [open, setOpen] = useState(false);
   const [isCompact, setIsCompact] = useState(
     () => typeof window !== "undefined" && window.matchMedia?.(COMPACT_QUERY).matches
@@ -46,6 +48,9 @@ const AIAssistantWidget = () => {
       window.removeEventListener("keydown", handleKey);
     };
   }, [open]);
+
+  // The AI Teacher page already is the assistant: no second way in on top of it.
+  if (pathname === "/ai-teacher") return null;
 
   const handleOpen = () => { playSlide(); setOpen(true); };
   const handleClose = () => { playSlide(); setOpen(false); };

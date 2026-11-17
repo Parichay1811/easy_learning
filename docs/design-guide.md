@@ -22,7 +22,7 @@ their assigned batches and submit new questions for the admin to review.
 |---|---|
 | Client | React 19 + Vite, React Router 7, Redux Toolkit, react-i18next, Framer Motion, Recharts, Firebase Auth (Google popup) |
 | Server | Node + Express 4, Mongoose 8, JWT (`jsonwebtoken`), `express-validator`, `multer` + Cloudinary (uploads), `bcryptjs`, `exceljs` (question-upload templates/parsing) |
-| AI voice assistant | `server/ai-assistant/` — a module of the same Express process at `/api/ai-assistant/*` (CPU speech in/out, lesson packs, a small in-process LLM via node-llama-cpp); its plain-ES-module page is served by the React site at `/ai-assistant/` and embedded by the navbar's "Ask AI" widget. See `server/ai-assistant/README.md` |
+| AI voice assistant | `server/ai-assistant/` — part of the API at `/api/ai-assistant/*`, run by `server/services/aiAssistant.js` in a supervised, lower-priority child process so its CPU-heavy work (speech in/out, lesson packs, a small LLM via node-llama-cpp) can't block or crash the API; its plain-ES-module page is served by the React site at `/ai-assistant/` and embedded by the `/ai-teacher` page (**AI Teacher** in the main navigation, `pages/AITeacher.jsx`) and the navbar's "Ask AI" widget. See `server/ai-assistant/README.md` |
 | DB | MongoDB — **three separate connections/databases**, see §4 |
 | No | GraphQL, WebSockets/socket.io (notifications use plain polling), TypeScript |
 
@@ -34,7 +34,7 @@ assistant's tests). `client/` and `server/` still run on their own (`npm run dev
 
 ```
 client/              the React site (Vite); `npm run build` → client/dist (served by Nginx)
-server/              the Express API — one process, including the AI voice assistant
+server/              the Express API (one PM2 process; it runs the AI voice assistant as its own child process)
   ai-assistant/      the AI voice assistant module (its own README); page in public/, served at /ai-assistant/
 docs/                this guide, ABOUT.md, AR-GAMES.md, PROJECT_PLAN.md (historical), UPDATES.md, BUGS.txt
 DEPLOY.md, redeploy.sh   production (Hostinger VPS) setup and the redeploy script
@@ -78,10 +78,12 @@ server/
   services/batchService.js
   data/*.json           seed content per subject/skill
   scripts/              seed-all.js, translate-content.js, migrate-subjects-from-legacy.js
-  ai-assistant/         the AI voice assistant: index.mjs (createAIAssistant → mounted at /api/ai-assistant),
+  services/aiAssistant.js  starts ai-assistant/worker.mjs as a child process (nice 10), restarts it if it
+                        exits, and forwards /api/ai-assistant/* to it (mounted before CORS/body parsers:
+                        bodies are streamed raw, and the assistant guards its own POSTs by Origin)
+  ai-assistant/         the AI voice assistant: index.mjs (createAIAssistant), worker.mjs (its process),
                         lib/ (router, speech, LLM, search), shared/ (server + browser code), packs/ (lessons),
-                        public/ (its page), factory/ (pack builder), test/ — mounted before CORS/body parsers
-                        in server.js because it reads raw bodies and guards its own POSTs by Origin
+                        public/ (its page), factory/ (pack builder), test/
 ```
 
 ## 4. The three-database architecture (read this twice)

@@ -9,12 +9,14 @@ asks for a test ("quiz me on circles", "test me for GCSE maths"): it confirms
 how many, asks them one by one, marks each with the reason, and ends with
 the score and the topics to look at again.
 
-It is part of Learnigo, not a separate app: this folder is a module of the
-Express API (`server/server.js` mounts it at `/api/ai-assistant/*`), and its
+It is part of Learnigo, not a separate app: the Express API serves it at
+`/api/ai-assistant/*`, running it in its own lower-priority child process
+(`worker.mjs`, started and restarted by `server/services/aiAssistant.js`) so
+its CPU-heavy work never blocks the API, and its
 page is served by the React site at `/ai-assistant/` (by
 `client/scripts/ai-assistant-static.mjs`), where the site's "Ask AI" widget
-embeds it. One `npm install` in `server/`, one process, one origin. The small
-language model runs inside the API (llama.cpp through node-llama-cpp,
+embeds it. One `npm install` in `server/`, one PM2 process, one origin. The
+small language model runs on the server (llama.cpp through node-llama-cpp,
 prebuilt for macOS, Linux and Windows); Node.js 20.11 or newer.
 
 **The look** is the site's: Fredoka with the site's dyslexia-friendly
@@ -47,8 +49,8 @@ npm run install:all
 npm run dev
 ```
 
-Open https://localhost:5173/ai-assistant/ in Chrome (or click **Ask AI** on
-any page with the navbar), press **Start the lesson** and allow the
+Open https://localhost:5173/ai-teacher in Chrome (the **AI Teacher** item in
+the site's navigation; the bare page is https://localhost:5173/ai-assistant/), press **Start the lesson** and allow the
 microphone (headphones work best). The admin panel is
 https://localhost:5173/ai-assistant/admin.html, the MCP server
 `POST http://localhost:5001/api/ai-assistant/mcp`. The API answers right away;
@@ -638,7 +640,8 @@ from other web origins are refused.
 
 | File | What it does |
 |---|---|
-| `index.mjs` | `createAIAssistant()`: loads packs and models, returns the request handler the API mounts at `/api/ai-assistant`: `/ask` (streams ack, plan, sentences), `/asr` (with the lesson as context), `/heard` (corrections), `/tts`, `/videos`, `/mcp`, `/admin`; reloads packs when they change |
+| `worker.mjs` | the assistant's process: lowers its CPU priority, loads `index.mjs`, serves it on a private port and tells the API which one |
+| `index.mjs` | `createAIAssistant()`: loads packs and models, returns the request handler behind `/api/ai-assistant`: `/ask` (streams ack, plan, sentences), `/asr` (with the lesson as context), `/heard` (corrections), `/tts`, `/videos`, `/mcp`, `/admin`; reloads packs when they change |
 | `package.json` | marks this folder as ES modules and holds its scripts (`test`, `bench`, `eval`, `packs`); its dependencies are in `server/package.json` |
 | `lib/test.mjs`, `shared/test.js` | tests: scope (topic, subject, exam level), how many, questions, score |
 | `lib/schema.mjs`, `lib/packs.mjs` | the pack check; loading packs from subject folders |
