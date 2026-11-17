@@ -3,7 +3,7 @@
 **Domain:** `www.learnigo.eu` (canonical) — `learnigo.eu` and `quizify.cloud` 301-redirect here  
 **Stack:** React 19 (Vite) + Express.js + MongoDB Atlas (MERN)  
 **Node version:** `22.18.0` (matches local dev machine)  
-**Strategy:** Nginx serves the built React SPA (including the AI voice assistant's page at `/ai-assistant/`); PM2 keeps the Express API alive (one process, the AI voice assistant included); MongoDB Atlas as the database.
+**Strategy:** Nginx serves the built React SPA (including the AI voice assistant's page at `/ai-assistant/`); PM2 keeps the Express API alive (one PM2 process, which runs the AI voice assistant as a supervised child process); MongoDB Atlas as the database.
 
 ---
 
@@ -283,14 +283,14 @@ Both should return `301` with `Location: https://www.learnigo.eu/`.
 
 The AI voice assistant ("AI teacher", **`server/ai-assistant/`**) is part of the app, not a separate service:
 
-- its API runs **inside the Express process** (`easy-learn`) at `/api/ai-assistant/*`, so the existing Nginx `location /api/` already serves it;
+- its API is served by the Express app (`easy-learn`) at `/api/ai-assistant/*`, so the existing Nginx `location /api/` already serves it. The API runs the assistant's heavy speech/LLM work in its own child process at a lower CPU priority (nice 10, `AI_ASSISTANT_NICE`), restarts it if it exits, and stops it with the API — so it can't block or crash the API on a small, busy server;
 - its page is part of the **React build** (`client/dist/ai-assistant/`), so the existing `try_files` serves it at `https://www.learnigo.eu/ai-assistant/` and the navbar's "Ask AI" widget embeds it from the same origin.
 
 So there is no extra PM2 process, subdomain, Nginx block or env var. Steps 8 and 10 above already install, build and start it.
 
-**Resources:** it runs a small local LLM plus speech recognition/synthesis models on the CPU (`node-llama-cpp`, `onnxruntime-node`, `@huggingface/transformers`). `npm install` in `server/` needs real disk space for their native binaries, and the first start downloads **~1.2 GB** of models into `~/.cache/learnigo-teacher` (already there if the old standalone assistant ran on this VPS). Check `df -h` and `free -h`: it adds roughly 1–1.5 GB of RAM to the `easy-learn` process. If a box can't afford that, set `AI_ASSISTANT=off` in `server/.env`; the rest of the API is unaffected and the assistant's routes answer 503.
+**Resources:** it runs a small local LLM plus speech recognition/synthesis models on the CPU (`node-llama-cpp`, `onnxruntime-node`, `@huggingface/transformers`). `npm install` in `server/` needs real disk space for their native binaries, and the first start downloads **~1.2 GB** of models into `~/.cache/learnigo-teacher` (already there if the old standalone assistant ran on this VPS). Check `df -h` and `free -h`: its child process uses roughly 1–1.5 GB of RAM. If a box can't afford that, set `AI_ASSISTANT=off` in `server/.env`; the rest of the API is unaffected and the assistant's routes answer 503.
 
-**Startup:** the API listens immediately; the assistant loads its packs and models in the background (a few seconds when the models are cached) and answers 503 until then. Check it with:
+**Startup:** the API listens immediately; the assistant's process loads its packs and models (under a minute when the models are cached) and its routes answer 503 until then. `pm2 logs easy-learn` shows "AI assistant ready (pid …)". Check it with:
 
 ```bash
 curl -s http://127.0.0.1:5000/api/ai-assistant/health | head -c 200   # "ready":true once loaded
@@ -368,7 +368,7 @@ cd ../server && npm install && pm2 restart easy-learn
 | Client env file | `/var/www/easy_learning/client/.env` |
 | PM2 logs | `pm2 logs easy-learn` |
 | Nginx error log | `/var/log/nginx/error.log` |
-| AI voice assistant | inside `easy-learn`: API at `/api/ai-assistant/*`, page at `https://www.learnigo.eu/ai-assistant/` (code: `server/ai-assistant/`) |
+| AI voice assistant | a child process of `easy-learn`: API at `/api/ai-assistant/*`, page at `https://www.learnigo.eu/ai-assistant/` (code: `server/ai-assistant/`) |
 | AI assistant data / models | `server/ai-assistant/data/` (corrections, TODOs, voice cache) / `~/.cache/learnigo-teacher` |
 | Redeploy script | `/var/www/easy_learning/redeploy.sh` |
 

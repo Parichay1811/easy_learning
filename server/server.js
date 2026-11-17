@@ -30,6 +30,7 @@ const speakMathsRoutes   = require('./routes/speakMaths')
 const speakEnglishRoutes = require('./routes/speakEnglish')
 const dashboardRoutes     = require('./routes/dashboard')
 const arRoutes            = require('./routes/ar')
+const { createAIAssistant } = require('./services/aiAssistant')
 
 // Initialise separate DB connections before routes load models
 require('./db/adminDb')
@@ -39,33 +40,15 @@ const app = express()
 
 // The AI voice assistant (./ai-assistant) is part of this API, at
 // /api/ai-assistant/*; its page is served by the React site at /ai-assistant/.
-// Only its own same-origin page calls it and it guards its POSTs itself (a
-// foreign Origin gets a 403), and it reads its own request bodies (JSON and raw
-// audio), so it is mounted before CORS and the body parsers. Its packs and
-// models take a while to load, so it starts once the API is listening and
-// answers 503 until it is ready. AI_ASSISTANT=off leaves it out (e.g. on a
-// machine without the RAM for it).
-let aiAssistant = null
-let aiAssistantFailed = false
-app.use('/api/ai-assistant', (req, res) => {
-  if (aiAssistant) return aiAssistant.handle(req, res)
-  res.status(503).json({
-    ready: false,
-    error: aiAssistantFailed || process.env.AI_ASSISTANT === 'off'
-      ? 'The AI assistant is not available'
-      : 'The AI assistant is starting',
-  })
-})
-function startAIAssistant() {
-  if (process.env.AI_ASSISTANT === 'off') return
-  import('./ai-assistant/index.mjs')
-    .then((m) => m.createAIAssistant())
-    .then((assistant) => { aiAssistant = assistant })
-    .catch((error) => {
-      aiAssistantFailed = true
-      console.error('AI assistant failed to start (the rest of the API is unaffected):', error)
-    })
-}
+// Its heavy speech/LLM work runs in a child process that this API starts,
+// supervises and forwards to (services/aiAssistant.js), so it can never block
+// or crash the API. Only its own same-origin page calls it and it guards its
+// POSTs itself (a foreign Origin gets a 403), and its request bodies (JSON and
+// raw audio) are streamed to it untouched, so it is mounted before CORS and the
+// body parsers. It answers 503 while it loads. AI_ASSISTANT=off leaves it out
+// (e.g. on a machine without the RAM for it).
+const aiAssistant = createAIAssistant({ enabled: process.env.AI_ASSISTANT !== 'off' })
+app.use('/api/ai-assistant', aiAssistant.handle)
 
 const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
   .split(',').map(o => o.trim().replace(/\/$/, ''))
@@ -132,15 +115,13 @@ app.use((err, req, res, _next) => {
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
-  startAIAssistant()
+  aiAssistant.start()
 })
 
-// Pending AI assistant saves (its TODO list) are written before the process ends.
+// Stop the AI assistant's process with the API (it saves its TODO list on the way out).
 for (const signal of ['SIGINT', 'SIGTERM']) {
   process.on(signal, () => {
-    try { aiAssistant?.close() } finally { process.exit(0) }
+    aiAssistant.stop()
+    process.exit(0)
   })
 }
-// A stray failed promise (a slow lookup, a dropped stream) is logged; it never
-// takes the API down.
-process.on('unhandledRejection', (error) => console.error('Unhandled rejection:', error))
