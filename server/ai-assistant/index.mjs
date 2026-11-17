@@ -385,6 +385,8 @@ export async function createAIAssistant() {
       const sample = exampleSpread(packs, 6);
       return {
         ready: speech.isReady(),
+        // "browser": the page speaks with the browser's own voice (LT_TTS=browser).
+        voice: speech.voice,
         llm: llm ? await llm.available() : false,
         model: llm?.model || null,
         kb: { cards: kb.size, hybrid: kb.hybrid },
@@ -421,7 +423,7 @@ export async function createAIAssistant() {
       const keep = ++heardCount;
       const hyps = await speech.transcribe(samples, {
         prompt: heard.prompt(context),
-        beams: 4,
+        beams: Number(process.env.LT_ASR_BEAMS || 4),
         keep,
       });
       const heardMs = Math.round(performance.now() - t0);
@@ -510,7 +512,7 @@ export async function createAIAssistant() {
                 ? (e.steps || []).map((s) => s.say)
                 : [];
         for (const say of lines)
-          if (say && spoken++ < 3)
+          if (say && speech.voice === "server" && spoken++ < 3)
             speech
               .speak(say, { cancelled: () => gone.signal.aborted })
               .catch(() => {});

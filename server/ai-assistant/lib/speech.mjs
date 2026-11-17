@@ -15,7 +15,10 @@ import { speakable } from './speech-text.mjs';
 import { writeWhole } from './files.mjs';
 
 // The voice engine and its default voice (see speech-worker.mjs).
+// LT_TTS=browser: no voice on the server at all (no model, no CPU); the page
+// speaks with the browser's own voice. Small servers use it (worker.mjs).
 export const ENGINE = process.env.LT_TTS || 'supertonic';
+const BROWSER_VOICE = ENGINE === 'browser';
 const VOICE = process.env.LT_VOICE || (ENGINE === 'kokoro' ? 'af_heart' : 'F1');
 
 // A model in a child process: call(message) resolves with its reply. A
@@ -99,10 +102,10 @@ export function wav(input, inputRate) {
 export function createSpeech({ dataDir, log = () => {} }) {
   const dir = path.join(dataDir, 'tts');
   fs.mkdirSync(dir, { recursive: true });
-  const tts = modelWorker('tts', log);
+  const tts = BROWSER_VOICE ? null : modelWorker('tts', log);
   const asr = modelWorker('asr', log);
   let loaded = false;
-  const ready = Promise.all([tts.ready, asr.ready]).then(() => { loaded = true; log('voice and speech models ready'); });
+  const ready = Promise.all([tts?.ready, asr.ready]).then(() => { loaded = true; log(BROWSER_VOICE ? 'speech model ready (the voice is the browser\'s)' : 'voice and speech models ready'); });
   const queues = { live: [], warm: [] };
   const memory = new Map();
   const inflight = new Map();
@@ -122,6 +125,7 @@ export function createSpeech({ dataDir, log = () => {} }) {
 
   // WAV bytes of the text in that voice and speed.
   async function speak(text, { voice = VOICE, speed = 1, priority = 'live', cancelled } = {}) {
+    if (BROWSER_VOICE) throw Object.assign(new Error('the voice is made in the browser'), { code: 503 });
     if (!(ENGINE === 'kokoro' ? isKokoroVoice(voice) : isSupertonicVoice(voice))) voice = VOICE;
     const clean = speakable(text);
     const key = crypto.createHash('sha1').update(`${ENGINE}|${voice}|${speed}|${clean}`).digest('hex');
@@ -192,8 +196,9 @@ export function createSpeech({ dataDir, log = () => {} }) {
   }
 
   function warm(texts, voice = VOICE) {
+    if (BROWSER_VOICE) return;
     for (const t of new Set(texts)) speak(t, { voice, priority: 'warm' }).catch(() => {});
   }
 
-  return { ready, speak, transcribe, score, warm, stats, isReady: () => loaded };
+  return { ready, speak, transcribe, score, warm, stats, voice: BROWSER_VOICE ? 'browser' : 'server', isReady: () => loaded };
 }

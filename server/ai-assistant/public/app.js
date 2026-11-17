@@ -54,6 +54,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 let ctx = null;
 let voice = null;
+let serverVoice = true; // false: the server has no voice, the browser speaks (health)
 let mic = null;
 let run = null;
 let mode = "off";
@@ -376,6 +377,24 @@ async function startStep(r, i, { redraw = true } = {}) {
   sayFrom(r, 0);
 }
 
+// The browser's clearest English voice, for when the server has none: the
+// natural/neural ones first (Edge, newer Chrome, Safari), then the familiar
+// good ones, then any British or other English voice.
+let chosenVoice = null;
+function browserVoice() {
+  if (chosenVoice) return chosenVoice;
+  const all = speechSynthesis.getVoices().filter((v) => /^en[-_]/i.test(v.lang));
+  const rank = (v) =>
+    /natural|neural|premium|enhanced/i.test(v.name) ? 0
+      : /google uk english female|google us english|samantha|serena|martha|daniel|karen|moira|aria|jenny|libby|sonia/i.test(v.name) ? 1
+        : /^en[-_]gb/i.test(v.lang) ? 2
+          : 3;
+  chosenVoice = all.sort((a, b) => rank(a) - rank(b))[0] || null;
+  return chosenVoice;
+}
+if ("speechSynthesis" in window)
+  speechSynthesis.addEventListener?.("voiceschanged", () => { chosenVoice = null; });
+
 // Says something short while the first sentence is still being made.
 async function filler(r) {
   const text = FILLERS[fillerIdx++ % FILLERS.length];
@@ -403,9 +422,25 @@ function sayFrom(r, offset) {
   if (r.buffer) voice.play(r.buffer, offset, done);
   else {
     const u = new SpeechSynthesisUtterance(r.plan.steps[r.i].say);
-    u.onend = () => {
-      if (!r.paused) done();
+    const v = browserVoice();
+    if (v) u.voice = v;
+    u.lang = v?.lang || "en-GB";
+    u.rate = voice.speed;
+    // The lesson never waits on the browser's voice: if it fails, or never
+    // says it has finished (some browsers have no voices), carry on after
+    // about as long as the sentence would take to say.
+    let moved = false;
+    const token = (r.sayToken = (r.sayToken || 0) + 1); // a later utterance replaces this one
+    const next = () => {
+      if (moved || r.paused || r.dead || r.sayToken !== token) return;
+      moved = true;
+      clearTimeout(guard);
+      done();
     };
+    const words = r.plan.steps[r.i].say.split(/\s+/).length;
+    const guard = setTimeout(next, (words / 2.3 / voice.speed + 2) * 1000);
+    u.onend = next;
+    u.onerror = next;
     speechSynthesis.speak(u);
   }
 }
@@ -823,6 +858,7 @@ async function begin() {
   document.addEventListener("pointerdown", wake);
   voice = new Voice(ctx);
   voice.sounds = sounds;
+  voice.server = serverVoice;
   scene.enter();
   scene.enableTilt();
   haptics.fire("start");
@@ -911,7 +947,11 @@ let captionAt = "";
   // The orb and the meter follow whoever is talking.
   const level =
     mode === "teaching" && voice
-      ? voice.level() * 7
+      ? voice.speaking
+        ? voice.level() * 7
+        : speechSynthesis.speaking
+          ? 0.35 + 0.25 * Math.sin(performance.now() / 95) // the browser's voice has no level to read
+          : 0
       : mode === "hearing" || mode === "paused"
         ? (mic?.level || 0) * 14
         : 0;
@@ -962,6 +1002,8 @@ function showChips(list, next = false) {
 async function health() {
   try {
     const h = await (await fetch("/api/ai-assistant/health")).json();
+    serverVoice = h.voice !== "browser";
+    if (voice) voice.server = serverVoice;
     examples = [
       ...h.packs.flatMap((p) =>
         p.examples.slice(0, h.packs.length > 3 ? 1 : 2),

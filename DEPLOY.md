@@ -288,7 +288,27 @@ The AI voice assistant ("AI teacher", **`server/ai-assistant/`**) is part of the
 
 So there is no extra PM2 process, subdomain, Nginx block or env var. Steps 8 and 10 above already install, build and start it.
 
-**Resources:** it runs a small local LLM plus speech recognition/synthesis models on the CPU (`node-llama-cpp`, `onnxruntime-node`, `@huggingface/transformers`). `npm install` in `server/` needs real disk space for their native binaries, and the first start downloads **~1.2 GB** of models into `~/.cache/learnigo-teacher` (already there if the old standalone assistant ran on this VPS). Check `df -h` and `free -h`: its child process uses roughly 1–1.5 GB of RAM. If a box can't afford that, set `AI_ASSISTANT=off` in `server/.env`; the rest of the API is unaffected and the assistant's routes answer 503.
+**Resources:** the server install includes native speech/LLM packages (`node-llama-cpp`, `onnxruntime-node`, `@huggingface/transformers`), so `npm install` in `server/` needs a few GB of disk; models download on first start into `~/.cache/learnigo-teacher`.
+
+The assistant picks a profile from the machine (override with `AI_ASSISTANT_PROFILE=small|full` in `server/.env`):
+
+| | **small** (≤ 2 CPUs or < 6 GB RAM — this VPS) | **full** |
+|---|---|---|
+| Teacher's voice | the student's browser (`speechSynthesis`) — no server CPU | Supertonic on the server |
+| Language model | off: answers from lesson packs, maths rules, Wikipedia, open data; misses become TODOs | Qwen3.5 0.8B for questions outside the packs |
+| Hearing | Moonshine tiny, 2 guesses | Moonshine base, 4 guesses |
+| RAM (assistant processes) | ~1.1 GB | ~2.5 GB |
+
+**Search vectors — copy them, don't make them on the VPS.** Meaning-based search needs vectors for ~90,000 phrasings: minutes on a laptop, days on a small busy server. After running the assistant once locally (`npm run dev`), copy them over; until they're there, a small server searches by words only (and says so in `pm2 logs easy-learn`):
+
+```bash
+scp server/ai-assistant/data/embeddings-Xenova_bge_small_en_v1_5.{bin,keys.json} root@31.97.224.109:/var/www/easy_learning/server/ai-assistant/data/
+ssh root@31.97.224.109 'pm2 restart easy-learn'
+```
+
+They stay valid until the lesson packs change; new packs only add a few vectors, which the server makes itself.
+
+**CPU steal:** Hostinger throttles a VPS whose CPU stays maxed out (`top` shows it as `st`). Keep crash-looping processes off this box (`pm2 ls` — watch the ↺ restarts column), or every app on it slows down, the assistant first.
 
 **Startup:** the API listens immediately; the assistant's process loads its packs and models (under a minute when the models are cached) and its routes answer 503 until then. `pm2 logs easy-learn` shows "AI assistant ready (pid …)". Check it with:
 
