@@ -11,15 +11,6 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-// A lower CPU priority (nice 10 by default, AI_ASSISTANT_NICE to change it),
-// set before the models load so their threads and the speech process inherit
-// it: when the server is busy, the API's requests go first.
-try {
-  os.setPriority(Number(process.env.AI_ASSISTANT_NICE ?? 10));
-} catch {
-  /* not permitted here: run at the normal priority */
-}
-
 // Small servers (2 CPUs or fewer, or under 6 GB of RAM — like the production
 // VPS, which it shares with other apps) get a profile that keeps the teacher
 // quick there by leaving the heaviest work out. AI_ASSISTANT_PROFILE=full or
@@ -56,6 +47,18 @@ if (profile === "small") {
 console.log(
   `AI assistant profile: ${profile} (${os.availableParallelism()} CPUs, ${Math.round(os.totalmem() / 2 ** 30)} GB)`,
 );
+
+// CPU priority (AI_ASSISTANT_NICE to set it), before the models load so their
+// threads and the speech process inherit it. The full profile runs a language
+// model and a voice, so it gets nice 10 and the API and other apps go first;
+// the small one is light and bursty, and at nice 10 a busy neighbour on a small
+// server would leave it a tenth of the CPU, so it runs at the normal priority.
+// (Running in its own process is what keeps the API responsive either way.)
+try {
+  os.setPriority(Number(process.env.AI_ASSISTANT_NICE ?? (profile === "small" ? 0 : 10)));
+} catch {
+  /* not permitted here: run at the normal priority */
+}
 
 const { createAIAssistant } = await import("./index.mjs");
 const assistant = await createAIAssistant();

@@ -297,12 +297,13 @@ The assistant picks a profile from the machine (override with `AI_ASSISTANT_PROF
 | Teacher's voice | the student's browser (`speechSynthesis`) — no server CPU | Supertonic on the server |
 | Language model | off: answers from lesson packs, maths rules, Wikipedia, open data; misses become TODOs | Qwen3.5 0.8B for questions outside the packs |
 | Hearing | Moonshine tiny, 2 guesses | Moonshine base, 4 guesses |
+| CPU priority | normal (it's light) | nice 10 (the API and other apps first) |
 | RAM (assistant processes) | ~1.1 GB | ~2.5 GB |
 
-**Search vectors — copy them, don't make them on the VPS.** Meaning-based search needs vectors for ~90,000 phrasings: minutes on a laptop, days on a small busy server. After running the assistant once locally (`npm run dev`), copy them over; until they're there, a small server searches by words only (and says so in `pm2 logs easy-learn`):
+**Search vectors and their index — copy them, don't make them on the VPS.** Meaning-based search needs vectors for ~90,000 phrasings (minutes on a laptop, days on a small busy server) and a clustered index over them that makes each search ~10x cheaper (15 s on a laptop, a while on the VPS, which otherwise builds it in the background). After running the assistant once locally (`npm run dev`, wait for "clustered":true in `/api/ai-assistant/health`), copy them over; until the vectors are there, a small server searches by words only (and says so in `pm2 logs easy-learn`):
 
 ```bash
-scp server/ai-assistant/data/embeddings-Xenova_bge_small_en_v1_5.{bin,keys.json} root@31.97.224.109:/var/www/easy_learning/server/ai-assistant/data/
+scp server/ai-assistant/data/embeddings-Xenova_bge_small_en_v1_5.{bin,keys.json} server/ai-assistant/data/kb-ivf-*.bin root@31.97.224.109:/var/www/easy_learning/server/ai-assistant/data/
 ssh root@31.97.224.109 'pm2 restart easy-learn'
 ```
 

@@ -11,7 +11,11 @@ import { parseArith, arithPlan } from '../shared/arith.js';
 import { TEMPLATES, solvePlan, withQuiz, withInvite, answerPlan, parseChoice, rng } from '../shared/solvers.js';
 import { testScope, countFrom, askCountPlan, buildTest } from './test.mjs';
 import { wordsToDigits, parseUnit } from '../shared/numbers.js';
-import { MISS, OFFER, STOPPED, TALK } from '../shared/lines.js';
+import { MISS, OFFER, STOPPED, TALK, GENERIC_ACKS } from '../shared/lines.js';
+
+// With no fast model (small servers) the first line is a generic one.
+let ackTurn = 0;
+const genericAck = () => ({ say: GENERIC_ACKS[ackTurn++ % GENERIC_ACKS.length], topic: null });
 import { findTopic, bestFaq, tokens } from './packs.mjs';
 import { converse, isRealQuestion, YES, NO } from './converse.mjs';
 import { followUp, subjectOf, nextQuestions } from './followup.mjs';
@@ -432,7 +436,7 @@ async function answer(text, { context = {}, history = [], packs, kb, llm, fast, 
 
   // The first line ("Good question…") is said while answers are looked up.
   let acked = null;
-  const ackNow = () => (acked ||= (fast ? fast.ack(text).catch(() => null) : Promise.resolve(null)).then((a) => { if (a) emit({ type: 'ack', ...a }); return a; }));
+  const ackNow = () => (acked ||= (fast ? fast.ack(text).catch(() => null) : Promise.resolve(genericAck())).then((a) => { if (a) emit({ type: 'ack', ...a }); return a; }));
   // An exact answer from open data (lib/opendata.mjs): a number, a date, a
   // formula, a word's meaning, a picture, a country's figures over time.
   // What no lesson holds is looked up first; a fact a lesson may answer, after.
@@ -448,7 +452,10 @@ async function answer(text, { context = {}, history = [], packs, kb, llm, fast, 
   if (found?.first) { ackNow(); if (await fromData()) return 'data'; }
 
   // The knowledge base: checked answers found by meaning, no model needed.
+  // A search that takes a while (a small, busy server): say the first line meanwhile.
+  const slowSearch = kb ? setTimeout(ackNow, 600) : null;
   const hits = kb ? (await kb.find(text, 8)).filter((h) => h.card.id !== skipCard) : [];
+  clearTimeout(slowSearch);
   // A card must cover the question's key words: "earth's radius" is not
   // answered by a card about the radius in volumes of revolution.
   // Missing key words make a match at most a "Do you mean...?".
