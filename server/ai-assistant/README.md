@@ -49,8 +49,8 @@ npm run install:all
 npm run dev
 ```
 
-Open https://localhost:5173/ai-assistant/ in Chrome (or click **Ask AI** on
-any page with the navbar), press **Start the lesson** and allow the
+Open https://localhost:5173/ai-teacher in Chrome (the **AI Teacher** item in
+the site's navigation; the bare page is https://localhost:5173/ai-assistant/), press **Start the lesson** and allow the
 microphone (headphones work best). The admin panel is
 https://localhost:5173/ai-assistant/admin.html, the MCP server
 `POST http://localhost:5001/api/ai-assistant/mcp`. The API answers right away;

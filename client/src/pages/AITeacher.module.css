@@ -1,0 +1,40 @@
+/* The teacher is one screen: below the 80px navbar it takes the rest of the
+   viewport, framed like the site's white cards. */
+.page {
+  position: relative;
+  height: calc(100dvh - 80px);
+  padding: clamp(6px, 1.4vh, 14px) clamp(8px, 2vw, 24px) clamp(10px, 2vh, 20px);
+  display: flex;
+}
+
+@supports not (height: 100dvh) {
+  .page { height: calc(100vh - 80px); }
+}
+
+.frameWrap {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  max-width: 1680px;
+  margin: 0 auto;
+  border-radius: 24px;
+  border: 4px solid rgba(255, 255, 255, 0.95);
+  overflow: hidden;
+  background: #0d3b1e;
+  box-shadow: 0 16px 40px rgba(10, 30, 15, 0.35);
+}
+
+.frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Phones: edge to edge, every pixel for the lesson. */
+@media (max-width: 640px) {
+  .page { padding: 0; }
+  .frameWrap { border: 0; border-radius: 0; }
+}

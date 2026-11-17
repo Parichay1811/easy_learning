@@ -22,7 +22,7 @@ their assigned batches and submit new questions for the admin to review.
 |---|---|
 | Client | React 19 + Vite, React Router 7, Redux Toolkit, react-i18next, Framer Motion, Recharts, Firebase Auth (Google popup) |
 | Server | Node + Express 4, Mongoose 8, JWT (`jsonwebtoken`), `express-validator`, `multer` + Cloudinary (uploads), `bcryptjs`, `exceljs` (question-upload templates/parsing) |
-| AI voice assistant | `server/ai-assistant/` — part of the API at `/api/ai-assistant/*`, run by `server/services/aiAssistant.js` in a supervised, lower-priority child process so its CPU-heavy work (speech in/out, lesson packs, a small LLM via node-llama-cpp) can't block or crash the API; its plain-ES-module page is served by the React site at `/ai-assistant/` and embedded by the navbar's "Ask AI" widget. See `server/ai-assistant/README.md` |
+| AI voice assistant | `server/ai-assistant/` — part of the API at `/api/ai-assistant/*`, run by `server/services/aiAssistant.js` in a supervised, lower-priority child process so its CPU-heavy work (speech in/out, lesson packs, a small LLM via node-llama-cpp) can't block or crash the API; its plain-ES-module page is served by the React site at `/ai-assistant/` and embedded by the `/ai-teacher` page (**AI Teacher** in the main navigation, `pages/AITeacher.jsx`) and the navbar's "Ask AI" widget. See `server/ai-assistant/README.md` |
 | DB | MongoDB — **three separate connections/databases**, see §4 |
 | No | GraphQL, WebSockets/socket.io (notifications use plain polling), TypeScript |
 

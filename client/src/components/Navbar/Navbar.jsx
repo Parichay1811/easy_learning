@@ -9,6 +9,7 @@ import {
   FaHandPaper, FaLayerGroup, FaGamepad,
 } from "react-icons/fa";
 import { RiBarChart2Fill } from "react-icons/ri";
+import { BsStars } from "react-icons/bs";
 import { useAuth } from "../../context/AuthContext";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 import AIAssistantWidget from "../AIAssistantWidget/AIAssistantWidget";
@@ -54,6 +55,11 @@ const Navbar = () => {
             <NavLink to="/games" className={pillClass("navGames")} onClick={close}>
               <span className={styles.navIconWrap}><FaGamepad className={styles.navIcon} /></span>
               {t("navbar.games", { defaultValue: "Games" })}
+            </NavLink>
+
+            <NavLink to="/ai-teacher" className={pillClass("navAITeacher")} onClick={close}>
+              <span className={styles.navIconWrap}><BsStars className={styles.navIcon} /></span>
+              {t("navbar.aiTeacher", { defaultValue: "AI Teacher" })}
             </NavLink>
 
             <NavLink to="/contact-us" className={pillClass("navContact")} onClick={close}>

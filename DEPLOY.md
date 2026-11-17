@@ -284,7 +284,7 @@ Both should return `301` with `Location: https://www.learnigo.eu/`.
 The AI voice assistant ("AI teacher", **`server/ai-assistant/`**) is part of the app, not a separate service:
 
 - its API is served by the Express app (`easy-learn`) at `/api/ai-assistant/*`, so the existing Nginx `location /api/` already serves it. The API runs the assistant's heavy speech/LLM work in its own child process at a lower CPU priority (nice 10, `AI_ASSISTANT_NICE`), restarts it if it exits, and stops it with the API — so it can't block or crash the API on a small, busy server;
-- its page is part of the **React build** (`client/dist/ai-assistant/`), so the existing `try_files` serves it at `https://www.learnigo.eu/ai-assistant/` and the navbar's "Ask AI" widget embeds it from the same origin.
+- its page is part of the **React build** (`client/dist/ai-assistant/`), served by the existing `try_files` at `/ai-assistant/`. Students reach it from the **AI Teacher** item in the main navigation (`/ai-teacher`, a site page that embeds it) or the floating "Ask AI" button.
 
 So there is no extra PM2 process, subdomain, Nginx block or env var. Steps 8 and 10 above already install, build and start it.
 
@@ -313,18 +313,12 @@ cd /var/www/easy_learning
 git pull origin main && ./redeploy.sh
 ```
 
-Then point the old subdomain at the new page so existing links keep working — replace the contents of `/etc/nginx/sites-available/learnigo-ai-assistant` with (keep the `listen 443 ssl` / certificate lines certbot added):
-
-```nginx
-server {
-    listen 80;
-    server_name assistant.learnigo.eu;
-    return 301 https://www.learnigo.eu/ai-assistant/;
-}
-```
+There is no separate assistant subdomain any more: the AI Teacher is a page of the site (`https://www.learnigo.eu/ai-teacher`, in the main navigation). Remove the old `assistant.learnigo.eu` Nginx block and its certificate, and delete its DNS A record:
 
 ```bash
+mv /etc/nginx/sites-enabled/learnigo-ai-assistant /root/backups/
 nginx -t && systemctl reload nginx
+certbot delete --cert-name assistant.learnigo.eu
 ```
 
 `VITE_AI_ASSISTANT_URL` in `client/.env` is no longer used and can be deleted.

@@ -22,6 +22,7 @@ import ReadModule from "./pages/modules/ReadModule";
 import WriteModule from "./pages/modules/WriteModule";
 import SpeakModule from "./pages/modules/SpeakModule";
 import GamesPage from "./pages/GamesPage";
+import AITeacher from "./pages/AITeacher";
 import ARHub from "./ar/pages/ARHub";
 import ARGame from "./ar/pages/ARGame";
 import ARInsights from "./ar/pages/ARInsights";
@@ -60,6 +61,7 @@ function AnimatedRoutes() {
         <Route path="/module/write/:subject" element={<WriteModule />} />
         <Route path="/module/speak/:subject" element={<SpeakModule />} />
         <Route path="/games" element={<GamesPage />} />
+        <Route path="/ai-teacher" element={<AITeacher />} />
         {/* Camera (MediaPipe) games. `/games/ar/insights` is matched before the
             :gameId route so it cannot be swallowed as a game id. */}
         <Route path="/games/ar" element={<ARHub />} />
@@ -112,7 +114,7 @@ function AppLayout() {
   const hideBackground3D = isAR || [
     "/", "/home", "/about-us", "/contact-us", "/faq", "/policy", "/terms-and-conditions",
     "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login",
-    "/games", "/games/ar", "/dashboard",
+    "/games", "/games/ar", "/dashboard", "/ai-teacher",
   ].includes(location.pathname)
     || location.pathname.startsWith("/module/")
     || location.pathname.startsWith("/subject/");
