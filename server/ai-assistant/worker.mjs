@@ -16,9 +16,9 @@ import { fileURLToPath } from "node:url";
 // quick there by leaving the heaviest work out. AI_ASSISTANT_PROFILE=full or
 // small forces one; any LT_* setting in server/.env still wins over it.
 const SMALL = {
-  // The voice is the browser's own (speechSynthesis): no voice model on the
-  // server (~700 MB of RAM, seconds of CPU per sentence).
-  LT_TTS: "browser",
+  // The voice stays on the server (Supertonic, natural and several times
+  // faster than real time even here, cached by sentence): the browser's own
+  // voices sound robotic. LT_TTS=browser takes it off the server if needed.
   // No language model (~0.5 GB, the slowest part on a CPU): answers come from
   // the lesson packs, the maths rules, Wikipedia and open data; anything else
   // is a TODO for a new pack, as before.

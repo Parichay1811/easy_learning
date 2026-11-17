@@ -665,8 +665,7 @@ from other web origins are refused.
 
 In `server/.env`: `AI_ASSISTANT=off` (leave the module out of the API),
 `AI_ASSISTANT_PROFILE` (`small` or `full`; by default `small` on 2 CPUs or
-fewer or under 6 GB of RAM: the browser's voice (`LT_TTS=browser`), no LLM
-(`LT_LLM=off`), no speech recognition (`LT_ASR=off`: questions are typed, and
+fewer or under 6 GB of RAM: no LLM (`LT_LLM=off`), no speech recognition (`LT_ASR=off`: questions are typed, and
 the question box suggests topics as you type, from `GET /topics?q=`), and
 word search only until the saved search vectors are
 copied in — see DEPLOY.md), `AI_ASSISTANT_NICE` (the process's CPU priority:

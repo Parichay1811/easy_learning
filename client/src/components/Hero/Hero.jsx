@@ -13,6 +13,8 @@ import {
   FaCompass,
 } from "react-icons/fa";
 import { playSlide } from "../../utils/sounds";
+import { narrate } from "../../utils/narrator";
+import { getSpeechLang } from "../../utils/speechLang";
 import { useAuth } from "../../context/AuthContext";
 import { fetchRounds, fetchModuleStars } from "../../store/slices/dashboardSlice";
 import { SUBJECT_ICON_IMAGES } from "../../data/subjectIcons";
@@ -37,7 +39,7 @@ const Hero = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const rounds = useSelector((state) => state.dashboard.rounds);
   const [roundsLoaded, setRoundsLoaded] = useState(false);
@@ -85,13 +87,11 @@ const Hero = () => {
   };
 
   const handleListen = () => {
-    if (!("speechSynthesis" in window)) return;
     const greetingText = firstName
       ? t("hero.greeting", { name: firstName })
       : "";
     const message = `${greetingText}. ${t("hero.readyForAdventure", { defaultValue: "Ready for your next adventure?" })}`;
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(new SpeechSynthesisUtterance(message));
+    narrate(message, { lang: getSpeechLang(i18n.language) });
   };
 
   const ModuleIcon = lastRound ? (MODULE_ICONS[lastRound.module] || FaCompass) : FaCompass;

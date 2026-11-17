@@ -43,6 +43,7 @@ import { createEmbedder } from "./lib/embed.mjs";
 import { createTools } from "./lib/tools.mjs";
 import { createMcp } from "./lib/mcp.mjs";
 import { quizStep } from "./shared/solvers.js";
+import { RENDERS, findRender } from "./shared/renders.js";
 import {
   GREETING,
   FILLERS,
@@ -190,6 +191,70 @@ function suggestFrom(packs, q, n) {
     out.push({ e, score: score + (e.reviewed ? 5 : 0) - e.key.length / 100 });
   }
   return out.sort((a, b) => b.score - a.score).slice(0, n).map(({ e }) => ({ id: e.id, title: e.title, area: e.area }));
+}
+
+// What the lesson page shows around the board for one topic (GET /lesson):
+// its subject and group, the key takeaways, a real-life example (with a
+// picture when there is one), something to try, the quiz, and the other
+// topics of its group for the subject menu. Taken from the pack itself.
+const sentences = (text) => String(text || "").match(/[^.!?]+[.!?]+/g)?.map((x) => x.trim()) || [];
+const REAL_LIFE = /\b(in real life|in everyday life|for example|think about|imagine|you can see|you see this|like a|such as|at home|in your)\b/i;
+const TRY_IT = /\b(try|experiment|measure|test how|we can use|you can use|watch what happens|place|drop|fill|mix|count)\b/i;
+// A 3D render only on a strong match: its title is the lesson's title or one
+// of its keywords, or two of its tags are. One shared word is not enough
+// ("force" is not a gear train, "axis" is not the seasons).
+function renderFor(pack) {
+  const want = new Set([pack.title, ...(pack.keywords || [])].map((w) => String(w).toLowerCase().trim()));
+  let best = null;
+  let top = 1;
+  for (const r of Object.values(RENDERS)) {
+    const score = (want.has(r.title.toLowerCase()) ? 2 : 0) + r.tags.filter((t) => want.has(String(t).toLowerCase())).length;
+    if (score > top) { top = score; best = r; }
+  }
+  return best;
+}
+
+export function lessonCard(pack, all, topicRows = new Map()) {
+  const says = (pack.explain || []).map((s) => s.say);
+  const faqs = (pack.faq || []).map((f) => (Array.isArray(f) ? f[1] : f.a));
+  // Sentences kept with their passage, so an example only runs on within it.
+  const passages = [...says, ...faqs].map(sentences);
+  const pick = (re, skip = "") => {
+    for (const p of passages)
+      for (let i = 0; i < p.length; i++)
+        if (re.test(p[i]) && p[i] !== skip) return p[i] + (p[i + 1] && p[i + 1].length < 140 ? ` ${p[i + 1]}` : "");
+    return null;
+  };
+  const real = pick(REAL_LIFE);
+  const tryIt = pick(TRY_IT, real ? sentences(real)[0] : "");
+  const quiz = pack.quiz || [];
+  const row = topicRows.get(pack.id) || {};
+  const [group, groupName] = String(pack.group || row.group || "").split(/\s+—\s+/);
+  const area = pack.area || row.area || "";
+  const render = renderFor(pack);
+  const image = pack.visual?.op === "image" ? { src: pack.visual.src, credit: pack.visual.credit || null }
+    : render ? { src: render.src, credit: null } : null;
+  const related = [];
+  for (const p of all.values())
+    if (p.id !== pack.id && related.length < 40 && (pack.group ? p.group === pack.group : p.id.split("-")[0] === pack.id.split("-")[0]))
+      related.push({ id: p.id, title: p.title });
+  // Reviewed packs have no fact list: the first sentence of each step instead.
+  const takeaways = (pack.facts || []).length ? pack.facts.slice(0, 3) : says.map((x) => sentences(x)[0] || x).filter(Boolean).slice(0, 3);
+  return {
+    id: pack.id,
+    title: pack.title,
+    subject: area.split(":")[0].trim(),
+    area,
+    group: groupName || group || "",
+    takeaways,
+    realLife: real,
+    image,
+    tryIt: tryIt || null,
+    practice: quiz[0] ? quiz[0].say || quiz[0].q || null : null,
+    quizCount: quiz.length,
+    keywords: pack.keywords || [],
+    related,
+  };
 }
 
 // Anything that changes something (a POST) must come from this site's own
@@ -498,6 +563,13 @@ export async function createAIAssistant() {
     // Topics for the question box as the student types: GET /topics?q=photo
     // -> { topics: [{ id, title, area }] }, best first. Titles only, from
     // memory, so it is cheap enough for every keystroke on a small server.
+    // The page around the board for one topic: GET /lesson?id=PHYS-DYN-01
+    async "GET /lesson"(req, res, url) {
+      const pack = packs.get(url.searchParams.get("id") || "");
+      if (!pack) throw Object.assign(new Error("no such lesson"), { code: 404 });
+      return lessonCard(pack, packs, topicRows);
+    },
+
     async "GET /topics"(req, res, url) {
       return { topics: suggestTopics(url.searchParams.get("q") || "", 8) };
     },
@@ -615,9 +687,12 @@ export async function createAIAssistant() {
         if (!res.writableEnded) gone = true;
       });
       const t0 = performance.now();
+      // lang: two letters (en, es, fr…); the whole site's narrator uses this.
+      const lang = (url.searchParams.get("lang") || "en").slice(0, 2).toLowerCase();
       const audio = await speech.speak(text, {
         voice: url.searchParams.get("voice") || undefined,
         speed,
+        lang,
         cancelled: () => gone,
       });
       if (!gone)

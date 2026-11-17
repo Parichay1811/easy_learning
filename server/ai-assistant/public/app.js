@@ -32,6 +32,22 @@ const els = {
   sounds: $("sounds"),
   state: $("state"),
   meter: $("meter"),
+  saying: $("saying"),
+  sticky: $("sticky"),
+  subjectBtn: $("subject-btn"),
+  subjectArea: $("subject-area"),
+  subjectGroup: $("subject-group"),
+  subjectIcon: document.querySelector(".subject-icon"),
+  related: $("related"),
+  takeaways: $("takeaways"),
+  realImg: $("real-img"),
+  realText: $("real-text"),
+  tryText: $("try-text"),
+  tryBtn: $("try-btn"),
+  quizText: $("quiz-text"),
+  quizBtn: $("quiz-btn"),
+  notes: $("notes"),
+  notesText: $("notes-text"),
 };
 const STATUS = {
   off: "Press Start, then allow the microphone",
@@ -177,6 +193,8 @@ function setMode(m) {
   }
   els.status.textContent =
     m === "idle" && mic?.muted ? "Mic off: type your question" : STATUS[m];
+  // The question bar shows it too, as its placeholder ("Ready: type a question").
+  els.input.placeholder = els.status.textContent;
   if (!mic) return;
   // The bar for an interruption stays high a moment after the teacher stops,
   // while the room still echoes the last words.
@@ -271,6 +289,7 @@ async function showVideos(q, source = null) {
       row.prepend(a);
     }
     els.videos.hidden = !row.children.length;
+    videoPicture();
   } catch {
     /* no videos: the lesson still works */
   }
@@ -278,6 +297,7 @@ async function showVideos(q, source = null) {
 
 function teach(plan) {
   if (plan.next?.length) showChips(plan.next, true);
+  aroundTheBoard(plan);
   if (plan.watch) showVideos(plan.watch, plan.source);
   if (run) {
     run.dead = true;
@@ -300,9 +320,11 @@ function teach(plan) {
   run.audio = plan.steps.map((s) =>
     voice.load(s.say, run.ctrl.signal).catch(() => null),
   );
+  // The topic of the answer, in the conversation (not when it only repeats
+  // the question just asked: the answer itself shows under it).
   if (
     plan.title &&
-    !["say", "ack", "talk", "unclear", "fragment"].includes(plan.kind)
+    !["say", "ack", "talk", "unclear", "fragment", "faq"].includes(plan.kind)
   )
     log("teacher", plan.title);
   startStep(run, 0);
@@ -750,12 +772,13 @@ async function ask(text, seq = ++askSeq, spokenAs = null, open = null) {
   const handle = (e) => {
     if (e.type === "ack") {
       if (plan) return;
-      els.tier.textContent = `said “${e.say}” after ${e.ms} ms`;
+      els.tier.textContent = "Thinking…";
       fillerAt = Date.now();
       teach({ kind: "ack", steps: [{ say: e.say, draw: [] }] });
     } else if (e.type === "plan") {
       plan = e;
-      els.tier.textContent = `answered by ${e.tier} in ${e.ms} ms`;
+      els.tier.textContent = `Answered by AI in ${e.ms} ms`;
+      els.tier.title = `${e.tier}: ${e.ms} ms`;
       if (e.kind === "control") return control(e.action, e.say);
       if (e.kind === "fragment") {
         prefix = e.prefix;
@@ -772,7 +795,6 @@ async function ask(text, seq = ++askSeq, spokenAs = null, open = null) {
         for (const op of e.draw) board.add(op, board.clock);
     } else if (e.type === "end" && plan) {
       streamEnded(plan);
-      els.tier.textContent += `, spoken answer complete in ${e.ms} ms`;
     }
   };
   const reader = res.body.getReader();
@@ -911,12 +933,213 @@ async function begin() {
 const GREETING_TYPED =
   "Hi, I'm your Learnigo teacher. Type any question, or start typing a topic and pick it from the list. Type test me for some questions.";
 
+// ── The page around the board ───────────────────────────────────────────
+// The sticky note says what kind of lesson is on the board; the subject card,
+// the four cards under the board and the menu follow the topic being taught
+// (GET /lesson), and a general answer fills the cards from its own words.
+const STICKY = {
+  explain: "Concept Explainer", faq: "Your Question", solve: "Worked Example", convert: "Worked Example",
+  chat: "Fact Finder", data: "Fact Finder", card: "Concept Explainer", test: "Practice", question: "Practice",
+  answer: "Practice", quiz: "Practice", miss: "Coming Soon",
+};
+const SUBJECT_ICONS = [
+  [/math/i, "➗"], [/physic|engineer|electric/i, "⚡"], [/chem/i, "🧪"], [/bio|body|health/i, "🌱"],
+  [/space|astro/i, "🪐"], [/hist|ancient|war/i, "🏛️"], [/geo|world|earth/i, "🌍"], [/english|literat|languag|phonic|read/i, "📚"],
+  [/art|music|film|media|design/i, "🎨"], [/comput|tech|coding|ai\b/i, "💻"], [/commerce|econ|business|money|account/i, "💰"],
+  [/kid|early/i, "🧸"], [/philos|religio|faith|belief/i, "💭"],
+];
+let lesson = null; // the /lesson card of the topic on the board
+let lessonFor = null;
+const firstSentence = (t) => (String(t).match(/[^.!?]+[.!?]/) || [String(t)])[0].trim();
+
+function aroundTheBoard(plan) {
+  const label = STICKY[plan.kind];
+  els.sticky.hidden = !label;
+  if (label) els.sticky.textContent = label;
+  if (["ack", "say", "talk", "greet", "unclear", "fragment", "control"].includes(plan.kind)) return;
+  const topic = plan.topic || plan.context?.topic;
+  if (topic) {
+    if (topic !== lessonFor) loadLesson(topic);
+  } else if (plan.steps?.length && !TEST_KINDS.has(plan.kind)) {
+    // An answer from Wikipedia or open data: its own sentences are the takeaways.
+    lessonFor = null;
+    lesson = { title: plan.title || "", related: [] };
+    showSubject(plan.source?.site || "AI Teacher", plan.title || "Your question", "");
+    showCards({
+      takeaways: plan.steps.map((st) => firstSentence(st.say)).filter(Boolean).slice(0, 3),
+      realLife: null,
+      tryIt: null,
+      quizCount: 0,
+    });
+  }
+}
+
+async function loadLesson(id) {
+  lessonFor = id;
+  try {
+    const card = await (await fetch(`/api/ai-assistant/lesson?id=${encodeURIComponent(id)}`)).json();
+    if (lessonFor !== id || card.error) return;
+    lesson = card;
+    showSubject(card.subject, card.group || card.title, card.subject + " " + card.group + " " + card.title);
+    showCards(card);
+    showRelated(card.related || []);
+    loadNotes();
+  } catch {
+    /* the board still teaches without the cards */
+  }
+}
+
+function showSubject(area, group, words) {
+  els.subjectArea.textContent = area || "AI Teacher";
+  els.subjectGroup.textContent = group || "Pick a topic";
+  els.subjectIcon.textContent = (SUBJECT_ICONS.find(([re]) => re.test(words || "")) || [null, "✨"])[1];
+}
+
+function showRelated(list) {
+  els.related.replaceChildren(
+    ...(list.length
+      ? list.map((t) => {
+          const li = document.createElement("li");
+          const b = document.createElement("button");
+          b.type = "button";
+          b.textContent = t.title;
+          b.addEventListener("click", () => {
+            toggleRelated(false);
+            openTopic(t.id, t.title);
+          });
+          li.append(b);
+          return li;
+        })
+      : [Object.assign(document.createElement("li"), { className: "empty", textContent: "Type a topic in the bar above to begin." })]),
+  );
+}
+function toggleRelated(open = els.related.hidden) {
+  els.related.hidden = !open;
+  els.subjectBtn.setAttribute("aria-expanded", String(open));
+}
+els.subjectBtn.addEventListener("click", () => toggleRelated());
+document.addEventListener("pointerdown", (e) => {
+  if (!els.related.hidden && !e.target.closest(".subject")) toggleRelated(false);
+});
+showRelated([]);
+
+function showCards(c) {
+  els.takeaways.replaceChildren(
+    ...(c.takeaways?.length ? c.takeaways : ["Ask a question or pick a topic: the key points appear here."]).map((t) =>
+      Object.assign(document.createElement("li"), { textContent: t }),
+    ),
+  );
+  els.realText.textContent = c.realLife || (lesson?.title ? `Ask “Give me an example” to see ${lesson.title} in everyday life.` : "Where you meet it in everyday life.");
+  els.realImg.hidden = !c.image?.src;
+  if (c.image?.src) els.realImg.src = c.image.src;
+  els.tryText.textContent = c.tryIt || (c.practice ? `Try this: ${c.practice}` : "Something to try with what you learn.");
+  els.tryBtn.hidden = !c.practice;
+  els.quizText.textContent = c.quizCount
+    ? `Test your understanding with ${Math.max(5, c.quizCount)} quick questions.`
+    : "Test your understanding with quick questions.";
+}
+
+// No picture of its own: the first video's thumbnail stands in.
+function videoPicture() {
+  if (!els.realImg.hidden) return;
+  const img = els.videos.querySelector(".v-card img");
+  if (!img) return;
+  els.realImg.src = img.src;
+  els.realImg.hidden = false;
+}
+
+async function askNow(text, open = null) {
+  await start();
+  if (mode === "teaching") interrupt();
+  ask(text, ++askSeq, null, open);
+}
+function openTopic(id, title) {
+  askNow(`Teach me about ${title}`, id);
+}
+const testMe = () => askNow(lesson?.title ? `Test me on ${lesson.title}` : "Test me");
+const glow = (el) => {
+  el.classList.add("glow");
+  el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  setTimeout(() => el.classList.remove("glow"), 1600);
+};
+// A short lesson made here from the card: drawn on the board and said aloud.
+function boardFrom(title, rows) {
+  if (!rows.length) return false;
+  askSeq++;
+  start().then(() => {
+    if (mode === "teaching") interrupt();
+    teach({
+      kind: "say",
+      title,
+      steps: [{ say: rows.join(" "), draw: [{ op: "clear" }, { op: "title", text: title }, { op: "bullets", rows }] }],
+    });
+  });
+  return true;
+}
+
+// The three quick asks under the conversation.
+for (const b of document.querySelectorAll(".action"))
+  b.addEventListener("click", () => (b.dataset.ask === "test" ? testMe() : askNow(b.dataset.ask)));
+els.quizBtn.addEventListener("click", testMe);
+els.tryBtn.addEventListener("click", testMe);
+
+// The lesson menu.
+const MENU = {
+  board: () => document.querySelector(".holo-wrap").scrollIntoView({ block: "nearest", behavior: "smooth" }),
+  concepts: () => {
+    glow($("card-take"));
+    const rows = [...els.takeaways.children].map((li) => li.textContent);
+    if (lesson?.title) boardFrom(`Key concepts: ${lesson.title}`, rows);
+  },
+  notes: () => {
+    els.notes.hidden = !els.notes.hidden;
+    if (!els.notes.hidden) els.notesText.focus();
+  },
+  practice: testMe,
+  try: () => {
+    glow($("card-try"));
+    if (lesson?.tryIt) boardFrom("Try it yourself", [lesson.tryIt]);
+  },
+  quiz: testMe,
+  games: () => {
+    (window.top || window).location.href = "/games";
+  },
+};
+for (const b of document.querySelectorAll(".menu-item"))
+  b.addEventListener("click", () => {
+    for (const x of document.querySelectorAll(".menu-item")) {
+      x.classList.toggle("active", x === b);
+      x.toggleAttribute("aria-current", x === b);
+    }
+    MENU[b.dataset.go]?.();
+  });
+
+// Notes: one per topic, kept in this browser only.
+const notesKey = () => `learnigo-notes:${lesson?.id || "general"}`;
+function loadNotes() {
+  try {
+    els.notesText.value = localStorage.getItem(notesKey()) || "";
+  } catch {
+    els.notesText.value = "";
+  }
+}
+els.notesText.addEventListener("input", () => {
+  try {
+    localStorage.setItem(notesKey(), els.notesText.value);
+  } catch {
+    /* storage off: the notes last until the page closes */
+  }
+});
+$("notes-close").addEventListener("click", () => {
+  els.notes.hidden = true;
+});
+loadNotes();
+
 // No speech recognition on this server (LT_ASR=off): no microphone, and
 // everything on the page asks for typing instead of talking.
 function typedOnly() {
   serverHearing = false;
   els.mic.hidden = true;
-  els.input.placeholder = "Type a question or a topic…";
   Object.assign(STATUS, {
     off: "Press Start to begin",
     idle: "Ready: type a question",
@@ -989,9 +1212,7 @@ async function pickSuggest(i) {
   if (!t) return;
   hideSuggest();
   els.input.value = "";
-  await start();
-  if (mode === "teaching") interrupt();
-  ask(`Teach me about ${t.title}`, ++askSeq, null, t.id);
+  openTopic(t.id, t.title);
 }
 els.input.addEventListener("input", () => {
   clearTimeout(suggest.timer);
@@ -1078,6 +1299,7 @@ let captionAt = "";
         ? (mic?.level || 0) * 14
         : 0;
   orb.setLevel(level);
+  document.documentElement.style.setProperty("--talk", Math.min(1, level).toFixed(2));
   els.meter.style.width = `${Math.round(Math.min(1, level) * 100)}%`;
   const r = run;
   if (r && !r.finished && r.cues && mode !== "thinking") {
@@ -1086,6 +1308,7 @@ let captionAt = "";
     if (k < -1) k = r.cues.length - 1;
     if (captionAt !== `${r.i}|${k}|${r.cues.length}`) {
       captionAt = `${r.i}|${k}|${r.cues.length}`;
+      els.saying.hidden = false;
       els.caption.innerHTML = r.cues
         .map(
           (c, i) =>
@@ -1095,6 +1318,7 @@ let captionAt = "";
     }
   } else if (mode === "idle" && awaiting && captionAt !== "answer") {
     captionAt = "answer";
+    els.saying.hidden = false;
     els.caption.textContent = serverHearing
       ? "Your turn: say your answer, or tap an option (or press A to D)."
       : "Your turn: tap an option, or press A to D.";

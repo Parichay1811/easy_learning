@@ -5,27 +5,17 @@
  * channel, or both — `settings.instruction` decides, because "listen and find"
  * is a real skill for one child and an insurmountable barrier for another.
  *
- * Uses the platform speech synthesiser: no network, works offline, and follows
- * the app's i18n language. `speechRate` defaults below 1 — comprehension for
- * this population matters far more than pace.
+ * Speaks through the site's narrator (the natural server voice, falling back to
+ * the platform speech synthesiser offline), and follows the app's i18n
+ * language. `speechRate` defaults below 1 — comprehension for this population
+ * matters far more than pace.
  */
 import { getSettings } from './settings'
+import { narrate, stopNarration, isNarrating } from '../../utils/narrator'
 
 const synth = typeof window !== 'undefined' ? window.speechSynthesis : null
 
-let voices = []
 let unlocked = false
-let currentUtterance = null
-
-function refreshVoices() {
-  if (!synth) return
-  voices = synth.getVoices() || []
-}
-
-if (synth) {
-  refreshVoices()
-  synth.addEventListener?.('voiceschanged', refreshVoices)
-}
 
 export function ttsSupported() {
   return Boolean(synth)
@@ -48,64 +38,24 @@ export function unlockSpeech() {
   return unlocked
 }
 
-function pickVoice(lang) {
-  if (!voices.length) refreshVoices()
-  const want = (lang || 'en').toLowerCase()
-  const short = want.split('-')[0]
-  return (
-    voices.find((v) => v.lang?.toLowerCase() === want) ||
-    voices.find((v) => v.lang?.toLowerCase().startsWith(short)) ||
-    voices.find((v) => v.default) ||
-    voices[0] ||
-    null
-  )
-}
-
 /**
  * Speaks `text` and resolves when it finishes (or immediately when speech is
- * off, so callers can always `await` it without branching).
+ * off, so callers can always `await` it without branching). It speaks through
+ * the site's narrator (utils/narrator.js): the natural server voice, or the
+ * browser's best voice for the language.
  *
  * @param {string} text
  * @param {{lang?: string, rate?: number, pitch?: number, interrupt?: boolean}} opts
  */
 export function speak(text, opts = {}) {
   const s = getSettings()
-  if (!synth || !s.speech || !text || s.instruction === 'visual') return Promise.resolve(false)
-
-  const { lang = document.documentElement.lang || 'en', interrupt = true } = opts
-
-  return new Promise((resolve) => {
-    try {
-      if (interrupt) synth.cancel()
-      const u = new SpeechSynthesisUtterance(String(text))
-      const voice = pickVoice(lang)
-      if (voice) u.voice = voice
-      u.lang = voice?.lang || lang
-      u.rate = opts.rate ?? s.speechRate ?? 0.85
-      u.pitch = opts.pitch ?? 1.05
-      u.volume = Math.min(1, (s.volume ?? 0.7) + 0.25)
-
-      let settled = false
-      const done = (ok) => {
-        if (settled) return
-        settled = true
-        if (currentUtterance === u) currentUtterance = null
-        resolve(ok)
-      }
-      u.onend = () => done(true)
-      u.onerror = () => done(false)
-      // Safety net: Safari occasionally never fires `onend`.
-      const guard = setTimeout(() => done(false), 1200 + String(text).length * 110)
-      u.onend = () => {
-        clearTimeout(guard)
-        done(true)
-      }
-
-      currentUtterance = u
-      synth.speak(u)
-    } catch {
-      resolve(false)
-    }
+  if (!s.speech || !text || s.instruction === 'visual') return Promise.resolve(false)
+  const { lang = document.documentElement.lang || 'en' } = opts
+  return narrate(String(text), {
+    lang,
+    rate: opts.rate ?? s.speechRate ?? 0.85,
+    pitch: opts.pitch ?? 1.05,
+    volume: Math.min(1, (s.volume ?? 0.7) + 0.25),
   })
 }
 
@@ -124,14 +74,9 @@ export function speakPhoneme(letter, opts = {}) {
 }
 
 export function cancelSpeech() {
-  try {
-    synth?.cancel()
-  } catch {
-    /* ignore */
-  }
-  currentUtterance = null
+  stopNarration()
 }
 
 export function isSpeaking() {
-  return Boolean(synth?.speaking)
+  return isNarrating()
 }
