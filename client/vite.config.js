@@ -18,6 +18,9 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
     plugins: [react(), basicSsl(), aiAssistantStatic()],
+    // The AR vision worker (src/ar/core/visionWorker.js) must be an ES-module
+    // worker: MediaPipe loads its WASM glue with `import()` there.
+    worker: { format: 'es' },
     server: {
       https: true,
       host: true,

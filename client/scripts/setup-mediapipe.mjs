@@ -16,7 +16,8 @@
  * runtime.
  */
 import { createWriteStream } from 'node:fs'
-import { mkdir, copyFile, stat, readdir, rm } from 'node:fs/promises'
+import { mkdir, copyFile, stat, readdir, rm, readFile, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import { pipeline } from 'node:stream/promises'
 import { Readable } from 'node:stream'
 import { dirname, join, resolve } from 'node:path'
@@ -41,6 +42,15 @@ const MODELS = [
     minBytes: 1_000_000,
   },
 ]
+
+// The phone model: MediaPipe's full palm detector + lite hand-landmark
+// network, bundled in the repo (see scripts/models/README.md for why and how it
+// is built). Copied, not downloaded — there is no official copy to download.
+const LITE_HAND = {
+  file: 'hand_landmarker_lite.task',
+  src: join(HERE, 'models', 'hand_landmarker_lite.task'),
+  sha256: '11107f3ea2ffe7df1138fefdd917bdf78523040fed171b5f6daac43797af2058',
+}
 
 const log = (...a) => console.log('[mediapipe]', ...a)
 
@@ -102,10 +112,31 @@ async function fetchModel({ file, url, minBytes }) {
   }
 }
 
+async function vendorLiteHand() {
+  const dest = join(MODEL_OUT, LITE_HAND.file)
+  try {
+    const data = await readFile(LITE_HAND.src)
+    const sum = createHash('sha256').update(data).digest('hex')
+    if (sum !== LITE_HAND.sha256) throw new Error(`checksum mismatch (${sum.slice(0, 12)}…)`)
+    const existing = await readFile(dest).catch(() => null)
+    if (existing && createHash('sha256').update(existing).digest('hex') === sum) {
+      log(`${LITE_HAND.file} already up to date`)
+      return true
+    }
+    await mkdir(MODEL_OUT, { recursive: true })
+    await writeFile(dest, data)
+    log(`vendored ${LITE_HAND.file} (${(data.length / 1e6).toFixed(1)} MB) — phones use this`)
+    return true
+  } catch (err) {
+    log(`lite hand model skipped: ${err.message} — phones will use the full model`)
+    return false
+  }
+}
+
 async function main() {
   await mkdir(OUT, { recursive: true })
   await vendorWasm()
-  const results = await Promise.all(MODELS.map(fetchModel))
+  const results = await Promise.all([...MODELS.map(fetchModel), vendorLiteHand()])
   if (results.every(Boolean)) log('AR assets ready (fully offline-capable)')
   else log('AR assets partially vendored — the games still run via CDN fallback')
 }

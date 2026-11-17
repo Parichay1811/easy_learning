@@ -57,6 +57,7 @@ const POINTS_ROW_ICONS = {
 const CAMERA_HELP_KEYS = {
   CAMERA_DENIED: 'cameraDenied',
   CAMERA_MISSING: 'cameraMissing',
+  CAMERA_BUSY: 'cameraBusy',
   CAMERA_UNSUPPORTED: 'cameraUnsupported',
   MODEL_FAILED: 'modelFailed',
 }
@@ -69,6 +70,10 @@ const CAMERA_HELP_FALLBACK = {
   CAMERA_MISSING: {
     title: 'No camera found',
     body: 'We could not find a camera on this device. Plug one in, or open the games on a phone or tablet.',
+  },
+  CAMERA_BUSY: {
+    title: 'The camera is busy',
+    body: 'Another app or browser tab is using the camera. Close it, then press Try again.',
   },
   CAMERA_UNSUPPORTED: {
     title: 'This browser cannot do camera games',
