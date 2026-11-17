@@ -54,7 +54,7 @@ echo [ OK]  Client dependencies installed.
 echo.
 
 :: ── Server dependencies ───────────────────────────────────────────────────────
-echo [3/3] Installing server dependencies (Express + dotenv)...
+echo [3/3] Installing server dependencies (Express + the AI assistant)...
 call npm install --prefix server
 if %errorlevel% neq 0 (
   echo [ERR]  Server install failed.
@@ -86,8 +86,8 @@ echo   Setup complete!
 echo ================================================
 echo.
 echo   npm run dev      -- start both client + server
-echo   npm run client   -- React frontend  (port 3000)
-echo   npm run server   -- Express API     (port 5000)
+echo   npm run client   -- React site      (https://localhost:5173)
+echo   npm run server   -- Express API     (port 5001, incl. the AI assistant)
 echo.
 pause
 endlocal

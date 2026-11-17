@@ -79,7 +79,7 @@ function Invoke-NpmInstall {
 # ── Install dependencies ──────────────────────────────────────────────────────
 Invoke-NpmInstall "[1/3] Installing root dependencies (concurrently)…"
 Invoke-NpmInstall "[2/3] Installing client dependencies (React + Vite)…" -prefix "client"
-Invoke-NpmInstall "[3/3] Installing server dependencies (Express + dotenv)…" -prefix "server"
+Invoke-NpmInstall "[3/3] Installing server dependencies (Express + the AI assistant)…" -prefix "server"
 
 # ── Environment files ─────────────────────────────────────────────────────────
 Write-Info "Checking environment files…"
@@ -105,6 +105,6 @@ Write-Host "   ✅  Setup complete!                           " -ForegroundColor
 Write-Host "  ================================================" -ForegroundColor Green
 Write-Host ""
 Write-Host "  npm run dev      — start both client + server" -ForegroundColor White
-Write-Host "  npm run client   — React frontend  →  http://localhost:3000" -ForegroundColor White
-Write-Host "  npm run server   — Express API     →  http://localhost:5000" -ForegroundColor White
+Write-Host "  npm run client   — React site      →  https://localhost:5173" -ForegroundColor White
+Write-Host "  npm run server   — Express API     →  http://localhost:5001 (incl. the AI assistant)" -ForegroundColor White
 Write-Host ""

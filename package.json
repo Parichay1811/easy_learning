@@ -1,5 +1,19 @@
 {
-  "name": "easy_learning",
+  "name": "learnigo",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "description": "Learnigo: the React site (client/) and the Express API with the AI voice assistant (server/).",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix server && npm install --prefix client",
+    "dev": "concurrently -n api,web -c blue,magenta \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "server": "npm run dev --prefix server",
+    "client": "npm run dev --prefix client",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server",
+    "test": "npm run test:ai-assistant --prefix server",
+    "lint": "npm run lint --prefix client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }

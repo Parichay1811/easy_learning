@@ -2,7 +2,7 @@
 
 A guide for the people who *use* Learnigo day to day: students, parents, organization
 admins, and the platform super admin. For how the app is built, see
-[design-guide.md](./design-guide.md) — this document is about what you can click and what
+[design-guide.md](./docs/design-guide.md) — this document is about what you can click and what
 happens when you do.
 
 ## Contents

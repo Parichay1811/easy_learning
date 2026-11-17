@@ -22,15 +22,29 @@ their assigned batches and submit new questions for the admin to review.
 |---|---|
 | Client | React 19 + Vite, React Router 7, Redux Toolkit, react-i18next, Framer Motion, Recharts, Firebase Auth (Google popup) |
 | Server | Node + Express 4, Mongoose 8, JWT (`jsonwebtoken`), `express-validator`, `multer` + Cloudinary (uploads), `bcryptjs`, `exceljs` (question-upload templates/parsing) |
+| AI voice assistant | `server/ai-assistant/` — a module of the same Express process at `/api/ai-assistant/*` (CPU speech in/out, lesson packs, a small in-process LLM via node-llama-cpp); its plain-ES-module page is served by the React site at `/ai-assistant/` and embedded by the navbar's "Ask AI" widget. See `server/ai-assistant/README.md` |
 | DB | MongoDB — **three separate connections/databases**, see §4 |
 | No | GraphQL, WebSockets/socket.io (notifications use plain polling), TypeScript |
 
-Root has no shared `package.json` scripts — `client/` and `server/` are run independently
-(`npm run dev` in each).
+The root `package.json` only has convenience scripts: `npm run install:all`, `npm run dev`
+(API + site together via `concurrently`), `npm run build`, `npm start`, `npm test` (the AI
+assistant's tests). `client/` and `server/` still run on their own (`npm run dev` in each).
 
 ## 3. Repo map
 
 ```
+client/              the React site (Vite); `npm run build` → client/dist (served by Nginx)
+server/              the Express API — one process, including the AI voice assistant
+  ai-assistant/      the AI voice assistant module (its own README); page in public/, served at /ai-assistant/
+docs/                this guide, ABOUT.md, AR-GAMES.md, PROJECT_PLAN.md (historical), UPDATES.md, BUGS.txt
+DEPLOY.md, redeploy.sh   production (Hostinger VPS) setup and the redeploy script
+setup.sh/.ps1/.bat   first-time local setup
+```
+
+```
+client/
+  scripts/ai-assistant-static.mjs   Vite plugin: serves/copies server/ai-assistant's page at /ai-assistant/
+  scripts/setup-mediapipe.mjs       vendors the AR games' MediaPipe runtime into public/mediapipe/
 client/src/
   pages/            top-level routed pages (Home, Learn, SubjectPage, GamesPage, Dashboard, ...)
   pages/modules/     the 4 skill-module pages: ListenModule, ReadModule, WriteModule, SpeakModule
@@ -38,7 +52,7 @@ client/src/
   pages/admin/       AdminDashboard (org admin)
   pages/superadmin/  SuperAdminDashboard
   pages/teacher/     TeacherLogin, TeacherDashboard, TeacherBatchDetail, TeacherQuestionUpload
-  components/        shared UI: Navbar, RoundComplete, ContactForm, LanguageSwitcher, Background3D, ...
+  components/        shared UI: Navbar, AIAssistantWidget (embeds /ai-assistant/), RoundComplete, ContactForm, LanguageSwitcher, Background3D, ...
   components/Admin/  admin+teacher shared UI: DataTable, Modal, StatCard, SearchBar, BatchDetail,
                      QuestionBatchDetailModal, ScheduleEditor, WeeklyScheduleGrid, MultiSelect(Modal)
   store/slices/       one Redux slice per content collection + dashboardSlice
@@ -64,6 +78,10 @@ server/
   services/batchService.js
   data/*.json           seed content per subject/skill
   scripts/              seed-all.js, translate-content.js, migrate-subjects-from-legacy.js
+  ai-assistant/         the AI voice assistant: index.mjs (createAIAssistant → mounted at /api/ai-assistant),
+                        lib/ (router, speech, LLM, search), shared/ (server + browser code), packs/ (lessons),
+                        public/ (its page), factory/ (pack builder), test/ — mounted before CORS/body parsers
+                        in server.js because it reads raw bodies and guards its own POSTs by Origin
 ```
 
 ## 4. The three-database architecture (read this twice)

@@ -1,9 +1,9 @@
-# Easy Learn — Hostinger VPS Deployment Guide
+# Learnigo — Hostinger VPS Deployment Guide
 
 **Domain:** `www.learnigo.eu` (canonical) — `learnigo.eu` and `quizify.cloud` 301-redirect here  
 **Stack:** React 19 (Vite) + Express.js + MongoDB Atlas (MERN)  
 **Node version:** `22.18.0` (matches local dev machine)  
-**Strategy:** Nginx serves the built React SPA; PM2 keeps the Express API alive; MongoDB Atlas as the database.
+**Strategy:** Nginx serves the built React SPA (including the AI voice assistant's page at `/ai-assistant/`); PM2 keeps the Express API alive (one process, the AI voice assistant included); MongoDB Atlas as the database.
 
 ---
 
@@ -145,7 +145,7 @@ npm install
 npm run build
 ```
 
-The production-ready static files are now in `/var/www/easy_learning/client/dist/`.
+The production-ready static files are now in `/var/www/easy_learning/client/dist/` (the AI voice assistant's page is in `dist/ai-assistant/`). The server install includes the assistant's native speech/LLM packages — see "The AI Voice Assistant" below for disk and RAM.
 
 ---
 
@@ -279,80 +279,55 @@ Both should return `301` with `Location: https://www.learnigo.eu/`.
 
 ---
 
-## Deploying the AI Voice Assistant (optional)
+## The AI Voice Assistant
 
-The Home page embeds a separate app, **`learnigo-ai-assistant/`** ("Learnigo live teacher"), in an iframe. It lives in this same repo (folded in from its original standalone repo, `github.com/SutirthaBoss/learnigo-ai-assistant`) but is still its own standalone Node server — not part of the React build — so it needs its own PM2 process and its own Nginx server block, on its own subdomain.
+The AI voice assistant ("AI teacher", **`server/ai-assistant/`**) is part of the app, not a separate service:
 
-**Before you start:** this app runs a small local LLM plus speech recognition/synthesis models (`node-llama-cpp`, `onnxruntime-node`, `@huggingface/transformers`). `npm install` needs real disk space for native binaries, and the first start downloads **~1.2 GB** of models into `~/.cache/learnigo-teacher`. Confirm the VPS has a few GB free (`df -h`) before installing — a nearly-full volume fails installs with `ENOSPC` partway through. Also check free RAM (`free -h`): it's CPU inference running alongside the main Express API and MongoDB connections on the same box, so a 1-2 GB VPS may struggle under both at once.
+- its API runs **inside the Express process** (`easy-learn`) at `/api/ai-assistant/*`, so the existing Nginx `location /api/` already serves it;
+- its page is part of the **React build** (`client/dist/ai-assistant/`), so the existing `try_files` serves it at `https://www.learnigo.eu/ai-assistant/` and the navbar's "Ask AI" widget embeds it from the same origin.
 
-### 1. Get a subdomain pointed at the VPS
+So there is no extra PM2 process, subdomain, Nginx block or env var. Steps 8 and 10 above already install, build and start it.
 
-Add a DNS **A record** for `assistant.learnigo.eu` → the VPS IP (`31.97.224.109`), the same way `www`/bare `learnigo.eu` already point there.
+**Resources:** it runs a small local LLM plus speech recognition/synthesis models on the CPU (`node-llama-cpp`, `onnxruntime-node`, `@huggingface/transformers`). `npm install` in `server/` needs real disk space for their native binaries, and the first start downloads **~1.2 GB** of models into `~/.cache/learnigo-teacher` (already there if the old standalone assistant ran on this VPS). Check `df -h` and `free -h`: it adds roughly 1–1.5 GB of RAM to the `easy-learn` process. If a box can't afford that, set `AI_ASSISTANT=off` in `server/.env`; the rest of the API is unaffected and the assistant's routes answer 503.
 
-### 2. Install its dependencies
-
-It's already on disk after `git pull`/`git clone` of this repo (see step 5) — just install:
-
-```bash
-cd /var/www/easy_learning/learnigo-ai-assistant
-npm install
-```
-
-### 3. Start it with PM2
+**Startup:** the API listens immediately; the assistant loads its packs and models in the background (a few seconds when the models are cached) and answers 503 until then. Check it with:
 
 ```bash
-pm2 start server.mjs --name learnigo-ai-assistant --cwd /var/www/easy_learning/learnigo-ai-assistant
-pm2 save
+curl -s http://127.0.0.1:5000/api/ai-assistant/health | head -c 200   # "ready":true once loaded
 ```
 
-Check it's actually listening before moving on — the first run downloads its models, which takes a while:
+**Optional Nginx tweaks** in the `www.learnigo.eu` server block, inside `location /api/`:
+
+```nginx
+        client_max_body_size 2m;   # spoken questions over ~15 s are sent as ~1.3 MB of audio (default limit: 1m)
+```
+
+(Streaming answers already work: the assistant sends `X-Accel-Buffering: no`.)
+
+### Moving from the old standalone assistant (one time)
+
+Earlier deploys ran it as its own app in `learnigo-ai-assistant/` (PM2 process `learnigo-ai-assistant`, port 4173, `assistant.learnigo.eu`). The new `redeploy.sh` retires that automatically: it deletes the old PM2 process, moves its saved data (learned speech corrections, TODO list, voice cache) to `server/ai-assistant/data/`, and removes the old folder. Because the *old* copy of the script is what runs the first `git pull`, run it like this **once**:
 
 ```bash
-pm2 logs learnigo-ai-assistant --lines 30
-curl http://127.0.0.1:4173/   # should return the app's HTML once ready
+cd /var/www/easy_learning
+git pull origin main && ./redeploy.sh
 ```
 
-### 4. Add an Nginx server block
-
-```bash
-nano /etc/nginx/sites-available/learnigo-ai-assistant
-```
+Then point the old subdomain at the new page so existing links keep working — replace the contents of `/etc/nginx/sites-available/learnigo-ai-assistant` with (keep the `listen 443 ssl` / certificate lines certbot added):
 
 ```nginx
 server {
     listen 80;
     server_name assistant.learnigo.eu;
-
-    location / {
-        proxy_pass         http://127.0.0.1:4173;
-        proxy_http_version 1.1;
-        proxy_set_header   Upgrade $http_upgrade;
-        proxy_set_header   Connection 'upgrade';
-        proxy_set_header   Host $host;
-        proxy_set_header   X-Real-IP $remote_addr;
-        proxy_cache_bypass $http_upgrade;
-    }
+    return 301 https://www.learnigo.eu/ai-assistant/;
 }
 ```
 
-> A dedicated subdomain (not a `/path` under `www.learnigo.eu`) is required: the app's HTML references its own assets as root-absolute paths (`/app.js`, `/style.css`, …), which only resolve correctly when it owns the whole origin. Its same-site check (`lib/router.mjs`'s `sameSite`) compares the browser's `Origin` against the forwarded `Host` header, so it works here as long as `proxy_set_header Host $host;` stays in place — same as the `/api/` block above.
-
 ```bash
-ln -s /etc/nginx/sites-available/learnigo-ai-assistant /etc/nginx/sites-enabled/
-nginx -t
-systemctl reload nginx
-certbot --nginx -d assistant.learnigo.eu
+nginx -t && systemctl reload nginx
 ```
 
-### 5. Point the client at it
-
-In `/var/www/easy_learning/client/.env`:
-
-```env
-VITE_AI_ASSISTANT_URL=https://assistant.learnigo.eu
-```
-
-Then rebuild the client (`npm run build`) so the iframe's `src` picks it up.
+`VITE_AI_ASSISTANT_URL` in `client/.env` is no longer used and can be deleted.
 
 ---
 
@@ -365,7 +340,7 @@ cd /var/www/easy_learning
 ./redeploy.sh
 ```
 
-It pulls `main`, reinstalls server and client dependencies, rebuilds the client, restarts the API under PM2, and (if present) updates and restarts the AI voice assistant too. It refuses to run if tracked files have uncommitted local changes, so it never overwrites server-side edits.
+It pulls the current branch (then re-runs its freshly pulled self), reinstalls server dependencies (the API and the AI voice assistant), reinstalls client dependencies and rebuilds the site (which includes the assistant's page), and restarts the API under PM2. It refuses to run if tracked files have uncommitted local changes, so it never overwrites server-side edits.
 
 Equivalent manual steps, if you need to do it by hand:
 
@@ -393,8 +368,8 @@ cd ../server && npm install && pm2 restart easy-learn
 | Client env file | `/var/www/easy_learning/client/.env` |
 | PM2 logs | `pm2 logs easy-learn` |
 | Nginx error log | `/var/log/nginx/error.log` |
-| AI voice assistant | `localhost:4173` (PM2 process: `learnigo-ai-assistant`), public at `assistant.learnigo.eu` |
-| AI assistant Nginx config | `/etc/nginx/sites-available/learnigo-ai-assistant` |
+| AI voice assistant | inside `easy-learn`: API at `/api/ai-assistant/*`, page at `https://www.learnigo.eu/ai-assistant/` (code: `server/ai-assistant/`) |
+| AI assistant data / models | `server/ai-assistant/data/` (corrections, TODOs, voice cache) / `~/.cache/learnigo-teacher` |
 | Redeploy script | `/var/www/easy_learning/redeploy.sh` |
 
 ---
@@ -409,5 +384,6 @@ cd ../server && npm install && pm2 restart easy-learn
 | Google sign-in fails | Add `www.learnigo.eu` to Firebase Console → Authentication → Authorized Domains |
 | MongoDB connection refused | Add the VPS IP (`31.97.224.109`) to MongoDB Atlas → Network Access → IP Allowlist |
 | `npm run build` fails | Confirm `client/.env` has `VITE_FIREBASE_API_KEY` set |
-| AI assistant widget shows a blank panel | `pm2 logs learnigo-ai-assistant` — likely still downloading models on first start, or `VITE_AI_ASSISTANT_URL` doesn't match the Nginx `server_name` |
-| AI assistant install fails with `ENOSPC` | The native speech/LLM dependencies need real disk space — `df -h` and free space before retrying `npm install` |
+| AI assistant says it is warming up / `/api/ai-assistant/health` returns 503 | Still loading (first start downloads ~1.2 GB of models) — `pm2 logs easy-learn`; look for "AI assistant ready" or "AI assistant failed to start" |
+| `/ai-assistant/` shows the site's 404 page | The client wasn't rebuilt after pulling — `cd client && npm run build` |
+| Server `npm install` fails with `ENOSPC` | The assistant's native speech/LLM dependencies need real disk space — `df -h` and free space before retrying `npm install` |

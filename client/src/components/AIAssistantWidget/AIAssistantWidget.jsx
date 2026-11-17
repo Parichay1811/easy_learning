@@ -8,17 +8,16 @@ import AIAssistantOrb from "./AIAssistantOrb";
 import { playSlide } from "../../utils/sounds";
 import styles from "./AIAssistantWidget.module.css";
 
-// The standalone "Learnigo live teacher" voice assistant runs as its own
-// server (learnigo-ai-assistant/ at the repo root) — not part of this React build.
-// Local dev talks to it on its default port; production points this at the
-// assistant's own subdomain (see DEPLOY.md). Until that env var is set for a
-// given build, the widget stays hidden rather than linking to a dead/local URL.
-const ASSISTANT_URL = import.meta.env.VITE_AI_ASSISTANT_URL;
+// The AI voice assistant is part of this site: its page is served at
+// /ai-assistant/ (client/scripts/ai-assistant-static.mjs) and it talks to the
+// same API at /api/ai-assistant/* (server/ai-assistant/). Same origin, so the
+// embedded page needs no separate host, CORS or env var.
+const ASSISTANT_URL = "/ai-assistant/";
 
 // The AI voice assistant trigger. At 430px and up it floats bottom-right over
 // the page; below that it sits inline in the navbar next to the hamburger,
 // since a fixed circle would otherwise overlap small-screen content.
-// Clicking it opens the live assistant (a separate app) in an embedded panel.
+// Clicking it opens the live assistant in an embedded panel.
 const COMPACT_QUERY = "(max-width: 429px)";
 
 const AIAssistantWidget = () => {
@@ -50,8 +49,6 @@ const AIAssistantWidget = () => {
 
   const handleOpen = () => { playSlide(); setOpen(true); };
   const handleClose = () => { playSlide(); setOpen(false); };
-
-  if (!ASSISTANT_URL) return null;
 
   const trigger = (
     <button
