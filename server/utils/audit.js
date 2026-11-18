@@ -12,9 +12,24 @@ const audit = (...args) => {
   return run
 }
 
+// Stored exactly as it will be read back, so the hash still matches later:
+// no undefined values, dates and ids as strings, no empty objects (Mongo drops them).
+function plain(v) {
+  if (v === undefined) return undefined
+  const strip = (x) => {
+    if (!x || typeof x !== 'object' || Array.isArray(x)) return x
+    for (const k of Object.keys(x)) { x[k] = strip(x[k]); if (x[k] && typeof x[k] === 'object' && !Array.isArray(x[k]) && !Object.keys(x[k]).length) delete x[k] }
+    return x
+  }
+  const out = strip(JSON.parse(JSON.stringify(v)))
+  return out && typeof out === 'object' && !Array.isArray(out) && !Object.keys(out).length ? undefined : out
+}
+
 // audit(req, 'learner.view', { targetType:'learner', targetId, orgId, reason, meta }). Never throws.
 async function write(req, action, { targetType = '', targetId = '', orgId = '', reason = '', meta } = {}) {
   try {
+    meta = plain(meta)
+    reason = String(reason || '')
     const a = req.actor || {}
     const last = await AuditEvent.findOne().sort({ at: -1, _id: -1 }).select('hash').lean()
     const e = new AuditEvent({

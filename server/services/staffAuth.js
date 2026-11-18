@@ -5,8 +5,9 @@
 // audited, and with SUPER_ADMIN_TOTP_SECRET set it needs a code too.
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
-const Staff = require('../models/superadmin/Staff')
-const StaffSession = require('../models/superadmin/StaffSession')
+// Models load lazily: the throttle and challenge helpers work without a database.
+const Staff = { findById: (...a) => require('../models/superadmin/Staff').findById(...a) }
+const StaffSession = new Proxy({}, { get: (_, k) => { const M = require('../models/superadmin/StaffSession'); return typeof M[k] === 'function' ? M[k].bind(M) : M[k] } })
 
 const SESSION_HOURS = Number(process.env.STAFF_SESSION_HOURS) || 12
 const MAX_FAILURES = 5

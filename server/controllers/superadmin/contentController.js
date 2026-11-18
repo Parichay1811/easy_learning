@@ -14,7 +14,8 @@ const { h, fail, paging, rx } = require('./util')
 const BUILT_IN = { uploadBatchId: null }
 const EDITABLE = ['instruction', 'prompt', 'audio_text', 'options', 'correct_answer', 'accepted_answers', 'hints', 'feedback', 'worked_example', 'level', 'level_name', 'difficulty_band', 'question', 'answer', 'hint', 'sentence', 'text', 'title', 'content']
 
-const banks = h(async () => {
+const banks = h(async (req) => {
+  if (req.query.fresh) clear('content:') // the page's "refresh" button
   const out = await cached('content:banks', 60_000, async () => {
     const langs = (await readPlatformSettings())['platform.languages'].value.filter((l) => l !== 'en')
     const rows = []

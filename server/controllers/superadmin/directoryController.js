@@ -366,9 +366,9 @@ const families = h(async (req) => {
 async function forIndependentLearner(req) {
   const email = String(req.params.email || '').toLowerCase()
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return { error: { status: 404, message: 'Learner not found' } }
+  if (await Student.exists({ email })) return { error: { status: 400, message: 'This learner belongs to an organisation: open them from that organisation.' } }
   const known = (await User.exists({ email })) || (await Child.exists({ email }))
   if (!known) return { error: { status: 404, message: 'Learner not found' } }
-  if (await Student.exists({ email })) return { error: { status: 400, message: 'This learner belongs to an organisation: open them from that organisation.' } }
   await audit(req, 'people.learner.analytics', { targetType: 'learner', targetId: email, reason: String(req.query.reason || ''), meta: { path: req.path.split('/').pop() } })
   return { emails: [email], who: email.split('@')[0], names: { [email]: email.split('@')[0] } }
 }
