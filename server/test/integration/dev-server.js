@@ -17,6 +17,7 @@ const { seedDemo } = require('../../scripts/seed-demo')
   const app = await start({ port: Number(process.env.DEV_PORT) || 5055, clientUrl: `https://localhost:${process.env.DEV_CLIENT_PORT || 5231},http://localhost:5173` })
   const demo = await seedDemo(app.db)
   const school = await require('../../scripts/seed-school-tree').seedSchoolTree(app.db, demo)
+  await require('../../scripts/seed-superadmin-demo').seedSuperadminDemo(app.db, demo)
   const t = app.tokens
   const out = {
     api: `${app.url}/api`,

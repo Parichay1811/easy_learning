@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -36,6 +36,8 @@ import ParentLogin from "./pages/ParentLogin";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
+import ViewAsBanner from "./components/ViewAs/ViewAsBanner";
+import StatusBanner from "./components/StatusBanner/StatusBanner";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import SoloSignup from "./pages/teacher/SoloSignup";
 import JoinGroup from "./pages/join/JoinGroup";
@@ -57,6 +59,9 @@ const DEV_PAGES = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEV_PAGES =
 const DashboardKit = lazy(() => import("./pages/dev/DashboardKit"));
 const CommsGallery = lazy(() => import("./pages/dev/CommsGallery"));
 const SchoolApp = lazy(() => import("./pages/admin/school/SchoolApp"));
+const SuperAdminConsole = lazy(() => import("./pages/superadmin/console/SuperAdminConsole"));
+const ViewAsLanding = lazy(() => import("./pages/ViewAsLanding"));
+const StatusPage = lazy(() => import("./pages/StatusPage"));
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -99,7 +104,10 @@ function AnimatedRoutes() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin-school/*" element={<SchoolApp />} />
-        <Route path="/superadmin-dashboard" element={<SuperAdminDashboard />} />
+        <Route path="/superadmin-dashboard" element={<Suspense fallback={null}><SuperAdminConsole /></Suspense>} />
+        <Route path="/superadmin-classic" element={<SuperAdminDashboard />} />
+        <Route path="/view-as" element={<Suspense fallback={null}><ViewAsLanding /></Suspense>} />
+        <Route path="/status" element={<Suspense fallback={null}><StatusPage /></Suspense>} />
         <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
         <Route path="/teach" element={<SoloSignup />} />
         <Route path="/join/:code" element={<JoinGroup />} />
@@ -122,7 +130,7 @@ function AppLayout() {
   // site header and background like any other page.
   const isAR = location.pathname.startsWith("/games/ar/");
   const isSchool = location.pathname.startsWith("/admin-school");
-  const hideNavbar = isAR || isSchool || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/teacher-dashboard", "/parent-dashboard", "/teach"].includes(location.pathname)
+  const hideNavbar = isAR || isSchool || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/superadmin-classic", "/view-as", "/teacher-dashboard", "/parent-dashboard", "/teach"].includes(location.pathname)
     || location.pathname.startsWith("/join/") || location.pathname.startsWith("/tutor/");
   // Every page a logged-in student can reach — Home, About Us, Contact Us, the
   // question modules, Subject page, the Games/Camera Games hubs and the Student
@@ -142,6 +150,8 @@ function AppLayout() {
 
   return (
     <>
+      <ViewAsBanner />
+      <StatusBanner />
       {!hideBackground3D && <Background3D />}
       {!hideNavbar && <Navbar />}
       <div style={{ paddingTop: hideNavbar ? "0" : "80px", flex: 1, display: "flex", flexDirection: "column" }}>
