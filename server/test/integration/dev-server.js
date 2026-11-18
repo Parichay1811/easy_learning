@@ -1,8 +1,9 @@
 // A running demo: the real server on a fixed port, an in-memory MongoDB filled with
 // demo data, and tokens for every role. For developing and screenshotting dashboards.
 //
-//   cd server && node test/integration/dev-server.js        (leave it running)
-//   cd client && VITE_API_BASE_URL=http://127.0.0.1:5055/api npx vite --port 5231 --strictPort
+//   cd server && DEV_PORT=5061 DEV_CLIENT_PORT=5241 node test/integration/dev-server.js   (leave it running)
+//   cd client && VITE_API_BASE_URL=http://127.0.0.1:5061/api npx vite --port 5241 --strictPort
+// (defaults: API 5055, client 5231; pick your own ports if several people run it)
 //
 // Sign a browser in by putting a token in localStorage (keys: parent_jwt, teacher_jwt,
 // admin_jwt, superadmin_jwt, jwt_token for a student). Tokens are written to
@@ -13,7 +14,7 @@ const { start } = require('./harness')
 const { seedDemo } = require('../../scripts/seed-demo')
 
 ;(async () => {
-  const app = await start({ port: Number(process.env.DEV_PORT) || 5055, clientUrl: 'https://localhost:5231,http://localhost:5173' })
+  const app = await start({ port: Number(process.env.DEV_PORT) || 5055, clientUrl: `https://localhost:${process.env.DEV_CLIENT_PORT || 5231},http://localhost:5173` })
   const demo = await seedDemo(app.db)
   const t = app.tokens
   const out = {
