@@ -151,27 +151,33 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
 ## F7. Notifications and messaging
 
 - [x] **FND-050** Notification centre `P1` `Platform`
-  - *Done:* `Notification` model, `notify()`, and the list / unread / read endpoints. Email and push are not done.
+  - *Done:* `Notification` model, `notify()`, and the list / unread / read endpoints (paginated with `before`). Preferences per account and kind (`instant` / `digest` / `off`, `GET/PUT /api/notification-prefs`) that `notify()` respects; instant email for email-worthy kinds through `sendMail`, a daily digest email for `digest` kinds, one-tap signed unsubscribe. `NotificationBell` and `NotificationPrefs` in `client/src/components/comms/`. *Not done:* web push / PWA (`P2`).
   - `Notification {accountId, kind, title, body, link, readAt}`. A bell in the shell with an unread count uses the existing polling pattern (~25 s, design-guide §5.4: no WebSockets). Plus email, with web push via a progressive web app (PWA) later (`P2`).
   - Every account has preferences per kind (instant / daily digest / off).
-- [ ] **FND-051** Messaging, generalised `P1` `Institute` `Solo`
+- [x] **FND-051** Messaging, generalised `P1` `Institute` `Solo`
+  - *Done:* `Thread` / `Message` (`models/comms/`), `/api/messages/*`. Who may write to whom comes only from real links (`services/commsLinks.js`: a parent and the teachers of their **verified** child in that child's school, parent and school office, teacher and school office), the school's `messaging` policy (off / parent_starts / both), office-hours notice and the `comms` module. Threads per child, read receipts, private attachments (images/PDF, 5 MB, 3 per message, served only to participants), abuse reports with admin/super admin review and hide, rate limits, `GET /api/admin/messaging/metrics` (counts and reply times only). `MessageCenter` component. Old admin/parent to super admin chats untouched.
   - Extend the existing admin↔super-admin and parent↔super-admin chat to threads between any two linked accounts: parent↔teacher, teacher↔admin, parent↔admin. Org policy decides who may start a thread (FND-022). Attachments and read receipts. Flag abusive messages (SUP-051).
-- [ ] **FND-052** Announcements `P1` `Institute` `Platform`
+- [x] **FND-052** Announcements `P1` `Institute` `Platform`
+  - *Done:* `Announcement` + `AnnouncementReceipt`, `/api/announcements` (compose with dry-run reach, feed, read, sent list with read rates, report, cancel, audiences). Super admin: platform or segment (roles, org kind, plans); admin: school, groups, units (once `models/admin/OrgUnit.js` exists), parents of a grade, staff; teacher: own groups (+ verified parents). Scheduled send and expiry via the scheduler. `AnnouncementsPanel` and `AnnouncementComposer`. *Not done:* students as recipients (they have no stable notification id yet, FND-011).
   - Super admin → everyone or a segment. Admin → org, unit or group. Teacher → group (and its parents).
 
 ## F8. Reports and exports
 
-- [ ] **FND-060** Report generator `P1` `Platform`
+- [x] **FND-060** Report generator `P1` `Platform`
+  - *Done (browser PDF, no server PDF by design):* `/api/reports/{parent,teacher,admin,superadmin}/...` assemble learner / group / school reports from `analytics/queries.js` through the same scopes as the dashboards; `ReportView` (`client/src/components/reports/`) prints only the report on A4/Letter, black-and-white-safe patterns, school logo on `reports.branded`, "Print / Save as PDF". *Not done:* test-result report (needs the tests feature), term reports (need FND-018).
   - HTML template → PDF (headless Chrome in a worker process, queued, one at a time on the small server). Branded with the org logo on `reports.branded`.
   - Report types: learner weekly / monthly / term, group, unit, org and test result.
-- [ ] **FND-061** Scheduled digests `P1` `Family` `Institute`
+- [x] **FND-061** Scheduled digests `P1` `Family` `Institute`
+  - *Done:* `services/scheduler.js` (one line in `server.js`, jittered, leased, `SCHEDULER=off`), `services/digests.js`: weekly parent email (Sunday from 18:00 local, verified children only: story, 4 tiles, one idea, button), Monday teacher summary, monthly admin summary, daily notification digest. Idempotent per period (each recipient claimed in `JobRun` before sending), small batches with yields, inline-styled table emails, strings in `server/i18n/emails.js`, one-tap unsubscribe. Super admin: `GET /api/jobs`, `POST /api/jobs/:name/run`. *Not done:* the monthly PDF attachment (parents can print `ReportView`).
   - A weekly parent email (Sunday evening, local time) and a monthly PDF. A weekly teacher summary on Monday morning. A monthly school summary for the admin.
-- [ ] **FND-062** CSV/XLSX export `P1` `Solo` `Institute`
+- [x] **FND-062** CSV/XLSX export `P1` `Solo` `Institute`
+  - *Done:* `utils/exporter.js` (streams CSV or XLSX, formula-injection safe, audits every export), used by the report learner tables (`.../learners.export?format=csv|xlsx`). API keys (`api.export`): `GET/POST/DELETE /api/admin/api-keys` (hashed, scoped, max 10, audited), `GET /api/v1/learners` and `/api/v1/daily-summaries` (org-only, paginated, 60 req/min per key). Role pages still need to call `exportRows` for their own tables.
   - Every table can be exported. `api.export` adds a read-only REST API with org-scoped API keys (`P2`).
 
 ## F9. Privacy, security, compliance (we serve children, from the EU)
 
 - [ ] **FND-070** Consent records `P0` `Family` `Institute`
+  - *Partly done:* `ConsentRecord` (append-only) and `utils/consent.js` (`recordConsent`, `currentConsent`, `hasConsent`, `consentHistory`, `needsGuardianConsent` with the GDPR Art. 8 age per country); `GET/POST /api/consents` for parents (own child), admins (own students, school DPA basis) and the super admin (read, audited). *Still to do:* the Parent and Admin flows must call `recordConsent` at link/sign-up time.
   - Store who consented, for which child, the policy version and when. Under the GDPR Art. 8 age (13–16 depending on country) a guardian must consent. Schools consent through their data-processing agreement (DPA) and record the legal basis.
 - [ ] **FND-071** Data rights `P1` `Platform`
   - Export everything about a learner (JSON + PDF) and delete a learner, with a 30-day grace period and cascade across all three databases. The super admin handles requests in a queue (SUP-060).
@@ -179,6 +185,7 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
   - *Done:* hash-chained `AuditEvent` + `audit()`. Viewer screens are in the Admin and Super Admin plans.
   - An append-only `AuditEvent {actor, action, target, orgId, ip, at, reason?}` for logins, permission changes, exports, deletions, "view as" and grade changes. Visible to the admin (their org) and the super admin.
 - [ ] **FND-073** Data minimisation `P1` `Platform`
+  - *Partly done:* `utils/minimise.js`: `firstNameInitial`, `leaderboardRows` (first name + initial, no ids/emails), `benchmark` / `benchmarks` (null under 20 learners). Weekly teacher emails already use first name + initial. *Still to do:* leaderboard and benchmark features must use them; the public "no ads, no trackers" statement.
   - No ads, no third-party trackers on learner pages, no selling of data (state it publicly). Leaderboards show first name + initial only. Benchmarks need ≥ 20 learners per bucket.
 - [ ] **FND-074** Security hardening `P1` `Platform`
   - Rate limits on login and link-code endpoints, lockout, session revocation, httpOnly cookies for all roles (move tokens out of `localStorage`), secrets rotation (some were shared in chat), dependency scanning, backups with restore drills.

@@ -126,6 +126,7 @@ app.use('/api/speak/maths',   speakMathsRoutes)
 app.use('/api/speak/english', speakEnglishRoutes)
 app.use('/api/dashboard',        dashboardRoutes)
 app.use('/api',                  sharedRoutes)
+app.use('/api',                  require('./routes/comms'))
 app.use('/api/ar',               arRoutes)
 
 // Global error handler — catches any unhandled errors from route handlers
@@ -137,6 +138,7 @@ app.use((err, req, res, _next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
   aiAssistant.start()
+  require('./services/scheduler').startScheduler()
 })
 
 // Stop the AI assistant's process with the API (it saves its TODO list on the way out).
