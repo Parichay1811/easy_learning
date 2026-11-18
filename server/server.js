@@ -81,6 +81,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 // Behind nginx the client address is the last X-Forwarded-For hop: without this every
 // visitor would look like 127.0.0.1 and share one limit.
 app.set('trust proxy', process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY) : (process.env.NODE_ENV === 'production' ? 1 : false))
+app.use(require('./middleware/realIp').realIp) // nginx sends X-Real-IP; see middleware/realIp.js
 app.use('/api', securityHeaders)
 // Generous overall limit per client; sign-in endpoints get tighter ones.
 app.use('/api', rateLimit({ windowMs: 60_000, max: 900 }))
