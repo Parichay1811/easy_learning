@@ -35,6 +35,7 @@ router.get('/children/:id/dashboard/answers',       parentChildAccess, getChildD
 router.get('/children/:id/dashboard/rounds',        parentChildAccess, getChildDashRounds)
 
 analyticsMounts.mountParent(router)
+require('./parentFamily')(router)
 
 router.get('/chat', getMyParentThread)
 router.post('/chat', sendChatMessageValidator, validate, sendMyParentMessage)

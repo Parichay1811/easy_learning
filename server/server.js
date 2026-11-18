@@ -85,10 +85,12 @@ app.use('/api/superadmin/auth', superadminAuthRoutes)
 app.use('/api/teacher/auth', teacherAuthRoutes)
 app.use('/api/parent/auth', parentAuthRoutes)
 app.use('/api/admin', adminRoutes)
+app.use('/api/superadmin/data-requests', require('./routes/dataRequests'))
 app.use('/api/superadmin', superadminRoutes)
 app.use('/api/teacher', teacherRoutes)
 app.use('/api/parent', parentRoutes)
 app.use('/api/contact', contactRoutes)
+app.use('/api/public', require('./routes/publicReport'))
 
 app.get('/', (req, res) => {
   res.send('hello bachho')
