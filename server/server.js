@@ -86,8 +86,11 @@ app.use('/api/teacher/auth', teacherAuthRoutes)
 app.use('/api/parent/auth', parentAuthRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/superadmin', superadminRoutes)
+app.use('/api/teacher', require('./routes/teacherTests')) // question bank + tests (TCH-020..061)
 app.use('/api/teacher', teacherRoutes)
+app.use('/api/parent', require('./routes/parentTests'))
 app.use('/api/parent', parentRoutes)
+app.use('/api/student', require('./routes/studentTests'))
 app.use('/api/contact', contactRoutes)
 
 app.get('/', (req, res) => {

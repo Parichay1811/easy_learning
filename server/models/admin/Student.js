@@ -14,6 +14,14 @@ const schema = new mongoose.Schema({
   batchIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Batch' }],
   parentIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Parent' }],
   status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  // Test accommodations (TCH-034), applied to every test automatically.
+  accommodations: {
+    extraTime: { type: Number, enum: [1, 1.25, 1.5, 2], default: 1 },
+    readAloud: { type: Boolean, default: false },
+    largerText: { type: Boolean, default: false },
+    fewerOptions: { type: Boolean, default: false },
+    note: { type: String, default: '', maxlength: 300 },
+  },
 }, { timestamps: true })
 
 module.exports = adminDb.model('Student', schema)

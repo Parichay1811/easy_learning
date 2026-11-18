@@ -75,6 +75,21 @@ function buildQuestionSchema() {
     status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'approved' },
     submittedBy: { type: mongoose.Schema.Types.ObjectId, default: null },
     uploadBatchId: { type: mongoose.Schema.Types.ObjectId, default: null, index: true },
+
+    // Tags for analytics and the question bank (FND-042, TCH-021). All optional:
+    // seed content gets defaults from scripts/backfill-question-tags.js.
+    skillIds: { type: [String], default: undefined, index: true },
+    gradeBand: { type: String },
+    difficulty: { type: Number, min: 1, max: 5 },
+    curriculumCode: { type: String },
+    estimatedSeconds: { type: Number, min: 0 },
+    // Authoring (TCH-020/023): the workspace a teacher-made question belongs to,
+    // its edit count (old versions live in QuestionRevision), and what it was copied from.
+    orgId: { type: String, default: null, index: true },
+    authorName: { type: String },
+    version: { type: Number, default: 1 },
+    copiedFrom: { type: mongoose.Schema.Types.Mixed },
+    archived: { type: Boolean, default: false },
   }, { timestamps: true })
 }
 
