@@ -23,6 +23,7 @@ const schema = new mongoose.Schema({
   approvedAt: { type: Date, default: null },
   approvedBy: { type: String, default: '' },
   logoUrl: { type: String, default: '' },
+  brandColor: { type: String, default: '' }, // TCH-081: on reports, invites and the join page
   adminDesignation: { type: String, default: '' },
 }, { timestamps: true })
 

@@ -21,6 +21,11 @@ const deps = {
   },
   now: () => Date.now(),
 }
+// Integration tests boot the real server in a child process and sign their own tokens:
+// they pass the matching certificates here. Ignored outside NODE_ENV=test.
+if (process.env.NODE_ENV === 'test' && process.env.FIREBASE_TEST_CERTS) {
+  deps.fetchCerts = async () => ({ certs: JSON.parse(process.env.FIREBASE_TEST_CERTS), ttlMs: 3600000 })
+}
 
 async function certFor(kid) {
   if (!cache.certs || deps.now() > cache.until || !cache.certs[kid]) {

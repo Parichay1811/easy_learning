@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
   rejectionReason: { type: String, default: '' },
   rejectionHistory: { type: [{ reason: String, rejectedAt: { type: Date, default: Date.now } }], default: [] },
   logoUrl: { type: String, default: '' },
+  brandColor: { type: String, default: '' }, // TCH-081: on reports, invites and the join page
 }, { timestamps: true })
 
 module.exports = adminDb.model('Organization', schema)

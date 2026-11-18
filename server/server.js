@@ -89,6 +89,8 @@ app.use('/api/superadmin', superadminRoutes)
 app.use('/api/teacher', teacherRoutes)
 app.use('/api/parent', parentRoutes)
 app.use('/api/contact', contactRoutes)
+app.use('/api/join', require('./routes/join')) // public join codes and tutor pages (TCH-011/082)
+app.use('/api/admin', require('./routes/teacherInvite')) // TCH-002 invite email
 
 app.get('/', (req, res) => {
   res.send('hello bachho')

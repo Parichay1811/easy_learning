@@ -9,6 +9,9 @@ const schema = new mongoose.Schema({
   studentIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
   consentGiven: { type: Boolean, default: false },
   status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  // Invited by a teacher (TCH-012): shows "Invited" until the parent signs in and is linked.
+  invitedAt: { type: Date, default: null },
+  invitedByTutorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tutor', default: null },
 }, { timestamps: true })
 
 module.exports = adminDb.model('Parent', schema)
