@@ -36,7 +36,8 @@ async function exportRows(req, res, { filename, format = 'csv', columns, rows, s
   const fmt = FORMATS.includes(format) ? format : 'csv'
   const name = `${cleanName(filename)}-${new Date().toISOString().slice(0, 10)}.${fmt}`
   let count = 0
-  let failed = null
+  // Audited before the last byte goes out, so the record exists by the time the download finishes.
+  const record = (failed) => audit(req, a.action || 'export', { targetType: a.targetType || '', targetId: a.targetId || '', orgId: a.orgId || '', reason: a.reason || '', meta: { ...(a.meta || {}), format: fmt, rows: count, file: name, ...(failed ? { failed: true } : {}) } })
   try {
     if (fmt === 'csv') {
       res.set({ 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': `attachment; filename="${name}"`, 'Cache-Control': 'no-store' })
@@ -47,6 +48,7 @@ async function exportRows(req, res, { filename, format = 'csv', columns, rows, s
         count++
         if (buf.length > 64 * 1024) { if (!res.write(buf)) await new Promise((r) => res.once('drain', r)); buf = '' }
       }
+      await record()
       res.end(buf)
     } else {
       const ExcelJS = require('exceljs')
@@ -62,15 +64,14 @@ async function exportRows(req, res, { filename, format = 'csv', columns, rows, s
         if (count % 500 === 0) await new Promise((r) => setImmediate(r))
       }
       ws.commit()
+      await record()
       await wb.commit()
     }
   } catch (err) {
-    failed = err
     console.error('export failed:', err.message)
+    await record(true)
     if (!res.headersSent) res.status(500).json({ success: false, message: 'Export failed' })
     else res.end()
-  } finally {
-    await audit(req, a.action || 'export', { targetType: a.targetType || '', targetId: a.targetId || '', orgId: a.orgId || '', reason: a.reason || '', meta: { ...(a.meta || {}), format: fmt, rows: count, file: name, ...(failed ? { failed: true } : {}) } })
   }
   return { rows: count, file: name }
 }

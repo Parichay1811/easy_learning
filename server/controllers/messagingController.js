@@ -152,7 +152,7 @@ const startThread = async (req, res) => {
     if (!thread) {
       const auth = await links.authorize(req.actor, target, { ...scope, starting: true })
       if (auth.error) { dropFiles(req); return sendFail(res, auth) }
-      const myName = req.actor.name || (await myDisplayName(req.actor))
+      const myName = await myDisplayName(req.actor)
       try {
         thread = await Thread.create({
           orgId: auth.orgId, pairKey, studentId: auth.studentId, childId: auth.childId, childName: auth.childName,
@@ -182,7 +182,7 @@ function officeNotice(officeHours, req) {
 async function myDisplayName(actor) {
   const { contactsFor } = require('../utils/recipients')
   const c = (await contactsFor([actor])).get(`${actor.role}:${actor.id}`)
-  return c?.name || { parent: 'Parent', teacher: 'Teacher', admin: 'School office' }[actor.role]
+  return c?.name || actor.name || { parent: 'Parent', teacher: 'Teacher', admin: 'School office' }[actor.role]
 }
 
 const getMessages = async (req, res) => {

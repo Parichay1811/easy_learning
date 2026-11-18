@@ -40,6 +40,12 @@ const teachersOf = (batches) => [...new Set(batches.flatMap(links.teacherIdsOfBa
 // Validate the audience for this author and work out the recipients.
 // author = { role, id, orgId } (orgId resolved for admins). -> { recipients, label } or { error }
 async function resolveAudience(author, audience = {}) {
+  const res = await resolveAll(author, audience)
+  if (res.error) return res
+  return { ...res, recipients: res.recipients.filter((r) => !(r.role === author.role && r.id === String(author.id))) }
+}
+
+async function resolveAll(author, audience) {
   const type = audience.type
   if (!AUTHORITY[author.role]?.includes(type)) return fail(403, 'You can\'t send to this audience.', 'AUDIENCE_NOT_ALLOWED')
   const includeParents = audience.includeParents !== false
