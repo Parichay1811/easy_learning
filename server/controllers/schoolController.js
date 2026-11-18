@@ -229,7 +229,7 @@ async function promotionPlan(req) {
     const e = exc.get(String(s._id))
     let action = e?.action || (m.action === 'leave' ? 'leave' : m.action === 'promote' ? 'promote' : 'stay')
     let toUnitId = action === 'promote' ? m.toUnitId : action === 'move' ? e?.toUnitId : action === 'repeat' ? String(s.unitId) : null
-    if ((action === 'move') && !unitIds.has(String(toUnitId))) { action = 'stay'; toUnitId = null }
+    if ((action === 'move' || action === 'promote') && !unitIds.has(String(toUnitId))) { action = 'stay'; toUnitId = null }
     return { studentId: String(s._id), name: s.name, fromUnitId: String(s.unitId), from: tree.unitLabel(units, s.unitId), action, toUnitId, to: toUnitId ? tree.unitLabel(units, toUnitId) : '' }
   })
   const summary = rows.reduce((acc, r) => { acc[r.action] = (acc[r.action] || 0) + 1; return acc }, {})

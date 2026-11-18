@@ -51,13 +51,14 @@ import NotFound from "./pages/NotFound";
 // unless VITE_ENABLE_DEV_PAGES=1.
 const DEV_PAGES = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEV_PAGES === "1";
 const DashboardKit = lazy(() => import("./pages/dev/DashboardKit"));
+const SchoolApp = lazy(() => import("./pages/admin/school/SchoolApp"));
 
 function AnimatedRoutes() {
   const location = useLocation();
 
   return (
     <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
+      <Routes location={location} key={location.pathname.startsWith("/admin-school") ? "/admin-school" : location.pathname}>
         <Route path="/" element={<RoleSelect />} />
         <Route path="/home" element={<Home />} />
         <Route path="/subject/:subject" element={<SubjectPage />} />
@@ -91,6 +92,7 @@ function AnimatedRoutes() {
         <Route path="/parent-login" element={<ParentLogin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/admin-school/*" element={<SchoolApp />} />
         <Route path="/superadmin-dashboard" element={<SuperAdminDashboard />} />
         <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
@@ -109,7 +111,8 @@ function AppLayout() {
   // accident. The Camera Games hub is just a menu, so it keeps the normal
   // site header and background like any other page.
   const isAR = location.pathname.startsWith("/games/ar/");
-  const hideNavbar = isAR || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/teacher-dashboard", "/parent-dashboard"].includes(location.pathname);
+  const isSchool = location.pathname.startsWith("/admin-school");
+  const hideNavbar = isAR || isSchool || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/teacher-dashboard", "/parent-dashboard"].includes(location.pathname);
   // Every page a logged-in student can reach — Home, About Us, Contact Us, the
   // question modules, Subject page, the Games/Camera Games hubs and the Student
   // Dashboard — shares the same full-viewport video background, so the app reads
@@ -117,7 +120,7 @@ function AppLayout() {
   // gate and every login page share the RoboticBackground instead, and an active
   // camera session (gameplay or Insights) owns the whole viewport with its own
   // background.
-  const hideBackground3D = isAR || [
+  const hideBackground3D = isAR || isSchool || [
     "/", "/home", "/about-us", "/contact-us", "/faq", "/policy", "/terms-and-conditions",
     "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login",
     "/games", "/games/ar", "/dashboard", "/ai-teacher",
