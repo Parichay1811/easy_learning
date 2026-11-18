@@ -1,12 +1,13 @@
 const jwt = require('jsonwebtoken')
+const { identityFromRequest } = require('../utils/firebaseToken')
 const ParentAccount = require('../models/ParentAccount')
 
 const googleSignIn = async (req, res) => {
   try {
-    const { uid, email, name, photoURL } = req.body
-    if (!uid || !email) {
-      return res.status(400).json({ success: false, message: 'uid and email are required' })
-    }
+    // Identity comes from the verified Firebase token, never from the request body.
+    const identity = await identityFromRequest(req, res)
+    if (!identity) return
+    const { uid, email, name, photoURL } = identity
 
     let parent = await ParentAccount.findOne({ uid })
     if (!parent) {

@@ -64,7 +64,8 @@ app.use(cors({
 // as already read and skips it — every other route keeps the default limit.
 app.use('/api/ar', express.json({ limit: '2mb' }))
 app.use(express.json())
-app.use(cookieParser())
+// Signed cookies need a secret; the student session cookie is signed so it can't be forged.
+app.use(cookieParser(process.env.COOKIE_SECRET || process.env.JWT_SECRET))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 const PORT = process.env.PORT || 5000

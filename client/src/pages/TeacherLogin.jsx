@@ -21,8 +21,7 @@ const TeacherLogin = () => {
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const { uid, email, displayName, photoURL } = result.user;
-      await teacherGoogleSignIn(uid, email, displayName || "", photoURL || "");
+            await teacherGoogleSignIn(await result.user.getIdToken());
       navigate("/teacher-dashboard");
     } catch (err) {
       const cancelled = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];

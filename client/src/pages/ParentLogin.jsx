@@ -21,8 +21,7 @@ const ParentLogin = () => {
     setLoading(true);
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      const { uid, email, displayName, photoURL } = result.user;
-      await parentGoogleSignIn(uid, email, displayName || "", photoURL || "");
+            await parentGoogleSignIn(await result.user.getIdToken());
       navigate("/parent-dashboard");
     } catch (err) {
       const cancelled = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];

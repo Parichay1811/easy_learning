@@ -43,11 +43,11 @@ export const AdminAuthProvider = ({ children }) => {
     { id: p.id, uid: p.uid, email: p.email, name: p.name, role: "parent" }
   )));
 
-  const adminGoogleSignIn = async (uid, email, name, photoURL) => {
+  const adminGoogleSignIn = async (idToken) => {
     const res = await fetch(`${API}/api/admin/auth/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid, email, name, photoURL }),
+      body: JSON.stringify({ idToken }),
     });
     if (!res.ok && res.status === 404) throw new Error("Admin auth route not found. The server may not be running the latest code.");
     const data = await res.json();
@@ -71,11 +71,11 @@ export const AdminAuthProvider = ({ children }) => {
     setSuperAdminUser({ email: data.superadmin.email, name: data.superadmin.name, role: "superadmin" });
   };
 
-  const teacherGoogleSignIn = async (uid, email, name, photoURL) => {
+  const teacherGoogleSignIn = async (idToken) => {
     const res = await fetch(`${API}/api/teacher/auth/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid, email, name, photoURL }),
+      body: JSON.stringify({ idToken }),
     });
     if (!res.ok && res.status === 404) {
       const data = await res.json().catch(() => null);
@@ -89,11 +89,11 @@ export const AdminAuthProvider = ({ children }) => {
     return data.teacher;
   };
 
-  const parentGoogleSignIn = async (uid, email, name, photoURL) => {
+  const parentGoogleSignIn = async (idToken) => {
     const res = await fetch(`${API}/api/parent/auth/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ uid, email, name, photoURL }),
+      body: JSON.stringify({ idToken }),
     });
     if (!res.ok && res.status === 404) throw new Error("Parent auth route not found. The server may not be running the latest code.");
     const data = await res.json();
