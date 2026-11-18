@@ -6,6 +6,8 @@ const jwt = require('jsonwebtoken')
 const TRIES = [
   { secret: 'PARENT_JWT_SECRET', role: 'parent', claim: 'parent' },
   { secret: 'ADMIN_JWT_SECRET', role: 'admin', claim: 'org_admin' },
+  // School staff (ADM-023): coordinator / office / viewer. NOT 'admin', so requireRole('admin') refuses them.
+  { secret: 'ADMIN_JWT_SECRET', role: 'staff', claim: 'org_staff' },
   { secret: 'TEACHER_JWT_SECRET', role: 'teacher', claim: 'teacher' },
   { secret: 'SUPERADMIN_JWT_SECRET', role: 'superadmin', claim: 'superadmin' },
 ]
@@ -18,7 +20,7 @@ function actorFromRequest(req) {
       if (!process.env[t.secret]) continue
       try {
         const p = jwt.verify(token, process.env[t.secret])
-        if (p.role === t.claim) return { role: t.role, id: String(p.id || p.email), email: p.email, name: p.name, orgId: p.orgId ? String(p.orgId) : null, uid: p.uid }
+        if (p.role === t.claim) return { role: t.role, id: String(p.id || p.email), email: p.email, name: p.name, orgId: p.orgId ? String(p.orgId) : null, uid: p.uid, ...(p.staffRole ? { staffRole: p.staffRole, staffId: String(p.staffId) } : {}) }
       } catch { /* try the next role */ }
     }
     if (process.env.JWT_SECRET) {

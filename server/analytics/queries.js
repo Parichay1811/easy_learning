@@ -143,20 +143,150 @@ function patterns(days) {
 }
 
 // Current and longest streak from all activity dates (up to ~2 years back).
-async function streak(email, tz = 'UTC') {
+// `skipDates` (a Set or array of YYYY-MM-DD, e.g. school holidays, ADM-062): an
+// inactive day in it does not break the streak (and does not count as a day of it).
+async function streak(email, tz = 'UTC', { skipDates } = {}) {
   const today = todayIn(tz)
   const docs = await LearnerDay.find({ email: String(email).toLowerCase(), date: { $gte: addDays(today, -800) } }).select('date minutes answered').lean()
   const active = new Set(docs.filter((d) => (d.answered || 0) > 0 || (d.minutes || 0) >= ACTIVE_MINUTES).map((d) => d.date))
+  return streakFrom(active, today, skipDates)
+}
+
+function streakFrom(active, today, skipDates) {
+  const skip = skipDates instanceof Set ? skipDates : new Set(skipDates || [])
+  const bridge = (d) => !active.has(d) && skip.has(d)
   let current = 0
   // Today not finished yet: a streak that ran up to yesterday is still alive.
-  let cursor = active.has(today) ? today : addDays(today, -1)
-  while (active.has(cursor)) { current++; cursor = addDays(cursor, -1) }
+  let cursor = active.has(today) || bridge(today) ? today : addDays(today, -1)
+  for (let guard = 0; guard < 900; guard++) {
+    if (active.has(cursor)) current++
+    else if (!bridge(cursor)) break
+    cursor = addDays(cursor, -1)
+  }
   let longest = 0, run = 0, prev = null
   for (const date of [...active].sort()) {
-    run = prev && addDays(prev, 1) === date ? run + 1 : 1
+    let linked = false
+    if (prev) { let d = addDays(prev, 1); while (d < date && bridge(d)) d = addDays(d, 1); linked = d === date }
+    run = linked ? run + 1 : 1
     longest = Math.max(longest, run); prev = date
   }
-  return { current, longest, lastActive: [...active].sort().pop() || null }
+  return { current, longest: Math.max(longest, current), lastActive: [...active].sort().pop() || null }
+}
+
+// ── Rollups for schools and units (ADM-040..044) ─────────────────────────────
+
+// Per-learner sums over a range, computed in MongoDB: Map email -> totals.
+async function perEmailTotals(emails, from, to) {
+  const list = norm(emails)
+  const out = new Map()
+  if (!list.length) return out
+  const rows = await LearnerDay.aggregate([
+    { $match: { email: { $in: list }, date: { $gte: from, $lte: to } } },
+    { $group: {
+      _id: '$email',
+      minutes: { $sum: '$minutes' }, answered: { $sum: '$answered' }, correct: { $sum: '$correct' }, sessions: { $sum: '$sessions' },
+      activeDays: { $sum: { $cond: [{ $or: [{ $gt: ['$answered', 0] }, { $gte: ['$minutes', ACTIVE_MINUTES] }] }, 1, 0] } },
+      lastDate: { $max: '$date' },
+    } },
+  ])
+  for (const r of rows) out.set(r._id, { minutes: r.minutes, answered: r.answered, correct: r.correct, sessions: r.sessions, activeDays: r.activeDays, lastDate: r.lastDate })
+  return out
+}
+
+// Per-learner, per-subject answers: Map email -> { english: { answered, correct, minutes }, ... }.
+async function perEmailSubjects(emails, from, to) {
+  const list = norm(emails)
+  const out = new Map()
+  if (!list.length) return out
+  const rows = await LearnerDay.aggregate([
+    { $match: { email: { $in: list }, date: { $gte: from, $lte: to } } },
+    { $project: { email: 1, ms: { $objectToArray: { $ifNull: ['$byModuleSubject', {}] } } } },
+    { $unwind: '$ms' },
+    { $group: {
+      _id: { email: '$email', subject: { $arrayElemAt: [{ $split: ['$ms.k', '_'] }, 1] } },
+      answered: { $sum: '$ms.v.answered' }, correct: { $sum: '$ms.v.correct' }, minutes: { $sum: '$ms.v.minutes' },
+    } },
+  ])
+  for (const r of rows) {
+    if (!out.has(r._id.email)) out.set(r._id.email, {})
+    out.get(r._id.email)[r._id.subject] = { answered: r.answered, correct: r.correct, minutes: r.minutes }
+  }
+  return out
+}
+
+// Sum learners into groups (units, sections, teachers' classes). `groups` is
+// [{ key, emails }]; `perEmail` from perEmailTotals. Per-learner averages, so a
+// big section and a small one can be compared fairly.
+function rollupGroups(groups, perEmail, rangeDays) {
+  return groups.map(({ key, emails, ...rest }) => {
+    const list = norm(emails)
+    const t = { minutes: 0, answered: 0, correct: 0, activeDays: 0, active: 0 }
+    for (const e of list) {
+      const r = perEmail.get(e)
+      if (!r) continue
+      t.minutes += r.minutes || 0; t.answered += r.answered || 0; t.correct += r.correct || 0; t.activeDays += r.activeDays || 0
+      if ((r.activeDays || 0) > 0) t.active++
+    }
+    const n = list.length
+    return {
+      key, ...rest,
+      learners: n,
+      activeLearners: t.active,
+      activePct: pct(t.active, n),
+      minutes: Math.round(t.minutes * 10) / 10,
+      minutesPerLearner: n ? Math.round((t.minutes / n) * 10) / 10 : null,
+      answered: t.answered,
+      accuracy: pct(t.correct, t.answered),
+      engagement: n ? engagementScore({ activeDays: t.activeDays / n, days: rangeDays, minutes: t.minutes / n, answered: t.answered / n }) : null,
+    }
+  })
+}
+
+// Row x subject accuracy grid (e.g. grade x subject): groups [{ key, emails }], perSubj from perEmailSubjects.
+function subjectGrid(groups, perSubj) {
+  return groups.map(({ key, emails, ...rest }) => {
+    const cells = {}
+    for (const s of SUBJECTS) cells[s] = { answered: 0, correct: 0, minutes: 0 }
+    for (const e of norm(emails)) {
+      for (const [s, v] of Object.entries(perSubj.get(e) || {})) {
+        if (!cells[s]) continue
+        cells[s].answered += v.answered || 0; cells[s].correct += v.correct || 0; cells[s].minutes += v.minutes || 0
+      }
+    }
+    for (const s of SUBJECTS) { cells[s].accuracy = pct(cells[s].correct, cells[s].answered); cells[s].minutes = Math.round(cells[s].minutes * 10) / 10 }
+    return { key, ...rest, cells }
+  })
+}
+
+// Change per learner between two periods (wins, class growth). Accuracy deltas
+// need at least `minAnswers` answers in both periods to count.
+function growthRows(emails, cur, prev, { minAnswers = 10 } = {}) {
+  return norm(emails).map((email) => {
+    const c = cur.get(email) || {}, p = prev.get(email) || {}
+    const ca = (c.answered || 0) >= minAnswers ? pct(c.correct, c.answered) : null
+    const pa = (p.answered || 0) >= minAnswers ? pct(p.correct, p.answered) : null
+    return {
+      email, minutes: Math.round((c.minutes || 0) * 10) / 10, prevMinutes: Math.round((p.minutes || 0) * 10) / 10,
+      accuracy: ca, prevAccuracy: pa, accuracyDelta: ca != null && pa != null ? ca - pa : null,
+      minutesDelta: Math.round(((c.minutes || 0) - (p.minutes || 0)) * 10) / 10,
+      activeDays: c.activeDays || 0, lastDate: c.lastDate || p.lastDate || null,
+    }
+  })
+}
+
+// How the time was spent: practice, warrior, test, homework, ar, ai_teacher.
+function featureUse(days) {
+  const out = {}
+  for (const d of days) for (const [k, n] of Object.entries(d.sources || {})) out[k] = (out[k] || 0) + n
+  return out
+}
+
+// Distinct active learners per day (adoption over time).
+function activeSeries(days, range) {
+  const by = new Map()
+  for (let i = 0; i < range.days; i++) by.set(addDays(range.from, i), new Set())
+  for (const d of days) if (((d.answered || 0) > 0 || (d.minutes || 0) >= ACTIVE_MINUTES) && by.has(d.date)) by.get(d.date).add(d.email)
+  return [...by.entries()].map(([date, s]) => ({ date, learners: s.size }))
 }
 
 // Calendar heatmap: minutes per day (summed over the learners in scope).
@@ -196,4 +326,7 @@ async function timeline(email, { from, to, limit = 100 } = {}) {
   return LearningEvent.find(q).sort({ ts: -1 }).limit(Math.min(Number(limit) || 100, 500)).lean()
 }
 
-module.exports = { parseRange, fetchDays, totals, overview, series, matrix, patterns, streak, calendar, perLearner, timeline, addDays, daysBetween, todayIn, norm }
+module.exports = {
+  parseRange, fetchDays, totals, overview, series, matrix, patterns, streak, streakFrom, calendar, perLearner, timeline, addDays, daysBetween, todayIn, norm,
+  perEmailTotals, perEmailSubjects, rollupGroups, subjectGrid, growthRows, featureUse, activeSeries, ACTIVE_MINUTES,
+}

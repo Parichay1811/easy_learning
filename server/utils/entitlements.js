@@ -32,7 +32,7 @@ async function entitlementsFor(actor) {
     const plan = PLANS[await deps.parentPlan(actor.id)] ? await deps.parentPlan(actor.id) : 'free'
     return { plan, modules: [...PLANS[plan].modules], limits: PLANS[plan].limits || {} }
   }
-  if ((actor.role === 'admin' || actor.role === 'teacher') && actor.orgId) {
+  if ((actor.role === 'admin' || actor.role === 'teacher' || actor.role === 'staff') && actor.orgId) {
     const { org, sa } = await deps.orgFor(actor.orgId)
     const solo = org?.kind === 'solo'
     let plan = sa?.plan && PLANS[sa.plan] ? sa.plan : null

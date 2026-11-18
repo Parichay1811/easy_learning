@@ -27,6 +27,10 @@ const schema = new mongoose.Schema({
   tutorIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tutor' }],
   studentIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
   status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  // School tree and academic year (ADM-010/012). Archived groups are read-only but still reportable.
+  unitId: { type: mongoose.Schema.Types.ObjectId, ref: 'OrgUnit', default: null },
+  yearId: { type: mongoose.Schema.Types.ObjectId, ref: 'AcademicYear', default: null },
+  archivedAt: { type: Date, default: null },
 }, { timestamps: true })
 
 schema.index({ orgId: 1, 'subjects.teacherIds': 1 })

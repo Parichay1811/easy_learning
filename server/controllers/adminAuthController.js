@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { identityFromRequest } = require('../utils/firebaseToken')
 const OrgAdmin = require('../models/admin/OrgAdmin')
+const { staffForSignIn } = require('../utils/staffSignIn')
 
 const googleSignIn = async (req, res) => {
   try {
@@ -16,6 +17,22 @@ const googleSignIn = async (req, res) => {
       admin.name = name || admin.name
       admin.photoURL = photoURL || admin.photoURL
       await admin.save()
+    }
+
+    // Staff roles (ADM-023): somebody who doesn't run a school of their own but was
+    // added as staff by a school (matched by this verified email) works in that school.
+    const staff = await staffForSignIn({ uid, email, name })
+    if (staff) {
+      const token = jwt.sign(
+        { id: admin._id, uid: admin.uid, email: admin.email, name: admin.name, orgId: staff.orgId, staffId: staff._id, staffRole: staff.role, role: 'org_staff' },
+        process.env.ADMIN_JWT_SECRET,
+        { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '7d' }
+      )
+      return res.json({
+        success: true,
+        token,
+        admin: { id: admin._id, uid: admin.uid, email: admin.email, name: admin.name, photoURL: admin.photoURL, orgId: staff.orgId, staffRole: staff.role },
+      })
     }
 
     const token = jwt.sign(
