@@ -50,3 +50,9 @@ Only `linkStatus: 'verified'` links expose data ([utils/guardianLink.js](../../s
 ## Testing pattern
 
 `test/integration/harness.js`: `const app = await start()`; `app.tokens.parent(id)`, `.teacher(id, orgId)`, `.admin(id, orgId, uid)`, `.student(email)`, `.superadmin()`; `app.call(method, route, { token, body, headers })`; seed with `app.db.admin|main|superadmin.collection(...)`. Note: superadmin `Organization.adminOrgId` is a **string**.
+
+## Mail and organisation policy
+
+- `sendMail({ to, subject, html, text, kind })` ([utils/mailer.js](../../server/utils/mailer.js)): never throws. With `SMTP_URL` (or `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`) and `MAIL_FROM` it sends; without them the message stays `queued` in the `Outbox` collection (`models/Outbox.js`), so nothing is lost and tests can read it.
+- `getOrgPolicy(orgId)` ([utils/orgPolicy.js](../../server/utils/orgPolicy.js)): the organisation's policy with defaults (`messaging`, `teachersCreateGroups`, `parentsSeeClassAverage`, `leaderboards`, `aiTeacherInSchoolHours`, `activityVisibility`, `retentionYears`, DPA acceptance). Stored in `models/admin/OrgPolicy.js`. Features that a policy governs must call it.
+- `DataRequest` (shared by Parent privacy centre and the Super Admin queue; owned by the Parent work): `{ subjectEmail, subjectName, requestedByRole, requestedById, orgId?, kind: 'export'|'delete', status: 'pending'|'processing'|'done'|'rejected', dueAt, resolvedAt, resolvedBy, note }` in `models/DataRequest.js`.
