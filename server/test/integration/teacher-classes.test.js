@@ -210,6 +210,10 @@ test('school policy: teachers create groups only when allowed; their groups stay
   const ok = await app.call('POST', '/api/teacher/groups', { token: T.a1(), body: { name: 'My club' } })
   assert.equal(ok.status, 201)
   const club = ok.body.group._id
+  const mine = await app.call('GET', `/api/teacher/groups/${club}`, { token: T.a1() })
+  assert.equal(mine.status, 200)
+  assert.equal(mine.body.permissions.canManage, true)
+  assert.equal(mine.body.permissions.isSolo, false)
 
   // The admin-made group: visible, but not mine to rename.
   const list = await app.call('GET', '/api/teacher/groups', { token: T.a1() })
@@ -221,7 +225,7 @@ test('school policy: teachers create groups only when allowed; their groups stay
   const other = await app.call('GET', '/api/teacher/groups', { token: T.a2() })
   assert.equal(other.body.groups.length, 0)
   for (const [m, path, body] of [
-    ['PATCH', `/api/teacher/groups/${club}`, { name: 'x' }], ['POST', `/api/teacher/groups/${club}/archive`], ['GET', `/api/teacher/groups/${club}/join`],
+    ['GET', `/api/teacher/groups/${club}`], ['PATCH', `/api/teacher/groups/${club}`, { name: 'x' }], ['POST', `/api/teacher/groups/${club}/archive`], ['GET', `/api/teacher/groups/${club}/join`],
     ['GET', `/api/teacher/groups/${club}/heatmap`], ['GET', `/api/teacher/groups/${club}/parents`], ['POST', `/api/teacher/groups/${club}/roster`, { rows: [{ name: 'x' }] }],
     ['GET', `/api/teacher/batches/${club}/analytics/overview`],
   ]) {

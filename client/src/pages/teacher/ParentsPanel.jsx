@@ -46,36 +46,34 @@ export default function ParentsPanel({ groupId }) {
   return (
     <div className={s.form}>
       <div className={s.row}>
-        <ParentStatus status="linked" /> <strong>{d.counts.linked}</strong>
-        <ParentStatus status="invited" /> <strong>{d.counts.invited}</strong>
-        <ParentStatus status="none" /> <strong>{d.counts.none}</strong>
+        <span className={s.row} style={{ gap: 6 }}><ParentStatus status="linked" /> <strong>{d.counts.linked}</strong></span>
+        <span className={s.row} style={{ gap: 6 }}><ParentStatus status="invited" /> <strong>{d.counts.invited}</strong></span>
+        <span className={s.row} style={{ gap: 6 }}><ParentStatus status="none" /> <strong>{d.counts.none}</strong></span>
       </div>
       <p className={s.muted} style={{ margin: 0 }}>{t("teacher.parents.help", { defaultValue: "Parents get an email to sign in with Google. Once they add their child, the link is confirmed automatically because you invited them." })}</p>
       {msg && <p className={msg.ok ? s.success : s.error} role="status">{msg.text}</p>}
-      <div className={s.tableWrap}>
-        <table className={s.table}>
-          <caption className="d-sr-only">{t("teacher.parents.caption", { defaultValue: "Parents of each student" })}</caption>
-          <thead><tr><th>{t("teacher.student", { defaultValue: "Student" })}</th><th>{t("teacher.parents.status", { defaultValue: "Parent" })}</th><th>{t("teacher.parents.email", { defaultValue: "Parent email" })}</th></tr></thead>
-          <tbody>
-            {d.students.map((st) => (
-              <tr key={st.studentId}>
-                <td><strong>{st.name}</strong><br /><span className={s.small}>{st.email || t("teacher.noEmail", { defaultValue: "no email" })}</span></td>
-                <td><ParentStatus status={st.status} />{st.parents.filter((p) => p.status === "linked").map((p) => <div key={p.id} className={s.small}>{p.email}</div>)}</td>
-                <td>
-                  {st.status === "linked" ? "—" : (
-                    <div className={s.row} style={{ flexWrap: "nowrap" }}>
-                      <input className={s.input} type="email" value={emailOf(st)} onChange={(e) => setEmails((m) => ({ ...m, [st.studentId]: e.target.value }))} placeholder="parent@example.com" aria-label={t("teacher.parents.emailFor", { defaultValue: "Parent email for {{name}}", name: st.name })} style={{ minWidth: 180 }} />
-                      <Button size="sm" variant="ghost" icon={FaEnvelope} disabled={busy || !EMAIL.test(emailOf(st))} onClick={() => invite([st])}>
-                        {st.status === "invited" ? t("teacher.parents.resend", { defaultValue: "Resend" }) : t("teacher.parents.invite", { defaultValue: "Invite" })}<span className="d-sr-only"> {st.name}</span>
-                      </Button>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <ul className={s.personList} aria-label={t("teacher.parents.caption", { defaultValue: "Parents of each student" })}>
+        {d.students.map((st) => (
+          <li key={st.studentId} className={s.personRow} style={{ flexWrap: "wrap" }}>
+            <span className={s.personMain} style={{ minWidth: 160 }}>
+              <strong>{st.name}</strong>
+              <span>{st.email || t("teacher.noEmail", { defaultValue: "no email" })}</span>
+            </span>
+            <span style={{ minWidth: 100 }}>
+              <ParentStatus status={st.status} />
+              {st.parents.filter((p) => p.status === "linked").map((p) => <span key={p.id} className={s.small} style={{ display: "block" }}>{p.email}</span>)}
+            </span>
+            {st.status !== "linked" && (
+              <span className={s.row} style={{ flex: "1 1 280px", flexWrap: "nowrap" }}>
+                <input className={s.input} type="email" value={emailOf(st)} onChange={(e) => setEmails((m) => ({ ...m, [st.studentId]: e.target.value }))} placeholder="parent@example.com" aria-label={t("teacher.parents.emailFor", { defaultValue: "Parent email for {{name}}", name: st.name })} />
+                <Button size="sm" variant="ghost" icon={FaEnvelope} disabled={busy || !EMAIL.test(emailOf(st))} onClick={() => invite([st])}>
+                  {st.status === "invited" ? t("teacher.parents.resend", { defaultValue: "Resend" }) : t("teacher.parents.invite", { defaultValue: "Invite" })}<span className="d-sr-only"> {st.name}</span>
+                </Button>
+              </span>
+            )}
+          </li>
+        ))}
+      </ul>
       <div><Button icon={FaEnvelope} disabled={busy || !ready.length} onClick={() => invite(ready)}>{t("teacher.parents.inviteAll", { defaultValue: "Invite {{count}} parents", count: ready.length })}</Button></div>
     </div>
   );

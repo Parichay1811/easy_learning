@@ -146,7 +146,7 @@ function ListTab({ group, onDone }) {
           {parentCount > 0 && (
             <label className={s.row}>
               <input type="checkbox" checked={inviteParents} onChange={(e) => setInviteParents(e.target.checked)} style={{ width: 22, height: 22 }} />
-              {t("teacher.list.inviteParents", { defaultValue: "Email the {{count}} parents listed an invite to follow their child", count: parentCount })}
+              {t("teacher.list.inviteParents", { defaultValue: "Email an invite to the parents in the list ({{count}}), so they can follow their child", count: parentCount })}
             </label>
           )}
           <div className={s.row}>

@@ -32,7 +32,7 @@ function Overview({ group, go }) {
 
   const o = ov.data;
   const n = group.studentCount;
-  const skills = SUBJECTS.flatMap((sub) => MODULES.map((m) => ({ id: `${m.key}_${sub.key}`, label: `${moduleLabel(t, m.key)} · ${subjectLabel(t, sub.key)}`, short: `${moduleLabel(t, m.key).slice(0, 1)}${subjectLabel(t, sub.key).slice(0, 1)}` })));
+  const skills = SUBJECTS.flatMap((sub) => MODULES.map((m) => ({ id: `${m.key}_${sub.key}`, label: `${moduleLabel(t, m.key)} · ${subjectLabel(t, sub.key)}`, short: `${moduleLabel(t, m.key).slice(0, 1)}·${subjectLabel(t, sub.key).slice(0, 3)}` })));
   const heatStudents = (hm.data?.rows || []).map((r) => ({
     id: r.studentId, name: r.name, atRisk: r.atRisk,
     scores: Object.fromEntries(Object.entries(r.cells).map(([k, c]) => [k, c.answered ? pctToFraction(c.accuracy) : null])),
@@ -196,7 +196,7 @@ function StudentsTab({ data, go, reload, openAdd }) {
   return (
     <section className={s.card}>
       <div className={s.pageHead} style={{ marginBottom: 12 }}>
-        <h2 className={s.h2} style={{ margin: 0 }}>{t("teacher.nStudents", { defaultValue: "{{count}} students", count: data.students.length })}</h2>
+        <h2 className={s.h2} style={{ margin: 0 }}>{t("teacher.nStudents", { defaultValue: (data.students.length) === 1 ? "1 student" : "{{count}} students", count: data.students.length })}</h2>
         <div className={s.headActions}>
           <Button icon={FaUserPlus} onClick={openAdd}>{t("teacher.add.btn", { defaultValue: "Add students" })}</Button>
         </div>
@@ -306,7 +306,7 @@ export default function GroupView({ id, tab = "overview", go, params }) {
         <div>
           <Button variant="ghost" size="sm" icon={FaArrowLeft} onClick={() => go("groups")}>{t("teacher.groups.title", { defaultValue: "My groups" })}</Button>
           <h1 style={{ marginTop: 8 }}><span aria-hidden="true">{g.emoji || "👥"}</span> {g.name}</h1>
-          <p>{[g.gradeBand, t("teacher.nStudents", { defaultValue: "{{count}} students", count: d.students.length }), g.subjects.map((a) => a.subject?.name).join(", ")].filter(Boolean).join(" · ")}</p>
+          <p>{[g.gradeBand, t("teacher.nStudents", { defaultValue: (d.students.length) === 1 ? "1 student" : "{{count}} students", count: d.students.length }), g.subjects.map((a) => a.subject?.name).join(", ")].filter(Boolean).join(" · ")}</p>
         </div>
         <div className={s.headActions}>
           <Button icon={FaUserPlus} onClick={() => setAdding(true)}>{t("teacher.add.btn", { defaultValue: "Add students" })}</Button>

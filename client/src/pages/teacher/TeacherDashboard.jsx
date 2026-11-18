@@ -14,6 +14,7 @@ import PlanView from "./PlanView";
 import WorkspaceSwitcher from "./WorkspaceSwitcher";
 import { API_ROOT, useLoad, useTeacherApi } from "./teacherApi";
 import logo from "/logo.png";
+import s from "./teacher.module.css";
 
 // The question upload page still takes the older helper shape.
 function useLegacyApi(token) {
@@ -54,9 +55,9 @@ const TeacherDashboard = () => {
   const nav = [
     { key: "today", label: t("teacher.nav.today", { defaultValue: "Today" }), icon: FaHome, to: "/teacher-dashboard?view=today" },
     { key: "groups", label: t("teacher.nav.groups", { defaultValue: "Groups" }), icon: FaUsers, to: "/teacher-dashboard?view=groups" },
-    { key: "summary", label: t("teacher.nav.summary", { defaultValue: "My summary" }), icon: FaChartLine, to: "/teacher-dashboard?view=summary" },
+    { key: "summary", label: t("teacher.nav.summary", { defaultValue: "Summary" }), icon: FaChartLine, to: "/teacher-dashboard?view=summary" },
     { key: "questions", label: t("teacher.nav.questions", { defaultValue: "Questions" }), icon: FaUpload, to: "/teacher-dashboard?view=questions" },
-    { key: "plan", label: ws.data?.workspace?.kind === "solo" ? t("teacher.nav.plan", { defaultValue: "Plan and settings" }) : t("teacher.nav.planSchool", { defaultValue: "Plan" }), icon: FaCog, to: "/teacher-dashboard?view=plan" },
+    { key: "plan", label: t("teacher.nav.plan", { defaultValue: "Plan" }), icon: FaCog, to: "/teacher-dashboard?view=plan" },
   ];
   const active = { group: "groups", student: "groups" }[view] || view;
   const workspace = ws.data;
@@ -69,7 +70,7 @@ const TeacherDashboard = () => {
       active={active}
       contextSwitcher={workspace && <WorkspaceSwitcher key={wsKey} current={{ id: workspace.workspace.id, name: workspace.workspace.name, kind: workspace.workspace.kind }} onSwitched={onSwitched} />}
       breadcrumbs={workspace ? [{ label: workspace.workspace.name, to: "/teacher-dashboard?view=today" }, { label: nav.find((n) => n.key === active)?.label || "" }] : undefined}
-      user={<Button variant="ghost" size="sm" icon={FaSignOutAlt} onClick={handleLogout}>{t("teacher.logout", { defaultValue: "Log out" })}</Button>}
+      user={<Button variant="ghost" size="sm" icon={FaSignOutAlt} onClick={handleLogout} aria-label={t("teacher.logout", { defaultValue: "Log out" })}><span className={s.hideNarrow}>{t("teacher.logout", { defaultValue: "Log out" })}</span></Button>}
     >
       <div key={wsKey} style={{ display: "contents" }}>
         {ws.loading && !workspace ? <Skeleton variant="chart" /> : (

@@ -151,12 +151,6 @@ export default function GroupsView({ go, params }) {
         </div>
       )}
 
-      {atLimit && !archived && d.canCreateGroups && (
-        <PlanLockCard module="groups" title={t("teacher.groups.limitTitle", { defaultValue: "Want another group?" })}
-          text={t("teacher.groups.limitText", { defaultValue: "Your plan includes {{max}} group. Solo Pro has unlimited groups, branding and deeper analytics.", max: d.limits.groups })}
-          ctaLabel={t("teacher.seePlans", { defaultValue: "See plans" })} onUpgrade={() => go("plan")} />
-      )}
-
       {q.loading && !d && <div className={s.groupGrid}>{[0, 1, 2].map((i) => <Skeleton key={i} variant="tile" height={180} />)}</div>}
       {q.error && <EmptyState tone="error" title={t("teacher.loadError", { defaultValue: "We couldn't load this page" })} text={q.error} actionLabel={t("teacher.retry", { defaultValue: "Try again" })} onAction={q.reload} />}
       {d && !d.groups.length && (
@@ -179,7 +173,7 @@ export default function GroupsView({ go, params }) {
                 </div>
               </div>
               <div className={s.groupMeta}>
-                <span className={s.badge}><FaUsers aria-hidden="true" /> {t("teacher.nStudents", { defaultValue: "{{count}} students", count: g.studentCount })}{g.maxStudents ? ` / ${g.maxStudents}` : ""}</span>
+                <span className={s.badge}><FaUsers aria-hidden="true" /> {t("teacher.nStudents", { defaultValue: (g.studentCount) === 1 ? "1 student" : "{{count}} students", count: g.studentCount })}{g.maxStudents ? ` / ${g.maxStudents}` : ""}</span>
                 {g.groupKind === "practice" && <span className={`${s.badge} ${s.badgeAccent}`}>{t("teacher.group.practice", { defaultValue: "Practice group" })}</span>}
                 {!g.canManage && <span className={s.badge}>{t("teacher.group.school", { defaultValue: "From your school" })}</span>}
               </div>
@@ -199,6 +193,12 @@ export default function GroupsView({ go, params }) {
             </article>
           ))}
         </div>
+      )}
+
+      {atLimit && !archived && d.canCreateGroups && (
+        <PlanLockCard module="groups" title={t("teacher.groups.limitTitle", { defaultValue: "Want another group?" })}
+          text={t("teacher.groups.limitText", { defaultValue: "Your plan includes {{max}} group. Solo Pro has unlimited groups, branding and deeper analytics.", max: d.limits.groups })}
+          ctaLabel={t("teacher.seePlans", { defaultValue: "See plans" })} onUpgrade={() => go("plan")} />
       )}
 
       {editing && d && (

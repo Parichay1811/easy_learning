@@ -64,7 +64,7 @@ function Notes({ studentId, initial }) {
   );
 }
 
-function Analytics({ id, name }) {
+function Analytics({ id, name, notes }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const tr = useTimeRange({ defaultRange: "month", defaultCmp: "prev" });
@@ -105,9 +105,10 @@ function Analytics({ id, name }) {
           <CalendarHeatmap data={calData} to={tr.to} />
         </ChartCard>
       </div>
+      {notes}
       <ChartCard title={t("teacher.stu.tlTitle", { defaultValue: "What did {{name}} do?", name })} answer={events.length ? t("teacher.stu.tlAnswer", { defaultValue: "Sessions and game rounds, newest first." }) : ""} loading={tl.loading}
         empty={tl.data && !events.length && { title: t("teacher.stu.tlEmpty", { defaultValue: "Nothing in this period" }) }}>
-        <Timeline events={events} />
+        <Timeline events={events} max={40} />
       </ChartCard>
     </>
   );
@@ -138,10 +139,12 @@ export default function StudentView({ id, go }) {
         <span>{t("teacher.stu.parent", { defaultValue: "Parent:" })}</span> <ParentStatus status={d.parents.status} />
         {d.parents.parents.map((p) => <span key={p.id} className={s.small}>{p.email}</span>)}
       </div>
-      {d.hasAnalytics ? <Analytics id={id} name={st.name.split(" ")[0]} /> : (
-        <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} />
+      {d.hasAnalytics ? <Analytics id={id} name={st.name.split(" ")[0]} notes={<Notes studentId={id} initial={d.notes} />} /> : (
+        <>
+          <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} />
+          <Notes studentId={id} initial={d.notes} />
+        </>
       )}
-      <Notes studentId={id} initial={d.notes} />
     </>
   );
 }

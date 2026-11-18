@@ -104,7 +104,7 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
                 <span className={s.classTime}>{c.startTime}<span>{c.endTime}</span></span>
                 <span>
                   <span className={s.className}>{c.emoji} {c.groupName}</span>
-                  <span className={s.muted} style={{ display: "block", fontSize: "0.9rem" }}>{[c.subject, t("teacher.nStudents", { defaultValue: "{{count}} students", count: c.studentCount })].filter(Boolean).join(" · ")}</span>
+                  <span className={s.muted} style={{ display: "block", fontSize: "0.9rem" }}>{[c.subject, t("teacher.nStudents", { defaultValue: (c.studentCount) === 1 ? "1 student" : "{{count}} students", count: c.studentCount })].filter(Boolean).join(" · ")}</span>
                 </span>
                 <span className={s.row}>
                   {c.state === "now" && <span className={`${s.badge} ${s.badgeGood}`}>{t("teacher.today.now", { defaultValue: "Now" })}</span>}

@@ -1,5 +1,5 @@
 // Non-component helpers shared by the teacher pages.
-import { SUBJECTS, MODULES } from "../../components/dashboard";
+import { SUBJECTS, MODULES, today, toISO } from "../../components/dashboard";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { apiCall, pctToFraction } from "./teacherApi";
 
@@ -21,7 +21,13 @@ export function limitText(t, r) {
 }
 
 // The kit's time range as the shared analytics endpoints' query string.
-export const rangeQuery = (tr) => `from=${tr.from}&to=${tr.to}&cmp=${tr.cmp === "yoy" ? "lastyear" : tr.cmp || "prev"}`;
+// Days after today are cut off, so "this week" does not end in empty future days.
+export const rangeQuery = (tr) => {
+  const now = toISO(today());
+  const to = tr.to > now ? now : tr.to;
+  const from = tr.from > to ? to : tr.from;
+  return `from=${from}&to=${to}&cmp=${tr.cmp === "yoy" ? "lastyear" : tr.cmp || "prev"}`;
+};
 
 const LEVEL = { not_started: "notStarted", learning: "learning", practising: "practising", mastered: "mastered" };
 

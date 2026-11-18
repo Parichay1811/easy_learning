@@ -10,6 +10,7 @@ import { useAdminAuth } from "../../context/AdminAuthContext";
 import RoboticBackground from "../../components/RoboticBackground/RoboticBackground";
 import { apiCall } from "./teacherApi";
 import loginStyles from "../Login.module.css";
+import teacherLoginStyles from "../TeacherLogin.module.css";
 import s from "./SoloSignup.module.css";
 
 const SUBJECTS = ["English", "Maths", "Science"];
@@ -63,7 +64,7 @@ export default function SoloSignup() {
       <div className={loginStyles.content}>
         <form className={`${loginStyles.card} ${s.card}`} onSubmit={start}>
           <div style={{ fontSize: "3rem", color: "#22c55e", textAlign: "center" }} aria-hidden="true"><FaChalkboardTeacher /></div>
-          <h1 className={`${loginStyles.title} ${s.title}`}>{t("teacher.signup.title", { defaultValue: "I teach privately" })}</h1>
+          <h1 className={`${loginStyles.title} ${teacherLoginStyles.title} ${s.title}`}>{t("teacher.signup.title", { defaultValue: "I teach privately" })}</h1>
           <p className={s.lead}>{t("teacher.signup.lead", { defaultValue: "Start your own free tutoring workspace. Set up a class in five minutes and see who needs help, on what." })}</p>
           <ul className={s.perks}>
             <li><FaCheck aria-hidden="true" /> {t("teacher.signup.perk1", { defaultValue: "Solo Free: 1 group and up to 15 students, free for ever" })}</li>

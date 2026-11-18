@@ -31,22 +31,29 @@ the moment students finish I know who needs help and on what."*
 
 ## T1. Getting started
 
-- [ ] **TCH-001** Solo signup `P0` `Solo` · needs FND-015, FND-030
+- [x] **TCH-001** Solo signup `P0` `Solo` · needs FND-015, FND-030
   - "I teach privately" → name, subjects, grades and country → a Solo workspace is created on Solo Free. Guided checklist: create a group → add students → assign first practice → see first results.
-- [ ] **TCH-002** Institute invite acceptance `P1` `Institute`
+  - *Done:* `/teach` page and `POST /api/teacher/auth/solo` (verified Firebase token): approved Solo org in both databases (`plan: solo_free`), OrgAdmin + Tutor, default + custom subjects, `TeacherProfile`; idempotent, cleans up on failure; returns teacher + admin tokens. Getting-started checklist on Today (the "assign first practice" step waits for practice sets/tests). Tests: `test/integration/teacher-classes.test.js`.
+- [x] **TCH-002** Institute invite acceptance `P1` `Institute`
   - The admin's invite email names the school and the teacher's groups. First login lands on "Your classes" (today a missing `Tutor` row gives a 404 that says "ask your admin". Keep that, but make it friendlier).
-- [ ] **TCH-003** Workspace switcher `P1` `Solo` `Institute` · needs FND-010, DSN-001
+  - *Done:* sign-in 404 now has `code: NO_TEACHER_ACCOUNT` and a friendlier message; the login page offers a Solo workspace. `POST /api/admin/tutors/:id/invite` emails the teacher naming the school and their groups (Admin UI button not wired yet: ADMIN plan). First login lands on Today.
+- [x] **TCH-003** Workspace switcher `P1` `Solo` `Institute` · needs FND-010, DSN-001
+  - *Done:* sign-in returns `workspaces` + `needsChoice` and takes an optional `tutorId`; `GET /api/teacher/auth/workspaces`, `POST /api/teacher/auth/switch`; chooser after login and a switcher in the shell. `Tutor.uid` is now unique per organisation (old global `uid_1` index dropped once, lazily). Full Account/Membership (FND-010) still to do.
 
 ## T2. Groups and students
 
-- [ ] **TCH-010** Create and manage groups `P0` `Solo` `Institute` · module `groups`
+- [x] **TCH-010** Create and manage groups `P0` `Solo` `Institute` · module `groups`
   - Name, subject(s), grade band, colour and emoji, schedule (reuse `ScheduleEditor`/`WeeklyScheduleGrid`), archive/restore. In Institutes: only if the policy allows, and the group sits under the teacher's unit.
-- [ ] **TCH-011** Add students in every way `P0` `Solo` `Institute` · needs FND-011, FND-012
+  - *Done:* `/api/teacher/groups` create/edit/archive/restore with colour, emoji, grade band, subjects, class size; weekly schedule through the existing `ScheduleEditor`; institutes need `teachersCreateGroups`, and teachers only manage groups they created. Plan limits (FND-031) give a friendly 402 `PLAN_LIMIT` and usage meters. "Sits under the teacher's unit" waits for FND-017.
+- [x] **TCH-011** Add students in every way `P0` `Solo` `Institute` · needs FND-011, FND-012
   - Join code or QR on the projector · invite link · CSV paste · create managed learners with printable login cards (picture password) · move or copy students between groups.
-- [ ] **TCH-012** Invite parents `P1` `Solo` `Institute` · needs FND-012
+  - *Done:* join code + QR (own SVG encoder, `components/teacher/qr.js`, checked with OpenCV), invite link `/join/:code` (students join themselves, parents add a verified child), projector view, CSV paste/upload with preview and dry run, move/copy between groups, add from the school list. *Not done:* managed learners and login cards (FND-011, Parent work; TODO left in the Add students panel).
+- [x] **TCH-012** Invite parents `P1` `Solo` `Institute` · needs FND-012
   - Bulk "invite parents" for a group. Each child shows a parent status: Linked / Invited / None.
-- [ ] **TCH-013** Student profile (teacher view) `P1` `Solo` `Institute`
+  - *Done:* per-group Linked / Invited / None and bulk invites (org `Parent` record + email through `sendMail`); invited parents are verified by the school-link rule when they add their child.
+- [x] **TCH-013** Student profile (teacher view) `P1` `Solo` `Institute`
   - The parent's in-depth views ([PARENT.md](PARENT.md) P3–P5) limited to this workspace's activity (FND-021), plus **private teacher notes**, accommodations (TCH-034) and test history.
+  - *Done:* teacher student profile on the shared `/students/:id/analytics/*` endpoints plus private notes (`TeacherNote`, author-only) and parent status. *Not done:* limiting analytics to this workspace's activity (FND-021), accommodations (TCH-034), test history (tests not built).
 
 ## T3. Question bank
 
@@ -110,19 +117,25 @@ the moment students finish I know who needs help and on what."*
 The same chart kit and time-range bar as the parents' (DSN-003, DSN-020), with
 teacher-specific views. **Levels: test → group → subject → skill → student → session.**
 
-- [ ] **TCH-050** "Today" home `P0` `Solo` `Institute`
+- [x] **TCH-050** "Today" home `P0` `Solo` `Institute`
   - Today's classes (from the schedule), tests open now, **Needs attention** (at-risk students, unmarked work, failed tests), recent highlights ("Ravi mastered fractions!").
-- [ ] **TCH-051** Group dashboard `P0` `Solo` `Institute` · needs FND-043
+  - *Done:* `GET /api/teacher/today`: today's classes from schedules, needs attention (at-risk from `perLearner`), recent wins, week story and tiles. "Tests open now / unmarked work" wait for tests.
+- [x] **TCH-051** Group dashboard `P0` `Solo` `Institute` · needs FND-043
   - Story card, tiles (active students, minutes per student, accuracy, mastery growth, test completion), **student × skill heatmap**, distribution strip, trend vs the previous period and compare with my other groups.
+  - *Done:* group dashboard: story, tiles, student x (module x subject) heatmap (`GET /groups/:id/heatmap`), distribution strip, trend, comparison with my other groups (`GET /groups/compare`). Test completion tile waits for tests; skills are the 12 module x subject areas until FND-042.
 - [ ] **TCH-052** Test results `P0` `Solo` `Institute`
   - Score distribution, per-student table, **item analysis** (difficulty, discrimination, time, common wrong answers, "possibly wrong key" flag), compare attempts and export.
-- [ ] **TCH-053** Subject and module views `P1` `Solo` `Institute`
+- [x] **TCH-053** Subject and module views `P1` `Solo` `Institute`
   - Subject × module matrix for the group, a skill coverage map (skills taught vs mastered), and what's untouched.
-- [ ] **TCH-054** Individual student `P0` `Solo` `Institute` · needs TCH-013
-- [ ] **TCH-055** Suggested groups `P2` `Solo` `Institute` · needs FND-044
+  - *Done:* Subjects and skills tab: subject x module matrix and practised/mastered coverage per area.
+- [x] **TCH-054** Individual student `P0` `Solo` `Institute` · needs TCH-013
+  - *Done:* see TCH-013 (story, tiles, matrix, calendar, timeline, notes).
+- [x] **TCH-055** Suggested groups `P2` `Solo` `Institute` · needs FND-044
   - "These 5 students are all stuck on fractions": one tap creates a temporary practice group with a suggested set of questions.
-- [ ] **TCH-056** My teaching summary `P1` `Solo` `Institute`
+  - *Done:* `GET /groups/:id/suggestions` (students under 60 % on the same area) and one-tap practice groups (`POST /groups/suggested`, `groupKind: practice`, not counted against the group limit). Suggested question sets wait for practice sets.
+- [x] **TCH-056** My teaching summary `P1` `Solo` `Institute`
   - The teacher's own view of what the admin sees about them (ADM-041): tests created, questions contributed, class engagement and growth, reply time. Transparent by design.
+  - *Done:* `GET /api/teacher/summary`: groups, students, active, minutes per student, accuracy and growth, engagement, questions contributed (from uploads). `testsCreated` is 0 and `replyTimeHours` null until tests and messaging exist (explained in `notes`).
 
 ## T7. Homework and practice sets
 
@@ -141,12 +154,15 @@ teacher-specific views. **Levels: test → group → subject → skill → stude
 
 ## T9. Solo business tools
 
-- [ ] **TCH-080** Solo plan and billing `P1` `Solo` · needs FND-032
+- [x] **TCH-080** Solo plan and billing `P1` `Solo` · needs FND-032
   - Upgrade from Solo Free (1 group, 15 students), invoices and usage against limits.
-- [ ] **TCH-081** Branding for tutors `P1` `Solo` · module `reports.branded`
+  - *Done:* Plan page with plan, limits and usage and what Solo Pro adds; Upgrade shows "online payment coming soon, contact us". *Not done:* invoices and real upgrade (FND-032 billing).
+- [x] **TCH-081** Branding for tutors `P1` `Solo` · module `reports.branded`
   - Logo and colour on reports, invite emails and the student join page. Builds the tutor's brand with parents.
-- [ ] **TCH-082** Public tutor page `P2` `Solo`
+  - *Done:* brand colour and logo on the org (both copies), gated by `reports.branded`; used in parent invite emails, the join page and the tutor page. Reports use it once FND-060 exists.
+- [x] **TCH-082** Public tutor page `P2` `Solo`
   - Optional profile page (subjects, grades, testimonials) with a "join my class" button. A growth loop for Learnigo.
+  - *Done:* optional public page `/tutor/:slug` (headline, bio, subjects, testimonials, "Join my class"), off until published; no email shown.
 
 ---
 

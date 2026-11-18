@@ -46,9 +46,10 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
 
 ## F2. Organisation tree
 
-- [ ] **FND-015** `Organization.kind = 'solo' | 'institute'` `P0` `Solo` `Institute`
+- [x] **FND-015** `Organization.kind = 'solo' | 'institute'` `P0` `Solo` `Institute`
   - Solo self-signup creates an `Organization(kind: solo)` that is auto-approved, plus an `OrgAdmin` and a `Tutor` for the same account. All existing batch, question and approval code then works for solo tutors unchanged. Questions are auto-approved when `kind === 'solo'`.
   - Keep the adminDb and superAdminDb `Organization` copies in sync (design-guide §4). Better still, do FND-016.
+  - *Done (Teacher work):* Solo self-signup creates both `Organization` copies (`kind: solo`, approved, `plan: solo_free`), an OrgAdmin and a Tutor (`services/teacherWorkspaces.js`). FND-016 still to do.
 - [ ] **FND-016** One source of truth for `Organization` `P1` `Platform`
   - Replace the hand-synced duplicate with one collection, read by the super admin through a service. Remove the double-write sites listed in design-guide §5.4.
 - [ ] **FND-017** Org units `P1` `Institute`
@@ -95,6 +96,7 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
   - Migrate the existing `subscriptionPlan` enum (`free/basic/pro/enterprise` on superadmin `Organization`) to plan ids (`free`, `family_plus`, `solo_free`, `solo_pro`, `institute`, `enterprise`).
 - [ ] **FND-031** Limits `P1` `Solo` `Institute`
   - Seats (students per org), groups per solo plan, storage for media, tests per month (if needed). Show usage against each limit on billing pages.
+  - *Partly done (Teacher work):* `groups` and `students` limits enforced for teachers (402 `PLAN_LIMIT`) with usage on the Groups and Plan pages; join links respect them. Admin-side creation and storage/tests limits are not enforced yet.
 - [ ] **FND-032** Billing `P1` `Family` `Solo` `Institute`
   - Stripe Checkout and the Customer Portal for cards. Stripe Tax handles EU VAT. Schools can pay by invoice or purchase order with a manual "mark as paid" for the super admin.
   - Trials (14 days of Solo Pro or Institute), coupons, upgrade/downgrade with proration. A webhook writes `Subscription {ownerType, ownerId, plan, status, seats, periodEnd}`.
