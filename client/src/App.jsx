@@ -45,6 +45,8 @@ import TutorPage from "./pages/join/TutorPage";
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import { ParentReportPage, SharedReportPage } from "./pages/parent/ReportPage";
 import FamilyLayer from "./components/family/FamilyLayer";
+import TeacherTestsApp from "./pages/teacher/tests/TeacherTestsApp";
+import TestPlayer from "./pages/TestPlayer";
 import LearningSupportByCountry from "./pages/LearningSupportByCountry";
 import LearningDifferences from "./pages/LearningDifferences";
 import WhoWeHelp from "./pages/WhoWeHelp";
@@ -117,6 +119,8 @@ function AnimatedRoutes() {
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
         <Route path="/parent/report" element={<ParentReportPage />} />
         <Route path="/shared-report/:token" element={<SharedReportPage />} />
+        <Route path="/teacher/tests/*" element={<TeacherTestsApp />} />
+        <Route path="/test/:id" element={<TestPlayer />} />
         {DEV_PAGES && <Route path="/dev/dashboard-kit" element={<DashboardKit />} />}
         {DEV_PAGES && <Route path="/dev/comms" element={<CommsGallery />} />}
         <Route path="*" element={<NotFound />} />
@@ -135,7 +139,8 @@ function AppLayout() {
   const isAR = location.pathname.startsWith("/games/ar/");
   const isSchool = location.pathname.startsWith("/admin-school");
   const hideNavbar = isAR || isSchool || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/superadmin-classic", "/view-as", "/teacher-dashboard", "/parent-dashboard", "/teach", "/parent/report"].includes(location.pathname)
-    || location.pathname.startsWith("/join/") || location.pathname.startsWith("/tutor/") || location.pathname.startsWith("/shared-report/");
+    || location.pathname.startsWith("/join/") || location.pathname.startsWith("/tutor/") || location.pathname.startsWith("/shared-report/")
+    || location.pathname.startsWith("/teacher/tests") || location.pathname.startsWith("/test/");
   // Every page a logged-in student can reach — Home, About Us, Contact Us, the
   // question modules, Subject page, the Games/Camera Games hubs and the Student
   // Dashboard — shares the same full-viewport video background, so the app reads

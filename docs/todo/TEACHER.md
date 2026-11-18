@@ -57,30 +57,40 @@ the moment students finish I know who needs help and on what."*
 
 ## T3. Question bank
 
-- [ ] **TCH-020** In-app question editor for every interaction type `P0` `Solo` `Institute` · module `qbank.author`
+- [x] **TCH-020** In-app question editor for every interaction type `P0` `Solo` `Institute` · module `qbank.author`
   - All 12 types from the registry ([widgetRegistry.js](../../client/src/components/QuestionWidgets/widgetRegistry.js)): tap, true/false, drag to blank, multi-select, order, tap sequence, letter bank, match pairs, sort bins, short and long typed answers, and voice recording.
   - Fields: instruction, prompt, picture/emoji/image upload, audio text (read aloud by the site's natural narrator), hints, feedback (correct / incorrect / second try) and worked example.
   - **Live preview** on the real wooden-board `QuestionCard`, at phone and desktop size, with a "try it as a student" mode.
-- [ ] **TCH-021** Tags and metadata `P0` `Solo` `Institute` · needs FND-042
+  - *Done:* `/teacher/tests/bank/new` edits all 12 types (fields, emoji or uploaded picture, read-aloud text, hints, three feedbacks, worked example) with a live `QuestionCard` preview at phone/desktop width and "try as a student"; server validation in `utils/questionShape.js`. *Not done:* storing the student's voice recording itself (mic answers keep the transcript).
+- [x] **TCH-021** Tags and metadata `P0` `Solo` `Institute` · needs FND-042
   - Module, subject, skill(s), grade band, difficulty 1–5, curriculum code (optional) and estimated time. Required tags power analytics.
-- [ ] **TCH-022** Import and export `P1` `Solo` `Institute`
+  - *Done:* skills, grade band, difficulty 1-5, curriculum code, estimated time, points (FND-042 fields).
+- [x] **TCH-022** Import and export `P1` `Solo` `Institute`
   - Keep the `.xlsx` template path. Add CSV, copy-paste from a document, and bulk edit in a grid.
-- [ ] **TCH-023** Bank browser `P1` `Solo` `Institute`
+  - *Done:* `.xlsx` path untouched; CSV / spreadsheet paste / plain text from a document with a dry-run check (`/bank/import`), CSV export (audited), grid edit (`PATCH /bank/bulk`).
+- [x] **TCH-023** Bank browser `P1` `Solo` `Institute`
   - Search and filter **my questions / my school's bank / Learnigo's bank**. Duplicate and adapt, collections ("Fractions starter set") and versioning (edits don't change past test results).
-- [ ] **TCH-024** Approval flow by workspace `P0` `Solo` `Institute`
+  - *Done:* mine / school / Learnigo scopes with search and filters, duplicate, collections (private or shared in the workspace), versioning (`QuestionRevision`; attempts snapshot the question, so edits never change past results).
+- [x] **TCH-024** Approval flow by workspace `P0` `Solo` `Institute`
   - Solo: auto-approved. Institute: goes to the admin review queue (exists: [adminQuestionController.js](../../server/controllers/adminQuestionController.js)). The teacher sees status and the reviewer's notes.
-- [ ] **TCH-025** Share to the public bank `P2` `Solo` `Institute` · module `qbank.share` · needs SUP-031
+  - *Done:* solo workspaces auto-approve; institute questions open a `QuestionUploadBatch` (source `editor`/`csv`) in the existing admin review queue; content edits go back for review, tag-only edits don't; the editor shows status and the reviewer's note. Publishing a test with unapproved questions is refused.
+- [x] **TCH-025** Share to the public bank `P2` `Solo` `Institute` · module `qbank.share` · needs SUP-031
   - Opt in to share good questions with every Learnigo teacher, after a review by the Learnigo content team. Credited to the author.
+  - *Done (submission record only):* `POST /bank/questions/:m/:s/:id/share` creates a `PublicQuestionSubmission` (superAdminDb) with a content snapshot and credit; review UI is SUP-031.
 - [ ] **TCH-026** AI-assisted drafting `P2` `Solo` `Institute`
   - "Make 5 questions on fractions for grade 4, mixed types" → drafts land as **unapproved** for the teacher to edit. Only when a language model is configured (never required).
-- [ ] **TCH-027** Question quality stats `P1` `Solo` `Institute` · needs FND-043
+  - *Not done:* no language model is configured in this build; skipped by design.
+- [x] **TCH-027** Question quality stats `P1` `Solo` `Institute` · needs FND-043
   - Per question: times used, % correct, average time and the most common wrong answer. Flags: "too easy", "confusing", "possibly wrong key" (high-scorers miss it).
+  - *Done:* times used, % correct, average time, most common wrong answer, flags (too easy, confusing, possibly wrong key) from test attempts, on the editor and the bank list.
 
 ## T4. Tests and their rules
 
-- [ ] **TCH-030** Test builder `P0` `Solo` `Institute` · module `tests`
+- [x] **TCH-030** Test builder `P0` `Solo` `Institute` · module `tests`
   - Pick questions from the bank (filters + search), or use **random pools** ("8 from Fractions, difficulty 2–3"), with sections, reorder and points per question. Save as template, duplicate, and see the student preview.
-- [ ] **TCH-031** Rules `P0` `Solo` `Institute` · module `tests` (advanced rules: `tests.advanced`)
+  - *Done:* `Test` model; builder with bank picker, random pools (tests.advanced), sections, reorder, points, rubrics, templates (presets + "keep as template"), duplicate, student preview.
+- [x] **TCH-031** Rules `P0` `Solo` `Institute` · module `tests` (advanced rules: `tests.advanced`)
+  - *Done:* every rule in the table, enforced on the server (`utils/testRules.js`): timezone-aware window, total/per-question limits with auto hand-in, attempts + which counts, shuffles, hints/listen/AI lock, feedback timing, release auto/manual, style, pass mark, late work, light integrity log (never penalised). Advanced rules need `tests.advanced`.
 
   | Rule | Options |
   |---|---|
@@ -94,23 +104,30 @@ the moment students finish I know who needs help and on what."*
   | Pass mark | % to pass, mastery credit on/off |
   | Late work | Not allowed / allowed with a mark / allowed until a date |
   | Integrity (light) | Full-screen request, log tab switches and paste events (shown to the teacher, never auto-penalised) |
-- [ ] **TCH-032** Assign `P0` `Solo` `Institute`
+- [x] **TCH-032** Assign `P0` `Solo` `Institute`
   - To groups, to some students, or to a group minus some students. Reminders to students (and parents, optional) at open, 24 h before close and at close.
-- [ ] **TCH-033** Student test player `P0` `Platform` · needs TCH-031
+  - *Done:* groups, some students, or a group minus some (`TestAssignment`, membership resolved live); notifications on assign, at open, 24 h before close and at close to students and (opt-in) linked parents. Reminders run on a 5-minute timer plus whenever lists are opened (no cron in the app).
+- [x] **TCH-033** Student test player `P0` `Platform` · needs TCH-031
   - The student's side: a "To do" list on their home screen, a test intro card (rules in plain words, time, attempts), the familiar wooden-board question card, a progress bar, a timer when timed, saving offline and resuming after a dropped connection, and a calm submit/confirm screen.
-- [ ] **TCH-034** Accommodations per student `P1` `Solo` `Institute` · module `tests.advanced`
+  - *Done:* To do card on `/home`, player at `/test/:id`: rules in plain words, wooden-board card, progress, timer, autosave with an on-device queue that flushes when the connection returns, resume, calm hand-in. The answer key never reaches the browser; every answer goes through `recordAnswer({ testId, source: 'test' | 'homework', orgId })`.
+- [x] **TCH-034** Accommodations per student `P1` `Solo` `Institute` · module `tests.advanced`
   - Extra time (×1.25, ×1.5, ×2), read-aloud always on, fewer options, larger text, separate quiet window. Set once on the student and applied to every test automatically. This fits the dyslexia-friendly audience Learnigo serves.
-- [ ] **TCH-035** Live monitor `P1` `Solo` `Institute`
+  - *Done:* extra time ×1.25/×1.5/×2, read-aloud always on, larger text, fewer options; set on the `Student`, applied at attempt start. *Not done:* a separate quiet window.
+- [x] **TCH-035** Live monitor `P1` `Solo` `Institute`
   - During an open test: who has started, finished or is stuck (long time on one question), with a live % correct per question so the teacher can re-teach right away. Uses the polling pattern, no WebSockets.
+  - *Done:* polling monitor (10 s): not started / working / away / stuck per student, live % correct per question.
 
 ## T5. Marking and feedback
 
-- [ ] **TCH-040** Auto-marking `P0` `Solo` `Institute`
+- [x] **TCH-040** Auto-marking `P0` `Solo` `Institute`
   - Reuses `scoreAnswer.js`. Partial credit for multi-select, order and match pairs (configurable).
-- [ ] **TCH-041** Marking queue for typed and spoken answers `P1` `Solo` `Institute` · module `grading.manual`
+  - *Done:* `server/utils/scoreAnswer.js` (same rules as the client) with partial credit for multi-select, order, sequence, match pairs and sort bins.
+- [x] **TCH-041** Marking queue for typed and spoken answers `P1` `Solo` `Institute` · module `grading.manual`
   - Typed long answers and voice recordings land in a queue with a rubric (criteria × levels), quick comments, a voice comment, and mark with the keyboard (next/prev). Works on a tablet.
-- [ ] **TCH-042** Release results `P1` `Solo` `Institute`
+  - *Done:* marking queue with rubric levels, quick comments, keyboard (J/K, 1-9, C, Enter) and touch. *Not done:* voice comments.
+- [x] **TCH-042** Release results `P1` `Solo` `Institute`
   - Release now or at close. Students see their score and feedback, parents see results with the teacher's comment (PAR-051), and corrections after release are recorded in the audit log.
+  - *Done:* release now or by rule; students and linked parents notified; corrections after release are audited (`test.mark.correct`) and the student is told.
 
 ## T6. Performance at every level
 
@@ -126,6 +143,10 @@ teacher-specific views. **Levels: test → group → subject → skill → stude
 - [ ] **TCH-052** Test results `P0` `Solo` `Institute`
   - Score distribution, per-student table, **item analysis** (difficulty, discrimination, time, common wrong answers, "possibly wrong key" flag), compare attempts and export.
 - [x] **TCH-053** Subject and module views `P1` `Solo` `Institute`
+- [x] **TCH-052** Test results `P0` `Solo` `Institute`
+  - Score distribution, per-student table, **item analysis** (difficulty, discrimination, time, common wrong answers, "possibly wrong key" flag), compare attempts and export.
+  - *Done:* distribution, per-student table, item analysis (difficulty, discrimination top-27 % vs bottom-27 %, time, common wrong answer, possibly-wrong-key flag), compare tries, CSV export (audited). 30 students in about 0.1 s in the integration test.
+- [ ] **TCH-053** Subject and module views `P1` `Solo` `Institute`
   - Subject × module matrix for the group, a skill coverage map (skills taught vs mastered), and what's untouched.
   - *Done:* Subjects and skills tab: subject x module matrix and practised/mastered coverage per area.
 - [x] **TCH-054** Individual student `P0` `Solo` `Institute` · needs TCH-013
@@ -139,10 +160,12 @@ teacher-specific views. **Levels: test → group → subject → skill → stude
 
 ## T7. Homework and practice sets
 
-- [ ] **TCH-060** Practice sets `P1` `Solo` `Institute`
+- [x] **TCH-060** Practice sets `P1` `Solo` `Institute`
   - Lighter than tests: a set of questions or a module/subject ("15 min of Listen · Maths this week"), or an AI Teacher topic. They count towards mastery, not grades.
-- [ ] **TCH-061** Auto-practice from results `P2` `Solo` `Institute`
+  - *Done:* practice sets (question sets with instant feedback, unlimited tries, recorded as `homework`) or a module target ("15 min of Listen · Maths") with progress from `LearnerDay`. The AI Teacher topic is stored but not yet linked into the AI Teacher.
+- [x] **TCH-061** Auto-practice from results `P2` `Solo` `Institute`
   - After a test, each student gets practice on the skills they missed, built automatically and approved by the teacher in one click.
+  - *Done:* after a test, per-student suggestions from missed skills (or the missed questions), sent as practice sets in one click.
 
 ## T8. Communication and reports
 
@@ -172,6 +195,15 @@ teacher-specific views. **Levels: test → group → subject → skill → stude
 - A test with 30 students shows item analysis within 5 s of the last submission.
 - Institute teachers can never see another teacher's private groups or out-of-school activity (permission suite FND-002).
 - Every view works on a tablet. Marking works with keyboard and touch.
+
+## Tests API for other roles
+
+- **Parent (for PAR-051):** `GET /api/parent/children/:id/tests` (verified links only, `childAccess`) returns
+  `{ child: { name }, assigned: [{ testId, title, kind, teacher, opensAt, closesAt, phase, status: 'not_started'|'in_progress'|'waiting_for_result' }], upcoming: [...same], results: [{ testId, title, kind, teacher, submittedAt, percent, passed, late, needsMarking, attempts, comments: [string] }] }`.
+  Results appear only once released to the student (`utils/testRules.isReleased`).
+- **Student:** `/api/student/tests` (To do), `/tests/:id`, `/tests/:id/start`, `/attempts/:id` (+ `/open`, `/items/:itemId`, `/events`, `/submit`).
+- **Teacher:** `/api/teacher/bank/*`, `/tests/*`, `/marking`, `/accommodations`, `/test-groups` (`routes/teacherTests.js`).
+- Demo data: `scripts/seed-demo-tests.js` (`seedDemoTests(app, demo)` after `seedDemo`).
 
 ## Links to other roles
 

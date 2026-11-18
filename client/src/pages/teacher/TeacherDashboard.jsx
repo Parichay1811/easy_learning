@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaHome, FaUsers, FaChartLine, FaUpload, FaCog, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaUsers, FaChartLine, FaUpload, FaCog, FaSignOutAlt, FaClipboardList } from "react-icons/fa";
 import { DashboardShell, Button, Skeleton } from "../../components/dashboard";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import TeacherQuestionUpload from "./TeacherQuestionUpload";
@@ -56,7 +56,8 @@ const TeacherDashboard = () => {
     { key: "today", label: t("teacher.nav.today", { defaultValue: "Today" }), icon: FaHome, to: "/teacher-dashboard?view=today" },
     { key: "groups", label: t("teacher.nav.groups", { defaultValue: "Groups" }), icon: FaUsers, to: "/teacher-dashboard?view=groups" },
     { key: "summary", label: t("teacher.nav.summary", { defaultValue: "Summary" }), icon: FaChartLine, to: "/teacher-dashboard?view=summary" },
-    { key: "questions", label: t("teacher.nav.questions", { defaultValue: "Questions" }), icon: FaUpload, to: "/teacher-dashboard?view=questions" },
+    { key: "tests", label: t("teacher.nav.tests", { defaultValue: "Tests & question bank" }), icon: FaClipboardList, to: "/teacher/tests" },
+    { key: "questions", label: t("teacher.nav.questions", { defaultValue: "Upload questions" }), icon: FaUpload, to: "/teacher-dashboard?view=questions" },
     { key: "plan", label: t("teacher.nav.plan", { defaultValue: "Plan" }), icon: FaCog, to: "/teacher-dashboard?view=plan" },
   ];
   const active = { group: "groups", student: "groups" }[view] || view;

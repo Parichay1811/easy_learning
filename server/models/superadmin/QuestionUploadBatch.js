@@ -16,6 +16,8 @@ const schema = new mongoose.Schema({
   // server/utils/questionVisibility.js.
   batchIds: { type: [String], default: [] },
 
+  // 'xlsx' (template upload), 'editor' (in-app question editor) or 'csv' (CSV/paste import).
+  source: { type: String, default: 'xlsx' },
   originalFilename: { type: String, required: true },
   originalFileUrl: { type: String, required: true },
 

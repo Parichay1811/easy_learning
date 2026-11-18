@@ -20,6 +20,14 @@ const schema = new mongoose.Schema({
   externalId: { type: String, default: '', trim: true },
   leftAt: { type: Date, default: null },
   leaveReason: { type: String, default: '' },
+  // Test accommodations (TCH-034), applied to every test automatically.
+  accommodations: {
+    extraTime: { type: Number, enum: [1, 1.25, 1.5, 2], default: 1 },
+    readAloud: { type: Boolean, default: false },
+    largerText: { type: Boolean, default: false },
+    fewerOptions: { type: Boolean, default: false },
+    note: { type: String, default: '', maxlength: 300 },
+  },
 }, { timestamps: true })
 
 schema.index({ orgId: 1, unitId: 1 })
