@@ -30,6 +30,8 @@ const speakMathsRoutes   = require('./routes/speakMaths')
 const speakEnglishRoutes = require('./routes/speakEnglish')
 const dashboardRoutes     = require('./routes/dashboard')
 const sharedRoutes        = require('./routes/shared')
+const { rateLimit, accountKey } = require('./middleware/rateLimit')
+const { securityHeaders } = require('./middleware/security')
 const arRoutes            = require('./routes/ar')
 const { createAIAssistant } = require('./services/aiAssistant')
 
@@ -68,6 +70,20 @@ app.use(express.json())
 // Signed cookies need a secret; the student session cookie is signed so it can't be forged.
 app.use(cookieParser(process.env.COOKIE_SECRET || process.env.JWT_SECRET))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
+// ── Abuse protection (FND-074) ────────────────────────────────────────────────
+// Behind nginx the client address is the last X-Forwarded-For hop: without this every
+// visitor would look like 127.0.0.1 and share one limit.
+app.set('trust proxy', process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY) : (process.env.NODE_ENV === 'production' ? 1 : false))
+app.use('/api', securityHeaders)
+// Generous overall limit per client; sign-in endpoints get tighter ones.
+app.use('/api', rateLimit({ windowMs: 60_000, max: 900 }))
+app.use(['/api/auth', '/api/admin/auth', '/api/teacher/auth', '/api/parent/auth', '/api/superadmin/auth'], rateLimit({ windowMs: 60_000, max: 40 }))
+// Password sign-ins: 8 tries per client+account per 15 minutes (slows guessing, never locks out a whole site).
+const passwordLimiter = rateLimit({ windowMs: 15 * 60_000, max: 8, key: accountKey, message: 'Too many sign-in attempts. Please wait 15 minutes and try again.' })
+app.use(['/api/auth/login', '/api/superadmin/auth/login'], passwordLimiter)
+app.use('/api/auth/register', rateLimit({ windowMs: 60 * 60_000, max: 20, message: 'Too many sign-ups from this network. Please try again later.' }))
+
 
 const PORT = process.env.PORT || 5000
 
