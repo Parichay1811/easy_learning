@@ -8,15 +8,15 @@ let app
 test.before(async () => { app = await start() })
 test.after(async () => { await app?.stop() })
 
-test('super admin password login: the 9th wrong attempt in a window is blocked, with Retry-After', async () => {
+test('student password login: the 9th wrong attempt in a window is blocked, with Retry-After', async () => {
   const codes = []
   for (let i = 0; i < 10; i++) {
-    const r = await app.call('POST', '/api/superadmin/auth/login', { body: { email: 'root@example.com', password: `wrong${i}` } })
+    const r = await app.call('POST', '/api/auth/login', { body: { email: 'guess.me@example.com', password: `wrong${i}` } })
     codes.push(r.status)
   }
   assert.ok(codes.slice(0, 8).every((c) => c === 401 || c === 400), `first 8 should be refused normally, got ${codes}`)
   assert.deepEqual(codes.slice(8), [429, 429])
-  const res = await fetch(`${app.url}/api/superadmin/auth/login`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: 'root@example.com', password: 'x' }) })
+  const res = await fetch(`${app.url}/api/auth/login`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ email: 'guess.me@example.com', password: 'x' }) })
   assert.equal(res.status, 429)
   assert.ok(Number(res.headers.get('retry-after')) > 0)
 })

@@ -84,10 +84,11 @@ app.set('trust proxy', process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY)
 app.use('/api', securityHeaders)
 // Generous overall limit per client; sign-in endpoints get tighter ones.
 app.use('/api', rateLimit({ windowMs: 60_000, max: 900 }))
-app.use(['/api/auth', '/api/admin/auth', '/api/teacher/auth', '/api/parent/auth', '/api/superadmin/auth'], rateLimit({ windowMs: 60_000, max: 40 }))
+app.use(['/api/auth', '/api/admin/auth', '/api/teacher/auth', '/api/parent/auth'], rateLimit({ windowMs: 60_000, max: 40 }))
 // Password sign-ins: 8 tries per client+account per 15 minutes (slows guessing, never locks out a whole site).
 const passwordLimiter = rateLimit({ windowMs: 15 * 60_000, max: 8, key: accountKey, message: 'Too many sign-in attempts. Please wait 15 minutes and try again.' })
-app.use(['/api/auth/login', '/api/superadmin/auth/login'], passwordLimiter)
+// Super admin staff sign-in has its own account lockout and IP throttle (services/staffAuth.js).
+app.use('/api/auth/login', passwordLimiter)
 app.use('/api/auth/register', rateLimit({ windowMs: 60 * 60_000, max: 20, message: 'Too many sign-ups from this network. Please try again later.' }))
 
 
