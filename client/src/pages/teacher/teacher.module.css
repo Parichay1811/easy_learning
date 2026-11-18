@@ -6,7 +6,7 @@
   border-radius: var(--d-radius);
   box-shadow: var(--d-shadow);
   padding: 20px;
-  border: 1px solid var(--d-line);
+  border: 2px solid var(--d-line);
 }
 
 .pageHead {
@@ -105,13 +105,13 @@
   padding: 14px;
   border-radius: var(--d-radius-sm);
   background: var(--d-card-alt);
-  border: 1px solid var(--d-line);
+  border: 2px solid var(--d-line);
 }
 .checkDone { background: var(--d-good-soft); }
 .checkIcon { font-size: 1.4rem; flex: none; line-height: 1; margin-top: 2px; }
 .checkItem strong { display: block; margin-bottom: 4px; }
 .checkItem p { margin: 0 0 8px; color: var(--d-muted); font-size: 0.9rem; }
-.progressBar { height: 10px; border-radius: 99px; background: var(--d-card-alt); overflow: hidden; border: 1px solid var(--d-line); }
+.progressBar { height: 10px; border-radius: 99px; background: var(--d-card-alt); overflow: hidden; border: 2px solid var(--d-line); }
 .progressBar span { display: block; height: 100%; background: var(--d-good); border-radius: 99px; }
 
 /* Groups */
@@ -125,7 +125,7 @@
   border-radius: var(--d-radius);
   background: var(--d-card);
   box-shadow: var(--d-shadow);
-  border: 1px solid var(--d-line);
+  border: 2px solid var(--d-line);
   border-top: 8px solid var(--group, var(--d-accent));
 }
 .groupTitle { display: flex; align-items: center; gap: 10px; }
@@ -137,7 +137,7 @@
 .usage { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
 .meter { min-width: 200px; flex: 1; }
 .meter label { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; }
-.meterTrack { height: 12px; border-radius: 99px; background: var(--d-card-alt); border: 1px solid var(--d-line); overflow: hidden; }
+.meterTrack { height: 12px; border-radius: 99px; background: var(--d-card-alt); border: 2px solid var(--d-line); overflow: hidden; }
 .meterFill { height: 100%; background: var(--d-accent); border-radius: 99px; }
 .meterFull { background: var(--d-attention); }
 
@@ -287,7 +287,7 @@
 
 /* Notes */
 .noteList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
-.noteItem { padding: 12px 14px; background: var(--d-card-alt); border-radius: var(--d-radius-sm); border: 1px solid var(--d-line); }
+.noteItem { padding: 12px 14px; background: var(--d-card-alt); border-radius: var(--d-radius-sm); border: 2px solid var(--d-line); }
 .notePinned { border-color: var(--d-accent); }
 .noteItem p { margin: 0 0 6px; white-space: pre-wrap; }
 .noteFoot { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; font-size: 0.85rem; color: var(--d-muted); }
@@ -295,7 +295,7 @@
 /* Compare bars */
 .compare { display: flex; flex-direction: column; gap: 12px; }
 .compareRow { display: grid; grid-template-columns: minmax(120px, 200px) 1fr 60px; gap: 10px; align-items: center; }
-.compareBar { height: 18px; border-radius: 99px; background: var(--d-card-alt); overflow: hidden; border: 1px solid var(--d-line); }
+.compareBar { height: 18px; border-radius: 99px; background: var(--d-card-alt); overflow: hidden; border: 2px solid var(--d-line); }
 .compareBar span { display: block; height: 100%; border-radius: 99px; }
 .compareMe { font-weight: 700; }
 
@@ -374,3 +374,41 @@
   .compareRow > :first-child { grid-column: 1 / -1; }
   .card { padding: 16px; }
 }
+
+/* Upload questions: three numbered steps, subject pickers with the world art */
+.uploadSteps { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); align-items: start; }
+.step { display: flex; flex-direction: column; gap: 12px; }
+.stepTitle { display: flex; align-items: center; gap: 10px; margin: 0; font-size: 1.12rem; color: var(--d-ink); }
+.stepNum {
+  flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--d-sun); color: #3d2c00; font-weight: 700; font-size: 0.95rem;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--d-sun) 60%, #000);
+}
+.step .fieldLabel { margin: 4px 0 0; }
+.pickRow { display: flex; flex-wrap: wrap; gap: 8px; }
+.pick {
+  display: inline-flex; flex-direction: column; align-items: center; gap: 4px; min-width: 88px; padding: 8px 10px;
+  border: 2px solid var(--d-line); border-radius: 18px; background: var(--d-card); color: var(--d-ink);
+  font: inherit; font-weight: 600; font-size: 0.9rem; cursor: pointer; box-shadow: 0 3px 0 var(--d-line);
+}
+.pick img { width: 44px; height: 44px; object-fit: contain; }
+.pickSmall { flex-direction: row; min-width: 0; padding: 6px 14px 6px 6px; border-radius: 999px; }
+.pickIcon { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--pc); color: var(--d-on-fill); font-size: 0.8rem; }
+.pick:hover { border-color: color-mix(in srgb, var(--pc) 60%, var(--d-line)); }
+.pick:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--d-line); }
+.pickOn { border-color: var(--pc); background: color-mix(in srgb, var(--pc) 14%, var(--d-card)); box-shadow: 0 3px 0 color-mix(in srgb, var(--pc) 55%, transparent); }
+.dropZone {
+  position: relative; display: flex; align-items: center; gap: 12px; padding: 18px; cursor: pointer;
+  border: 2px dashed color-mix(in srgb, var(--d-accent) 45%, var(--d-line)); border-radius: 18px; background: var(--d-accent-soft); color: var(--d-accent-ink);
+}
+.dropZone:focus-within { outline: 3px solid var(--d-focus); outline-offset: 2px; }
+.dropZone input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.dropIcon { font-size: 1.8rem; flex-shrink: 0; }
+.dropText { font-weight: 600; overflow-wrap: anywhere; }
+.groupPick { border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.checkChip {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 4px 14px; cursor: pointer;
+  border: 2px solid var(--d-line); border-radius: 999px; background: var(--d-card); font-weight: 500; box-shadow: 0 2px 0 var(--d-line);
+}
+.checkChip input { width: 18px; height: 18px; accent-color: var(--d-accent); }
+.checkChipOn { border-color: var(--d-accent); background: var(--d-accent-soft); color: var(--d-accent-ink); }

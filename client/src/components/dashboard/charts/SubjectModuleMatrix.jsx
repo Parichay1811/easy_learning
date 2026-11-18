@@ -39,7 +39,7 @@ export default function SubjectModuleMatrix({ cells = [], subjects, modules, onS
         {subs.map((sub) => (
           <div key={sub.key} className={s.matrixRow} role="group" aria-label={subjectLabel(t, sub.key)}>
             <span className={s.matrixSubject} style={{ '--sc': sub.fill, '--si': sub.ink }}>
-              <span className={s.subjectBar} />
+              {sub.art ? <img className={s.subjectArt} src={sub.art} alt="" width="40" height="40" loading="lazy" /> : <span className={s.subjectBar} />}
               {subjectLabel(t, sub.key)}
             </span>
             {mods.map((mod) => {

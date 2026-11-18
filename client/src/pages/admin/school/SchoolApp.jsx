@@ -128,7 +128,7 @@ export default function SchoolApp() {
   return (
     <SchoolCtx.Provider value={ctx}>
       <DashboardShell
-        brand={{ label: "LEARNIGO", to: home }}
+        brand={{ label: "LEARNIGO", role: t("school.brandRole", { defaultValue: "School" }), to: home }}
         nav={nav}
         active={active}
         bell={ctx.isAdmin ? <NotificationBell role="admin" /> : null}

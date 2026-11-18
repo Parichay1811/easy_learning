@@ -53,20 +53,29 @@ AI Teacher's wooden board) but calmer, because dashboards are for reading.
 - [x] **DSN-003** Time-range bar `P0` `Platform`
   - *Done:* `TimeRangeBar` + `useTimeRange` (Day/Week/Month/Year/Custom, compare, terms, state in the URL).
   - Day / Week / Month / Year / Custom, a "compare with" option (previous period, same period last year, none), and an academic-term picker for institutes. The state lives in the URL, so a link shares the exact view.
-- [ ] **DSN-004** Drill-down and "zoom" transitions `P1` `Platform`
-  - *Not done:* drill-down works by navigation; the animated zoom transition is not built.
+- [x] **DSN-004** Drill-down and "zoom" transitions `P1` `Platform`
+  - *Done:* `DashboardShell` treats a new path, tab, view, section, id, org or child as a new level: its blocks ease in (story, then tiles, then charts, about 0.3 s). Browser Back restores the scroll position of the page you left. Reduced motion makes it instant. Built with CSS rather than shared-element animation, so it works with the app's declarative router.
   - Clicking a bar, cell or tile pushes the next level with a short shared-element animation (framer-motion, already in the client). Back returns to the same scroll position. Reduced motion means instant swaps.
 
 ## D3. Visual language for data
 
 - [x] **DSN-010** Dashboard tokens `P0` `Platform`
-  - *Done:* `tokens.css`: fixed subject and module colours, status and mastery scales, light and dark.
-  - Base: the site's Fredoka font, white cards with 20–24 px radius, soft shadows. Light canvas `#f6f8fc` for data pages, plus a dark mode.
-  - **Fixed colours per subject and module, everywhere.** Proposal, aligned to the site palette:
-    - English `#7b6dff` (purple) · Maths `#3d9bff` (blue) · Science `#43c0a0` (teal-green)
+  - *Done:* `tokens.css`: fixed subject and module colours, status and mastery scales, light and dark (the "Meadow" edition, see DSN-012).
+  - Base: the site's Fredoka font, white cards with 24 px radius, a 2 px border and a 3D "lip". A pale sky canvas (`#f2f8ff` fading from `#dcefff`), plus a dusk dark mode.
+  - **Fixed colours per subject and module, everywhere**, matching the subject worlds on the home page:
+    - English `#8b5cf6` (English Kingdom purple) · Maths `#339af0` (Maths Galaxy blue) · Science `#40c057` (Science Lab green)
     - Listen `#4dc9ff` · Read `#ff9d3b` · Write `#ff6b9d` · Speak `#6bcf7f`
-    - Status: good `#2e7d32`, attention `#ef6c00`, alert `#c0392b`, neutral `#6b7280`
+    - Status: good `#2f9e44`, attention `#f08c00`, alert `#e03131`, neutral `#868e96` (text uses the `-ink` variants)
   - Check every pair for colour-blind safety (deuteranopia/protanopia) and ≥ 4.5:1 text contrast. Patterns or labels back up colour on every chart.
+- [x] **DSN-012** Brand look: the meadow, the puppy and toy-like controls `P1` `Platform`
+  - *Done:* the dashboards no longer look like a generic admin template. Benchmarked against the site's own home page and playful education dashboards (Dribbble: "Kids Learning Dashboard: Learn, Play & Grow", "Nestly Learn", "Homeschool Dashboard"), then:
+    - the real Learnigo logo and a role tag (Parent, Teacher, School, Console) in the sidebar, and the puppy alone when it is collapsed;
+    - colourful icon bubbles in the menu, and the green 3D "you are here" pill from the site's top navigation;
+    - the `StoryCard` became a welcome board in the meadow with the waving puppy (it dims to dusk in dark mode);
+    - KPI tiles with coloured icon bubbles and a soft colour splash; mastery tiles with the castle, abacus and plant art;
+    - chunky buttons (green primary, the orange "Start your adventure" CTA), chips, segmented controls and tables with a 3D lip;
+    - empty states with the puppy; phones get a floating tab dock.
+  - Assets: `client/src/assets/dash/` (logo 24 KB, mascot 35 KB, meadow 64 KB, all WebP). Contrast checked: white on green 4.66:1, muted text 5.4:1.
 - [x] **DSN-011** Numbers `P0` `Platform`
   - *Done:* `format.js` (durations, deltas, percentages, "—" for missing data, locale-aware).
   - Locale-aware formatting. Durations as "2 h 10 min". Deltas as ▲ +12 % in green or ▼ −4 % in orange, with "vs last week" spelled out on hover and for screen readers. "—" with a tooltip when there is no data, never `NaN` or `0 %`.

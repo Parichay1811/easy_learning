@@ -1,11 +1,12 @@
 // Fixed identities used by every dashboard chart: a subject or module has the
 // SAME colour everywhere. Use these instead of inventing colours.
 import { FaHeadphones, FaBookOpen, FaPen, FaMicrophone } from 'react-icons/fa';
+import { SUBJECT_ICON_IMAGES } from '../../data/subjectIcons';
 
 export const SUBJECTS = [
-  { key: 'english', label: 'English', color: '#7b6dff', ink: 'var(--d-english-ink)', fill: 'var(--d-english)' },
-  { key: 'maths', label: 'Maths', color: '#3d9bff', ink: 'var(--d-maths-ink)', fill: 'var(--d-maths)' },
-  { key: 'science', label: 'Science', color: '#43c0a0', ink: 'var(--d-science-ink)', fill: 'var(--d-science)' },
+  { key: 'english', label: 'English', world: 'English Kingdom', color: '#8b5cf6', ink: 'var(--d-english-ink)', fill: 'var(--d-english)', art: SUBJECT_ICON_IMAGES.english },
+  { key: 'maths', label: 'Maths', world: 'Maths Galaxy', color: '#339af0', ink: 'var(--d-maths-ink)', fill: 'var(--d-maths)', art: SUBJECT_ICON_IMAGES.maths },
+  { key: 'science', label: 'Science', world: 'Science Lab', color: '#40c057', ink: 'var(--d-science-ink)', fill: 'var(--d-science)', art: SUBJECT_ICON_IMAGES.science },
 ];
 
 export const MODULES = [

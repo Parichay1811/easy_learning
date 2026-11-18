@@ -26,10 +26,17 @@ buttons with a darker edge, and the Learnigo logo in a navbar-style top bar.
 The board is a dark chalkboard in a white frame that tilts in 3D, and the
 teacher is a WebGL orb in the site widget's purple and teal that listens,
 thinks and speaks in its own colours and pulses with the voice. The screen edge glows while the
-student talks. It is one screen that never scrolls, on any device and either
-way round: the board keeps 16:9 and takes the largest size that fits above its
-caption, the side panel and chat fit what is left, and phones stack them in a
-column. Every moment that matters has a haptic: vibration patterns on
+student talks. The lesson is just the board and the question bar under it
+(with the lesson menu beside it): no chat log, side panel or cards. It is one
+screen that never scrolls, on any device and either way round: the board keeps
+16:9 (up to 3:2 when there is height to spare) at the largest size that fits
+above the bar; tablets and upright screens put the menu in a row above the
+board, short landscape screens keep it at the side in a compact size, and
+upright phones stack subject, board, bar and menu in a column that scrolls.
+An answer's source (Wikipedia, open data) is a small link on the board's
+corner. The teacher stops talking when the page is hidden (another tab, a
+locked phone, the site's pop-up closed) and carries on when it is back.
+Every moment that matters has a haptic: vibration patterns on
 Android, the switch trick on iPhone (iOS 17.4+; reported patched in 26.5),
 and a visual pulse for everyone. Motion uses GSAP (free licence) and stays
 still for "reduce motion".
@@ -410,9 +417,11 @@ ends with the same cards.
 the curriculum's own words before searching (`lib/heard.mjs`), and a
 misheard first word ("Flynn me about…") is read as "tell me about…".
 
-**Watch next:** under the answer, up to three YouTube videos on the topic
+**Videos:** `/videos` finds up to three YouTube videos on a topic
 (`lib/videos.mjs`, searched with yt-search-lib, MIT, no API key; one search a
 topic a week, cached in `data/videos.json`; `LT_VIDEOS=off` turns it off).
+The page no longer lists them under the answer (the lesson is the board and
+the bar); the board draws them as cards to tap when nothing else answers.
 Links open on YouTube in a new tab.
 
 ## Every answer is drawn

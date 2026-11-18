@@ -152,7 +152,7 @@ const ParentDashboard = () => {
 
   return (
     <DashboardShell
-      brand={{ label: "LEARNIGO", to: "/" }}
+      brand={{ label: "LEARNIGO", role: T("brandRole", "Parent"), to: "/" }}
       nav={nav}
       active={tab}
       bell={<NotificationBell role="parent" />}

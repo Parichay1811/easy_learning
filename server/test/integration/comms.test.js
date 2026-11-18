@@ -524,7 +524,9 @@ test('API keys: module-gated, hashed, scoped, org-only, rate-limited and revocab
   assert.equal(c.status, 201)
   const key = c.body.key
   const stored = await app.db.main.collection('apikeys').findOne({})
-  assert.ok(!JSON.stringify(stored).includes(key.split('_')[2]), 'only a hash is stored')
+  // The secret is base64url, so it can itself contain "_": take everything after "lk_<prefix>_".
+  const secret = key.split('_').slice(2).join('_')
+  assert.ok(secret.length >= 20 && !JSON.stringify(stored).includes(secret), 'only a hash is stored')
   const v1 = (path, k = key) => fetch(`${app.url}${path}`, { headers: { 'x-api-key': k } })
   const l = await v1('/api/v1/learners')
   assert.equal(l.status, 200)

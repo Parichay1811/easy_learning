@@ -1,14 +1,31 @@
 import { Link } from 'react-router-dom';
-import { FaCheckCircle, FaExclamationCircle, FaExclamationTriangle } from 'react-icons/fa';
+import {
+  FaCheckCircle, FaExclamationCircle, FaExclamationTriangle, FaClock, FaBullseye, FaFire, FaStar, FaCalendarCheck,
+  FaTrophy, FaSeedling, FaUserGraduate, FaChalkboardTeacher, FaUserFriends, FaClipboardCheck, FaQuestionCircle,
+  FaHandHoldingHeart, FaCoins, FaFlask, FaServer, FaHeartbeat, FaGamepad, FaChair, FaMagnet, FaChartLine, FaUsers,
+} from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import InfoTip from './InfoTip';
 import Sparkline from './Sparkline';
 import Skeleton from './Skeleton';
 import { fmtDelta, fmtNumber, NO_DATA } from './format';
+import { renderIcon } from './shellUtils';
 import s from './cards.module.css';
 
 const TONE_ICON = { good: FaCheckCircle, attention: FaExclamationCircle, alert: FaExclamationTriangle };
 const ARROW = { up: '▲', down: '▼', flat: '▬' };
+
+// A friendly icon for the tile when the page does not pass one (matched on the label).
+const AUTO_ICONS = [
+  [/streak/i, FaFire], [/star/i, FaStar], [/accura|right|score/i, FaBullseye],
+  [/time|minute|hour/i, FaClock], [/active days|days/i, FaCalendarCheck], [/master/i, FaTrophy], [/practis/i, FaSeedling],
+  [/nudge|risk|attention/i, FaHandHoldingHeart], [/teacher|staff/i, FaChalkboardTeacher], [/parent|famil/i, FaUserFriends],
+  [/student|learner|pupil/i, FaUserGraduate], [/test/i, FaClipboardCheck], [/question|answer/i, FaQuestionCircle],
+  [/mrr|arr|revenue|paying|invoice|payment/i, FaCoins], [/trial/i, FaFlask], [/cpu|memory|api|uptime|up for/i, FaServer],
+  [/error|health|ai teacher/i, FaHeartbeat], [/session|game/i, FaGamepad], [/seat/i, FaChair], [/sticki/i, FaMagnet],
+  [/people|users|members/i, FaUsers],
+];
+const autoIcon = (label) => (typeof label === 'string' ? AUTO_ICONS.find(([re]) => re.test(label))?.[1] : null) || FaChartLine;
 
 /**
  * Big number + delta + sparkline. Every tile is a door: pass `onClick` or `to`.
@@ -21,9 +38,11 @@ const ARROW = { up: '▲', down: '▼', flat: '▬' };
  * value: string (already formatted) or number (formatted with fmtNumber) or null ("—").
  * delta: { current, previous, mode?, vs?, lowerIsBetter? }  mode = percent | points | duration | number
  * tone:  'neutral' | 'good' | 'attention' | 'alert'. Shown as an icon plus a word, never colour alone.
+ * icon:  react-icons component for the coloured bubble (picked from the label when omitted; false hides it).
+ * hue:   'grass' | 'sky' | 'sun' | 'grape' | 'coral' | 'berry' | 'teal' (tiles in a row take turns when omitted).
  */
 export default function KpiTile({
-  label, value, unit, delta, sparkline, helpText, tone = 'neutral', onClick, to, loading, className = '',
+  label, value, unit, delta, sparkline, helpText, tone = 'neutral', onClick, to, loading, className = '', icon, hue,
 }) {
   const { t } = useTranslation();
   if (loading) return <Skeleton variant="tile" className={className} />;
@@ -37,9 +56,13 @@ export default function KpiTile({
     alert: t('dash.tone.alert', { defaultValue: 'Needs attention' }),
   }[tone];
 
+  const iconEl = icon === false ? null : renderIcon(icon || autoIcon(label));
   const body = (
     <>
-      <span className={s.kpiLabel}>{label}</span>
+      <span className={s.kpiHead}>
+        {iconEl && <span className={s.kpiIcon} aria-hidden="true">{iconEl}</span>}
+        <span className={s.kpiLabel}>{label}</span>
+      </span>
       <span className={s.kpiValueRow}>
         <span className={s.kpiValue}>{shown}</span>
         {unit && shown !== NO_DATA && <span className={s.kpiUnit}>{unit}</span>}
@@ -62,7 +85,7 @@ export default function KpiTile({
     </>
   );
 
-  const cls = `${s.card} ${s.kpi} ${s[`kpiTone_${tone}`] || ''} ${onClick || to ? s.kpiAction : ''} ${className}`;
+  const cls = `${s.card} ${s.kpi} ${s[`kpiTone_${tone}`] || ''} ${hue ? s[`kpiHue_${hue}`] || '' : ''} ${onClick || to ? s.kpiAction : ''} ${className}`;
   return (
     <div className={cls} data-print="section">
       {to ? (

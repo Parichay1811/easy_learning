@@ -3,10 +3,9 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import { signInWithPopup } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { FaUserGraduate, FaUserFriends, FaCheckCircle } from "react-icons/fa";
-import { auth, googleProvider } from "../../firebase/auth";
+import { signInWithGoogle } from "../../firebase/auth";
 import { useAuth } from "../../context/AuthContext";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { authHeaders } from "../../utils/authHeaders";
@@ -49,7 +48,7 @@ export default function JoinGroup() {
     try {
       let headers = authHeaders();
       if (!headers.Authorization && !user) {
-        const res = await signInWithPopup(auth, googleProvider);
+        const res = await signInWithGoogle();
         const s2 = await fetch(`${API_ROOT}/api/auth/session`, { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ idToken: await res.user.getIdToken() }) });
         const data = await s2.json().catch(() => ({}));
         if (data.token) { localStorage.setItem("firebase_jwt", data.token); headers = { Authorization: `Bearer ${data.token}` }; }
@@ -68,7 +67,7 @@ export default function JoinGroup() {
     setBusy(true); setErr("");
     try {
       if (!parentUser) {
-        const res = await signInWithPopup(auth, googleProvider);
+        const res = await signInWithGoogle();
         await parentGoogleSignIn(await res.user.getIdToken());
       }
       await loadChildren(getParentToken());

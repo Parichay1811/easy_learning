@@ -54,7 +54,7 @@ export default function TeacherTestsApp() {
 
   return (
     <DashboardShell
-      brand={{ label: "LEARNIGO", to: "/teacher-dashboard" }}
+      brand={{ label: "LEARNIGO", role: tt("brandRole", "Teacher"), to: "/teacher-dashboard" }}
       nav={nav}
       active={active}
       bell={<NotificationBell role="teacher" />}

@@ -61,7 +61,7 @@ export default function TrendLine({
   return (
     <ChartFrame label={label || t('dash.trend.label', { defaultValue: 'Trend line' })} summary={summary || auto}>
       <div className={s.rc} style={{ height }}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height: 200 }}>
           <ComposedChart data={rows} margin={{ top: 14, right: 12, bottom: 0, left: 0 }} accessibilityLayer>
             <CartesianGrid vertical={false} stroke={GRID_STROKE} />
             <XAxis dataKey="x" tick={AXIS_TICK} tickFormatter={xFormat} tickLine={false} axisLine={{ stroke: GRID_STROKE }} minTickGap={24} />

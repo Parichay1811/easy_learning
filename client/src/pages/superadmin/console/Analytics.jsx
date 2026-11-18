@@ -11,7 +11,7 @@ import { HealthBar, FlagPills } from "./orgBits";
 import s from "./console.module.css";
 
 const ROLE_SERIES = [
-  { key: "student", label: "Learners", color: "#7b6dff" }, { key: "parent", label: "Parents", color: "#43c0a0" },
+  { key: "student", label: "Learners", color: "#8b5cf6" }, { key: "parent", label: "Parents", color: "#40c057" },
   { key: "teacher", label: "Teachers", color: "#3d9bff" }, { key: "admin", label: "Admins", color: "#ff9d3b" },
 ];
 const cellsOf = (matrix) => Object.entries(matrix || {}).flatMap(([subject, row]) => Object.entries(row).map(([module, c]) => ({ subject, module, accuracy: c.answered ? c.accuracy / 100 : null, minutes: c.minutes, answered: c.answered })));

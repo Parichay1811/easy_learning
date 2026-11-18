@@ -66,7 +66,7 @@ export default function StackedBars({ data = [], series, unit = 'min', goal, hei
   return (
     <ChartFrame label={label || t('dash.stack.label', { defaultValue: 'Stacked bar chart' })} summary={summary || auto}>
       <div className={s.rc} style={{ height }}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" initialDimension={{ width: 320, height: 200 }}>
           <BarChart data={rows} margin={{ top: 14, right: 12, bottom: 0, left: 0 }} barCategoryGap="22%" accessibilityLayer>
             <defs>{keys.map((k, i) => <Pattern key={k.key} id={`${uid}-p${i}`} color={k.color} index={i} />)}</defs>
             <CartesianGrid vertical={false} stroke={GRID_STROKE} />

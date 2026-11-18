@@ -94,7 +94,7 @@ export default function TestsHome({ kind = "test" }) {
                     {t.needsMarking > 0 && <span className={`${s.chip} ${s.chipWarn}`}>{tt("home.toMark", "{{n}} to mark", { n: t.needsMarking })}</span>}
                   </div>
                   <div className={s.small}>
-                    {tt("home.questions", "{{count}} questions", { count: t.questionCount })}
+                    {tt("home.questions", "{{count}} questions", { count: t.questionCount, defaultValue_one: "{{count}} question" })}
                     {t.status === "published" && <> · {tt("home.done", "{{finished}} of {{assigned}} finished", { finished: t.finished, assigned: t.assigned })}</>}
                     {t.average != null && <> · {tt("home.avg", "average {{avg}} %", { avg: t.average })}</>}
                     {t.closesAt && <> · {tt("home.closes", "closes {{when}}", { when: fmtWhen(t.closesAt) })}</>}

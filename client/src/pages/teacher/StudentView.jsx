@@ -94,7 +94,7 @@ function Analytics({ id, name, notes }) {
           <KpiTile label={t("teacher.kpi.time", { defaultValue: "Learning time" })} value={fmtDuration(o.totals.minutes)} sparkline={(o.series?.points || []).map((p) => p.minutes)} delta={o.previous ? { current: o.totals.minutes, previous: o.previous.minutes, mode: "duration" } : undefined} />
           <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={o.totals.accuracy == null ? null : fmtPercent(o.totals.accuracy / 100)} delta={o.previous?.accuracy != null && o.totals.accuracy != null ? { current: o.totals.accuracy / 100, previous: o.previous.accuracy / 100, mode: "points" } : undefined} />
           <KpiTile label={t("teacher.kpi.days", { defaultValue: "Active days" })} value={o.totals.activeDays} delta={o.previous ? { current: o.totals.activeDays, previous: o.previous.activeDays, mode: "number" } : undefined} />
-          <KpiTile label={t("teacher.kpi.streak", { defaultValue: "Streak" })} value={o.streak ? t("teacher.kpi.streakDays", { defaultValue: "{{count}} days", count: o.streak.current }) : null} helpText={o.streak ? t("teacher.kpi.longest", { defaultValue: "Longest: {{count}} days", count: o.streak.longest }) : undefined} />
+          <KpiTile label={t("teacher.kpi.streak", { defaultValue: "Streak" })} value={o.streak ? t("teacher.kpi.streakDays", { defaultValue: "{{count}} days", defaultValue_one: "{{count}} day", count: o.streak.current }) : null} helpText={o.streak ? t("teacher.kpi.longest", { defaultValue: "Longest: {{count}} days", count: o.streak.longest }) : undefined} />
         </div>
       )}
       <div className={s.grid2}>

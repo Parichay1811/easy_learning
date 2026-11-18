@@ -3,7 +3,8 @@ import s from './cards.module.css';
 
 /**
  * Dashboard button: chunky like the learning pages, 44px tall.
- * variant: 'primary' | 'ghost' | 'soft'. Pass `to` to render a router link.
+ * variant: 'primary' (green) | 'cta' (the site's big orange button) | 'ghost' | 'soft'.
+ * Pass `to` to render a router link.
  *
  *   <Button onClick={retry}>Try again</Button>
  */

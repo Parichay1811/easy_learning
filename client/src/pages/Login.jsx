@@ -2,8 +2,7 @@ import { useState } from "react";
 import ManagedLogin from "../components/family/ManagedLogin";
 import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../firebase/auth";
+import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -45,7 +44,7 @@ const Login = () => {
     setError("");
     setLoading(true);
     try {
-      await signInWithPopup(auth, googleProvider);
+      await signInWithGoogle();
       navigate("/home");
     } catch (err) {
       const cancelled = [

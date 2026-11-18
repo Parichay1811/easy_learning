@@ -1,7 +1,6 @@
 import { useState } from "react";
 import * as FramerMotion from "framer-motion";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../firebase/auth";
+import { signInWithGoogle } from "../firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -26,7 +25,7 @@ const TeacherLogin = () => {
     setError("");
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithGoogle();
       setNoAccount(false);
       const data = await teacherGoogleSignIn(await result.user.getIdToken());
       // Teaches in more than one place (TCH-003): ask where, once.
