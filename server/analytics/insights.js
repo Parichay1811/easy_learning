@@ -9,7 +9,7 @@ function buildInsights({ cur, prev, matrix, patterns, streak, who = 'They', rang
   const out = []
   const push = (kind, key, params, text) => out.push({ kind, key, params, text })
 
-  if (streak?.current >= 3) push('celebrate', 'streak', { days: streak.current }, `${streak.current}-day streak! ${who} ${streak.current >= 7 ? 'have kept going' : 'is on a roll'}.`)
+  if (streak?.current >= 3) push('celebrate', 'streak', { days: streak.current }, `${streak.current}-day streak! ${streak.current >= 7 ? 'Wonderful consistency.' : 'A great run.'}`)
   if (streak?.current > 0 && streak.current === streak.longest && streak.current >= 5) push('celebrate', 'streak_record', { days: streak.current }, `A new record: ${streak.current} days in a row.`)
 
   if (cur.answered === 0 && cur.minutes === 0) {

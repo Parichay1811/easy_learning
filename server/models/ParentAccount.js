@@ -5,6 +5,8 @@ const schema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   name: { type: String, default: '' },
   photoURL: { type: String, default: '' },
+  // Family plan (config/plans.js): 'free' or 'family_plus'.
+  plan: { type: String, default: 'free' },
 }, { timestamps: true })
 
 module.exports = mongoose.model('ParentAccount', schema)
