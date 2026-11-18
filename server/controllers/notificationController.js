@@ -1,7 +1,13 @@
 const Notification = require('../models/Notification')
 const { addr } = require('../utils/notify')
 
-const mine = (req) => addr(req.actor.role, req.actor.id)
+// Students sign in by Google (uid) or password (their own id), and some features address
+// them by email: a student's bell gathers all three, so nothing addressed to them is missed.
+const mine = (req) => {
+  const { role, id, email } = req.actor
+  if (role !== 'student') return addr(role, id)
+  return { $in: [...new Set([addr('student', id), email && addr('student', String(email).toLowerCase())].filter(Boolean))] }
+}
 
 const list = async (req, res) => {
   try {

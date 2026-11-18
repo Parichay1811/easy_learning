@@ -5,7 +5,7 @@ import ChartFrame, { Swatch } from './ChartFrame';
 import TooltipCard from './TooltipCard';
 import { AXIS_TICK, GRID_STROKE, defaultXFormat, defaultXFull, makeValueFormat, tickFormat } from './rechartsBits';
 import { MAX_POINTS } from '../constants';
-import { fmtDelta } from '../format';
+import { fmtDelta, fmtPercent } from '../format';
 import { capPoints, prefersReducedMotion } from '../utils';
 import s from './charts.module.css';
 
@@ -31,8 +31,13 @@ export default function TrendLine({
   data = [], unit = 'min', milestones = [], seriesLabel, prevLabel, height = 260, yFormat, xFormat = defaultXFormat, color = COLOR, summary, label,
 }) {
   const { t } = useTranslation();
-  const fmtY = yFormat || makeValueFormat(unit);
   const rows = useMemo(() => capPoints(data, MAX_POINTS), [data]);
+  // '%' accepts either fractions (0.86, the kit's convention) or whole percentages (86, as the
+  // analytics API returns them): values all within 0..1 are read as fractions.
+  const isPct = unit === '%';
+  const fraction = isPct && rows.every((r) => (r.value == null || r.value <= 1) && (r.prev == null || r.prev <= 1));
+  const fmtY = yFormat || (isPct ? (v) => (v == null ? '—' : fmtPercent(fraction ? v : v / 100)) : makeValueFormat(unit));
+  const axisTick = isPct ? (v) => `${Math.round(fraction ? v * 100 : v)}%` : tickFormat;
   const hasPrev = rows.some((r) => r.prev != null);
   const cur = seriesLabel || t('dash.trend.current', { defaultValue: 'This period' });
   const prv = prevLabel || t('dash.trend.prev', { defaultValue: 'Previous period' });
@@ -60,7 +65,7 @@ export default function TrendLine({
           <ComposedChart data={rows} margin={{ top: 14, right: 12, bottom: 0, left: 0 }} accessibilityLayer>
             <CartesianGrid vertical={false} stroke={GRID_STROKE} />
             <XAxis dataKey="x" tick={AXIS_TICK} tickFormatter={xFormat} tickLine={false} axisLine={{ stroke: GRID_STROKE }} minTickGap={24} />
-            <YAxis tick={AXIS_TICK} tickFormatter={tickFormat} tickLine={false} axisLine={false} width={44} />
+            <YAxis tick={AXIS_TICK} tickFormatter={axisTick} tickLine={false} axisLine={false} width={44} />
             <Tooltip
               cursor={{ stroke: 'var(--d-control)', strokeDasharray: '4 4' }}
               content={(p) => (

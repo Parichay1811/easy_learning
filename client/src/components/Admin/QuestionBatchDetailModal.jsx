@@ -24,10 +24,21 @@ export default function QuestionBatchDetailModal({ batchId, get, post, onClose }
     });
   }, [batchId, get]);
 
-  const editableKeys = rows.length ? Object.keys(rows[0]).filter((k) => !HIDDEN_KEYS.includes(k)) : [];
+  // Rich fields (feedback, image, hints as objects…) come from the in-app editor. They are
+  // shown as a summary and never edited here, so saving can't flatten them into "[object Object]".
+  const isRich = (v) => v !== null && typeof v === "object" && (!Array.isArray(v) || v.some((x) => x !== null && typeof x === "object"));
+  const visibleKeys = rows.length ? Object.keys(rows[0]).filter((k) => !HIDDEN_KEYS.includes(k)) : [];
+  const richKeys = new Set(visibleKeys.filter((k) => rows.some((r) => isRich(r[k]))));
+  const editableKeys = visibleKeys.filter((k) => !richKeys.has(k));
+  const summarise = (v) => {
+    if (Array.isArray(v)) return `${v.length} item${v.length === 1 ? "" : "s"}`;
+    const text = Object.values(v).filter((x) => typeof x === "string" && x).join(" · ");
+    return text ? (text.length > 60 ? `${text.slice(0, 60)}…` : text) : "(set in the editor)";
+  };
 
-  const rowColumns = editableKeys.map((k) => ({
-    key: k, label: k, render: (r) => (Array.isArray(r[k]) ? r[k].join(", ") : String(r[k] ?? "—")),
+  const rowColumns = visibleKeys.map((k) => ({
+    key: k, label: k,
+    render: (r) => (isRich(r[k]) ? summarise(r[k]) : Array.isArray(r[k]) ? r[k].join(", ") : String(r[k] ?? "—")),
   }));
 
   const editFields = editableKeys.map((k) => ({

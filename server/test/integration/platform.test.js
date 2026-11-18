@@ -163,6 +163,12 @@ test('notifications: delivered to the right person only, mark read', async () =>
   await app.call('POST', '/api/notifications/read-all', { token: p })
   assert.equal((await app.call('GET', '/api/notifications/unread-count', { token: p })).body.count, 0)
   void notify
+  // Students: a notice addressed by email reaches them whichever way they signed in.
+  await app.db.main.collection('notifications').insertOne({ to: 'student:aanya@kids.test', kind: 'test_assigned', title: 'Fractions quiz', body: '', link: '', readAt: null, createdAt: now, updatedAt: now })
+  const stu = await app.call('GET', '/api/notifications', { token: app.tokens.student('Aanya@kids.test', 'Aanya') })
+  assert.equal(stu.status, 200)
+  assert.ok(stu.body.items.some((n) => n.title === 'Fractions quiz'))
+  assert.ok(!stu.body.items.some((n) => n.title === 'New test'), "a parent's notices are not a student's")
 })
 
 test('forged identity fails: unsigned cookie, body-only sign-in, wrong-secret token', async () => {
