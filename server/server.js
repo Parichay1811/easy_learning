@@ -117,6 +117,7 @@ app.use('/api/admin', require('./routes/teacherInvite')) // TCH-002 invite email
 app.use('/api/status', require('./routes/status'))
 app.use('/api/billing', require('./routes/billing'))
 app.post('/api/view-as/end', require('./controllers/superadmin/viewAsController').endFromBanner)
+app.use('/api/public', require('./routes/publicReport'))
 
 app.get('/', (req, res) => {
   res.send('hello bachho')

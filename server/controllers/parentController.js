@@ -15,6 +15,7 @@ const markVerified = (child, by) => {
   child.verifiedAt = new Date()
   child.verifiedBy = by
   child.consentVersion = CONSENT_VERSION
+  child.consentHistory = [...(child.consentHistory || []), { at: new Date(), action: 'link_verified', version: CONSENT_VERSION, by, note: by === 'school' ? 'Confirmed by the school' : 'Confirmed with the child\'s link code' }]
 }
 
 const getChildren = async (req, res) => {
@@ -77,6 +78,13 @@ const updateChild = async (req, res) => {
 
 const deleteChild = async (req, res) => {
   try {
+    const existing = await Child.findOne({ _id: req.params.id, parentId: req.parent.id })
+    if (!existing) return res.status(404).json({ success: false, message: 'Child not found' })
+    // A child account this parent manages can't be orphaned: delete it from the privacy centre instead.
+    if (existing.managedLearnerId && existing.guardianRole !== 'co' && existing.linkStatus === 'verified'
+      && !(await Child.countDocuments({ email: existing.email, linkStatus: 'verified', _id: { $ne: existing._id } }))) {
+      return res.status(409).json({ success: false, message: "You manage this child's account. To remove it, use the privacy centre to delete the account." })
+    }
     const child = await Child.findOneAndDelete({ _id: req.params.id, parentId: req.parent.id })
     if (!child) return res.status(404).json({ success: false, message: 'Child not found' })
     res.json({ success: true })

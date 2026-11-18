@@ -74,6 +74,18 @@ jobs.register('dataRights.due', {
   },
 })
 
+// Daily: erase learners whose approved deletion passed its 30-day grace period (FND-071).
+jobs.register('dataRights.erase', {
+  description: 'Erases learners whose approved deletion request is past its 30-day grace period.',
+  everyMs: 24 * 3600_000,
+  run: async () => {
+    const { audit } = require('../utils/audit')
+    const done = await require('./dataRights').runDueDeletions()
+    for (const d of done) await audit({ actor: { role: 'system', id: 'jobs' } }, 'data_rights.delete_run', { targetType: 'data_request', targetId: String(d.id), meta: d.counts })
+    return { erased: done.length }
+  },
+})
+
 // Manual: build LearnerDay rollups from old history, in a separate low-priority process (FND-080).
 jobs.register('rollups.backfill', {
   description: 'Builds learning rollups from older history (scripts/backfill-learner-days.js --apply) in a child process.',

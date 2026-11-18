@@ -12,6 +12,11 @@ const studentAnswerSchema = new mongoose.Schema({
   timeTaken:    { type: Number, default: null },
   mode:         { type: String, default: 'practice' },
   timestamp:    { type: Date, default: Date.now },
+  // Which bank question this was and its topic (for the parent's question review, PAR-033).
+  questionId:   { type: String, default: null },
+  topic:        { type: String, default: null },
+  hintsUsed:    { type: Number, default: 0 },
 })
+studentAnswerSchema.index({ email: 1, timestamp: -1 })
 
 module.exports = mongoose.model('StudentAnswer', studentAnswerSchema)

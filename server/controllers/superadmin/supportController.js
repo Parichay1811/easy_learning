@@ -196,7 +196,7 @@ const listRequests = h(async (req) => {
 })
 
 function hasService() {
-  try { return Object.keys(require('../../services/dataRights')) } catch { return null }
+  return Object.keys(require('../../services/dataRights'))
 }
 
 const getRequest = h(async (req) => {
@@ -269,20 +269,34 @@ const exportBundle = async (req, res) => {
   }
 }
 
-// Runs the deletion through the Parent work's services/dataRights.js when it exists.
+// Erases a learner through services/dataRights.js (the real cascade across all three
+// databases). Families get a 30-day grace period to change their mind, so a deletion
+// can only run once `dueAt` has passed; approved requests also run on their own
+// (daily job `dataRights.erase`).
 const runDeletion = h(async (req) => {
   needId(req.params.id, 'Request')
   const r = await DataRequest.findById(req.params.id)
   if (!r) throw fail(404, 'Request not found')
   if (r.kind !== 'delete') throw fail(400, 'Only delete requests run a deletion.')
-  const svc = (() => { try { return require('../../services/dataRights') } catch { return null } })()
-  const fn = svc && (svc.deleteLearner || svc.processDelete || svc.runDelete)
-  if (typeof fn !== 'function') throw fail(501, 'The deletion service (services/dataRights.js) is not installed on this server yet.', 'NO_SERVICE')
+  if (r.status === 'rejected' || r.status === 'done') throw fail(409, `This request is already ${r.status}.`)
+  if (r.dueAt && new Date(r.dueAt) > new Date()) {
+    throw fail(409, `The family can still cancel until ${new Date(r.dueAt).toISOString().slice(0, 10)}. Approve it now; it is erased automatically after that date.`, 'GRACE_PERIOD')
+  }
+  const svc = require('../../services/dataRights')
   r.status = 'processing'
   await r.save()
-  const result = await fn(r.subjectEmail, { request: r, by: by(req) })
+  const result = await svc.eraseLearner(r.subjectEmail)
+  r.result = result
+  await r.save()
   await audit(req, 'data_rights.delete_run', { targetType: 'learner', targetId: r.subjectEmail, orgId: r.orgId || '', meta: { requestId: String(r._id), result: result ?? null } })
   return { result: result ?? null, footprint: await footprint(r.subjectEmail) }
 })
 
-module.exports = { inbox, thread, updateThread, addNote, reply, listRequests, getRequest, updateRequest, exportBundle, runDeletion, footprint }
+// Erase every approved deletion whose grace period is over (also run daily by the job registry).
+const runDue = h(async (req) => {
+  const done = await require('../../services/dataRights').runDueDeletions()
+  for (const d of done) await audit(req, 'data_rights.delete_run', { targetType: 'data_request', targetId: String(d.id), meta: d.counts })
+  return { erased: done.length, done }
+})
+
+module.exports = { inbox, thread, updateThread, addNote, reply, listRequests, getRequest, updateRequest, exportBundle, runDeletion, runDue, footprint }

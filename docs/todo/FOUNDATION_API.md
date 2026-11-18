@@ -91,3 +91,9 @@ Server routes live in `server/routes/comms.js` (mounted at `/api`); client piece
 - **Seats:** `utils/seats.js` `seatInfo(orgId)` / `assertSeats(orgId, n)` (409 `SEATS_FULL` body). Never call it on learning routes.
 - **Parent links from schools:** `utils/parentLinks.js` `linkSchoolChildren(parentAccount)` (runs on parent sign-in) and `linkedParentEmails(parentEmails, learnerEmails)`.
 - **Tests:** `start({ env, preload: [require.resolve('./fake-firebase')] })` makes the real sign-in endpoints accept ID tokens signed with a key the test owns (see `admin-school.test.js` `idToken()`); `app.tokens.staff(id, orgId, staffId, staffRole, email)`.
+## Managed learners, family settings, data rights (built by the Parent work)
+
+- `createManagedLearner({ name, age, avatar, createdByRole: 'parent'|'teacher'|'admin', createdById, orgId?, batchId? })` -> `{ learner, loginCode: 'ABC 234', picturePassword: ['cat','star','dog'] }` in [services/managedLearners.js](../../server/services/managedLearners.js) (`resetManagedLogin(id)` makes a new card). With `orgId` it also adds the roster `Student`, so teacher/admin scopes see the learner. The learner's data is keyed by `learner.email` (`ml-<id>@managed.learnigo.invalid`). Sign-in: `POST /api/auth/managed-login { loginCode, picture }` -> student JWT; `GET /api/auth/managed-pictures`.
+- Learner side: `GET /api/dashboard/family` (goal, week progress, healthy-use state, unseen cheers), `POST /api/dashboard/ai-teacher-log { topic, title, subject, seconds }`.
+- Data rights: [services/dataRights.js](../../server/services/dataRights.js) `exportLearner`, `countLearner`, `requestDeletion`, `cancelDeletion`, `approveRequest`, `rejectRequest`, `runDueDeletions`, `eraseLearner`. Super admin queue API: `GET /api/superadmin/data-requests?status=&kind=`, `POST /:id/approve`, `POST /:id/reject { note }`, `POST /run-due`.
+- Public read-only report links: `GET /api/public/report/:token` (PAR-072).

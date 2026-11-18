@@ -1,4 +1,5 @@
 import { useState } from "react";
+import ManagedLogin from "../components/family/ManagedLogin";
 import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
 import { signInWithPopup } from "firebase/auth";
@@ -12,6 +13,7 @@ import styles from "./Login.module.css";
 
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
+  const [classCode, setClassCode] = useState(false); // young learners: code + picture password
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
@@ -164,8 +166,12 @@ const Login = () => {
               {isSignup ? t("login.signInBtn") : t("login.signUpBtn")}
             </button>
           </p>
+          <button className={styles.toggleBtn} onClick={() => setClassCode(true)} type="button">
+            {t("login.classCode", { defaultValue: "I have a class code" })}
+          </button>
         </div>
       </div>
+      {classCode && <ManagedLogin onClose={() => setClassCode(false)} />}
     </FramerMotion.motion.div>
   );
 };

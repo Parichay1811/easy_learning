@@ -662,9 +662,15 @@ test('data rights: queue with due dates, footprint across databases, proof requi
   const notYet = await app.call('PATCH', `/api/superadmin/data-requests/${delId}`, { token: s, body: { status: 'done' } })
   assert.equal(notYet.status, 409)
   assert.equal(notYet.body.code, 'DATA_REMAINS')
-  assert.equal((await app.call('POST', `/api/superadmin/data-requests/${delId}/run-deletion`, { token: s })).body.code, 'NO_SERVICE')
-  // (the Parent work's dataRights service deletes; here we simulate it)
-  for (const c of ['learnerdays', 'children']) await app.db.main.collection(c).deleteMany({ email: 'mia@home.test' })
+  // Grace period: a request whose 30 days are not over cannot be run yet.
+  const { insertedId: graceId } = await app.db.main.collection('datarequests').insertOne({ subjectEmail: 'leo@home.test', subjectName: 'Leo', requestedByRole: 'parent', requestedById: ids.parentId, kind: 'delete', status: 'processing', dueAt: new Date(Date.now() + 10 * 86400_000), note: '', createdAt: new Date(), updatedAt: new Date() })
+  const early = await app.call('POST', `/api/superadmin/data-requests/${graceId}/run-deletion`, { token: s })
+  assert.equal(early.status, 409)
+  assert.equal(early.body.code, 'GRACE_PERIOD')
+  // Past its due date: the real cascade (services/dataRights.js) erases everything.
+  const ran = await app.call('POST', `/api/superadmin/data-requests/${delId}/run-deletion`, { token: s })
+  assert.equal(ran.status, 200)
+  assert.equal(ran.body.footprint.reduce((n, x) => n + x.count, 0), 0)
   const done = await app.call('PATCH', `/api/superadmin/data-requests/${delId}`, { token: s, body: { status: 'done', note: 'Deleted everywhere' } })
   assert.equal(done.status, 200)
   assert.match(done.body.request.note, /Proof of deletion: 0 records/)

@@ -28,19 +28,22 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
   - New `Account` (uid, email(s), name, avatar, locale, timezone, auth providers) and `Membership {accountId, orgId?, role: learner|parent|teacher|admin|staff, unitIds[], status}`.
   - Role switcher in the dashboard shell (see [DESIGN.md](DESIGN.md#d2-the-shell-one-frame-for-every-role)): "Aanya's parent · Teacher at Sunrise School · My tutoring".
   - Migration: back-fill `Account` from `User`, `ParentAccount`, `OrgAdmin` and `Tutor` by email. Old JWT middlewares keep working during the transition, resolving to the same `Account`.
-- [ ] **FND-011** Learners without email (managed accounts) `P0` `Family` `Solo` `Institute`
+- [x] **FND-011** Learners without email (managed accounts) `P0` `Family` `Solo` `Institute`
+  - *Done (Parent work):* `services/managedLearners.js` `createManagedLearner({ name, age, avatar, createdByRole, createdById, orgId, batchId })` -> `{ learner, loginCode, picturePassword }` (model `ManagedLearner`, synthetic email `ml-<id>@managed.learnigo.invalid` so all analytics work unchanged; with `orgId` it also creates the roster `Student`). Sign-in `POST /api/auth/managed-login { loginCode, picture }` (hashed code, bcrypt pictures, per-IP and per-code limits, lockout, one answer for every failure) and the "I have a class code" login. *Not done:* teacher QR cards and the class-code + "pick your name" flow (Teacher work), `learnerId` on the activity collections, graduating to an own login.
   - Young children rarely have email. A parent or teacher creates a **managed learner**: display name and avatar, sign-in by **class code + picture password**, or a QR card printed by the teacher.
   - Give each learner a stable `learnerId`. Activity collections (`StudentAnswer`, `StudentRound`, `StudentActivity`, `StudentAchievement`, `ARSession`) gain a `learnerId`. Keep `email` for compatibility, and back-fill.
   - A managed learner can later "graduate" to their own login without losing history.
 - [ ] **FND-012** Verified linking flows `P0` `Family` `Solo` `Institute` · needs FND-011
   - *School-verified sign-in (ADMIN work):* `utils/parentLinks.linkSchoolChildren` runs on every parent sign-in: each active org `Parent` with the verified email becomes verified `Child` links (pending ones are verified, revoked ones untouched); `ParentInvite` tracks invited / linked / bounced.
+  - *Parent work:* parent-created managed learners (verified as guardian), revoking a link, co-guardian invites. Teacher join codes are the Teacher work.
   - *Done so far (PR #86):* **school-verified** (an org `Parent` and `Student` with matching emails verify a link automatically) and **link code** (the learner makes a one-time 6-character code on their Dashboard, valid 24 h, stored hashed, rate-limited; the parent enters it). *Still to do:* parent-created managed learners, teacher join codes, revoking a link, co-guardian approval.
   - **School-verified:** the admin adds a parent to a student (the `admin/Parent` records that exist today), and the parent gets an email invite. When they sign in with that email they are linked and verified. *This also connects the two parent systems that are separate today.*
   - **Parent-created:** the parent creates a managed learner and is verified as its guardian.
   - **Link code:** an existing student generates a 6-character code or QR (valid 24 h). The parent enters it, and the student (or the guardian already linked) approves.
   - **Teacher join:** a group join code, invite link or QR, plus roster import (TCH-011). The student accepts, or for managed learners the teacher adds them.
   - Every link stores `{verifiedBy, method, at, consentVersion}`, and any linked guardian or the admin can revoke it.
-- [ ] **FND-013** Several guardians per child `P1` `Family`
+- [x] **FND-013** Several guardians per child `P1` `Family`
+  - *Done:* `GuardianInvite` (bound to the invited email, hashed token, 14 days, mail via the outbox), accept by link or from the kids page, main guardian removes co-guardians (not school-verified ones), notification preferences per guardian row.
   - Co-parent invite. Each guardian has their own notification settings. The primary guardian can remove others, except where a school verified the link.
 - [ ] **FND-014** Multi-factor login for staff `P1` `Platform`
   - *Partial:* TOTP done for super admin staff (SUP-001, reusable `utils/totp.js`). Not done for org admins and teachers (they sign in with Google).
@@ -148,7 +151,8 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
   - Rule-based and translatable templates. "Best learning time: weekday evenings, 6–7 pm." "Strongest: Listen · Maths (92 %)." "Practise next: fractions (Learning, 54 %)." "Up 12 points in Read · English since last month." "New record: 9-day streak!"
   - Each insight has a severity (celebrate / info / nudge / alert), the evidence behind it (a link to the chart) and a suggested action.
   - Optional AI wording: only when a language model is configured (the full server profile), never needed for the feature to work.
-- [ ] **FND-045** AI Teacher usage per learner `P1` `Family` `Platform`
+- [x] **FND-045** AI Teacher usage per learner `P1` `Family` `Platform`
+  - *Done:* the AI Teacher page posts `POST /api/dashboard/ai-teacher-log { topic, title, subject, seconds }` when a learner token is in the browser (lesson id from the pack, never typed text); stored as LearningEvent `ai_teacher` and added to LearnerDay minutes. *Not done:* quiz results and question counts.
   - When a signed-in learner uses the AI Teacher, log topic id, subject, duration, quiz results and the number of questions asked. Store the **topic, not the free text** by default. Parents see topics; showing raw questions is an org/parent setting that is off by default.
   - The assistant today is anonymous ([server/ai-assistant](../../server/ai-assistant)). Pass the learner context through the existing `/api/ai-assistant/*` proxy.
 - [ ] **FND-046** Usage logs `P1` `Family` `Platform`
@@ -184,8 +188,10 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
 
 - [ ] **FND-070** Consent records `P0` `Family` `Institute`
   - *Partly done:* `ConsentRecord` (append-only) and `utils/consent.js` (`recordConsent`, `currentConsent`, `hasConsent`, `consentHistory`, `needsGuardianConsent` with the GDPR Art. 8 age per country); `GET/POST /api/consents` for parents (own child), admins (own students, school DPA basis) and the super admin (read, audited). *Still to do:* the Parent and Admin flows must call `recordConsent` at link/sign-up time.
+  - *Partly done:* parent links keep a `consentHistory` (who, what, policy version, when) shown in the privacy centre. Age-of-consent rules per country and the school DPA basis are not done.
   - Store who consented, for which child, the policy version and when. Under the GDPR Art. 8 age (13–16 depending on country) a guardian must consent. Schools consent through their data-processing agreement (DPA) and record the legal basis.
-- [ ] **FND-071** Data rights `P1` `Platform`
+- [x] **FND-071** Data rights `P1` `Platform`
+  - *Done:* `models/DataRequest.js`, `services/dataRights.js` (`exportLearner` JSON without secrets, `requestDeletion` with 30-day grace, cancel, `approveRequest`/`rejectRequest`, `runDueDeletions` -> `eraseLearner` cascade over the main DB, managed account, guardian links, cheers, shares, and anonymised school roster rows). Queue API `/api/superadmin/data-requests` (list, approve, reject, run-due) and `scripts/process-data-requests.js` for a daily job. *Not done:* PDF export, the Super Admin queue UI (SUP-060).
   - Export everything about a learner (JSON + PDF) and delete a learner, with a 30-day grace period and cascade across all three databases. The super admin handles requests in a queue (SUP-060).
 - [x] **FND-072** Audit log `P0` `Platform`
   - *Done:* hash-chained `AuditEvent` + `audit()`. Viewer screens are in the Admin and Super Admin plans.
