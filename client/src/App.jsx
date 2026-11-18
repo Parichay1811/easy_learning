@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -36,6 +36,8 @@ import ParentLogin from "./pages/ParentLogin";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
+import ViewAsBanner from "./components/ViewAs/ViewAsBanner";
+import StatusBanner from "./components/StatusBanner/StatusBanner";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import LearningSupportByCountry from "./pages/LearningSupportByCountry";
@@ -51,6 +53,9 @@ import NotFound from "./pages/NotFound";
 // unless VITE_ENABLE_DEV_PAGES=1.
 const DEV_PAGES = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEV_PAGES === "1";
 const DashboardKit = lazy(() => import("./pages/dev/DashboardKit"));
+const SuperAdminConsole = lazy(() => import("./pages/superadmin/console/SuperAdminConsole"));
+const ViewAsLanding = lazy(() => import("./pages/ViewAsLanding"));
+const StatusPage = lazy(() => import("./pages/StatusPage"));
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -91,7 +96,10 @@ function AnimatedRoutes() {
         <Route path="/parent-login" element={<ParentLogin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
-        <Route path="/superadmin-dashboard" element={<SuperAdminDashboard />} />
+        <Route path="/superadmin-dashboard" element={<Suspense fallback={null}><SuperAdminConsole /></Suspense>} />
+        <Route path="/superadmin-classic" element={<SuperAdminDashboard />} />
+        <Route path="/view-as" element={<Suspense fallback={null}><ViewAsLanding /></Suspense>} />
+        <Route path="/status" element={<Suspense fallback={null}><StatusPage /></Suspense>} />
         <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
         {DEV_PAGES && <Route path="/dev/dashboard-kit" element={<DashboardKit />} />}
@@ -109,7 +117,7 @@ function AppLayout() {
   // accident. The Camera Games hub is just a menu, so it keeps the normal
   // site header and background like any other page.
   const isAR = location.pathname.startsWith("/games/ar/");
-  const hideNavbar = isAR || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/teacher-dashboard", "/parent-dashboard"].includes(location.pathname);
+  const hideNavbar = isAR || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/superadmin-classic", "/view-as", "/teacher-dashboard", "/parent-dashboard"].includes(location.pathname);
   // Every page a logged-in student can reach — Home, About Us, Contact Us, the
   // question modules, Subject page, the Games/Camera Games hubs and the Student
   // Dashboard — shares the same full-viewport video background, so the app reads
@@ -127,6 +135,8 @@ function AppLayout() {
 
   return (
     <>
+      <ViewAsBanner />
+      <StatusBanner />
       {!hideBackground3D && <Background3D />}
       {!hideNavbar && <Navbar />}
       <div style={{ paddingTop: hideNavbar ? "0" : "80px", flex: 1, display: "flex", flexDirection: "column" }}>

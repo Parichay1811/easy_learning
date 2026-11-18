@@ -29,7 +29,10 @@ let last = { at: 0, sample: null }
 let lastCpu = null
 const history = [] // [{ at, cpu, steal, rssMb, p95, errorRate }] one per sample, 2 h
 
+// Busy/steal need two readings some time apart: readings closer than 2 s keep
+// the previous result (a tiny interval is mostly noise).
 function sampleCpu() {
+  if (last.sample && Date.now() - last.at < 2000) return lastCpu
   const now = readCpu()
   const prev = last.sample
   last = { at: Date.now(), sample: now }
@@ -51,6 +54,13 @@ function sample() {
   const m = requestMetrics.summary({ windowMs: 5 * 60_000 })
   history.push({ at: new Date().toISOString(), cpu: cpu?.busyPct ?? null, steal: cpu?.stealPct ?? null, rssMb: Math.round(process.memoryUsage().rss / 1048576), p95: m.p95, errorRate: m.errorRate })
   while (history.length > 120) history.shift()
+}
+
+function memAvailable() {
+  try {
+    const m = fs.readFileSync('/proc/meminfo', 'utf8').match(/^MemAvailable:\s+(\d+) kB/m)
+    return m ? Number(m[1]) * 1024 : null
+  } catch { return null }
 }
 
 // ── databases ──────────────────────────────────────────────────────────────
@@ -108,18 +118,24 @@ function alerts({ cpu, api, mem, ai, dbs }) {
   if (cpu?.busyPct != null && cpu.busyPct >= LIMITS.cpuPct) out.push({ level: 'alert', key: 'cpu.busy', text: `CPU is ${cpu.busyPct} % busy` })
   if (api.p95 != null && api.p95 >= LIMITS.p95Ms) out.push({ level: 'attention', key: 'api.p95', text: `API p95 is ${api.p95} ms` })
   if (api.errorRate != null && api.requests >= 20 && api.errorRate >= LIMITS.errorRatePct) out.push({ level: 'alert', key: 'api.errors', text: `${api.errorRate} % of API requests failed` })
-  if (mem.usedPct >= LIMITS.memPct) out.push({ level: 'attention', key: 'mem', text: `Memory is ${mem.usedPct} % used` })
+  if (!mem.approximate && mem.usedPct >= LIMITS.memPct) out.push({ level: 'attention', key: 'mem', text: `Memory is ${mem.usedPct} % used` })
   if (ai && !ai.ok && process.env.AI_ASSISTANT !== 'off') out.push({ level: 'attention', key: 'ai', text: `AI Teacher is not ready (${ai.message || ai.status})` })
   for (const d of dbs) if (d.state !== 'connected') out.push({ level: 'alert', key: `db.${d.name}`, text: `Database ${d.name} is ${d.state}` })
   return out
 }
 
 async function snapshot() {
+  // No recent reading (first call, or the minute sampler is off): take two, 500 ms apart.
+  if (!lastCpu || Date.now() - last.at > 90_000) { last = { at: 0, sample: readCpu() }; await new Promise((r) => setTimeout(r, 500)); last.at = 0 }
   const cpu = sampleCpu() || lastCpu
   const mu = process.memoryUsage()
+  // Linux: MemAvailable (free + reclaimable cache). Elsewhere os.freemem() leaves
+  // the file cache out, so "used" looks near 100 %; it is shown but never alerts.
+  const available = memAvailable()
   const mem = {
-    totalMb: Math.round(os.totalmem() / 1048576), freeMb: Math.round(os.freemem() / 1048576),
-    usedPct: Math.round((1 - os.freemem() / os.totalmem()) * 1000) / 10,
+    totalMb: Math.round(os.totalmem() / 1048576), freeMb: Math.round((available ?? os.freemem()) / 1048576),
+    usedPct: Math.round((1 - (available ?? os.freemem()) / os.totalmem()) * 1000) / 10,
+    approximate: available == null,
     rssMb: Math.round(mu.rss / 1048576), heapUsedMb: Math.round(mu.heapUsed / 1048576), heapTotalMb: Math.round(mu.heapTotal / 1048576),
   }
   const api = requestMetrics.summary({ windowMs: 5 * 60_000 })

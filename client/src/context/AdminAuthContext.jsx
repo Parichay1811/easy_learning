@@ -23,6 +23,9 @@ function isExpired(token) {
   return p.exp * 1000 < Date.now();
 }
 
+// Console staff: role (owner, support, ...), id and session id ride in the token (SUP-001).
+const superAdminFrom = (p) => ({ email: p.email, name: p.name, role: "superadmin", staffRole: p.staffRole || "owner", staffId: p.staffId || "", sid: p.sid || "", breakGlass: p.breakGlass !== false && !p.staffId });
+
 function readStoredUser(tokenKey, mapPayload) {
   const token = localStorage.getItem(tokenKey);
   if (!token || isExpired(token)) return null;
@@ -33,9 +36,7 @@ export const AdminAuthProvider = ({ children }) => {
   const [adminUser, setAdminUser] = useState(() => readStoredUser(ADMIN_JWT_KEY, (p) => (
     { id: p.id, uid: p.uid, email: p.email, name: p.name, orgId: p.orgId, role: "org_admin" }
   )));
-  const [superAdminUser, setSuperAdminUser] = useState(() => readStoredUser(SUPERADMIN_JWT_KEY, (p) => (
-    { email: p.email, name: p.name, role: "superadmin" }
-  )));
+  const [superAdminUser, setSuperAdminUser] = useState(() => readStoredUser(SUPERADMIN_JWT_KEY, superAdminFrom));
   const [teacherUser, setTeacherUser] = useState(() => readStoredUser(TEACHER_JWT_KEY, (p) => (
     { id: p.id, uid: p.uid, email: p.email, name: p.name, orgId: p.orgId, role: "teacher" }
   )));
@@ -66,9 +67,17 @@ export const AdminAuthProvider = ({ children }) => {
     });
     if (!res.ok && res.status === 404) throw new Error("Super admin auth route not found. The server may not be running the latest code.");
     const data = await res.json();
-    if (!data.success) throw new Error(data.message);
+    if (!data.success) throw Object.assign(new Error(data.message), { code: data.code });
+    // Named staff continue with two-factor sign-in (data.step); the break-glass owner gets a token now.
+    if (data.step) return data;
+    return superAdminCompleteLogin(data);
+  };
+
+  // Stores the session token once every sign-in step is done (SUP-001).
+  const superAdminCompleteLogin = (data) => {
     localStorage.setItem(SUPERADMIN_JWT_KEY, data.token);
-    setSuperAdminUser({ email: data.superadmin.email, name: data.superadmin.name, role: "superadmin" });
+    setSuperAdminUser(superAdminFrom(decodeJWT(data.token)));
+    return data;
   };
 
   const teacherGoogleSignIn = async (idToken) => {
@@ -132,7 +141,7 @@ export const AdminAuthProvider = ({ children }) => {
   return (
     <AdminAuthContext.Provider value={{
       adminUser, superAdminUser, teacherUser, parentUser,
-      adminGoogleSignIn, superAdminLogin, teacherGoogleSignIn, parentGoogleSignIn,
+      adminGoogleSignIn, superAdminLogin, superAdminCompleteLogin, teacherGoogleSignIn, parentGoogleSignIn,
       adminLogout, superAdminLogout, teacherLogout, parentLogout,
       getAdminToken, getSuperAdminToken, getTeacherToken, getParentToken,
     }}>

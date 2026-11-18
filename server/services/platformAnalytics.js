@@ -147,8 +147,14 @@ function activationFunnel({ days = 90 } = {}) {
     const paidOrgs = new Set((await M.Subscription().find({ ownerType: 'org', status: 'active', priceCents: { $gt: 0 } }).select('ownerId').lean()).map((s) => s.ownerId))
     const orgOf = new Map(students.map((s) => [s.email, String(s.orgId)]))
     const paid = new Set(list.filter((e) => paidOrgs.has(orgOf.get(e)) || allChildren.some((c) => c.email === e && paidParents.has(String(c.parentId)))))
-    const n = (s) => list.filter((e) => s.has(e)).length
-    return { cohortDays: days, steps: [{ key: 'signup', n: list.length }, { key: 'first_lesson', n: n(started) }, { key: 'day7', n: n(day7) }, { key: 'linked_parent', n: n(linked) }, { key: 'paid', n: n(paid) }] }
+    // A funnel: each step counts only learners who also passed every step before it.
+    const steps = [['signup', null], ['first_lesson', started], ['day7', day7], ['linked_parent', linked], ['paid', paid]]
+    let remaining = list
+    return {
+      cohortDays: days,
+      steps: steps.map(([key, set]) => { if (set) remaining = remaining.filter((e) => set.has(e)); return { key, n: remaining.length } }),
+      reached: { first_lesson: list.filter((e) => started.has(e)).length, day7: list.filter((e) => day7.has(e)).length, linked_parent: list.filter((e) => linked.has(e)).length, paid: list.filter((e) => paid.has(e)).length },
+    }
   })
 }
 

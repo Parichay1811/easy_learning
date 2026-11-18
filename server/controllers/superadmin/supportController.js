@@ -44,10 +44,12 @@ async function allThreads() {
 const inbox = h(async (req) => {
   const { limit, page, skip } = paging(req.query, { def: 30 })
   let list = await allThreads()
-  const counts = { open: list.filter((t) => t.status === 'open').length, pending: list.filter((t) => t.status === 'pending').length, mine: list.filter((t) => t.assigneeId === req.superadmin.staffId && t.status !== 'resolved').length, unassigned: list.filter((t) => !t.assigneeId && t.status !== 'resolved').length }
+  const meId = req.superadmin.staffId || req.superadmin.email
+  const mine = (t) => !!t.assigneeId && t.assigneeId === meId
+  const counts = { open: list.filter((t) => t.status === 'open').length, pending: list.filter((t) => t.status === 'pending').length, mine: list.filter((t) => mine(t) && t.status !== 'resolved').length, unassigned: list.filter((t) => !t.assigneeId && t.status !== 'resolved').length }
   if (req.query.kind) list = list.filter((t) => t.kind === req.query.kind)
   if (req.query.status) list = list.filter((t) => t.status === req.query.status)
-  if (req.query.assignee === 'me') list = list.filter((t) => t.assigneeId && t.assigneeId === req.superadmin.staffId)
+  if (req.query.assignee === 'me') list = list.filter(mine)
   else if (req.query.assignee === 'none') list = list.filter((t) => !t.assigneeId)
   if (req.query.q) { const r = rx(req.query.q); list = list.filter((t) => r.test(t.title || '') || r.test(t.who || '') || r.test(t.email || '') || r.test(t.last || '')) }
   list.sort((a, b) => (b.unread > 0) - (a.unread > 0) || new Date(b.lastAt) - new Date(a.lastAt))
