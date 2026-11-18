@@ -31,12 +31,14 @@ function childSection(locale, c) {
     { value: L('parent.tile_days_value', { days: cur.activeDays }), label: L('parent.tile_days') },
   ]
   const idea = ideaText(locale, c)
+  // A quiet week gets the story and an idea, not a row of zeros.
+  const quiet = !cur.answered && !cur.minutes
   const html = para(c.name, { size: 20, bold: true, margin: '8px 0 6px' })
     + para(story, { color: C.ink })
-    + tiles(tileList)
+    + (quiet ? '' : tiles(tileList))
     + callout(L('parent.idea'), idea)
     + button(c.url, L('parent.button'))
-  const text = [`${c.name}`, story, tileList.map((x) => `${x.label}: ${x.value}${x.delta ? ` (${x.delta} ${t(locale, 'parent.vs_last_week')})` : ''}`).join('\n'), `${L('parent.idea')}: ${idea}`, c.url].join('\n')
+  const text = [`${c.name}`, story, quiet ? '' : tileList.map((x) => `${x.label}: ${x.value}${x.delta ? ` (${x.delta} ${t(locale, 'parent.vs_last_week')})` : ''}`).join('\n'), `${L('parent.idea')}: ${idea}`, c.url].join('\n')
   return { html, text }
 }
 
@@ -59,7 +61,9 @@ function parentWeeklyEmail({ locale = 'en', name, children, unsubscribeUrl }) {
   const content = para(name ? t(locale, 'common.hi', { name: name.split(' ')[0] }) : t(locale, 'common.hi_anon'))
     + para(t(locale, 'parent.intro'), { color: C.soft })
     + sections.map((s) => s.html).join(divider())
-  const why = t(locale, 'parent.why', { child: children.map((c) => c.name).join(', ') })
+  const names = children.map((c) => c.name)
+  const why = names.length === 1 ? t(locale, 'parent.why', { child: names[0] })
+    : t(locale, 'parent.why_many', { children: `${names.slice(0, -1).join(', ')} ${t(locale, 'common.and')} ${names[names.length - 1]}` })
   const html = layout({ locale, title: subject, preheader: t(locale, 'parent.preheader'), content, unsubscribeUrl, why, settingsUrl: dashboardUrl('parent', '?tab=settings') })
   const text = [name ? t(locale, 'common.hi', { name: name.split(' ')[0] }) : t(locale, 'common.hi_anon'), '', t(locale, 'parent.intro'), '', ...sections.map((s) => s.text + '\n'), why, unsubscribeUrl ? `${t(locale, 'common.unsubscribe')}: ${unsubscribeUrl}` : ''].join('\n')
   return { subject, html, text }

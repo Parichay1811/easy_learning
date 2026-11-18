@@ -51,6 +51,7 @@ import NotFound from "./pages/NotFound";
 // unless VITE_ENABLE_DEV_PAGES=1.
 const DEV_PAGES = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEV_PAGES === "1";
 const DashboardKit = lazy(() => import("./pages/dev/DashboardKit"));
+const CommsGallery = lazy(() => import("./pages/dev/CommsGallery"));
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -95,6 +96,7 @@ function AnimatedRoutes() {
         <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
         {DEV_PAGES && <Route path="/dev/dashboard-kit" element={<DashboardKit />} />}
+        {DEV_PAGES && <Route path="/dev/comms" element={<CommsGallery />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>

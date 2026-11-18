@@ -35,6 +35,8 @@ const STRINGS = {
     'parent.idea': 'One idea for the week ahead',
     'parent.button': 'See {child}\'s progress',
     'parent.why': 'You get this weekly email because {child} is linked to your Learnigo account.',
+    'parent.why_many': 'You get this weekly email because {children} are linked to your Learnigo account.',
+    'common.and': 'and',
 
     'idea.practise_next': 'Try a few {module} · {subject} questions together. It\'s the area with the most room to grow ({accuracy} % right).',
     'idea.no_activity': 'Pick a 10-minute slot, maybe after dinner on Monday, and do one round of Listen together.',

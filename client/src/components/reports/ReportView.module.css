@@ -1,0 +1,93 @@
+/* Printable report (FND-060, DSN-031). On screen it is a white "sheet" on the
+   dashboard canvas; on paper it is plain black on white with patterns instead
+   of colour, A4 or Letter (the printer decides; margins fit both). */
+
+.sheet {
+  background: var(--d-card, #fff);
+  color: var(--d-ink, #1d2433);
+  border-radius: var(--d-radius, 22px);
+  box-shadow: var(--d-shadow);
+  padding: clamp(18px, 4vw, 40px);
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: var(--d-font, system-ui, sans-serif);
+  line-height: 1.5;
+}
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; max-width: 900px; margin: 0 auto 12px; }
+.head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 16px 24px; border-bottom: 2px solid var(--d-ink, #1d2433); padding-bottom: 14px; margin-bottom: 18px; }
+.brand { display: flex; align-items: center; gap: 12px; min-height: 40px; }
+.logo { max-height: 48px; max-width: 180px; object-fit: contain; }
+.wordmark { font-size: 1.35rem; font-weight: 700; color: var(--d-accent-ink, #5a4bd6); letter-spacing: 0.02em; }
+.orgName { font-weight: 600; color: var(--d-muted); }
+.titleBox { flex: 1 1 260px; text-align: right; }
+.title { margin: 0; font-size: 1.45rem; line-height: 1.25; }
+.range { margin: 4px 0 0; color: var(--d-muted); font-size: 0.95rem; }
+
+.section { margin: 0 0 22px; break-inside: avoid; page-break-inside: avoid; }
+.h2 { font-size: 1.08rem; margin: 0 0 10px; }
+.story { font-size: 1.2rem; line-height: 1.5; margin: 0 0 10px; font-weight: 500; }
+.insights { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.insight { display: flex; gap: 10px; align-items: baseline; }
+.glyph { flex: 0 0 auto; display: inline-grid; place-items: center; width: 22px; height: 22px; border: 1.5px solid currentColor; border-radius: 50%; font-size: 0.75rem; font-weight: 700; }
+.kind { font-weight: 600; margin-right: 4px; }
+
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 10px; }
+.kpi { border: 1.5px solid var(--d-line, #e2e7f0); border-radius: 14px; padding: 12px 14px; }
+.kpiLabel { font-size: 0.85rem; color: var(--d-muted); }
+.kpiValue { font-size: 1.35rem; font-weight: 700; line-height: 1.2; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.kpiDelta { font-size: 0.82rem; margin-top: 2px; color: var(--d-muted); }
+
+.chart { width: 100%; height: auto; display: block; }
+.chart text { font-family: inherit; font-size: 11px; fill: var(--d-tick, #5b6478); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.85rem; color: var(--d-muted); margin-top: 6px; }
+.swatch { display: inline-block; width: 22px; height: 12px; vertical-align: -1px; margin-right: 6px; border: 1px solid var(--d-ink); }
+
+.table { width: 100%; border-collapse: collapse; font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.table th, .table td { padding: 7px 8px; border-bottom: 1px solid var(--d-line, #e2e7f0); text-align: left; vertical-align: top; }
+.table th { font-weight: 600; }
+.table thead th { border-bottom: 1.5px solid var(--d-ink, #1d2433); }
+.table td.num, .table th.num { text-align: right; white-space: nowrap; }
+.table thead { display: table-header-group; }
+.table tr { break-inside: avoid; page-break-inside: avoid; }
+.matrixCell { white-space: nowrap; }
+.flag { font-weight: 600; }
+.cellWord { color: var(--d-muted); font-size: 0.8rem; }
+.scroll { overflow-x: auto; }
+.foot { margin-top: 26px; padding-top: 10px; border-top: 1px solid var(--d-line); font-size: 0.8rem; color: var(--d-muted); }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.state { max-width: 900px; margin: 0 auto; }
+
+@page { margin: 14mm 12mm; }
+
+/* The printed copy: a second render portalled to <body>, the only thing on paper,
+   so no shell, navbar or footer can leak into the PDF whatever page hosts the report. */
+.printRoot { display: none; }
+
+@media print {
+  :global(body) > *:not(.printRoot) { display: none !important; }
+  .printRoot { display: block !important; background: #fff; }
+  :global(html), :global(body) { background: #fff !important; height: auto !important; overflow: visible !important; }
+  .toolbar { display: none !important; }
+  .sheet {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0;
+    max-width: none;
+    background: #fff;
+    color: #000;
+    --d-ink: #000;
+    --d-muted: #333;
+    --d-line: #999;
+    --d-tick: #000;
+    --d-accent-ink: #000;
+  }
+  .kpi { border-color: #000; }
+  .chart text { fill: #000; }
+  .scroll { overflow: visible; }
+  .head { break-after: avoid; }
+}
+
+@media screen and (max-width: 600px) {
+  .titleBox { text-align: left; }
+  .toolbar { justify-content: stretch; }
+}

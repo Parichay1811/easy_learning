@@ -47,7 +47,7 @@ const compose = async (req, res) => {
     const resolved = await svc.resolveAudience(author, audience)
     if (resolved.error) return res.status(resolved.error.status).json({ success: false, message: resolved.error.message, code: resolved.error.code })
     if (req.body.dryRun) return res.json({ success: true, recipients: resolved.recipients.length, label: resolved.label })
-    const authorName = req.actor.role === 'superadmin' ? 'Learnigo' : req.actor.name ||(await contactsFor([req.actor])).get(me(req))?.name || ''
+    const authorName = req.actor.role === 'superadmin' ? 'Learnigo' : ((await contactsFor([req.actor])).get(me(req))?.name || req.actor.name || '')
     const a = await Announcement.create({ authorKey: me(req), authorRole: req.actor.role, authorName, orgId: author.orgId || '', audience, label: resolved.label, title, body, link, publishAt, expiresAt })
     await audit(req, 'announcement.create', { targetType: 'announcement', targetId: a._id, orgId: author.orgId || '', meta: { audience: audience.type, recipients: resolved.recipients.length } })
     const sent = publishAt <= new Date() ? await svc.deliver(a._id) : null

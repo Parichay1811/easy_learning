@@ -19,7 +19,7 @@ function button(href, label) {
 function tiles(items) {
   const cells = items.map((x) => `<td width="${Math.floor(100 / items.length)}%" valign="top" style="padding:4px">`
     + `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${C.tile};border-radius:14px"><tr><td style="padding:14px 10px;font-family:${FONT};text-align:center">`
-    + `<div style="font-size:22px;line-height:28px;font-weight:700;color:${C.ink}">${esc(x.value)}</div>`
+    + `<div style="font-size:19px;line-height:24px;font-weight:700;color:${C.ink}">${esc(x.value)}</div>`
     + `<div style="font-size:12px;line-height:16px;color:${C.soft};margin-top:4px">${esc(x.label)}</div>`
     + (x.delta ? `<div style="font-size:12px;line-height:16px;margin-top:4px;color:${x.up ? C.good : C.warn}">${x.up ? '&#9650;' : '&#9660;'} ${esc(x.delta)}</div>` : '')
     + '</td></tr></table></td>').join('')

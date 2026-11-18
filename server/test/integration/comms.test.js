@@ -295,6 +295,7 @@ test('notification preferences: off stops the bell, digest defers the email, ins
   const mails = async () => (await outbox({ to: 'meera.parent@family.test', kind: 'notify:message' })).length
 
   await app.call('PUT', '/api/notification-prefs', { token: T.P5, body: { kinds: { message: 'off' } } })
+  await wait(400)   // emails from earlier tests go out in the background; let them land first
   const b0 = await bell(), m0 = await mails()
   assert.equal((await send('one')).status, 201)
   await wait(150)
