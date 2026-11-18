@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -47,6 +47,11 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
 
+// Developer-only pages (component galleries). Not routed in production builds
+// unless VITE_ENABLE_DEV_PAGES=1.
+const DEV_PAGES = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEV_PAGES === "1";
+const DashboardKit = lazy(() => import("./pages/dev/DashboardKit"));
+
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -89,6 +94,7 @@ function AnimatedRoutes() {
         <Route path="/superadmin-dashboard" element={<SuperAdminDashboard />} />
         <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
+        {DEV_PAGES && <Route path="/dev/dashboard-kit" element={<DashboardKit />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
