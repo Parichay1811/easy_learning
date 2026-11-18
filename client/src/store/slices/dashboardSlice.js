@@ -4,7 +4,10 @@ const BASE = import.meta.env.VITE_API_BASE_URL
 
 function authHeaders() {
   const token = localStorage.getItem('jwt_token') || localStorage.getItem('firebase_jwt')
-  return token ? { Authorization: `Bearer ${token}` } : {}
+  // The learner's timezone, so "today" and the hour of day are theirs (analytics rollups).
+  let tz = 'UTC'
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC' } catch { /* keep UTC */ }
+  return { ...(token ? { Authorization: `Bearer ${token}` } : {}), 'X-Timezone': tz }
 }
 
 async function apiFetch(url, options = {}) {

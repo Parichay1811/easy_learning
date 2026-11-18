@@ -60,6 +60,7 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
 ## F3. Permissions: one rule engine
 
 - [ ] **FND-020** `can(actor, action, resource)` used by every route `P0` `Platform`
+  - *Partly done:* `utils/actors.js` (one actor shape for every role) and `utils/scopes.js` (checks permission and returns the learners a role may see) now guard all analytics routes. Older routes still use their own checks.
   - Replace the scattered org/tutor checks with one policy module, `server/utils/policy.js`, and an Express helper `authorize('tests.edit', loadTest)`.
   - Rules are resolved from membership role, unit scope (a coordinator sees `/grade5/*`), group assignment (teacher), guardianship (parent) and plan entitlements (FND-030).
   - The same rules are exposed to the client (`useCan('tests.edit', test)`), so the UI hides actions the user can't perform.
@@ -86,7 +87,8 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
 
 ## F5. Plans, modules and entitlements
 
-- [ ] **FND-030** Entitlement service `P0` `Platform`
+- [x] **FND-030** Entitlement service `P0` `Platform`
+  - *Done:* plans and modules in `config/plans.js`; `entitlementsFor` / `requireModule` (402 with an upgrade payload); super admin overrides per org; `GET /api/entitlements`. Billing (FND-032) is separate.
   - `entitlements(account|org) → Set<moduleKey>` comes from the plan, plus add-ons, plus per-org overrides set by the super admin.
   - Server: `requireModule('tests')` middleware. Client: `useModule('tests')` drives UI gating with a friendly upgrade card (DSN-030), never a broken page.
   - Module keys: `core.learning`, `ai.teacher`, `family.link`, `analytics.basic`, `analytics.deep`, `groups`, `qbank.author`, `qbank.share`, `tests`, `tests.advanced`, `grading.manual`, `reports.branded`, `comms`, `comms.policy`, `org.tree`, `org.campus`, `org.analytics`, `staff.roles`, `sso`, `api.export`.
@@ -102,11 +104,13 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
 
 The heart of the parent "wow" and every other dashboard. It must stay cheap on our 2-vCPU / 8 GB server, so **nothing heavy is computed when a page loads**.
 
-- [ ] **FND-040** One event shape `P0` `Platform`
+- [x] **FND-040** One event shape `P0` `Platform`
+  - *Done:* `LearningEvent` + `LearnerDay`, written by `analytics/record.js` from answer, session and round logging.
   - `LearningEvent {learnerId, ts, tz, orgId?, groupIds[], testId?, kind, module, subject, skillIds[], questionId?, correct?, firstTry?, timeMs?, hintsUsed?, listenPlays?, attempt?, xp?, stars?, device: {type, os, browser}, source: practice|warrior|test|homework|ar|ai_teacher}`.
   - Write events from the existing logging endpoints (`/api/dashboard/log-answer`, `log-round`, `log-session`), the AR telemetry ([ARSession](../../server/models/ARSession.js)) and the AI Teacher (FND-045). Keep the old collections working, and retire them later.
   - TTL: raw events are kept for 24 months (configurable). Rollups are kept forever.
-- [ ] **FND-041** Metrics dictionary `P0` `Platform`
+- [x] **FND-041** Metrics dictionary `P0` `Platform`
+  - *Done:* `utils/metrics.js` (definitions, mastery levels, engagement score), served at `GET /api/meta/metrics`.
   - One file (`shared/metrics.js`, used by both server and client) defines each metric's formula, label, unit and help text. Every dashboard uses it, so the numbers always agree across roles.
 
   | Metric | Definition |
@@ -125,12 +129,14 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
   | At risk | No activity for 7 days with assigned work, or accuracy falling > 15 points over 2 weeks, or 3 failed tests in a row |
 - [ ] **FND-042** Skills and topics on every question `P0` `Platform`
   - Audit the question banks (Listen/Read/Write/Speak × English/Maths/Science) and add `skillIds[]`, `gradeBand` and `difficulty 1–5`. Optionally map to curricula (UK National Curriculum, Common Core, CBSE). A backfill script uses existing fields, plus a review UI for the content team (SUP-030).
-- [ ] **FND-043** Pre-computed rollups `P0` `Platform` · needs FND-040
+- [x] **FND-043** Pre-computed rollups `P0` `Platform` · needs FND-040
+  - *Done:* `LearnerDay` upserts as events arrive; day/week/month series; `scripts/backfill-learner-days.js`. *Nightly group/unit rollup tables were deliberately skipped:* group and unit views sum `LearnerDay` for their learners on demand (indexed on `{email, date}`).
   - `LearnerDay {learnerId, date(local), minutes, sessions, answered, correct, firstTryCorrect, hints, xp, stars, byModuleSubject{}, bySkill{}, byHour[24], devices{}, firstAt, lastAt}`, updated with `$inc` upserts as each event arrives (no batch job on page load).
   - Weekly, monthly and yearly figures are summed from `LearnerDay` (at most 366 small docs per learner-year, so fast). Cache `LearnerPeriod` for closed periods.
   - `GroupDay` and `UnitDay` (keyed by `unitPath`) and `OrgDay` are filled by a nightly job in a low-priority child process (the same pattern as the AI assistant worker), so the API process is never slowed down.
   - Indexes: `{learnerId, date}`, `{groupId, date}`, `{orgId, unitPath, date}`.
-- [ ] **FND-044** Insights engine (plain-language findings) `P1` `Platform` · needs FND-041, FND-043
+- [x] **FND-044** Insights engine (plain-language findings) `P1` `Platform` · needs FND-041, FND-043
+  - *Done:* rule-based `analytics/insights.js` (`buildInsights`, `buildStory`), no AI needed.
   - Rule-based and translatable templates. "Best learning time: weekday evenings, 6–7 pm." "Strongest: Listen · Maths (92 %)." "Practise next: fractions (Learning, 54 %)." "Up 12 points in Read · English since last month." "New record: 9-day streak!"
   - Each insight has a severity (celebrate / info / nudge / alert), the evidence behind it (a link to the chart) and a suggested action.
   - Optional AI wording: only when a language model is configured (the full server profile), never needed for the feature to work.
@@ -142,7 +148,8 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
 
 ## F7. Notifications and messaging
 
-- [ ] **FND-050** Notification centre `P1` `Platform`
+- [x] **FND-050** Notification centre `P1` `Platform`
+  - *Done:* `Notification` model, `notify()`, and the list / unread / read endpoints. Email and push are not done.
   - `Notification {accountId, kind, title, body, link, readAt}`. A bell in the shell with an unread count uses the existing polling pattern (~25 s, design-guide §5.4: no WebSockets). Plus email, with web push via a progressive web app (PWA) later (`P2`).
   - Every account has preferences per kind (instant / daily digest / off).
 - [ ] **FND-051** Messaging, generalised `P1` `Institute` `Solo`
@@ -166,7 +173,8 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
   - Store who consented, for which child, the policy version and when. Under the GDPR Art. 8 age (13–16 depending on country) a guardian must consent. Schools consent through their data-processing agreement (DPA) and record the legal basis.
 - [ ] **FND-071** Data rights `P1` `Platform`
   - Export everything about a learner (JSON + PDF) and delete a learner, with a 30-day grace period and cascade across all three databases. The super admin handles requests in a queue (SUP-060).
-- [ ] **FND-072** Audit log `P0` `Platform`
+- [x] **FND-072** Audit log `P0` `Platform`
+  - *Done:* hash-chained `AuditEvent` + `audit()`. Viewer screens are in the Admin and Super Admin plans.
   - An append-only `AuditEvent {actor, action, target, orgId, ip, at, reason?}` for logins, permission changes, exports, deletions, "view as" and grade changes. Visible to the admin (their org) and the super admin.
 - [ ] **FND-073** Data minimisation `P1` `Platform`
   - No ads, no third-party trackers on learner pages, no selling of data (state it publicly). Leaderboards show first name + initial only. Benchmarks need ≥ 20 learners per bucket.

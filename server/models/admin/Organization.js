@@ -2,6 +2,8 @@ const mongoose = require('mongoose')
 const adminDb = require('../../db/adminDb')
 
 const schema = new mongoose.Schema({
+  // 'institute' = a school or centre run by an admin; 'solo' = one private tutor (FND-015).
+  kind: { type: String, enum: ['institute', 'solo'], default: 'institute' },
   name: { type: String, required: true, trim: true },
   type: { type: String, enum: ['school', 'coaching_centre', 'institution', 'other'], default: 'school' },
   adminEmail: { type: String, required: true, lowercase: true },

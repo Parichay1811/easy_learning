@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const analyticsMounts = require('./analyticsMounts')
 const superadminAuth = require('../middleware/superadminAuth')
 const validate = require('../middleware/validate')
 const { superadminStudentAccess } = require('../middleware/studentDashboardAccess')
@@ -61,5 +62,7 @@ router.post('/settings', settingValidator, validate, upsertSetting)
 
 router.get('/contact', getContactMessages)
 router.put('/contact/:id', respondContactValidator, validate, respondToContact)
+
+analyticsMounts.mountSuperadmin(router)
 
 module.exports = router

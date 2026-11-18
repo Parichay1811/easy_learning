@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const analyticsMounts = require('./analyticsMounts')
 const parentAuth = require('../middleware/parentAuth')
 const validate = require('../middleware/validate')
 const { parentChildAccess } = require('../middleware/studentDashboardAccess')
@@ -32,6 +33,8 @@ router.get('/children/:id/dashboard/achievements',  parentChildAccess, getChildD
 router.get('/children/:id/dashboard/performance',   parentChildAccess, getChildDashPerformance)
 router.get('/children/:id/dashboard/answers',       parentChildAccess, getChildDashAnswers)
 router.get('/children/:id/dashboard/rounds',        parentChildAccess, getChildDashRounds)
+
+analyticsMounts.mountParent(router)
 
 router.get('/chat', getMyParentThread)
 router.post('/chat', sendChatMessageValidator, validate, sendMyParentMessage)

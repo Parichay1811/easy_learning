@@ -2,6 +2,11 @@ const mongoose = require('mongoose')
 const superAdminDb = require('../../db/superAdminDb')
 
 const schema = new mongoose.Schema({
+  // 'institute' = a school or centre run by an admin; 'solo' = one private tutor (FND-015).
+  kind: { type: String, enum: ['institute', 'solo'], default: 'institute' },
+  // Module overrides set by the super admin: 'tests.advanced' adds it, '-sso' removes it (FND-030).
+  featureOverrides: [{ type: String }],
+  plan: { type: String, default: '' },
   name: { type: String, required: true, trim: true },
   type: { type: String, default: 'school' },
   adminEmail: { type: String, required: true, lowercase: true },

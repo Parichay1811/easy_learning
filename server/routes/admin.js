@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const analyticsMounts = require('./analyticsMounts')
 const adminAuth = require('../middleware/adminAuth')
 const validate = require('../middleware/validate')
 const { uploadOrgLogo, uploadAvatar, handleUpload } = require('../middleware/upload')
@@ -107,5 +108,7 @@ router.get('/questions/uploads/:id', getUploadBatchDetail)
 router.post('/questions/uploads/:id/approve', approveUploadBatch)
 router.post('/questions/uploads/:id/reject', rejectUploadValidator, validate, rejectUploadBatch)
 router.patch('/questions/:module/:subject/:id', updateQuestion)
+
+analyticsMounts.mountAdmin(router)
 
 module.exports = router

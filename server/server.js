@@ -29,6 +29,7 @@ const speakScienceRoutes = require('./routes/speakScience')
 const speakMathsRoutes   = require('./routes/speakMaths')
 const speakEnglishRoutes = require('./routes/speakEnglish')
 const dashboardRoutes     = require('./routes/dashboard')
+const sharedRoutes        = require('./routes/shared')
 const arRoutes            = require('./routes/ar')
 const { createAIAssistant } = require('./services/aiAssistant')
 
@@ -106,6 +107,7 @@ app.use('/api/speak/science', speakScienceRoutes)
 app.use('/api/speak/maths',   speakMathsRoutes)
 app.use('/api/speak/english', speakEnglishRoutes)
 app.use('/api/dashboard',        dashboardRoutes)
+app.use('/api',                  sharedRoutes)
 app.use('/api/ar',               arRoutes)
 
 // Global error handler — catches any unhandled errors from route handlers

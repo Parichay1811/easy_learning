@@ -1,3 +1,4 @@
+const { recordAnswer, recordSession, recordRound, contextFrom } = require('../analytics/record')
 const StudentActivity   = require('../models/StudentActivity')
 const StudentAchievement = require('../models/StudentAchievement')
 const StudentAnswer      = require('../models/StudentAnswer')
@@ -128,6 +129,8 @@ const logSession = async (req, res) => {
       },
       { upsert: true, new: true }
     )
+
+    await recordSession({ email, module: mod, subject, minutes: durationMinutes || 0, xp: xpEarned || 0, ts: now, ...contextFrom(req) })
 
     const newAchievements = await checkAndAwardAchievements(email)
     res.json({ success: true, newAchievements })
@@ -262,6 +265,12 @@ const logAnswer = async (req, res) => {
       timeTaken: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken : null,
       mode: mode || 'practice',
     })
+    await recordAnswer({
+      email, module: mod, subject, correct: !!correct, mode: mode || 'practice',
+      timeMs: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken * 1000 : null, // client sends seconds
+      hintsUsed: Number(req.body.hintsUsed) || 0, firstTry: req.body.firstTry ?? null, testId: req.body.testId,
+      ...contextFrom(req),
+    })
     res.json({ success: true })
   } catch (err) {
     console.error('logAnswer error:', err)
@@ -341,6 +350,9 @@ const logRound = async (req, res) => {
       },
       { upsert: true, new: true }
     )
+
+    // Stars only: minutes come from real session durations (logSession), not the fixed 5 above.
+    await recordRound({ email, module: mod, subject, mode: mode || 'practice', stars: stars || 0, totalStars: totalStars || 0, ...contextFrom(req) })
 
     const newAchievements = await checkAndAwardAchievements(email)
     res.json({ success: true, newAchievements })
