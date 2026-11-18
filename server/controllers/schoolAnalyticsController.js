@@ -66,7 +66,14 @@ async function structureFor(req, scope) {
   return { structure, units, groups }
 }
 
-const rangeWords = (range) => (range.term ? `in ${range.term.name}` : range.days === 1 ? 'today' : range.days === 7 ? 'this week' : `in the last ${range.days} days`)
+function rangeWords(range) {
+  if (range.term) return `in ${range.term.name}`
+  if (range.days === 1) return 'today'
+  const monday = new Date(`${range.from}T12:00:00Z`).getUTCDay() === 1
+  if (monday && range.days <= 7) return range.days === 7 ? 'this week' : 'so far this week'
+  if (range.from.endsWith('-01') && range.days <= 31) return 'so far this month'
+  return range.days === 7 ? 'this week' : `in the last ${range.days} days`
+}
 
 // ADM-040 School overview: story, tiles, sunburst, grade x subject heatmap, trends.
 const overview = h(async (req) => {
@@ -309,7 +316,9 @@ const lists = h(async (req) => {
   const wins = growth
     .filter((g) => (g.accuracyDelta != null && g.accuracyDelta >= 5) || (g.minutesDelta >= 30 && g.prevMinutes > 0))
     .map((g) => ({ ...ctx.get(g.email), email: g.email, accuracy: g.accuracy, accuracyDelta: g.accuracyDelta, minutes: g.minutes, minutesDelta: g.minutesDelta, why: g.accuracyDelta != null && g.accuracyDelta >= 5 ? 'accuracy_up' : 'time_up' }))
-    .sort((a, b) => ((b.accuracyDelta ?? 0) - (a.accuracyDelta ?? 0)) || (b.minutesDelta - a.minutesDelta))
+    .filter((w) => !atRisk.some((r) => r.email === w.email))
+    .sort((a, b) => (Number(b.why === 'accuracy_up') - Number(a.why === 'accuracy_up'))
+      || (a.why === 'accuracy_up' ? (b.accuracyDelta - a.accuracyDelta) : (b.minutesDelta - a.minutesDelta)))
     .slice(0, 20)
   return {
     range, previous: prevRange,
@@ -345,7 +354,7 @@ const usage = h(async (req) => {
     learners: { total: scope.emails.length, series: q.activeSeries(days, range), activeInRange: new Set(days.filter((d) => (d.answered || 0) > 0 || (d.minutes || 0) >= q.ACTIVE_MINUTES).map((d) => d.email)).size },
     devices: patterns.devices, heat: patterns.heat, bestHour: patterns.bestHour,
     features: q.featureUse(days),
-    teachers: { total: tutors.length, signedIn: tutors.filter((t) => t.authStatus === 'active').length, active7: tutors.filter((t) => within(t.lastLoginAt, 7)).length, active30: tutors.filter((t) => within(t.lastLoginAt, 30)).length, neverSignedIn: tutors.filter((t) => !t.lastLoginAt).map((t) => ({ id: String(t._id), name: t.name })).slice(0, 50) },
+    teachers: { total: tutors.length, signedIn: tutors.filter((t) => t.authStatus === 'active').length, active7: tutors.filter((t) => within(t.lastLoginAt, 7)).length, active30: tutors.filter((t) => within(t.lastLoginAt, 30)).length, neverSignedIn: tutors.filter((t) => !t.lastLoginAt && t.authStatus !== 'active').map((t) => ({ id: String(t._id), name: t.name })).slice(0, 50) },
     parents: { total: parents, invited: (inv.invited || 0) + (inv.bounced || 0) + (inv.linked || 0), linked: inv.linked || 0, bounced: inv.bounced || 0, learnersWithLinkedParent: linkedLearners },
     staff: { total: staff.length, active30: staff.filter((s) => within(s.lastLoginAt, 30)).length },
   }
@@ -378,12 +387,13 @@ const studentProfile = h(async (req) => {
   ])
   const invites = new Map((await ParentInvite.find({ orgId: req.org._id, parentId: { $in: parents.map((p) => p._id) } }).lean()).map((i) => [String(i.parentId), i.status]))
   const linkedEmails = s.email ? new Set((await Child.find({ email: s.email, linkStatus: 'verified' }).select('parentId').lean()).map((c) => String(c.parentId))) : new Set()
+  const linkedParents = await require('../utils/parentLinks').linkedParentEmails(parents.map((p) => p.email), [s.email])
   const groups = structure.batches.filter((b) => (s.batchIds || []).some((x) => String(x) === String(b._id)))
   const tutorName = (id) => structure.tutors.find((t) => String(t._id) === String(id))?.name
   return {
     student: { id: String(s._id), name: s.name, email: s.email, age: s.age, grade: s.grade, status: s.status, leftAt: s.leftAt, externalId: s.externalId, unitId: s.unitId, unit: s.unitId ? tree.unitLabel(structure.units, s.unitId) : '' },
     groups: groups.map((b) => ({ id: String(b._id), name: b.name, teachers: (b.tutorIds || []).map(tutorName).filter(Boolean), archived: Boolean(b.archivedAt) })),
-    parents: parents.map((p) => ({ id: String(p._id), name: p.name, email: p.email, status: invites.get(String(p._id)) || 'not_invited' })),
+    parents: parents.map((p) => ({ id: String(p._id), name: p.name, email: p.email, status: linkedParents.has(p.email) ? 'linked' : invites.get(String(p._id)) || 'not_invited' })),
     linkedParentAccounts: linkedEmails.size,
     history: moves.map((m) => ({ kind: m.kind, at: m.at, from: m.fromUnitId ? tree.unitLabel(structure.units, m.fromUnitId) : '', to: m.toUnitId ? tree.unitLabel(structure.units, m.toUnitId) : '', reason: m.reason })),
     consent,

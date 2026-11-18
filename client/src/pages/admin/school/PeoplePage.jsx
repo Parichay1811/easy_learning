@@ -106,8 +106,8 @@ function StudentsTab() {
     { key: "act", label: t("school.people.actions", { defaultValue: "Actions" }), render: (r) => (
       <span className={s.row}>
         {can("people.move") && has("org.tree") && <button type="button" className={s.iconBtn} onClick={() => setMoving(r)} aria-label={t("school.people.moveX", { defaultValue: "Move {{name}}", name: r.name })} title={t("school.people.move", { defaultValue: "Move" })}><FaExchangeAlt /></button>}
-        {can("parents.invite") && r.parents.length > 0 && <button type="button" className={s.iconBtn} onClick={() => invite([r._id])} aria-label={t("school.people.inviteX", { defaultValue: "Invite {{name}}'s parents", name: r.name })} title={t("school.people.invite", { defaultValue: "Invite parents" })}><FaEnvelope /></button>}
         {can("people.write") && <button type="button" className={s.iconBtn} onClick={() => setLeaving(r)} aria-label={t("school.people.leaveX", { defaultValue: "{{name}} is leaving", name: r.name })} title={t("school.people.markLeft", { defaultValue: "Mark as left" })}><FaSignOutAlt /></button>}
+        {can("parents.invite") && r.parents.length > 0 && <button type="button" className={s.iconBtn} onClick={() => invite([r._id])} aria-label={t("school.people.inviteX", { defaultValue: "Invite {{name}}'s parents", name: r.name })} title={t("school.people.invite", { defaultValue: "Invite parents" })}><FaEnvelope /></button>}
       </span>
     ) },
   ];

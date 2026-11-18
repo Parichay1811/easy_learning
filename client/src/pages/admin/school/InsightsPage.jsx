@@ -101,7 +101,7 @@ function Lists({ params }) {
     <div className={s.grid2}>
       <section className={s.card} aria-labelledby="ar-h">
         <h2 id="ar-h" className={s.cardTitle}>{t("school.risk.title", { defaultValue: "Who needs a nudge?" })}</h2>
-        <p className={s.cardSub}>{t("school.risk.listSub", { defaultValue: "{{n}} students, by class, with their teachers and why.", n: d.atRiskCount })}</p>
+        <p className={s.cardSub}>{(d.atRiskCount === 1 ? t("school.risk.listSub1", { defaultValue: "1 student, with their teachers and why." }) : t("school.risk.listSub", { defaultValue: "{{n}} students, by class, with their teachers and why.", n: d.atRiskCount }))}</p>
         {!d.atRiskCount && <p className={s.okText}>{t("school.risk.none", { defaultValue: "Nobody right now. Lovely." })}</p>}
         {d.atRisk.map((g) => (
           <div key={g.unit} style={{ marginBottom: 14 }}>

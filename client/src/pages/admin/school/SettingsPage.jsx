@@ -395,7 +395,7 @@ function Audit() {
       <div className={s.head}>
         <div>
           <h2 id="au-h" className={s.cardTitle}>{t("school.audit.title", { defaultValue: "Who changed what" })}</h2>
-          {d && <p className={s.cardSub}>{d.integrity.intact ? <span className={`${s.pill} ${s.pillGood}`}>✓ {t("school.audit.intact", { defaultValue: "Log intact: no entry was changed or removed" })}</span> : <span className={`${s.pill} ${s.pillAlert}`}>✖ {t("school.audit.broken", { defaultValue: "Some entries don't match their seal. Contact Learnigo." })}</span>}</p>}
+          {d && d.integrity.checked > 0 && <p className={s.cardSub}>{d.integrity.intact ? <span className={`${s.pill} ${s.pillGood}`}>✓ {t("school.audit.intact", { defaultValue: "Log intact: no entry was changed or removed" })}</span> : <span className={`${s.pill} ${s.pillAlert}`}>✖ {t("school.audit.broken", { defaultValue: "Some entries don't match their seal. Contact Learnigo." })}</span>}</p>}
         </div>
         <Button size="sm" variant="ghost" icon={FaDownload} onClick={() => api.download(`/audit${qs({ ...f, format: "csv" })}`, "audit-log.csv")}>{t("school.audit.export", { defaultValue: "Export CSV" })}</Button>
       </div>
@@ -409,7 +409,9 @@ function Audit() {
         <Field id="au-f" label={t("school.cal.from", { defaultValue: "From" })}><input id="au-f" type="date" className={s.input} value={f.from} onChange={(e) => setF({ ...f, from: e.target.value })} /></Field>
         <Field id="au-t" label={t("school.cal.to", { defaultValue: "To" })}><input id="au-t" type="date" className={s.input} value={f.to} onChange={(e) => setF({ ...f, to: e.target.value })} /></Field>
       </div>
-      {data.loading ? <Skeleton variant="text" lines={6} /> : (
+      {data.loading ? <Skeleton variant="text" lines={6} /> : !d?.events?.length ? (
+        <p className={s.muted}>{t("school.audit.empty", { defaultValue: "Nothing recorded yet. Imports, invitations, role and policy changes, exports and deletions appear here." })}</p>
+      ) : (
         <DataTable caption={t("school.audit.caption", { defaultValue: "Newest first" })} rows={d?.events || []} getRowKey={(r) => r._id}
           columns={[
             { key: "at", label: t("school.audit.when", { defaultValue: "When" }), render: (r) => new Date(r.at).toLocaleString() },

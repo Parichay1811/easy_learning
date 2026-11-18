@@ -50,10 +50,12 @@ export default function TeachersPage() {
     { key: "students", label: t("school.teachers.students", { defaultValue: "Students" }), align: "end", sortable: true },
     { key: "engagement", label: t("school.engagement", { defaultValue: "Engagement" }), sortable: true, sortValue: (r) => r.engagement ?? -1, render: (r) => <Health value={r.engagement} /> },
     { key: "minutesPerStudent", label: t("school.teachers.minutes", { defaultValue: "Min / student" }), align: "end", sortable: true, render: (r) => (r.minutesPerStudent != null ? fmtDuration(r.minutesPerStudent) : NO_DATA) },
-    { key: "startingAccuracy", label: t("school.teachers.start", { defaultValue: "Starting level" }), align: "end", render: (r) => (r.startingAccuracy != null ? `${r.startingAccuracy} %` : NO_DATA) },
-    { key: "growth", label: t("school.teachers.growth", { defaultValue: "Class growth" }), align: "end", sortable: true, sortValue: (r) => r.growth ?? -999, render: (r) => pts(r.growth) },
-    { key: "questions", label: t("school.teachers.questions", { defaultValue: "Questions (approved)" }), align: "end", render: (r) => (r.questions ? `${r.questions}${r.approvalRate != null ? ` (${r.approvalRate} %)` : ""}` : "0") },
-    { key: "tests", label: t("school.teachers.tests", { defaultValue: "Tests" }), align: "end", render: (r) => (r.testsAvailable ? r.tests : <span title={t("school.teachers.testsSoon", { defaultValue: "Tests arrive with the Tests module" })}>0</span>) },
+    { key: "growth", label: t("school.teachers.growth", { defaultValue: "Class growth" }), sortable: true, sortValue: (r) => r.growth ?? -999, render: (r) => (
+      <><div className={s.strong}>{pts(r.growth)}</div><div className={`${s.small} ${s.muted}`}>{r.startingAccuracy != null ? t("school.teachers.from", { defaultValue: "from {{a}} % to {{b}} %", a: r.startingAccuracy, b: r.accuracy }) : t("school.teachers.noStart", { defaultValue: "not enough answers yet" })}</div></>
+    ) },
+    { key: "questions", label: t("school.teachers.content", { defaultValue: "Questions · tests" }), align: "end", render: (r) => (
+      <><div>{r.questions}{r.approvalRate != null ? ` · ${r.approvalRate} % ${t("school.teachers.approved", { defaultValue: "approved" })}` : ""}</div><div className={`${s.small} ${s.muted}`}>{r.testsAvailable ? t("school.teachers.testsN", { defaultValue: "{{n}} tests", n: r.tests }) : t("school.teachers.testsSoon", { defaultValue: "tests: coming soon" })}</div></>
+    ) },
     { key: "lastActive", label: t("school.teachers.last", { defaultValue: "Last active" }), sortable: true, render: (r) => (r.lastActive ? fmtDate(r.lastActive.slice(0, 10)) : r.signedIn ? NO_DATA : t("school.teachers.never", { defaultValue: "Never signed in" })) },
     ...(can("people.write") ? [{ key: "act", label: "", render: (r) => r.groups.length > 0 && <button type="button" className={s.iconBtn} onClick={() => setMoving(r)} aria-label={t("school.teachers.transferX", { defaultValue: "Hand over {{name}}'s groups", name: r.name })} title={t("school.teachers.transfer", { defaultValue: "Hand over groups" })}><FaExchangeAlt /></button> }] : []),
   ];

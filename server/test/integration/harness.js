@@ -46,6 +46,8 @@ async function start({ port: fixedPort, clientUrl, env: extraEnv = {}, preload =
     admin: (id, orgId, uid = `a-${id}`) => sign('ADMIN_JWT_SECRET', { id, uid, email: `${uid}@school.test`, name: 'Admin', orgId, role: 'org_admin' }),
     teacher: (id, orgId, email = `t-${id}@school.test`) => sign('TEACHER_JWT_SECRET', { id, uid: `t-${id}`, email, name: 'Teacher', orgId, role: 'teacher' }),
     superadmin: () => sign('SUPERADMIN_JWT_SECRET', { email: 'root@example.com', role: 'superadmin', name: 'Super Admin' }),
+    // School staff (ADM-023): the OrgStaff row must exist and be active.
+    staff: (id, orgId, staffId, staffRole, email) => sign('ADMIN_JWT_SECRET', { id, uid: `s-${id}`, email, name: 'Staff', orgId, staffId, staffRole, role: 'org_staff' }),
   }
 
   async function call(method, route, { token, body, headers = {}, cookie } = {}) {

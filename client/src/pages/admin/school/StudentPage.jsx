@@ -49,7 +49,7 @@ export default function StudentPage() {
         <KpiTile loading={ov.loading} label={t("school.student.time", { defaultValue: "Learning time" })} value={d ? fmtDuration(d.totals.minutes) : NO_DATA}
           delta={d?.previous ? { current: d.totals.minutes, previous: d.previous.minutes, mode: "duration", vs: t("school.vsPrev", { defaultValue: "vs the period before" }) } : undefined} sparkline={trend.map((x) => x.value)} />
         <KpiTile loading={ov.loading} label={t("school.tile.accuracy", { defaultValue: "Accuracy" })} value={d?.totals.accuracy != null ? fmtPercent(d.totals.accuracy / 100) : NO_DATA}
-          delta={d?.previous?.accuracy != null && d?.totals.accuracy != null ? { current: d.totals.accuracy, previous: d.previous.accuracy, mode: "points" } : undefined} />
+          delta={d?.previous?.accuracy != null && d?.totals.accuracy != null ? { current: d.totals.accuracy / 100, previous: d.previous.accuracy / 100, mode: "points" } : undefined} />
         <KpiTile loading={ov.loading} label={t("school.student.days", { defaultValue: "Active days" })} value={d ? `${d.totals.activeDays} / ${d.range.days}` : NO_DATA} />
         <KpiTile loading={ov.loading} label={t("school.student.streak", { defaultValue: "Streak" })} value={d?.streak ? t("school.student.streakN", { defaultValue: "{{n}} days", n: d.streak.current }) : NO_DATA}
           helpText={t("school.student.streakHelp", { defaultValue: "Days in a row. School holidays don't break it if your school chose that in Settings." })} />

@@ -15,7 +15,8 @@
   background: var(--d-card); border-radius: 22px; box-shadow: var(--d-shadow);
   padding: 20px; min-width: 0; color: var(--d-ink);
 }
-.cardTitle { margin: 0 0 4px; font-size: 1.12rem; }
+.cardTitle { margin: 0 0 4px; font-size: 1.12rem; color: var(--d-ink); background: none; -webkit-text-fill-color: currentColor; }
+.title { -webkit-text-fill-color: currentColor; background: none; }
 .cardSub { margin: 0 0 14px; color: var(--d-muted); font-size: 0.95rem; }
 .muted { color: var(--d-muted); }
 .small { font-size: 0.88rem; }
@@ -82,16 +83,18 @@
 .iconBtn:disabled { opacity: 0.45; cursor: not-allowed; }
 
 /* Health bar (engagement 0-100) */
-.health { display: inline-flex; align-items: center; gap: 8px; min-width: 120px; }
-.healthTrack { position: relative; width: 70px; height: 8px; border-radius: 6px; background: var(--d-card-alt); overflow: hidden; border: 1px solid var(--d-line); }
+.health { display: inline-flex; align-items: center; gap: 8px; min-width: 96px; }
+.healthTrack { position: relative; width: 56px; height: 8px; border-radius: 6px; background: var(--d-card-alt); overflow: hidden; border: 1px solid var(--d-line); }
 .healthFill { position: absolute; inset: 0 auto 0 0; border-radius: 6px; background: color-mix(in srgb, var(--d-score-hi) var(--p), var(--d-score-lo)); }
 
 /* Tree */
-.treeLayout { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+.treeLayout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; align-items: start; }
 @media (max-width: 1000px) { .treeLayout { grid-template-columns: minmax(0, 1fr); } }
 .tree { list-style: none; margin: 0; padding: 0; }
 .tree .tree { padding-left: 22px; border-left: 2px dashed var(--d-line); margin-left: 14px; }
-.node { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 14px; min-height: 48px; flex-wrap: wrap; border: 2px solid transparent; }
+.node { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 14px; min-height: 48px; border: 2px solid transparent; }
+.nodeMain { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+@media (max-width: 640px) { .node { flex-wrap: wrap; } .nodeTools { margin-left: 0; } }
 .node:hover { background: var(--d-card-alt); }
 .nodeSelected { background: var(--d-accent-soft); border-color: var(--d-accent); }
 .nodeDrop { border-color: var(--d-accent); border-style: dashed; background: var(--d-accent-soft); }
@@ -99,8 +102,8 @@
 .nodeName:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 1px; }
 .drag { cursor: grab; color: var(--d-muted); display: inline-grid; place-items: center; width: 28px; min-height: 40px; }
 .typeTag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--d-muted); background: var(--d-card-alt); border-radius: 6px; padding: 2px 6px; }
-.counts { color: var(--d-muted); font-size: 0.88rem; white-space: nowrap; }
-.nodeTools { margin-left: auto; display: flex; gap: 6px; }
+.counts { color: var(--d-muted); font-size: 0.85rem; padding-left: 4px; }
+.nodeTools { margin-left: auto; display: flex; gap: 6px; flex: none; }
 .renameInput { font: inherit; font-weight: 700; border: 2px solid var(--d-focus); border-radius: 10px; padding: 6px 8px; min-height: 40px; width: 180px; max-width: 100%; }
 
 /* Import wizard steps */

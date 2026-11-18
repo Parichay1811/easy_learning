@@ -20,6 +20,7 @@ const { cleanYear } = require('../utils/schoolCalendar')
 const { entitlementsFor } = require('../utils/entitlements')
 const { audit } = require('../utils/audit')
 const { sendMail } = require('../utils/mailer')
+const { linkedParentEmails } = require('../utils/parentLinks')
 const q = require('../analytics/queries')
 
 const { validId } = tree
@@ -289,10 +290,11 @@ const listStudents = h(async (req, res) => {
   const ids = students.map((s) => s._id)
   const parents = await Parent.find({ orgId: req.org._id, studentIds: { $in: ids }, status: 'active' }).select('email studentIds').lean()
   const invites = new Map((await ParentInvite.find({ orgId: req.org._id }).lean()).map((i) => [String(i.parentId), i.status]))
+  const linked = await linkedParentEmails(parents.map((p) => p.email), students.map((s) => s.email))
   const byStudent = new Map()
   for (const p of parents) for (const sid of p.studentIds || []) {
     const k = String(sid); if (!byStudent.has(k)) byStudent.set(k, [])
-    byStudent.get(k).push({ email: p.email, status: invites.get(String(p._id)) || 'not_invited' })
+    byStudent.get(k).push({ email: p.email, status: linked.has(p.email) ? 'linked' : invites.get(String(p._id)) || 'not_invited' })
   }
   const batches = new Map(structure.batches.map((b) => [String(b._id), b.name]))
   res.json({
@@ -478,11 +480,12 @@ async function inviteRows(req) {
   const parents = await Parent.find({ orgId: req.org._id, status: 'active' }).select('name email studentIds').lean()
   const invites = new Map((await ParentInvite.find({ orgId: req.org._id }).lean()).map((i) => [String(i.parentId), i]))
   const names = new Map(structure.students.map((s) => [String(s._id), s.name]))
+  const linked = await linkedParentEmails(parents.map((p) => p.email), structure.students.map((s) => s.email))
   return parents
     .filter((p) => !scoped || (p.studentIds || []).some((id) => scoped.has(String(id))))
     .map((p) => {
       const inv = invites.get(String(p._id))
-      return { parentId: String(p._id), name: p.name, email: p.email, children: (p.studentIds || []).map((id) => names.get(String(id))).filter(Boolean), status: inv?.status || 'not_invited', sends: inv?.sends || 0, lastSentAt: inv?.lastSentAt || null, linkedAt: inv?.linkedAt || null }
+      return { parentId: String(p._id), name: p.name, email: p.email, children: (p.studentIds || []).map((id) => names.get(String(id))).filter(Boolean), status: linked.has(p.email) ? 'linked' : inv?.status || 'not_invited', sends: inv?.sends || 0, lastSentAt: inv?.lastSentAt || null, linkedAt: inv?.linkedAt || null }
     })
 }
 

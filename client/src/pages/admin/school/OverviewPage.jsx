@@ -50,7 +50,11 @@ function toSunburst(name, nodes) {
     const kids = (n.children || []).map(conv).filter((c) => (c.students ?? 0) > 0 || (c.children || []).length);
     return kids.length ? { id: n.id, name: n.name, score: f(n.engagement), children: kids } : { id: n.id, name: n.name, score: f(n.engagement), students: n.learners };
   };
-  return { id: "root", name, children: nodes.map(conv) };
+  const children = nodes.map(conv).filter((c) => (c.students ?? 0) > 0 || (c.children || []).length);
+  const size = (n) => (n.students != null ? n.students : (n.children || []).reduce((a, c) => a + size(c), 0));
+  const total = children.reduce((a, c) => a + size(c), 0);
+  const score = total ? children.reduce((a, c) => a + (c.score ?? 0) * size(c), 0) / total : null;
+  return { id: "root", name, score, children };
 }
 
 function SetupNudge() {
@@ -84,7 +88,9 @@ export default function OverviewPage() {
   const trend = useMemo(() => {
     if (!d?.series) return [];
     const prev = d.prevSeries?.points || [];
-    return d.series.points.map((p, i) => ({ x: p.key, value: p.minutes, prev: prev[i] ? prev[i].minutes : undefined }));
+    const n = Math.max(1, d.tiles?.learners || 1);
+    const per = (m) => Math.round((m / n) * 10) / 10;
+    return d.series.points.map((p, i) => ({ x: p.key, value: per(p.minutes), prev: prev[i] ? per(prev[i].minutes) : undefined }));
   }, [d]);
 
   if (locked) {
@@ -96,7 +102,7 @@ export default function OverviewPage() {
   const T = d?.tiles;
   const vs = d?.range?.term ? t("school.vsTerm", { defaultValue: "vs {{term}}", term: d.range.term.previous || "previous term" }) : t("school.vsPrev", { defaultValue: "vs the period before" });
   const chips = [
-    ...(lists.data?.atRiskCount ? [{ kind: "nudge", text: t("school.chip.atRisk", { defaultValue: "{{n}} need a nudge", n: lists.data.atRiskCount }), to: `${BASE}/insights?tab=lists` }] : []),
+    ...(lists.data?.atRiskCount ? [{ kind: "nudge", text: (lists.data.atRiskCount === 1 ? t("school.chip.atRisk1", { defaultValue: "1 needs a nudge" }) : t("school.chip.atRisk", { defaultValue: "{{n}} need a nudge", n: lists.data.atRiskCount })), to: `${BASE}/insights?tab=lists` }] : []),
     ...(lists.data?.wins?.length ? [{ kind: "celebrate", text: t("school.chip.wins", { defaultValue: "{{n}} big improvers", n: lists.data.wins.length }), to: `${BASE}/insights?tab=lists` }] : []),
     ...(d?.dip && d.dip.delta <= -5 ? [{ kind: "alert", text: t("school.chip.dip", { defaultValue: "{{row}} · {{subject}} down {{n}} pts", row: d.dip.row, subject: subjectLabel(t, d.dip.subject), n: -d.dip.delta }) }] : []),
     ...(d?.insights || []).slice(0, 1).map((i) => ({ kind: i.kind, text: i.text })),
@@ -132,7 +138,7 @@ export default function OverviewPage() {
               delta={T?.prevMinutesPerStudent != null ? { current: T.minutesPerStudent, previous: T.prevMinutesPerStudent, mode: "duration", vs } : undefined}
               sparkline={trend.map((p) => p.value)} helpText={t("school.tile.minutesHelp", { defaultValue: "Learning time divided by all students in view, including those who didn't learn." })} />
             <KpiTile loading={ov.loading} label={t("school.tile.accuracy", { defaultValue: "Accuracy" })} value={T?.accuracy != null ? fmtPercent(f(T.accuracy)) : NO_DATA}
-              delta={T?.prevAccuracy != null && T?.accuracy != null ? { current: T.accuracy, previous: T.prevAccuracy, mode: "points", vs } : undefined}
+              delta={T?.prevAccuracy != null && T?.accuracy != null ? { current: T.accuracy / 100, previous: T.prevAccuracy / 100, mode: "points", vs } : undefined}
               helpText={t("school.tile.accuracyHelp", { defaultValue: "Correct answers divided by answers given." })} />
             <KpiTile loading={ov.loading} label={t("school.tile.mastery", { defaultValue: "Practising or mastered" })} value={T?.masteryPct != null ? fmtPercent(f(T.masteryPct)) : NO_DATA}
               helpText={t("school.tile.masteryHelp", { defaultValue: "Share of student-subject pairs (with at least 5 answers) at Practising (50 %+) or Mastered (80 %+)." })} />
@@ -172,7 +178,7 @@ export default function OverviewPage() {
             </ChartCard>
           </div>
           <ChartCard
-            title={t("school.trend.title", { defaultValue: "Is learning time going up?" })}
+            title={t("school.trend.title", { defaultValue: "Is learning time per student going up?" })}
             answer={T ? t("school.trend.answer", { defaultValue: "{{m}} per student in this period.", m: fmtDuration(T.minutesPerStudent || 0) }) : ""}
             loading={ov.loading}
             table={toTable.trend(trend, t)}
@@ -193,7 +199,7 @@ function AtRiskPreview({ lists }) {
     <div className={s.grid2}>
       <section className={s.card} aria-labelledby="risk-h">
         <h2 id="risk-h" className={s.cardTitle}>{t("school.risk.title", { defaultValue: "Who needs a nudge?" })}</h2>
-        <p className={s.cardSub}>{l ? t("school.risk.sub", { defaultValue: "{{n}} students, grouped by class.", n: l.atRiskCount }) : ""}</p>
+        <p className={s.cardSub}>{l ? (l.atRiskCount === 1 ? t("school.risk.sub1", { defaultValue: "1 student." }) : t("school.risk.sub", { defaultValue: "{{n}} students, grouped by class.", n: l.atRiskCount })) : ""}</p>
         {l && !l.atRiskCount && <p className={s.okText}>{t("school.risk.none", { defaultValue: "Nobody right now. Lovely." })}</p>}
         <ul className={s.list}>
           {(l?.atRisk || []).slice(0, 4).map((g) => (

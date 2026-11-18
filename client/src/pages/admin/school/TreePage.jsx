@@ -13,6 +13,12 @@ import s from "./school.module.css";
 
 const TYPES = ["campus", "grade", "section", "department"];
 const CHILD_TYPE = { campus: "grade", grade: "section", department: null, section: null };
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+const countsText = (t, c) => [
+  plural(c.students || 0, t("school.word.student", { defaultValue: "student" }), t("school.word.students", { defaultValue: "students" })),
+  plural(c.teachers || 0, t("school.word.teacher", { defaultValue: "teacher" }), t("school.word.teachers", { defaultValue: "teachers" })),
+  plural(c.groups || 0, t("school.word.group", { defaultValue: "group" }), t("school.word.groups", { defaultValue: "groups" })),
+].join(" · ");
 const flatten = (nodes, depth = 0, out = []) => { for (const n of nodes) { out.push({ ...n, depth }); flatten(n.children, depth + 1, out); } return out; };
 
 function Node({ node, selected, onSelect, canEdit, onRename, onAddChild, onDelete, onDrop, dragId, setDragId }) {
@@ -34,20 +40,24 @@ function Node({ node, selected, onSelect, canEdit, onRename, onAddChild, onDelet
           <span className={s.drag} draggable onDragStart={(e) => { setDragId(node.id); e.dataTransfer.setData("text/plain", node.id); e.dataTransfer.effectAllowed = "move"; }} onDragEnd={() => setDragId(null)}
             title={t("school.tree.drag", { defaultValue: "Drag to move" })} aria-hidden="true"><FaGripVertical /></span>
         )}
-        {editing ? (
-          <span className={s.row}>
-            <label className="d-sr-only" htmlFor={`rn-${node.id}`}>{t("school.tree.newName", { defaultValue: "New name" })}</label>
-            <input id={`rn-${node.id}`} className={s.renameInput} value={name} autoFocus maxLength={80} onChange={(e) => setName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === "Enter") save(); if (e.key === "Escape") { setName(node.name); setEditing(false); } }} />
-            <button type="button" className={s.iconBtn} onClick={save} aria-label={t("school.save", { defaultValue: "Save" })}><FaCheck /></button>
-            <button type="button" className={s.iconBtn} onClick={() => { setName(node.name); setEditing(false); }} aria-label={t("school.cancel", { defaultValue: "Cancel" })}><FaTimes /></button>
+        <span className={s.nodeMain}>
+          <span className={s.row} style={{ gap: 6 }}>
+            {editing ? (
+              <>
+                <label className="d-sr-only" htmlFor={`rn-${node.id}`}>{t("school.tree.newName", { defaultValue: "New name" })}</label>
+                <input id={`rn-${node.id}`} className={s.renameInput} value={name} autoFocus maxLength={80} onChange={(e) => setName(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === "Enter") save(); if (e.key === "Escape") { setName(node.name); setEditing(false); } }} />
+                <button type="button" className={s.iconBtn} onClick={save} aria-label={t("school.save", { defaultValue: "Save" })}><FaCheck /></button>
+                <button type="button" className={s.iconBtn} onClick={() => { setName(node.name); setEditing(false); }} aria-label={t("school.cancel", { defaultValue: "Cancel" })}><FaTimes /></button>
+              </>
+            ) : (
+              <button type="button" className={s.nodeName} onClick={() => onSelect(node.id)} aria-pressed={selected === node.id}
+                onDoubleClick={canEdit ? () => setEditing(true) : undefined}>{node.name}</button>
+            )}
+            <span className={s.typeTag}>{t(`school.type.${node.type}`, { defaultValue: node.type })}</span>
           </span>
-        ) : (
-          <button type="button" className={s.nodeName} onClick={() => onSelect(node.id)} aria-pressed={selected === node.id}
-            onDoubleClick={canEdit ? () => setEditing(true) : undefined}>{node.name}</button>
-        )}
-        <span className={s.typeTag}>{t(`school.type.${node.type}`, { defaultValue: node.type })}</span>
-        <span className={s.counts}>{t("school.tree.counts", { defaultValue: "{{s}} students · {{t}} teachers · {{g}} groups", s: c.students || 0, t: c.teachers || 0, g: c.groups || 0 })}</span>
+          <span className={s.counts}>{countsText(t, c)}</span>
+        </span>
         <Health value={node.health?.engagement} />
         <span className={s.nodeTools}>
           <Link className={s.iconBtn} to={`${BASE}/units/${node.id}`} aria-label={t("school.tree.open", { defaultValue: "Open the dashboard for {{name}}", name: node.name })} title={t("school.tree.openShort", { defaultValue: "Dashboard" })}><FaChartPie /></Link>
@@ -90,7 +100,7 @@ function UnitPanel({ unitId, all, canEdit, canMove, onChanged }) {
   return (
     <section className={`${s.card} ${s.sticky}`} aria-labelledby="unit-h">
       <h2 id="unit-h" className={s.cardTitle}>{p.unit.label}</h2>
-      <p className={s.cardSub}>{t("school.tree.panelSub", { defaultValue: "{{s}} students · {{t}} teachers · {{g}} groups", s: p.students.length, t: p.teachers.length, g: p.groups.length })}</p>
+      <p className={s.cardSub}>{countsText(t, { students: p.students.length, teachers: p.teachers.length, groups: p.groups.length })}</p>
       <div className={s.actions} style={{ marginTop: 0 }}>
         <Button size="sm" to={`${BASE}/units/${unitId}`}>{t("school.tree.dashboard", { defaultValue: "Open dashboard" })}</Button>
         <Button size="sm" variant="soft" to={`${BASE}/people?unit=${unitId}`}>{t("school.tree.manage", { defaultValue: "Manage students" })}</Button>

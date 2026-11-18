@@ -99,6 +99,7 @@ function Queue() {
   const [picked, setPicked] = useState([]);
   const [result, setResult] = useState(null);
   const items = data.data?.items || [];
+  const current = items.some((b) => b._id === open) ? open : items[0]?._id || null;
   const bulk = async () => {
     try { const r = await api.post("/review/bulk", { ids: picked, action: "approve" }); setResult({ ok: true, text: t("school.review.bulkDone", { defaultValue: "{{n}} uploads approved.", n: r.updated }) }); setPicked([]); data.reload(); }
     catch (e) { setResult({ ok: false, text: e.message }); }
@@ -134,7 +135,7 @@ function Queue() {
           {data.loading ? <Skeleton variant="text" lines={6} /> : !items.length ? <EmptyState compact title={t("school.review.empty", { defaultValue: "Nothing waiting" })} text={t("school.review.emptyText", { defaultValue: "When teachers upload questions they appear here." })} /> : (
             <ul className={s.list}>
               {items.map((b) => (
-                <li key={b._id} className={s.listItem} style={open === b._id ? { outline: "3px solid var(--d-accent)" } : undefined}>
+                <li key={b._id} className={s.listItem} style={current === b._id ? { outline: "3px solid var(--d-accent)" } : undefined}>
                   {b.status === "pending" && (
                     <label className={s.check} style={{ padding: 0, minHeight: 0 }}>
                       <input type="checkbox" checked={picked.includes(b._id)} onChange={(e) => setPicked((p) => (e.target.checked ? [...p, b._id] : p.filter((x) => x !== b._id)))} />
@@ -152,7 +153,7 @@ function Queue() {
             </ul>
           )}
         </section>
-        {open ? <Detail key={open} id={open} onChanged={data.reload} /> : <div className={s.card}><p className={s.muted}>{t("school.review.pick", { defaultValue: "Choose an upload to preview it on the board, exactly as learners will see it." })}</p></div>}
+        {current ? <Detail key={current} id={current} onChanged={data.reload} /> : <div className={s.card}><p className={s.muted}>{t("school.review.pick", { defaultValue: "Choose an upload to preview it on the board, exactly as learners will see it." })}</p></div>}
       </div>
     </div>
   );
