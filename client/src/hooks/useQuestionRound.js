@@ -89,6 +89,8 @@ export function useQuestionRound({ module, subject, warriorSeconds = 30 }) {
       userAnswer: describe(userAnswer),
       correctAnswer: describe(current?.correct_answer),
       correct, xpEarned: xp, timeTaken, mode,
+      // Which bank question and topic, so a parent can review the exact card (PAR-033).
+      questionId: current?.id, topic: current?.academic?.curriculum_strand,
     }));
     if (correct) {
       setTotalScore((s) => s + 1);

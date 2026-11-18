@@ -11,6 +11,7 @@ const LearningEvent = require('../models/analytics/LearningEvent')
 const StudentAnswer = require('../models/StudentAnswer')
 const StudentAchievement = require('../models/StudentAchievement')
 const ARSession = require('../models/ARSession')
+const { ACHIEVEMENTS } = require('../controllers/dashboardController')
 
 const round1 = (n) => Math.round(n * 10) / 10
 const cap = (s) => String(s || '').charAt(0).toUpperCase() + String(s || '').slice(1)
@@ -72,7 +73,7 @@ async function trends(email, range) {
       if (cur.firstTryAccuracy >= prev.firstTryAccuracy + 3) parts.push('gets more right on the first try')
     }
   }
-  const summary = parts.length ? `${cap(parts.join(', ').replace(/, ([^,]*)$/, ' and $1'))} than the period before.` : (cur.answered ? 'Steady compared with the period before.' : null)
+  const summary = parts.length ? `${cap(parts.join(', ').replace(/, ([^,]*)$/, ' and $1'))} than the period before.` : (cur.answered ? 'Keeps a steady pace compared with the period before.' : null)
   return { range, bucket: by, points, current: cur, previous: prev, summary }
 }
 
@@ -149,7 +150,7 @@ function bankModel(module, subject) {
 }
 const CARD_FIELDS = 'id subject module interaction level level_name instruction prompt audio_text image question_image_link options correct_answer academic.skill academic.curriculum_strand hints'
 
-async function answers(email, { filter = 'all', limit = 30, before } = {}) {
+async function answers(email, { filter = 'all', limit = 30, before, module, subject } = {}) {
   const lim = Math.min(Math.max(Number(limit) || 30, 1), 100)
   const base = { email }
   if (before && !Number.isNaN(Date.parse(before))) base.timestamp = { $lt: new Date(before) }
@@ -159,6 +160,8 @@ async function answers(email, { filter = 'all', limit = 30, before } = {}) {
   const median = times.length ? times[Math.floor(times.length / 2)] : null
   const slowAt = Math.max(15, median ? median * 2 : 15)
   const f = { ...base }
+  if (MODULES.includes(module)) f.module = module
+  if (SUBJECTS.includes(subject)) f.subject = subject
   if (filter === 'wrong') f.correct = false
   else if (filter === 'hint') f.hintsUsed = { $gt: 0 }
   else if (filter === 'slow') f.timeTaken = { $gte: slowAt }
@@ -376,7 +379,7 @@ async function buildReport({ email, name, from, to, tz = 'UTC' }) {
   const matrix = q.matrix(o.days)
   const patterns = q.patterns(o.days)
   const who = name || 'Your child'
-  const rangeLabel = `from ${range.from} to ${range.to}`
+  const rangeLabel = `in these ${range.days} days`
   return {
     child: { name: who }, range, totals: o.cur, previous: o.prev, deltas: o.deltas, streak,
     series: q.series(o.days, range), matrix, patterns,
@@ -384,7 +387,7 @@ async function buildReport({ email, name, from, to, tz = 'UTC' }) {
     insights: buildInsights({ cur: o.cur, prev: o.prev, matrix, patterns, streak, who, rangeDays: range.days }),
     calendar: cal.filter((d) => d.date >= range.from && d.date <= range.to),
     sources: src.sources, sourcesNote: src.note, skills: sk, aiTeacher: { minutes: ai.minutes, topics: ai.topics.slice(0, 8) },
-    achievements: ach.filter((a) => a.earnedAt && a.earnedAt.toISOString().slice(0, 10) <= range.to).map((a) => ({ id: a.achievementId, earnedAt: a.earnedAt })),
+    achievements: ach.filter((a) => a.earnedAt && a.earnedAt.toISOString().slice(0, 10) <= range.to).map((a) => { const def = ACHIEVEMENTS.find((x) => x.id === a.achievementId); return { id: a.achievementId, name: def?.name, icon: def?.icon, earnedAt: a.earnedAt } }),
     milestones: ms.filter((m) => m.date >= range.from && m.date <= range.to),
     generatedAt: new Date(),
   }

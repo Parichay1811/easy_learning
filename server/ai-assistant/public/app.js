@@ -976,12 +976,46 @@ function aroundTheBoard(plan) {
   }
 }
 
+// Usage for a signed-in learner's parents (FND-045): the lesson's topic id, its
+// title and the time on it. Never what the child typed or said. Anonymous
+// visitors (no learner token in this origin's storage) log nothing.
+const usage = { topic: null, title: "", subject: "", since: 0 };
+const learnerToken = () => {
+  try { return localStorage.getItem("jwt_token") || localStorage.getItem("firebase_jwt"); } catch { return null; }
+};
+function flushUsage() {
+  if (!usage.topic || !usage.since) return;
+  const seconds = Math.round((Date.now() - usage.since) / 1000);
+  usage.since = document.hidden ? 0 : Date.now();
+  const token = learnerToken();
+  if (!token || seconds < 5) return;
+  let tz = "UTC";
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC"; } catch { /* default */ }
+  fetch("/api/dashboard/ai-teacher-log", {
+    method: "POST", keepalive: true,
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, "X-Timezone": tz },
+    body: JSON.stringify({ topic: usage.topic, title: usage.title, subject: usage.subject, seconds }),
+  }).catch(() => {});
+}
+function trackLesson(card, id) {
+  if (usage.topic === id) return;
+  flushUsage();
+  Object.assign(usage, { topic: id, title: card.title || "", subject: card.subject || "", since: Date.now() });
+}
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) flushUsage();
+  else if (usage.topic) usage.since = Date.now();
+});
+window.addEventListener("pagehide", flushUsage);
+setInterval(flushUsage, 5 * 60 * 1000);
+
 async function loadLesson(id) {
   lessonFor = id;
   try {
     const card = await (await fetch(`/api/ai-assistant/lesson?id=${encodeURIComponent(id)}`)).json();
     if (lessonFor !== id || card.error) return;
     lesson = card;
+    trackLesson(card, id);
     showSubject(card.subject, card.group || card.title, card.subject + " " + card.group + " " + card.title);
     showCards(card);
     showRelated(card.related || []);

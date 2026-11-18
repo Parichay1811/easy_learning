@@ -219,7 +219,8 @@ const updateSettings = handle(async (req, res) => {
 const getGoal = handle(async (req, res) => {
   const tz = req.get('x-timezone') || req.query.tz || 'UTC'
   const goal = req.child.weeklyGoal
-  ok(res, { goal, progress: goal ? await fam.goalProgress(req.child.email, goal, safeTz(tz)) : null })
+  // Without a goal the week is still shown, measured against a gentle default (20 min on 5 days).
+  ok(res, { goal, progress: await fam.goalProgress(req.child.email, goal || { minutesPerDay: 20, daysPerWeek: 5 }, safeTz(tz)) })
 })
 
 // ── Cheers (PAR-061) ─────────────────────────────────────────────────────────

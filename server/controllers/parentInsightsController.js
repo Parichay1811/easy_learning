@@ -44,7 +44,7 @@ const year = handle(async (req, res) => {
 // GET /children/:id/answers?filter=wrong|hint|slow|all&limit&before
 const answers = handle(async (req, res) => {
   const filter = ['wrong', 'hint', 'slow', 'all'].includes(req.query.filter) ? req.query.filter : 'all'
-  ok(res, await ins.answers(req.child.email, { filter, limit: req.query.limit, before: req.query.before }))
+  ok(res, await ins.answers(req.child.email, { filter, limit: req.query.limit, before: req.query.before, module: req.query.module, subject: req.query.subject }))
 })
 
 // GET /children/:id/activity.csv?from&to : the usage log as CSV (audited export).

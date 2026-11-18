@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as FramerMotion from "framer-motion";
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase/auth";
@@ -15,6 +15,13 @@ const ParentLogin = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { parentGoogleSignIn } = useAdminAuth();
+  // A co-guardian invite link (/parent-login?invite=…) is kept until sign-in; the dashboard accepts it.
+  useEffect(() => {
+    try {
+      const invite = new URLSearchParams(window.location.search).get("invite");
+      if (invite) sessionStorage.setItem("parent_invite", invite);
+    } catch { /* private mode */ }
+  }, []);
 
   const handleGoogle = async () => {
     setError("");

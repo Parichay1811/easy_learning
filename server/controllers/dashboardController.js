@@ -380,4 +380,4 @@ const getRounds = async (req, res) => {
   }
 }
 
-module.exports = { logSession, getStats, getActivity, getAchievements, getPerformance, getModuleStars, logAnswer, getAnswers, logRound, getRounds }
+module.exports = { ACHIEVEMENTS, logSession, getStats, getActivity, getAchievements, getPerformance, getModuleStars, logAnswer, getAnswers, logRound, getRounds }
