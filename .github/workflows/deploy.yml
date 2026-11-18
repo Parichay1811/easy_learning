@@ -45,10 +45,8 @@ jobs:
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v12
         with:
-          # Lighthouse CI serves this folder itself and swaps in its own port.
-          staticDistDir: ./client/dist
-          urls: |
-            http://localhost/
+          # lighthouserc.json points Lighthouse CI at client/dist: it serves that
+          # folder itself and swaps its own port into http://localhost/.
           configPath: ./.github/lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
