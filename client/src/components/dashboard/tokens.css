@@ -1,0 +1,289 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   Learnigo dashboard design tokens (DSN-010).
+
+   Scope: every variable lives on `.dash`, the class DashboardShell puts on its
+   root. Anything rendered inside the shell can read them. To use a kit
+   component outside the shell, wrap it in <div className="dash">.
+
+   Theme: follows the OS (prefers-color-scheme) unless the `.dash` element, or
+   any ancestor, carries data-theme="light" | "dark".
+
+   Contrast (checked with WCAG relative luminance, see README):
+   - --d-ink / --d-muted on card and canvas: >= 4.5:1 in both themes.
+   - Fixed brand colours (--d-english …) are FILLS and strokes. When you need
+     coloured TEXT use the matching `-ink` variable, which passes 4.5:1.
+   - Colour never carries meaning alone: charts add labels, glyphs, patterns.
+   ────────────────────────────────────────────────────────────────────────── */
+
+.dash {
+  /* Surfaces */
+  --d-canvas: #f6f8fc;
+  --d-card: #ffffff;
+  --d-card-alt: #f1f4fa;
+  --d-ink: #1d2433;
+  --d-muted: #5b6478;
+  --d-line: #e2e7f0;
+  --d-control: #8a93a8;          /* borders of inputs/buttons: 3:1 against the card */
+  --d-shadow: 0 2px 4px rgba(29, 36, 51, 0.04), 0 10px 28px rgba(29, 36, 51, 0.07);
+  --d-shadow-pop: 0 12px 36px rgba(29, 36, 51, 0.22);
+  --d-overlay: rgba(20, 26, 44, 0.45);
+
+  /* Brand / interactive */
+  --d-accent: #6c5ce7;           /* Learnigo purple: buttons, selected */
+  --d-on-accent: #ffffff;
+  --d-accent-ink: #5a4bd6;       /* accent used as text/icon on a card */
+  --d-accent-soft: #ece9ff;
+  --d-focus: #4f46c8;
+
+  /* Subjects: FIXED fills, identical in both themes */
+  --d-english: #7b6dff;
+  --d-maths: #3d9bff;
+  --d-science: #43c0a0;
+  --d-english-ink: #5a4bd6;
+  --d-maths-ink: #0b5cad;
+  --d-science-ink: #0a7a62;
+
+  /* Modules: FIXED fills */
+  --d-listen: #4dc9ff;
+  --d-read: #ff9d3b;
+  --d-write: #ff6b9d;
+  --d-speak: #6bcf7f;
+  --d-listen-ink: #0a6c99;
+  --d-read-ink: #a35200;
+  --d-write-ink: #b0245f;
+  --d-speak-ink: #1d7a38;
+  --d-on-fill: #1d2433;          /* text placed on a subject/module fill */
+
+  /* Status. Fill = icons, bars, borders. Ink = text on a card. */
+  --d-good: #2e7d32;
+  --d-attention: #ef6c00;
+  --d-alert: #c0392b;
+  --d-neutral: #6b7280;
+  --d-good-ink: #2e7d32;
+  --d-attention-ink: #b45309;
+  --d-alert-ink: #c0392b;
+  --d-neutral-ink: #5b6478;
+  --d-good-soft: #e6f4e7;
+  --d-attention-soft: #fff0df;
+  --d-alert-soft: #fbe9e7;
+  --d-neutral-soft: #eceff4;
+
+  /* Mastery scale (sequential, lightness always increases with mastery) */
+  --d-m0: #e3e7ee;  --d-m0-ink: #4a5568;   /* not started */
+  --d-m1: #ffe08a;  --d-m1-ink: #1d2433;   /* learning */
+  --d-m2: #7fd1b9;  --d-m2-ink: #1d2433;   /* practising */
+  --d-m3: #187a62;  --d-m3-ink: #ffffff;   /* mastered */
+
+  /* Activity heat ramp (minutes) and continuous score ramp (0..1) */
+  --d-h0: #eaeef6;
+  --d-h1: #d9d4ff;
+  --d-h2: #b3a9ff;
+  --d-h3: #8576f0;
+  --d-h4: #4f3fc4;
+  --d-hi0: #1d2433; --d-hi1: #1d2433; --d-hi2: #1d2433; --d-hi3: #1d2433; --d-hi4: #ffffff; /* text on a heat cell */
+  --d-score-lo: #ffe08a;
+  --d-score-hi: #187a62;
+
+  /* Chart furniture */
+  --d-grid: #e2e7f0;
+  --d-tick: #5b6478;
+  --d-band: rgba(108, 92, 231, 0.12);
+  --d-pattern: rgba(29, 36, 51, 0.45);
+  --d-skeleton-a: #eaeef6;
+  --d-skeleton-b: #f6f8fc;
+
+  /* Shape */
+  --d-radius: 22px;
+  --d-radius-sm: 14px;
+  --d-radius-pill: 999px;
+  --d-touch: 44px;
+  --d-font: "Fredoka", system-ui, sans-serif;
+
+  color-scheme: light;
+  font-family: var(--d-font);
+  color: var(--d-ink);
+  background: var(--d-canvas);
+  font-size: 16px;
+}
+
+/* Dark values, shared by the OS preference and the explicit override. */
+@media (prefers-color-scheme: dark) {
+  .dash:not([data-theme="light"]):not([data-theme="light"] .dash) {
+    --d-canvas: #0f1424;
+    --d-card: #171e33;
+    --d-card-alt: #1d2640;
+    --d-ink: #eef1f8;
+    --d-muted: #a6afc4;
+    --d-line: #2a3350;
+    --d-control: #7b8499;
+    --d-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 10px 28px rgba(0, 0, 0, 0.35);
+    --d-shadow-pop: 0 12px 36px rgba(0, 0, 0, 0.6);
+    --d-overlay: rgba(0, 0, 0, 0.6);
+    --d-accent: #a99fff;
+    --d-on-accent: #0f1424;
+    --d-accent-ink: #a99fff;
+    --d-accent-soft: #2a2760;
+    --d-focus: #c4bcff;
+    --d-english-ink: #a99fff;
+    --d-maths-ink: #6db3ff;
+    --d-science-ink: #43c0a0;
+    --d-listen-ink: #4dc9ff;
+    --d-read-ink: #ff9d3b;
+    --d-write-ink: #ff7fae;
+    --d-speak-ink: #6bcf7f;
+    --d-good: #5fbf64;
+    --d-attention: #ff9a3c;
+    --d-alert: #ff7b6b;
+    --d-neutral: #9aa3b8;
+    --d-good-ink: #6fcf74;
+    --d-attention-ink: #ffb067;
+    --d-alert-ink: #ff7b6b;
+    --d-neutral-ink: #9aa3b8;
+    --d-good-soft: #1c3322;
+    --d-attention-soft: #3a2a17;
+    --d-alert-soft: #3d2022;
+    --d-neutral-soft: #232b42;
+    --d-m0: #2d3548;  --d-m0-ink: #b4bdd0;
+    --d-m1: #7a6320;  --d-m1-ink: #fff4cf;
+    --d-m2: #2f8f7a;  --d-m2-ink: #0f1424;
+    --d-m3: #5fe0bf;  --d-m3-ink: #0f1424;
+    --d-h0: #222a42;
+    --d-h1: #34306b;
+    --d-h2: #5448b0;
+    --d-h3: #8576f0;
+    --d-h4: #c4bcff;
+    --d-hi0: #eef1f8; --d-hi1: #eef1f8; --d-hi2: #eef1f8; --d-hi3: #0f1424; --d-hi4: #0f1424;
+    --d-score-lo: #7a6320;
+    --d-score-hi: #5fe0bf;
+    --d-grid: #2a3350;
+    --d-tick: #a6afc4;
+    --d-band: rgba(169, 159, 255, 0.16);
+    --d-pattern: rgba(255, 255, 255, 0.55);
+    --d-skeleton-a: #1d2640;
+    --d-skeleton-b: #263153;
+    color-scheme: dark;
+  }
+}
+
+.dash[data-theme="dark"],
+[data-theme="dark"] .dash {
+  --d-canvas: #0f1424;
+  --d-card: #171e33;
+  --d-card-alt: #1d2640;
+  --d-ink: #eef1f8;
+  --d-muted: #a6afc4;
+  --d-line: #2a3350;
+  --d-control: #7b8499;
+  --d-shadow: 0 2px 4px rgba(0, 0, 0, 0.25), 0 10px 28px rgba(0, 0, 0, 0.35);
+  --d-shadow-pop: 0 12px 36px rgba(0, 0, 0, 0.6);
+  --d-overlay: rgba(0, 0, 0, 0.6);
+  --d-accent: #a99fff;
+  --d-on-accent: #0f1424;
+  --d-accent-ink: #a99fff;
+  --d-accent-soft: #2a2760;
+  --d-focus: #c4bcff;
+  --d-english-ink: #a99fff;
+  --d-maths-ink: #6db3ff;
+  --d-science-ink: #43c0a0;
+  --d-listen-ink: #4dc9ff;
+  --d-read-ink: #ff9d3b;
+  --d-write-ink: #ff7fae;
+  --d-speak-ink: #6bcf7f;
+  --d-good: #5fbf64;
+  --d-attention: #ff9a3c;
+  --d-alert: #ff7b6b;
+  --d-neutral: #9aa3b8;
+  --d-good-ink: #6fcf74;
+  --d-attention-ink: #ffb067;
+  --d-alert-ink: #ff7b6b;
+  --d-neutral-ink: #9aa3b8;
+  --d-good-soft: #1c3322;
+  --d-attention-soft: #3a2a17;
+  --d-alert-soft: #3d2022;
+  --d-neutral-soft: #232b42;
+  --d-m0: #2d3548;  --d-m0-ink: #b4bdd0;
+  --d-m1: #7a6320;  --d-m1-ink: #fff4cf;
+  --d-m2: #2f8f7a;  --d-m2-ink: #0f1424;
+  --d-m3: #5fe0bf;  --d-m3-ink: #0f1424;
+  --d-h0: #222a42;
+  --d-h1: #34306b;
+  --d-h2: #5448b0;
+  --d-h3: #8576f0;
+  --d-h4: #c4bcff;
+  --d-hi0: #eef1f8; --d-hi1: #eef1f8; --d-hi2: #eef1f8; --d-hi3: #0f1424; --d-hi4: #0f1424;
+  --d-score-lo: #7a6320;
+  --d-score-hi: #5fe0bf;
+  --d-grid: #2a3350;
+  --d-tick: #a6afc4;
+  --d-band: rgba(169, 159, 255, 0.16);
+  --d-pattern: rgba(255, 255, 255, 0.55);
+  --d-skeleton-a: #1d2640;
+  --d-skeleton-b: #263153;
+  color-scheme: dark;
+}
+
+/* ── Shared base for everything inside a dashboard ───────────────────── */
+.dash *,
+.dash *::before,
+.dash *::after {
+  box-sizing: border-box;
+}
+
+/* The site sets letter-spacing/line-height on `*` for dyslexia. Keep that for
+   prose, but SVG text and tight numeric tiles need a calmer rhythm. */
+.dash svg text {
+  letter-spacing: 0;
+  word-spacing: 0;
+  font-family: var(--d-font);
+}
+
+.dash :focus-visible {
+  outline: 3px solid var(--d-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+:where(.dash) button {
+  font-family: inherit;
+  color: inherit;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dash *,
+  .dash *::before,
+  .dash *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visually hidden but available to screen readers */
+.dash .d-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* DSN-031: print. No sidebar, flat cards, pages break between sections. */
+@media print {
+  .dash {
+    --d-canvas: #ffffff;
+    --d-shadow: none;
+    background: #fff;
+  }
+  .dash [data-print="hide"] {
+    display: none !important;
+  }
+  .dash [data-print="section"] {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}
