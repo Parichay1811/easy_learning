@@ -288,14 +288,14 @@ const runDeletion = h(async (req) => {
   const result = await svc.eraseLearner(r.subjectEmail)
   r.result = result
   await r.save()
-  await audit(req, 'data_rights.delete_run', { targetType: 'learner', targetId: r.subjectEmail, orgId: r.orgId || '', meta: { requestId: String(r._id), result: result ?? null } })
+  await audit(req, 'learner.erase', { targetType: 'learner', targetId: r.subjectEmail, orgId: r.orgId || '', meta: { requestId: String(r._id), result: result ?? null } })
   return { result: result ?? null, footprint: await footprint(r.subjectEmail) }
 })
 
 // Erase every approved deletion whose grace period is over (also run daily by the job registry).
 const runDue = h(async (req) => {
   const done = await require('../../services/dataRights').runDueDeletions()
-  for (const d of done) await audit(req, 'data_rights.delete_run', { targetType: 'data_request', targetId: String(d.id), meta: d.counts })
+  for (const d of done) await audit(req, 'learner.erase', { targetType: 'data_request', targetId: String(d.id), meta: d.counts })
   return { erased: done.length, done }
 })
 

@@ -81,7 +81,7 @@ jobs.register('dataRights.erase', {
   run: async () => {
     const { audit } = require('../utils/audit')
     const done = await require('./dataRights').runDueDeletions()
-    for (const d of done) await audit({ actor: { role: 'system', id: 'jobs' } }, 'data_rights.delete_run', { targetType: 'data_request', targetId: String(d.id), meta: d.counts })
+    for (const d of done) await audit({ actor: { role: 'system', id: 'jobs' } }, 'learner.erase', { targetType: 'data_request', targetId: String(d.id), meta: d.counts })
     return { erased: done.length }
   },
 })
