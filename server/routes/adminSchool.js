@@ -79,7 +79,7 @@ router.put('/bank/:id/tags', permit('questions.review'), g.tagBank)
 
 // Policies, branding, billing, privacy, audit (ADM-060/061/080/081/082)
 router.get('/policies', permit('settings.read'), g.getPolicies)
-router.put('/policies', adminOnly, g.updatePolicies)
+router.put('/policies', adminOnly, requireModule('comms.policy'), g.updatePolicies)
 router.put('/branding', adminOnly, requireModule('reports.branded'), g.updateBranding)
 router.get('/billing', adminOnly, g.billing)
 router.get('/privacy', adminOnly, g.privacy)
