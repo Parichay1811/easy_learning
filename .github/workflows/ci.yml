@@ -40,6 +40,8 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: server/package-lock.json
+      # The assistant's speech fixing reads the system word list (/usr/share/dict/words).
+      - run: sudo apt-get update -q && sudo apt-get install -y -q wamerican
       # The assistant uses the server's packages (it lives inside server/). CPU-only onnxruntime,
       # and no llama.cpp build (the CI machine has no GPU and the tests don't use a local LLM).
       - run: npm ci
