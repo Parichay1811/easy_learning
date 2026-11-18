@@ -43,26 +43,32 @@ AI Teacher's wooden board) but calmer, because dashboards are for reading.
 └──────────────┴────────────────────────────────────────────────────────────┘
 ```
 
-- [ ] **DSN-001** Shared `DashboardShell` component `P0` `Platform`
+- [x] **DSN-001** Shared `DashboardShell` component `P0` `Platform`
+  - *Done:* `client/src/components/dashboard/DashboardShell.jsx`, used by the Parent, Teacher, Admin (school) and Super Admin dashboards; bottom tabs on phones.
   - Collapsible sidebar (icons only at < 1280 px, bottom tab bar on phones). A context switcher for role / org / child (from FND-010 memberships). Breadcrumbs generated from the org tree (FND-017). A bell (FND-050) and an avatar menu.
   - It replaces the separate layouts in `pages/parent`, `pages/teacher`, `pages/admin` and `pages/superadmin`.
-- [ ] **DSN-002** Command palette (⌘K / Ctrl-K, the search icon on phones) `P1` `Platform`
+- [x] **DSN-002** Command palette (⌘K / Ctrl-K, the search icon on phones) `P1` `Platform`
+  - *Done:* `CommandPalette` (Ctrl/Cmd+K, forgiving search, recents, keyboard and screen reader). It still has to be given items in each dashboard.
   - Search people, groups, tests, questions and pages, scoped by permissions. Recent items. Actions such as "Create test", "Invite parent" and "Open Grade 5".
-- [ ] **DSN-003** Time-range bar `P0` `Platform`
+- [x] **DSN-003** Time-range bar `P0` `Platform`
+  - *Done:* `TimeRangeBar` + `useTimeRange` (Day/Week/Month/Year/Custom, compare, terms, state in the URL).
   - Day / Week / Month / Year / Custom, a "compare with" option (previous period, same period last year, none), and an academic-term picker for institutes. The state lives in the URL, so a link shares the exact view.
 - [ ] **DSN-004** Drill-down and "zoom" transitions `P1` `Platform`
+  - *Not done:* drill-down works by navigation; the animated zoom transition is not built.
   - Clicking a bar, cell or tile pushes the next level with a short shared-element animation (framer-motion, already in the client). Back returns to the same scroll position. Reduced motion means instant swaps.
 
 ## D3. Visual language for data
 
-- [ ] **DSN-010** Dashboard tokens `P0` `Platform`
+- [x] **DSN-010** Dashboard tokens `P0` `Platform`
+  - *Done:* `tokens.css`: fixed subject and module colours, status and mastery scales, light and dark.
   - Base: the site's Fredoka font, white cards with 20–24 px radius, soft shadows. Light canvas `#f6f8fc` for data pages, plus a dark mode.
   - **Fixed colours per subject and module, everywhere.** Proposal, aligned to the site palette:
     - English `#7b6dff` (purple) · Maths `#3d9bff` (blue) · Science `#43c0a0` (teal-green)
     - Listen `#4dc9ff` · Read `#ff9d3b` · Write `#ff6b9d` · Speak `#6bcf7f`
     - Status: good `#2e7d32`, attention `#ef6c00`, alert `#c0392b`, neutral `#6b7280`
   - Check every pair for colour-blind safety (deuteranopia/protanopia) and ≥ 4.5:1 text contrast. Patterns or labels back up colour on every chart.
-- [ ] **DSN-011** Numbers `P0` `Platform`
+- [x] **DSN-011** Numbers `P0` `Platform`
+  - *Done:* `format.js` (durations, deltas, percentages, "—" for missing data, locale-aware).
   - Locale-aware formatting. Durations as "2 h 10 min". Deltas as ▲ +12 % in green or ▼ −4 % in orange, with "vs last week" spelled out on hover and for screen readers. "—" with a tooltip when there is no data, never `NaN` or `0 %`.
 
 ## D4. Chart catalogue: the right picture for each question
@@ -85,11 +91,14 @@ Built on **Recharts** (already a client dependency) plus a few custom SVG pieces
 | "What happened, in order?" | **Timeline** of sessions and events with icons, expandable to see answers | Parent, Teacher |
 | "Progress towards a goal" | **Progress ring** (weekly minutes goal, test completion) | Parent, Student, Teacher |
 
-- [ ] **DSN-020** Chart kit `P0` `Platform`
+- [x] **DSN-020** Chart kit `P0` `Platform`
+  - *Done:* 13 charts plus `ChartCard` (question title, answer line, info, view as table, text summary, loading/empty/error).
   - Each chart: a title phrased as a question, a one-line answer under it, a legend only when needed, a hover/tap tooltip, an "ⓘ how is this calculated?" link to the metric definition, an accessible text summary (`aria-describedby`), a "view as table" toggle and empty/loading/error states.
-- [ ] **DSN-021** Story card `P1` `Platform` · needs FND-044
+- [x] **DSN-021** Story card `P1` `Platform` · needs FND-044
+  - *Done:* `StoryCard`, fed by the shared insights engine.
   - The top of each overview. One sentence plus 2–4 insight chips (celebrate / info / nudge / alert). Each chip opens the chart that proves it.
-- [ ] **DSN-022** Celebrations `P2` `Family`
+- [x] **DSN-022** Celebrations `P2` `Family`
+  - *Done:* `Celebration` + `useCelebrateOnce`; Parent milestones use it.
   - Milestones (first mastered skill, 7-day streak, 1,000 questions) appear as a soft confetti card for parents and a badge for the child. One per visit, never noisy. Respects reduced motion.
 
 ## D5. Layout by device
@@ -101,9 +110,11 @@ Built on **Recharts** (already a client dependency) plus a few custom SVG pieces
 | Admin | **Laptop / desktop** | Dense grids, tree on the left, multi-chart overview. Readable on a projector in meetings. |
 | Super admin | **Desktop** | Data-dense console with tables and filters. Phone layout only for alerts. |
 
-- [ ] **DSN-030** States that teach `P0` `Platform`
+- [x] **DSN-030** States that teach `P0` `Platform`
+  - *Done:* `EmptyState`, `Skeleton`, `PlanLockCard`, used across the dashboards.
   - Empty states explain the next step with one button ("Link your child to see their learning", "Create your first group"). Skeleton loaders shaped like the real content. Upgrade cards for locked modules show a preview of what you'd get (blurred sample data), never an error.
 - [ ] **DSN-031** Print and PDF styles `P1` `Platform`
+  - *Partly done:* the report pages (Parent report, Comms `ReportView`) print cleanly to A4 with black-and-white-safe charts and the school logo; dashboards themselves only hide the sidebar when printed.
   - Every report page prints cleanly on A4/Letter: no sidebar, charts in black-and-white-safe patterns, page breaks between sections, school logo on `reports.branded`.
 
 ## D6. Key screens (wireframes)
