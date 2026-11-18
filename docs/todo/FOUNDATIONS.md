@@ -33,6 +33,7 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
   - Give each learner a stable `learnerId`. Activity collections (`StudentAnswer`, `StudentRound`, `StudentActivity`, `StudentAchievement`, `ARSession`) gain a `learnerId`. Keep `email` for compatibility, and back-fill.
   - A managed learner can later "graduate" to their own login without losing history.
 - [ ] **FND-012** Verified linking flows `P0` `Family` `Solo` `Institute` · needs FND-011
+  - *School-verified sign-in (ADMIN work):* `utils/parentLinks.linkSchoolChildren` runs on every parent sign-in: each active org `Parent` with the verified email becomes verified `Child` links (pending ones are verified, revoked ones untouched); `ParentInvite` tracks invited / linked / bounced.
   - *Done so far (PR #86):* **school-verified** (an org `Parent` and `Student` with matching emails verify a link automatically) and **link code** (the learner makes a one-time 6-character code on their Dashboard, valid 24 h, stored hashed, rate-limited; the parent enters it). *Still to do:* parent-created managed learners, teacher join codes, revoking a link, co-guardian approval.
   - **School-verified:** the admin adds a parent to a student (the `admin/Parent` records that exist today), and the parent gets an email invite. When they sign in with that email they are linked and verified. *This also connects the two parent systems that are separate today.*
   - **Parent-created:** the parent creates a managed learner and is verified as its guardian.
@@ -52,10 +53,12 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
   - *Done (Teacher work):* Solo self-signup creates both `Organization` copies (`kind: solo`, approved, `plan: solo_free`), an OrgAdmin and a Tutor (`services/teacherWorkspaces.js`). FND-016 still to do.
 - [ ] **FND-016** One source of truth for `Organization` `P1` `Platform`
   - Replace the hand-synced duplicate with one collection, read by the super admin through a service. Remove the double-write sites listed in design-guide §5.4.
-- [ ] **FND-017** Org units `P1` `Institute`
+- [x] **FND-017** Org units `P1` `Institute`
+  - *Done (ADMIN work):* `models/admin/OrgUnit.js` with id paths (`/<campus>/<grade>/<section>/`, renames are free), `utils/orgUnits.js` (create, bulk, rename, move subtree, delete-if-empty, `membersOf`, `unitCounts`), `Batch.unitId`, `Student.unitId`, `Tutor.unitIds`. Unit analytics sum `LearnerDay` for the unit's learners on demand (no `unitPath` rollup table needed: 500 students in ~220 ms).
   - `OrgUnit {orgId, parentId, type: campus|grade|section|department, name, path}` with a materialized `path` (`/campus1/grade5/5B`) for fast subtree queries. `Batch` gains `unitId`.
   - Moving a unit moves its subtree. Analytics rollups are keyed by `unitPath` so any level can be summed.
-- [ ] **FND-018** Academic years and terms `P1` `Institute`
+- [x] **FND-018** Academic years and terms `P1` `Institute`
+  - *Done (ADMIN work):* `models/admin/AcademicYear.js` (terms, holidays, exam weeks), promotion with `StudentMove` history, `Batch.yearId` and `Batch.archivedAt` (read-only on admin routes). *Still to do:* tests belonging to a year (test models), teacher routes honouring `archivedAt`.
   - `AcademicYear {orgId, name, start, end, terms[]}`. Groups, tests and reports belong to a year, and old years stay readable (read-only).
 
 ## F3. Permissions: one rule engine
@@ -83,7 +86,8 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
 - [ ] **FND-021** Scope analytics to the viewer's workspace `P0` `Solo` `Institute`
   - A school sees activity that happens **in the school's context**: assigned tests and work, and activity during school hours if the org opts in. It does not see free home play or another tutor's tests. Parents see everything their child does.
   - Every event stores `orgId` (nullable) and `groupIds` at the time it happened (FND-040), so this filter is cheap.
-- [ ] **FND-022** Privacy settings per org `P1` `Institute`
+- [x] **FND-022** Privacy settings per org `P1` `Institute`
+  - *Done (ADMIN work):* `GET/PUT /api/admin/policies` with validation; `policyAllows` / `requirePolicy` in `utils/orgPolicy.js` for the features that must obey them (see FOUNDATION_API.md). *Not done:* a "teachers see each other's groups" setting.
   - Whether parents see class averages, whether leaderboards are on, whether parents can message teachers, and whether teachers can see each other's groups.
 
 ## F5. Plans, modules and entitlements
@@ -95,6 +99,7 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
   - Module keys: `core.learning`, `ai.teacher`, `family.link`, `analytics.basic`, `analytics.deep`, `groups`, `qbank.author`, `qbank.share`, `tests`, `tests.advanced`, `grading.manual`, `reports.branded`, `comms`, `comms.policy`, `org.tree`, `org.campus`, `org.analytics`, `staff.roles`, `sso`, `api.export`.
   - Migrate the existing `subscriptionPlan` enum (`free/basic/pro/enterprise` on superadmin `Organization`) to plan ids (`free`, `family_plus`, `solo_free`, `solo_pro`, `institute`, `enterprise`).
 - [ ] **FND-031** Limits `P1` `Solo` `Institute`
+  - *Seats done (ADMIN work):* `utils/seats.js` `seatInfo` / `assertSeats` (bought seats = superadmin `Organization.seats` or plan `limits.students`).
   - Seats (students per org), groups per solo plan, storage for media, tests per month (if needed). Show usage against each limit on billing pages.
   - *Partly done (Teacher work):* `groups` and `students` limits enforced for teachers (402 `PLAN_LIMIT`) with usage on the Groups and Plan pages; join links respect them. Admin-side creation and storage/tests limits are not enforced yet.
 - [ ] **FND-032** Billing `P1` `Family` `Solo` `Institute`

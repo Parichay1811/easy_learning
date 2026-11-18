@@ -25,7 +25,7 @@ const overview = wrap(async (req, scope) => {
   const o = await q.overview(scope.emails, query(req, scope))
   const single = scope.emails.length === 1
   const [streak, series, matrix, patterns] = await Promise.all([
-    single ? q.streak(scope.emails[0], scope.tz) : null,
+    single ? q.streak(scope.emails[0], scope.tz, { skipDates: scope.skipDates }) : null,
     q.series(o.days, o.range),
     q.matrix(o.days),
     q.patterns(o.days),

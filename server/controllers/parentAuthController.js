@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { identityFromRequest } = require('../utils/firebaseToken')
 const ParentAccount = require('../models/ParentAccount')
+const { linkSchoolChildren } = require('../utils/parentLinks')
 
 const googleSignIn = async (req, res) => {
   try {
@@ -17,6 +18,10 @@ const googleSignIn = async (req, res) => {
       parent.photoURL = photoURL || parent.photoURL
       await parent.save()
     }
+
+    // The school's invite is the verification (ADM-022): link the children every
+    // school listed for this verified email. Never blocks sign-in.
+    try { await linkSchoolChildren(parent) } catch (err) { console.error('linkSchoolChildren failed:', err.message) }
 
     const token = jwt.sign(
       { id: parent._id, uid: parent.uid, email: parent.email, name: parent.name, role: 'parent' },

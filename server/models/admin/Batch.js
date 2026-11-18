@@ -36,6 +36,9 @@ const schema = new mongoose.Schema({
   archivedAt: { type: Date, default: null },
   joinCode: { type: String, default: undefined },
   joinEnabled: { type: Boolean, default: true },
+  // School tree and academic year (ADM-010/012). Archived groups (archivedAt above) are read-only but still reportable.
+  unitId: { type: mongoose.Schema.Types.ObjectId, ref: 'OrgUnit', default: null },
+  yearId: { type: mongoose.Schema.Types.ObjectId, ref: 'AcademicYear', default: null },
 }, { timestamps: true })
 
 schema.index({ joinCode: 1 }, { unique: true, partialFilterExpression: { joinCode: { $type: 'string' } } })

@@ -16,6 +16,7 @@ const { seedDemo } = require('../../scripts/seed-demo')
 ;(async () => {
   const app = await start({ port: Number(process.env.DEV_PORT) || 5055, clientUrl: `https://localhost:${process.env.DEV_CLIENT_PORT || 5231},http://localhost:5173` })
   const demo = await seedDemo(app.db)
+  const school = await require('../../scripts/seed-school-tree').seedSchoolTree(app.db, demo)
   const t = app.tokens
   const out = {
     api: `${app.url}/api`,
@@ -28,6 +29,7 @@ const { seedDemo } = require('../../scripts/seed-demo')
       solo: t.admin(demo.solo.adminId, demo.solo.orgId, demo.solo.adminUid),
       soloTeacher: t.teacher(demo.solo.tutorId, demo.solo.orgId, 'rao@demo.test'),
       superadmin: t.superadmin(),
+      coordinator: t.staff('demo-coord-admin', demo.org.id, school.staffId, 'coordinator', 'coordinator@demo.test'),
       student: t.student(demo.family.childEmails[0], 'Aanya'),
     },
   }

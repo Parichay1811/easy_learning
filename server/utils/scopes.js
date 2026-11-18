@@ -62,17 +62,43 @@ async function forTeacherStudent(teacher, studentId) {
   return toScope([s], s.name)
 }
 
-// Admin: the whole school, one group, or one student, never another school's.
-async function forAdmin(admin, { batchId, studentId } = {}) {
+// Admin: the whole school, one unit (its whole subtree, ADM-010), one group, or
+// one student, never another school's. Staff with units (`admin.staff.unitIds`,
+// set by utils/orgAccess.js) are limited to those subtrees: anything outside is 404.
+async function forAdmin(admin, { batchId, studentId, unitId } = {}) {
   const Student = require('../models/admin/Student')
+  const Batch = require('../models/admin/Batch')
+  const { loadUnits, subtreeIdSet, validId } = require('./orgUnits')
   const org = await adminOrg(admin)
   if (!org) return fail(400, 'Organization not found')
+  for (const id of [batchId, studentId, unitId]) if (id && !validId(id)) return fail(404, 'Not found')
   const filter = { orgId: org._id, status: 'active' }
+  const restrict = admin.staff?.unitIds?.length ? admin.staff.unitIds : null
+  let who = studentId ? null : batchId ? 'The group' : org.name
+  if (unitId || restrict) {
+    const units = await loadUnits(org._id)
+    const allowed = restrict ? subtreeIdSet(units, restrict) : null
+    let ids = allowed
+    if (unitId) {
+      const unit = units.find((u) => String(u._id) === String(unitId))
+      if (!unit || (allowed && !allowed.has(String(unitId)))) return fail(404, 'Unit not found')
+      ids = subtreeIdSet(units, [unitId])
+      who = unit.name
+    }
+    if (batchId && allowed) {
+      const b = await Batch.findOne({ _id: batchId, orgId: org._id }).select('unitId').lean()
+      if (!b || !b.unitId || !allowed.has(String(b.unitId))) return fail(404, 'Group not found')
+    }
+    const inUnits = await Batch.find({ orgId: org._id, unitId: { $in: [...ids] } }).distinct('_id')
+    filter.$or = [{ unitId: { $in: [...ids] } }, { batchIds: { $in: inUnits } }]
+  }
   if (batchId) filter.batchIds = batchId
   if (studentId) filter._id = studentId
   const students = await Student.find(filter).select('name email')
   if (studentId && !students.length) return fail(404, 'Student not found')
-  return { ...toScope(students, studentId ? students[0].name : batchId ? 'The group' : org.name), orgId: String(org._id) }
+  // School holidays don't break a student's streak if the school wishes (ADM-062).
+  const skipDates = studentId ? await require('./schoolCalendar').streakSkipDates(org._id) : undefined
+  return { ...toScope(students, studentId ? students[0].name : who), orgId: String(org._id), ...(skipDates ? { skipDates } : {}) }
 }
 
 // Super admin: any organisation (by its superadmin id) or the whole platform.

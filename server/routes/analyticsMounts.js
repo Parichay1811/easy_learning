@@ -24,11 +24,15 @@ function mountTeacher(router) {
   router.get('/analytics/learners', scoped((req) => scopes.forTeacherAll(req.teacher)), analytics.learners)
 }
 
-// Admin: the school, a group, or a student.
-function mountAdmin(router) {
-  handlers(router, '/analytics', scoped((req) => scopes.forAdmin(req.admin, { batchId: req.query.batchId })))
-  router.get('/analytics/learners', scoped((req) => scopes.forAdmin(req.admin, { batchId: req.query.batchId })), analytics.learners)
+// Admin: the school, a unit of the school tree, a group, or a student.
+// `/units/:id/analytics/...` needs the org.tree module (ADM-010); `unitGuards` lets the
+// admin router put its module check in front. Staff are limited to their units by forAdmin.
+function mountAdmin(router, { unitGuards = [] } = {}) {
+  handlers(router, '/analytics', scoped((req) => scopes.forAdmin(req.admin, { batchId: req.query.batchId, unitId: req.query.unitId })))
+  router.get('/analytics/learners', scoped((req) => scopes.forAdmin(req.admin, { batchId: req.query.batchId, unitId: req.query.unitId })), analytics.learners)
   handlers(router, '/students/:id/analytics', scoped((req) => scopes.forAdmin(req.admin, { studentId: req.params.id })))
+  handlers(router, '/units/:id/analytics', ...unitGuards, scoped((req) => scopes.forAdmin(req.admin, { unitId: req.params.id })))
+  router.get('/units/:id/analytics/learners', ...unitGuards, scoped((req) => scopes.forAdmin(req.admin, { unitId: req.params.id })), analytics.learners)
 }
 
 // Super admin: any organisation, or one of its students.
