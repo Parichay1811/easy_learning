@@ -22,13 +22,13 @@ const deps = {
 const FROM = () => process.env.MAIL_FROM || 'Learnigo <no-reply@learnigo.eu>'
 const stripHtml = (h) => String(h || '').replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
 
-async function sendMail({ to, subject, text, html, kind = 'general' }) {
+async function sendMail({ to, subject, text, html, kind = 'general', headers }) {
   try {
     const doc = await Outbox.create({ to, subject, html: html || '', text: text || stripHtml(html), kind })
     const t = deps.transport()
     if (!t) return { id: String(doc._id), status: 'queued' }
     try {
-      await t.sendMail({ from: FROM(), to: doc.to, subject, text: doc.text, html: html || undefined })
+      await t.sendMail({ from: FROM(), to: doc.to, subject, text: doc.text, html: html || undefined, headers })
       doc.status = 'sent'; doc.sentAt = new Date(); await doc.save()
     } catch (err) {
       doc.status = 'failed'; doc.error = String(err.message).slice(0, 300); await doc.save()
