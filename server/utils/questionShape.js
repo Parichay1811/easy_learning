@@ -39,7 +39,8 @@ function normaliseQuestion(input = {}) {
   const emoji = str(input.emoji ?? input.image?.emoji, 16)
   const imageUrl = str(input.imageUrl ?? input.image?.url, 500)
   if (imageUrl && !/^(https?:\/\/|\/uploads\/)/.test(imageUrl)) err('imageUrl', 'The picture link must start with http(s)://')
-  q.image = imageUrl ? { mode: 'image', url: imageUrl, emoji: emoji || null } : emoji ? { mode: 'emoji', emoji } : null
+  const imageAlt = str(input.imageAlt ?? input.image?.alt, 200)
+  q.image = imageUrl ? { mode: 'image', url: imageUrl, alt: imageAlt, emoji: emoji || null } : emoji ? { mode: 'emoji', emoji } : null
 
   // Answers, by type.
   let options = list(input.options, 12, 200)

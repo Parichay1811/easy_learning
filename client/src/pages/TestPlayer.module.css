@@ -1,0 +1,102 @@
+/* The student test player: calm meadow, one question at a time, big targets. */
+.page {
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 24px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  font-family: "Fredoka", system-ui, sans-serif;
+  background: radial-gradient(130% 90% at 50% 0%, #c9ecff 0%, #e4f6ea 55%, #c7e9b3 100%);
+  color: #1d2433;
+}
+.playing { padding-top: 0; }
+
+.panel {
+  width: min(680px, 100%);
+  background: #ffffff;
+  border-radius: 26px;
+  padding: 28px 24px;
+  box-shadow: 0 14px 40px rgba(29, 36, 51, 0.14);
+  box-sizing: border-box;
+  margin-top: 4vh;
+}
+.kicker { margin: 0 0 6px; font-weight: 700; color: #5a4bd6; text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.85rem; }
+.h1 { margin: 0 0 10px; font-size: 1.9rem; line-height: 1.2; }
+.h2 { margin: 0 0 8px; font-size: 1.25rem; }
+.lead { font-size: 1.1rem; line-height: 1.6; margin: 0 0 12px; color: #2c3446; }
+.rules { margin: 10px 0 18px; padding-left: 1.2em; font-size: 1.08rem; line-height: 1.8; }
+.past { border-top: 1px solid #e2e7f0; margin-top: 16px; padding-top: 14px; }
+.error { color: #b42318; font-weight: 600; }
+.linkBtn { background: none; border: 0; padding: 0; color: #5a4bd6; text-decoration: underline; font: inherit; cursor: pointer; min-height: 32px; }
+
+.actionsRow { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 8px; }
+.primary, .secondary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 52px; padding: 10px 26px; border-radius: 999px; font-weight: 700; font-size: 1.1rem;
+  text-decoration: none; cursor: pointer; font-family: inherit; border: 3px solid transparent;
+}
+.primary { background: #6c5ce7; color: #ffffff; box-shadow: 0 5px 0 #4a3db8; }
+.primary:active { transform: translateY(3px); box-shadow: 0 2px 0 #4a3db8; }
+.primary:disabled { background: #a59ce8; box-shadow: none; cursor: default; }
+.secondary { background: #ffffff; color: #1d2433; border-color: #c4cad6; }
+.secondary:disabled { opacity: 0.5; cursor: default; }
+.primary:focus-visible, .secondary:focus-visible, .qdot:focus-visible, .leave:focus-visible, .linkBtn:focus-visible { outline: 3px solid #1d2433; outline-offset: 3px; }
+
+/* Top bar while playing */
+.top {
+  position: sticky; top: 0; z-index: 5; width: calc(100% + 32px); margin: 0 -16px;
+  display: flex; align-items: center; gap: 12px; padding: 10px 16px; box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(6px); border-bottom: 1px solid #e2e7f0;
+}
+.leave { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 10px; border-radius: 12px; color: #1d2433; text-decoration: none; font-weight: 600; }
+.topTitle { flex: 1; min-width: 0; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; }
+.topRight { display: flex; align-items: center; gap: 10px; }
+.timer { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 1.1rem; padding: 6px 12px; border-radius: 999px; background: #ece9ff; color: #3f32b0; }
+.timerLow { background: #fff0df; color: #8a3b00; }
+.stars { display: inline-flex; align-items: center; gap: 4px; font-weight: 700; color: #8a5a00; background: #fff4cc; padding: 6px 10px; border-radius: 999px; }
+.save { font-size: 0.85rem; color: #4a5568; white-space: nowrap; }
+.saveOff { color: #8a3b00; font-weight: 700; }
+
+.progressWrap { width: min(720px, 100%); display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.progress { flex: 1; height: 12px; border-radius: 999px; background: rgba(255, 255, 255, 0.85); overflow: hidden; border: 1px solid #d6dbe6; }
+.progress > span { display: block; height: 100%; background: linear-gradient(90deg, #6c5ce7, #43c0a0); transition: width 0.3s ease; }
+.count { font-weight: 700; white-space: nowrap; }
+.section { margin: 0; font-weight: 700; color: #3f32b0; }
+.qTimer { margin: 0; font-weight: 700; padding: 4px 12px; border-radius: 999px; background: #ece9ff; color: #3f32b0; font-variant-numeric: tabular-nums; }
+
+.stage { width: 100%; display: flex; justify-content: center; }
+.nav { width: min(720px, 100%); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.nav > :last-child { margin-left: auto; }
+.dots { width: min(720px, 100%); display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.qdot { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #c4cad6; background: #ffffff; font-weight: 700; color: #1d2433; cursor: pointer; font-family: inherit; }
+.qdotDone { background: #d9f2e4; border-color: #2e7d32; }
+.qdotCur { border-color: #6c5ce7; box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3); }
+
+.modalBack { position: fixed; inset: 0; background: rgba(20, 26, 44, 0.45); display: grid; place-items: center; padding: 16px; z-index: 20; }
+.modal { width: min(480px, 100%); background: #ffffff; border-radius: 24px; padding: 24px; box-sizing: border-box; }
+
+/* Done */
+.doneIcon { font-size: 54px; text-align: center; }
+.big { font-size: 3rem; font-weight: 700; margin: 6px 0; color: #3f32b0; text-align: center; }
+.panel .h1 { text-align: left; }
+.reviewList { list-style: none; padding: 0; margin: 14px 0; display: flex; flex-direction: column; gap: 8px; }
+.reviewItem { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: #f6f8fc; }
+.dot { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; flex-shrink: 0; }
+.dotGood { background: #d9f2e4; color: #1d6b2a; }
+.dotBad { background: #fbe9e7; color: #a3261c; }
+.dotWait { background: #fff0df; color: #8a3b00; }
+.comment { flex-basis: 100%; color: #4a5568; padding-left: 40px; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 600px) {
+  .hideSm { display: none; }
+  .h1 { font-size: 1.55rem; }
+  .panel { padding: 22px 18px; margin-top: 2vh; }
+  .primary, .secondary { padding: 10px 18px; }
+  .topRight { gap: 6px; }
+  .save { display: none; }
+  .saveOff { display: inline; }
+}
+@media (prefers-reduced-motion: reduce) { .progress > span { transition: none; } }

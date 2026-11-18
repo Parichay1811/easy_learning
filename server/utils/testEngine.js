@@ -8,7 +8,7 @@ const TestAttempt = require('../models/tests/TestAttempt')
 const Child = require('../models/Child')
 const { notify } = require('./notify')
 const { recordAnswer } = require('../analytics/record')
-const { scoreItem, answerKey, MANUAL_TYPES } = require('./scoreAnswer')
+const { scoreItem, answerKey } = require('./scoreAnswer')
 const rules$ = require('./testRules')
 const bank = require('./questionBank')
 
@@ -76,7 +76,8 @@ function fewerOptions(q) {
   return { ...q, options: q.options.filter((o) => keep.includes(o) || others.includes(o)) }
 }
 
-const defaultMarking = (q, item, manualAllowed) => (manualAllowed && (item.marking === 'manual' || MANUAL_TYPES.has(q.interaction)) ? 'manual' : 'auto')
+// The builder defaults typed_long / mic_record to 'manual'; without the grading.manual module everything is auto-marked.
+const defaultMarking = (q, item, manualAllowed) => (manualAllowed && item.marking === 'manual' ? 'manual' : 'auto')
 
 // Builds the frozen item list for a new attempt.
 async function buildItems(test, acc = {}, { manualAllowed = true } = {}) {

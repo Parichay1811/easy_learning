@@ -13,6 +13,7 @@ const API = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").r
 const NAV = [
   { key: "batches", label: "My Batches", icon: <MdGroups /> },
   { key: "questions", label: "Upload Questions", icon: <MdUploadFile /> },
+  { key: "tests", label: "Tests & question bank", icon: <MdUploadFile />, href: "/teacher/tests" },
 ];
 
 function useTeacherApi(token) {
@@ -126,7 +127,7 @@ const TeacherDashboard = () => {
             <button
               key={n.key}
               className={`${styles.navItem} ${section === n.key ? styles.navActive : ""}`}
-              onClick={() => { setSection(n.key); setSelectedBatchId(null); setMobileNavOpen(false); }}
+              onClick={() => { if (n.href) { navigate(n.href); return; } setSection(n.key); setSelectedBatchId(null); setMobileNavOpen(false); }}
             >
               {n.icon} <span>{n.label}</span>
             </button>

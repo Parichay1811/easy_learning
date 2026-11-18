@@ -38,6 +38,8 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
 import TeacherDashboard from "./pages/teacher/TeacherDashboard";
 import ParentDashboard from "./pages/parent/ParentDashboard";
+import TeacherTestsApp from "./pages/teacher/tests/TeacherTestsApp";
+import TestPlayer from "./pages/TestPlayer";
 import LearningSupportByCountry from "./pages/LearningSupportByCountry";
 import LearningDifferences from "./pages/LearningDifferences";
 import WhoWeHelp from "./pages/WhoWeHelp";
@@ -94,6 +96,8 @@ function AnimatedRoutes() {
         <Route path="/superadmin-dashboard" element={<SuperAdminDashboard />} />
         <Route path="/teacher-dashboard" element={<TeacherDashboard />} />
         <Route path="/parent-dashboard" element={<ParentDashboard />} />
+        <Route path="/teacher/tests/*" element={<TeacherTestsApp />} />
+        <Route path="/test/:id" element={<TestPlayer />} />
         {DEV_PAGES && <Route path="/dev/dashboard-kit" element={<DashboardKit />} />}
         <Route path="*" element={<NotFound />} />
       </Routes>
@@ -109,7 +113,8 @@ function AppLayout() {
   // accident. The Camera Games hub is just a menu, so it keeps the normal
   // site header and background like any other page.
   const isAR = location.pathname.startsWith("/games/ar/");
-  const hideNavbar = isAR || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/teacher-dashboard", "/parent-dashboard"].includes(location.pathname);
+  const hideNavbar = isAR || ["/", "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login", "/admin-dashboard", "/superadmin-dashboard", "/teacher-dashboard", "/parent-dashboard"].includes(location.pathname)
+    || location.pathname.startsWith("/teacher/tests") || location.pathname.startsWith("/test/");
   // Every page a logged-in student can reach — Home, About Us, Contact Us, the
   // question modules, Subject page, the Games/Camera Games hubs and the Student
   // Dashboard — shares the same full-viewport video background, so the app reads
