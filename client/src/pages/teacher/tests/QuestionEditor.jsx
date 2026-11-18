@@ -281,15 +281,15 @@ export default function QuestionEditor() {
             <h2>{tt("ed.question", "The question")}</h2>
             <div className={s.page} style={{ gap: 12 }}>
               <label className={s.field}><span>{tt("ed.instruction", "Instruction")}</span>
-                <input value={f.instruction} onChange={(e) => set({ instruction: e.target.value })} placeholder={tt("ed.instructionPh", "Tap the word you hear.")} aria-invalid={!!err("instruction")} />
+                <input value={f.instruction} onChange={(e) => set({ instruction: e.target.value })} placeholder={tt("ed.instructionPh", "e.g. Tap the word you hear.")} aria-invalid={!!err("instruction")} />
                 {err("instruction") && <span className={s.fieldError}>{err("instruction")}</span>}
               </label>
               <label className={s.field}><span>{tt("ed.prompt", "Prompt (optional)")}</span>
-                <textarea value={f.prompt} onChange={(e) => set({ prompt: e.target.value })} placeholder={tt("ed.promptPh", "4 + 3 = ___")} />
+                <textarea value={f.prompt} onChange={(e) => set({ prompt: e.target.value })} placeholder={tt("ed.promptPh", "e.g. 4 + 3 = ___")} />
               </label>
               <div className={s.row}>
                 <label className={s.field} style={{ flex: "0 1 140px" }}><span>{tt("ed.emoji", "Emoji")}</span>
-                  <input value={f.emoji} onChange={(e) => set({ emoji: e.target.value })} placeholder="🍎" maxLength={16} />
+                  <input value={f.emoji} onChange={(e) => set({ emoji: e.target.value })} placeholder={tt("ed.eg", "e.g. {{x}}", { x: "🍎" })} maxLength={16} />
                 </label>
                 <div className={s.field}>
                   <span>{tt("ed.picture", "Picture")}</span>
@@ -305,7 +305,7 @@ export default function QuestionEditor() {
               </div>
               {f.imageUrl && <label className={s.field}><span>{tt("ed.alt", "Describe the picture (for screen readers)")}</span><input value={f.imageAlt} onChange={(e) => set({ imageAlt: e.target.value })} /></label>}
               <label className={s.field}><span>{tt("ed.audio", "Read aloud (the narrator says this)")}</span>
-                <input value={f.audio_text} onChange={(e) => set({ audio_text: e.target.value })} placeholder={tt("ed.audioPh", "soap")} />
+                <input value={f.audio_text} onChange={(e) => set({ audio_text: e.target.value })} placeholder={tt("ed.audioPh", "e.g. soap")} />
               </label>
             </div>
           </section>
@@ -342,7 +342,7 @@ export default function QuestionEditor() {
               <label className={s.field}><span>{tt("ed.difficulty", "Difficulty (1 easy – 5 hard)")}</span>
                 <select value={f.difficulty} onChange={(e) => set({ difficulty: Number(e.target.value) })}>{[1, 2, 3, 4, 5].map((d) => <option key={d} value={d}>{d}</option>)}</select>
               </label>
-              <label className={s.field}><span>{tt("ed.code", "Curriculum code")}</span><input value={f.curriculumCode} onChange={(e) => set({ curriculumCode: e.target.value })} placeholder="NC-Y4-F1" /></label>
+              <label className={s.field}><span>{tt("ed.code", "Curriculum code")}</span><input value={f.curriculumCode} onChange={(e) => set({ curriculumCode: e.target.value })} placeholder={tt("ed.eg", "e.g. {{x}}", { x: "NC-Y4-F1" })} /></label>
               <label className={s.field}><span>{tt("ed.seconds", "Estimated seconds")}</span><input type="number" min="0" value={f.estimatedSeconds} onChange={(e) => set({ estimatedSeconds: e.target.value })} /></label>
               <label className={s.field}><span>{tt("ed.points", "Points")}</span><input type="number" min="1" max="100" value={f.points} onChange={(e) => set({ points: e.target.value })} /></label>
             </div>

@@ -41,7 +41,7 @@ export default function MarkingQueue() {
   const setComment = (fn) => patch((b) => ({ comment: typeof fn === "function" ? fn(b.comment) : fn }));
   const setCrit = (fn) => patch((b) => ({ crit: typeof fn === "function" ? fn(b.crit) : fn }));
 
-  const rubricScore = cur?.rubric?.length ? cur.rubric.reduce((sum, c, ci) => sum + (levels[ci] != null ? Number(c.levels[levels[ci]]?.points) || 0 : 0), 0) : null;
+  const rubricScore = cur?.rubric?.length && levels.some((l) => l != null) ? cur.rubric.reduce((sum, c, ci) => sum + (levels[ci] != null ? Number(c.levels[levels[ci]]?.points) || 0 : 0), 0) : null;
 
   const save = useCallback(async () => {
     if (!cur) return;

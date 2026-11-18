@@ -129,6 +129,7 @@ The heart of the parent "wow" and every other dashboard. It must stay cheap on o
   | At risk | No activity for 7 days with assigned work, or accuracy falling > 15 points over 2 weeks, or 3 failed tests in a row |
 - [ ] **FND-042** Skills and topics on every question `P0` `Platform`
   - Audit the question banks (Listen/Read/Write/Speak × English/Maths/Science) and add `skillIds[]`, `gradeBand` and `difficulty 1–5`. Optionally map to curricula (UK National Curriculum, Common Core, CBSE). A backfill script uses existing fields, plus a review UI for the content team (SUP-030).
+  - *Partly done:* optional `skillIds`, `gradeBand`, `difficulty`, `curriculumCode`, `estimatedSeconds` (+ `orgId`, `version`) on the shared question schema; `scripts/backfill-question-tags.js` (dry run, `--apply`) fills difficulty, skills and time from `level`/`difficulty_band`/`academic.skill`/`telemetry`. *Not done:* curriculum mapping and the content-team review UI (SUP-030).
 - [x] **FND-043** Pre-computed rollups `P0` `Platform` · needs FND-040
   - *Done:* `LearnerDay` upserts as events arrive; day/week/month series; `scripts/backfill-learner-days.js`. *Nightly group/unit rollup tables were deliberately skipped:* group and unit views sum `LearnerDay` for their learners on demand (indexed on `{email, date}`).
   - `LearnerDay {learnerId, date(local), minutes, sessions, answered, correct, firstTryCorrect, hints, xp, stars, byModuleSubject{}, bySkill{}, byHour[24], devices{}, firstAt, lastAt}`, updated with `$inc` upserts as each event arrives (no batch job on page load).

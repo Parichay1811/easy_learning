@@ -13,10 +13,10 @@ const GRADE_BANDS = ["K-2", "3-5", "6-8", "9-10", "11-12", "adult"];
 export function QuestionLine({ q, stats, right }) {
   const tt = useT();
   return (
-    <div className={s.listRow}>
+    <div className={`${s.listRow} ${s.qline}`}>
       <span aria-hidden="true" style={{ fontSize: 26, width: 36, textAlign: "center" }}>{q.emoji || "❓"}</span>
       <div className={s.grow}>
-        <div className={`${s.title} ${s.ellipsis}`}>{q.instruction || tt("bank.untitled", "(no instruction)")}{q.prompt ? <span className={s.muted}> · {q.prompt}</span> : null}</div>
+        <div className={s.title}>{q.instruction || tt("bank.untitled", "(no instruction)")}{q.prompt ? <span className={s.muted}> · {q.prompt}</span> : null}</div>
         <div className={s.chips} style={{ marginTop: 4 }}>
           <span className={`${s.chip} ${s.chipAccent}`}>{tt(`type.${q.interaction}`, INTERACTION_LABELS[q.interaction] || q.interaction)}</span>
           <span className={s.chip}>{tt(`module.${q.module}`, cap(q.module))} · {tt(`subject.${q.subject}`, cap(q.subject))}</span>
@@ -204,7 +204,7 @@ export default function BankBrowser() {
         </form>
       </section>
 
-      <div className={s.split} style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(220px, 300px)" }}>
+      <div className={s.splitSide}>
         <div className={s.page}>
           {bulk && data ? <BulkGrid rows={data.questions.filter((q) => q.mine)} onDone={(saved) => { setBulk(false); if (saved) load(1); }} /> : (
             <section className={s.card} aria-live="polite">

@@ -15,7 +15,7 @@ const PENDING = (attemptId) => `learnigo.test.pending.${attemptId}`;
 const readPending = (id) => { try { return JSON.parse(localStorage.getItem(PENDING(id)) || "{}"); } catch { return {}; } };
 const writePending = (id, v) => { try { if (Object.keys(v).length) localStorage.setItem(PENDING(id), JSON.stringify(v)); else localStorage.removeItem(PENDING(id)); } catch { /* storage off */ } };
 const answered = (v) => v !== undefined && v !== null && v !== "" && !(Array.isArray(v) && !v.length) && !(typeof v === "object" && !Array.isArray(v) && !Object.values(v).some((x) => (Array.isArray(x) ? x.length : x)));
-const mmss = (ms) => { const t = Math.max(0, Math.ceil(ms / 1000)); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
+const mmss = (ms) => { const t = Math.max(0, Math.ceil(ms / 1000)); const h = Math.floor(t / 3600); const m = Math.floor((t % 3600) / 60); return `${h ? `${h}:${String(m).padStart(2, "0")}` : m}:${String(t % 60).padStart(2, "0")}`; };
 
 function useTT() {
   const { t } = useTranslation();
@@ -305,7 +305,7 @@ export default function TestPlayer() {
         <div className={s.topTitle}>{intro?.test?.title}</div>
         <div className={s.topRight}>
           {rules.style === "warrior" && immediate && <span className={s.stars} aria-label={tt("play.stars", "{{n}} stars", { n: stars })}><FaStar aria-hidden="true" /> {stars}</span>}
-          {totalLeft !== null && <span className={`${s.timer} ${totalLeft < 60000 ? s.timerLow : ""}`} role="timer" aria-label={tt("play.timeLeft", "Time left {{t}}", { t: mmss(totalLeft) })}><FaClock aria-hidden="true" /> {mmss(totalLeft)}</span>}
+          {totalLeft !== null && (rules.timeLimit === "total" || totalLeft < 3600000) && <span className={`${s.timer} ${totalLeft < 60000 ? s.timerLow : ""}`} role="timer" aria-label={tt("play.timeLeft", "Time left {{t}}", { t: mmss(totalLeft) })}><FaClock aria-hidden="true" /> {mmss(totalLeft)}</span>}
           <span className={`${s.save} ${status === "offline" ? s.saveOff : ""}`} role="status">{status === "offline" && <FaWifi aria-hidden="true" />} {statusText}</span>
         </div>
       </header>

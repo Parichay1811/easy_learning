@@ -210,7 +210,7 @@ export default function TestResults() {
           <Button variant="ghost" icon={FaBullhorn} onClick={remind}>{tt("res.remind", "Remind")}</Button>
           <Button variant="ghost" icon={FaFileExport} onClick={() => api.download(`/tests/${id}/results.csv`, `results-${id}.csv`)}>{tt("res.export", "Export CSV")}</Button>
           {summary.needsMarking > 0 && <Button variant="soft" icon={FaPenNib} to={`/teacher/tests/marking?testId=${id}`}>{tt("res.mark", "Mark {{n}}", { n: summary.needsMarking })}</Button>}
-          {!test.released && <Button icon={FaUnlock} onClick={release}>{tt("res.release", "Release results now")}</Button>}
+          {!test.released && (test.rules.release === "manual" || ["after_close", "never"].includes(test.rules.feedback)) && <Button icon={FaUnlock} onClick={release}>{tt("res.release", "Release results now")}</Button>}
         </div>
       </div>
       {msg && <p className={`${s.notice} ${s.noticeGood}`} role="status">{msg}</p>}

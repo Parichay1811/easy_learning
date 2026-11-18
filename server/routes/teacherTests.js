@@ -11,6 +11,10 @@ const b = require('../controllers/teacherBankController')
 const t = require('../controllers/teacherTestController')
 
 fs.mkdirSync(path.join(UPLOAD_ROOT, 'question-images'), { recursive: true })
+
+// Reminders (open, 24 h before close, at close) and time-up hand-ins also run on a
+// timer, not only when someone opens a list. No cron in this app; unref() so it never keeps the process alive.
+setInterval(() => require('../utils/testEngine').runReminders(new Date(), { force: true }), 5 * 60 * 1000).unref()
 const uploadImage = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 2 * 1024 * 1024 },

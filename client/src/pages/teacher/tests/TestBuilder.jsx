@@ -381,7 +381,7 @@ export default function TestBuilder() {
                           </>
                         ) : (
                           <>
-                            <div className={`${s.title} ${s.ellipsis}`}>{q?.emoji} {q?.instruction || tt("build.missing", "Question")}{q?.prompt ? <span className={s.muted}> · {q.prompt}</span> : null}</div>
+                            <div className={s.title}>{q?.emoji} {q?.instruction || tt("build.missing", "Question")}{q?.prompt ? <span className={s.muted}> · {q.prompt}</span> : null}</div>
                             <div className={s.chips}>
                               <span className={`${s.chip} ${s.chipAccent}`}>{tt(`type.${q?.interaction}`, INTERACTION_LABELS[q?.interaction] || "")}</span>
                               {q && q.status !== "approved" && <span className={`${s.chip} ${s.chipWarn}`}>{tt("status.pending", "Waiting for review")}</span>}
