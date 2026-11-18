@@ -2,7 +2,7 @@
 // config change, and the super admin can switch single modules on or off for one
 // organisation (featureOverrides). Prices live with billing, not here.
 const MODULES = {
-  'core.learning': 'Learning modules, games and the AI Teacher',
+  'core.learning': 'Learning modules and games',
   'ai.teacher': 'AI Teacher',
   'family.link': 'Link a parent and their children',
   'analytics.basic': 'Progress overview (last 90 days)',

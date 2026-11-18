@@ -44,3 +44,14 @@ test('limiter unit: sliding window, per key, reset', () => {
   assert.equal(run({ ip: 'a' }), 'next')
   assert.equal(accountKey({ ip: '1.1.1.1', body: { email: 'A@B.co' } }), '1.1.1.1|a@b.co')
 })
+
+test('public plans endpoint lists every plan with human-readable modules and no prices', async () => {
+  const r = await app.call('GET', '/api/plans')
+  assert.equal(r.status, 200)
+  const ids = r.body.plans.map((p) => p.id)
+  assert.deepEqual(ids, ['free', 'family_plus', 'solo_free', 'solo_pro', 'institute', 'enterprise'])
+  const solo = r.body.plans.find((p) => p.id === 'solo_free')
+  assert.equal(solo.limits.students, 15)
+  assert.ok(solo.modules.every((m) => m.key && m.label))
+  assert.ok(!JSON.stringify(r.body).match(/price|eur|usd/i))
+})

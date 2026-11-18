@@ -4,11 +4,16 @@ const express = require('express')
 const router = express.Router()
 const { anyAuth } = require('../utils/actors')
 const { entitlementsFor } = require('../utils/entitlements')
-const { MODULES } = require('../config/plans')
+const { MODULES, PLANS } = require('../config/plans')
 const n = require('../controllers/notificationController')
 const { metricsDictionary } = require('../controllers/analyticsController')
 
 router.get('/meta/metrics', metricsDictionary)
+// Public: what each plan includes, for the pricing page. No prices here: those belong to billing.
+router.get('/plans', (req, res) => res.json({
+  success: true,
+  plans: Object.entries(PLANS).map(([id, p]) => ({ id, label: p.label, for: p.for, limits: p.limits || {}, modules: p.modules.map((key) => ({ key, label: MODULES[key] })) })),
+}))
 router.get('/me', anyAuth, async (req, res) => {
   try {
     const ent = await entitlementsFor(req.actor)
