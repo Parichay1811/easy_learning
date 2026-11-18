@@ -379,7 +379,7 @@ cd ../server && npm install && pm2 restart easy-learn
 
 This release changes sign-in and adds data that needs filling. In order:
 
-1. **Check nginx forwards the visitor address.** `grep -n X-Forwarded-For /etc/nginx/sites-enabled/*` must show `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` inside `location /api/`. Add it and `nginx -t && systemctl reload nginx` if missing. Without it every visitor shares one rate limit.
+1. **Visitor address behind nginx.** The API reads the visitor's address from `X-Forwarded-For`, or from `X-Real-IP` when the request comes from nginx on the same machine (`server/middleware/realIp.js`). Our nginx sends `X-Real-IP`, so nothing needs changing. Adding `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` to `location /api/` is still good practice.
 2. `./redeploy.sh` (installs production dependencies only: `npm install --omit=dev`).
 3. **Optional env** (`server/.env`, see `server/.env.example`): `COOKIE_SECRET` (defaults to `JWT_SECRET`), `FIREBASE_PROJECT_ID` (defaults to the public project id), `SMTP_URL` + `MAIL_FROM` for real email (without them emails wait in the Outbox collection), `SCHEDULER=off` to disable weekly digests.
 4. **Migrations** (each prints what it would do without `--apply`):
