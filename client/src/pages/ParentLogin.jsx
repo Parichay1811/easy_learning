@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import * as FramerMotion from "framer-motion";
-import { signInWithPopup } from "firebase/auth";
-import { auth, googleProvider } from "../firebase/auth";
+import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { MdFamilyRestroom } from "react-icons/md";
 import { FcGoogle } from "react-icons/fc";
@@ -27,7 +26,7 @@ const ParentLogin = () => {
     setError("");
     setLoading(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithGoogle();
             await parentGoogleSignIn(await result.user.getIdToken());
       navigate("/parent-dashboard");
     } catch (err) {

@@ -64,6 +64,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(readStoredJWTUser);
 
   useEffect(() => {
+    if (!auth) return undefined; // Firebase not configured: only email / JWT sign-in works
     // Firebase listener (handles Google sign-in)
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       const storedJWT = localStorage.getItem(JWT_KEY);
@@ -133,7 +134,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     localStorage.removeItem(JWT_KEY);
     localStorage.removeItem(FIREBASE_JWT_KEY);
-    await signOut(auth);
+    if (auth) await signOut(auth);
     await syncSessionCookie(null);
     setUser(null);
   };

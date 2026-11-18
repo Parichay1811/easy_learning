@@ -2,10 +2,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import { signInWithPopup } from "firebase/auth";
 import { FcGoogle } from "react-icons/fc";
 import { FaChalkboardTeacher, FaCheck } from "react-icons/fa";
-import { auth, googleProvider } from "../../firebase/auth";
+import { signInWithGoogle } from "../../firebase/auth";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import RoboticBackground from "../../components/RoboticBackground/RoboticBackground";
 import { apiCall } from "./teacherApi";
@@ -43,7 +42,7 @@ export default function SoloSignup() {
     setErr("");
     setBusy(true);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await signInWithGoogle();
       const idToken = await result.user.getIdToken();
       const subjects = [...f.subjects, ...f.other.split(",").map((x) => x.trim()).filter(Boolean)];
       const r = await apiCall("/teacher/auth/solo", { method: "POST", body: { idToken, name: f.name, workspaceName: f.workspaceName, subjects, grades: f.grades, country: f.country } });
