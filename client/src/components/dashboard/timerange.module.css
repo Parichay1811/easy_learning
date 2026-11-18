@@ -1,0 +1,84 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  padding: 10px 0;
+  min-width: 0;
+}
+.sticky {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--d-canvas);
+  padding: 10px 0;
+}
+
+.seg {
+  display: inline-flex;
+  padding: 4px;
+  gap: 2px;
+  border-radius: var(--d-radius-pill);
+  background: var(--d-card);
+  border: 1.5px solid var(--d-control);
+  max-width: 100%;
+}
+.segBtn {
+  min-height: 36px;
+  min-width: 44px;
+  padding: 4px 14px;
+  border: 0;
+  border-radius: var(--d-radius-pill);
+  background: transparent;
+  color: var(--d-ink);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  letter-spacing: 0;
+}
+.segBtn:hover { background: var(--d-card-alt); }
+.segBtn[aria-pressed="true"] {
+  background: var(--d-accent);
+  color: var(--d-on-accent);
+  box-shadow: 0 2px 0 color-mix(in srgb, var(--d-accent) 55%, #000);
+  font-weight: 600;
+}
+
+.nav { display: inline-flex; align-items: center; gap: 4px; }
+.navBtn {
+  width: var(--d-touch);
+  height: var(--d-touch);
+  border-radius: 50%;
+  border: 1.5px solid var(--d-control);
+  background: var(--d-card);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.navBtn:hover:not(:disabled) { background: var(--d-card-alt); }
+.navBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.period { min-width: 9.5em; text-align: center; font-weight: 600; font-size: 0.98rem; letter-spacing: 0; }
+
+.custom { display: flex; flex-wrap: wrap; gap: 10px; }
+.field { display: inline-flex; align-items: center; gap: 8px; }
+.fieldLabel { color: var(--d-muted); font-size: 0.88rem; }
+.select {
+  min-height: var(--d-touch);
+  padding: 4px 14px;
+  border-radius: var(--d-radius-sm);
+  border: 1.5px solid var(--d-control);
+  background: var(--d-card);
+  color: var(--d-ink);
+  font-size: 0.95rem;
+  max-width: 100%;
+}
+.compare { margin-inline-start: auto; }
+
+@media (max-width: 700px) {
+  .seg { width: 100%; }
+  .segBtn { flex: 1; padding-inline: 6px; }
+  .nav { flex: 1; justify-content: space-between; }
+  .compare { margin-inline-start: 0; width: 100%; }
+  .compare .select { width: 100%; }
+}

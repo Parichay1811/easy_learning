@@ -15,12 +15,8 @@ async function syncSessionCookie(user) {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({
-        uid: user.uid,
-        email: user.email,
-        name: user.displayName || "",
-        photoURL: user.photoURL || "",
-      }),
+      // The server takes the identity from this signed token, not from anything we say.
+      body: JSON.stringify({ idToken: await user.getIdToken() }),
     });
     const data = await res.json().catch(() => ({}));
     if (data.token) {

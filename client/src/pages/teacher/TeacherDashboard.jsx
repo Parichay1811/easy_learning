@@ -1,179 +1,99 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { FaChalkboardTeacher } from "react-icons/fa";
-import { MdLogout, MdGroups, MdVisibility, MdUploadFile, MdMenu, MdClose } from "react-icons/md";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { FaHome, FaUsers, FaChartLine, FaUpload, FaCog, FaSignOutAlt, FaClipboardList, FaComments, FaBullhorn } from "react-icons/fa";
+import { DashboardShell, Button, Skeleton } from "../../components/dashboard";
 import { useAdminAuth } from "../../context/AdminAuthContext";
-import DataTable from "../../components/Admin/DataTable";
-import TeacherBatchDetail from "./TeacherBatchDetail";
 import TeacherQuestionUpload from "./TeacherQuestionUpload";
-import styles from "../admin/AdminDashboard.module.css";
+import TodayView from "./TodayView";
+import GroupsView from "./GroupsView";
+import GroupView from "./GroupView";
+import StudentView from "./StudentView";
+import SummaryView from "./SummaryView";
+import PlanView from "./PlanView";
+import WorkspaceSwitcher from "./WorkspaceSwitcher";
+import { NotificationBell, MessageCenter, NotificationPrefs, AnnouncementComposer, AnnouncementsPanel } from "../../components/comms";
+import { API_ROOT, useLoad, useTeacherApi } from "./teacherApi";
+import logo from "/logo.png";
+import s from "./teacher.module.css";
 
-const API = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
-
-const NAV = [
-  { key: "batches", label: "My Batches", icon: <MdGroups /> },
-  { key: "questions", label: "Upload Questions", icon: <MdUploadFile /> },
-];
-
-function useTeacherApi(token) {
-  const get = useCallback(async (path) => {
-    const r = await fetch(`${API}/api/teacher${path}`, { headers: { Authorization: `Bearer ${token}` } });
-    return r.json();
-  }, [token]);
-
-  const post = useCallback(async (path, body, method = "POST") => {
-    const r = await fetch(`${API}/api/teacher${path}`, {
-      method,
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    return r.json();
-  }, [token]);
-
-  const postForm = useCallback(async (path, formData, method = "POST") => {
-    const r = await fetch(`${API}/api/teacher${path}`, {
-      method,
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    return r.json();
-  }, [token]);
-
-  const del = useCallback(async (path) => {
-    const r = await fetch(`${API}/api/teacher${path}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return r.json();
-  }, [token]);
-
-  return { get, post, postForm, del };
+// The question upload page still takes the older helper shape.
+function useLegacyApi(token) {
+  const call = useCallback(async (path, init = {}) => (await fetch(`${API_ROOT}/api/teacher${path}`, { ...init, headers: { Authorization: `Bearer ${token}`, ...(init.headers || {}) } })).json(), [token]);
+  const get = useCallback((path) => call(path), [call]);
+  const post = useCallback((path, body, method = "POST") => call(path, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }), [call]);
+  const postForm = useCallback((path, formData, method = "POST") => call(path, { method, body: formData }), [call]);
+  return { get, post, postForm };
 }
 
+// Teacher dashboard: one shell, views chosen by ?view= (today | groups | group | student |
+// summary | plan | questions) so links and the back button work.
 const TeacherDashboard = () => {
+  const { t } = useTranslation();
   const { teacherUser, teacherLogout, getTeacherToken } = useAdminAuth();
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
   const token = getTeacherToken();
-  const { get, post, postForm, del } = useTeacherApi(token);
-
-  const [section, setSection] = useState("batches");
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [batches, setBatches] = useState([]);
-  const [selectedBatchId, setSelectedBatchId] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const legacy = useLegacyApi(token);
+  const { get } = useTeacherApi();
+  const [wsKey, setWsKey] = useState(0);
 
   useEffect(() => {
-    if (!teacherUser && teacherUser !== undefined) navigate("/teacher-login");
+    if (!teacherUser) navigate("/teacher-login");
   }, [teacherUser, navigate]);
 
-  const loadBatches = useCallback(async () => {
-    const d = await get("/batches");
-    if (d.success) setBatches(d.batches);
-  }, [get]);
-
-  useEffect(() => {
-    (async () => {
-      await loadBatches();
-      setLoading(false);
-    })();
-  }, [loadBatches]);
+  const ws = useLoad(() => (token ? get("/workspace") : Promise.resolve({ ok: false })), [token, wsKey]);
+  // Notification links use ?tab=messages&thread=<id> (the same shape on every role).
+  const view = params.get("view") || (params.get("tab") === "messages" ? "messages" : "today");
+  const id = params.get("id");
+  const go = useCallback((v, extra = {}) => {
+    setParams({ view: v, ...Object.fromEntries(Object.entries(extra).filter(([, x]) => x != null && x !== "")) });
+    window.scrollTo?.(0, 0);
+  }, [setParams]);
 
   const handleLogout = () => { teacherLogout(); navigate("/"); };
+  const onSwitched = () => { setWsKey((k) => k + 1); setParams({ view: "today" }); };
 
-  if (loading || teacherUser === undefined) {
-    return <div className={styles.splash}><FaChalkboardTeacher className={styles.splashIcon} /><p>Loading…</p></div>;
-  }
+  const nav = [
+    { key: "today", label: t("teacher.nav.today", { defaultValue: "Today" }), icon: FaHome, to: "/teacher-dashboard?view=today" },
+    { key: "groups", label: t("teacher.nav.groups", { defaultValue: "Groups" }), icon: FaUsers, to: "/teacher-dashboard?view=groups" },
+    { key: "summary", label: t("teacher.nav.summary", { defaultValue: "Summary" }), icon: FaChartLine, to: "/teacher-dashboard?view=summary" },
+    { key: "messages", label: t("teacher.nav.messages", { defaultValue: "Messages" }), icon: FaComments, to: "/teacher-dashboard?view=messages" },
+    { key: "announcements", label: t("teacher.nav.announcements", { defaultValue: "Announcements" }), icon: FaBullhorn, to: "/teacher-dashboard?view=announcements" },
+    { key: "tests", label: t("teacher.nav.tests", { defaultValue: "Tests & question bank" }), icon: FaClipboardList, to: "/teacher/tests" },
+    { key: "questions", label: t("teacher.nav.questions", { defaultValue: "Upload questions" }), icon: FaUpload, to: "/teacher-dashboard?view=questions" },
+    { key: "plan", label: t("teacher.nav.plan", { defaultValue: "Plan" }), icon: FaCog, to: "/teacher-dashboard?view=plan" },
+  ];
+  const active = { group: "groups", student: "groups" }[view] || view;
+  const workspace = ws.data;
 
+  if (!teacherUser) return null;
   return (
-    <div className={styles.layout}>
-      {/* Mobile top bar */}
-      <div className={styles.mobileTopBar}>
-        <button
-          className={styles.hamburgerBtn}
-          onClick={() => setMobileNavOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          <MdMenu />
-        </button>
-        <span className={styles.mobileTopBarTitle}>
-          <FaChalkboardTeacher /> Teacher Panel
-        </span>
-      </div>
-
-      {/* Backdrop for mobile drawer */}
-      {mobileNavOpen && (
-        <div className={styles.sidebarBackdrop} onClick={() => setMobileNavOpen(false)} />
-      )}
-
-      <aside className={`${styles.sidebar} ${mobileNavOpen ? styles.sidebarOpen : ""}`}>
-        <div className={styles.sidebarHeader}>
-          <FaChalkboardTeacher className={styles.sidebarLogo} />
-          <span>Teacher Panel</span>
-          <button
-            className={styles.sidebarCloseBtn}
-            onClick={() => setMobileNavOpen(false)}
-            aria-label="Close menu"
-          >
-            <MdClose />
-          </button>
-        </div>
-        <div className={styles.adminInfo}>
-          {teacherUser?.name && <p className={styles.adminName}>{teacherUser.name}</p>}
-          <p className={styles.adminEmail}>{teacherUser?.email}</p>
-        </div>
-        <nav className={styles.nav}>
-          {NAV.map((n) => (
-            <button
-              key={n.key}
-              className={`${styles.navItem} ${section === n.key ? styles.navActive : ""}`}
-              onClick={() => { setSection(n.key); setSelectedBatchId(null); setMobileNavOpen(false); }}
-            >
-              {n.icon} <span>{n.label}</span>
-            </button>
-          ))}
-        </nav>
-        <button className={styles.logoutBtn} onClick={handleLogout}>
-          <MdLogout /> <span>Logout</span>
-        </button>
-      </aside>
-
-      <main className={styles.main}>
-        {section === "questions" ? (
-          <TeacherQuestionUpload get={get} post={post} postForm={postForm} token={token} />
-        ) : selectedBatchId ? (
-          <TeacherBatchDetail
-            batchId={selectedBatchId}
-            teacherId={teacherUser?.id}
-            get={get}
-            post={post}
-            del={del}
-            onClose={() => setSelectedBatchId(null)}
-            onChanged={loadBatches}
-          />
-        ) : (
+    <DashboardShell
+      brand={{ label: "LEARNIGO", logo: <img src={logo} alt="" style={{ height: 28 }} />, to: "/teacher-dashboard" }}
+      nav={nav}
+      active={active}
+      contextSwitcher={workspace && <WorkspaceSwitcher key={wsKey} current={{ id: workspace.workspace.id, name: workspace.workspace.name, kind: workspace.workspace.kind }} onSwitched={onSwitched} />}
+      breadcrumbs={workspace ? [{ label: workspace.workspace.name, to: "/teacher-dashboard?view=today" }, { label: nav.find((n) => n.key === active)?.label || "" }] : undefined}
+      bell={<NotificationBell role="teacher" />}
+      user={<Button variant="ghost" size="sm" icon={FaSignOutAlt} onClick={handleLogout} aria-label={t("teacher.logout", { defaultValue: "Log out" })}><span className={s.hideNarrow}>{t("teacher.logout", { defaultValue: "Log out" })}</span></Button>}
+    >
+      <div key={wsKey} style={{ display: "contents" }}>
+        {ws.loading && !workspace ? <Skeleton variant="chart" /> : (
           <>
-            <div className={styles.pageHeader}>
-              <h1>My Batches</h1>
-              <p>Welcome back, {teacherUser?.name || teacherUser?.email}</p>
-            </div>
-            <DataTable
-              columns={[
-                { key: "name", label: "Batch Name" },
-                { key: "academicYear", label: "Year / Term", render: (r) => [r.academicYear, r.term].filter(Boolean).join(" · ") || "—" },
-                { key: "subjects", label: "Subjects", render: (r) => r.subjects?.length || 0 },
-                { key: "studentIds", label: "Students", render: (r) => `${r.studentIds?.length || 0}${r.maxStudents ? ` / ${r.maxStudents}` : ""}` },
-                { key: "status", label: "Status" },
-              ]}
-              rows={batches}
-              actions={[
-                { icon: <MdVisibility />, title: "Open Batch", onClick: (row) => setSelectedBatchId(row._id) },
-              ]}
-              emptyMsg="No batches assigned to you yet. Ask your admin to add you to a batch."
-            />
+            {view === "today" && <TodayView teacher={teacherUser} workspace={workspace} go={go} onWorkspaceChange={ws.reload} />}
+            {view === "groups" && <GroupsView go={go} params={params} />}
+            {view === "group" && id && <GroupView key={id} id={id} tab={params.get("tab") || "overview"} go={go} params={params} />}
+            {view === "student" && id && <StudentView key={id} id={id} go={go} />}
+            {view === "summary" && <SummaryView workspace={workspace} />}
+            {view === "messages" && <><MessageCenter role="teacher" initialThreadId={params.get("thread") || undefined} /><NotificationPrefs role="teacher" /></>}
+            {view === "announcements" && <><AnnouncementComposer role="teacher" /><AnnouncementsPanel role="teacher" compact /></>}
+            {view === "plan" && <PlanView workspace={workspace} reload={ws.reload} />}
+            {view === "questions" && <TeacherQuestionUpload get={legacy.get} post={legacy.post} postForm={legacy.postForm} token={token} />}
           </>
         )}
-      </main>
-    </div>
+      </div>
+    </DashboardShell>
   );
 };
 

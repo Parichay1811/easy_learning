@@ -1,6 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const analyticsMounts = require('./analyticsMounts')
 const adminAuth = require('../middleware/adminAuth')
+const { orgContext, staffLegacyGate, legacyGuards } = require('../utils/orgAccess')
+const { requireModule } = require('../utils/entitlements')
 const validate = require('../middleware/validate')
 const { uploadOrgLogo, uploadAvatar, handleUpload } = require('../middleware/upload')
 const { adminStudentAccess } = require('../middleware/studentDashboardAccess')
@@ -43,6 +46,11 @@ const {
 } = require('../controllers/adminQuestionController')
 
 router.use(adminAuth)
+// ADMIN.md: who is calling (admin or staff), their school, then the school routes;
+// staff only reach the older routes listed in utils/orgAccess.js.
+router.use(orgContext)
+router.use(require('./adminSchool'))
+router.use(staffLegacyGate, legacyGuards)
 
 router.get('/stats', getStats)
 
@@ -107,5 +115,7 @@ router.get('/questions/uploads/:id', getUploadBatchDetail)
 router.post('/questions/uploads/:id/approve', approveUploadBatch)
 router.post('/questions/uploads/:id/reject', rejectUploadValidator, validate, rejectUploadBatch)
 router.patch('/questions/:module/:subject/:id', updateQuestion)
+
+analyticsMounts.mountAdmin(router, { unitGuards: [requireModule('org.tree')] })
 
 module.exports = router

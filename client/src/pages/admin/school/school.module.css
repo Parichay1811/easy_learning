@@ -1,0 +1,165 @@
+/* School admin pages. Colours come from the dashboard kit tokens (.dash). */
+.page { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px; }
+.title { margin: 0; font-size: 1.6rem; line-height: 1.2; color: var(--d-ink); }
+.sub { margin: 4px 0 0; color: var(--d-muted); font-size: 0.98rem; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.grow { flex: 1 1 auto; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+@media (max-width: 1100px) { .grid3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 820px) { .grid2, .grid3 { grid-template-columns: minmax(0, 1fr); } }
+
+.card {
+  background: var(--d-card); border-radius: 22px; box-shadow: var(--d-shadow);
+  padding: 20px; min-width: 0; color: var(--d-ink);
+}
+.cardTitle { margin: 0 0 4px; font-size: 1.12rem; color: var(--d-ink); background: none; -webkit-text-fill-color: currentColor; }
+.title { -webkit-text-fill-color: currentColor; background: none; }
+.cardSub { margin: 0 0 14px; color: var(--d-muted); font-size: 0.95rem; }
+.muted { color: var(--d-muted); }
+.small { font-size: 0.88rem; }
+.strong { font-weight: 700; }
+
+/* Tabs */
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 2px solid var(--d-line); padding-bottom: 0; }
+.tab {
+  appearance: none; border: 0; background: none; font: inherit; font-weight: 600; color: var(--d-muted);
+  padding: 10px 14px; min-height: 44px; border-radius: 12px 12px 0 0; cursor: pointer; margin-bottom: -2px;
+  border-bottom: 3px solid transparent;
+}
+.tab:hover { color: var(--d-ink); background: var(--d-card-alt); }
+.tab[aria-selected="true"] { color: var(--d-accent-ink); border-bottom-color: var(--d-accent); }
+.tab:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 2px; }
+
+/* Forms */
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.label { font-weight: 600; font-size: 0.95rem; color: var(--d-ink); }
+.hint { font-size: 0.86rem; color: var(--d-muted); }
+.input, .select, .textarea {
+  font: inherit; color: var(--d-ink); background: var(--d-card); border: 2px solid var(--d-control);
+  border-radius: 12px; padding: 9px 12px; min-height: 44px; min-width: 0; max-width: 100%;
+}
+.textarea { min-height: 88px; resize: vertical; }
+.input:focus-visible, .select:focus-visible, .textarea:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 1px; border-color: var(--d-focus); }
+.check { display: flex; gap: 10px; align-items: flex-start; min-height: 44px; padding: 8px 0; cursor: pointer; }
+.check input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--d-accent); flex: none; }
+.formGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+
+/* Messages and banners */
+.banner { display: flex; gap: 12px; align-items: flex-start; border-radius: 16px; padding: 12px 16px; background: var(--d-card); box-shadow: var(--d-shadow); border-left: 6px solid var(--d-neutral); }
+.banner p { margin: 0; }
+.bannerIcon { flex: none; font-size: 1.3rem; margin-top: 2px; }
+.good { border-left-color: var(--d-good); }
+.attention { border-left-color: var(--d-attention); }
+.alert { border-left-color: var(--d-alert); }
+.goodInk { color: var(--d-good-ink); }
+.attentionInk { color: var(--d-attention-ink); }
+.alertInk { color: var(--d-alert-ink); }
+.errorText { color: var(--d-alert-ink); font-weight: 600; margin: 8px 0 0; }
+.okText { color: var(--d-good-ink); font-weight: 600; margin: 8px 0 0; }
+
+/* Pills / status chips: always a word, never colour alone */
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; background: var(--d-card-alt); color: var(--d-ink); white-space: nowrap; }
+.pillGood { background: color-mix(in srgb, var(--d-good) 16%, transparent); color: var(--d-good-ink); }
+.pillAttention { background: color-mix(in srgb, var(--d-attention) 16%, transparent); color: var(--d-attention-ink); }
+.pillAlert { background: color-mix(in srgb, var(--d-alert) 14%, transparent); color: var(--d-alert-ink); }
+
+/* Plain table for small lists */
+.tableWrap { overflow-x: auto; max-width: 100%; }
+.table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.table th, .table td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--d-line); vertical-align: top; }
+.table th { color: var(--d-muted); font-weight: 600; font-size: 0.86rem; }
+.num { text-align: right !important; font-variant-numeric: tabular-nums; }
+
+/* Linky buttons inside text and tables */
+.link { appearance: none; background: none; border: 0; padding: 0; font: inherit; color: var(--d-accent-ink); font-weight: 600; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; min-height: 24px; text-align: left; }
+.link:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 2px; border-radius: 4px; }
+.iconBtn { appearance: none; border: 2px solid transparent; background: var(--d-card-alt); color: var(--d-ink); border-radius: 12px; min-width: 40px; min-height: 40px; display: inline-grid; place-items: center; cursor: pointer; font-size: 1rem; }
+.iconBtn:hover { border-color: var(--d-control); }
+.iconBtn:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 2px; }
+.iconBtn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Health bar (engagement 0-100) */
+.health { display: inline-flex; align-items: center; gap: 8px; min-width: 96px; }
+.healthTrack { position: relative; width: 56px; height: 8px; border-radius: 6px; background: var(--d-card-alt); overflow: hidden; border: 1px solid var(--d-line); }
+.healthFill { position: absolute; inset: 0 auto 0 0; border-radius: 6px; background: color-mix(in srgb, var(--d-score-hi) var(--p), var(--d-score-lo)); }
+
+/* Tree */
+.treeLayout { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 1000px) { .treeLayout { grid-template-columns: minmax(0, 1fr); } }
+.tree { list-style: none; margin: 0; padding: 0; }
+.tree .tree { padding-left: 22px; border-left: 2px dashed var(--d-line); margin-left: 14px; }
+.node { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border-radius: 14px; min-height: 48px; border: 2px solid transparent; }
+.nodeMain { display: flex; flex-direction: column; flex: 1 1 auto; min-width: 0; }
+@media (max-width: 640px) { .node { flex-wrap: wrap; } .nodeTools { margin-left: 0; } }
+.node:hover { background: var(--d-card-alt); }
+.nodeSelected { background: var(--d-accent-soft); border-color: var(--d-accent); }
+.nodeDrop { border-color: var(--d-accent); border-style: dashed; background: var(--d-accent-soft); }
+.nodeName { appearance: none; border: 0; background: none; font: inherit; font-weight: 700; color: var(--d-ink); cursor: pointer; padding: 6px 4px; min-height: 40px; text-align: left; border-radius: 8px; }
+.nodeName:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 1px; }
+.drag { cursor: grab; color: var(--d-muted); display: inline-grid; place-items: center; width: 28px; min-height: 40px; }
+.typeTag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--d-muted); background: var(--d-card-alt); border-radius: 6px; padding: 2px 6px; }
+.counts { color: var(--d-muted); font-size: 0.85rem; padding-left: 4px; }
+.nodeTools { margin-left: auto; display: flex; gap: 6px; flex: none; }
+.renameInput { font: inherit; font-weight: 700; border: 2px solid var(--d-focus); border-radius: 10px; padding: 6px 8px; min-height: 40px; width: 180px; max-width: 100%; }
+
+/* Import wizard steps */
+.steps { display: flex; gap: 8px; flex-wrap: wrap; list-style: none; padding: 0; margin: 0; counter-reset: step; }
+.step { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--d-card-alt); color: var(--d-muted); font-weight: 600; font-size: 0.9rem; }
+.stepOn { background: var(--d-accent); color: var(--d-on-accent); }
+.stepDone { background: color-mix(in srgb, var(--d-good) 18%, transparent); color: var(--d-good-ink); }
+.drop { border: 3px dashed var(--d-control); border-radius: 20px; padding: 28px; text-align: center; background: var(--d-card-alt); }
+.dropActive { border-color: var(--d-accent); background: var(--d-accent-soft); }
+
+/* Heatmap table (grade x subject) */
+.heat { border-collapse: separate; border-spacing: 6px; width: 100%; }
+.heat th { font-size: 0.86rem; color: var(--d-muted); text-align: left; font-weight: 600; }
+.heatCell { border-radius: 12px; padding: 10px; text-align: center; min-width: 84px; color: #10151f; font-weight: 700; }
+.heatCell small { display: block; font-weight: 600; font-size: 0.78rem; opacity: 0.85; }
+.heatEmpty { background: var(--d-card-alt); color: var(--d-muted); }
+
+/* Progress meter */
+.meter { height: 12px; border-radius: 999px; background: var(--d-card-alt); overflow: hidden; border: 1px solid var(--d-line); }
+.meterFill { height: 100%; background: var(--d-accent); border-radius: 999px; }
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.checkItem { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 16px; background: var(--d-card-alt); flex-wrap: wrap; }
+.checkMark { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; flex: none; background: var(--d-card); border: 2px solid var(--d-control); color: var(--d-muted); }
+.checkMarkDone { background: var(--d-good); border-color: var(--d-good); color: #fff; }
+
+/* Question preview on the wooden board */
+.reviewLayout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 18px; align-items: start; }
+@media (max-width: 1000px) { .reviewLayout { grid-template-columns: minmax(0, 1fr); } }
+.boardWrap { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.boardOptions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; position: relative; z-index: 1; }
+.boardOption { background: #fff; color: #1b2440; border-radius: 14px; padding: 10px 16px; font-weight: 700; min-width: 64px; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25); }
+.boardOptionRight { outline: 4px solid #6bcf7f; }
+.boardMeta { color: #c9d6ff; font-size: 0.9rem; position: relative; z-index: 1; margin: 12px 0 0; }
+.note { border-radius: 14px; background: #fff6c8; color: #3b3200; padding: 10px 12px; font-size: 0.93rem; }
+
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.listItem { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 10px 12px; border-radius: 14px; background: var(--d-card-alt); }
+.dlg { position: fixed; inset: 0; background: var(--d-overlay); display: grid; place-items: center; padding: 16px; z-index: 60; }
+.dlgBox { background: var(--d-card); color: var(--d-ink); border-radius: 22px; box-shadow: var(--d-shadow-pop); padding: 22px; width: min(560px, 100%); max-height: calc(100vh - 32px); overflow: auto; }
+.swatch { width: 44px; height: 44px; border-radius: 12px; border: 2px solid var(--d-control); padding: 0; }
+.previewHeader { border-radius: 16px; padding: 14px 16px; color: #fff; font-weight: 700; }
+.sticky { position: sticky; top: 8px; }
+
+/* Top bar on phones: the school name shortens, buttons become icons (aria-label keeps the words). */
+.ctxPill { max-width: 100%; min-width: 0; }
+.ctxText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+@media (max-width: 700px) {
+  .ctxPill { max-width: 46vw; }
+  .phoneIcon > span:last-child { display: none; }
+  .heatCell { min-width: 56px; padding: 8px 4px; font-size: 0.92rem; }
+  .heat { border-spacing: 4px; }
+}
+/* Tree on phones: no drag handle (use "Move this unit to"), smaller indents. */
+@media (max-width: 640px) {
+  .drag { display: none; }
+  .tree .tree { padding-left: 8px; margin-left: 4px; }
+  .nodeMain { flex-basis: 100%; }
+  .nodeTools .iconBtn { min-width: 36px; min-height: 36px; }
+}

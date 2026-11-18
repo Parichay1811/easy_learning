@@ -54,7 +54,8 @@ if [ -d "$OLD" ]; then
 fi
 
 log "Installing server dependencies (API + AI assistant)"
-(cd server && npm install)
+# --omit=dev: test-only packages (an in-memory MongoDB) are not needed in production.
+(cd server && npm install --omit=dev)
 
 log "Installing client dependencies and building"
 (cd client && npm install && npm run build)

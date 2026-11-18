@@ -183,6 +183,17 @@ const AdminDashboard = () => {
     if (!adminUser && adminUser !== undefined) navigate("/admin-login");
   }, [adminUser, navigate]);
 
+  // School staff (coordinator, office, viewer) work in the school dashboard (ADM-023).
+  useEffect(() => {
+    try {
+      const p = JSON.parse(atob((localStorage.getItem("admin_jwt") || "").split(".")[1] || ""));
+      if (p?.role === "org_staff") navigate("/admin-school", { replace: true });
+    } catch { /* not a staff token */ }
+    // Message notifications link here (?tab=messages&thread=<id>): messages live in the school dashboard.
+    const q = new URLSearchParams(window.location.search);
+    if (q.get("tab") === "messages") navigate(`/admin-school/messages${q.get("thread") ? `?thread=${encodeURIComponent(q.get("thread"))}` : ""}`, { replace: true });
+  }, [navigate]);
+
   const loadStats = useCallback(async () => {
     const data = await get("/stats");
     if (data.success) { setStats(data.stats); setOrg(data.stats.org); }
@@ -469,6 +480,7 @@ const AdminDashboard = () => {
             <div className={styles.pageHeader}>
               <h1>Overview</h1>
               <p>Welcome back, {adminUser?.name || adminUser?.email}</p>
+              {org && <p><button type="button" className={styles.primaryBtn} onClick={() => navigate("/admin-school")}>Open the school dashboard (tree, analytics, imports, settings)</button></p>}
             </div>
             <div className={styles.statsGrid}>
               <StatCard label="Tutors" value={stats.tutors} icon={<MdPeople />} color="#a259f7" />

@@ -27,7 +27,21 @@ const schema = new mongoose.Schema({
   tutorIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tutor' }],
   studentIds: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Student' }],
   status: { type: String, enum: ['active', 'inactive'], default: 'active' },
+  // Teacher-made groups (TCH-010/011/055): look, grade band, who made it, archive, join code.
+  color: { type: String, default: '' },
+  emoji: { type: String, default: '' },
+  gradeBand: { type: String, default: '' },
+  groupKind: { type: String, enum: ['class', 'practice'], default: 'class' },
+  createdByTutorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tutor', default: null },
+  archivedAt: { type: Date, default: null },
+  joinCode: { type: String, default: undefined },
+  joinEnabled: { type: Boolean, default: true },
+  // School tree and academic year (ADM-010/012). Archived groups (archivedAt above) are read-only but still reportable.
+  unitId: { type: mongoose.Schema.Types.ObjectId, ref: 'OrgUnit', default: null },
+  yearId: { type: mongoose.Schema.Types.ObjectId, ref: 'AcademicYear', default: null },
 }, { timestamps: true })
+
+schema.index({ joinCode: 1 }, { unique: true, partialFilterExpression: { joinCode: { $type: 'string' } } })
 
 schema.index({ orgId: 1, 'subjects.teacherIds': 1 })
 schema.index({ orgId: 1, 'subjects.subject': 1 })

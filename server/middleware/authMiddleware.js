@@ -27,7 +27,8 @@ const dashboardAuth = (req, res, next) => {
     } catch (_) {}
   }
 
-  const raw = req.cookies?.user_session
+  // signedCookies only holds cookies whose signature checks out (see cookieParser(secret) in server.js)
+  const raw = req.signedCookies?.user_session
   if (raw) {
     try {
       const user = JSON.parse(raw)

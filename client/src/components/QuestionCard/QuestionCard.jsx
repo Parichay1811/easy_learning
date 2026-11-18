@@ -120,7 +120,7 @@ export default function QuestionCard({ question, subject, onAnswered }) {
     <div className={styles.card}>
       <div className={styles.stimulus}>
         <p className={styles.instruction}>{question.instruction}</p>
-        {question.image?.emoji && <div className={styles.emoji}>{question.image.emoji}</div>}
+        {question.image?.url ? <img className={styles.picture} src={question.image.url} alt={question.image.alt || ""} /> : question.image?.emoji && <div className={styles.emoji}>{question.image.emoji}</div>}
         {question.prompt && <p className={styles.promptBox}>{question.prompt}</p>}
 
         <div className={styles.toolRow}>

@@ -212,6 +212,9 @@ server {
         proxy_set_header   Connection 'upgrade';
         proxy_set_header   Host $host;
         proxy_set_header   X-Real-IP $remote_addr;
+        # Required: the API's rate limits use the real visitor address (TRUST_PROXY=1).
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
         proxy_cache_bypass $http_upgrade;
     }
 }
@@ -369,6 +372,28 @@ cd client && npm install && npm run build
 # If server code changed — restart API
 cd ../server && npm install && pm2 restart easy-learn
 ```
+
+---
+
+## Releasing the roles / analytics work (one time)
+
+This release changes sign-in and adds data that needs filling. In order:
+
+1. **Check nginx forwards the visitor address.** `grep -n X-Forwarded-For /etc/nginx/sites-enabled/*` must show `proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;` inside `location /api/`. Add it and `nginx -t && systemctl reload nginx` if missing. Without it every visitor shares one rate limit.
+2. `./redeploy.sh` (installs production dependencies only: `npm install --omit=dev`).
+3. **Optional env** (`server/.env`, see `server/.env.example`): `COOKIE_SECRET` (defaults to `JWT_SECRET`), `FIREBASE_PROJECT_ID` (defaults to the public project id), `SMTP_URL` + `MAIL_FROM` for real email (without them emails wait in the Outbox collection), `SCHEDULER=off` to disable weekly digests.
+4. **Migrations** (each prints what it would do without `--apply`):
+   ```bash
+   cd /var/www/easy_learning/server
+   node scripts/migrate-verify-children.js            # parent links: school-confirmed ones verify, the rest need a learner code
+   node scripts/migrate-verify-children.js --apply
+   node scripts/backfill-learner-days.js              # builds the analytics rollups from existing history
+   node scripts/backfill-learner-days.js --apply
+   ```
+5. **Smoke test** (read-only, from anywhere): `node scripts/smoke.js https://www.learnigo.eu`. Every line must say PASS.
+6. People signed in before the release are asked to sign in again once (the student session cookie is now signed and Google sign-in is verified).
+
+Tests: `cd server && npm test` (needs `npm install` with dev dependencies; it starts the real server on an in-memory MongoDB). CI runs them on every pull request.
 
 ---
 

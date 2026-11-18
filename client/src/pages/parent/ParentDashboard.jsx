@@ -1,355 +1,181 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  MdFamilyRestroom, MdAdd, MdDelete, MdEdit,
-  MdInsights, MdClose, MdLogout, MdMenu, MdSupportAgent, MdChildCare,
-} from "react-icons/md";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { FaHome, FaChartLine, FaClock, FaUsers, FaFileAlt, FaShieldAlt, FaHeadset, FaSchool, FaComments } from "react-icons/fa";
 import { useAdminAuth } from "../../context/AdminAuthContext";
-import StudentDashboardViewer from "../../components/StudentDashboardViewer/StudentDashboardViewer";
-import Modal from "../../components/Admin/Modal";
-import DataTable from "../../components/Admin/DataTable";
-import StatCard from "../../components/Admin/StatCard";
-import styles from "./ParentDashboard.module.css";
+import { DashboardShell, EmptyState, Skeleton } from "../../components/dashboard";
+import { useParentApi } from "./parentApi";
+import ChildSwitcher from "./ChildSwitcher";
+import ParentHome from "./ParentHome";
+import ParentLearning from "./ParentLearning";
+import ParentActivity from "./ParentActivity";
+import ParentFamily from "./ParentFamily";
+import ParentReports from "./ParentReports";
+import ParentPrivacy from "./ParentPrivacy";
+import ParentChat from "./ParentChat";
+import ParentSchool from "./ParentSchool";
+import { NotificationBell, MessageCenter, NotificationPrefs } from "../../components/comms";
+import SetupWizard from "./SetupWizard";
+import s from "./parent.module.css";
 
-const API = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
+const TABS = ["home", "learning", "activity", "school", "messages", "family", "reports", "privacy", "support"];
+const INVITE_KEY = "parent_invite";
 
-const NAV = [
-  { key: "kids", label: "My Kids", icon: <MdChildCare /> },
-  { key: "chat", label: "Chat with Us", icon: <MdSupportAgent /> },
-];
-
-function useParentApi(token) {
-  const get = useCallback(async (path) => {
-    const r = await fetch(`${API}/api/parent${path}`, { headers: { Authorization: `Bearer ${token}` } });
-    return r.json();
-  }, [token]);
-
-  const post = useCallback(async (path, body, method = "POST") => {
-    const r = await fetch(`${API}/api/parent${path}`, {
-      method,
-      headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    return r.json();
-  }, [token]);
-
-  const del = useCallback(async (path) => {
-    const r = await fetch(`${API}/api/parent${path}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return r.json();
-  }, [token]);
-
-  return { get, post, del };
-}
-
-// ── Performance modal (fallback when a kid has no learning activity yet) ─────
-function PerformanceModal({ data, onClose }) {
-  return (
-    <div className={styles.modalOverlay} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <div className={styles.modalHeader}>
-          <h3>Performance — {data.name}</h3>
-          <button className={styles.modalClose} onClick={onClose}><MdClose /></button>
-        </div>
-        {data.performance.linked ? (
-          <div className={styles.perfGrid}>
-            <div className={styles.perfStat}><span>{data.performance.totalXP}</span><label>Total XP</label></div>
-            <div className={styles.perfStat}><span>{data.performance.totalSessions}</span><label>Sessions</label></div>
-            <div className={styles.perfStat}><span>{data.performance.totalMinutes}</span><label>Minutes</label></div>
-            <div className={styles.perfStat}><span>{data.performance.averageScore}%</span><label>Avg Score</label></div>
-            <div className={styles.perfStat}><span>{data.performance.achievementCount}</span><label>Achievements</label></div>
-          </div>
-        ) : (
-          <p className={styles.empty}>No learning activity recorded yet for this child's email. Once they start learning, progress will show up here.</p>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ── Chat panel ────────────────────────────────────────────────────────────────
-function ChatPanel({ messages, draft, onDraftChange, onSend, sending }) {
-  return (
-    <div className={styles.chatPanel}>
-      <div className={styles.chatMessages}>
-        {messages.length === 0 ? (
-          <p className={styles.empty}>No messages yet. Start the conversation with the Super Admin.</p>
-        ) : (
-          messages.map((m) => (
-            <div key={m._id} className={`${styles.chatBubble} ${m.senderRole === "parent" ? styles.chatBubbleMine : styles.chatBubbleTheirs}`}>
-              <p>{m.message}</p>
-              <span className={styles.chatTime}>{new Date(m.createdAt).toLocaleString()}</span>
-            </div>
-          ))
-        )}
-      </div>
-      <div className={styles.chatInputRow}>
-        <textarea
-          rows={2}
-          value={draft}
-          onChange={(e) => onDraftChange(e.target.value)}
-          placeholder="Message the Super Admin…"
-        />
-        <button className={styles.primaryBtn} onClick={onSend} disabled={sending || !draft.trim()}>
-          {sending ? "Sending…" : "Send"}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-// ── Main component ────────────────────────────────────────────────────────────
+// The parent's dashboard (PAR-*): one shell, a child switcher, and a page per tab.
+// State lives in the URL (?tab=&child=&range=…) so a link opens the same view.
 const ParentDashboard = () => {
+  const { t } = useTranslation();
+  const T = (k, d, o) => t(`parent.${k}`, { defaultValue: d, ...o });
   const { parentUser, parentLogout, getParentToken } = useAdminAuth();
   const navigate = useNavigate();
   const token = getParentToken();
-  const { get, post, del } = useParentApi(token);
+  const api = useParentApi(token);
+  const [params, setParams] = useSearchParams();
+  const tab = TABS.includes(params.get("tab")) ? params.get("tab") : "home";
 
-  const [section, setSection] = useState("kids");
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [children, setChildren] = useState([]);
-  const [modal, setModal] = useState(null);
-  const [modalLoading, setModalLoading] = useState(false);
-  const [modalError, setModalError] = useState("");
-  const [perfModal, setPerfModal] = useState(null);
-  const [dashboardViewerChild, setDashboardViewerChild] = useState(null);
-  const [chatMessages, setChatMessages] = useState([]);
-  const [chatDraft, setChatDraft] = useState("");
+  const [children, setChildren] = useState(null);
+  const [invites, setInvites] = useState([]);
   const [chatUnread, setChatUnread] = useState(0);
-  const [chatSending, setChatSending] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [setupFor, setSetupFor] = useState(null);
+  const [notice, setNotice] = useState("");
 
   useEffect(() => {
     if (!parentUser && parentUser !== undefined) navigate("/parent-login");
   }, [parentUser, navigate]);
 
   const loadChildren = useCallback(async () => {
-    const d = await get("/children");
-    if (d.success) setChildren(d.children);
-  }, [get]);
+    const d = await api.get("/children");
+    setChildren(d.success ? d.children : []);
+    return d.success ? d.children : [];
+  }, [api]);
 
+  const loadInvites = useCallback(async () => {
+    const d = await api.get("/guardian-invites");
+    if (d.success) setInvites(d.invites);
+  }, [api]);
+
+  // An invite link (…/parent-login?invite=…) is kept until the parent is signed in, then accepted here.
   useEffect(() => {
+    if (!token) return;
     (async () => {
-      await loadChildren();
-      setLoading(false);
+      let pending = null;
+      try { pending = sessionStorage.getItem(INVITE_KEY); } catch { /* private mode */ }
+      if (pending) {
+        try { sessionStorage.removeItem(INVITE_KEY); } catch { /* ignore */ }
+        const r = await api.post("/guardian-invites/accept", { token: pending });
+        setNotice(r.success ? T("invite.accepted", "You can now follow {{name}}'s learning.", { name: r.child?.name }) : r.message);
+      }
+      await Promise.all([loadChildren(), loadInvites()]);
     })();
-  }, [loadChildren]);
-
-  const pollChatUnread = useCallback(async () => {
-    const d = await get("/chat/unread-count");
-    if (d.success) setChatUnread(d.count);
-  }, [get]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   useEffect(() => {
-    (async () => { await pollChatUnread(); })();
-    const iv = setInterval(pollChatUnread, 25000);
+    if (!token) return undefined;
+    const poll = async () => { const d = await api.get("/chat/unread-count"); if (d.success) setChatUnread(d.count); };
+    poll();
+    const iv = setInterval(poll, 25000);
     return () => clearInterval(iv);
-  }, [pollChatUnread]);
+  }, [api, token]);
 
-  const loadChat = useCallback(async () => {
-    const d = await get("/chat");
-    if (d.success) { setChatMessages(d.messages); setChatUnread(0); }
-  }, [get]);
+  const verified = useMemo(() => (children || []).filter((c) => c.linkStatus === "verified"), [children]);
+  const childId = params.get("child");
+  const child = verified.find((c) => c._id === childId) || verified[0] || null;
 
-  const loadSection = useCallback(async (sec) => {
-    setSection(sec);
-    if (sec === "kids") loadChildren();
-    else if (sec === "chat") loadChat();
-  }, [loadChildren, loadChat]);
-
-  const handleSendChat = async () => {
-    if (!chatDraft.trim()) return;
-    setChatSending(true);
-    const d = await post("/chat", { message: chatDraft.trim() });
-    setChatSending(false);
-    if (d.success) { setChatDraft(""); loadChat(); }
-  };
-
-  const handleLogout = () => { parentLogout(); navigate("/"); };
-
-  const openModal = (config) => { setModal(config); setModalError(""); };
-  const closeModal = () => setModal(null);
-
-  const handleModalSubmit = async (form) => {
-    setModalLoading(true);
-    setModalError("");
-    try {
-      const data = await post(modal.endpoint, form, modal.method || "POST");
-      if (!data.success) { setModalError(data.message || "Something went wrong"); return; }
-      closeModal();
-      loadChildren();
-    } finally {
-      setModalLoading(false);
-    }
-  };
-
-  const handleDeleteChild = async (child) => {
-    if (!confirm(`Remove ${child.name} from your kids?`)) return;
-    await del(`/children/${child._id}`);
-    loadChildren();
-  };
-
-  const openChildPerformance = async (child) => {
-    const d = await get(`/children/${child._id}/performance`);
-    if (!d.success) return;
-    if (d.performance.linked) {
-      setDashboardViewerChild({ id: child._id, name: child.name });
-    } else {
-      setPerfModal({ name: child.name, performance: d.performance });
-    }
-  };
-
-  if (loading || parentUser === undefined) {
-    return <div className={styles.splash}><MdFamilyRestroom className={styles.splashIcon} /><p>Loading…</p></div>;
+  // First-run setup for a newly linked child (PAR-004): once, skippable.
+  const [dismissed, setDismissed] = useState(() => new Set());
+  let autoSetup = null;
+  if (child && !child.onboardedAt && tab === "home" && !dismissed.has(child._id)) {
+    let skipped = false;
+    try { skipped = localStorage.getItem(`parent_setup_skip_${child._id}`) === "1"; } catch { /* ignore */ }
+    if (!skipped) autoSetup = child;
   }
+  const wizardFor = setupFor || autoSetup;
 
-  const childFields = [
-    { key: "name", label: "Child's Name", required: true, minLength: 2, maxLength: 100 },
-    { key: "age", label: "Age", type: "number", required: true, min: 1, max: 25 },
-    { key: "email", label: "Child's Email", type: "email", required: true, placeholder: "Used to link their learning progress" },
+  const go = useCallback((nextTab, extra = {}) => {
+    setParams((prev) => {
+      const n = new URLSearchParams(prev);
+      n.set("tab", nextTab);
+      for (const [k, v] of Object.entries(extra)) { if (v == null) n.delete(k); else n.set(k, v); }
+      return n;
+    });
+    window.scrollTo?.({ top: 0 });
+  }, [setParams]);
+
+  const selectChild = (id) => setParams((prev) => { const n = new URLSearchParams(prev); n.set("child", id); return n; });
+
+  const nav = [
+    { key: "home", label: T("nav.home", "Home"), icon: FaHome, onClick: () => go("home") },
+    { key: "learning", label: T("nav.learning", "Learning"), icon: FaChartLine, onClick: () => go("learning") },
+    { key: "activity", label: T("nav.activity", "Activity"), icon: FaClock, onClick: () => go("activity") },
+    { key: "school", label: T("nav.school", "School"), icon: FaSchool, onClick: () => go("school") },
+    { key: "messages", label: T("nav.messages", "Messages"), icon: FaComments, onClick: () => go("messages") },
+    { key: "family", label: T("nav.family", "Family"), icon: FaUsers, onClick: () => go("family"), badge: invites.length || undefined },
+    { key: "reports", label: T("nav.reports", "Reports"), icon: FaFileAlt, onClick: () => go("reports") },
+    { key: "privacy", label: T("nav.privacy", "Privacy"), icon: FaShieldAlt, onClick: () => go("privacy") },
+    { key: "support", label: T("nav.support", "Support"), icon: FaHeadset, onClick: () => go("support"), badge: chatUnread || undefined },
   ];
 
-  return (
-    <div className={styles.layout}>
-      {/* Mobile top bar */}
-      <div className={styles.mobileTopBar}>
-        <button
-          className={styles.hamburgerBtn}
-          onClick={() => setMobileNavOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          <MdMenu />
-        </button>
-        <span className={styles.mobileTopBarTitle}>
-          <MdFamilyRestroom /> Parent Dashboard
-        </span>
+  const signOut = () => { parentLogout(); navigate("/"); };
+  const needsChild = ["home", "learning", "activity", "school", "reports", "privacy"].includes(tab);
+
+  let page;
+  if (children === null) {
+    page = <><Skeleton variant="rect" height={140} /><Skeleton variant="chart" /></>;
+  } else if (tab === "family") {
+    page = <ParentFamily api={api} kids={children} child={child} invites={invites} parent={parentUser}
+      onChanged={async () => { await Promise.all([loadChildren(), loadInvites()]); }} onSelect={selectChild} onSetup={setSetupFor} go={go} />;
+  } else if (tab === "support") {
+    page = <ParentChat api={api} onRead={() => setChatUnread(0)} />;
+  } else if (tab === "messages") {
+    page = <><MessageCenter role="parent" initialThreadId={params.get("thread") || undefined} /><NotificationPrefs role="parent" /></>;
+  } else if (needsChild && !child) {
+    page = (
+      <div className={s.card}>
+        <EmptyState
+          icon="👋"
+          title={children.length ? T("empty.notLinked", "Your child's link isn't confirmed yet") : T("empty.title", "Add your child to see their learning")}
+          text={children.length
+            ? T("empty.notLinkedText", "Once the link is confirmed with a code or by the school, their learning shows up here.")
+            : T("empty.text", "Create an account for a young child, or link a child who already uses Learnigo.")}
+          actionLabel={T("empty.action", "Add or link a child")}
+          onAction={() => go("family", { add: "1" })}
+        />
       </div>
+    );
+  } else if (tab === "home") page = <ParentHome api={api} child={child} go={go} />;
+  else if (tab === "learning") page = <ParentLearning api={api} child={child} go={go} />;
+  else if (tab === "activity") page = <ParentActivity api={api} child={child} onChanged={loadChildren} />;
+  else if (tab === "school") page = <ParentSchool api={api} child={child} />;
+  else if (tab === "reports") page = <ParentReports api={api} child={child} />;
+  else if (tab === "privacy") page = <ParentPrivacy api={api} child={child} onChanged={loadChildren} />;
 
-      {/* Backdrop for mobile drawer */}
-      {mobileNavOpen && (
-        <div className={styles.sidebarBackdrop} onClick={() => setMobileNavOpen(false)} />
+  return (
+    <DashboardShell
+      brand={{ label: "LEARNIGO", to: "/" }}
+      nav={nav}
+      active={tab}
+      bell={<NotificationBell role="parent" />}
+      contextSwitcher={verified.length ? <ChildSwitcher kids={verified} selected={child?._id} onSelect={selectChild} /> : null}
+      user={(
+        <span className={s.topUser}>
+          <span className={s.srOnly}>{parentUser?.email}</span>
+          <button type="button" className={s.signOut} onClick={signOut}>{T("signOut", "Sign out")}</button>
+        </span>
       )}
-
-      {/* Sidebar */}
-      <aside className={`${styles.sidebar} ${mobileNavOpen ? styles.sidebarOpen : ""}`}>
-        <div className={styles.sidebarHeader}>
-          <MdFamilyRestroom className={styles.sidebarLogo} />
-          <span>Parent Dashboard</span>
-          <button
-            className={styles.sidebarCloseBtn}
-            onClick={() => setMobileNavOpen(false)}
-            aria-label="Close menu"
-          >
-            <MdClose />
-          </button>
-        </div>
-        <div className={styles.adminInfo}>
-          {parentUser?.name && <p className={styles.adminName}>{parentUser.name}</p>}
-          <p className={styles.adminEmail}>{parentUser?.email}</p>
-        </div>
-        <nav className={styles.nav}>
-          {NAV.map((n) => (
-            <button
-              key={n.key}
-              className={`${styles.navItem} ${section === n.key ? styles.navActive : ""}`}
-              onClick={() => { loadSection(n.key); setMobileNavOpen(false); }}
-            >
-              {n.icon} <span>{n.label}</span>
-              {n.key === "chat" && chatUnread > 0 && <span className={styles.navDot} />}
-            </button>
-          ))}
-        </nav>
-        <button className={styles.logoutBtn} onClick={handleLogout}>
-          <MdLogout /> <span>Logout</span>
-        </button>
-      </aside>
-
-      {/* Main */}
-      <main className={styles.main}>
-        {/* ── My Kids ── */}
-        {section === "kids" && (
-          <>
-            <div className={styles.pageHeader}>
-              <h1>My Kids</h1>
-              <button className={styles.primaryBtn} onClick={() => openModal({
-                title: "Add Kid",
-                endpoint: "/children",
-                fields: childFields,
-              })}>
-                <MdAdd /> Add Kid
-              </button>
-            </div>
-            <div className={styles.statsGrid}>
-              <StatCard label="Total Kids" value={children.length} icon={<MdChildCare />} color="#ec4899" />
-            </div>
-            <DataTable
-              columns={[
-                { key: "name", label: "Name" },
-                { key: "age", label: "Age" },
-                { key: "email", label: "Email" },
-              ]}
-              rows={children}
-              actions={[
-                { icon: <MdInsights />, title: "Performance", onClick: openChildPerformance },
-                { icon: <MdEdit />, title: "Edit", onClick: (row) => openModal({
-                    title: "Edit Kid",
-                    endpoint: `/children/${row._id}`,
-                    method: "PATCH",
-                    fields: childFields,
-                    initial: { name: row.name, age: row.age, email: row.email },
-                  }) },
-                { icon: <MdDelete />, title: "Remove", variant: "delete", onClick: handleDeleteChild },
-              ]}
-              emptyMsg={`You haven't added any kids yet. Click "Add Kid" to get started.`}
-            />
-          </>
-        )}
-
-        {/* ── Chat with Us ── */}
-        {section === "chat" && (
-          <>
-            <div className={styles.pageHeader}>
-              <h1>Chat with Us</h1>
-              <p>Chat directly with the Super Admin about your account or your kids.</p>
-            </div>
-            <ChatPanel
-              messages={chatMessages}
-              draft={chatDraft}
-              onDraftChange={setChatDraft}
-              onSend={handleSendChat}
-              sending={chatSending}
-            />
-          </>
-        )}
-      </main>
-
-      {/* Modal */}
-      {modal && (
-        <Modal
-          title={modal.title}
-          fields={modal.fields}
-          initial={modal.initial}
-          onSubmit={handleModalSubmit}
-          onClose={closeModal}
-          loading={modalLoading}
-          serverError={modalError}
-        />
+    >
+      {notice && <p className={s.notice} role="status">{notice}</p>}
+      {page}
+      {wizardFor && (
+        <SetupWizard key={wizardFor._id} api={api} child={wizardFor}
+          onClose={async (done) => {
+            if (!done) { try { localStorage.setItem(`parent_setup_skip_${wizardFor._id}`, "1"); } catch { /* ignore */ } }
+            setDismissed((d) => new Set(d).add(wizardFor._id));
+            setSetupFor(null);
+            await loadChildren();
+          }} />
       )}
-
-      {/* Performance fallback modal */}
-      {perfModal && <PerformanceModal data={perfModal} onClose={() => setPerfModal(null)} />}
-
-      {dashboardViewerChild && (
-        <StudentDashboardViewer
-          apiBase={`${API}/api/parent/children/${dashboardViewerChild.id}/dashboard`}
-          token={token}
-          displayName={dashboardViewerChild.name}
-          onClose={() => setDashboardViewerChild(null)}
-        />
-      )}
-    </div>
+    </DashboardShell>
   );
 };
 

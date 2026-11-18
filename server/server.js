@@ -29,6 +29,9 @@ const speakScienceRoutes = require('./routes/speakScience')
 const speakMathsRoutes   = require('./routes/speakMaths')
 const speakEnglishRoutes = require('./routes/speakEnglish')
 const dashboardRoutes     = require('./routes/dashboard')
+const sharedRoutes        = require('./routes/shared')
+const { rateLimit, accountKey } = require('./middleware/rateLimit')
+const { securityHeaders } = require('./middleware/security')
 const arRoutes            = require('./routes/ar')
 const { createAIAssistant } = require('./services/aiAssistant')
 
@@ -63,9 +66,31 @@ app.use(cors({
 // overruns the 100kb default. Mounted first so the global parser sees the body
 // as already read and skips it — every other route keeps the default limit.
 app.use('/api/ar', express.json({ limit: '2mb' }))
+// Stripe signs the exact bytes, so its webhook gets the raw body (FND-032).
+app.post('/api/billing/webhook', express.raw({ type: 'application/json', limit: '1mb' }), require('./routes/billing').webhook)
 app.use(express.json())
-app.use(cookieParser())
+// Signed cookies need a secret; the student session cookie is signed so it can't be forged.
+app.use(cookieParser(process.env.COOKIE_SECRET || process.env.JWT_SECRET))
+// Request metrics for the health page, then platform-wide rules: read-only "view as",
+// revoked sessions, suspended orgs, daily activity (SUP-002/012/040).
+app.use(require('./utils/requestMetrics').middleware)
+app.use(require('./middleware/platformGuard'))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
+// ── Abuse protection (FND-074) ────────────────────────────────────────────────
+// Behind nginx the client address is the last X-Forwarded-For hop: without this every
+// visitor would look like 127.0.0.1 and share one limit.
+app.set('trust proxy', process.env.TRUST_PROXY ? Number(process.env.TRUST_PROXY) : (process.env.NODE_ENV === 'production' ? 1 : false))
+app.use('/api', securityHeaders)
+// Generous overall limit per client; sign-in endpoints get tighter ones.
+app.use('/api', rateLimit({ windowMs: 60_000, max: 900 }))
+app.use(['/api/auth', '/api/admin/auth', '/api/teacher/auth', '/api/parent/auth'], rateLimit({ windowMs: 60_000, max: 40 }))
+// Password sign-ins: 8 tries per client+account per 15 minutes (slows guessing, never locks out a whole site).
+const passwordLimiter = rateLimit({ windowMs: 15 * 60_000, max: 8, key: accountKey, message: 'Too many sign-in attempts. Please wait 15 minutes and try again.' })
+// Super admin staff sign-in has its own account lockout and IP throttle (services/staffAuth.js).
+app.use('/api/auth/login', passwordLimiter)
+app.use('/api/auth/register', rateLimit({ windowMs: 60 * 60_000, max: 20, message: 'Too many sign-ups from this network. Please try again later.' }))
+
 
 const PORT = process.env.PORT || 5000
 
@@ -84,9 +109,18 @@ app.use('/api/teacher/auth', teacherAuthRoutes)
 app.use('/api/parent/auth', parentAuthRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/superadmin', superadminRoutes)
+app.use('/api/teacher', require('./routes/teacherTests')) // question bank + tests (TCH-020..061)
 app.use('/api/teacher', teacherRoutes)
+app.use('/api/parent', require('./routes/parentTests'))
 app.use('/api/parent', parentRoutes)
+app.use('/api/student', require('./routes/studentTests'))
 app.use('/api/contact', contactRoutes)
+app.use('/api/join', require('./routes/join')) // public join codes and tutor pages (TCH-011/082)
+app.use('/api/admin', require('./routes/teacherInvite')) // TCH-002 invite email
+app.use('/api/status', require('./routes/status'))
+app.use('/api/billing', require('./routes/billing'))
+app.post('/api/view-as/end', require('./controllers/superadmin/viewAsController').endFromBanner)
+app.use('/api/public', require('./routes/publicReport'))
 
 app.get('/', (req, res) => {
   res.send('hello bachho')
@@ -105,6 +139,8 @@ app.use('/api/speak/science', speakScienceRoutes)
 app.use('/api/speak/maths',   speakMathsRoutes)
 app.use('/api/speak/english', speakEnglishRoutes)
 app.use('/api/dashboard',        dashboardRoutes)
+app.use('/api',                  sharedRoutes)
+app.use('/api',                  require('./routes/comms'))
 app.use('/api/ar',               arRoutes)
 
 // Global error handler — catches any unhandled errors from route handlers
@@ -116,6 +152,9 @@ app.use((err, req, res, _next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
   aiAssistant.start()
+  // Two schedulers with different jobs: digests/announcements (scheduler.js) and console jobs (jobs.js). SCHEDULER=off stops both.
+  require('./services/scheduler').startScheduler()
+  require('./services/jobs').startScheduler()
 })
 
 // Stop the AI assistant's process with the API (it saves its TODO list on the way out).

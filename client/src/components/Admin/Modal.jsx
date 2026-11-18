@@ -37,7 +37,7 @@ function validateForm(fields, form) {
   return errors;
 }
 
-export default function Modal({ title, fields, onSubmit, onClose, loading, serverError, initial, wide }) {
+export default function Modal({ title, fields, onSubmit, onClose, loading, serverError, initial, wide, submitLabel, hint }) {
   const [form, setForm] = useState(initial || {});
   const [touched, setTouched] = useState({});
   const errors = validateForm(fields, form);
@@ -62,6 +62,7 @@ export default function Modal({ title, fields, onSubmit, onClose, loading, serve
           <button className={styles.modalClose} onClick={onClose}><MdClose /></button>
         </div>
         <form onSubmit={handleSubmit} className={styles.modalForm}>
+          {hint && <p className={styles.modalHint}>{hint}</p>}
           {fields.map((f) => {
             if (f.showIf && !f.showIf(form)) return null;
             const showError = touched[f.key] && errors[f.key];
@@ -99,7 +100,7 @@ export default function Modal({ title, fields, onSubmit, onClose, loading, serve
           })}
           {serverError && <p className={styles.serverError}>{serverError}</p>}
           <button type="submit" className={styles.modalSubmit} disabled={loading || (Object.keys(touched).length > 0 && hasErrors)}>
-            {loading ? "Saving…" : "Save"}
+            {loading ? "Saving…" : (submitLabel || "Save")}
           </button>
         </form>
       </div>

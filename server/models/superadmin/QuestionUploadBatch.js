@@ -16,6 +16,8 @@ const schema = new mongoose.Schema({
   // server/utils/questionVisibility.js.
   batchIds: { type: [String], default: [] },
 
+  // 'xlsx' (template upload), 'editor' (in-app question editor) or 'csv' (CSV/paste import).
+  source: { type: String, default: 'xlsx' },
   originalFilename: { type: String, required: true },
   originalFileUrl: { type: String, required: true },
 
@@ -28,6 +30,9 @@ const schema = new mongoose.Schema({
   rejectionHistory: { type: [{ reason: String, rejectedAt: { type: Date, default: Date.now } }], default: [] },
   reviewedBy: { type: String, default: '' },
   reviewedAt: { type: Date, default: null },
+  // ADM-050: reviewer notes (school-internal), and ADM-051 bank tags.
+  reviewNotes: { type: [{ by: String, text: String, at: { type: Date, default: Date.now } }], default: [] },
+  tags: { type: [String], default: [] },
 }, { timestamps: true })
 
 module.exports = superAdminDb.model('QuestionUploadBatch', schema)

@@ -1,0 +1,72 @@
+name: CI
+
+# Tests, lint and a production build on every pull request and push to main.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  server:
+    name: Server tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      # --ignore-scripts: the AI packages' native downloads are not needed for API tests.
+      - run: npm ci --ignore-scripts
+        working-directory: server
+      # Starts the real server against an in-memory MongoDB (downloads mongod once).
+      - run: npm test
+        working-directory: server
+
+  ai-assistant:
+    name: AI assistant tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: server/package-lock.json
+      # The assistant's speech fixing reads the system word list (/usr/share/dict/words).
+      - run: sudo apt-get update -q && sudo apt-get install -y -q wamerican
+      # The assistant uses the server's packages (it lives inside server/). CPU-only onnxruntime,
+      # and no llama.cpp build (the CI machine has no GPU and the tests don't use a local LLM).
+      - run: npm ci
+        working-directory: server
+        env:
+          npm_config_onnxruntime_node_install_cuda: skip
+          NODE_LLAMA_CPP_SKIP_DOWNLOAD: 'true'
+      - run: npm test
+        working-directory: server/ai-assistant
+
+  client:
+    name: Client lint and build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: client/package-lock.json
+      - run: npm ci
+        working-directory: client
+      - run: npm run lint
+        working-directory: client
+      - run: npm run build
+        working-directory: client
+        env:
+          VITE_API_BASE_URL: https://example.invalid/api

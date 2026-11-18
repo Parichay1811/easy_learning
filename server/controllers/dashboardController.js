@@ -1,3 +1,4 @@
+const { recordAnswer, recordSession, recordRound, contextFrom } = require('../analytics/record')
 const StudentActivity   = require('../models/StudentActivity')
 const StudentAchievement = require('../models/StudentAchievement')
 const StudentAnswer      = require('../models/StudentAnswer')
@@ -128,6 +129,8 @@ const logSession = async (req, res) => {
       },
       { upsert: true, new: true }
     )
+
+    await recordSession({ email, module: mod, subject, minutes: durationMinutes || 0, xp: xpEarned || 0, ts: now, ...contextFrom(req) })
 
     const newAchievements = await checkAndAwardAchievements(email)
     res.json({ success: true, newAchievements })
@@ -261,6 +264,15 @@ const logAnswer = async (req, res) => {
       xpEarned: xpEarned || 0,
       timeTaken: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken : null,
       mode: mode || 'practice',
+      questionId: typeof req.body.questionId === 'string' ? req.body.questionId.slice(0, 60) : null,
+      topic: typeof req.body.topic === 'string' ? req.body.topic.slice(0, 80) : null,
+      hintsUsed: Math.max(0, Math.min(10, Number(req.body.hintsUsed) || 0)),
+    })
+    await recordAnswer({
+      email, module: mod, subject, correct: !!correct, mode: mode || 'practice',
+      timeMs: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken * 1000 : null, // client sends seconds
+      hintsUsed: Number(req.body.hintsUsed) || 0, firstTry: req.body.firstTry ?? null, testId: req.body.testId,
+      ...contextFrom(req),
     })
     res.json({ success: true })
   } catch (err) {
@@ -342,6 +354,9 @@ const logRound = async (req, res) => {
       { upsert: true, new: true }
     )
 
+    // Stars only: minutes come from real session durations (logSession), not the fixed 5 above.
+    await recordRound({ email, module: mod, subject, mode: mode || 'practice', stars: stars || 0, totalStars: totalStars || 0, ...contextFrom(req) })
+
     const newAchievements = await checkAndAwardAchievements(email)
     res.json({ success: true, newAchievements })
   } catch (err) {
@@ -365,4 +380,4 @@ const getRounds = async (req, res) => {
   }
 }
 
-module.exports = { logSession, getStats, getActivity, getAchievements, getPerformance, getModuleStars, logAnswer, getAnswers, logRound, getRounds }
+module.exports = { ACHIEVEMENTS, logSession, getStats, getActivity, getAchievements, getPerformance, getModuleStars, logAnswer, getAnswers, logRound, getRounds }

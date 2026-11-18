@@ -1,29 +1,32 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const { identityFromRequest } = require('../utils/firebaseToken')
 
 // ── Session cookie helpers (used by Firebase / Google OAuth flow) ─────────────
 
 const COOKIE_NAME = 'user_session'
 const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000 // 7 days
 
-const setSession = (req, res) => {
-  const { uid, email, name, photoURL } = req.body
-  if (!uid || !email) {
-    return res.status(400).json({ success: false, message: 'uid and email are required' })
-  }
+const setSession = async (req, res) => {
+  // Identity comes from the verified Firebase token, never from the request body.
+  const identity = await identityFromRequest(req, res)
+  if (!identity) return
+  const { uid, email, name, photoURL } = identity
 
-  const sessionData = { uid, email, name: name || '', photoURL: photoURL || '' }
+  const sessionData = { uid, email, name, photoURL }
 
+  // Signed, so the cookie can't be forged: dashboardAuth only trusts a valid signature.
   res.cookie(COOKIE_NAME, JSON.stringify(sessionData), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     maxAge: COOKIE_MAX_AGE,
+    signed: true,
   })
 
   const token = jwt.sign(
-    { id: uid, email, name: name || '' },
+    { id: uid, email, name },
     process.env.JWT_SECRET,
     { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
   )
@@ -32,7 +35,7 @@ const setSession = (req, res) => {
 }
 
 const getSession = (req, res) => {
-  const raw = req.cookies[COOKIE_NAME]
+  const raw = req.signedCookies && req.signedCookies[COOKIE_NAME]
   if (!raw) return res.json({ success: true, user: null })
 
   try {
@@ -44,7 +47,7 @@ const getSession = (req, res) => {
 }
 
 const clearSession = (req, res) => {
-  res.clearCookie(COOKIE_NAME, { httpOnly: true, sameSite: 'lax' })
+  res.clearCookie(COOKIE_NAME, { httpOnly: true, sameSite: 'lax', signed: true })
   res.json({ success: true, message: 'Session cleared' })
 }
 

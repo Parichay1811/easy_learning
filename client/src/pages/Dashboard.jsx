@@ -14,6 +14,7 @@ import {
 import styles from './Dashboard.module.css'
 import DashboardView from './DashboardView'
 import VideoBackground from '../components/VideoBackground/VideoBackground'
+import LinkParentCard from '../components/LinkParentCard/LinkParentCard'
 import { FaExclamationTriangle } from 'react-icons/fa'
 
 // ── Main Dashboard (Redux-connected wrapper for the logged-in student) ─────────
@@ -101,6 +102,7 @@ export default function Dashboard() {
         displayName={firstName}
         avatarUrl={user?.photoURL}
       />
+      <LinkParentCard />
     </>
   )
 }

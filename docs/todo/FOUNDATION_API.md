@@ -1,0 +1,99 @@
+# Foundation API: what the role features build on
+
+Built (see [FOUNDATIONS.md](FOUNDATIONS.md) for the plan). Read this before adding a role feature.
+Run `cd server && npm test`: unit tests plus integration tests that boot the real server on an in-memory MongoDB.
+
+## Identity
+
+- **Sign-in is verified.** Every Google sign-in sends a Firebase **ID token** (`{ idToken }`); [utils/firebaseToken.js](../../server/utils/firebaseToken.js) verifies it. Never take uid/email from a request body.
+- **Student session cookie is signed** (`req.signedCookies.user_session`). Never read `req.cookies` for identity.
+- [utils/actors.js](../../server/utils/actors.js): `anyAuth` sets `req.actor = { role: student|parent|admin|teacher|superadmin, id, email, name, orgId }` from whichever token is present. `requireRole('admin','teacher')`.
+- Existing per-role middlewares still set `req.parent`, `req.admin`, `req.teacher`, `req.superadmin`, `req.user` (student).
+
+## Learning events and rollups
+
+- [analytics/record.js](../../server/analytics/record.js): `recordAnswer`, `recordSession`, `recordRound` (never throw). They write a `LearningEvent` (raw, 24 months) and `$inc` the learner's `LearnerDay` (`models/analytics/`): one doc per learner per **local** day with minutes, answers, correct, accuracy inputs, `byModuleSubject`, `byHour`, `devices`, `sources`. `contextFrom(req)` adds timezone (`X-Timezone` header) and device.
+- Tests/homework must call `recordAnswer({ email, module, subject, correct, timeMs, testId, source: 'test', orgId })` so they show up everywhere.
+- Backfill existing history once after deploy: `node scripts/backfill-learner-days.js --apply`.
+
+## Shared analytics (the same numbers for every role)
+
+- [analytics/queries.js](../../server/analytics/queries.js) `overview, series, matrix, patterns, streak, calendar, perLearner, timeline`, all from `LearnerDay`. [analytics/insights.js](../../server/analytics/insights.js) `buildInsights`, `buildStory`. Definitions: [utils/metrics.js](../../server/utils/metrics.js) (also `GET /api/meta/metrics`).
+- HTTP: [controllers/analyticsController.js](../../server/controllers/analyticsController.js) handlers read `req.analyticsScope = { emails, who, names, tz }`. [utils/scopes.js](../../server/utils/scopes.js) resolves **who may be looked at** per role (`forParentChild, forTeacherBatch, forTeacherAll, forTeacherStudent, forAdmin, forSuperadminOrg`) and `scoped(resolver)` is the middleware. [routes/analyticsMounts.js](../../server/routes/analyticsMounts.js) mounts them:
+
+| Role | Endpoints (all `GET`, query: `from`, `to` (YYYY-MM-DD), `cmp=prev\|lastyear\|none`, `tz`) |
+|---|---|
+| Parent | `/api/parent/children/:id/analytics/{overview,calendar,matrix,patterns,timeline}` |
+| Teacher | `/api/teacher/batches/:id/analytics/{overview,calendar,matrix,patterns,timeline,learners}`, `/api/teacher/students/:id/analytics/...`, `/api/teacher/analytics/...` (all my students) |
+| Admin | `/api/admin/analytics/{overview,...,learners}?batchId=`, `/api/admin/students/:id/analytics/...` |
+| Super admin | `/api/superadmin/organizations/:id/analytics/{...,learners}`, `.../students/:studentId/analytics/...` |
+
+`overview` returns `{ range, totals, previous, deltas, streak, series, matrix, patterns, story, insights }`. `learners` returns one row per learner with `atRisk` and `riskReason`.
+
+To add a new scope (a school unit, a test's takers), write a resolver in `utils/scopes.js` that **checks the permission and returns emails**, then mount the same handlers.
+
+## Plans and modules
+
+- [config/plans.js](../../server/config/plans.js): `MODULES`, `PLANS` (`free, family_plus, solo_free, solo_pro, institute, enterprise`). [utils/entitlements.js](../../server/utils/entitlements.js): `entitlementsFor(actor)`, `requireModule('tests')` (answers **402** `{ code: 'MODULE_LOCKED', module }`). Per-org overrides: super admin sets `featureOverrides` (`'tests.advanced'` adds, `'-sso'` removes) on the superadmin `Organization`. `Organization.kind` is `institute` or `solo`.
+- `GET /api/me`, `GET /api/entitlements` (any signed-in role).
+- Put `anyAuth` before `requireModule` on shared routes; role routers that already authenticate set `req.actor` themselves via `anyAuth` or build it from their `req.<role>`.
+
+## Notifications and audit
+
+- `notify({ role, id } | [...], { kind, title, body, link })` ([utils/notify.js](../../server/utils/notify.js)); `GET /api/notifications`, `/unread-count`, `POST /:id/read`, `POST /read-all`.
+- `audit(req, action, { targetType, targetId, orgId, reason, meta })` ([utils/audit.js](../../server/utils/audit.js)): hash-chained `AuditEvent`. Call it for exports, "view as", deletions, grade changes, permission changes, bulk imports.
+
+## Parent links
+
+Only `linkStatus: 'verified'` links expose data ([utils/guardianLink.js](../../server/utils/guardianLink.js) `childAccess`). See design-guide §5.3.1.
+
+## Testing pattern
+
+`test/integration/harness.js`: `const app = await start()`; `app.tokens.parent(id)`, `.teacher(id, orgId)`, `.admin(id, orgId, uid)`, `.student(email)`, `.superadmin()`; `app.call(method, route, { token, body, headers })`; seed with `app.db.admin|main|superadmin.collection(...)`. Note: superadmin `Organization.adminOrgId` is a **string**.
+
+## Mail and organisation policy
+
+- `sendMail({ to, subject, html, text, kind })` ([utils/mailer.js](../../server/utils/mailer.js)): never throws. With `SMTP_URL` (or `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`) and `MAIL_FROM` it sends; without them the message stays `queued` in the `Outbox` collection (`models/Outbox.js`), so nothing is lost and tests can read it.
+- `getOrgPolicy(orgId)` ([utils/orgPolicy.js](../../server/utils/orgPolicy.js)): the organisation's policy with defaults (`messaging`, `teachersCreateGroups`, `parentsSeeClassAverage`, `leaderboards`, `aiTeacherInSchoolHours`, `activityVisibility`, `retentionYears`, DPA acceptance). Stored in `models/admin/OrgPolicy.js`. Features that a policy governs must call it.
+- **Teacher workspaces** (Teacher work): one Google account can be a `Tutor` in several orgs (`Tutor.uid` is unique per org). `services/teacherWorkspaces.js` signs teacher/admin tokens, lists workspaces and creates Solo workspaces. Teacher routes in `routes/teacherClasses.js` resolve the workspace with `services/teacherContext.js` (`context(req)` gives tutor, org, entitlements, policy; `myGroup()` 404s anything the teacher does not teach; `assertWithinLimit(ctx, 'groups'|'students', n)` answers 402 `PLAN_LIMIT`). Groups are `Batch` docs with `color, emoji, gradeBand, groupKind ('class'|'practice'), createdByTutorId, archivedAt, joinCode`. Public `/api/join/:code` and `/api/join/tutor/:slug`.
+- **Sign-in in integration tests:** set `process.env.FIREBASE_TEST_CERTS` (JSON `{kid: pem}`) before `start()` and sign RS256 tokens with your key; only honoured when `NODE_ENV=test` (see `test/integration/teacher-classes.test.js`).
+## Platform pieces from the Super Admin work
+
+- **Platform guard** ([middleware/platformGuard.js](../../server/middleware/platformGuard.js), mounted once in `server.js`): "view as" tokens (`imp` claim) can only `GET` (side-effecting GETs like chat threads are refused too); revoked sessions (`SessionRevocation`) and suspended orgs are refused; daily activity per account goes to `ActorDay`. `req.viewAs` is set during a view-as session. **If you add a GET that writes (marks read, counts views), add it to `SIDE_EFFECT_GETS`.**
+- **Jobs** ([services/jobs.js](../../server/services/jobs.js)): `register(name, { description, everyMs, run: async ({ progress }) => result })`; runs are recorded and can be re-run from the console. Heavy work: spawn a child process inside `run`.
+- **Feature flags** ([services/featureFlags.js](../../server/services/featureFlags.js)): `await isOn('key', { orgId, plan, actorId })` for gradual rollouts. Module switches are already applied by `entitlementsFor`.
+- **Plans and billing**: `entitlementsFor` now reads the org's `Subscription` (plan, frozen `planSnapshot`, `seats` → `limits.students`) and the plan catalogue (`services/planCatalog.js`). `GET /api/billing/usage` (admin/teacher) returns seats and groups against limits.
+- **Status**: public `GET /api/status` (banner + incidents).
+- **Staff**: console routes use `superadminAuth` + `requireStaffRole('support', ...)`; `req.superadmin` keeps its shape plus `staffId`, `staffRole`, `sid`, `breakGlass`, and `req.actor` is set for `audit()`.
+
+- `DataRequest` (shared by Parent privacy centre and the Super Admin queue; owned by the Parent work): `{ subjectEmail, subjectName, requestedByRole, requestedById, orgId?, kind: 'export'|'delete', status: 'pending'|'processing'|'done'|'rejected', dueAt, resolvedAt, resolvedBy, note }` in `models/DataRequest.js`.
+
+## Communication, reports, exports, consent (FND-050..073)
+
+Server routes live in `server/routes/comms.js` (mounted at `/api`); client pieces in `client/src/components/comms/` and `client/src/components/reports/`. Gallery: `/dev/comms` (dev only; `?as=parent&token=<jwt>` signs the page in).
+
+- **`notify(to, { kind, title, body, link })`** now respects each recipient's preference for `kind` (`utils/notifyPrefs.js` `KINDS`: `message, announcement, test_assigned, result_released, at_risk, link_request, approval, report_ready, weekly_digest, teacher_summary, admin_summary, security`). Use one of these kinds (unknown kinds work, bell only). Email goes out in the background for email-worthy kinds; `digest` kinds wait for the daily email.
+- **Client:** `import { NotificationBell, NotificationPrefs, MessageCenter, AnnouncementsPanel, AnnouncementComposer } from '../../components/comms'` and `import ReportView from '../../components/reports/ReportView'`. Each takes `role` (or picks the token for the current page). Put the bell in `DashboardShell`'s `bell` slot. Message notifications link to `/<role>-dashboard?tab=messages&thread=<id>`: pass `initialThreadId` to `MessageCenter`.
+- **Messaging:** `/api/messages/{contacts,threads,threads/:id/messages,threads/:id/read,unread-count,attachments/:msg/:i,:msg/flag,flags}`; metrics `GET /api/admin/messaging/metrics?from&to`. Links decide everything (`services/commsLinks.js`); never add your own messaging rules.
+- **Announcements:** `POST /api/announcements { title, body, link?, audience: { type, ids?, grade?, includeParents?, includeStaff?, roles?, orgKind?, plans? }, publishAt?, expiresAt?, dryRun? }`, `GET /api/announcements` (my feed), `/sent`, `/:id/report`, `/audiences`.
+- **Reports:** `GET /api/reports/parent/children/:id`, `/teacher/{batches/:id,students/:id,all}`, `/admin/{org,batches/:id,students/:id}`, `/superadmin/organizations/:id` (`from`, `to`), and `.../learners.export?format=csv|xlsx` for group/school tables.
+- **Exports:** `exportRows(req, res, { filename, format, columns, rows, audit })` in `utils/exporter.js` for any table (streams, audited). API keys: `/api/admin/api-keys`; data API `/api/v1/learners`, `/api/v1/daily-summaries` (header `X-Api-Key`).
+- **Consent:** `recordConsent(req, { subjectEmail, childId|studentId, orgId, purpose, status, legalBasis })` in `utils/consent.js`; history at `GET /api/consents?childId=|studentId=`.
+- **Privacy helpers:** `firstNameInitial`, `leaderboardRows`, `benchmark` (null under 20) in `utils/minimise.js`.
+- **Jobs:** `services/scheduler.js` runs `announcements`, `notification_daily`, `parent_weekly`, `teacher_weekly`, `admin_monthly`; `SCHEDULER=off` disables it. Env: `PUBLIC_APP_URL` (links in emails), `PUBLIC_API_URL` (unsubscribe links), `UNSUBSCRIBE_SECRET`, `DIGEST_PARENT_HOUR` (18), `DIGEST_TEACHER_HOUR` (7), `DIGEST_ADMIN_HOUR` (8), `DIGEST_DAILY_HOUR` (17).
+## School structure, staff and policies (ADMIN work)
+
+- **School tree:** `OrgUnit {orgId, parentId, type: campus|grade|section|department, name, path}` ([utils/orgUnits.js](../../server/utils/orgUnits.js)). `Student.unitId` (homeroom section), `Batch.unitId`, `Tutor.unitIds`. A unit's learners = homeroom students in its subtree + students of groups placed in it (`membersOf`).
+- **Scopes:** `forAdmin(admin, { batchId, studentId, unitId })`: `unitId` covers the whole subtree; when `admin.staff.unitIds` is set (staff), everything outside those subtrees is 404. Mounted as `/api/admin/units/:id/analytics/{overview,calendar,matrix,patterns,timeline,learners}` and `/api/admin/analytics/...?unitId=`.
+- **Staff:** an `OrgStaff` row (coordinator / office / viewer) lets a person sign in through the admin Google sign-in. Their token has role `org_staff`; `anyAuth` gives `req.actor = { role: 'staff', staffRole, orgId }`, so **`requireRole('admin')` refuses staff**: allow `'staff'` explicitly where a staff role should get in. Inside `/api/admin` every request goes through `utils/orgAccess.js` (`orgContext`, `permit('perm')`, `staffLegacyGate`): staff are deny-by-default on admin routes, so **a new `/api/admin/*` route is admin-only for staff until it is listed** in `LEGACY` there or mounted in `routes/adminSchool.js` with `permit(...)`.
+- **Policies:** `policyAllows(orgId, rule)` and Express `requirePolicy(rule)` (403 `{ code: 'POLICY_BLOCKED' }`) in [utils/orgPolicy.js](../../server/utils/orgPolicy.js). Rules: `teachersCreateGroups` (mount on teacher group creation), `parentsSeeClassAverage`, `leaderboards`, `aiTeacherInSchoolHours`, `parentStartsMessage`, `teacherStartsMessage`. Solo workspaces always allow their own groups and messaging.
+- **Academic years:** `AcademicYear {name, start, end, status, terms[], events[{kind: holiday|exam|event}]}`; `utils/schoolCalendar.js` (`streakSkipDates(orgId)`, `termsAround`). `queries.streak(email, tz, { skipDates })` lets holidays bridge a streak. Archived groups (`Batch.archivedAt`) are read-only: teacher routes should refuse edits too.
+- **Seats:** `utils/seats.js` `seatInfo(orgId)` / `assertSeats(orgId, n)` (409 `SEATS_FULL` body). Never call it on learning routes.
+- **Parent links from schools:** `utils/parentLinks.js` `linkSchoolChildren(parentAccount)` (runs on parent sign-in) and `linkedParentEmails(parentEmails, learnerEmails)`.
+- **Tests:** `start({ env, preload: [require.resolve('./fake-firebase')] })` makes the real sign-in endpoints accept ID tokens signed with a key the test owns (see `admin-school.test.js` `idToken()`); `app.tokens.staff(id, orgId, staffId, staffRole, email)`.
+## Managed learners, family settings, data rights (built by the Parent work)
+
+- `createManagedLearner({ name, age, avatar, createdByRole: 'parent'|'teacher'|'admin', createdById, orgId?, batchId? })` -> `{ learner, loginCode: 'ABC 234', picturePassword: ['cat','star','dog'] }` in [services/managedLearners.js](../../server/services/managedLearners.js) (`resetManagedLogin(id)` makes a new card). With `orgId` it also adds the roster `Student`, so teacher/admin scopes see the learner. The learner's data is keyed by `learner.email` (`ml-<id>@managed.learnigo.invalid`). Sign-in: `POST /api/auth/managed-login { loginCode, picture }` -> student JWT; `GET /api/auth/managed-pictures`.
+- Learner side: `GET /api/dashboard/family` (goal, week progress, healthy-use state, unseen cheers), `POST /api/dashboard/ai-teacher-log { topic, title, subject, seconds }`.
+- Data rights: [services/dataRights.js](../../server/services/dataRights.js) `exportLearner`, `countLearner`, `requestDeletion`, `cancelDeletion`, `approveRequest`, `rejectRequest`, `runDueDeletions`, `eraseLearner`. Super admin queue API: `GET /api/superadmin/data-requests?status=&kind=`, `POST /:id/approve`, `POST /:id/reject { note }`, `POST /run-due`.
+- Public read-only report links: `GET /api/public/report/:token` (PAR-072).

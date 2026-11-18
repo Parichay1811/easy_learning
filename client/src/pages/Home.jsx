@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Hero from "../components/Hero/Hero";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
+import TodoCard from "../components/tests/TodoCard";
 import { useAuth } from "../context/AuthContext";
 
 const Home = () => {
@@ -32,6 +33,7 @@ const Home = () => {
         transition={{ duration: 0.4 }}
         onClickCapture={handleClick}
       >
+        <TodoCard />
         <Hero />
       </FramerMotion.motion.div>
     </>

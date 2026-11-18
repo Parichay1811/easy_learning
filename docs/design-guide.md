@@ -223,6 +223,37 @@ context now — it holds separate state/localStorage keys and
 `teacherGoogleSignIn`/`teacherLogout` functions alongside the pre-existing admin/superadmin
 ones, all exposed via one `useAdminAuth()` hook.
 
+### 5.3.0 Sign-in is verified (read this before touching auth)
+
+Every Google sign-in endpoint (`/api/auth/session`, `/api/admin/auth/google`,
+`/api/teacher/auth/google`, `/api/parent/auth/google`) takes `{ idToken }`, the Firebase ID
+token, and verifies it with `utils/firebaseToken.js` (Google's certificates, our project id,
+expiry, verified email). Identity comes only from the verified claims, never from the request
+body. Before this, the body was trusted and anyone could sign in as anyone. The student session
+cookie is **signed** (`cookieParser(secret)`); read it from `req.signedCookies`, never
+`req.cookies`. `utils/actors.js` `actorFromRequest` returns one actor shape for any role.
+
+### 5.3.1 Parent → child links are verified
+
+A parent's `Child` row only exposes the learner's data when `linkStatus === 'verified'`
+(`utils/guardianLink.js` `childAccess`, used by `parentChildAccess` and the performance
+route). New links start `pending`; legacy rows without the field read as `pending`. A link
+becomes verified when a school already linked that parent and student (org `Parent` +
+`Student` with matching emails) or when the learner's one-time code (`POST
+/api/dashboard/link-code`, `LinkCode` model, hashed, 24 h) is entered via `POST
+/api/parent/children/:id/verify`. Changing a child's email resets the link to `pending`.
+Any new route that returns a child's data must go through `childAccess`.
+
+### 5.3.2 Analytics, plans and the shared foundations
+
+Learning events (`analytics/record.js`) feed `LearnerDay` rollups (one document per learner per
+local day) and a raw `LearningEvent` log. Every dashboard reads the same query layer
+(`analytics/queries.js`) through `controllers/analyticsController.js`, behind a scope check
+(`utils/scopes.js`: verified child, assigned group, own school, any school for the super admin), so
+the numbers agree across roles. Metric definitions are in `utils/metrics.js`. Plans are lists of
+feature modules (`config/plans.js`, `utils/entitlements.js`, `requireModule`); the super admin can
+override modules per organisation. See `docs/todo/FOUNDATION_API.md`.
+
 ### 5.4 Admin / Super-Admin / Organization lifecycle
 
 - Org registration (`POST /api/admin/org`) is **reversible**: `approveOrg`/`rejectOrg` in

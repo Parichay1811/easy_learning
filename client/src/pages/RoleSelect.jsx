@@ -1,5 +1,5 @@
 import * as FramerMotion from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaUserGraduate, FaCrown, FaChalkboardTeacher } from "react-icons/fa";
 import { MdAdminPanelSettings, MdFamilyRestroom } from "react-icons/md";
@@ -110,6 +110,9 @@ const RoleSelect = () => {
             </FramerMotion.motion.div>
           ))}
         </div>
+        <p className={styles.subtitle} style={{ marginTop: 16 }}>
+          <Link to="/teach" style={{ color: "#86efac", fontWeight: 700 }}>{t("roleSelect.soloTeacher", { defaultValue: "I teach privately: start a free tutoring workspace" })}</Link>
+        </p>
         <p className={styles.copyright}>
           {t("roleSelect.copyright", { year: new Date().getFullYear() })}
         </p>

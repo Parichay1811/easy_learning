@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const analyticsMounts = require('./analyticsMounts')
 const teacherAuth = require('../middleware/teacherAuth')
 const validate = require('../middleware/validate')
 const { uploadQuestionSheet, handleUpload } = require('../middleware/upload')
@@ -34,5 +35,8 @@ router.post('/questions/upload', handleUpload(uploadQuestionSheet.single('file')
 router.get('/questions/uploads', getMyUploadBatches)
 router.get('/questions/uploads/:id', getMyUploadBatchDetail)
 router.patch('/questions/:module/:subject/:id', updateQuestion)
+
+analyticsMounts.mountTeacher(router)
+router.use(require('./teacherClasses')) // groups, students, Today, workspace (TCH-010..082)
 
 module.exports = router
