@@ -85,6 +85,9 @@ const today = handle(async (req, res) => {
   }
   wins.sort((a, b) => (a.kind === 'accuracy_up' ? -1 : 0) - (b.kind === 'accuracy_up' ? -1 : 0) || b.value - a.value)
 
+  // Checklist step 3: a test or practice set this teacher has published (assigned).
+  const Test = require('../models/tests/Test')
+  const assignedSomething = Boolean(await Test.exists({ orgId: String(ctx.orgId), ownerTutorId: String(ctx.tutorId), status: 'published' }))
   res.json({
     success: true, tz, date: end, weekday: dow,
     classes,
@@ -95,8 +98,7 @@ const today = handle(async (req, res) => {
     checklist: {
       group: groups.length > 0,
       students: students.length > 0,
-      // TODO(TCH-060/TCH-032, other agent): mark done when a practice set or test is assigned.
-      practice: false,
+      practice: assignedSomething,
       results: !!recent,
       dismissed: false,
     },

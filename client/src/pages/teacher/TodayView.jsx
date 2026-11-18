@@ -1,6 +1,7 @@
 // TCH-050 "Today": today's classes, who needs attention, recent wins, and the getting-started
 // checklist for a new Solo tutor (TCH-001).
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { FaCheckCircle, FaRegCircle, FaUsers, FaUserPlus, FaClipboardList, FaChartLine, FaTrophy } from "react-icons/fa";
 import { StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, fmtDuration, fmtPercent, fmtDate, today } from "../../components/dashboard";
 import { useLoad, useTeacherApi } from "./teacherApi";
@@ -17,12 +18,13 @@ function greeting(t) {
 
 function Checklist({ data, workspace, go, onDismiss }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const c = data.checklist;
   const firstGroup = data.classes[0]?.groupId;
   const steps = [
     { key: "group", done: c.group, icon: FaUsers, title: t("teacher.check.group", { defaultValue: "Create a group" }), text: t("teacher.check.groupText", { defaultValue: "Name it, pick a colour and the subjects you teach." }), action: () => go("groups", { create: "1" }), label: t("teacher.check.groupBtn", { defaultValue: "Create group" }) },
     { key: "students", done: c.students, icon: FaUserPlus, title: t("teacher.check.students", { defaultValue: "Add students" }), text: t("teacher.check.studentsText", { defaultValue: "Share a join code, or paste your class list." }), action: () => go("groups", firstGroup ? {} : { create: "1" }), label: t("teacher.check.studentsBtn", { defaultValue: "Add students" }) },
-    { key: "practice", done: c.practice, icon: FaClipboardList, title: t("teacher.check.practice", { defaultValue: "Assign first practice" }), text: t("teacher.check.practiceText", { defaultValue: "Ask students to try Listen or Read in your subjects this week. Assigning practice sets and tests is coming next." }) },
+    { key: "practice", done: c.practice, icon: FaClipboardList, title: t("teacher.check.practice", { defaultValue: "Assign first practice" }), text: t("teacher.check.practiceText", { defaultValue: "Set a short practice or a quiz for a group: pick questions from the bank, choose the rules, and assign it." }), action: () => navigate("/teacher/tests"), label: t("teacher.check.practiceBtn", { defaultValue: "Set practice" }) },
     { key: "results", done: c.results, icon: FaChartLine, title: t("teacher.check.results", { defaultValue: "See first results" }), text: t("teacher.check.resultsText", { defaultValue: "As soon as students learn, you see who needs help and on what." }), action: () => go("groups"), label: t("teacher.check.resultsBtn", { defaultValue: "Open my groups" }) },
   ];
   const done = steps.filter((x) => x.done).length;

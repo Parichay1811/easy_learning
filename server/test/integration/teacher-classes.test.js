@@ -368,6 +368,7 @@ test('Today, heatmap, compare, suggestions and summary use the shared analytics'
   assert.equal(t.body.checklist.group, true)
   assert.equal(t.body.checklist.students, true)
   assert.equal(t.body.checklist.results, true)
+  assert.equal(t.body.checklist.practice, false, 'nothing published yet')
   assert.equal(t.body.counts.studentsWithoutEmail, 1)
   assert.ok(t.body.attention.some((a) => a.name === 'Noah'), 'inactive learner needs attention')
   assert.ok(typeof t.body.week.story === 'string')

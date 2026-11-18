@@ -18,7 +18,7 @@ import { NotificationBell, MessageCenter, NotificationPrefs } from "../../compon
 import SetupWizard from "./SetupWizard";
 import s from "./parent.module.css";
 
-const TABS = ["home", "learning", "activity", "family", "reports", "privacy", "support"];
+const TABS = ["home", "learning", "activity", "school", "messages", "family", "reports", "privacy", "support"];
 const INVITE_KEY = "parent_invite";
 
 // The parent's dashboard (PAR-*): one shell, a child switcher, and a page per tab.

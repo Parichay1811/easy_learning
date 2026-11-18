@@ -29,6 +29,11 @@ test.before(async () => {
     { _id: oid(), name: 'Ms Rao', adminOrgId: String(solo), subscriptionPlan: 'free' },
     { _id: oid(), name: 'Locked', adminOrgId: String(noBank), subscriptionPlan: 'free', featureOverrides: ['-qbank.author', '-tests'] },
   ])
+  // Signed-in teacher records (a Tutor with authStatus 'active' is what sign-in leaves behind).
+  await admin.collection('tutors').insertMany([
+    { _id: tA, name: 'Mr Sharma', email: 'ta@a.test', uid: 't-A', orgId: orgA, status: 'active', authStatus: 'active' },
+    { _id: tSolo, name: 'Ms Rao', email: 'rao@s.test', uid: 't-S', orgId: solo, status: 'active', authStatus: 'active' },
+  ])
   await admin.collection('batches').insertMany([
     { _id: batchA, name: 'Year 5', orgId: orgA, tutorIds: [tA], directTutorIds: [tA], subjects: [], studentIds: [], status: 'active' },
     { _id: batchSolo, name: 'Evening', orgId: solo, tutorIds: [tSolo], directTutorIds: [tSolo], subjects: [], studentIds: [], status: 'active' },
@@ -184,6 +189,10 @@ test('builder and assign: unapproved questions block publishing; assignment scop
   assert.equal((await app.call('POST', `/api/teacher/tests/${testId}/publish`, { token: tok.tOther, body: { batchIds: [ids.batchA] } })).status, 404)
   assert.equal((await app.call('GET', `/api/teacher/tests/${testId}`, { token: tok.tB })).status, 404)
   const pub = await app.call('POST', `/api/teacher/tests/${testId}/publish`, { token: tok.tA, body: { batchIds: [ids.batchA], excludedStudentIds: [ids.sid('ex@kids.test')], notifyParents: true } })
+  // The teacher's Today checklist now shows the 'assign first practice' step as done.
+  const todayRes = await app.call('GET', '/api/teacher/today', { token: tok.tA })
+  assert.equal(todayRes.status, 200, JSON.stringify(todayRes.body))
+  assert.equal(todayRes.body.checklist.practice, true)
   assert.equal(pub.status, 200)
   assert.equal(pub.body.students, 30)
   assert.ok(await app.db.main.collection('notifications').findOne({ to: 'student:aanya@kids.test', kind: 'test_assigned' }))
