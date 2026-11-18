@@ -77,7 +77,7 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
 
   const w = d.week;
   const chips = [];
-  if (d.attentionCount) chips.push({ kind: "nudge", text: t("teacher.today.chipAttention", { defaultValue: "{{count}} need a nudge", count: d.attentionCount }), onClick: () => document.getElementById("needs-attention")?.focus() });
+  if (d.attentionCount) chips.push({ kind: "nudge", text: t("teacher.today.chipAttention", { defaultValue: "{{count}} need a nudge", defaultValue_one: "{{count}} needs a nudge", count: d.attentionCount }), onClick: () => document.getElementById("needs-attention")?.focus() });
   if (d.wins.length) chips.push({ kind: "celebrate", text: t("teacher.today.chipWins", { defaultValue: "{{count}} recent wins", count: d.wins.length }) });
   if (d.classes.length) chips.push({ kind: "info", text: t("teacher.today.chipClasses", { defaultValue: "{{count}} classes today", count: d.classes.length }) });
 
@@ -119,7 +119,7 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
         </ChartCard>
 
         <ChartCard title={t("teacher.today.attention", { defaultValue: "Who needs a nudge?" })}
-          answer={d.attentionCount ? t("teacher.today.attentionAnswer", { defaultValue: "{{count}} students could use a check-in.", count: d.attentionCount }) : t("teacher.today.attentionNone", { defaultValue: "Everyone is on track." })}
+          answer={d.attentionCount ? t("teacher.today.attentionAnswer", { defaultValue: "{{count}} students could use a check-in.", defaultValue_one: "{{count}} student could use a check-in.", count: d.attentionCount }) : t("teacher.today.attentionNone", { defaultValue: "Everyone is on track." })}
           info={t("teacher.today.attentionInfo", { defaultValue: "No learning for 7 days, or accuracy down more than 15 points over two weeks." })}
           empty={!d.attentionCount && { title: t("teacher.today.allGood", { defaultValue: "All on track" }), text: d.counts.students ? t("teacher.today.allGoodText", { defaultValue: "Nobody needs a nudge right now." }) : t("teacher.today.noStudentsText", { defaultValue: "Add students to a group to see who needs help." }) }}>
           <ul className={s.personList} id="needs-attention" tabIndex={-1}>

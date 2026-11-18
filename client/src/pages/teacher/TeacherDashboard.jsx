@@ -14,7 +14,6 @@ import PlanView from "./PlanView";
 import WorkspaceSwitcher from "./WorkspaceSwitcher";
 import { NotificationBell, MessageCenter, NotificationPrefs, AnnouncementComposer, AnnouncementsPanel } from "../../components/comms";
 import { API_ROOT, useLoad, useTeacherApi } from "./teacherApi";
-import logo from "/logo.png";
 import s from "./teacher.module.css";
 
 // The question upload page still takes the older helper shape.
@@ -60,7 +59,7 @@ const TeacherDashboard = () => {
     { key: "summary", label: t("teacher.nav.summary", { defaultValue: "Summary" }), icon: FaChartLine, to: "/teacher-dashboard?view=summary" },
     { key: "messages", label: t("teacher.nav.messages", { defaultValue: "Messages" }), icon: FaComments, to: "/teacher-dashboard?view=messages" },
     { key: "announcements", label: t("teacher.nav.announcements", { defaultValue: "Announcements" }), icon: FaBullhorn, to: "/teacher-dashboard?view=announcements" },
-    { key: "tests", label: t("teacher.nav.tests", { defaultValue: "Tests & question bank" }), icon: FaClipboardList, to: "/teacher/tests" },
+    { key: "tests", label: t("teacher.nav.tests", { defaultValue: "Tests & questions" }), icon: FaClipboardList, to: "/teacher/tests" },
     { key: "questions", label: t("teacher.nav.questions", { defaultValue: "Upload questions" }), icon: FaUpload, to: "/teacher-dashboard?view=questions" },
     { key: "plan", label: t("teacher.nav.plan", { defaultValue: "Plan" }), icon: FaCog, to: "/teacher-dashboard?view=plan" },
   ];
@@ -70,7 +69,7 @@ const TeacherDashboard = () => {
   if (!teacherUser) return null;
   return (
     <DashboardShell
-      brand={{ label: "LEARNIGO", logo: <img src={logo} alt="" style={{ height: 28 }} />, to: "/teacher-dashboard" }}
+      brand={{ label: "LEARNIGO", role: t("teacher.brandRole", { defaultValue: "Teacher" }), to: "/teacher-dashboard" }}
       nav={nav}
       active={active}
       contextSwitcher={workspace && <WorkspaceSwitcher key={wsKey} current={{ id: workspace.workspace.id, name: workspace.workspace.name, kind: workspace.workspace.kind }} onSwitched={onSwitched} />}

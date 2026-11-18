@@ -1,10 +1,15 @@
-/* DashboardShell: sidebar -> icons only under 1280px -> bottom tabs on phones */
+/* DashboardShell: sidebar -> icons only under 1280px -> floating tab dock on phones.
+   Looks like the learning site: the puppy logo, colourful icon bubbles, and the
+   green "you are here" pill with a 3D lip (the site's top navigation). */
 .shell {
   display: flex;
   min-height: 100dvh;
   width: 100%;
   max-width: 100vw;
-  background: var(--d-canvas);
+  background:
+    radial-gradient(900px 260px at 85% -40px, color-mix(in srgb, var(--d-sun) 18%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--d-canvas-top) 0, var(--d-canvas) 380px);
+  background-color: var(--d-canvas);
   color: var(--d-ink);
   overflow-x: clip;
 }
@@ -38,42 +43,53 @@
   top: 0;
   align-self: flex-start;
   flex: 0 0 auto;
-  width: 248px;
+  width: 256px;
   height: 100dvh;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 18px 12px 14px;
+  gap: 14px;
+  padding: 16px 14px 14px;
   background: var(--d-card);
-  border-inline-end: 1px solid var(--d-line);
+  border-inline-end: 2px solid var(--d-line);
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 25;
   transition: width 0.18s ease;
+  scrollbar-width: none;
 }
-.shell[data-collapsed="true"] .sidebar { width: 76px; }
+.shell[data-collapsed="true"] .sidebar { width: 84px; padding-inline: 10px; }
 
 .brand {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  padding: 0 10px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 2px 6px 8px;
   color: var(--d-accent-ink);
-  font-weight: 700;
-  font-size: 1.15rem;
-  letter-spacing: 0.06em;
   text-decoration: none;
+  border-bottom: 2px dashed var(--d-line);
+}
+.brandLogo { display: block; height: 58px; width: auto; max-width: 100%; object-fit: contain; }
+.brandMascot { display: block; width: 52px; height: 58px; object-fit: contain; }
+.brandRole {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 12px;
+  border-radius: var(--d-radius-pill);
+  background: var(--d-sun-soft);
+  color: var(--d-sun-ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   white-space: nowrap;
 }
-.brandLogo { display: inline-flex; width: 32px; height: 32px; flex-shrink: 0; }
-.brandLogo img, .brandLogo svg { width: 100%; height: 100%; object-fit: contain; }
-.brandText { overflow: hidden; text-overflow: ellipsis; }
-.shell[data-collapsed="true"] .sidebar .brand { justify-content: center; padding: 0; }
+.brandText { overflow: hidden; text-overflow: ellipsis; font-weight: 700; font-size: 1.15rem; letter-spacing: 0.06em; }
+.shell[data-collapsed="true"] .sidebar .brand { align-items: center; padding-inline: 0; }
 
-.sideNav { flex: 1; min-height: 0; }
-.navList, .subList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
-.subList { margin: 4px 0 6px; }
+.sideNav { flex: 1 0 auto; }   /* long menus scroll the sidebar; the note and button stay below */
+.navList, .subList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.subList { margin: 6px 0 8px; gap: 2px; }
 
 .nav_side, .nav_sub, .nav_sheet, .nav_tab {
   position: relative;
@@ -81,10 +97,10 @@
   align-items: center;
   gap: 12px;
   width: 100%;
-  min-height: var(--d-touch);
-  padding: 8px 14px;
+  min-height: 48px;
+  padding: 6px 12px 6px 8px;
   border: 0;
-  border-radius: 14px;
+  border-radius: 16px;
   background: transparent;
   color: var(--d-ink);
   font-size: 1rem;
@@ -93,13 +109,48 @@
   text-align: start;
   text-decoration: none;
   cursor: pointer;
-  letter-spacing: 0;
+  letter-spacing: 0.01em;
+  transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
 .nav_side:hover, .nav_sub:hover, .nav_sheet:hover { background: var(--d-card-alt); }
-.nav_side.navOn, .nav_sub.navOn, .nav_sheet.navOn { background: var(--d-accent-soft); color: var(--d-accent-ink); font-weight: 600; }
-.nav_sub { padding-inline-start: 50px; font-size: 0.92rem; color: var(--d-muted); }
-.nav_sub.navOn { color: var(--d-accent-ink); }
-.navIcon { display: inline-flex; flex: 0 0 24px; justify-content: center; font-size: 1.2rem; }
+.nav_side:active, .nav_sheet:active { transform: translateY(2px); }
+
+/* "You are here": the green pill with a 3D lip, like the site's Home button. */
+.nav_side.navOn, .nav_sheet.navOn {
+  background: var(--d-accent);
+  color: var(--d-on-accent);
+  font-weight: 600;
+  box-shadow: 0 4px 0 var(--d-accent-lip), inset 0 2px 0 rgba(255, 255, 255, 0.18);
+}
+.nav_sub { min-height: 40px; padding-inline-start: 54px; font-size: 0.93rem; color: var(--d-muted); }
+.nav_sub.navOn { color: var(--d-accent-ink); font-weight: 600; background: var(--d-accent-soft); }
+
+/* Colourful icon bubbles (the site's top-nav icons sit in coloured circles). */
+.navIcon {
+  --hue: var(--d-grass);
+  --hue-soft: var(--d-grass-soft);
+  --hue-ink: var(--d-grass-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: var(--hue-soft);
+  color: var(--hue-ink);
+  font-size: 1.05rem;
+}
+.nav_sub .navIcon { display: none; }
+.navOn .navIcon { background: rgba(255, 255, 255, 0.22); color: inherit; }
+.navList > li:nth-child(8n + 2) .navIcon, .tabbar > :nth-child(8n + 2) .navIcon { --hue-soft: var(--d-sky-soft); --hue-ink: var(--d-sky-ink); }
+.navList > li:nth-child(8n + 3) .navIcon, .tabbar > :nth-child(8n + 3) .navIcon { --hue-soft: var(--d-coral-soft); --hue-ink: var(--d-coral-ink); }
+.navList > li:nth-child(8n + 4) .navIcon, .tabbar > :nth-child(8n + 4) .navIcon { --hue-soft: var(--d-grape-soft); --hue-ink: var(--d-grape-ink); }
+.navList > li:nth-child(8n + 5) .navIcon, .tabbar > :nth-child(8n + 5) .navIcon { --hue-soft: var(--d-berry-soft); --hue-ink: var(--d-berry-ink); }
+.navList > li:nth-child(8n + 6) .navIcon { --hue-soft: var(--d-teal-soft); --hue-ink: var(--d-teal-ink); }
+.navList > li:nth-child(8n + 7) .navIcon { --hue-soft: var(--d-sun-soft); --hue-ink: var(--d-sun-ink); }
+.navList > li:nth-child(8n + 8) .navIcon { --hue-soft: var(--d-sky-soft); --hue-ink: var(--d-sky-ink); }
+
 .navLabel { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .badge {
   min-width: 22px;
@@ -107,15 +158,31 @@
   padding: 0 6px;
   border-radius: var(--d-radius-pill);
   background: var(--d-alert);
-  color: var(--d-card);
+  color: #fff;
   font-size: 0.74rem;
   font-weight: 700;
   line-height: 22px;
   text-align: center;
   letter-spacing: 0;
+  box-shadow: 0 0 0 2px var(--d-card);
 }
 .shell[data-collapsed="true"] .sidebar .nav_side { justify-content: center; padding-inline: 0; }
-.shell[data-collapsed="true"] .sidebar .badge { position: absolute; top: 2px; inset-inline-end: 6px; min-width: 18px; height: 18px; line-height: 18px; font-size: 0.66rem; padding: 0 4px; }
+.shell[data-collapsed="true"] .sidebar .badge { position: absolute; top: 0; inset-inline-end: 4px; min-width: 18px; height: 18px; line-height: 18px; font-size: 0.66rem; padding: 0 4px; }
+
+/* A friendly note at the foot of the sidebar */
+.sideFoot {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: var(--d-sky-soft);
+  color: var(--d-sky-ink);
+  font-size: 0.85rem;
+  line-height: 1.35;
+}
+.sideFoot img { width: 42px; height: auto; flex-shrink: 0; margin-bottom: -4px; }
+.shell[data-collapsed="true"] .sideFoot { display: none; }
 
 .collapseBtn {
   display: flex;
@@ -124,13 +191,15 @@
   gap: 8px;
   min-height: var(--d-touch);
   border-radius: 14px;
-  border: 1.5px solid var(--d-line);
-  background: transparent;
+  border: 2px solid var(--d-line);
+  background: var(--d-card);
   color: var(--d-muted);
   font-size: 0.9rem;
   cursor: pointer;
+  box-shadow: 0 3px 0 var(--d-line);
 }
 .collapseBtn:hover { background: var(--d-card-alt); color: var(--d-ink); }
+.collapseBtn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--d-line); }
 
 /* ── Top bar ─────────────────────────────────────────────────────────── */
 .column { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; }
@@ -141,11 +210,11 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 64px;
-  padding: 8px 24px;
-  background: color-mix(in srgb, var(--d-canvas) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--d-line);
+  min-height: 68px;
+  padding: 10px 28px;
+  background: color-mix(in srgb, var(--d-card) 78%, transparent);
+  backdrop-filter: blur(14px) saturate(1.2);
+  border-bottom: 2px solid color-mix(in srgb, var(--d-line) 80%, transparent);
 }
 .topBrand { display: none; }
 .context { flex: 0 1 auto; min-width: 0; }
@@ -156,14 +225,26 @@
 .main {
   flex: 1;
   width: 100%;
-  max-width: 1680px;
+  max-width: 1600px;
   margin-inline: auto;
-  padding: 20px 24px 48px;
+  padding: 22px 28px 56px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
   min-width: 0;
   outline: none;
+}
+/* DSN-004: a new level eases in, as if zooming into what was clicked: the story,
+   then the tiles, then the charts. Each block animates itself (not the wrapper), so
+   fixed-position dialogs inside the page are never shifted while it plays. */
+.level { display: flex; flex-direction: column; gap: inherit; min-width: 0; }
+.level > * { animation: levelIn 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) backwards; transform-origin: 50% 0; }
+.level > :nth-child(2) { animation-delay: 0.04s; }
+.level > :nth-child(3) { animation-delay: 0.08s; }
+.level > :nth-child(n + 4) { animation-delay: 0.12s; }
+@keyframes levelIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to { opacity: 1; transform: none; }
 }
 .crumbRow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; }
 .crumbs ol { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; list-style: none; margin: 0; padding: 0; font-size: 0.95rem; color: var(--d-muted); }
@@ -173,45 +254,50 @@
 .crumbs [aria-current="page"] { color: var(--d-ink); font-weight: 600; }
 .actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
-/* ── Bottom tab bar (phones) ─────────────────────────────────────────── */
+/* ── Bottom tab dock (phones) ────────────────────────────────────────── */
 .tabbar { display: none; }
 .sheetWrap { display: none; }
 
 @media (max-width: 700px) {
   .sidebar { display: none; }
-  .topbar { padding: 6px 12px; gap: 8px; }
+  .topbar { padding: 8px 12px; gap: 8px; min-height: 60px; }
   .topBrand { display: block; }
-  .topBrand .brand { padding: 0; font-size: 1rem; }
+  .topBrand .brand { padding: 0; border: 0; flex-direction: row; align-items: center; gap: 8px; }
+  .topBrand .brandLogo { height: 40px; }
+  .topBrand .brandRole { display: none; }
   .topSlot:empty { display: none; }
-  .main { padding: 14px 16px calc(92px + env(safe-area-inset-bottom)); gap: 14px; }
+  .main { padding: 14px 16px calc(108px + env(safe-area-inset-bottom)); gap: 14px; }
 
   .tabbar {
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 1fr;
+    gap: 2px;
     position: fixed;
-    inset: auto 0 0 0;
+    inset: auto 10px calc(10px + env(safe-area-inset-bottom)) 10px;
     z-index: 60;
-    padding-bottom: env(safe-area-inset-bottom);
+    padding: 6px;
+    border-radius: 26px;
     background: var(--d-card);
-    border-top: 1px solid var(--d-line);
-    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--d-line);
+    box-shadow: 0 4px 0 var(--d-lip), 0 16px 36px -10px rgba(16, 27, 48, 0.35);
   }
   .nav_tab {
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
-    min-height: 62px;
-    padding: 6px 2px;
-    border-radius: 0;
+    gap: 3px;
+    min-height: 60px;
+    padding: 4px 2px;
+    border-radius: 20px;
     color: var(--d-muted);
     font-size: 0.72rem;
     text-align: center;
   }
+  .nav_tab .navIcon { flex-basis: auto; width: 34px; height: 30px; border-radius: 11px; font-size: 1rem; }
   .nav_tab .navLabel { flex: none; max-width: 100%; }
-  .nav_tab .badge { position: absolute; top: 4px; inset-inline-start: calc(50% + 6px); min-width: 18px; height: 18px; line-height: 18px; font-size: 0.64rem; padding: 0 4px; }
-  .nav_tab.navOn { color: var(--d-accent-ink); font-weight: 600; }
-  .nav_tab.navOn::before { content: ""; position: absolute; top: 0; left: 22%; right: 22%; height: 4px; border-radius: 0 0 4px 4px; background: var(--d-accent); }
+  .nav_tab .badge { position: absolute; top: 2px; inset-inline-start: calc(50% + 6px); min-width: 18px; height: 18px; line-height: 18px; font-size: 0.64rem; padding: 0 4px; }
+  .nav_tab.navOn { color: var(--d-accent-ink); font-weight: 600; background: var(--d-accent-soft); }
+  .nav_tab.navOn .navIcon { background: var(--d-accent); color: var(--d-on-accent); box-shadow: 0 3px 0 var(--d-accent-lip); }
 
   .sheetWrap {
     display: flex;
@@ -227,22 +313,23 @@
     max-height: 80dvh;
     overflow-y: auto;
     padding: 18px 14px calc(18px + env(safe-area-inset-bottom));
-    border-radius: 24px 24px 0 0;
+    border-radius: 28px 28px 0 0;
     background: var(--d-card);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
   }
   .sheetClose { align-self: flex-end; width: var(--d-touch); height: var(--d-touch); border-radius: 50%; border: 0; background: var(--d-card-alt); cursor: pointer; display: grid; place-items: center; }
-  .nav_sheet { min-height: 52px; font-size: 1.05rem; }
+  .nav_sheet { min-height: 54px; font-size: 1.05rem; }
 }
 
 @media (max-width: 1279px) and (min-width: 701px) {
-  .topbar { padding-inline: 16px; }
-  .main { padding-inline: 16px; }
+  .topbar { padding-inline: 18px; }
+  .main { padding-inline: 18px; }
 }
 
 @media print {
+  .shell { background: #fff; }
   .main { padding: 0; max-width: none; }
   .fill { position: static; overflow: visible; }
 }

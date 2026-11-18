@@ -10,12 +10,31 @@ import { DashboardShell, TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCa
 See it live: run the client in dev and open `/dev/dashboard-kit` (add `?theme=dark` for dark mode).
 Sample data for demos and tests: `sample.js` (deterministic, same JSON shapes as the charts take).
 
+## The look: "Meadow"
+
+The dashboards live in the same world as the learning pages, so a parent, tutor or principal
+recognises Learnigo at once. References were the site itself (home meadow, puppy, chunky
+"Start your adventure" button, subject worlds) and playful-but-calm education dashboards.
+
+- **Brand assets** in `src/assets/dash/`: `logo.webp` (sidebar), `mascot.webp` (puppy, empty states,
+  sidebar note), `meadow.webp` (the welcome board behind every `StoryCard`). Subject art comes from
+  `data/subjectIcons.js` (castle, abacus, plant) via `SUBJECTS[i].art`.
+- **Toy-like 3D edge.** Cards, buttons, chips and segmented controls have a 2 px border and a solid
+  "lip" under them (`--d-lip`, `--d-accent-lip`) instead of blurry shadows. Pressing moves them down.
+- **Green means "here / go"** (`--d-accent`, the site's active-menu green). The big orange
+  `Button variant="cta"` is for the one main action on a screen (large text keeps it AA).
+- **Icon bubbles.** Menu items and KPI tiles take turns with the meadow hues
+  (`--d-grass/sky/sun/grape/coral/berry/teal`, each with `-soft` and `-ink`). `KpiTile` picks an icon
+  from its label; pass `icon` / `hue` to choose.
+- **Levels zoom in** (DSN-004): a new tab, view, section or drilled-in id eases in block by block;
+  Back restores the scroll position. Reduced motion turns it off.
+
 ## Ground rules
 
 - **Tokens** live in `tokens.css` as CSS variables on `.dash` (the shell adds that class). Outside the shell wrap
   things in `<div className="dash">`. Light by default; dark follows the OS (`prefers-color-scheme`) and can be forced with
   `data-theme="dark" | "light"` on the shell (`theme` prop) or any ancestor.
-- **Fixed colours.** English `#7b6dff`, Maths `#3d9bff`, Science `#43c0a0`; Listen `#4dc9ff`, Read `#ff9d3b`, Write `#ff6b9d`,
+- **Fixed colours.** English `#8b5cf6` (English Kingdom), Maths `#339af0` (Maths Galaxy), Science `#40c057` (Science Lab); Listen `#4dc9ff`, Read `#ff9d3b`, Write `#ff6b9d`,
   Speak `#6bcf7f`. Use `SUBJECTS` / `MODULES` from `constants.js`, never your own colours. Status: `--d-good/-attention/-alert/-neutral`.
   Coloured TEXT must use the `-ink` variants (e.g. `--d-attention-ink`), the plain ones are for fills and strokes (contrast >= 4.5:1).
 - **Colour never carries meaning alone.** Mastery has glyphs + words, subjects in stacked bars have textures, heatmap cells
@@ -33,7 +52,7 @@ Sample data for demos and tests: `sample.js` (deterministic, same JSON shapes as
 ### `DashboardShell`
 ```jsx
 <DashboardShell
-  brand={{ label: 'LEARNIGO', logo: <img src={logo} alt="" />, to: '/' }}   // or any node
+  brand={{ label: 'LEARNIGO', role: 'Parent', to: '/' }}   // the Learnigo logo + a role tag; or any node
   nav={[
     { key: 'home', label: 'Overview', icon: FaHome, to: '/parent-dashboard', badge: 2 },
     { key: 'tests', label: 'Tests', icon: FaClipboardList, onClick: openTests,

@@ -27,7 +27,7 @@ function RulesList({ test, accommodations }) {
   const r = test.rules;
   const when = (iso) => new Date(iso).toLocaleString(undefined, { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" });
   const lines = [];
-  lines.push(tt("intro.questions", "{{count}} questions", { count: test.questionCount }));
+  lines.push(tt("intro.questions", "{{count}} questions", { count: test.questionCount, defaultValue_one: "{{count}} question" }));
   if (r.timeLimit === "total") lines.push(tt("intro.total", "You have {{m}} minutes. The clock keeps going if you leave.", { m: Math.round(r.totalMinutes * (accommodations?.extraTime || 1)) }));
   else if (r.timeLimit === "per_question") lines.push(tt("intro.perQ", "{{s}} seconds for each question. You can't go back.", { s: Math.round(r.perQuestionSeconds * (accommodations?.extraTime || 1)) }));
   else lines.push(tt("intro.noLimit", "No time limit. Take your time."));

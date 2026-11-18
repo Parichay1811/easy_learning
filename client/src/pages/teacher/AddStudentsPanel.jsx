@@ -150,7 +150,7 @@ function ListTab({ group, onDone }) {
             </label>
           )}
           <div className={s.row}>
-            <Button onClick={apply} disabled={busy || preview.summary.error > 0 || adding === 0 || preview.problems.length > 0}>{t("teacher.list.add", { defaultValue: "Add {{count}} students", count: adding })}</Button>
+            <Button onClick={apply} disabled={busy || preview.summary.error > 0 || adding === 0 || preview.problems.length > 0}>{t("teacher.list.add", { defaultValue: "Add {{count}} students", defaultValue_one: "Add {{count}} student", count: adding })}</Button>
             {preview.summary.error > 0 && <span className={s.muted}>{t("teacher.list.fixFirst", { defaultValue: "Fix the red rows above, then check again." })}</span>}
           </div>
         </>
@@ -171,7 +171,7 @@ function SchoolTab({ group, onDone }) {
   const list = (all || []).filter((x) => !inGroup.has(String(x._id)) && x.name.toLowerCase().includes(search.toLowerCase())).slice(0, 100);
   const add = async () => {
     const r = await send("POST", `/batches/${group._id}/students`, { studentIds: picked });
-    setMsg(r.ok ? { ok: true, text: t("teacher.school.added", { defaultValue: "Added {{count}} students.", count: picked.length }) } : { ok: false, text: limitText(t, r) });
+    setMsg(r.ok ? { ok: true, text: t("teacher.school.added", { defaultValue: "Added {{count}} students.", defaultValue_one: "Added {{count}} student.", count: picked.length }) } : { ok: false, text: limitText(t, r) });
     if (r.ok) { setPicked([]); onDone?.(); }
   };
   return (

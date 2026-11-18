@@ -55,7 +55,7 @@ function Overview({ group, go }) {
       <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare />
       {ov.loading ? <Skeleton variant="tile" /> : o && (
         <StoryCard sentence={o.story} chips={[
-          lr.data?.atRisk ? { kind: "nudge", text: t("teacher.group.chipRisk", { defaultValue: "{{count}} need a nudge", count: lr.data.atRisk }) } : null,
+          lr.data?.atRisk ? { kind: "nudge", text: t("teacher.group.chipRisk", { defaultValue: "{{count}} need a nudge", defaultValue_one: "{{count}} needs a nudge", count: lr.data.atRisk }) } : null,
           ...(o.insights || []).slice(0, 3).map((i) => ({ kind: ["alert", "celebrate", "nudge"].includes(i.kind) ? i.kind : "info", text: t(`dash.insight.${i.key}`, { defaultValue: i.text, ...i.params }) })),
         ].filter(Boolean).slice(0, 4)} />
       )}
@@ -113,7 +113,7 @@ function Overview({ group, go }) {
               <li key={sg.title} className={s.personRow}>
                 <span className={s.avatar} aria-hidden="true"><FaMagic /></span>
                 <span className={s.personMain}>
-                  <strong>{t("teacher.sug.item", { defaultValue: "{{count}} students on {{skill}}", count: sg.students.length, skill: `${moduleLabel(t, sg.module)} · ${subjectLabel(t, sg.subject)}` })}</strong>
+                  <strong>{t("teacher.sug.item", { defaultValue: "{{count}} students on {{skill}}", defaultValue_one: "{{count}} student on {{skill}}", count: sg.students.length, skill: `${moduleLabel(t, sg.module)} · ${subjectLabel(t, sg.subject)}` })}</strong>
                   <span>{sg.students.map((x) => `${x.name} (${x.accuracy} %)`).join(", ")}</span>
                 </span>
                 <Button size="sm" variant="soft" onClick={() => makeGroup(sg)}>{t("teacher.sug.make", { defaultValue: "Make group" })}</Button>
@@ -181,14 +181,14 @@ function StudentsTab({ data, go, reload, openAdd }) {
   const transfer = async () => {
     const r = await send("POST", `/groups/${g._id}/students/transfer`, { toGroupId: target, studentIds: picked, mode });
     setMoving(false);
-    setMsg(r.ok ? { ok: true, text: mode === "move" ? t("teacher.roster.moved", { defaultValue: "Moved {{count}} students.", count: r.count }) : t("teacher.roster.copied", { defaultValue: "Copied {{count}} students.", count: r.count }) } : { ok: false, text: limitText(t, r) });
+    setMsg(r.ok ? { ok: true, text: mode === "move" ? t("teacher.roster.moved", { defaultValue: "Moved {{count}} students.", defaultValue_one: "Moved {{count}} student.", count: r.count }) : t("teacher.roster.copied", { defaultValue: "Copied {{count}} students.", defaultValue_one: "Copied {{count}} student.", count: r.count }) } : { ok: false, text: limitText(t, r) });
     setPicked([]);
     reload();
   };
   const remove = async () => {
-    if (!window.confirm(t("teacher.roster.removeConfirm", { defaultValue: "Remove {{count}} students from {{name}}? Their learning history is kept.", count: picked.length, name: g.name }))) return;
+    if (!window.confirm(t("teacher.roster.removeConfirm", { defaultValue: "Remove {{count}} students from {{name}}? Their learning history is kept.", defaultValue_one: "Remove {{count}} student from {{name}}? Their learning history is kept.", count: picked.length, name: g.name }))) return;
     for (const id of picked) await send("DELETE", `/batches/${g._id}/students/${id}`);
-    setMsg({ ok: true, text: t("teacher.roster.removed", { defaultValue: "Removed {{count}} students.", count: picked.length }) });
+    setMsg({ ok: true, text: t("teacher.roster.removed", { defaultValue: "Removed {{count}} students.", defaultValue_one: "Removed {{count}} student.", count: picked.length }) });
     setPicked([]);
     reload();
   };

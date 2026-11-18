@@ -3,7 +3,7 @@ import { SUBJECTS, MODULES, today, toISO } from "../../components/dashboard";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { apiCall, pctToFraction } from "./teacherApi";
 
-export const GROUP_COLORS = ["#3d9bff", "#7b6dff", "#43c0a0", "#ff9d3b", "#ff6b9d", "#4dc9ff", "#6bcf7f", "#c0392b"];
+export const GROUP_COLORS = ["#339af0", "#8b5cf6", "#40c057", "#ff9d3b", "#f06595", "#20c997", "#fab005", "#e8590c"];
 export const GROUP_EMOJIS = ["🧮", "📚", "🔬", "✏️", "🎧", "🗣️", "🌍", "🎨", "🚀", "🌱", "⭐", "🦉"];
 
 export const groupStyle = (g) => ({ "--group": g?.color || "var(--d-accent)" });

@@ -216,7 +216,7 @@ export default function BankBrowser() {
               ) : !data ? <Skeleton variant="text" lines={6} /> : (
                 <>
                   <div className={s.head}>
-                    <h2 style={{ margin: 0 }}>{tt("bank.count", "{{count}} questions", { count: data.total })}</h2>
+                    <h2 style={{ margin: 0 }}>{tt("bank.count", "{{count}} questions", { count: data.total, defaultValue_one: "{{count}} question" })}</h2>
                     {scope === "mine" && data.questions.some((q) => q.mine) && <Button size="sm" variant="ghost" icon={FaTable} onClick={() => setBulk(true)}>{tt("bank.bulk", "Edit as a grid")}</Button>}
                   </div>
                   {data.questions.length === 0 ? (
@@ -238,7 +238,7 @@ export default function BankBrowser() {
             <ul className={s.list} style={{ marginTop: 10 }}>
               {cols.map((c) => (
                 <li key={c._id}><button type="button" className={s.queueBtn} aria-current={colView?.collection._id === c._id} onClick={() => openCollection(c)}>
-                  <strong>{c.name}</strong><br /><span className={s.small}>{tt("col.count", "{{count}} questions", { count: c.count })}{!c.mine && ` · ${tt("col.shared", "shared")}`}</span>
+                  <strong>{c.name}</strong><br /><span className={s.small}>{tt("col.count", "{{count}} questions", { count: c.count, defaultValue_one: "{{count}} question" })}{!c.mine && ` · ${tt("col.shared", "shared")}`}</span>
                 </button></li>
               ))}
             </ul>

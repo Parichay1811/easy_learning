@@ -177,7 +177,7 @@ function AssignPanel({ test, assignment, onPublished }) {
                 <summary style={{ cursor: "pointer", listStyle: "revert" }}>
                   <label className={s.check} style={{ display: "inline-flex" }} onClick={(e) => e.stopPropagation()}>
                     <input type="checkbox" checked={whole} onChange={() => toggle(batchIds, setBatchIds, g._id)} />
-                    <strong>{g.name}</strong> <span className={s.small}>({tt("assign.students", "{{count}} students", { count: g.students.length })})</span>
+                    <strong>{g.name}</strong> <span className={s.small}>({tt("assign.students", "{{count}} students", { count: g.students.length, defaultValue_one: "{{count}} student" })})</span>
                   </label>
                 </summary>
                 <div className={s.chips} style={{ marginTop: 8 }}>

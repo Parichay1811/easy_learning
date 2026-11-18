@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaEllipsisH, FaTimes } from 'react-icons/fa';
 import { NavEntry, SideNav } from './ShellNav';
 import { useActive } from './shellUtils';
+import logoImg from '../../assets/dash/logo.webp';
+import mascotImg from '../../assets/dash/mascot.webp';
 import './tokens.css';
 import s from './shell.module.css';
 
@@ -21,6 +23,54 @@ function useMedia(query) {
   return match;
 }
 
+// DSN-004: moving to another level (a tab, a view, a section, or drilling into an
+// id / org / child) eases the new level in, like zooming into it. The time range
+// and other filters are NOT levels, so changing them never remounts the page.
+const LEVEL_PARAMS = ['tab', 'view', 'section', 'id', 'org', 'child'];
+const levelKeyOf = (loc) => {
+  const p = new URLSearchParams(loc.search);
+  return [loc.pathname, ...LEVEL_PARAMS.map((k) => p.get(k) || '')].join('|');
+};
+
+// Back (and Forward) returns to where you were on that page. New pages start at
+// the top as before (the role dashboards scroll up when they navigate).
+const SCROLL_KEY = 'dash.scroll';
+function useScrollMemory(rootRef, fill) {
+  const location = useLocation();
+  const navType = useNavigationType();
+  const pos = useRef(0);
+  useEffect(() => {
+    const el = fill ? rootRef.current : null;
+    const target = el || window;
+    const onScroll = () => { pos.current = el ? el.scrollTop : window.scrollY; };
+    target.addEventListener('scroll', onScroll, { passive: true });
+    return () => target.removeEventListener('scroll', onScroll);
+  }, [rootRef, fill]);
+  useEffect(() => {
+    const key = location.key;
+    const el = fill ? rootRef.current : null;
+    let saved = {};
+    try { saved = JSON.parse(sessionStorage.getItem(SCROLL_KEY) || '{}'); } catch { /* storage unavailable */ }
+    const timers = [];
+    if (navType === 'POP' && saved[key] > 0) {
+      const y = saved[key];
+      // The page fills in as its data arrives, so try a few times until it is tall enough.
+      for (const ms of [0, 120, 360, 800]) {
+        timers.push(setTimeout(() => (el ? el.scrollTo({ top: y }) : window.scrollTo({ top: y })), ms));
+      }
+    }
+    return () => {
+      timers.forEach(clearTimeout);
+      try {
+        const next = { ...saved, [key]: pos.current };
+        const keys = Object.keys(next);
+        if (keys.length > 60) keys.slice(0, keys.length - 60).forEach((k) => delete next[k]);
+        sessionStorage.setItem(SCROLL_KEY, JSON.stringify(next));
+      } catch { /* storage unavailable: Back starts at the top */ }
+    };
+  }, [location.key, navType, rootRef, fill]);
+}
+
 function readPref() {
   try {
     const v = localStorage.getItem(PREF_KEY);
@@ -30,13 +80,23 @@ function readPref() {
   }
 }
 
+// "LEARNIGO · Console" -> "Console". A plain "LEARNIGO" label has no role tag.
+function roleOf(b) {
+  if (b.role) return b.role;
+  return String(b.label || '').replace(/learnigo/i, '').replace(/^[\s·:|–-]+/, '').trim();
+}
+
+// The real puppy logo of the learning site; the puppy alone when the menu is narrow.
 function Brand({ brand, collapsed }) {
   const b = brand && typeof brand === 'object' && !('props' in brand) ? brand : { node: brand };
   if (b.node) return <div className={s.brand}>{b.node}</div>;
+  const role = roleOf(b);
   const body = (
     <>
-      {b.logo && <span className={s.brandLogo}>{b.logo}</span>}
-      <span className={collapsed ? 'd-sr-only' : s.brandText}>{b.label || 'LEARNIGO'}</span>
+      {collapsed
+        ? <img src={mascotImg} alt="Learnigo" className={s.brandMascot} width="52" height="58" />
+        : <img src={logoImg} alt="Learnigo" className={s.brandLogo} width="160" height="58" />}
+      {!collapsed && role && <span className={s.brandRole}>{role}</span>}
     </>
   );
   return b.to ? <Link to={b.to} className={s.brand}>{body}</Link> : <div className={s.brand}>{body}</div>;
@@ -59,7 +119,11 @@ function Brand({ brand, collapsed }) {
  *   </DashboardShell>
  *
  * Props
- *   brand            node, or { label, logo, to }
+ *   brand            node, or { label, role, to }: shows the Learnigo logo plus a role tag
+ *                    ("Parent", "Teacher" …; taken from the label when no role is given)
+ *   sideNote         text in the friendly note at the foot of the sidebar; false hides it
+ *   zoomKey          what counts as "a new level" for the zoom-in (default: the path plus the
+ *                    tab / view / section / id / org / child URL parameters)
  *   nav[]            { key, label, icon (component or element), to | onClick, badge, children? }
  *   active           key of the current nav item (if omitted the current URL decides)
  *   topbar           slot, grows to fill the bar (search, command palette button)
@@ -73,9 +137,13 @@ function Brand({ brand, collapsed }) {
  * bottom tab bar with at most 5 entries, the rest under "More".
  */
 export default function DashboardShell({
-  brand, nav = [], active, topbar, breadcrumbs = [], contextSwitcher, bell, user, actions, theme, fill, className = '', children,
+  brand, nav = [], active, topbar, breadcrumbs = [], contextSwitcher, bell, user, actions, theme, fill, sideNote, zoomKey, className = '', children,
 }) {
   const { t } = useTranslation();
+  const location = useLocation();
+  const rootRef = useRef(null);
+  useScrollMemory(rootRef, fill);
+  const level = zoomKey ?? levelKeyOf(location);
   const narrow = useMedia(NARROW);
   const [pref, setPref] = useState(readPref);
   const [more, setMore] = useState(false);
@@ -105,6 +173,7 @@ export default function DashboardShell({
 
   return (
     <div
+      ref={rootRef}
       className={`dash ${s.shell} ${fill ? s.fill : ''} ${className}`}
       data-theme={theme}
       data-collapsed={collapsed ? 'true' : 'false'}
@@ -122,6 +191,12 @@ export default function DashboardShell({
         <nav aria-label={t('dash.shell.nav', { defaultValue: 'Main' })} className={s.sideNav}>
           <SideNav nav={nav} active={active} collapsed={collapsed} />
         </nav>
+        {sideNote !== false && (
+          <p className={s.sideFoot}>
+            <img src={mascotImg} alt="" width="42" height="49" />
+            <span>{sideNote || t('dash.shell.note', { defaultValue: 'Every day of learning counts. Little steps grow into big wins!' })}</span>
+          </p>
+        )}
         <button
           type="button"
           className={s.collapseBtn}
@@ -163,7 +238,7 @@ export default function DashboardShell({
               {actions && <div className={s.actions} data-print="hide">{actions}</div>}
             </div>
           )}
-          {children}
+          <div key={level} className={s.level}>{children}</div>
         </main>
       </div>
 

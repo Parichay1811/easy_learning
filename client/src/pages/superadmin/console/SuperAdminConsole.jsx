@@ -94,6 +94,7 @@ export default function SuperAdminConsole() {
   return (
     <DashboardShell
       brand={{ label: "LEARNIGO · Console", to: "/superadmin-dashboard" }}
+      sideNote={false}
       nav={nav}
       active={active}
       bell={<NotificationBell role="superadmin" />}

@@ -85,7 +85,7 @@ function Report({ r, title, print = false }) {
     { label: t('report.kpi.accuracy', { defaultValue: 'Answers right' }), value: pct(tot.accuracy), delta: delta(tot.accuracy, prev?.accuracy, (x) => `${x} pts`) },
     { label: t('report.kpi.days', { defaultValue: 'Active days' }), value: `${tot.activeDays ?? NO_DATA} / ${r.range.days}`, delta: null },
   ];
-  if (r.kind === 'learner' && r.streak) kpis.push({ label: t('report.kpi.streak', { defaultValue: 'Current streak' }), value: t('report.days', { count: r.streak.current, defaultValue: '{{count}} days' }), delta: t('report.best', { count: r.streak.longest, defaultValue: 'best: {{count}} days' }) });
+  if (r.kind === 'learner' && r.streak) kpis.push({ label: t('report.kpi.streak', { defaultValue: 'Current streak' }), value: t('report.days', { count: r.streak.current, defaultValue: '{{count}} days', defaultValue_one: '{{count}} day' }), delta: t('report.best', { count: r.streak.longest, defaultValue: 'best: {{count}} days', defaultValue_one: 'best: {{count}} day' }) });
   if (r.summary) {
     kpis.push({ label: t('report.kpi.active', { defaultValue: 'Learners active' }), value: `${r.summary.active} / ${r.summary.learners}`, delta: null });
     kpis.push({ label: t('report.kpi.nudge', { defaultValue: 'Need a nudge' }), value: String(r.summary.atRisk), delta: null });
@@ -102,7 +102,7 @@ function Report({ r, title, print = false }) {
         </div>
         <div className={s.titleBox}>
           <h1 id={`${idp}report-title`} className={s.title}>{title || `${kindTitle}: ${r.who}`}</h1>
-          <p className={s.range}>{fmtDate({ from: r.range.from, to: r.range.to }, { style: 'long' })} · {t('report.daysN', { count: r.range.days, defaultValue: '{{count}} days' })}</p>
+          <p className={s.range}>{fmtDate({ from: r.range.from, to: r.range.to }, { style: 'long' })} · {t('report.daysN', { count: r.range.days, defaultValue: '{{count}} days', defaultValue_one: '{{count}} day' })}</p>
         </div>
       </header>
 

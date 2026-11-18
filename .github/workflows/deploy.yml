@@ -13,12 +13,10 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
   # ── Lighthouse CI Quality Gate ─────────────────────────────────────────────
+  # Audits THIS pull request's build, served locally, so the gate checks the code
+  # being merged (the old target, a GitHub Pages URL of a renamed repo, was a 404).
   lighthouse:
     name: 🔦 Lighthouse Audit
     runs-on: ubuntu-latest
@@ -27,12 +25,31 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: client/package-lock.json
+
+      - name: Install dependencies
+        working-directory: client
+        run: npm ci
+
+      - name: Build
+        working-directory: client
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+        run: npm run build
+
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v12
         with:
+          # Lighthouse CI serves this folder itself and swaps in its own port.
+          staticDistDir: ./client/dist
           urls: |
-            https://sutirthachakraborty.github.io/easy_learning/
-          budgetPath: ./.github/lighthouse-budget.json
+            http://localhost/
+          configPath: ./.github/lighthouserc.json
           uploadArtifacts: true
           temporaryPublicStorage: true
 
@@ -41,6 +58,10 @@ jobs:
     name: 📦 Build & Deploy
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # One Pages deployment at a time; pull request audits are not held up by it.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

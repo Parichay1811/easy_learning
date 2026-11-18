@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { FaStar, FaInfoCircle, FaBullseye, FaExclamationTriangle, FaMagic } from 'react-icons/fa';
+import { FaStar, FaInfoCircle, FaBullseye, FaExclamationTriangle } from 'react-icons/fa';
 import Skeleton from './Skeleton';
 import s from './cards.module.css';
 
@@ -14,6 +14,7 @@ const KINDS = {
 /**
  * The top of every overview: ONE sentence that answers "how is it going?",
  * plus 2-4 insight chips. Each chip should open the chart that proves it.
+ * It is drawn as a welcome board in the meadow from the learning site, with the puppy.
  *
  *   <StoryCard
  *     sentence="Aanya learned 2 h 10 min this week, 25 min more than last week."
@@ -38,9 +39,7 @@ export default function StoryCard({ sentence, chips = [], title, loading, classN
   }
   return (
     <section className={`${s.card} ${s.story} ${className}`} aria-label={title || undefined} data-print="section">
-      <span className={s.storyBadge} aria-hidden="true">
-        <FaMagic />
-      </span>
+      <span className={s.storyScene} aria-hidden="true" />
       <div className={s.storyBody}>
         {title && <p className={s.storyTitle}>{title}</p>}
         <p className={s.storySentence}>{sentence}</p>
