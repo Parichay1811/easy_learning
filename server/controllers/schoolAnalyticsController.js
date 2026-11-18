@@ -104,6 +104,15 @@ const overview = h(async (req) => {
   const Child = require('../models/Child')
   const linked = n ? (await Child.distinct('email', { email: { $in: emails }, linkStatus: 'verified' })).length : 0
   const Test = testModel()
+  // Tests handed in by these learners in this range (all attempts, any group in this school).
+  let testsCompleted = null
+  if (Test) {
+    const TestAttempt = require('../models/tests/TestAttempt')
+    testsCompleted = await TestAttempt.countDocuments({
+      orgId: String(req.org._id), studentEmail: { $in: emails }, status: { $in: ['submitted', 'auto_submitted'] },
+      submittedAt: { $gte: new Date(`${range.from}T00:00:00Z`), $lte: new Date(`${range.to}T23:59:59Z`) },
+    })
+  }
   const atRisk = learnersRes.rows.filter((r) => r.atRisk).length
   const tiles = {
     learners: n,
@@ -113,7 +122,7 @@ const overview = h(async (req) => {
     prevMinutesPerStudent: prev && n ? Math.round((prev.minutes / n) * 10) / 10 : null,
     accuracy: cur.accuracy, prevAccuracy: prev?.accuracy ?? null,
     masteryPct: pct(good, pairs),
-    testsCompleted: null, testsAvailable: Boolean(Test),
+    testsCompleted, testsAvailable: Boolean(Test),
     atRisk,
     parentsLinkedPct: pct(linked, n), parentsLinked: linked,
   }
@@ -203,7 +212,7 @@ const teachers = h(async (req) => {
   const testCounts = new Map()
   if (Test) {
     try {
-      const rows = await Test.aggregate([{ $match: { orgId: { $in: [req.org._id, String(req.org._id)] } } }, { $group: { _id: { $ifNull: ['$createdBy', '$tutorId'] }, n: { $sum: 1 } } }])
+      const rows = await Test.aggregate([{ $match: { orgId: { $in: [req.org._id, String(req.org._id)] } } }, { $group: { _id: '$ownerTutorId', n: { $sum: 1 } } }])
       for (const r of rows) testCounts.set(String(r._id), r.n)
     } catch { /* different shape: leave empty */ }
   }
@@ -360,12 +369,35 @@ const usage = h(async (req) => {
   }
 })
 
-// ADM-045 Test and question analytics: tests need the test models (TEACHER work); the
-// question bank half works today from reviewed uploads.
+// ADM-045 Test and question analytics: question bank health from reviewed uploads, and
+// school-wide test results (counts by status, attempts and average score per test).
 const tests = h(async (req) => {
   const QUB = require('../models/superadmin/QuestionUploadBatch')
   const byStatus = await QUB.aggregate([{ $match: { orgId: String(req.org._id) } }, { $group: { _id: { status: '$status', subject: '$subject', module: '$module' }, uploads: { $sum: 1 }, questions: { $sum: '$rowCount' } } }])
-  return { testsAvailable: Boolean(testModel()), questionBank: byStatus.map((r) => ({ ...r._id, uploads: r.uploads, questions: r.questions })) }
+  const questionBank = byStatus.map((r) => ({ ...r._id, uploads: r.uploads, questions: r.questions }))
+  const Test = testModel()
+  if (!Test) return { testsAvailable: false, questionBank }
+  // School-wide test picture: how many tests exist, and how each published one went.
+  const TestAttempt = require('../models/tests/TestAttempt')
+  const orgId = String(req.org._id)
+  const [counts, perTest] = await Promise.all([
+    Test.aggregate([{ $match: { orgId } }, { $group: { _id: '$status', n: { $sum: 1 } } }]),
+    TestAttempt.aggregate([
+      { $match: { orgId, status: { $in: ['submitted', 'auto_submitted'] } } },
+      { $group: { _id: '$testId', attempts: { $sum: 1 }, learners: { $addToSet: '$studentEmail' }, avgPercent: { $avg: '$percent' } } },
+      { $sort: { attempts: -1 } }, { $limit: 50 },
+    ]),
+  ])
+  const titles = new Map((await Test.find({ _id: { $in: perTest.map((t) => t._id) }, orgId }).select('title ownerTutorId').lean()).map((t) => [String(t._id), t]))
+  return {
+    testsAvailable: true,
+    questionBank,
+    tests: Object.fromEntries(counts.map((c) => [c._id, c.n])),
+    results: perTest.filter((t) => titles.has(String(t._id))).map((t) => ({
+      testId: String(t._id), title: titles.get(String(t._id)).title, attempts: t.attempts, learners: t.learners.length,
+      avgPercent: t.avgPercent == null ? null : Math.round(t.avgPercent),
+    })),
+  }
 })
 
 // ADM-046 Student profile (school context). Learning analytics come from the shared
