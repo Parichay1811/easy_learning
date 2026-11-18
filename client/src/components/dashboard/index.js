@@ -19,6 +19,10 @@ export { default as PlanLockCard } from './PlanLockCard';
 export { default as InfoTip } from './InfoTip';
 export { default as Button } from './Button';
 export { default as DataTable } from './DataTable';
+export { default as CommandPalette } from './CommandPalette';
+export { default as Celebration } from './Celebration';
+export { useCelebrateOnce } from './useCelebrateOnce';
+export { searchItems, scoreItem } from './paletteSearch';
 
 // Charts
 export { default as CalendarHeatmap } from './charts/CalendarHeatmap';

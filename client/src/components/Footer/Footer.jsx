@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { FaGlobe, FaShieldAlt, FaFileContract } from "react-icons/fa";
+import { FaGlobe, FaShieldAlt, FaFileContract, FaTags } from "react-icons/fa";
 import styles from "./Footer.module.css";
 
 const Footer = () => {
@@ -13,6 +13,10 @@ const Footer = () => {
           <Link to="/learning-support-by-country" className={styles.link}>
             <FaGlobe className={styles.icon} />
             {t("footer.learningSupport", { defaultValue: "Learning Support" })}
+          </Link>
+          <Link to="/pricing" className={styles.link}>
+            <FaTags className={styles.icon} />
+            {t("footer.pricing", { defaultValue: "Plans" })}
           </Link>
           <Link to="/policy" className={styles.link}>
             <FaShieldAlt className={styles.icon} />

@@ -125,3 +125,19 @@ Dates helpers: `dates.js` (`toISO`, `parseISO`, `today`, `addDays`, `startOfWeek
 ## Print
 `@media print` hides sidebar, bars and buttons (`data-print="hide"`), flattens shadows and avoids page breaks inside cards
 (`data-print="section"`). Add `data-print="hide"` to anything that should not print.
+
+
+## CommandPalette (DSN-002)
+Search everything and jump. Ctrl/Cmd+K anywhere, or the trigger button (an icon on phones). Give it only what the person may open.
+
+```jsx
+<CommandPalette scope="teacher" items={[
+  { id: 'new-test', label: 'Create a test', group: 'Actions', to: '/teacher/tests/new', keywords: ['quiz'] },
+  { id: 'g-5b', label: 'Year 5 Maths', group: 'Groups', hint: '24 students', to: '/teacher/groups/5b' },
+  { id: 'export', label: 'Export results', group: 'Actions', onSelect: () => exportCsv() },
+]} />
+```
+Props: `{ items:[{id,label,group,hint,icon,keywords,to|onSelect}], scope, placeholder, open, onOpenChange, hideTrigger, hotkey }`. Put it in the shell's `topbar` slot. It remembers the last 5 choices per `scope` in localStorage. Forgiving search (`searchItems`): exact, prefix, word prefix, contains, keywords, letters-in-order. Needs a react-router `<Router>`.
+
+## Celebration + useCelebrateOnce (DSN-022)
+A calm milestone card with a little confetti (off for reduced motion). `const [show, dismiss] = useCelebrateOnce('streak-7-' + child.id)` (imported from the barrel) returns true only the first time; `<Celebration emoji title text actionLabel onAction onClose={dismiss} />`.

@@ -2,11 +2,22 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  ChartCard, DistributionStrip, EmptyState, Funnel, ItemAnalysisTable, PlanLockCard, Skeleton, StudentSkillHeatmap, TrendLine, UnitSunburst,
+  Celebration, ChartCard, CommandPalette, DistributionStrip, EmptyState, Funnel, ItemAnalysisTable, PlanLockCard, Skeleton, StudentSkillHeatmap, TrendLine, UnitSunburst,
   fmtDate, fmtDelta, fmtDuration, fmtNumber, fmtPercent, toTable,
 } from '../../components/dashboard';
 import { sampleDistribution, sampleFunnel, sampleItems, sampleStudentSkills, sampleTrend, sampleUnits } from '../../components/dashboard/sample';
 import s from './DashboardKit.module.css';
+
+const PALETTE_ITEMS = [
+  { id: 'new-test', label: 'Create a test', group: 'Actions', keywords: ['quiz', 'exam'] },
+  { id: 'invite', label: 'Invite parents', group: 'Actions', hint: 'by email' },
+  { id: 'g-5b', label: 'Year 5 Maths', group: 'Groups', hint: '24 students' },
+  { id: 'g-6e', label: 'Year 6 English', group: 'Groups', hint: '19 students' },
+  { id: 's-aanya', label: 'Aanya Rao', group: 'Students', hint: 'Year 5 Maths' },
+  { id: 's-ravi', label: 'Ravi Menon', group: 'Students', hint: 'Year 5 Maths' },
+  { id: 'p-groups', label: 'Student groups', group: 'Pages' },
+  { id: 'p-reports', label: 'Reports', group: 'Pages' },
+];
 
 export default function KitSections({ said }) {
   const { t } = useTranslation();
@@ -19,6 +30,11 @@ export default function KitSections({ said }) {
 
   return (
     <>
+      <h2 className={s.h2}>Search and celebrations</h2>
+      <ChartCard title="Can I find anything in two keystrokes?" answer="Press Ctrl or Cmd + K anywhere, or use the button. Try “quiz”, “sgrp” or “5b”.">
+        <CommandPalette scope="gallery" items={PALETTE_ITEMS.map((i) => ({ ...i, onSelect: (it) => said(`Opened: ${it.label}`) }))} />
+      </ChartCard>
+      <Celebration emoji="🔥" title="7 days in a row!" text="Aanya has learned every day this week. That is a brand new record." actionLabel="See the streak" onAction={() => said('Open streak')} onClose={() => said('Closed celebration')} />
       <h2 className={s.h2}>Teacher and admin charts</h2>
       <ChartCard title="How is the whole class spread?" answer="Most of the class is between 55 % and 85 %. The square is the student you are looking at." info="Each dot is a student's accuracy this week. The shaded band holds the middle half of the class." table={toTable.distribution(dist, t)}>
         <DistributionStrip data={dist} domain={[0.3, 1]} highlightId="s7" onSelect={(it) => said(`Student: ${it.name}`)} />
