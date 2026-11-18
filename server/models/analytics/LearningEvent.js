@@ -17,6 +17,7 @@ const schema = new mongoose.Schema({
   source: String,     // practice | warrior | test | homework | ar | ai_teacher
   testId: String,
   topic: String,
+  title: String,      // ai_teacher: the lesson's title from the pack (never the child's own words)
   device: { type: String, default: 'unknown' }, // phone | tablet | desktop | unknown
   os: String,
   browser: String,

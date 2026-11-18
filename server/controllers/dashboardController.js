@@ -264,6 +264,9 @@ const logAnswer = async (req, res) => {
       xpEarned: xpEarned || 0,
       timeTaken: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken : null,
       mode: mode || 'practice',
+      questionId: typeof req.body.questionId === 'string' ? req.body.questionId.slice(0, 60) : null,
+      topic: typeof req.body.topic === 'string' ? req.body.topic.slice(0, 80) : null,
+      hintsUsed: Math.max(0, Math.min(10, Number(req.body.hintsUsed) || 0)),
     })
     await recordAnswer({
       email, module: mod, subject, correct: !!correct, mode: mode || 'practice',
