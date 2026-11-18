@@ -78,6 +78,25 @@ function readGroupFields(body, { partial }) {
   return out
 }
 
+// GET /groups/:id: one of my groups with its roster and what I may do with it.
+const getGroup = handle(async (req, res) => {
+  const ctx = await context(req)
+  const batch = await myGroup(ctx, req.params.id)
+  await batch.populate('subjects.subject', 'name code')
+  const students = await Student.find({ _id: { $in: batch.studentIds }, orgId: ctx.orgId }).select('name email grade age status').sort({ name: 1 }).lean()
+  const others = await Batch.find({ orgId: ctx.orgId, tutorIds: ctx.tutorId, status: 'active', _id: { $ne: batch._id } }).select('name emoji color').sort({ name: 1 }).lean()
+  const subjects = await Subject.find({ orgId: ctx.orgId, status: 'active' }).select('name code').sort({ name: 1 }).lean()
+  res.json({
+    success: true,
+    group: groupView(batch, ctx),
+    students: students.map((x) => ({ id: String(x._id), name: x.name, email: x.email || '', grade: x.grade || '', age: x.age, status: x.status })),
+    otherGroups: others.map((o) => ({ id: String(o._id), name: o.name, emoji: o.emoji || '', color: o.color || '' })),
+    subjects,
+    permissions: { canManage: canManage(ctx, batch), canAddNewStudents: ctx.canAddNewStudents, isSolo: ctx.solo },
+    tutorId: String(ctx.tutorId),
+  })
+})
+
 // POST /groups { name, subjectIds[], gradeBand, color, emoji, description, maxStudents }
 const createGroup = handle(async (req, res) => {
   const ctx = await context(req)
@@ -331,7 +350,7 @@ const inviteParents = handle(async (req, res) => {
 })
 
 module.exports = {
-  listGroups, createGroup, updateGroup, archiveGroup, restoreGroup,
+  listGroups, getGroup, createGroup, updateGroup, archiveGroup, restoreGroup,
   getJoin, updateJoin, importRoster, transferStudents, groupParents, inviteParents,
   planImport, newCode,
 }

@@ -71,22 +71,35 @@ export const AdminAuthProvider = ({ children }) => {
     setSuperAdminUser({ email: data.superadmin.email, name: data.superadmin.name, role: "superadmin" });
   };
 
-  const teacherGoogleSignIn = async (idToken) => {
+  // Stores a teacher token (and, for a Solo owner, their admin token): used by sign-in,
+  // Solo signup and the workspace switcher (TCH-001/003).
+  const teacherUseToken = (token, adminToken) => {
+    localStorage.setItem(TEACHER_JWT_KEY, token);
+    const p = decodeJWT(token);
+    setTeacherUser({ id: p.id, uid: p.uid, email: p.email, name: p.name, orgId: p.orgId, role: "teacher" });
+    if (adminToken) {
+      localStorage.setItem(ADMIN_JWT_KEY, adminToken);
+      const a = decodeJWT(adminToken);
+      setAdminUser({ id: a.id, uid: a.uid, email: a.email, name: a.name, orgId: a.orgId, role: "org_admin" });
+    }
+  };
+
+  // Returns the whole answer ({ teacher, workspaces, needsChoice }). Errors carry `code`
+  // (NO_TEACHER_ACCOUNT lets the login page offer a Solo workspace).
+  const teacherGoogleSignIn = async (idToken, tutorId) => {
     const res = await fetch(`${API}/api/teacher/auth/google`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idToken }),
+      body: JSON.stringify(tutorId ? { idToken, tutorId } : { idToken }),
     });
-    if (!res.ok && res.status === 404) {
-      const data = await res.json().catch(() => null);
-      throw new Error(data?.message || "No teacher account found for this email.");
+    const data = await res.json().catch(() => null);
+    if (!data?.success) {
+      const err = new Error(data?.message || "No teacher account found for this email.");
+      err.code = data?.code;
+      throw err;
     }
-    const data = await res.json();
-    if (!data.success) throw new Error(data.message);
-    localStorage.setItem(TEACHER_JWT_KEY, data.token);
-    const p = decodeJWT(data.token);
-    setTeacherUser({ id: p.id, uid: p.uid, email: p.email, name: p.name, orgId: p.orgId, role: "teacher" });
-    return data.teacher;
+    teacherUseToken(data.token, data.adminToken);
+    return data;
   };
 
   const parentGoogleSignIn = async (idToken) => {
@@ -132,7 +145,7 @@ export const AdminAuthProvider = ({ children }) => {
   return (
     <AdminAuthContext.Provider value={{
       adminUser, superAdminUser, teacherUser, parentUser,
-      adminGoogleSignIn, superAdminLogin, teacherGoogleSignIn, parentGoogleSignIn,
+      adminGoogleSignIn, superAdminLogin, teacherGoogleSignIn, teacherUseToken, parentGoogleSignIn,
       adminLogout, superAdminLogout, teacherLogout, parentLogout,
       getAdminToken, getSuperAdminToken, getTeacherToken, getParentToken,
     }}>

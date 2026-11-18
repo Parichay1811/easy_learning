@@ -90,7 +90,7 @@ const today = handle(async (req, res) => {
     classes,
     attention: attention.slice(0, 12), attentionCount: attention.length,
     wins: wins.slice(0, 6),
-    week: { totals: ov.cur, deltas: ov.deltas, story: buildStory({ cur: ov.cur, prev: ov.prev, who: 'Your students', rangeLabel: 'in the last 7 days' }) },
+    week: { totals: ov.cur, previous: ov.prev, deltas: ov.deltas, series: q.series(ov.days, ov.range).points.map((p) => p.minutes), story: buildStory({ cur: ov.cur, prev: ov.prev, who: 'Your students', rangeLabel: 'in the last 7 days' }) },
     counts: { groups: groups.length, students: students.length, studentsWithoutEmail: students.filter((s) => !s.email).length },
     checklist: {
       group: groups.length > 0,
@@ -123,7 +123,7 @@ async function groupGrid(ctx, req, batch) {
     }))
     const r = risk.get(lower(s.email))
     return {
-      studentId: String(s._id), name: s.name, hasEmail: !!s.email, cells,
+      studentId: String(s._id), name: s.name, email: lower(s.email), hasEmail: !!s.email, cells,
       totals: { answered: t.answered, accuracy: t.accuracy, minutes: Math.round(t.minutes), activeDays: t.activeDays },
       atRisk: !!r?.atRisk, riskReason: r?.riskReason || null,
     }
