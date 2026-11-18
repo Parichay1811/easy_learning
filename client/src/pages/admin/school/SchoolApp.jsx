@@ -129,15 +129,15 @@ export default function SchoolApp() {
         nav={nav}
         active={active}
         contextSwitcher={a && (
-          <span className={s.pill} title={a.org.name}>
+          <span className={`${s.pill} ${s.ctxPill}`} title={`${a.org.name} · ${a.roleLabel}`}>
             {a.org.logoUrl ? <img src={a.org.logoUrl} alt="" width="20" height="20" style={{ borderRadius: 6 }} /> : null}
-            {a.org.name} · {a.roleLabel}
+            <span className={s.ctxText}>{a.org.name} · {a.roleLabel}</span>
           </span>
         )}
         user={(
           <div className={s.row}>
-            {ctx.isAdmin && <Button size="sm" variant="ghost" icon={FaArrowLeft} to="/admin-dashboard">{t("school.classic", { defaultValue: "Classic view" })}</Button>}
-            <Button size="sm" variant="ghost" icon={FaSignOutAlt} onClick={logout}>{t("school.logout", { defaultValue: "Sign out" })}</Button>
+            {ctx.isAdmin && <Button size="sm" variant="ghost" icon={FaArrowLeft} to="/admin-dashboard" className={s.phoneIcon} aria-label={t("school.classic", { defaultValue: "Classic view" })}>{t("school.classic", { defaultValue: "Classic view" })}</Button>}
+            <Button size="sm" variant="ghost" icon={FaSignOutAlt} onClick={logout} className={s.phoneIcon} aria-label={t("school.logout", { defaultValue: "Sign out" })}>{t("school.logout", { defaultValue: "Sign out" })}</Button>
           </div>
         )}
       >
