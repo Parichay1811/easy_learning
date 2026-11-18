@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MdFamilyRestroom, MdAdd, MdDelete, MdEdit,
-  MdInsights, MdClose, MdLogout, MdMenu, MdSupportAgent, MdChildCare,
-} from "react-icons/md";
+  MdInsights, MdClose, MdLogout, MdMenu, MdSupportAgent, MdChildCare, MdVpnKey, MdVerified, MdHourglassEmpty } from "react-icons/md";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import StudentDashboardViewer from "../../components/StudentDashboardViewer/StudentDashboardViewer";
 import Modal from "../../components/Admin/Modal";
@@ -115,6 +114,7 @@ const ParentDashboard = () => {
   const [modalError, setModalError] = useState("");
   const [perfModal, setPerfModal] = useState(null);
   const [dashboardViewerChild, setDashboardViewerChild] = useState(null);
+  const [notice, setNotice] = useState("");
   const [chatMessages, setChatMessages] = useState([]);
   const [chatDraft, setChatDraft] = useState("");
   const [chatUnread, setChatUnread] = useState(0);
@@ -191,9 +191,23 @@ const ParentDashboard = () => {
     loadChildren();
   };
 
+  const openVerify = (child) => openModal({
+    title: `Link ${child.name}`,
+    endpoint: `/children/${child._id}/verify`,
+    submitLabel: "Link",
+    fields: [{ key: "code", label: "Link code", required: true, minLength: 6, maxLength: 8, placeholder: "e.g. K7P4XQ" }],
+    hint: `Ask ${child.name} to open their Dashboard and tap "Link a parent". The code works once and lasts 24 hours.`,
+  });
+
   const openChildPerformance = async (child) => {
+    setNotice("");
     const d = await get(`/children/${child._id}/performance`);
-    if (!d.success) return;
+    if (!d.success) {
+      // An unverified link shows no data: say why, and how to fix it.
+      if (d.code === "LINK_NOT_VERIFIED") openVerify(child);
+      else setNotice(d.message || "Couldn't load this child's progress.");
+      return;
+    }
     if (d.performance.linked) {
       setDashboardViewerChild({ id: child._id, name: child.name });
     } else {
@@ -284,14 +298,27 @@ const ParentDashboard = () => {
             <div className={styles.statsGrid}>
               <StatCard label="Total Kids" value={children.length} icon={<MdChildCare />} color="#ec4899" />
             </div>
+            {notice && <p className={styles.empty} role="alert">{notice}</p>}
+            {children.some((c) => c.linkStatus !== "verified") && (
+              <p className={styles.empty}>
+                To see a child's progress, link them first: they open their Dashboard, tap "Link a parent", and
+                you enter the code here. If their school already added you as a parent, the link happens by itself.
+              </p>
+            )}
             <DataTable
               columns={[
                 { key: "name", label: "Name" },
                 { key: "age", label: "Age" },
                 { key: "email", label: "Email" },
+                { key: "linkStatus", label: "Link", render: (row) => (
+                  row.linkStatus === "verified"
+                    ? <span className={`${styles.badge} ${styles.badgeGreen}`}><MdVerified /> Linked</span>
+                    : <span className={`${styles.badge} ${styles.badgeYellow}`}><MdHourglassEmpty /> {row.linkStatus === "revoked" ? "Removed" : "Needs a code"}</span>
+                ) },
               ]}
               rows={children}
               actions={[
+                { icon: <MdVpnKey />, title: "Enter link code", onClick: openVerify },
                 { icon: <MdInsights />, title: "Performance", onClick: openChildPerformance },
                 { icon: <MdEdit />, title: "Edit", onClick: (row) => openModal({
                     title: "Edit Kid",
@@ -335,6 +362,8 @@ const ParentDashboard = () => {
           onClose={closeModal}
           loading={modalLoading}
           serverError={modalError}
+          submitLabel={modal.submitLabel}
+          hint={modal.hint}
         />
       )}
 

@@ -223,6 +223,17 @@ context now — it holds separate state/localStorage keys and
 `teacherGoogleSignIn`/`teacherLogout` functions alongside the pre-existing admin/superadmin
 ones, all exposed via one `useAdminAuth()` hook.
 
+### 5.3.1 Parent → child links are verified
+
+A parent's `Child` row only exposes the learner's data when `linkStatus === 'verified'`
+(`utils/guardianLink.js` `childAccess`, used by `parentChildAccess` and the performance
+route). New links start `pending`; legacy rows without the field read as `pending`. A link
+becomes verified when a school already linked that parent and student (org `Parent` +
+`Student` with matching emails) or when the learner's one-time code (`POST
+/api/dashboard/link-code`, `LinkCode` model, hashed, 24 h) is entered via `POST
+/api/parent/children/:id/verify`. Changing a child's email resets the link to `pending`.
+Any new route that returns a child's data must go through `childAccess`.
+
 ### 5.4 Admin / Super-Admin / Organization lifecycle
 
 - Org registration (`POST /api/admin/org`) is **reversible**: `approveOrg`/`rejectOrg` in

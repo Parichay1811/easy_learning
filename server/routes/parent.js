@@ -6,7 +6,7 @@ const { parentChildAccess } = require('../middleware/studentDashboardAccess')
 const { createChildValidator, updateChildValidator } = require('../validators/parentValidators')
 const { sendChatMessageValidator } = require('../validators/adminValidators')
 const {
-  getChildren, createChild, updateChild, deleteChild, getChildPerformance,
+  getChildren, createChild, updateChild, deleteChild, getChildPerformance, verifyChildLink,
 } = require('../controllers/parentController')
 const {
   getStats:        getChildDashStats,
@@ -25,6 +25,7 @@ router.post('/children', createChildValidator, validate, createChild)
 router.patch('/children/:id', updateChildValidator, validate, updateChild)
 router.delete('/children/:id', deleteChild)
 router.get('/children/:id/performance', getChildPerformance)
+router.post('/children/:id/verify', verifyChildLink)
 router.get('/children/:id/dashboard/stats',        parentChildAccess, getChildDashStats)
 router.get('/children/:id/dashboard/activity',      parentChildAccess, getChildDashActivity)
 router.get('/children/:id/dashboard/achievements',  parentChildAccess, getChildDashAchievements)

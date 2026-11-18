@@ -2,6 +2,7 @@ const Organization   = require('../models/admin/Organization')
 const SAOrganization = require('../models/superadmin/Organization')
 const Student        = require('../models/admin/Student')
 const Child          = require('../models/Child')
+const { childAccess } = require('../utils/guardianLink')
 
 // Authorizes an org admin to view one of their own students' learning dashboard,
 // then swaps req.user to that student's identity so the existing dashboardController
@@ -42,12 +43,12 @@ const superadminStudentAccess = async (req, res, next) => {
 }
 
 // Authorizes an independent parent to view one of their own kids' learning dashboard,
-// same swap trick as adminStudentAccess above.
+// same swap trick as adminStudentAccess above. Only for a VERIFIED link (FND-001).
 const parentChildAccess = async (req, res, next) => {
   try {
     const child = await Child.findOne({ _id: req.params.id, parentId: req.parent.id })
-    if (!child) return res.status(404).json({ success: false, message: 'Child not found' })
-    if (!child.email) return res.status(404).json({ success: false, message: 'Child has no linked learning account' })
+    const access = childAccess(child)
+    if (!access.ok) return res.status(access.status).json({ success: false, message: access.message, code: access.code, linkStatus: access.linkStatus })
 
     req.user = { email: child.email, name: child.name }
     next()

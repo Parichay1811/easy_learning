@@ -43,6 +43,7 @@ Family Plus option (decision in [README § 4](README.md#4-selling-it-plans-built
 ## P1. Onboarding and linking
 
 - [ ] **PAR-001** Verified child linking (replaces add-by-email) `P0` `Family` · needs FND-001, FND-012
+  - *Partly done (PR #86):* the parent's kids list shows each link's status and an "Enter link code" action, and the learner's Dashboard has a "Link a parent" card. Still to do: the "create a child account" door and revoking a link.
   - Three doors on one screen: **Create a child account** (managed learner, picture password), **I have a link code** (from the child's profile), **My school invited me** (auto-detected from the email).
   - The link status is visible on each child card: Verified ✓ / Waiting for approval ⏳ / Revoked.
 - [ ] **PAR-002** Accept school / tutor invitations `P0` `Institute` `Solo` · needs FND-012

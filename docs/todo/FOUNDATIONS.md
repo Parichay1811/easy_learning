@@ -11,11 +11,13 @@ email.
 
 ## F0. Must fix before selling
 
-- [ ] **FND-001** Close the parent → any-student data leak `P0` `Family`
+- [x] **FND-001** Close the parent → any-student data leak `P0` `Family` *(done: PR #86)*
   - **Today:** `POST /api/parent/children` ([parentController.js](../../server/controllers/parentController.js) `createChild`) accepts **any** email. Then `GET /children/:id/performance` and `/children/:id/dashboard/*` return that student's full learning history. A stranger can read any child's data by typing their email.
   - **Fix:** a new link starts as `pending` and shows no data until it is verified through one of the flows in FND-012. Existing `Child` rows are migrated to `pending`, except where the child's activity was created by that parent's own managed account.
   - **Accept when:** an automated test proves that an unverified link returns 403 on every child endpoint.
+  - **Done:** `Child.linkStatus` (`pending` / `verified` / `revoked`, legacy rows read as pending). `childAccess()` in [guardianLink.js](../../server/utils/guardianLink.js) is the one rule, used by `parentChildAccess` and the performance route, and a test checks every `/children/:id/dashboard/*` route sits behind it. Changing a child's email resets the link to pending. Existing links are migrated with `server/scripts/migrate-verify-children.js` (dry run by default).
 - [ ] **FND-002** Permission regression suite `P0` `Platform` · needs FND-020
+  - *Started:* `server/test/guardian-link.test.js` covers parent → child access (16 tests, `npm test` in `server/`). The full route × role table is still to do.
   - An automated table test that calls every `/api/*` route as each role (anonymous, student, parent, solo teacher, institute teacher, admin of org A, admin of org B, super admin) and checks the expected 200/403/404. It runs in CI and blocks a merge on failure.
 
 ## F1. Accounts and identity
@@ -31,6 +33,7 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
   - Give each learner a stable `learnerId`. Activity collections (`StudentAnswer`, `StudentRound`, `StudentActivity`, `StudentAchievement`, `ARSession`) gain a `learnerId`. Keep `email` for compatibility, and back-fill.
   - A managed learner can later "graduate" to their own login without losing history.
 - [ ] **FND-012** Verified linking flows `P0` `Family` `Solo` `Institute` · needs FND-011
+  - *Done so far (PR #86):* **school-verified** (an org `Parent` and `Student` with matching emails verify a link automatically) and **link code** (the learner makes a one-time 6-character code on their Dashboard, valid 24 h, stored hashed, rate-limited; the parent enters it). *Still to do:* parent-created managed learners, teacher join codes, revoking a link, co-guardian approval.
   - **School-verified:** the admin adds a parent to a student (the `admin/Parent` records that exist today), and the parent gets an email invite. When they sign in with that email they are linked and verified. *This also connects the two parent systems that are separate today.*
   - **Parent-created:** the parent creates a managed learner and is verified as its guardian.
   - **Link code:** an existing student generates a 6-character code or QR (valid 24 h). The parent enters it, and the student (or the guardian already linked) approves.

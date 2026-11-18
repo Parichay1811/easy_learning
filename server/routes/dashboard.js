@@ -13,10 +13,12 @@ const {
   logRound,
   getRounds,
 } = require('../controllers/dashboardController')
+const { createLinkCode } = require('../controllers/linkController')
 
 router.use(dashboardAuth)
 
 router.post('/log-session',  logSession)
+router.post('/link-code',    createLinkCode)
 router.get('/stats',         getStats)
 router.get('/activity',      getActivity)
 router.get('/achievements',  getAchievements)
