@@ -6,9 +6,10 @@ import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router-
 import { useTranslation } from "react-i18next";
 import {
   FaHome, FaSitemap, FaUsers, FaChalkboardTeacher, FaChartBar, FaQuestionCircle, FaCog, FaSignOutAlt,
-  FaExclamationTriangle, FaCheckCircle, FaHourglassHalf, FaArrowLeft,
+  FaExclamationTriangle, FaCheckCircle, FaHourglassHalf, FaArrowLeft, FaComments, FaBullhorn,
 } from "react-icons/fa";
 import { DashboardShell, Skeleton, EmptyState, Button } from "../../../components/dashboard";
+import { NotificationBell, MessageCenter, NotificationPrefs, AnnouncementComposer, AnnouncementsPanel } from "../../../components/comms";
 import { useLoad } from "./api";
 import { BASE, SchoolCtx } from "./context";
 import s from "./school.module.css";
@@ -115,6 +116,8 @@ export default function SchoolApp() {
     ctx.can("analytics.read") && { key: "teachers", label: t("school.nav.teachers", { defaultValue: "Teachers" }), icon: FaChalkboardTeacher, to: `${BASE}/teachers` },
     ctx.can("analytics.read") && { key: "insights", label: t("school.nav.insights", { defaultValue: "Insights" }), icon: FaChartBar, to: `${BASE}/insights` },
     ctx.can("questions.review") && { key: "questions", label: t("school.nav.questions", { defaultValue: "Questions" }), icon: FaQuestionCircle, to: `${BASE}/questions` },
+    ctx.isAdmin && { key: "messages", label: t("school.nav.messages", { defaultValue: "Messages" }), icon: FaComments, to: `${BASE}/messages` },
+    ctx.isAdmin && { key: "announcements", label: t("school.nav.announcements", { defaultValue: "Announcements" }), icon: FaBullhorn, to: `${BASE}/announcements` },
     ctx.isAdmin && { key: "settings", label: t("school.nav.settings", { defaultValue: "Settings" }), icon: FaCog, to: `${BASE}/settings` },
   ].filter(Boolean);
 
@@ -128,6 +131,7 @@ export default function SchoolApp() {
         brand={{ label: "LEARNIGO", to: home }}
         nav={nav}
         active={active}
+        bell={ctx.isAdmin ? <NotificationBell role="admin" /> : null}
         contextSwitcher={a && (
           <span className={`${s.pill} ${s.ctxPill}`} title={`${a.org.name} · ${a.roleLabel}`}>
             {a.org.logoUrl ? <img src={a.org.logoUrl} alt="" width="20" height="20" style={{ borderRadius: 6 }} /> : null}
@@ -154,6 +158,8 @@ export default function SchoolApp() {
                 <Route path="teachers" element={<TeachersPage />} />
                 <Route path="insights" element={<InsightsPage />} />
                 <Route path="questions" element={<ReviewPage />} />
+                <Route path="messages" element={ctx.isAdmin ? <><MessageCenter role="admin" initialThreadId={new URLSearchParams(location.search).get("thread") || undefined} /><NotificationPrefs role="admin" /></> : <Navigate to={home} replace />} />
+                <Route path="announcements" element={ctx.isAdmin ? <><AnnouncementComposer role="admin" /><AnnouncementsPanel role="admin" compact /></> : <Navigate to={home} replace />} />
                 <Route path="settings" element={ctx.isAdmin ? <SettingsPage /> : <Navigate to={home} replace />} />
                 <Route path="setup" element={ctx.isAdmin ? <SetupPage /> : <Navigate to={home} replace />} />
                 <Route path="*" element={<Navigate to={home} replace />} />

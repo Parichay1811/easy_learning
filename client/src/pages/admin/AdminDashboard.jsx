@@ -189,6 +189,9 @@ const AdminDashboard = () => {
       const p = JSON.parse(atob((localStorage.getItem("admin_jwt") || "").split(".")[1] || ""));
       if (p?.role === "org_staff") navigate("/admin-school", { replace: true });
     } catch { /* not a staff token */ }
+    // Message notifications link here (?tab=messages&thread=<id>): messages live in the school dashboard.
+    const q = new URLSearchParams(window.location.search);
+    if (q.get("tab") === "messages") navigate(`/admin-school/messages${q.get("thread") ? `?thread=${encodeURIComponent(q.get("thread"))}` : ""}`, { replace: true });
   }, [navigate]);
 
   const loadStats = useCallback(async () => {

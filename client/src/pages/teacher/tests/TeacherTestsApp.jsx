@@ -1,4 +1,5 @@
 // Teacher tests and question bank (TCH-020..061), at /teacher/tests/*.
+import { NotificationBell } from "../../../components/comms";
 import { useEffect } from "react";
 import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
 import { FaClipboardList, FaQuestionCircle, FaPenNib, FaUniversalAccess, FaArrowLeft, FaLeaf } from "react-icons/fa";
@@ -56,6 +57,7 @@ export default function TeacherTestsApp() {
       brand={{ label: "LEARNIGO", to: "/teacher-dashboard" }}
       nav={nav}
       active={active}
+      bell={<NotificationBell role="teacher" />}
       user={<span className="d-sr-only">{teacherUser.name || teacherUser.email}</span>}
     >
       <Routes>

@@ -6,9 +6,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   FaBuilding, FaChartLine, FaClipboardCheck, FaCog, FaComments, FaFlag, FaHeartbeat, FaHome, FaHistory,
-  FaMoneyBillWave, FaQuestionCircle, FaSignOutAlt, FaUserShield, FaUsers, FaChild, FaUserSecret,
+  FaMoneyBillWave, FaQuestionCircle, FaSignOutAlt, FaUserShield, FaUsers, FaChild, FaUserSecret, FaBullhorn,
 } from "react-icons/fa";
 import { DashboardShell, Skeleton } from "../../../components/dashboard";
+import { NotificationBell, AnnouncementComposer, AnnouncementsPanel } from "../../../components/comms";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
 import { API, useLoad, money } from "./api";
 import s from "./console.module.css";
@@ -30,6 +31,11 @@ const Staff = lazy(() => import("./Staff"));
 const Settings = lazy(() => import("./Settings"));
 
 // Who sees which section (owners see everything). Mirrors the server's gates.
+// Platform announcements (FND-052 / SUP-063): compose for everyone or a segment, see read rates.
+function Announcements() {
+  return <><AnnouncementComposer role="superadmin" /><AnnouncementsPanel role="superadmin" compact /></>;
+}
+
 const SECTIONS = [
   { key: "overview", icon: FaHome, label: "Overview", roles: "*", C: Overview },
   { key: "orgs", icon: FaBuilding, label: "Organisations", roles: ["support", "finance", "analyst"], C: Orgs },
@@ -38,6 +44,7 @@ const SECTIONS = [
   { key: "families", icon: FaChild, label: "Families", roles: ["support"], C: Families },
   { key: "analytics", icon: FaChartLine, label: "Analytics", roles: ["analyst", "support", "finance", "engineer", "content"], C: Analytics },
   { key: "support", icon: FaComments, label: "Support", roles: ["support"], C: Support, badge: "openSupport" },
+  { key: "announcements", icon: FaBullhorn, label: "Announcements", roles: ["support"], C: Announcements },
   { key: "privacy", icon: FaUserSecret, label: "Data rights", roles: ["support"], C: Privacy, badge: "dataPending" },
   { key: "content", icon: FaQuestionCircle, label: "Content", roles: ["content"], C: Content },
   { key: "billing", icon: FaMoneyBillWave, label: "Plans & billing", roles: ["finance", "support"], C: Billing },
@@ -89,6 +96,7 @@ export default function SuperAdminConsole() {
       brand={{ label: "LEARNIGO · Console", to: "/superadmin-dashboard" }}
       nav={nav}
       active={active}
+      bell={<NotificationBell role="superadmin" />}
       breadcrumbs={[{ label: t("sa.platform", "Platform"), to: "/superadmin-dashboard" }, { label: t(`sa.nav.${active}`, SECTIONS.find((x) => x.key === active).label) }]}
       user={
         <div className={s.userMenu}>

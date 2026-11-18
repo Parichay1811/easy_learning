@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaHome, FaUsers, FaChartLine, FaUpload, FaCog, FaSignOutAlt, FaClipboardList } from "react-icons/fa";
+import { FaHome, FaUsers, FaChartLine, FaUpload, FaCog, FaSignOutAlt, FaClipboardList, FaComments, FaBullhorn } from "react-icons/fa";
 import { DashboardShell, Button, Skeleton } from "../../components/dashboard";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import TeacherQuestionUpload from "./TeacherQuestionUpload";
@@ -12,6 +12,7 @@ import StudentView from "./StudentView";
 import SummaryView from "./SummaryView";
 import PlanView from "./PlanView";
 import WorkspaceSwitcher from "./WorkspaceSwitcher";
+import { NotificationBell, MessageCenter, NotificationPrefs, AnnouncementComposer, AnnouncementsPanel } from "../../components/comms";
 import { API_ROOT, useLoad, useTeacherApi } from "./teacherApi";
 import logo from "/logo.png";
 import s from "./teacher.module.css";
@@ -42,7 +43,8 @@ const TeacherDashboard = () => {
   }, [teacherUser, navigate]);
 
   const ws = useLoad(() => (token ? get("/workspace") : Promise.resolve({ ok: false })), [token, wsKey]);
-  const view = params.get("view") || "today";
+  // Notification links use ?tab=messages&thread=<id> (the same shape on every role).
+  const view = params.get("view") || (params.get("tab") === "messages" ? "messages" : "today");
   const id = params.get("id");
   const go = useCallback((v, extra = {}) => {
     setParams({ view: v, ...Object.fromEntries(Object.entries(extra).filter(([, x]) => x != null && x !== "")) });
@@ -56,6 +58,8 @@ const TeacherDashboard = () => {
     { key: "today", label: t("teacher.nav.today", { defaultValue: "Today" }), icon: FaHome, to: "/teacher-dashboard?view=today" },
     { key: "groups", label: t("teacher.nav.groups", { defaultValue: "Groups" }), icon: FaUsers, to: "/teacher-dashboard?view=groups" },
     { key: "summary", label: t("teacher.nav.summary", { defaultValue: "Summary" }), icon: FaChartLine, to: "/teacher-dashboard?view=summary" },
+    { key: "messages", label: t("teacher.nav.messages", { defaultValue: "Messages" }), icon: FaComments, to: "/teacher-dashboard?view=messages" },
+    { key: "announcements", label: t("teacher.nav.announcements", { defaultValue: "Announcements" }), icon: FaBullhorn, to: "/teacher-dashboard?view=announcements" },
     { key: "tests", label: t("teacher.nav.tests", { defaultValue: "Tests & question bank" }), icon: FaClipboardList, to: "/teacher/tests" },
     { key: "questions", label: t("teacher.nav.questions", { defaultValue: "Upload questions" }), icon: FaUpload, to: "/teacher-dashboard?view=questions" },
     { key: "plan", label: t("teacher.nav.plan", { defaultValue: "Plan" }), icon: FaCog, to: "/teacher-dashboard?view=plan" },
@@ -71,6 +75,7 @@ const TeacherDashboard = () => {
       active={active}
       contextSwitcher={workspace && <WorkspaceSwitcher key={wsKey} current={{ id: workspace.workspace.id, name: workspace.workspace.name, kind: workspace.workspace.kind }} onSwitched={onSwitched} />}
       breadcrumbs={workspace ? [{ label: workspace.workspace.name, to: "/teacher-dashboard?view=today" }, { label: nav.find((n) => n.key === active)?.label || "" }] : undefined}
+      bell={<NotificationBell role="teacher" />}
       user={<Button variant="ghost" size="sm" icon={FaSignOutAlt} onClick={handleLogout} aria-label={t("teacher.logout", { defaultValue: "Log out" })}><span className={s.hideNarrow}>{t("teacher.logout", { defaultValue: "Log out" })}</span></Button>}
     >
       <div key={wsKey} style={{ display: "contents" }}>
@@ -81,6 +86,8 @@ const TeacherDashboard = () => {
             {view === "group" && id && <GroupView key={id} id={id} tab={params.get("tab") || "overview"} go={go} params={params} />}
             {view === "student" && id && <StudentView key={id} id={id} go={go} />}
             {view === "summary" && <SummaryView workspace={workspace} />}
+            {view === "messages" && <><MessageCenter role="teacher" initialThreadId={params.get("thread") || undefined} /><NotificationPrefs role="teacher" /></>}
+            {view === "announcements" && <><AnnouncementComposer role="teacher" /><AnnouncementsPanel role="teacher" compact /></>}
             {view === "plan" && <PlanView workspace={workspace} reload={ws.reload} />}
             {view === "questions" && <TeacherQuestionUpload get={legacy.get} post={legacy.post} postForm={legacy.postForm} token={token} />}
           </>

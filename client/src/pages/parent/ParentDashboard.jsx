@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaHome, FaChartLine, FaClock, FaUsers, FaFileAlt, FaShieldAlt, FaHeadset } from "react-icons/fa";
+import { FaHome, FaChartLine, FaClock, FaUsers, FaFileAlt, FaShieldAlt, FaHeadset, FaSchool, FaComments } from "react-icons/fa";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { DashboardShell, EmptyState, Skeleton } from "../../components/dashboard";
 import { useParentApi } from "./parentApi";
@@ -13,6 +13,8 @@ import ParentFamily from "./ParentFamily";
 import ParentReports from "./ParentReports";
 import ParentPrivacy from "./ParentPrivacy";
 import ParentChat from "./ParentChat";
+import ParentSchool from "./ParentSchool";
+import { NotificationBell, MessageCenter, NotificationPrefs } from "../../components/comms";
 import SetupWizard from "./SetupWizard";
 import s from "./parent.module.css";
 
@@ -106,6 +108,8 @@ const ParentDashboard = () => {
     { key: "home", label: T("nav.home", "Home"), icon: FaHome, onClick: () => go("home") },
     { key: "learning", label: T("nav.learning", "Learning"), icon: FaChartLine, onClick: () => go("learning") },
     { key: "activity", label: T("nav.activity", "Activity"), icon: FaClock, onClick: () => go("activity") },
+    { key: "school", label: T("nav.school", "School"), icon: FaSchool, onClick: () => go("school") },
+    { key: "messages", label: T("nav.messages", "Messages"), icon: FaComments, onClick: () => go("messages") },
     { key: "family", label: T("nav.family", "Family"), icon: FaUsers, onClick: () => go("family"), badge: invites.length || undefined },
     { key: "reports", label: T("nav.reports", "Reports"), icon: FaFileAlt, onClick: () => go("reports") },
     { key: "privacy", label: T("nav.privacy", "Privacy"), icon: FaShieldAlt, onClick: () => go("privacy") },
@@ -113,7 +117,7 @@ const ParentDashboard = () => {
   ];
 
   const signOut = () => { parentLogout(); navigate("/"); };
-  const needsChild = ["home", "learning", "activity", "reports", "privacy"].includes(tab);
+  const needsChild = ["home", "learning", "activity", "school", "reports", "privacy"].includes(tab);
 
   let page;
   if (children === null) {
@@ -123,6 +127,8 @@ const ParentDashboard = () => {
       onChanged={async () => { await Promise.all([loadChildren(), loadInvites()]); }} onSelect={selectChild} onSetup={setSetupFor} go={go} />;
   } else if (tab === "support") {
     page = <ParentChat api={api} onRead={() => setChatUnread(0)} />;
+  } else if (tab === "messages") {
+    page = <><MessageCenter role="parent" initialThreadId={params.get("thread") || undefined} /><NotificationPrefs role="parent" /></>;
   } else if (needsChild && !child) {
     page = (
       <div className={s.card}>
@@ -140,6 +146,7 @@ const ParentDashboard = () => {
   } else if (tab === "home") page = <ParentHome api={api} child={child} go={go} />;
   else if (tab === "learning") page = <ParentLearning api={api} child={child} go={go} />;
   else if (tab === "activity") page = <ParentActivity api={api} child={child} onChanged={loadChildren} />;
+  else if (tab === "school") page = <ParentSchool api={api} child={child} />;
   else if (tab === "reports") page = <ParentReports api={api} child={child} />;
   else if (tab === "privacy") page = <ParentPrivacy api={api} child={child} onChanged={loadChildren} />;
 
@@ -148,6 +155,7 @@ const ParentDashboard = () => {
       brand={{ label: "LEARNIGO", to: "/" }}
       nav={nav}
       active={tab}
+      bell={<NotificationBell role="parent" />}
       contextSwitcher={verified.length ? <ChildSwitcher kids={verified} selected={child?._id} onSelect={selectChild} /> : null}
       user={(
         <span className={s.topUser}>
