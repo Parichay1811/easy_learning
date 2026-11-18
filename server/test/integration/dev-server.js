@@ -18,6 +18,8 @@ const { seedDemo } = require('../../scripts/seed-demo')
   const demo = await seedDemo(app.db)
   const school = await require('../../scripts/seed-school-tree').seedSchoolTree(app.db, demo)
   await require('../../scripts/seed-superadmin-demo').seedSuperadminDemo(app.db, demo)
+  // Questions and tests through the real API (TCH-020..052), so tests, results and the parent School tab have content.
+  await require('../../scripts/seed-demo-tests').seedDemoTests(app, demo)
   const t = app.tokens
   const out = {
     api: `${app.url}/api`,

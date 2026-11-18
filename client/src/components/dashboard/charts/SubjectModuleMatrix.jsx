@@ -46,6 +46,8 @@ export default function SubjectModuleMatrix({ cells = [], subjects, modules, onS
               const c = find(sub.key, mod.key);
               const lv = c ? (c.level != null ? masteryOf(c.level) : masteryFromScore(c.accuracy)) : masteryOf(0);
               const empty = !c || (c.accuracy == null && !c.minutes);
+              // Too few answers to judge ("Not started"): no percentage, which would look like mastery.
+              const tooFew = !empty && lv.level === 0;
               const name = `${subjectLabel(t, sub.key)} ${moduleLabel(t, mod.key)}`;
               const body = (
                 <>
@@ -53,7 +55,7 @@ export default function SubjectModuleMatrix({ cells = [], subjects, modules, onS
                     <span className={s.moduleDot} style={{ background: mod.fill }}><mod.Icon aria-hidden="true" /></span>
                     {moduleLabel(t, mod.key)}
                   </span>
-                  <span className={s.tileValue}>{empty ? '—' : fmtPercent(c.accuracy)}</span>
+                  <span className={s.tileValue}>{empty || tooFew ? '—' : fmtPercent(c.accuracy)}</span>
                   <span className={s.tileTime}>{empty ? t('dash.matrix.notYet', { defaultValue: 'Not started' }) : fmtDuration(c.minutes)}</span>
                   <span className={s.tileLevel}><MasteryGlyph level={lv.level} /> {masteryLabel(t, lv.key)}</span>
                 </>

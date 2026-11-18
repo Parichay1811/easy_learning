@@ -21,7 +21,7 @@ function parseRange({ from, to, cmp = 'prev', tz = 'UTC' } = {}) {
   let prev = null
   if (cmp === 'prev') prev = { from: addDays(start, -days), to: addDays(start, -1) }
   else if (cmp === 'lastyear') prev = { from: addDays(start, -365), to: addDays(end, -365) }
-  return { from: start, to: end, days, prev }
+  return { from: start, to: end, days, prev, today: todayIn(tz) }
 }
 
 async function fetchDays(emails, from, to) {
@@ -96,7 +96,10 @@ function series(days, range, { bucket } = {}) {
   }
   return {
     bucket: by,
-    points: [...map.values()].sort((a, b) => (a.key < b.key ? -1 : 1)).map((s) => ({ ...s, minutes: Math.round(s.minutes * 10) / 10, accuracy: pct(s.correct, s.answered) })),
+    // Days still to come (a week or month in progress) have no data yet: null, never 0.
+    points: [...map.values()].sort((a, b) => (a.key < b.key ? -1 : 1)).map((s) => (by === 'day' && range.today && s.key > range.today
+      ? { ...s, minutes: null, answered: null, correct: null, xp: null, accuracy: null, future: true }
+      : { ...s, minutes: Math.round(s.minutes * 10) / 10, accuracy: pct(s.correct, s.answered) })),
   }
 }
 
