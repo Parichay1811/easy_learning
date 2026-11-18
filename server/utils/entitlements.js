@@ -10,6 +10,11 @@ const deps = {
     const [org, sa] = await Promise.all([Org.findById(orgId).lean(), SAOrg.findOne({ adminOrgId: orgId }).lean()])
     return { org, sa }
   },
+  // The org's subscription, if billing has one (SUP-051): its plan and frozen snapshot win.
+  subscriptionFor: async (orgId) => {
+    const Subscription = require('../models/superadmin/Subscription')
+    return Subscription.findOne({ ownerType: 'org', ownerId: String(orgId), status: { $ne: 'cancelled' } }).lean()
+  },
   parentPlan: async (parentId) => {
     const ParentAccount = require('../models/ParentAccount')
     const p = await ParentAccount.findById(parentId).select('plan').lean()
@@ -30,15 +35,21 @@ async function entitlementsFor(actor) {
   if (actor.role === 'superadmin') return { plan: 'all', modules: Object.keys(MODULES), limits: {} }
   if (actor.role === 'parent') {
     const plan = PLANS[await deps.parentPlan(actor.id)] ? await deps.parentPlan(actor.id) : 'free'
-    return { plan, modules: [...PLANS[plan].modules], limits: PLANS[plan].limits || {} }
+    const catalog = (await require('../services/planCatalog').plan(plan)) || PLANS[plan]
+    const { modules } = await require('../services/featureFlags').resolveModules({ planModules: catalog.modules, plan, MODULES })
+    return { plan, modules, limits: catalog.limits || {} }
   }
   if ((actor.role === 'admin' || actor.role === 'teacher') && actor.orgId) {
-    const { org, sa } = await deps.orgFor(actor.orgId)
+    const [{ org, sa }, sub] = await Promise.all([deps.orgFor(actor.orgId), deps.subscriptionFor(actor.orgId).catch(() => null)])
     const solo = org?.kind === 'solo'
-    let plan = sa?.plan && PLANS[sa.plan] ? sa.plan : null
+    let plan = sub?.plan || (sa?.plan && PLANS[sa.plan] ? sa.plan : null)
     if (!plan) plan = solo ? (sa?.subscriptionPlan === 'pro' || sa?.subscriptionPlan === 'enterprise' ? 'solo_pro' : 'solo_free') : (LEGACY[sa?.subscriptionPlan] || 'institute')
-    const modules = applyOverrides(new Set(PLANS[plan].modules), sa?.featureOverrides)
-    return { plan, kind: solo ? 'solo' : 'institute', modules: [...modules], limits: PLANS[plan].limits || {} }
+    // Plan catalogue edits (SUP-050) and module flags (SUP-042) apply here; a subscriber keeps its snapshot until renewal.
+    const catalog = (await require('../services/planCatalog').plan(plan)) || PLANS[plan] || PLANS.institute
+    const bought = sub?.planSnapshot || catalog
+    const { modules } = await require('../services/featureFlags').resolveModules({ planModules: bought.modules, plan, overrides: sa?.featureOverrides, MODULES })
+    const limits = { ...(bought.limits || {}), ...(sub?.seats ? { students: sub.seats } : {}) }
+    return { plan, kind: solo ? 'solo' : 'institute', modules, limits, ...(sub ? { status: sub.status } : {}) }
   }
   return { plan: 'free', modules: [...PLANS.free.modules], limits: {} }
 }
@@ -55,4 +66,4 @@ const requireModule = (key) => async (req, res, next) => {
   }
 }
 
-module.exports = { entitlementsFor, requireModule, deps }
+module.exports = { entitlementsFor, requireModule, deps, applyOverrides }

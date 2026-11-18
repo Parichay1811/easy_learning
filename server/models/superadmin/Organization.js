@@ -24,6 +24,13 @@ const schema = new mongoose.Schema({
   approvedBy: { type: String, default: '' },
   logoUrl: { type: String, default: '' },
   adminDesignation: { type: String, default: '' },
+  // Super admin console (SUP-010/014/062): country for reporting, abuse suspension.
+  country: { type: String, default: '' },
+  website: { type: String, default: '' },
+  suspendedAt: { type: Date, default: null },
+  suspendReason: { type: String, default: '' },
+  suspendedBy: { type: String, default: '' },
+  appealNote: { type: String, default: '' },
 }, { timestamps: true })
 
 module.exports = superAdminDb.model('Organization', schema)

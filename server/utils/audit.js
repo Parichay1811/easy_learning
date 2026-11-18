@@ -3,8 +3,17 @@ const AuditEvent = require('../models/AuditEvent')
 
 const digest = (e, prev) => crypto.createHash('sha256').update(JSON.stringify([prev, e.at.toISOString(), e.actorRole, e.actorId, e.action, e.targetType, e.targetId, e.orgId, e.reason, e.meta || null])).digest('hex')
 
+// Writes are queued one after another so two events at the same moment can't
+// both link to the same previous hash (which would look like a broken chain).
+let tail = Promise.resolve()
+const audit = (...args) => {
+  const run = tail.then(() => write(...args))
+  tail = run.catch(() => null)
+  return run
+}
+
 // audit(req, 'learner.view', { targetType:'learner', targetId, orgId, reason, meta }). Never throws.
-async function audit(req, action, { targetType = '', targetId = '', orgId = '', reason = '', meta } = {}) {
+async function write(req, action, { targetType = '', targetId = '', orgId = '', reason = '', meta } = {}) {
   try {
     const a = req.actor || {}
     const last = await AuditEvent.findOne().sort({ at: -1, _id: -1 }).select('hash').lean()

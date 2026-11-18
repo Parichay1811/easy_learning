@@ -6,6 +6,8 @@ const Student = require('../models/admin/Student')
 const Tutor = require('../models/admin/Tutor')
 const ContactMessage = require('../models/ContactMessage')
 const { getPerformanceForEmail } = require('../utils/performance')
+const { audit } = require('../utils/audit')
+const { clear } = require('../utils/ttlCache')
 
 // ── Organizations ─────────────────────────────────────────────────────────────
 
@@ -28,13 +30,15 @@ const approveOrg = async (req, res) => {
     // Reversible: callable regardless of current status (pending/rejected/approved all flip to approved)
     saOrg.status = 'approved'
     saOrg.approvedAt = new Date()
-    saOrg.approvedBy = process.env.SUPER_ADMIN_EMAIL
+    saOrg.approvedBy = req.superadmin?.email || process.env.SUPER_ADMIN_EMAIL
     saOrg.rejectionReason = ''
     await saOrg.save()
 
     if (saOrg.adminOrgId) {
       await AdminOrganization.findByIdAndUpdate(saOrg.adminOrgId, { status: 'approved', rejectionReason: '' })
     }
+    await audit(req, 'org.approve', { targetType: 'organization', targetId: String(saOrg._id), orgId: saOrg.adminOrgId })
+    clear('directory:')
 
     res.json({ success: true, org: saOrg })
   } catch (err) {
@@ -60,6 +64,8 @@ const rejectOrg = async (req, res) => {
         $push: { rejectionHistory: { reason, rejectedAt: new Date() } },
       })
     }
+    await audit(req, 'org.reject', { targetType: 'organization', targetId: String(saOrg._id), orgId: saOrg.adminOrgId, reason })
+    clear('directory:')
 
     res.json({ success: true, org: saOrg })
   } catch (err) {
@@ -76,6 +82,8 @@ const updateSubscription = async (req, res) => {
       { new: true }
     )
     if (!saOrg) return res.status(404).json({ success: false, message: 'Organization not found' })
+    await audit(req, 'org.subscription.legacy', { targetType: 'organization', targetId: String(saOrg._id), orgId: saOrg.adminOrgId, meta: { plan, subscriptionStatus } })
+    clear('directory:')
     res.json({ success: true, org: saOrg })
   } catch (err) {
     res.status(500).json({ success: false, message: 'Internal server error' })
@@ -134,6 +142,7 @@ const getOrgStudentPerformance = async (req, res) => {
     if (!student) return res.status(404).json({ success: false, message: 'Student not found' })
 
     const performance = await getPerformanceForEmail(student.email)
+    await audit(req, 'learner.view', { targetType: 'learner', targetId: student.email, orgId: saOrg.adminOrgId, reason: String(req.query.reason || '') })
     res.json({ success: true, student: { id: student._id, name: student.name, email: student.email }, performance })
   } catch (err) {
     console.error('getOrgStudentPerformance error:', err)
@@ -198,6 +207,7 @@ const upsertSetting = async (req, res) => {
       { key, value, description: description || '' },
       { upsert: true, new: true }
     )
+    await audit(req, 'settings.update', { targetType: 'setting', targetId: key, meta: { value } })
     res.json({ success: true, setting })
   } catch (err) {
     res.status(500).json({ success: false, message: 'Internal server error' })

@@ -64,9 +64,15 @@ app.use(cors({
 // overruns the 100kb default. Mounted first so the global parser sees the body
 // as already read and skips it — every other route keeps the default limit.
 app.use('/api/ar', express.json({ limit: '2mb' }))
+// Stripe signs the exact bytes, so its webhook gets the raw body (FND-032).
+app.post('/api/billing/webhook', express.raw({ type: 'application/json', limit: '1mb' }), require('./routes/billing').webhook)
 app.use(express.json())
 // Signed cookies need a secret; the student session cookie is signed so it can't be forged.
 app.use(cookieParser(process.env.COOKIE_SECRET || process.env.JWT_SECRET))
+// Request metrics for the health page, then platform-wide rules: read-only "view as",
+// revoked sessions, suspended orgs, daily activity (SUP-002/012/040).
+app.use(require('./utils/requestMetrics').middleware)
+app.use(require('./middleware/platformGuard'))
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
 const PORT = process.env.PORT || 5000
@@ -89,6 +95,9 @@ app.use('/api/superadmin', superadminRoutes)
 app.use('/api/teacher', teacherRoutes)
 app.use('/api/parent', parentRoutes)
 app.use('/api/contact', contactRoutes)
+app.use('/api/status', require('./routes/status'))
+app.use('/api/billing', require('./routes/billing'))
+app.post('/api/view-as/end', require('./controllers/superadmin/viewAsController').endFromBanner)
 
 app.get('/', (req, res) => {
   res.send('hello bachho')
@@ -119,6 +128,7 @@ app.use((err, req, res, _next) => {
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`)
   aiAssistant.start()
+  require('./services/jobs').startScheduler()
 })
 
 // Stop the AI assistant's process with the API (it saves its TODO list on the way out).

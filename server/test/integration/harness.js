@@ -14,7 +14,7 @@ const SECRETS = {
 
 const freePort = () => new Promise((resolve) => { const s = net.createServer().listen(0, () => { const p = s.address().port; s.close(() => resolve(p)) }) })
 
-async function start({ port: fixedPort, clientUrl } = {}) {
+async function start({ port: fixedPort, clientUrl, env: extraEnv = {} } = {}) {
   const mongo = await MongoMemoryServer.create()
   const base = mongo.getUri().replace(/\/$/, '')
   const uris = { MONGODB_URI: `${base}/main`, ADMIN_MONGODB_URI: `${base}/admin`, SUPERADMIN_MONGODB_URI: `${base}/superadmin` }
@@ -22,6 +22,7 @@ async function start({ port: fixedPort, clientUrl } = {}) {
   const env = {
     ...process.env, ...SECRETS, ...uris, PORT: String(port), AI_ASSISTANT: 'off', NODE_ENV: 'test',
     SUPER_ADMIN_EMAIL: 'root@example.com', SUPER_ADMIN_PASSWORD: 'x', CLIENT_URL: clientUrl || 'http://localhost:5173',
+    ...extraEnv,
   }
   const child = spawn(process.execPath, ['server.js'], { cwd: path.join(__dirname, '..', '..'), env, stdio: ['ignore', 'pipe', 'pipe'] })
   let log = ''
