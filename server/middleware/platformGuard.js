@@ -17,7 +17,11 @@ const SECRET_FOR = { parent: 'PARENT_JWT_SECRET', org_admin: 'ADMIN_JWT_SECRET',
 const ROLE_FOR = { parent: 'parent', org_admin: 'admin', teacher: 'teacher', superadmin: 'superadmin' }
 const SAFE = new Set(['GET', 'HEAD', 'OPTIONS'])
 // GETs that write (mark-as-read) are closed to view-as as well.
-const SIDE_EFFECT_GETS = [/^\/api\/(admin|parent|teacher)\/chat\/?$/, /^\/api\/(admin|parent|teacher)\/messages\/[^/]+\/?$/]
+// GETs that change something (marking messages read) or show private messages: refused while viewing as someone.
+const SIDE_EFFECT_GETS = [
+  /^\/api\/(admin|parent|teacher)\/chat\/?$/, /^\/api\/(admin|parent|teacher)\/messages\/[^/]+\/?$/,
+  /^\/api\/messages\/threads\/[^/]+\/messages\/?$/, /^\/api\/messages\/attachments\//,
+]
 const VIEW_AS_END = '/api/view-as/end'
 const SUSPENDED_ALLOWED = [/^\/api\/admin\/(org|profile)\/?$/, /^\/api\/(me|status|entitlements)\/?$/, /^\/api\/notifications/]
 

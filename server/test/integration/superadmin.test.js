@@ -105,11 +105,12 @@ test('staff onboarding: temporary password, forced new password, TOTP set-up, re
   assert.equal(weak.body.code, 'WEAK_PASSWORD')
   const wrong = await app.call('POST', '/api/superadmin/auth/2fa/enable', { body: { setupToken: first.body.setupToken, code: '000000', newPassword: 'a-much-longer-password' } })
   assert.equal(wrong.status, 401)
-  const ok = await app.call('POST', '/api/superadmin/auth/2fa/enable', { body: { setupToken: first.body.setupToken, code: totp.totp(setup.body.secret), newPassword: 'a-much-longer-password' } })
+  const setupCode = totp.totp(setup.body.secret)
+  const ok = await app.call('POST', '/api/superadmin/auth/2fa/enable', { body: { setupToken: first.body.setupToken, code: setupCode, newPassword: 'a-much-longer-password' } })
   assert.equal(ok.status, 200)
   assert.equal(ok.body.recoveryCodes.length, 10)
   assert.equal(ok.body.superadmin.staffRole, 'support')
-  staff.support = { token: ok.body.token, email, password: 'a-much-longer-password', secret: setup.body.secret, id: c.body.staff.id, recoveryCodes: ok.body.recoveryCodes }
+  staff.support = { token: ok.body.token, email, password: 'a-much-longer-password', secret: setup.body.secret, setupCode, id: c.body.staff.id, recoveryCodes: ok.body.recoveryCodes }
   // The old temporary password no longer works.
   assert.equal((await login(email, c.body.temporaryPassword)).status, 401)
   const stored = await app.db.superadmin.collection('staffs').findOne({ email })
@@ -123,8 +124,8 @@ test('second sign-in needs a code; replays and used recovery codes are refused',
   const r = await login(s.email, s.password)
   assert.equal(r.body.step, 'totp')
   assert.equal((await app.call('POST', '/api/superadmin/auth/2fa/verify', { body: { challengeToken: r.body.challengeToken, code: '123456' } })).status, 401)
-  // The code used at set-up (same 30 s step) cannot be replayed...
-  const replay = await app.call('POST', '/api/superadmin/auth/2fa/verify', { body: { challengeToken: r.body.challengeToken, code: totp.totp(s.secret) } })
+  // The exact code used at set-up cannot be replayed (whether or not a 30 s step has passed since)...
+  const replay = await app.call('POST', '/api/superadmin/auth/2fa/verify', { body: { challengeToken: r.body.challengeToken, code: s.setupCode } })
   assert.equal(replay.status, 401)
   // ...but the next step's code is accepted (one step of drift).
   const next = await app.call('POST', '/api/superadmin/auth/2fa/verify', { body: { challengeToken: r.body.challengeToken, code: totp.totp(s.secret, Date.now() + 30_000) } })
@@ -273,6 +274,11 @@ test('view as teacher and parent: reads only', async () => {
   assert.equal((await app.call('GET', '/api/parent/children', { token: pr.body.token })).status, 200)
   assert.equal((await app.call('POST', '/api/parent/children', { token: pr.body.token, body: { name: 'X', age: 9, email: 'x@y.z' } })).body.code, 'VIEW_AS_READ_ONLY')
   assert.equal((await app.call('DELETE', '/api/parent/children/abc', { token: pr.body.token })).status, 403)
+  // Opening a message thread marks it read and shows private messages: refused while viewing as.
+  const thread = await app.call('GET', '/api/messages/threads/507f1f77bcf86cd799439011/messages', { token: pr.body.token })
+  assert.equal(thread.status, 403)
+  assert.equal(thread.body.code, 'VIEW_AS_PRIVATE')
+  assert.equal((await app.call('GET', '/api/messages/attachments/507f1f77bcf86cd799439011/0', { token: pr.body.token })).status, 403)
   // A view-as token is not a console token.
   assert.equal((await app.call('GET', '/api/superadmin/stats', { token: pr.body.token })).status, 401)
   const list = await app.call('GET', '/api/superadmin/view-as?active=1', { token: s })
