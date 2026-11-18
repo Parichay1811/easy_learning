@@ -116,16 +116,19 @@ export function createScene({ reduced = false } = {}) {
     }
   }
 
-  // The start screen gives way: the orb flies into its panel.
+  // The start screen gives way: the orb flies into its panel (when the page has
+  // one; the lesson page is just the board and the question bar).
   function enter() {
     const orb = document.getElementById('orb');
     const slot = document.querySelector('.orb-slot.live');
     const hero = document.getElementById('hero');
     document.body.classList.add('started');
-    if (!gsap || !window.Flip || reduced) { slot.appendChild(orb); hero.remove(); return; }
-    const state = window.Flip.getState(orb);
-    slot.appendChild(orb);
-    window.Flip.from(state, { duration: 1.1, ease: 'power3.inOut', absolute: true });
+    if (!gsap || reduced) { if (slot) slot.appendChild(orb); hero.remove(); return; }
+    if (slot && window.Flip) {
+      const state = window.Flip.getState(orb);
+      slot.appendChild(orb);
+      window.Flip.from(state, { duration: 1.1, ease: 'power3.inOut', absolute: true });
+    }
     gsap.to(hero, { opacity: 0, duration: 0.6, delay: 0.2, onComplete: () => hero.remove() });
     gsap.from('.panel', { y: 40, opacity: 0, duration: 0.9, delay: 0.35, stagger: 0.12, ease: 'power3.out' });
   }
@@ -136,33 +139,46 @@ export function createScene({ reduced = false } = {}) {
   return { setMode, pulse, enter, enableTilt };
 }
 
-// The board keeps 16:9 and takes the largest size that fits its box, so the
-// whole lesson is on one screen on any device, in any orientation.
+// The board takes the largest size that fits beside the menu and above the
+// question bar, so the whole lesson is on one screen on any device, in any
+// orientation. It keeps 16:9 (up to 3:2 when there is height to spare: the
+// board's page stays whole, centred, and is never squarer than board.js's
+// 1.45, where it zooms onto the figure).
 function fitBoard() {
+  const wrap = document.querySelector('.holo-wrap');
   const box = document.querySelector('.holo-box');
   const holo = document.querySelector('.holo');
-  if (!box || !holo) return;
-  // A caption under the board counts against its height (one inside the box).
-  const caption = box.querySelector('#caption');
-  const column = matchMedia('(max-width: 860px) and (orientation: portrait), (max-width: 640px)');
+  const dock = document.querySelector('.dock');
+  if (!wrap || !box || !holo) return;
+  // Phones upright: one column that scrolls (style.css), so the board's height is its own.
+  const column = matchMedia('(max-width: 700px) and (orientation: portrait)');
   const fit = () => {
-    const { width, height } = box.getBoundingClientRect();
-    const cap = caption ? caption.offsetHeight + parseFloat(getComputedStyle(caption).marginTop || 0) : 0;
-    // The board's frame (its border) sits outside the 16:9 drawing area.
+    const ws = getComputedStyle(wrap);
+    // A box with a height of its own (style.css sets --fixed-height on it for
+    // upright tablets and short screens) is the room; otherwise the board's
+    // column, less the bar under the board.
+    const fixed = getComputedStyle(box).getPropertyValue('--fixed-height').trim() === '1';
+    const width = wrap.clientWidth;
+    const height = fixed ? box.clientHeight : wrap.clientHeight - (dock?.offsetHeight || 0) - (parseFloat(ws.rowGap) || 0);
+    // The board's frame (its border) sits outside the drawing area.
     const frame = parseFloat(getComputedStyle(holo).borderLeftWidth) || 0;
     let w = width - 2 * frame;
-    // In one column (a phone upright) the board is nearly square, so the
-    // figure can fill it; side by side it keeps 16:9.
-    let h = column.matches ? Math.min(w * 0.92, Math.max(240, window.innerHeight * 0.46)) : (w * 9) / 16;
-    // Side by side the board fills the height left above its caption; in a
-    // single column it takes the full width and the page below adapts.
-    const room = height - cap - 2 * frame;
-    if (!column.matches && height > 0 && h > room) { h = Math.max(120, room); w = (h * 16) / 9; }
+    let h;
+    const room = height - 2 * frame;
+    if (column.matches) {
+      // A phone upright: nearly square, so the figure can fill it; the page below adapts.
+      h = Math.min(w * 0.92, Math.max(240, window.innerHeight * 0.46));
+    } else {
+      h = (w * 9) / 16;
+      if (h > room) { h = Math.max(120, room); w = (h * 16) / 9; }
+      else h = Math.min(room, w / 1.5);
+    }
     holo.style.width = `${Math.floor(w + 2 * frame)}px`;
     holo.style.height = `${Math.floor(h + 2 * frame)}px`;
-    if (caption) caption.style.width = `${Math.floor(w + 2 * frame)}px`;
   };
-  new ResizeObserver(fit).observe(box);
+  const ro = new ResizeObserver(fit);
+  ro.observe(wrap);
+  if (dock) ro.observe(dock);
   fit();
 }
 

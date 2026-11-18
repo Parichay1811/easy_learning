@@ -10,7 +10,7 @@ import { isEcho } from "./shared/echo.js";
 import { questionPlan, resultPlan } from "./shared/test.js";
 import { GREETING, FILLERS, NOT_HEARD, GO_AHEAD } from "./shared/lines.js";
 import { createOrb } from "./orb.js";
-import { createScene, reveal } from "./scene.js";
+import { createScene } from "./scene.js";
 import { createHaptics } from "./haptics.js";
 
 const $ = (id) => document.getElementById(id);
@@ -20,32 +20,18 @@ const els = {
   mic: $("mic"),
   stop: $("stop"),
   status: $("status"),
-  caption: $("caption"),
-  log: $("log"),
   form: $("ask"),
   input: $("text"),
-  chips: $("chips"),
-  videos: $("videos"),
   warm: $("warm"),
-  tier: $("tier"),
   haptic: $("haptic"),
   sounds: $("sounds"),
-  state: $("state"),
-  meter: $("meter"),
-  saying: $("saying"),
   sticky: $("sticky"),
+  source: $("source"),
   subjectBtn: $("subject-btn"),
   subjectArea: $("subject-area"),
   subjectGroup: $("subject-group"),
   subjectIcon: document.querySelector(".subject-icon"),
   related: $("related"),
-  takeaways: $("takeaways"),
-  realImg: $("real-img"),
-  realText: $("real-text"),
-  tryText: $("try-text"),
-  tryBtn: $("try-btn"),
-  quizText: $("quiz-text"),
-  quizBtn: $("quiz-btn"),
   notes: $("notes"),
   notesText: $("notes-text"),
 };
@@ -56,14 +42,6 @@ const STATUS = {
   thinking: "Thinking…",
   teaching: "Teaching: just talk to interrupt",
   paused: "Paused: I’m listening",
-};
-const STATE = {
-  off: "Waiting",
-  idle: "Listening",
-  hearing: "Hearing you",
-  thinking: "Thinking",
-  teaching: "Speaking",
-  paused: "Paused",
 };
 const FILLER_KINDS = new Set(["solve", "explain", "faq", "quiz", "miss"]);
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -81,6 +59,10 @@ let askSeq = 0;
 let fillerAt = 0;
 let fillerIdx = 0;
 let examples = [];
+// What the last answer offers to ask next ("When was he born?", "Tell me
+// more"); before any, the examples on the greeting's board. The hearing
+// listens for these words.
+let followUps = [];
 let prefix = null; // the start of a sentence the student has not finished
 let prefixAt = 0;
 const talk = []; // the last few questions and answers, for follow-ups
@@ -102,10 +84,7 @@ const board = new Board(els.board, {
     feel(name);
   },
   onOption: (i) => {
-    if (awaiting) {
-      log("you", `Option ${"ABCD"[i]}`);
-      teach(answerPlan(awaiting, i, test ? "" : undefined));
-    }
+    if (awaiting) teach(answerPlan(awaiting, i, test ? "" : undefined));
   },
   // A chip on the board ("What is soap bubble?") is asked as if said.
   onChip: (text) => {
@@ -160,7 +139,9 @@ els.sounds.addEventListener("click", () => {
 const history = [];
 window.teacher = {
   show: (plan) => teach(plan),
-  heard: (text, spokenAs = {}) => ask(text, ++askSeq, spokenAs),
+  // The site's pop-up calls this as it closes, so the voice stops at once.
+  silence: () => silence(),
+  heard: (text) => ask(text, ++askSeq),
   get state() {
     return {
       mode,
@@ -186,7 +167,6 @@ function setMode(m) {
   document.body.dataset.mode = m;
   orb.setState(m);
   scene.setMode(m);
-  els.state.textContent = STATE[m] || "";
   if (m !== prev) {
     if (m === "hearing") haptics.fire("listen");
     else if (m === "thinking") haptics.fire("think");
@@ -230,77 +210,21 @@ const resolve = (at, cs) =>
     ? at
     : (cs.find((c) => c.key === String(at).toLowerCase())?.start ?? 0);
 
-// Videos to watch next on what was just taught (server: /api/videos).
-let watching = "";
-async function showVideos(q, source = null) {
-  if (!q || (q === watching && !source)) return;
-  watching = q;
-  try {
-    const { videos = [] } = await (
-      await fetch(`/api/ai-assistant/videos?q=${encodeURIComponent(q)}`)
-    ).json();
-    if (watching !== q) return;
-    const row = els.videos.querySelector(".v-row");
-    row.replaceChildren(
-      ...videos.map((v) => {
-        const a = document.createElement("a");
-        a.className = "v-card";
-        a.href = v.url;
-        a.target = "_blank";
-        a.rel = "noopener noreferrer";
-        a.title = v.title;
-        const img = document.createElement("img");
-        img.src = v.thumb;
-        img.alt = "";
-        img.loading = "lazy";
-        img.referrerPolicy = "no-referrer";
-        const t = document.createElement("span");
-        t.className = "v-t";
-        t.textContent = v.title;
-        const m = document.createElement("span");
-        m.className = "v-m";
-        m.textContent = [v.channel, v.duration].filter(Boolean).join(" · ");
-        a.append(img, t, m);
-        return a;
-      }),
-    );
-    // The article the answer used, credited and one click away.
-    if (source?.url) {
-      const a = document.createElement("a");
-      a.className = "v-card v-source";
-      a.href = source.url;
-      a.target = "_blank";
-      a.rel = "noopener noreferrer";
-      const w = document.createElement("span");
-      w.className = "v-w";
-      w.textContent =
-        source.site === "Wikipedia"
-          ? "W"
-          : source.site
-              .split(/\s+/)
-              .map((x) => x[0])
-              .join("")
-              .slice(0, 3);
-      const t = document.createElement("span");
-      t.className = "v-t";
-      t.textContent = source.title;
-      const m = document.createElement("span");
-      m.className = "v-m";
-      m.textContent = `Read on ${source.site} · ${source.licence || "CC BY-SA"}`;
-      a.append(w, t, m);
-      row.prepend(a);
-    }
-    els.videos.hidden = !row.children.length;
-    videoPicture();
-  } catch {
-    /* no videos: the lesson still works */
-  }
+// The article or data an answer used, credited on the board's corner and one
+// tap away (Wikipedia's CC BY-SA asks for the link and the licence).
+const SOURCE_LICENCE = { Wikipedia: "CC BY-SA", Wiktionary: "CC BY-SA", Wikidata: "CC0" };
+function showSource(source) {
+  const licence = source?.licence || SOURCE_LICENCE[source?.site];
+  els.source.hidden = !source?.url;
+  if (!source?.url) return els.source.removeAttribute("href");
+  els.source.href = source.url;
+  els.source.textContent = `${source.site || "Source"}${licence ? ` · ${licence}` : ""}`;
+  els.source.title = `Read “${source.title || source.site}” on ${source.site || "its site"}`;
 }
 
 function teach(plan) {
-  if (plan.next?.length) showChips(plan.next, true);
+  if (plan.next?.length) followUps = plan.next;
   aroundTheBoard(plan);
-  if (plan.watch) showVideos(plan.watch, plan.source);
   if (run) {
     run.dead = true;
     run.ctrl.abort();
@@ -322,15 +246,38 @@ function teach(plan) {
   run.audio = plan.steps.map((s) =>
     voice.load(s.say, run.ctrl.signal).catch(() => null),
   );
-  // The topic of the answer, in the conversation (not when it only repeats
-  // the question just asked: the answer itself shows under it).
-  if (
-    plan.title &&
-    !["say", "ack", "talk", "unclear", "fragment", "faq"].includes(plan.kind)
-  )
-    log("teacher", plan.title);
   startStep(run, 0);
+  // An answer that arrives while the page is hidden waits, silent, until it is back.
+  if (document.hidden) {
+    pausedWhileHidden = true;
+    interrupt();
+  }
 }
+
+// No narration in the background: when the page is hidden (another tab, the
+// phone locked, the site's pop-up closed) the teacher stops talking at once and
+// carries on from there when the page is back. Leaving the page silences it.
+let pausedWhileHidden = false;
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    if (run && !run.paused && !run.finished && !run.dead) {
+      pausedWhileHidden = true;
+      interrupt();
+    }
+  } else if (pausedWhileHidden) {
+    pausedWhileHidden = false;
+    if (run?.paused) resume();
+  }
+});
+function silence() {
+  if (run) {
+    run.dead = true;
+    run.ctrl.abort();
+  }
+  voice?.stop();
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+}
+window.addEventListener("pagehide", silence);
 
 // A sentence of a streamed answer arrived: play it when its turn comes.
 function stepArrived(plan, step) {
@@ -639,13 +586,10 @@ async function onUtterance(audio) {
   const seq = ++askSeq;
   setMode("thinking");
   let out = {};
-  const chips = [...els.chips.querySelectorAll("button")]
-    .map((b) => b.textContent)
-    .slice(0, 6);
   const ctx = encodeURIComponent(
     JSON.stringify({
       topic: context.topic || null,
-      chips,
+      chips: (followUps.length ? followUps : examples).slice(0, 6),
       awaiting: !!awaiting,
     }),
   );
@@ -655,7 +599,6 @@ async function onUtterance(audio) {
       body: audio.buffer,
     });
     out = await res.json();
-    els.tier.textContent = `heard in ${out.ms} ms`;
   } catch {
     /* treated as not heard */
   }
@@ -665,89 +608,16 @@ async function onUtterance(audio) {
     if (text) history.push(`echo: ${text.slice(0, 40)}`);
     return run?.paused ? resume() : setMode("idle");
   }
-  ask(text, seq, {
-    heard: out.heard,
-    options: out.options || [],
-    swapped: out.swapped,
-  });
-}
-
-// A misheard question is put right by tapping it (or one of the other
-// things it may have been): asked again, and the correction is remembered
-// so the same words are heard right next time.
-function correct(said, meant) {
-  if (!meant.trim() || meant.trim() === said.trim()) return;
-  fetch("/api/ai-assistant/heard", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ heard: said, text: meant }),
-  }).catch(() => {});
-  if (mode === "teaching") interrupt();
-  ask(meant.trim());
-}
-
-function heardLine(li, text, spokenAs) {
-  const span = document.createElement("button");
-  span.type = "button";
-  span.className = "said";
-  span.textContent = text;
-  span.title = "Not what you said? Tap to correct it";
-  li.append(span);
-  if (spokenAs.swapped) {
-    const note = document.createElement("small");
-    note.className = "was";
-    note.textContent = `heard “${spokenAs.swapped.from}”`;
-    li.append(note);
-  }
-  if (spokenAs.options?.length) {
-    const row = document.createElement("span");
-    row.className = "or";
-    row.append("or: ");
-    for (const o of spokenAs.options) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = o;
-      b.addEventListener("click", () => {
-        row.remove();
-        correct(text, o);
-      });
-      row.append(b);
-    }
-    li.append(row);
-  }
-  span.addEventListener("click", () => {
-    const input = document.createElement("input");
-    input.className = "fix";
-    input.value = text;
-    input.setAttribute("aria-label", "What you said");
-    span.replaceWith(input);
-    input.focus();
-    input.select();
-    // Removing the box blurs it, which calls this again: once only.
-    let closed = false;
-    const done = (send) => {
-      if (closed) return;
-      closed = true;
-      const meant = input.value;
-      input.replaceWith(span);
-      if (send) correct(text, meant);
-    };
-    input.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") done(true);
-      if (e.key === "Escape") done(false);
-    });
-    input.addEventListener("blur", () => done(false));
-  });
+  ask(text, seq);
 }
 
 // Sends the question and acts on the answer as it streams in: an 'ack' is
 // said at once ("Ooh, the Mona Lisa. Let me think."), the 'plan' follows it,
 // and a spoken answer arrives sentence by sentence ('step', then 'end').
 // open: a lesson's id, picked from the topic suggestions: that lesson, as it is.
-async function ask(text, seq = ++askSeq, spokenAs = null, open = null) {
+async function ask(text, seq = ++askSeq, open = null) {
   if (prefix && Date.now() - prefixAt < 8000) text = `${prefix} ${text}`;
   prefix = null;
-  log("you", text, spokenAs);
   setMode("thinking");
   let res;
   try {
@@ -774,13 +644,10 @@ async function ask(text, seq = ++askSeq, spokenAs = null, open = null) {
   const handle = (e) => {
     if (e.type === "ack") {
       if (plan) return;
-      els.tier.textContent = "Thinking…";
       fillerAt = Date.now();
       teach({ kind: "ack", steps: [{ say: e.say, draw: [] }] });
     } else if (e.type === "plan") {
       plan = e;
-      els.tier.textContent = `Answered by AI in ${e.ms} ms`;
-      els.tier.title = `${e.tier}: ${e.ms} ms`;
       if (e.kind === "control") return control(e.action, e.say);
       if (e.kind === "fragment") {
         prefix = e.prefix;
@@ -841,27 +708,6 @@ async function ask(text, seq = ++askSeq, spokenAs = null, open = null) {
   }
 }
 
-function log(who, text, spokenAs = null) {
-  const li = document.createElement("li");
-  li.className = `from-${who}`;
-  if (spokenAs) heardLine(li, text, spokenAs);
-  else li.textContent = text;
-  // Oldest at the top, newest at the bottom, scrolled into view like a chat
-  // (unless the student has scrolled back to read).
-  const atEnd =
-    els.log.scrollHeight - els.log.scrollTop - els.log.clientHeight < 60;
-  els.log.append(li);
-  reveal(li);
-  while (els.log.children.length > 60) els.log.firstChild.remove();
-  if (atEnd)
-    els.log.scrollTo({
-      top: els.log.scrollHeight,
-      behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth",
-    });
-}
-
 // Started once: a chip tapped while the microphone prompt is up waits for the
 // same start (and its greeting) instead of being talked over by it.
 let starting = null;
@@ -904,8 +750,10 @@ async function begin() {
       onEnd: onUtterance,
     });
   } catch {
-    els.mic.disabled = true;
-    log("teacher", "The microphone is blocked, so type your questions below.");
+    // The microphone is blocked: questions are typed, and the bar says why.
+    typedOnly();
+    STATUS.idle = STATUS.hearing = "Microphone blocked: type a question";
+    setMode(mode);
   }
   FILLERS.forEach((f) => voice.load(f).catch(() => {}));
   teach({
@@ -936,9 +784,10 @@ const GREETING_TYPED =
   "Hi, I'm your Learnigo teacher. Type any question, or start typing a topic and pick it from the list. Type test me for some questions.";
 
 // ── The page around the board ───────────────────────────────────────────
-// The sticky note says what kind of lesson is on the board; the subject card,
-// the four cards under the board and the menu follow the topic being taught
-// (GET /lesson), and a general answer fills the cards from its own words.
+// The sticky note says what kind of lesson is on the board; the subject card
+// and the menu follow the topic being taught (GET /lesson). The lesson's key
+// points and activity are kept for the menu's "Key Concepts" and
+// "Experiments / Activities"; a general answer's own sentences are its key points.
 const STICKY = {
   explain: "Concept Explainer", faq: "Your Question", solve: "Worked Example", convert: "Worked Example",
   chat: "Fact Finder", data: "Fact Finder", card: "Concept Explainer", test: "Practice", question: "Practice",
@@ -952,6 +801,7 @@ const SUBJECT_ICONS = [
 ];
 let lesson = null; // the /lesson card of the topic on the board
 let lessonFor = null;
+let keyPoints = []; // its takeaways, for "Key Concepts"
 const firstSentence = (t) => (String(t).match(/[^.!?]+[.!?]/) || [String(t)])[0].trim();
 
 function aroundTheBoard(plan) {
@@ -959,20 +809,16 @@ function aroundTheBoard(plan) {
   els.sticky.hidden = !label;
   if (label) els.sticky.textContent = label;
   if (["ack", "say", "talk", "greet", "unclear", "fragment", "control"].includes(plan.kind)) return;
+  showSource(plan.source);
   const topic = plan.topic || plan.context?.topic;
   if (topic) {
     if (topic !== lessonFor) loadLesson(topic);
   } else if (plan.steps?.length && !TEST_KINDS.has(plan.kind)) {
-    // An answer from Wikipedia or open data: its own sentences are the takeaways.
+    // An answer from Wikipedia or open data: its own sentences are the key points.
     lessonFor = null;
     lesson = { title: plan.title || "", related: [] };
+    keyPoints = plan.steps.map((st) => firstSentence(st.say)).filter(Boolean).slice(0, 3);
     showSubject(plan.source?.site || "AI Teacher", plan.title || "Your question", "");
-    showCards({
-      takeaways: plan.steps.map((st) => firstSentence(st.say)).filter(Boolean).slice(0, 3),
-      realLife: null,
-      tryIt: null,
-      quizCount: 0,
-    });
   }
 }
 
@@ -1015,13 +861,13 @@ async function loadLesson(id) {
     const card = await (await fetch(`/api/ai-assistant/lesson?id=${encodeURIComponent(id)}`)).json();
     if (lessonFor !== id || card.error) return;
     lesson = card;
+    keyPoints = card.takeaways || [];
     trackLesson(card, id);
     showSubject(card.subject, card.group || card.title, card.subject + " " + card.group + " " + card.title);
-    showCards(card);
     showRelated(card.related || []);
     loadNotes();
   } catch {
-    /* the board still teaches without the cards */
+    /* the board still teaches without the lesson's details */
   }
 }
 
@@ -1046,7 +892,7 @@ function showRelated(list) {
           li.append(b);
           return li;
         })
-      : [Object.assign(document.createElement("li"), { className: "empty", textContent: "Type a topic in the bar above to begin." })]),
+      : [Object.assign(document.createElement("li"), { className: "empty", textContent: "Type a topic in the question bar to begin." })]),
   );
 }
 function toggleRelated(open = els.related.hidden) {
@@ -1059,45 +905,14 @@ document.addEventListener("pointerdown", (e) => {
 });
 showRelated([]);
 
-function showCards(c) {
-  els.takeaways.replaceChildren(
-    ...(c.takeaways?.length ? c.takeaways : ["Ask a question or pick a topic: the key points appear here."]).map((t) =>
-      Object.assign(document.createElement("li"), { textContent: t }),
-    ),
-  );
-  els.realText.textContent = c.realLife || (lesson?.title ? `Ask “Give me an example” to see ${lesson.title} in everyday life.` : "Where you meet it in everyday life.");
-  els.realImg.hidden = !c.image?.src;
-  if (c.image?.src) els.realImg.src = c.image.src;
-  els.tryText.textContent = c.tryIt || (c.practice ? `Try this: ${c.practice}` : "Something to try with what you learn.");
-  els.tryBtn.hidden = !c.practice;
-  els.quizText.textContent = c.quizCount
-    ? `Test your understanding with ${Math.max(5, c.quizCount)} quick questions.`
-    : "Test your understanding with quick questions.";
-}
-
-// No picture of its own: the first video's thumbnail stands in.
-function videoPicture() {
-  if (!els.realImg.hidden) return;
-  const img = els.videos.querySelector(".v-card img");
-  if (!img) return;
-  els.realImg.src = img.src;
-  els.realImg.hidden = false;
-}
-
 async function askNow(text, open = null) {
   await start();
   if (mode === "teaching") interrupt();
-  ask(text, ++askSeq, null, open);
+  ask(text, ++askSeq, open);
 }
 function openTopic(id, title) {
   askNow(`Teach me about ${title}`, id);
 }
-const testMe = () => askNow(lesson?.title ? `Test me on ${lesson.title}` : "Test me");
-const glow = (el) => {
-  el.classList.add("glow");
-  el.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  setTimeout(() => el.classList.remove("glow"), 1600);
-};
 // A short lesson made here from the card: drawn on the board and said aloud.
 function boardFrom(title, rows) {
   if (!rows.length) return false;
@@ -1107,40 +922,30 @@ function boardFrom(title, rows) {
     teach({
       kind: "say",
       title,
-      steps: [{ say: rows.join(" "), draw: [{ op: "clear" }, { op: "title", text: title }, { op: "bullets", rows }] }],
+      steps: [{ say: rows.join(" "), draw: [{ op: "clear" }, { op: "title", text: title }, { op: "bullets", items: rows }] }],
     });
   });
   return true;
 }
 
-// The quick asks under the conversation (and, on phones, "Try it yourself").
-for (const b of document.querySelectorAll(".action"))
-  b.addEventListener("click", () => {
-    if (b.dataset.go) MENU[b.dataset.go]();
-    else if (b.dataset.ask === "test") testMe();
-    else askNow(b.dataset.ask);
-  });
-els.quizBtn.addEventListener("click", testMe);
-els.tryBtn.addEventListener("click", testMe);
-
-// The lesson menu.
+// The lesson menu. With nothing on the board yet, the board says how to start.
+const PICK_FIRST = "Type a question or pick a topic first.";
 const MENU = {
   board: () => document.querySelector(".holo-wrap").scrollIntoView({ block: "nearest", behavior: "smooth" }),
   concepts: () => {
-    glow($("card-take"));
-    const rows = [...els.takeaways.children].map((li) => li.textContent);
-    if (lesson?.title) boardFrom(`Key concepts: ${lesson.title}`, rows);
+    if (lesson?.title && keyPoints.length) boardFrom(`Key concepts: ${lesson.title}`, keyPoints);
+    else boardFrom("Key concepts", [PICK_FIRST, "Its key ideas will show here."]);
   },
   notes: () => {
     els.notes.hidden = !els.notes.hidden;
     if (!els.notes.hidden) els.notesText.focus();
   },
-  practice: testMe,
   try: () => {
-    glow($("card-try"));
-    if (lesson?.tryIt) boardFrom("Try it yourself", [lesson.tryIt]);
+    const activity = lesson?.tryIt || (lesson?.practice ? `Try this: ${lesson.practice}` : "");
+    if (activity) boardFrom("Try it yourself", [activity]);
+    else if (lesson?.title) boardFrom("Try it yourself", ["No activity for this one yet.", "Say or type “test me” to practise it."]);
+    else boardFrom("Try it yourself", [PICK_FIRST, "Something to try with it will show here."]);
   },
-  quiz: testMe,
   games: () => {
     (window.top || window).location.href = "/games";
   },
@@ -1187,10 +992,11 @@ function typedOnly() {
     teaching: "Teaching: press Stop to interrupt",
     paused: "Paused",
   });
-  Object.assign(STATE, { idle: "Ready", hearing: "Ready" });
-  $("hero-sub").textContent =
-    "Type any question or topic. It draws, explains and tests you.";
-  $("hero-tip").textContent = "Pick a topic as you type, or tap an example";
+  // The start screen, while it is still there.
+  const sub = $("hero-sub");
+  const tip = $("hero-tip");
+  if (sub) sub.textContent = "Type any question or topic. It draws, explains and tests you.";
+  if (tip) tip.textContent = "Pick a topic as you type, or tap an example";
   setMode(mode);
 }
 
@@ -1324,10 +1130,8 @@ document.addEventListener("keydown", (e) => {
     board.onOption(pick);
 });
 
-// The face: the mouth follows the teacher's voice, the ring the student's.
-let captionAt = "";
+// The orb follows whoever is talking: the teacher's voice, or the student's.
 (function animate() {
-  // The orb and the meter follow whoever is talking.
   const level =
     mode === "teaching" && voice
       ? voice.speaking
@@ -1340,51 +1144,8 @@ let captionAt = "";
         : 0;
   orb.setLevel(level);
   document.documentElement.style.setProperty("--talk", Math.min(1, level).toFixed(2));
-  els.meter.style.width = `${Math.round(Math.min(1, level) * 100)}%`;
-  const r = run;
-  if (r && !r.finished && r.cues && mode !== "thinking") {
-    const t = board.clock - r.stepClock;
-    let k = r.cues.findIndex((c) => c.start > t) - 1;
-    if (k < -1) k = r.cues.length - 1;
-    if (captionAt !== `${r.i}|${k}|${r.cues.length}`) {
-      captionAt = `${r.i}|${k}|${r.cues.length}`;
-      els.saying.hidden = false;
-      els.caption.innerHTML = r.cues
-        .map(
-          (c, i) =>
-            `<span class="${i <= k ? "said" : ""}">${c.word.replace(/[<&]/g, "")}</span>`,
-        )
-        .join(" ");
-    }
-  } else if (mode === "idle" && awaiting && captionAt !== "answer") {
-    captionAt = "answer";
-    els.saying.hidden = false;
-    els.caption.textContent = serverHearing
-      ? "Your turn: say your answer, or tap an option (or press A to D)."
-      : "Your turn: tap an option, or press A to D.";
-  }
   requestAnimationFrame(animate);
 })();
-
-// The buttons under the board: examples at first, then after each answer
-// what to ask next about it ("When was he born?", "Tell me more").
-function showChips(list, next = false) {
-  els.chips.dataset.next = next ? "1" : "";
-  els.chips.classList.toggle("next", next);
-  els.chips.replaceChildren(
-    ...list.map((ex) => {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = ex;
-      b.addEventListener("click", async () => {
-        await start();
-        if (mode === "teaching") interrupt();
-        ask(ex);
-      });
-      return b;
-    }),
-  );
-}
 
 async function health() {
   try {
@@ -1398,7 +1159,6 @@ async function health() {
       ),
       "Test me on maths",
     ];
-    if (!els.chips.dataset.next) showChips(examples);
     els.warm.hidden = h.ready;
     if (!h.ready) setTimeout(health, 1500);
   } catch {

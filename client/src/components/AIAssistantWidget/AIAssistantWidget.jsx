@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as FramerMotion from "framer-motion";
@@ -15,13 +15,21 @@ import styles from "./AIAssistantWidget.module.css";
 // embedded page needs no separate host, CORS or env var.
 const ASSISTANT_URL = "/ai-assistant/";
 
-// The AI voice assistant trigger. At 430px and up it floats bottom-right over
+// The AI Teacher trigger. At 430px and up it floats bottom-right over
 // the page; below that it sits inline in the navbar next to the hamburger,
 // since a fixed circle would otherwise overlap small-screen content.
-// Clicking it opens the live assistant in an embedded panel; on a phone,
+// Clicking it opens the AI Teacher in an embedded panel; on a phone,
 // where that panel would fill the screen anyway, it opens the AI Teacher page
 // instead (the site's navbar above, the whole lesson scrolling below).
 const COMPACT_QUERY = "(max-width: 429px)";
+
+// Closing the panel stops the teacher's voice at once (the panel takes a moment
+// to animate away, and no lesson should go on talking in the background).
+function silence(frameRef) {
+  try {
+    frameRef.current?.contentWindow?.teacher?.silence?.();
+  } catch { /* not loaded yet: nothing is speaking */ }
+}
 const PHONE_QUERY = "(max-width: 720px)";
 
 const AIAssistantWidget = () => {
@@ -29,6 +37,7 @@ const AIAssistantWidget = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const frameRef = useRef(null);
   const [isCompact, setIsCompact] = useState(
     () => typeof window !== "undefined" && window.matchMedia?.(COMPACT_QUERY).matches
   );
@@ -45,7 +54,7 @@ const AIAssistantWidget = () => {
     if (!open) return undefined;
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const handleKey = (e) => { if (e.key === "Escape") setOpen(false); };
+    const handleKey = (e) => { if (e.key === "Escape") { silence(frameRef); setOpen(false); } };
     window.addEventListener("keydown", handleKey);
     return () => {
       document.body.style.overflow = prevOverflow;
@@ -61,14 +70,14 @@ const AIAssistantWidget = () => {
     if (window.matchMedia?.(PHONE_QUERY).matches) navigate("/ai-teacher");
     else setOpen(true);
   };
-  const handleClose = () => { playSlide(); setOpen(false); };
+  const handleClose = () => { silence(frameRef); playSlide(); setOpen(false); };
 
   const trigger = (
     <button
       type="button"
       className={styles.fab}
       onClick={handleOpen}
-      aria-label={t("aiAssistant.openLabel", { defaultValue: "Talk to your AI voice assistant" })}
+      aria-label={t("aiAssistant.openLabel", { defaultValue: "Talk to your AI Teacher" })}
     >
       {isCompact ? <BsStars className={styles.fabIcon} /> : <AIAssistantOrb size={56} />}
       <span className={styles.fabLabel}>
@@ -110,7 +119,7 @@ const AIAssistantWidget = () => {
                     <AIAssistantOrb size={32} />
                   </div>
                   <h2 className={styles.title}>
-                    {t("aiAssistant.title", { defaultValue: "Learnigo AI Voice Assistant" })}
+                    {t("aiAssistant.title", { defaultValue: "AI Teacher" })}
                   </h2>
                   <button
                     type="button"
@@ -122,9 +131,10 @@ const AIAssistantWidget = () => {
                   </button>
                 </div>
                 <iframe
+                  ref={frameRef}
                   className={styles.frame}
                   src={ASSISTANT_URL}
-                  title={t("aiAssistant.title", { defaultValue: "Learnigo AI Voice Assistant" })}
+                  title={t("aiAssistant.title", { defaultValue: "AI Teacher" })}
                   allow="microphone; autoplay"
                 />
               </FramerMotion.motion.div>

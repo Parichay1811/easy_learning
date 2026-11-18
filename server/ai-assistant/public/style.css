@@ -47,7 +47,7 @@ body[data-mode='paused'] { --accent: var(--orange); --accent-2: var(--red); }
 html, body { height: 100%; overflow: hidden; overscroll-behavior: none; }
 body {
   margin: 0; font-family: var(--font); color: var(--ink); line-height: 1.5;
-  height: 100vh; height: 100dvh; display: grid; grid-template-rows: auto minmax(0, 1fr);
+  height: 100vh; height: 100dvh; display: grid; grid-template-rows: auto minmax(0, 1fr); grid-template-columns: minmax(0, 1fr);
   padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   background: #0d3b1e;
 }
@@ -68,30 +68,29 @@ body[data-mode='hearing'] .edge-glow { opacity: 0.85; animation: breathe 1.6s ea
 body[data-mode='thinking'] .edge-glow { opacity: 0.3; }
 @keyframes breathe { 50% { opacity: 0.5; } }
 
-/* The question bar on top, centred like a search bar. */
-.hud { position: relative; z-index: 10; display: flex; align-items: center; gap: 14px; min-width: 0; padding: clamp(8px, 1.4vh, 12px) clamp(12px, 2vw, 24px) 4px; }
+/* The page's own header: only the logo (inside the site its navbar has one). */
+.hud { position: relative; z-index: 10; display: flex; align-items: center; gap: 14px; min-width: 0; padding: clamp(8px, 1.4vh, 12px) clamp(12px, 2vw, 24px) 0; }
 .brand { display: flex; align-items: center; gap: 12px; white-space: nowrap; color: inherit; text-decoration: none; }
 .brand .logo { width: clamp(96px, 9vw, 130px); height: auto; display: block; }
 .brand .tag { display: inline-flex; align-items: center; padding: 5px 14px; border-radius: 999px; font-size: 14px; font-weight: 600; color: #fff; background: linear-gradient(135deg, var(--brand), var(--brand-2)); box-shadow: 0 4px 14px rgba(108, 99, 255, 0.35); }
-/* Inside the site (its navbar above) the bar carries no second logo. */
-html.embedded .brand { display: none; }
+html.embedded .hud { display: none; }
+
+/* The question bar, under the board: centred like a search bar. */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 
-.ask { position: relative; z-index: 6; flex: 1; max-width: 900px; margin: 0 auto; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 6px 6px 6px 18px; border-radius: 999px; background: var(--card); border: 3px solid #dfe6ff; box-shadow: 0 10px 28px rgba(10, 30, 15, 0.22); transition: border-color 0.2s, box-shadow 0.2s; }
+.ask { position: relative; z-index: 6; flex: 1; max-width: 900px; margin: 0; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 6px 6px 6px 18px; border-radius: 999px; background: var(--card); border: 3px solid #dfe6ff; box-shadow: 0 10px 28px rgba(10, 30, 15, 0.22); transition: border-color 0.2s, box-shadow 0.2s; }
 .ask:focus-within { border-color: #b9b4ff; box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.18), 0 10px 28px rgba(10, 30, 15, 0.22); }
 .ask .spark { width: 24px; height: 24px; flex: none; fill: var(--brand); }
 body[data-mode='thinking'] .ask .spark { animation: twinkle 0.9s ease-in-out infinite; }
 @keyframes twinkle { 50% { transform: scale(0.75) rotate(20deg); opacity: 0.6; } }
 .ask input { flex: 1; min-width: 0; border: 0; outline: none; background: transparent; color: var(--text); font-size: clamp(16px, 1.3vw, 19px); font-weight: 600; padding: 8px 0; }
 .ask input::placeholder { color: var(--text); opacity: 0.9; }
-.metric { flex: none; max-width: 40%; padding: 6px 14px; border-radius: 999px; background: #d6ecff; color: var(--blue-2); font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.metric:empty { display: none; }
 .send { flex: none; width: 42px; height: 42px; border: 0; border-radius: 50%; display: grid; place-items: center; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--brand), #8b7dff); box-shadow: 0 3px 0 #3f37c9; transition: transform 0.15s; }
 .send svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .send:hover { transform: translateY(-1px); }
 .send:active { transform: translateY(2px); box-shadow: 0 1px 0 #3f37c9; }
 
-/* Small round controls at the end of the bar. */
+/* Small round controls beside the bar. */
 .controls { display: flex; gap: 8px; flex: none; }
 .ctl { width: 42px; height: 42px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; cursor: pointer; background: var(--card); color: var(--brand); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .ctl .lbl { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
@@ -102,13 +101,16 @@ body[data-mode='thinking'] .ask .spark { animation: twinkle 0.9s ease-in-out inf
 .ctl[hidden] { display: none; }
 :focus-visible { outline: 3px solid #ffd166; outline-offset: 2px; }
 
-/* The stage: menu | board | teacher, and the lesson cards under board and teacher. */
-.stage { position: relative; z-index: 5; display: grid; grid-template-columns: clamp(210px, 17vw, 260px) minmax(0, 1fr) clamp(280px, 23vw, 340px); grid-template-rows: minmax(0, 1fr) auto; grid-template-areas: "rail board side" "rail cards cards"; gap: clamp(10px, 1.4vw, 18px); padding: clamp(8px, 1.4vh, 14px) clamp(12px, 2vw, 24px) clamp(10px, 1.8vh, 18px); width: 100%; max-width: 1760px; margin: 0 auto; min-height: 0; }
+/* The stage: the menu beside the board's column (the board, the question bar
+   under it). grid-row 2 keeps it in the tall row when the header is hidden (embedded). */
+.stage { grid-row: 2; position: relative; z-index: 5; display: grid; grid-template-columns: clamp(210px, 17vw, 260px) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: "rail board"; gap: clamp(10px, 1.4vw, 18px); padding: clamp(8px, 1.4vh, 14px) clamp(12px, 2vw, 24px) clamp(10px, 1.8vh, 18px); width: 100%; max-width: 2200px; margin: 0 auto; min-height: 0; }
 .panel { position: relative; min-width: 0; min-height: 0; }
 .rail { grid-area: rail; display: flex; flex-direction: column; gap: 12px; }
-.holo-wrap { grid-area: board; display: flex; flex-direction: column; }
-.side { grid-area: side; display: flex; flex-direction: column; gap: 10px; }
-.cards { grid-area: cards; }
+.holo-wrap { grid-area: board; display: flex; flex-direction: column; justify-content: center; gap: clamp(10px, 1.4vw, 16px); }
+.dock { flex: none; display: flex; align-items: center; justify-content: center; gap: 12px; }
+/* What the page around the board takes from the height (header, menu row, bar, gaps). */
+:root { --chrome: 275px; }
+html.embedded { --chrome: 215px; }
 
 /* The subject card and its topics. */
 .subject { position: relative; }
@@ -134,8 +136,9 @@ body[data-mode='thinking'] .ask .spark { animation: twinkle 0.9s ease-in-out inf
 .mi-icon { flex: none; width: 30px; height: 30px; display: grid; place-items: center; }
 .mi-icon svg { width: 28px; height: 28px; }
 
-/* The board: a dark chalkboard in a wooden frame; fitBoard() keeps the inside 16:9. */
-.holo-box { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* The board: a dark chalkboard in a wooden frame; fitBoard() sizes it (16:9,
+   up to 3:2 when there is height to spare) and the bar sits right under it. */
+.holo-box { flex: none; min-height: 0; display: flex; align-items: center; justify-content: center; }
 .holo {
   position: relative; border-radius: 22px; overflow: hidden;
   border: 12px solid transparent;
@@ -155,90 +158,30 @@ body[data-mode='thinking'] .ask .spark { animation: twinkle 0.9s ease-in-out inf
 .sticky::before { content: ''; position: absolute; top: -9px; left: 50%; width: 34px; height: 14px; transform: translateX(-50%) rotate(-4deg); background: rgba(255, 255, 255, 0.55); border-radius: 2px; }
 .sticky[hidden] { display: none; }
 
-/* The AI teacher: avatar, state and a level meter. */
-.presence { flex: none; display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: var(--r); background: var(--card); color: var(--text); box-shadow: 0 12px 30px rgba(10, 30, 15, 0.25); }
+/* Where an answer came from: a small tag on the board's corner, a link to the article. */
+.source { position: absolute; z-index: 2; right: 12px; bottom: 10px; max-width: calc(100% - 24px); padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.28); background: rgba(13, 21, 48, 0.72); color: #dfe7ff; font-size: 12.5px; font-weight: 600; line-height: 1.4; text-decoration: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.source::after { content: ' ↗'; }
+.source:hover, .source:focus-visible { background: rgba(13, 21, 48, 0.9); color: #fff; }
+.source[hidden] { display: none; }
+
+/* The robot on the start screen; its mouth follows the voice. */
 .orb-slot { position: relative; display: grid; place-items: center; }
-.orb-slot.live { width: clamp(58px, 9vh, 76px); height: clamp(58px, 9vh, 76px); flex: none; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffffff, #dfe7ff); box-shadow: inset 0 0 0 3px #e3e9ff; }
 .orb { display: none; }
 .robot { width: 82%; height: 82%; overflow: visible; }
 .robot .mouth { transform-origin: 32px 38.3px; transform: scaleY(calc(1 + var(--talk, 0) * 2.4)); transition: transform 60ms linear; }
 .robot .eye { transition: r 0.2s; }
-body[data-mode='thinking'] .presence .robot .eye { animation: blinkEye 0.9s ease-in-out infinite; }
-@keyframes blinkEye { 50% { opacity: 0.35; } }
 .ripple { position: absolute; inset: 8%; border-radius: 50%; border: 3px solid var(--accent); pointer-events: none; }
 .ripple-success { border-color: var(--green); }
 .ripple-error { border-color: var(--red); }
-.presence-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
-.presence .label { font-size: clamp(16px, 1.2vw, 19px); font-weight: 700; color: var(--brand); letter-spacing: 0.02em; }
-.presence .state { font-size: clamp(19px, 1.5vw, 24px); font-weight: 700; color: var(--text); line-height: 1.2; }
-.meter { height: 6px; border-radius: 6px; background: #e5e7eb; overflow: hidden; }
-.meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 80ms linear; }
 
-/* The conversation: the student's questions and the teacher's answer, word by word. */
-.chat { flex: 1 1 auto; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: var(--r); background: rgba(255, 255, 255, 0.78); box-shadow: 0 12px 30px rgba(10, 30, 15, 0.2); }
-.log { flex: 1 1 auto; min-height: 64px; list-style: none; margin: 0; padding: 0 2px 2px 0; display: flex; flex-direction: column; gap: 8px; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, #000 22px); }
-.log::-webkit-scrollbar { display: none; }
-.log li { flex: none; padding: 8px 14px; border-radius: 18px; font-size: 15px; background: #fff; color: var(--text); box-shadow: 0 2px 8px rgba(30, 40, 90, 0.08); max-width: 92%; }
-.log li:first-child { margin-top: auto; }
-.log li.from-you { align-self: flex-end; border-radius: 18px 18px 6px 18px; color: #1f3f99; font-weight: 600; background: #dce8ff; box-shadow: 0 2px 0 #b9cdf5; }
-.log li.from-you .said { all: unset; cursor: text; border-bottom: 1px dashed rgba(31, 63, 153, 0.45); }
-.log li.from-you .said:hover, .log li.from-you .said:focus-visible { border-bottom-color: #1f3f99; outline: none; }
-.log li.from-you .fix { font: inherit; color: var(--text); background: #fff; border: 1px solid #b9cdf5; border-radius: 8px; padding: 2px 6px; width: min(60vw, 420px); max-width: 100%; }
-.log li.from-you .was { display: block; margin-top: 3px; font-size: 12px; opacity: 0.8; }
-.log li.from-you .or { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; font-size: 13px; }
-.log li.from-you .or button { font: inherit; color: #1f3f99; background: #fff; border: 0; border-radius: 999px; padding: 2px 10px; cursor: pointer; }
-.log li:not(.from-you) { align-self: flex-start; font-weight: 600; color: var(--brand); }
-.saying { flex: 0 1 auto; min-height: 0; display: flex; align-items: flex-start; gap: 8px; }
-.saying[hidden] { display: none; }
-.mini-bot { flex: none; width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: #ecebff; }
-.mini-bot .robot { width: 30px; height: 30px; }
-.caption { margin: 0; flex: 1; min-width: 0; max-height: min(7.2em, 100%); overflow-y: auto; padding: 10px 14px; border-radius: 6px 18px 18px 18px; background: #fff; border: 2px solid #e3e9ff; font-size: clamp(14px, 1.05vw, 16px); font-weight: 500; line-height: 1.5; color: var(--text-faint); scrollbar-width: thin; }
-.caption span { transition: color 0.15s; }
-.caption .said { color: var(--text); }
-.caption .said:last-of-type { color: var(--brand); }
-
-/* Three quick things to ask about the answer. */
-.actions { flex: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.action { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border: 0; border-radius: 16px; cursor: pointer; background: var(--card); color: var(--text); font-size: 13px; font-weight: 700; line-height: 1.2; text-align: center; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12), 0 8px 18px rgba(10, 30, 15, 0.16); transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-.action:hover { transform: translateY(-3px); }
-.action:active { transform: translateY(1px); }
-.ai-icon { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; }
-.ai-icon svg { width: 30px; height: 30px; }
-.ai-icon.green { background: #e3f6e5; }
-.ai-icon.purple { background: #efe9ff; }
-.ai-icon.gold { background: #fff4d6; }
-.ai-icon.lilac { background: #fff4d6; }
-.chips[hidden], .chips:empty { display: none; }
-.chips { flex: none; display: flex; flex-wrap: wrap; gap: 6px; }
-.chips button { border: 0; border-radius: 999px; padding: 6px 12px; background: var(--card-soft); color: var(--text); font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12); }
-
-/* The lesson cards: takeaways, a real-life example, something to try, a quiz. */
-.cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.2vw, 16px); }
-.card { position: relative; display: flex; flex-direction: column; gap: 8px; min-width: 0; padding: 14px 16px 16px; border-radius: 20px; border: 3px solid rgba(255, 255, 255, 0.9); color: var(--text); box-shadow: 0 12px 28px rgba(10, 30, 15, 0.22); overflow: hidden; transition: box-shadow 0.3s; }
-.card h3 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: clamp(16px, 1.25vw, 20px); font-weight: 700; }
-.c-icon { font-size: 1.15em; }
-.card p { margin: 0; font-size: clamp(13px, 1vw, 15px); line-height: 1.45; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
-.card.take { background: #fff6dc; }
-.card.real { background: #efeafe; }
-.card.try { background: #e6f7e9; }
-.card.quiz { background: #ffe8f1; align-items: center; text-align: center; justify-content: space-between; }
-.card.quiz h3 { align-self: stretch; }
-.card.glow { box-shadow: 0 0 0 4px #ffd166, 0 12px 28px rgba(10, 30, 15, 0.22); }
-.ticks { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
-.ticks li { position: relative; padding-left: 28px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: clamp(13px, 1vw, 15px); line-height: 1.4; }
-.ticks li::before { content: '✓'; position: absolute; left: 0; top: 0.05em; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: #fff; font-size: 12px; font-weight: 700; }
-#real-img { width: 100%; height: clamp(60px, 9vh, 96px); object-fit: cover; border-radius: 12px; background: #dcd3fb; }
-#real-img[hidden] { display: none; }
-.card.real:has(#real-img:not([hidden])) p { -webkit-line-clamp: 2; }
+/* The site's round button (the notes card's "Done"). */
 .card-btn { align-self: center; border: 0; border-radius: 999px; padding: 10px 26px; cursor: pointer; color: #fff; font-size: clamp(15px, 1.15vw, 18px); font-weight: 700; transition: transform 0.15s; }
 .card-btn.purple { background: linear-gradient(180deg, #7b6dff, #5b4bdb); box-shadow: 0 4px 0 #3f37c9; }
-.card-btn.green { background: linear-gradient(180deg, var(--green), var(--green-2)); box-shadow: 0 4px 0 var(--green-edge); padding: 7px 18px; font-size: 14px; }
 .card-btn:hover { transform: translateY(-1px); }
 .card-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #3f37c9; }
-.card-btn[hidden] { display: none; }
 
-/* Topic suggestions under the question bar: a white card like the site's menus. */
-.suggest { position: absolute; left: 12px; right: 12px; top: calc(100% + 8px); margin: 0; padding: 6px; list-style: none; border-radius: 18px; background: #fff; color: var(--text); box-shadow: 0 16px 40px rgba(10, 30, 15, 0.35); max-height: min(360px, 55vh); overflow-y: auto; overscroll-behavior: contain; }
+/* Topic suggestions over the question bar (it sits under the board): a white card like the site's menus. */
+.suggest { position: absolute; left: 12px; right: 12px; bottom: calc(100% + 8px); margin: 0; padding: 6px; list-style: none; border-radius: 18px; background: #fff; color: var(--text); box-shadow: 0 16px 40px rgba(10, 30, 15, 0.35); max-height: min(360px, 55vh); overflow-y: auto; overscroll-behavior: contain; }
 .suggest[hidden] { display: none; }
 .suggest li { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 9px 12px; border-radius: 12px; cursor: pointer; font-size: 15px; }
 .suggest li[aria-selected='true'] { background: #ecebff; }
@@ -247,14 +190,14 @@ body[data-mode='thinking'] .presence .robot .eye { animation: blinkEye 0.9s ease
 .suggest .sg-area { flex: none; max-width: 45%; font-size: 12px; font-weight: 600; color: var(--text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* Notes: a small card over the page, kept in this browser per topic. */
-.notes { position: fixed; z-index: 45; right: clamp(12px, 2vw, 24px); bottom: clamp(12px, 2vh, 24px); width: min(420px, calc(100vw - 24px)); display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #fff; color: var(--text); box-shadow: 0 20px 50px rgba(10, 30, 15, 0.4); }
+.notes { position: fixed; z-index: 45; right: clamp(12px, 2vw, 24px); top: clamp(12px, 2vh, 24px); width: min(420px, calc(100vw - 24px)); display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 20px; background: #fff; color: var(--text); box-shadow: 0 20px 50px rgba(10, 30, 15, 0.4); }
 .notes[hidden] { display: none; }
 .notes h3 { margin: 0; font-size: 18px; }
 .notes textarea { width: 100%; resize: vertical; min-height: 140px; padding: 10px 12px; border: 2px solid #e3e9ff; border-radius: 12px; font: inherit; font-size: 15px; color: var(--text); outline: none; }
 .notes textarea:focus { border-color: var(--brand); }
 
 /* Before the lesson starts only the start card shows. */
-body:not(.started) .stage, body:not(.started) .controls, body:not(.started) .ask { opacity: 0; pointer-events: none; }
+body:not(.started) .stage { opacity: 0; pointer-events: none; }
 
 /* The start screen: the site's "Start your adventure" card. */
 .hero { position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: clamp(6px, 1.6vh, 14px); padding: 16px; text-align: center; }
@@ -270,69 +213,81 @@ body:not(.started) .stage, body:not(.started) .controls, body:not(.started) .ask
 .warm, .tip { margin: 0; font-size: 14px; font-weight: 500; color: var(--text-faint); }
 .warm[hidden] { display: none; }
 
-/* Shorter screens (laptops): tighter cards, and the board keeps the room. */
-@media (max-height: 880px) {
-  .side .videos { display: none; }
-}
-@media (max-height: 820px) {
-  .card { padding: 10px 14px 12px; gap: 6px; }
-  .card p { -webkit-line-clamp: 2; }
-  .ticks { gap: 3px; }
-  .ticks li { -webkit-line-clamp: 1; }
-  #real-img { height: 46px; }
-  .card-btn { padding: 7px 20px; font-size: 15px; }
-  .card.quiz p { -webkit-line-clamp: 2; }
-  .action { padding: 7px 4px; font-size: 12px; }
-  .ai-icon { width: 32px; height: 32px; }
-}
-/* Tablets: the menu becomes a row of pills above the board. */
-@media (max-width: 1100px) {
-  /* The page scrolls. Only the root scrolls: were the body a scroll box of its
-     own (overflow on both), a swipe would land on it, find nothing to scroll
-     and, with overscroll-behavior: none, never reach the page. */
-  html { height: auto; overflow-x: hidden; overflow-y: auto; overscroll-behavior: auto; }
-  body { height: auto; min-height: 100dvh; overflow: visible; overscroll-behavior: auto; }
-  .stage { grid-template-columns: minmax(0, 1fr) clamp(260px, 32vw, 330px); grid-template-rows: auto auto auto; grid-template-areas: "rail rail" "board side" "cards cards"; }
+/* Tablets, and any upright screen: the menu becomes a row of pills above the
+   board, so the board has the whole width. The board is always in view here,
+   so no "Lesson Board" pill; the others wrap onto a second row when narrow. */
+@media (max-width: 1100px) and (min-height: 521px), (orientation: portrait) {
+  .stage { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "rail" "board"; }
   .rail { flex-direction: row; align-items: stretch; }
-  .subject { flex: none; width: clamp(220px, 30vw, 280px); }
-  .menu { display: flex; gap: 6px; overflow-x: auto; padding: 6px; scrollbar-width: none; flex: 1; }
+  .subject { flex: none; width: clamp(200px, 28vw, 270px); }
+  .menu { display: flex; flex-wrap: wrap; align-content: center; gap: 4px 6px; padding: 6px; overflow: visible; flex: 1; }
+  .menu li:first-child { display: none; }
   .menu li + li .menu-item { margin-top: 0; }
-  .menu-item { white-space: nowrap; padding: 8px 12px; }
-  .holo-box { height: clamp(300px, 52vw, 560px); justify-content: flex-start; }
-  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .card { max-height: none; }
+  .menu-item { white-space: nowrap; padding: 7px 12px; }
 }
-/* Phones: one column, in reading order: the question bar, the subject, the
-   board, four quick asks, then the lesson cards. The rail and the teacher's
-   panel open up (display: contents) so their parts can be placed one by one. */
-.action.phone-only { display: none; }
-@media (max-width: 700px) {
+/* Upright tablets and screens: the board keeps 16:9 across the full width (its
+   whole page stays readable), and the menu, board and bar sit together mid-screen. */
+@media (min-width: 701px) and (orientation: portrait) {
+  .stage { grid-template-rows: auto auto; align-content: center; }
+  .holo-box { --fixed-height: 1; height: min(calc((min(100vw, 2200px) - 2 * clamp(12px, 2vw, 24px) - 24px) * 0.5625 + 24px), calc(100dvh - var(--chrome))); }
+}
+/* Short landscape screens (a phone on its side, a small pop-up): the menu stays
+   at the side and everything gets compact, so the board and the bar under it
+   fit on one screen. No logo: every pixel of height goes to the board. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .hud { display: none; }
+  .stage { grid-template-columns: clamp(150px, 24vw, 210px) minmax(0, 1fr); gap: 10px; padding: 6px 10px 8px; }
+  .rail { gap: 8px; }
+  .subject-btn { padding: 6px 8px; gap: 8px; border-width: 2px; border-radius: 14px; box-shadow: 0 3px 0 #0d47a1; }
+  .subject-icon { width: 30px; height: 30px; font-size: 17px; border-radius: 9px; }
+  .subject-text small { font-size: 11px; }
+  .subject-text b { font-size: 13.5px; -webkit-line-clamp: 1; }
+  .chev { width: 16px; height: 16px; }
+  .menu { padding: 4px; border-radius: 14px; }
+  .menu-item { padding: 6px 8px; gap: 8px; font-size: 13px; border-radius: 10px; line-height: 1.2; }
+  .mi-icon { width: 22px; height: 22px; }
+  .mi-icon svg { width: 20px; height: 20px; }
+  .holo-wrap { gap: 8px; }
+  .holo { border-width: 7px; border-radius: 14px; }
+  .sticky { top: 6px; right: 8px; font-size: 11px; padding: 3px 8px 4px; }
+  .source { right: 6px; bottom: 5px; font-size: 11px; padding: 2px 9px; }
+  .dock { gap: 8px; }
+  .ask { padding: 3px 3px 3px 12px; border-width: 2px; gap: 8px; }
+  .ask .spark { width: 18px; height: 18px; }
+  /* 16px: a phone zooms the page into a smaller box when it is focused. */
+  .ask input { font-size: 16px; padding: 4px 0; }
+  .send, .ctl { width: 34px; height: 34px; }
+  .send svg { width: 18px; height: 18px; }
+  .ctl svg { width: 17px; height: 17px; }
+  #haptic, #sounds { display: none; }
+}
+/* Phones upright: one column in reading order: the subject, the board, the
+   question bar under it, then the lesson menu. The page scrolls. Only the root
+   scrolls: were the body a scroll box of its own (overflow on both), a swipe
+   would land on it, find nothing to scroll and, with overscroll-behavior:
+   none, never reach the page. The rail opens up (display: contents) so its
+   parts can be placed one by one. */
+@media (max-width: 700px) and (orientation: portrait) {
+  html { height: auto; overflow-x: hidden; overflow-y: auto; overscroll-behavior: auto; }
+  body { height: auto; min-height: 100dvh; overflow: visible; overscroll-behavior: auto; grid-template-rows: auto auto; }
   .hud { padding: 10px 12px 2px; gap: 8px; }
+  .brand .logo { width: 84px; }
+  .brand .tag { display: none; }
+  .dock { gap: 8px; }
   .ask { padding: 4px 4px 4px 14px; border-width: 2px; }
   .ask input { font-size: 17px; }
   .ask input::placeholder { color: var(--text-faint); }
-  .metric { display: none; }
   .ctl { width: 40px; height: 40px; }
   #haptic, #sounds { display: none; }
-  .brand .logo { width: 84px; }
-  .brand .tag { display: none; }
 
-  body { grid-template-rows: auto auto; }
   .stage { display: flex; flex-direction: column; gap: 12px; padding: 10px 12px 18px; }
   /* Everything keeps its own height: the page scrolls, nothing is squeezed. */
-  .stage > *, .rail > *, .side > * { flex-shrink: 0; }
-  .rail, .side { display: contents; }
+  .stage > *, .rail > * { flex-shrink: 0; }
+  .rail { display: contents; }
   .subject { order: 1; width: 100%; }
   .subject-btn { padding: 10px 12px; border-radius: 18px; }
   .subject-icon { width: 42px; height: 42px; font-size: 24px; }
-  .holo-wrap { order: 2; }
-  .actions { order: 3; }
-  .chat { order: 4; }
-  .cards { order: 5; }
-  .videos { order: 6; }
-  .chips { order: 7; }
-  .menu { order: 8; }
-  .presence { display: none; }
+  .holo-wrap { order: 2; gap: 12px; }
 
   /* The board: the sticky note sits on the frame, clear of the title. */
   .holo-box { height: auto; }
@@ -340,66 +295,17 @@ body:not(.started) .stage, body:not(.started) .controls, body:not(.started) .ask
   #board, .holo::before { border-radius: 9px; }
   .sticky { top: -14px; right: 6px; max-width: none; white-space: nowrap; font-size: 12px; padding: 4px 10px 5px; }
   .sticky::before { top: -6px; width: 26px; height: 10px; }
+  .source { right: 8px; bottom: 6px; font-size: 11.5px; }
 
-  /* Four colourful tiles in a row, as on the cards below. */
-  .actions { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
-  .action.phone-only { display: flex; }
-  .action { justify-content: flex-start; gap: 5px; padding: 10px 4px 9px; border: 2px solid rgba(255, 255, 255, 0.9); font-size: 12.5px; letter-spacing: 0.02em; }
-  .action:nth-child(1) { background: #e6f7e9; }
-  .action:nth-child(2) { background: #efeafe; }
-  .action:nth-child(3) { background: #fff6dc; }
-  .action:nth-child(4) { background: #ffe8f1; }
-  .ai-icon { width: 34px; height: 34px; background: rgba(255, 255, 255, 0.7); }
-  .ai-icon svg { width: 27px; height: 27px; }
-
-  /* The conversation: as tall as what is in it. */
-  .chat { flex: none; padding: 10px; }
-  .chat:not(:has(.log li)):has(.saying[hidden]) { display: none; }
-  .log { flex: none; min-height: 0; max-height: 34vh; }
-  .log:empty { display: none; }
-  .caption { max-height: 12em; }
-
-  /* The cards, full width; the real-life picture sits beside its text. */
-  .cards { grid-template-columns: 1fr; gap: 12px; }
-  .card { padding: 14px 16px; }
-  .card h3 { font-size: 19px; }
-  .card p, .ticks li { font-size: 15px; -webkit-line-clamp: 4; }
-  .card.real:has(#real-img:not([hidden])) { display: grid; grid-template-columns: minmax(0, 1fr) 40%; grid-template-rows: auto auto; column-gap: 12px; row-gap: 8px; }
-  .card.real:has(#real-img:not([hidden])) h3 { grid-column: 1 / -1; }
-  .card.real:has(#real-img:not([hidden])) p { grid-column: 1; align-self: center; -webkit-line-clamp: 5; }
-  .card.real #real-img { grid-column: 2; grid-row: 2; height: 96px; }
-  .card.quiz { flex-direction: row; flex-wrap: wrap; text-align: left; align-items: center; }
-  .card.quiz p { flex: 1 1 60%; }
-
-  /* The lesson menu last: the extras (notes, practice, games) as a grid of tiles. */
-  .menu { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px; }
-  .menu li:first-child { display: none; }
-  .menu li + li .menu-item { margin-top: 0; }
+  /* The rest of the lesson menu (concepts, notes, activities, games) as tiles. */
+  .menu { order: 3; flex: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px; }
   .menu-item { padding: 9px 10px; font-size: 14px; gap: 8px; white-space: normal; line-height: 1.2; }
   .mi-icon { width: 26px; height: 26px; }
   .mi-icon svg { width: 24px; height: 24px; }
-
-  .side .videos .v-card, .v-card { width: min(78vw, 260px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .start, .hero h1, body[data-mode] .edge-glow, .ask .spark, .robot .eye { animation: none !important; }
 }
-
-/* Videos to watch next: a compact row of cards that open in a new tab. */
-.videos { flex: none; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.side .v-card { width: clamp(170px, 70%, 210px); grid-template-columns: 64px 1fr; padding: 4px; }
-.side .v-card img, .side .v-source .v-w { width: 64px; height: 36px; }
-.videos[hidden] { display: none; }
-.videos .v-head { font-size: 13px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
-.v-row { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 4px; }
-.v-row::-webkit-scrollbar { display: none; }
-.v-card { flex: 0 0 auto; width: clamp(190px, 46%, 240px); display: grid; grid-template-columns: 84px 1fr; gap: 8px; align-items: center; padding: 6px; border-radius: 14px; background: var(--card); color: var(--text); text-decoration: none; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.14); transition: transform 0.2s; }
-.v-card:hover, .v-card:focus-visible { transform: translateY(-2px); }
-.v-card img { width: 84px; height: 47px; object-fit: cover; border-radius: 9px; background: #e5e7eb; }
-.v-card .v-t { font-size: 13px; font-weight: 600; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.v-card .v-m { grid-column: 2; font-size: 11.5px; color: var(--text-faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -4px; }
-@media (max-height: 640px) { .videos { display: none; } }
-.v-source .v-w { width: 84px; height: 47px; display: grid; place-items: center; border-radius: 9px; background: #f1f3f8; color: #111; font: 700 26px Georgia, 'Times New Roman', serif; }
 
 /* The admin page (admin.html) shares these tokens but scrolls like a normal page. */
 html:has(body.admin), body.admin { height: auto; overflow: auto; }
