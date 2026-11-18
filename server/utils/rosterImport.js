@@ -94,9 +94,11 @@ async function parseUpload(buffer, filename = '') {
 function autoMapping(headers, kind) {
   const map = {}
   const used = new Set()
-  const h = headers.map((x) => lower(x).replace(/[_\-.]+/g, ' ').replace(/\s+/g, ' '))
+  const clean = (x) => lower(x).replace(/[_\-.]+/g, ' ').replace(/\s+/g, ' ').trim()
+  const h = headers.map(clean)
   for (const f of FIELDS[kind] || []) {
-    const i = h.findIndex((x, idx) => !used.has(idx) && f.synonyms.includes(x))
+    const syn = f.synonyms.map(clean)
+    const i = h.findIndex((x, idx) => !used.has(idx) && syn.includes(x))
     if (i >= 0) { map[f.key] = i; used.add(i) }
   }
   return map
