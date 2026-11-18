@@ -42,6 +42,7 @@ Today each role has its own login: students (Firebase or JWT), org admins (email
 - [ ] **FND-013** Several guardians per child `P1` `Family`
   - Co-parent invite. Each guardian has their own notification settings. The primary guardian can remove others, except where a school verified the link.
 - [ ] **FND-014** Multi-factor login for staff `P1` `Platform`
+  - *Partial:* TOTP done for super admin staff (SUP-001, reusable `utils/totp.js`). Not done for org admins and teachers (they sign in with Google).
   - Required for admins and super admins, optional for teachers. TOTP first, passkeys later.
 
 ## F2. Organisation tree

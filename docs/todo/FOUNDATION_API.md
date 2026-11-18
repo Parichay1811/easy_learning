@@ -55,4 +55,13 @@ Only `linkStatus: 'verified'` links expose data ([utils/guardianLink.js](../../s
 
 - `sendMail({ to, subject, html, text, kind })` ([utils/mailer.js](../../server/utils/mailer.js)): never throws. With `SMTP_URL` (or `SMTP_HOST`/`SMTP_PORT`/`SMTP_USER`/`SMTP_PASS`) and `MAIL_FROM` it sends; without them the message stays `queued` in the `Outbox` collection (`models/Outbox.js`), so nothing is lost and tests can read it.
 - `getOrgPolicy(orgId)` ([utils/orgPolicy.js](../../server/utils/orgPolicy.js)): the organisation's policy with defaults (`messaging`, `teachersCreateGroups`, `parentsSeeClassAverage`, `leaderboards`, `aiTeacherInSchoolHours`, `activityVisibility`, `retentionYears`, DPA acceptance). Stored in `models/admin/OrgPolicy.js`. Features that a policy governs must call it.
+## Platform pieces from the Super Admin work
+
+- **Platform guard** ([middleware/platformGuard.js](../../server/middleware/platformGuard.js), mounted once in `server.js`): "view as" tokens (`imp` claim) can only `GET` (side-effecting GETs like chat threads are refused too); revoked sessions (`SessionRevocation`) and suspended orgs are refused; daily activity per account goes to `ActorDay`. `req.viewAs` is set during a view-as session. **If you add a GET that writes (marks read, counts views), add it to `SIDE_EFFECT_GETS`.**
+- **Jobs** ([services/jobs.js](../../server/services/jobs.js)): `register(name, { description, everyMs, run: async ({ progress }) => result })`; runs are recorded and can be re-run from the console. Heavy work: spawn a child process inside `run`.
+- **Feature flags** ([services/featureFlags.js](../../server/services/featureFlags.js)): `await isOn('key', { orgId, plan, actorId })` for gradual rollouts. Module switches are already applied by `entitlementsFor`.
+- **Plans and billing**: `entitlementsFor` now reads the org's `Subscription` (plan, frozen `planSnapshot`, `seats` → `limits.students`) and the plan catalogue (`services/planCatalog.js`). `GET /api/billing/usage` (admin/teacher) returns seats and groups against limits.
+- **Status**: public `GET /api/status` (banner + incidents).
+- **Staff**: console routes use `superadminAuth` + `requireStaffRole('support', ...)`; `req.superadmin` keeps its shape plus `staffId`, `staffRole`, `sid`, `breakGlass`, and `req.actor` is set for `audit()`.
+
 - `DataRequest` (shared by Parent privacy centre and the Super Admin queue; owned by the Parent work): `{ subjectEmail, subjectName, requestedByRole, requestedById, orgId?, kind: 'export'|'delete', status: 'pending'|'processing'|'done'|'rejected', dueAt, resolvedAt, resolvedBy, note }` in `models/DataRequest.js`.
