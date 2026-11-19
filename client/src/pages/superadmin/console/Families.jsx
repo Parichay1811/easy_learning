@@ -3,9 +3,9 @@
 // drill-down as everywhere else (asks for a reason; audited).
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, ChartCard, DataTable, KpiTile, SubjectModuleMatrix, TrendLine, fmtDuration, fmtPercent, toTable } from "../../../components/dashboard";
+import { Button, ChartCard, DataTable, KpiTile, SubjectModuleMatrix, TrendLine, fmtDuration, fmtPercent, toTable, usePane } from "../../../components/dashboard";
 import { useLoad, qs, dateOnly } from "./api";
-import { Field, Loadable, Modal, Pager, Panel, Pill, ReasonDialog, StatusPill } from "./ui";
+import { Field, Loadable, Modal, Pager, Panel, Pill, ReasonDialog, StatusPill, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 const cellsOf = (matrix) => Object.entries(matrix || {}).flatMap(([subject, row]) => Object.entries(row).map(([module, c]) => ({ subject, module, accuracy: c.answered ? c.accuracy / 100 : null, minutes: c.minutes })));
@@ -48,9 +48,16 @@ export default function Families() {
   const f = useLoad(`/families${qs({ page, q: search, limit: 25 })}`);
   const [asking, setAsking] = useState(null);
   const [viewing, setViewing] = useState(null);
+  const [pane, setPane] = usePane(["learners", "growth"]);
   const F = f.data;
   return (
     <>
+      <Tabs label={t("sa.nav.families", "Families")} value={pane} onChange={setPane} tabs={[
+        { key: "learners", label: t("sa.fam.list", "Learners and parents") },
+        { key: "growth", label: t("sa.fam.numbers", "Numbers and growth") },
+      ]} />
+      <TabBody value={pane}>
+      {pane === "growth" && <>
       <div className={s.kpis}>
         <KpiTile loading={!F} label={t("sa.fam.learners", "Independent learners")} value={F?.counts.learners} />
         <KpiTile loading={!F} label={t("sa.fam.verified", "With a verified parent")} value={F?.counts.withVerifiedGuardian} />
@@ -62,7 +69,8 @@ export default function Families() {
           <TrendLine data={F.growth.map((g) => ({ x: g.month, value: g.n }))} unit={t("sa.learners", "learners")} xFormat={(x) => x} />
         </ChartCard>
       )}
-      <Panel title={t("sa.fam.title", "Families and independent learners")} sub={t("sa.fam.sub", "Learners who are not in any school or tutor's workspace.")}>
+      </>}
+      {pane === "learners" && <Panel title={t("sa.fam.title", "Families and independent learners")} sub={t("sa.fam.sub", "Learners who are not in any school or tutor's workspace.")}>
         <form className={s.toolbar} role="search" onSubmit={(e) => { e.preventDefault(); setPage(1); setSearch(q); }}>
           <Field label={t("sa.search", "Search")}><input className={`${s.input} ${s.search}`} value={q} onChange={(e) => setQ(e.target.value)} placeholder={t("sa.fam.ph", "Learner email or name")} /></Field>
           <Button type="submit" size="sm">{t("sa.apply", "Search")}</Button>
@@ -80,15 +88,15 @@ export default function Families() {
                   { key: "source", label: t("sa.col.source", "Joined via"), render: (r) => <Pill>{r.source === "self" ? t("sa.fam.self", "own account") : t("sa.fam.family", "a parent")}</Pill> },
                   { key: "guardians", label: t("sa.col.guardians", "Parents"), render: (r) => (r.guardians.length ? r.guardians.map((g) => <span key={g.parentId} className={s.row}>{g.parent?.name || g.parent?.email || "—"} <StatusPill status={g.linkStatus === "verified" ? "active" : "pending"} label={g.linkStatus} />{g.parent?.plan === "family_plus" && <Pill tone="accent">Family Plus</Pill>}</span>) : "—") },
                   { key: "minutes30", label: t("sa.col.min30", "Minutes (30 d)"), align: "end" },
-                  { key: "lastActive", label: t("sa.col.lastActive", "Last active"), render: (r) => r.lastActive || "—" },
-                  { key: "createdAt", label: t("sa.col.created", "Created"), render: (r) => dateOnly(r.createdAt) },
+                  { key: "lastActive", label: t("sa.col.lastActive", "Last active"), render: (r) => <span>{r.lastActive || "—"}<br /><span className={`${s.small} ${s.muted}`}>{t("sa.col.created", "Created")} {dateOnly(r.createdAt)}</span></span> },
                 ]}
               />
               <Pager page={F.page} limit={F.limit} total={F.total} onPage={setPage} />
             </>
           )}
         </Loadable>
-      </Panel>
+      </Panel>}
+      </TabBody>
       {asking && <ReasonDialog title={t("sa.fam.why", "Why do you need to see {{e}}'s learning?", { e: asking })} intro={t("sa.fam.whyIntro", "This is a child's data. The reason is saved in the audit log.")} confirmLabel={t("sa.open", "Open")} onClose={() => setAsking(null)} onConfirm={async (reason) => setViewing({ email: asking, reason })} />}
       {viewing && <LearnerView email={viewing.email} reason={viewing.reason} onClose={() => setViewing(null)} />}
     </>

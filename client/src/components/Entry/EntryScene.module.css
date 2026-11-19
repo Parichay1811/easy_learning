@@ -1,0 +1,124 @@
+.scene {
+  --t0: 0s;
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, #8fd0ff 0%, #c7e9ff 45%, #9fdc7a 75%, #79c25a 100%);
+}
+
+/* The painted meadow (the dashboard meadow, without its puppy: the live
+   <Mascot/> stands in front instead). */
+.meadow {
+  position: absolute;
+  inset: -2%;
+  background: url("/brand/meadow-scene.webp") 46% 100% / cover no-repeat;
+  transform-origin: 50% 80%;
+  animation: breathe 36s ease-in-out var(--t0) infinite alternate;
+}
+
+@keyframes breathe {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+.sun {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 88% 6%, rgba(255, 249, 214, 0.95) 0, rgba(255, 244, 196, 0.55) 9%, rgba(255, 244, 196, 0) 28%);
+}
+
+.cloud {
+  position: absolute;
+  width: clamp(120px, 18vw, 260px);
+  opacity: 0.85;
+  filter: blur(0.5px) drop-shadow(0 6px 10px rgba(80, 140, 200, 0.18));
+}
+
+.c0 {
+  top: 7%;
+  left: -30%;
+  animation: float 140s linear calc(var(--t0) - 40s) infinite;
+}
+
+.c1 {
+  top: 19%;
+  left: -30%;
+  width: clamp(90px, 12vw, 180px);
+  opacity: 0.7;
+  animation: float 190s linear calc(var(--t0) - 120s) infinite;
+}
+
+@keyframes float {
+  from { translate: 0 0; }
+  to { translate: 160vw 0; }
+}
+
+/* A soft colour glow behind the page's card (the role's colour). */
+.tint {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 55% 50% at 55% 55%, color-mix(in srgb, var(--tint) 30%, transparent), transparent 70%);
+}
+
+/* Keeps text readable on top: lighter at the top (logo, titles) and the middle. */
+.wash {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0) 30%),
+    radial-gradient(ellipse 70% 60% at 50% 52%, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0) 72%);
+}
+
+.flock {
+  position: absolute;
+  inset: 0;
+}
+
+.flyer {
+  position: absolute;
+  width: clamp(22px, 2.6vw, 36px);
+  display: block;
+}
+
+.wings {
+  width: 100%;
+}
+
+.f0 { left: -6%; top: 26%; animation: drift0 30s linear var(--t0) infinite; }
+.f1 { left: 104%; top: 64%; width: clamp(18px, 2vw, 30px); animation: drift1 36s linear calc(var(--t0) - 12s) infinite; }
+.f2 { left: 22%; top: 104%; animation: drift2 42s linear calc(var(--t0) - 25s) infinite; }
+
+@keyframes drift0 {
+  0% { translate: 0 0; rotate: 20deg; }
+  25% { translate: 30vw -8vh; rotate: 35deg; }
+  50% { translate: 55vw 6vh; rotate: 10deg; }
+  75% { translate: 80vw -6vh; rotate: 30deg; }
+  100% { translate: 115vw 4vh; rotate: 20deg; }
+}
+
+@keyframes drift1 {
+  0% { translate: 0 0; rotate: -20deg; }
+  30% { translate: -35vw -10vh; rotate: -35deg; }
+  60% { translate: -65vw 4vh; rotate: -10deg; }
+  100% { translate: -115vw -12vh; rotate: -25deg; }
+}
+
+@keyframes drift2 {
+  0% { translate: 0 0; rotate: -5deg; }
+  35% { translate: 14vw -40vh; rotate: 15deg; }
+  70% { translate: 4vw -80vh; rotate: -10deg; }
+  100% { translate: 18vw -115vh; rotate: 5deg; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .meadow,
+  .cloud {
+    animation: none;
+  }
+  .flock {
+    display: none;
+  }
+}

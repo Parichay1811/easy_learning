@@ -22,7 +22,9 @@ const LANGUAGES = [
   { code: "vi", name: "Vietnamese", flag: "🇻🇳", native: "Tiếng Việt" },
 ];
 
-const LanguageSwitcher = () => {
+// variant "bar": a compact pill with a floating list (the navbar, a page header).
+// variant "menu": full width, and the list opens in place, inside a menu panel.
+const LanguageSwitcher = ({ variant = "bar" }) => {
   const { i18n } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null);
@@ -49,19 +51,22 @@ const LanguageSwitcher = () => {
   }, []);
 
   return (
-    <div className={styles.wrapper} ref={wrapperRef}>
+    <div className={`${styles.wrapper} ${variant === "menu" ? styles.inMenu : ""}`} ref={wrapperRef}>
       <button
+        type="button"
         className={styles.trigger}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-label="Select language"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        <MdLanguage className={styles.globe} />
+        <MdLanguage className={styles.globe} data-ls="globe" />
         <span className={styles.flag}>{currentLang.flag}</span>
         <span className={styles.code}>{currentLang.code.toUpperCase()}</span>
+        {variant === "menu" && <span className={styles.native}>{currentLang.native}</span>}
         <MdKeyboardArrowDown
           className={`${styles.arrow} ${isOpen ? styles.arrowOpen : ""}`}
+          data-ls="arrow"
         />
       </button>
 
@@ -70,7 +75,9 @@ const LanguageSwitcher = () => {
           {LANGUAGES.map((lang) => (
             <button
               key={lang.code}
+              type="button"
               role="option"
+              data-sound="select"
               aria-selected={lang.code === currentLang.code}
               className={`${styles.option} ${
                 lang.code === currentLang.code ? styles.active : ""

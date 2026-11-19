@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   TimeRangeBar, useTimeRange, KpiTile, ChartCard, StackedBars, Timeline, Button, toTable, fmtDuration,
+  SubTabs, SubPanel, usePane,
 } from "../../components/dashboard";
 import { useLoad } from "./parentApi";
 import { eventsToTimeline } from "./timelineMap";
@@ -9,11 +10,13 @@ import s from "./parent.module.css";
 
 const DEVICE_LABEL = { phone: "Phone", tablet: "Tablet", desktop: "Computer", unknown: "Other" };
 
-// Usage (PAR-040..042): screen time, the activity log, and gentle healthy-use settings.
+// Usage (PAR-040..042) in three sub-tabs: screen time, the activity log, and gentle healthy-use settings.
+const PANES = ["time", "log", "limits"];
 export default function ParentActivity({ api, child, onChanged }) {
   const { t } = useTranslation();
   const T = (k, d, o) => t(`parent.act.${k}`, { defaultValue: d, ...o });
   const tr = useTimeRange({ defaultRange: "week", defaultCmp: "none" });
+  const [pane, setPane] = usePane(PANES);
   const base = `/children/${child._id}`;
   const q = `from=${tr.from}&to=${tr.to}`;
   const st = useLoad(api.get, `${base}/analytics/screen-time?${q}`);
@@ -44,55 +47,69 @@ export default function ParentActivity({ api, child, onChanged }) {
           <p>{T("sub", "Screen time, every session, and gentle limits if you want them.")}</p>
         </div>
       </div>
-      <TimeRangeBar value={tr} ranges={["day", "week", "month", "custom"]} showCompare={false} sticky />
+      <SubTabs label={T("tabs", "Activity")} value={pane} onChange={setPane}
+        tabs={[
+          { id: "time", label: T("tab.time", "Screen time"), short: T("tab.timeShort", "Time") },
+          { id: "log", label: T("tab.log", "Activity log"), short: T("tab.logShort", "Log") },
+          { id: "limits", label: T("tab.limits", "Healthy use"), short: T("tab.limitsShort", "Limits") },
+        ]}
+        actions={pane !== "limits" && <TimeRangeBar value={tr} ranges={["day", "week", "month", "custom"]} showCompare={false} compact />} />
 
-      <div className={s.kpis}>
-        <KpiTile loading={st.loading && !d} label={T("total", "Total time")} value={d ? fmtDuration(d.minutes) : null} />
-        <KpiTile loading={st.loading && !d} label={T("perDay", "Per learning day")} value={d?.avgPerActiveDay != null ? fmtDuration(d.avgPerActiveDay) : null} helpText={T("perDayHelp", "Average on the days with learning.")} />
-        <KpiTile loading={st.loading && !d} label={T("longestDay", "Longest day")} value={d?.longestDay != null ? fmtDuration(d.longestDay) : null} />
-        <KpiTile loading={st.loading && !d} label={T("longestSession", "Longest session")} value={d?.longestSession ? fmtDuration(d.longestSession.minutes) : null} helpText={d?.longestSession?.what} />
-        <KpiTile loading={st.loading && !d} label={T("late", "Late-evening days")} value={d ? d.lateEveningDays : null}
-          tone={d?.lateEveningDays > 2 ? "attention" : "neutral"} helpText={T("lateHelp", "Days with learning after 9 pm or before 6 am.")} />
-        <KpiTile loading={st.loading && !d} label={T("devices", "Devices")} value={devices.length ? devices.map(([k]) => T(`dev.${k}`, DEVICE_LABEL[k] || k)).join(", ") : null} />
-      </div>
-
-      <ChartCard title={T("dailyTitle", "How much time each day?")} answer={d ? T("dailyAnswer", "{{t}} over {{n}} learning days", { t: fmtDuration(d.minutes), n: d.activeDays }) : undefined}
-        loading={st.loading} error={st.error} onRetry={st.reload} table={toTable.stacked(bars, t)}
-        empty={d && !d.minutes && { title: T("none", "No learning in this period") }}>
-        <StackedBars data={bars} unit="min" goal={child.healthyUse?.dailyLimitMin || undefined} />
-      </ChartCard>
-
-      {devices.length > 0 && (
-        <section className={s.card} aria-labelledby="p-dev-h">
-          <div className={s.cardHead}><h2 id="p-dev-h">{T("devTitle", "Which devices?")}</h2></div>
-          <ul className={s.list}>
-            {devices.map(([k, n]) => <li key={k}><span>{T(`dev.${k}`, DEVICE_LABEL[k] || k)}</span><strong>{Math.round((n / deviceTotal) * 100)} %</strong></li>)}
-          </ul>
-        </section>
-      )}
-
-      <ChartCard title={T("logTitle", "Activity log")} answer={tl.data ? T("logAnswer", "{{n}} activities, newest first", { n: events.length }) : undefined}
-        loading={tl.loading} error={tl.error} onRetry={tl.reload}
-        actions={<Button variant="ghost" size="sm" onClick={exportCsv} disabled={exporting}>{exporting ? T("exporting", "Preparing…") : T("csv", "Download CSV")}</Button>}
-        empty={tl.data && !events.length && { title: T("logEmpty", "Nothing to show"), text: subject !== "all" || device !== "all" ? T("logEmptyFilter", "Try another filter.") : T("logEmptyText", "Sessions appear here as {{name}} learns.", { name: first }) }}>
-        <div className={s.row} style={{ marginBottom: 12 }}>
-          <label className={s.field} style={{ flex: "1 1 160px" }}>{T("fSubject", "Subject")}
-            <select className={s.select} value={subject} onChange={(e) => setSubject(e.target.value)}>
-              <option value="all">{T("all", "All")}</option>
-              <option value="english">English</option><option value="maths">Maths</option><option value="science">Science</option>
-            </select>
-          </label>
-          <label className={s.field} style={{ flex: "1 1 160px" }}>{T("fDevice", "Device")}
-            <select className={s.select} value={device} onChange={(e) => setDevice(e.target.value)}>
-              <option value="all">{T("all", "All")}</option>
-              {["phone", "tablet", "desktop"].map((k) => <option key={k} value={k}>{T(`dev.${k}`, DEVICE_LABEL[k])}</option>)}
-            </select>
-          </label>
+      <SubPanel id="time" value={pane}>
+        <div className={s.kpis}>
+          <KpiTile loading={st.loading && !d} label={T("total", "Total time")} value={d ? fmtDuration(d.minutes) : null} />
+          <KpiTile loading={st.loading && !d} label={T("perDay", "Per learning day")} value={d?.avgPerActiveDay != null ? fmtDuration(d.avgPerActiveDay) : null} helpText={T("perDayHelp", "Average on the days with learning.")} />
+          <KpiTile loading={st.loading && !d} label={T("longestDay", "Longest day")} value={d?.longestDay != null ? fmtDuration(d.longestDay) : null} />
+          <KpiTile loading={st.loading && !d} label={T("longestSession", "Longest session")} value={d?.longestSession ? fmtDuration(d.longestSession.minutes) : null} helpText={d?.longestSession?.what} />
+          <KpiTile loading={st.loading && !d} label={T("late", "Late-evening days")} value={d ? d.lateEveningDays : null}
+            tone={d?.lateEveningDays > 2 ? "attention" : "neutral"} helpText={T("lateHelp", "Days with learning after 9 pm or before 6 am.")} />
+          <KpiTile loading={st.loading && !d} label={T("devices", "Devices")} value={devices.length ? devices.map(([k]) => T(`dev.${k}`, DEVICE_LABEL[k] || k)).join(", ") : null} />
         </div>
-        <Timeline events={events} />
-      </ChartCard>
 
-      <HealthyUse api={api} child={child} onChanged={onChanged} />
+        <div className={devices.length ? s.split : undefined}>
+          <ChartCard title={T("dailyTitle", "How much time each day?")} answer={d ? T("dailyAnswer", "{{t}} over {{n}} learning days", { t: fmtDuration(d.minutes), n: d.activeDays }) : undefined}
+            loading={st.loading} error={st.error} onRetry={st.reload} table={toTable.stacked(bars, t)}
+            empty={d && !d.minutes && { title: T("none", "No learning in this period") }}>
+            <StackedBars data={bars} unit="min" goal={child.healthyUse?.dailyLimitMin || undefined} />
+          </ChartCard>
+
+          {devices.length > 0 && (
+            <section className={`${s.card} ${s.devices}`} aria-labelledby="p-dev-h">
+              <div className={s.cardHead}><h2 id="p-dev-h">{T("devTitle", "Which devices?")}</h2></div>
+              <ul className={s.list}>
+                {devices.map(([k, n]) => <li key={k}><span>{T(`dev.${k}`, DEVICE_LABEL[k] || k)}</span><strong>{Math.round((n / deviceTotal) * 100)} %</strong></li>)}
+              </ul>
+            </section>
+          )}
+        </div>
+      </SubPanel>
+
+      <SubPanel id="log" value={pane}>
+        <ChartCard title={T("logTitle", "Activity log")} answer={tl.data ? T("logAnswer", "{{n}} activities, newest first", { n: events.length }) : undefined}
+          loading={tl.loading} error={tl.error} onRetry={tl.reload}
+          actions={<Button variant="ghost" size="sm" onClick={exportCsv} disabled={exporting}>{exporting ? T("exporting", "Preparing…") : T("csv", "Download CSV")}</Button>}
+          empty={tl.data && !events.length && { title: T("logEmpty", "Nothing to show"), text: subject !== "all" || device !== "all" ? T("logEmptyFilter", "Try another filter.") : T("logEmptyText", "Sessions appear here as {{name}} learns.", { name: first }) }}>
+          <div className={s.row} style={{ marginBottom: 12 }}>
+            <label className={s.field} style={{ flex: "1 1 160px" }}>{T("fSubject", "Subject")}
+              <select className={s.select} value={subject} onChange={(e) => setSubject(e.target.value)}>
+                <option value="all">{T("all", "All")}</option>
+                <option value="english">English</option><option value="maths">Maths</option><option value="science">Science</option>
+              </select>
+            </label>
+            <label className={s.field} style={{ flex: "1 1 160px" }}>{T("fDevice", "Device")}
+              <select className={s.select} value={device} onChange={(e) => setDevice(e.target.value)}>
+                <option value="all">{T("all", "All")}</option>
+                {["phone", "tablet", "desktop"].map((k) => <option key={k} value={k}>{T(`dev.${k}`, DEVICE_LABEL[k])}</option>)}
+              </select>
+            </label>
+          </div>
+          <div className={s.logScroll}><Timeline events={events} /></div>
+        </ChartCard>
+      </SubPanel>
+
+      <SubPanel id="limits" value={pane}>
+        <HealthyUse api={api} child={child} onChanged={onChanged} />
+      </SubPanel>
     </>
   );
 }

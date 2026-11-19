@@ -23,7 +23,10 @@ async function start({ port: fixedPort, clientUrl, env: extraEnv = {}, preload =
   const port = fixedPort || await freePort()
   const env = {
     ...process.env, ...SECRETS, ...uris, PORT: String(port), AI_ASSISTANT: 'off', NODE_ENV: 'test',
-    SUPER_ADMIN_EMAIL: 'root@example.com', SUPER_ADMIN_PASSWORD: 'x', CLIENT_URL: clientUrl || 'http://localhost:5173', ...extraEnv,
+    SUPER_ADMIN_EMAIL: 'root@example.com', SUPER_ADMIN_PASSWORD: 'x', CLIENT_URL: clientUrl || 'http://localhost:5173',
+    // Never send real mail from a test or demo server: empty values win over server/.env (dotenv
+    // never overrides a variable that is set), so every email stays in the Outbox.
+    SMTP_URL: '', SMTP_HOST: '', ...extraEnv,
   }
   const child = spawn(process.execPath, [...preload.flatMap((m) => ['-r', m]), 'server.js'], { cwd: path.join(__dirname, '..', '..'), env, stdio: ['ignore', 'pipe', 'pipe'] })
   let log = ''

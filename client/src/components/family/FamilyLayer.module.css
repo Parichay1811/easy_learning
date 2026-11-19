@@ -34,3 +34,22 @@
 .goalSub { display: block; color: #5b6478; font-size: 0.92rem; }
 .close { min-width: 44px; min-height: 44px; border: none; background: transparent; color: #5b6478; font-size: 1rem; cursor: pointer; border-radius: 50%; }
 @media (prefers-reduced-motion: reduce) { .sticker, .restIcon { animation: none; } }
+/* A request is waiting (services/linkRequests.js): a friendly note at the top, never covering the goal or break toast. */
+.reqToast {
+  /* Above the site's status banner (z 9000), which it may briefly cover until dismissed. */
+  position: fixed; left: 50%; top: calc(12px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); z-index: 9100;
+  width: max-content; max-width: calc(100% - 24px); box-sizing: border-box;
+  display: flex; align-items: center; gap: 10px; padding: 10px 8px 10px 14px; border-radius: 22px;
+  background: #fff; color: #1d2433; box-shadow: 0 0 0 3px #ffd43b, 0 12px 32px rgba(0, 0, 0, 0.22);
+  font-family: "Fredoka", system-ui, sans-serif; animation: reqIn 0.4s ease-out;
+}
+.reqIcon { font-size: 1.8rem; line-height: 1; }
+.reqText { display: grid; min-width: 0; }
+.reqText strong { font-weight: 600; font-size: 1.05rem; overflow-wrap: anywhere; }
+.reqText span { color: #5b6478; font-size: 0.92rem; }
+@keyframes reqIn { from { opacity: 0; transform: translate(-50%, -12px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@media (max-width: 480px) {
+  .reqToast { flex-wrap: wrap; width: calc(100% - 24px); }
+  .reqText { flex: 1 1 60%; }
+}
+@media (prefers-reduced-motion: reduce) { .reqToast { animation: none; } }

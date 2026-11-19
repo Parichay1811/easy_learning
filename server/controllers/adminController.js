@@ -25,6 +25,9 @@ const handleServiceError = (res, err) => {
 
 // ── Organization ─────────────────────────────────────────────────────────────
 
+// How a self-registered school is marked approved (free tier, no manual review).
+const SELF_SERVE = () => ({ status: 'approved', approvedAt: new Date(), approvedBy: 'self-signup (free)', rejectionReason: '' })
+
 const registerOrg = async (req, res) => {
   try {
     const { name, type, address, phone, designation, designationOther } = req.body
@@ -33,10 +36,12 @@ const registerOrg = async (req, res) => {
     const logoUrl = req.file ? req.file.path : ''
 
     if (existing) {
-      // Editing an already-registered org: apply changes in place. If it was previously
-      // approved or rejected, this counts as a resubmission and sends it back to pending
-      // for the Super Admin to re-review. Already-pending edits just update in place.
-      const needsResubmission = existing.status === 'approved' || existing.status === 'rejected'
+      // Editing an already-registered org: apply changes in place. Schools are self-serve
+      // (free, no approval needed), so an approved school stays approved. Only a school the
+      // Super Admin turned down goes back to them for another look; an old pending one
+      // (from before self-serve) is approved now.
+      const needsResubmission = existing.status === 'rejected'
+      const selfApprove = existing.status === 'pending'
 
       existing.name = name
       existing.type = type || 'school'
@@ -46,12 +51,13 @@ const registerOrg = async (req, res) => {
       if (needsResubmission) {
         existing.status = 'pending'
         existing.rejectionReason = ''
-      }
+      } else if (selfApprove) existing.status = 'approved'
       await existing.save()
 
       await SAOrganization.findOneAndUpdate({ adminOrgId: existing._id.toString() }, {
         name, type: type || 'school', address: address || '', phone: phone || '',
         ...(needsResubmission ? { status: 'pending', rejectionReason: '' } : {}),
+        ...(selfApprove ? SELF_SERVE() : {}),
         adminDesignation: designation === 'other' ? designationOther : designation,
         ...(logoUrl ? { logoUrl } : {}),
       })
@@ -66,17 +72,20 @@ const registerOrg = async (req, res) => {
       return res.json({ success: true, org: existing, resubmitted: needsResubmission })
     }
 
+    // Self-serve and free: the school can start at once. The Super Admin still sees every
+    // school in the console (and can suspend one), but nobody has to approve it first.
     const org = await Organization.create({
       name, type: type || 'school', address: address || '', phone: phone || '',
-      adminEmail: req.admin.email, adminUid: req.admin.uid, logoUrl,
+      adminEmail: req.admin.email, adminUid: req.admin.uid, logoUrl, status: 'approved',
     })
 
-    // Mirror to super admin DB for approval
+    // Mirror to the super admin DB (directory, oversight)
     await SAOrganization.create({
       name, type: type || 'school', address: address || '', phone: phone || '',
       adminEmail: req.admin.email, adminName: req.admin.name,
       adminUid: req.admin.uid, adminOrgId: org._id.toString(), logoUrl,
       adminDesignation: designation === 'other' ? designationOther : designation,
+      ...SELF_SERVE(),
     })
 
     // Link org to admin and record their declared identity

@@ -105,6 +105,8 @@ export const AdminAuthProvider = ({ children }) => {
     if (!data?.success) {
       const err = new Error(data?.message || "No teacher account found for this email.");
       err.code = data?.code;
+      // A school has invited this email: the sign-in page offers the invitation.
+      err.pendingInvites = data?.pendingInvites;
       throw err;
     }
     teacherUseToken(data.token, data.adminToken);

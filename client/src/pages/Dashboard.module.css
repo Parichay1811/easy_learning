@@ -1,600 +1,109 @@
-/* ── Heatmap colour tokens ───────────────────────────────────────────────────── */
-:root {
-  --heat-0: rgba(255, 255, 255, 0.07);
-  --heat-1: #1a5c35;
-  --heat-2: #26a049;
-  --heat-3: #39d353;
-  --heat-4: #69ff8c;
+/* ── Student dashboard frame ──────────────────────────────────────────────────
+   One screen under the site navbar: the tab bar (bottom on phones, side rail
+   in landscape) and a stage where the open tab fits without page scrolling. */
+
+/* --nav-extra: how far the site navbar's bottom is from the 80px page padding
+   (measured; negative when the bar is slimmer). */
+.screen {
+  position: relative;
+  flex: none;
+  width: 100%;
+  height: calc(100dvh - 80px - var(--nav-extra, 0px));
+  min-height: 260px;
+  margin-top: var(--nav-extra, 0px);
 }
 
-/* ── Page wrapper ────────────────────────────────────────────────────────────── */
-.dashboard {
-  min-height: 100vh;
-  background: transparent;
-  padding: 32px 24px 60px;
-  color: #e6edf3;
-  font-family: "Fredoka", sans-serif;
-}
-
-/* ── Loading / error states ──────────────────────────────────────────────────── */
-.loadingWrap {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  color: #a8b2d8;
-  font-size: 1.1rem;
-  background: rgba(10, 14, 26, 0.7);
-  font-family: "Fredoka", sans-serif;
-}
-
-.spinner {
-  width: 48px;
-  height: 48px;
-  border: 4px solid rgba(108, 99, 255, 0.2);
-  border-top-color: #6c63ff;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.errorMsg {
-  font-size: 1.2rem;
-  color: #ff6b6b;
-  text-align: center;
-  padding: 24px 24px 8px;
-}
-
-.retryBtn {
-  margin-top: 16px;
-  background: linear-gradient(135deg, #6c63ff, #43c0a0);
-  color: #fff;
-  border: none;
-  border-radius: 20px;
-  padding: 10px 28px;
-  font-family: "Fredoka", sans-serif;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, opacity 0.2s;
-}
-
-.retryBtn:hover { transform: translateY(-2px); opacity: 0.9; }
-
-/* ── Header ──────────────────────────────────────────────────────────────────── */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  background: rgba(10, 14, 26, 0.78);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 20px;
-  padding: 24px 32px;
-  margin-bottom: 28px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-}
-
-.headerLeft {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.avatar {
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-  overflow: hidden;
-  background: linear-gradient(135deg, #6c63ff, #43c0a0);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: 700;
-  color: #fff;
-  flex-shrink: 0;
-  border: 3px solid rgba(108, 99, 255, 0.5);
-}
-
-.avatar img {
+.root {
+  position: relative;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-.greeting {
-  margin: 0 0 4px;
-  font-size: 1.7rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, #fff 0%, #c8d8ff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.subGreeting {
-  margin: 0;
-  color: #b0bcd8;
-  font-size: 0.95rem;
-}
-
-/* ── Header right group ──────────────────────────────────────────────────────── */
-.headerRight {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 14px;
-  flex-shrink: 0;
-}
-
-/* ── Progress Map button ─────────────────────────────────────────────────────── */
-.progressMapBtn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, rgba(108, 99, 255, 0.55), rgba(67, 192, 160, 0.35));
-  border: 1px solid rgba(108, 99, 255, 0.6);
-  border-radius: 14px;
-  padding: 10px 18px;
-  color: #fff;
-  font-family: "Fredoka", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  white-space: nowrap;
-}
-
-.progressMapBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(108, 99, 255, 0.28);
-  background: linear-gradient(135deg, rgba(108, 99, 255, 0.28), rgba(67, 192, 160, 0.18));
-}
-
-/* ── Level badge ─────────────────────────────────────────────────────────────── */
-.levelBadge {
-  text-align: right;
-  min-width: 180px;
-}
-
-.levelLabel {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #e0e8ff;
-  margin-bottom: 8px;
-}
-
-.levelBar {
-  height: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 99px;
-  overflow: hidden;
-  margin-bottom: 6px;
-}
-
-.levelFill {
-  height: 100%;
-  background: linear-gradient(90deg, #6c63ff, #43c0a0);
-  border-radius: 99px;
-  transition: width 0.6s ease;
-}
-
-.levelXP {
-  font-size: 0.82rem;
-  color: #a8b8d8;
-}
-
-/* ── Stat Cards row ──────────────────────────────────────────────────────────── */
-.statsRow {
+  max-width: 1600px;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 16px;
-  margin-bottom: 28px;
-}
-
-.statCard {
-  background: rgba(10, 14, 26, 0.76);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 16px;
-  padding: 20px 18px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-}
-
-.statCard::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, var(--card-color, #6c63ff) 0%, transparent 60%);
-  opacity: 0.08;
-  border-radius: inherit;
-}
-
-.statCard:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
-}
-
-.statIcon {
-  font-size: 2rem;
-  line-height: 1;
-  filter: drop-shadow(0 0 8px var(--card-color, #6c63ff));
-}
-
-.statInfo { flex: 1; }
-
-.statValue {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #e6edf3;
-  line-height: 1.1;
-}
-
-.statLabel {
-  font-size: 0.82rem;
-  color: #a8b8d8;
-  margin-top: 2px;
-}
-
-.statSub {
-  font-size: 0.75rem;
-  color: #8892b0;
-  margin-top: 4px;
-}
-
-/* ── Generic section ─────────────────────────────────────────────────────────── */
-.section {
-  background: rgba(10, 14, 26, 0.76);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 20px;
-  padding: 28px 28px 24px;
-  margin-bottom: 24px;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.32);
-}
-
-.sectionTitle {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 20px;
-  color: #e0e8ff;
-}
-
-.sectionHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.sectionHeader .sectionTitle {
-  margin-bottom: 0;
-}
-
-/* ── Chart ───────────────────────────────────────────────────────────────────── */
-.chartWrap {
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: 12px;
-  padding: 12px 8px 0;
-}
-
-.chartTooltip {
-  background: #1e2336;
-  border: 1px solid rgba(108, 99, 255, 0.4);
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-family: "Fredoka", sans-serif;
-  color: #e6edf3;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 0.9rem;
-}
-
-.chartTooltip strong {
-  color: #a8b2d8;
-  font-size: 0.78rem;
-  font-weight: 400;
-}
-
-.emptyChart {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas: "stage" "tabs";
   gap: 10px;
-  padding: 40px 0;
-  color: #8892b0;
+  padding: 8px 10px max(8px, env(safe-area-inset-bottom));
 }
 
-.emptyChart span { font-size: 2.5rem; }
-
-.emptyChart p {
-  margin: 0;
-  font-size: 0.95rem;
-  text-align: center;
+/* tokens.css paints `.dash` with the canvas colour; here the meadow video shows through. */
+.root:global(.dash),
+.state:global(.dash) {
+  background: transparent;
 }
 
-/* ── Heatmap ─────────────────────────────────────────────────────────────────── */
-.heatControls {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
+.tabs { grid-area: tabs; min-width: 0; }
+
+.stage {
+  grid-area: stage;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
 }
 
-.heatStats {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.yearSelect {
-  appearance: none;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 10px;
-  color: #ccd6f6;
-  font-family: "Fredoka", sans-serif;
-  font-size: 0.88rem;
-  font-weight: 600;
-  padding: 5px 28px 5px 12px;
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23a8b2d8' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  transition: border-color 0.2s, background-color 0.2s;
-}
-
-.yearSelect:hover {
-  border-color: rgba(108, 99, 255, 0.5);
-  background-color: rgba(108, 99, 255, 0.1);
-}
-
-.yearSelect:focus {
+.panel {
+  height: 100%;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   outline: none;
-  border-color: rgba(108, 99, 255, 0.7);
-  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+  /* room for the cards' 3D lip and shadows */
+  padding: 2px 2px 6px;
+}
+.panel:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 2px; border-radius: 20px; }
+
+/* The AI Teacher's floating button sits in the bottom-right corner from 430px
+   up: keep the tab bar out from under it. */
+@media (orientation: portrait) and (min-width: 430px) {
+  .tabs { margin-right: 84px; }
+}
+@media (orientation: portrait) and (min-width: 700px) {
+  .root { padding: 12px 18px max(12px, env(safe-area-inset-bottom)); gap: 14px; }
+  .tabs { margin: 0; justify-self: center; width: min(600px, calc(100% - 190px)); }
 }
 
-.yearSelect option {
-  background: #1e2336;
-  color: #ccd6f6;
+/* Landscape: side rail on the left, and a lane on the right for the AI button. */
+@media (orientation: landscape) and (min-width: 600px) {
+  .root {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "tabs stage";
+    gap: clamp(10px, 1.4vw, 20px);
+    padding: clamp(8px, 1.6vh, 18px) 92px clamp(8px, 1.6vh, 18px) clamp(8px, 1vw, 16px);
+  }
+  .tabs { align-self: center; max-height: 100%; }
+}
+@media (orientation: landscape) and (min-width: 1780px) {
+  .root { padding-right: 16px; }
+}
+/* The admin viewer has no AI button over it. */
+.root[data-readonly] .tabs { margin-right: 0; }
+@media (orientation: landscape) and (min-width: 600px) {
+  .root[data-readonly] { padding-right: clamp(8px, 1vw, 16px); }
+}
+@media (orientation: landscape) and (max-height: 520px) {
+  .root { padding: 6px 88px 6px 6px; gap: 8px; }
 }
 
-.heatStat {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.82rem;
-  color: #a8b8d8;
-}
-
-.heatDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 2px;
-}
-
-.heatmapWrapper {
+/* ── Loading / error / signed-out ── */
+.state {
   position: relative;
-  overflow-x: auto;
-  padding-bottom: 8px;
-}
-
-.heatmapMonths {
+  height: 100%;
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 14px;
-  gap: 3px;
-  margin-left: 0;
-  margin-bottom: 4px;
-  font-size: 0.7rem;
-  color: #a8b8d8;
-  padding-left: 2px;
+  place-items: center;
+  padding: 16px;
 }
 
-.heatmapGrid {
-  display: flex;
-  gap: 3px;
-  align-items: flex-start;
-}
-
-.heatmapCol {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.heatCell {
-  width: 13px;
-  height: 13px;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.heatCell:hover {
-  transform: scale(1.4);
-  box-shadow: 0 0 8px rgba(105, 255, 140, 0.5);
-  z-index: 1;
-}
-
-.heatTooltip {
-  position: fixed;
-  background: #1e2336;
-  border: 1px solid rgba(108, 99, 255, 0.4);
-  border-radius: 10px;
-  padding: 8px 12px;
-  pointer-events: none;
-  z-index: 999;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 0.82rem;
-  color: #ccd6f6;
-  white-space: nowrap;
-  font-family: "Fredoka", sans-serif;
-}
-
-.heatTooltip strong { color: #a8b2d8; font-size: 0.78rem; }
-
-.heatLegend {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 12px;
-  font-size: 0.72rem;
-  color: #a8b8d8;
-}
-
-.heatLegendCell {
-  width: 13px;
-  height: 13px;
-  border-radius: 3px;
-}
-
-/* ── Achievement badges ──────────────────────────────────────────────────────── */
-.achieveCat {
-  margin-bottom: 24px;
-}
-
-.achieveCat:last-child { margin-bottom: 0; }
-
-.catTitle {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #b0c0e0;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin: 0 0 14px;
-}
-
-.badgeGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.badge {
-  position: relative;
+.stateCard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 14px 16px 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  cursor: default;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  min-width: 88px;
+  gap: 10px;
+  max-width: 420px;
+  padding: 24px 28px;
   text-align: center;
 }
-
-.badge:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-  z-index: 10;
-}
-
-.badgeEarned {
-  background: linear-gradient(135deg, rgba(108, 99, 255, 0.2), rgba(67, 192, 160, 0.15));
-  border-color: rgba(108, 99, 255, 0.35);
-  box-shadow: 0 0 18px rgba(108, 99, 255, 0.12);
-}
-
-.badgeLocked {
-  background: rgba(255, 255, 255, 0.03);
-  filter: grayscale(0.6);
-  opacity: 0.55;
-}
-
-.badgeIcon {
-  font-size: 2rem;
-  line-height: 1;
-}
-
-.badgeName {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #ccd6f6;
-  line-height: 1.2;
-}
-
-.badgeLocked .badgeName { color: #8892b0; }
-
-.badgeTooltip {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1e2336;
-  border: 1px solid rgba(108, 99, 255, 0.4);
-  border-radius: 12px;
-  padding: 10px 14px;
-  min-width: 170px;
-  font-size: 0.82rem;
-  color: #e6edf3;
-  pointer-events: none;
-  z-index: 100;
-  text-align: left;
-}
-
-.badgeTooltip strong { display: block; margin-bottom: 4px; font-size: 0.9rem; }
-.badgeTooltip p { margin: 0 0 4px; color: #a8b2d8; font-size: 0.78rem; }
-.badgeTooltip small { color: #6272a4; font-size: 0.72rem; }
-
-/* ── Responsive ──────────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .dashboard { padding: 16px 12px 48px; }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 20px;
-  }
-
-  .headerRight {
-    width: 100%;
-    align-items: flex-start;
-  }
-
-  .progressMapBtn { align-self: flex-start; }
-
-  .levelBadge { text-align: left; width: 100%; }
-
-  .statsRow { grid-template-columns: repeat(2, 1fr); }
-
-  .section { padding: 20px 16px; }
-
-  .sectionHeader { flex-direction: column; align-items: flex-start; }
-
-  .heatCell { width: 10px; height: 10px; }
-
-  .yearSelect { min-height: 40px; padding: 8px 28px 8px 12px; }
-}
-
-@media (max-width: 480px) {
-  .statsRow { grid-template-columns: 1fr; }
-  .greeting { font-size: 1.3rem; }
-
-  .progressMapBtn {
-    white-space: normal;
-    max-width: 100%;
-    text-align: center;
-  }
-}
+.stateCard h2 { margin: 0; font: 700 1.3rem/1.25 var(--d-font); color: var(--d-ink); }
+.stateCard p { margin: 0; color: var(--d-muted); font-size: 1rem; line-height: 1.45; }

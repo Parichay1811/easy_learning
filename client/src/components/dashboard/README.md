@@ -72,11 +72,41 @@ Sidebar is icons only under 1280 px (user can toggle, remembered in localStorage
 (max 5 entries, 4 + "More" sheet when you pass more). Skip link, `<header>`, `<nav>`, `<main id="dash-main">` landmarks.
 `fill` makes the shell `position: fixed` over the whole viewport: use it only while the page still sits under the site `Navbar`
 (better: add the dashboard path to `hideNavbar` in `App.jsx`). `<main>` is a flex column with 18 px gap: just stack cards in it.
+Nav entries may carry `group: 'Manage'`: a heading above each group in the sidebar, a thin rule in the icon rail, a heading in
+the phone "More" sheet (whose button adds up the badges hidden in it). Order entries so the first four are the most used.
+The shell is its own scroll container (`height: 100dvh`, `data-scroll-root`), so the top bar, the rail and sticky rows stay put;
+a new level (path or `tab/view/section/id/org/child`) starts at the top, Back restores the position. On short landscape phones
+(height <= 500 px) it is a slim side rail with a compact bar. `--d-topbar-h` holds the bar's height for sticky rows.
+
+### `SubTabs` + `SubPanel` + `usePane` (one screen per task)
+```jsx
+const [pane, setPane] = usePane(['summary', 'time', 'habits']);          // ?pane=… (first id = default, not in the URL)
+<SubTabs label="Aanya's learning" value={pane} onChange={setPane}
+  tabs={[{ id: 'summary', label: 'Summary' }, { id: 'time', label: 'Learning time', short: 'Time', badge: 2 }, …]}
+  actions={<Button icon={FaPlus}>Add a child</Button>} />                  // the tab's main action, top right
+<SubPanel id="summary" value={pane}>…</SubPanel>
+<PanelHead title="Students" text="One line of help." actions={<Button>Add</Button>} />
+```
+role=tablist with arrow keys / Home / End, sticky under the top bar (not on short landscape), scrolls sideways with edge fades
+when it doesn't fit, `short` labels on phones. `usePane` pushes history, so Back / reload keep the tab; `pane` is not a "level",
+so switching never refetches the page. Use `idBase` when a page has two rows.
+
+### `Sheet` (add / edit / invite)
+```jsx
+{open && <Sheet title="Invite a parent" text="One line of help." onClose={close} footer={<Button>Send</Button>}>…form…</Sheet>}
+```
+Centred dialog on wide screens, bottom sheet on phones; portals to `<body>`, focus trap, Escape (top sheet only), open/close sounds.
+`size`: `sm | md | lg`.
+
+### `WelcomeToast`
+`<WelcomeToast name={user.name} place="parent" />`: the AI teacher's spoken hello (utils/greetings, once per visit) shown in a
+bubble by the puppy for a few seconds. Put it in a shell slot (`user`) so changing pages doesn't cut it short.
 
 ### `useTimeRange` + `TimeRangeBar`
 ```jsx
 const tr = useTimeRange({ defaultRange: 'week', defaultCmp: 'prev', terms });  // terms: [{key,label,from,to}]
 <TimeRangeBar value={tr} ranges={['week','month','year','custom']} showCompare sticky />
+<TimeRangeBar value={tr} compact />          // ‹ [Nov 16 – 22 · Week ⌄] ›, the middle opens the full bar in a sheet ('auto': small screens only)
 fetch(`/api/x?from=${tr.from}&to=${tr.to}&cmpFrom=${tr.prevFrom}&cmpTo=${tr.prevTo}`);
 ```
 URL state: `?range=day|week|month|year|custom|term&from=YYYY-MM-DD&to=…&cmp=none|prev|yoy&term=key`.

@@ -87,6 +87,8 @@ const deleteChild = async (req, res) => {
     }
     const child = await Child.findOneAndDelete({ _id: req.params.id, parentId: req.parent.id })
     if (!child) return res.status(404).json({ success: false, message: 'Child not found' })
+    // A request the parent sent for this child stops too, so it can't be accepted later.
+    await require('../services/linkRequests').cancelForChild(req.parent.id, child._id)
     res.json({ success: true })
   } catch (err) {
     res.status(500).json({ success: false, message: 'Internal server error' })

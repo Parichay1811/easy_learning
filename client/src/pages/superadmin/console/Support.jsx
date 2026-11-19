@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, qs, ago, dateTime } from "./api";
-import { Field, Loadable, Notice, Panel, Pill, StatusPill, Tabs } from "./ui";
+import { Field, Loadable, Notice, Panel, Pill, Segmented, StatusPill } from "./ui";
 import s from "./console.module.css";
 
 const KIND = { contact: "Contact form", admin_chat: "Admin chat", parent_chat: "Parent chat" };
@@ -83,14 +83,14 @@ export default function Support({ go, params, setParams }) {
   const C = inbox.data?.counts;
   const [kind, refId] = open ? [open.split(":")[0], open.slice(open.indexOf(":") + 1)] : [];
   return (
-    <div className={s.split}>
+    <div className={`${s.split} ${s.inbox}`} data-open={open ? "1" : "0"}>
       <Panel title={t("sa.sup.title", "Support inbox")}>
-        <Tabs label={t("sa.sup.filter", "Filter")} value={assignee || status} onChange={(k) => (["me", "none"].includes(k) ? set({ assignee: k, status: "" }) : set({ status: k, assignee: null }))} tabs={[
+        <Segmented label={t("sa.sup.filter", "Filter")} value={assignee || status} onChange={(k) => (["me", "none"].includes(k) ? set({ assignee: k, status: "" }) : set({ status: k, assignee: null }))} options={[
           { key: "open", label: t("sa.status.open", "Open"), badge: C?.open }, { key: "pending", label: t("sa.sup.waiting", "Waiting") },
           { key: "me", label: t("sa.sup.mine", "Mine"), badge: C?.mine }, { key: "none", label: t("sa.sup.unassigned", "Unassigned") }, { key: "", label: t("sa.all", "All") },
         ]} />
         <Loadable state={inbox} empty={inbox.data && !inbox.data.rows.length ? { title: t("sa.sup.empty", "Inbox zero."), text: t("sa.sup.emptyText", "Nothing here right now.") } : null}>
-          <ul className={s.list}>
+          <ul className={`${s.list} ${s.inboxList}`}>
             {(inbox.data?.rows || []).map((r) => {
               const key = `${r.kind}:${r.ref}`;
               return (
@@ -110,6 +110,7 @@ export default function Support({ go, params, setParams }) {
         </Loadable>
       </Panel>
       <Panel>
+        {open && <div className={s.narrowOnly}><button type="button" className={s.linkBtn} data-sound="back" onClick={() => set({ thread: null })}>← {t("sa.sup.back", "Back to the inbox")}</button></div>}
         {open ? <Thread key={open} kind={kind} refId={refId} go={go} canned={canned} onChanged={() => inbox.reload({ quiet: true })} /> : <p className={s.muted}>{t("sa.sup.pick", "Pick a conversation on the left.")}</p>}
       </Panel>
     </div>

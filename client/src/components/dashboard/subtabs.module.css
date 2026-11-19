@@ -1,0 +1,124 @@
+/* Sub-tabs: the site's green "you are here" pill inside a white tray. */
+.bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  min-width: 0;
+}
+.sticky {
+  position: sticky;
+  top: calc(var(--d-topbar-h, 0px) + 6px);
+  z-index: 20;
+  pointer-events: none;   /* the pills float over the page; the gaps between them stay clickable */
+}
+.sticky > * { pointer-events: auto; }
+
+.list {
+  display: flex;
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--d-radius-pill);
+  background: var(--d-card);
+  border: 2px solid var(--d-line);
+  box-shadow: 0 3px 0 var(--d-line);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-padding-inline: 8px;
+}
+.list::-webkit-scrollbar { display: none; }
+.list[data-more="end"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 36px), transparent); }
+.list[data-more="start"] { -webkit-mask-image: linear-gradient(90deg, transparent, #000 36px); mask-image: linear-gradient(90deg, transparent, #000 36px); }
+.list[data-more="both"] { -webkit-mask-image: linear-gradient(90deg, transparent, #000 36px, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(90deg, transparent, #000 36px, #000 calc(100% - 36px), transparent); }
+[dir="rtl"] .list[data-more="end"] { -webkit-mask-image: linear-gradient(270deg, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(270deg, #000 calc(100% - 36px), transparent); }
+[dir="rtl"] .list[data-more="start"] { -webkit-mask-image: linear-gradient(270deg, transparent, #000 36px); mask-image: linear-gradient(270deg, transparent, #000 36px); }
+.short { display: none; }
+
+.tab {
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  padding: 4px 16px;
+  border: 0;
+  border-radius: var(--d-radius-pill);
+  background: transparent;
+  color: var(--d-ink);
+  font: inherit;
+  font-size: 0.97rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.tab:hover { background: var(--d-card-alt); }
+.tab.on {
+  background: var(--d-accent);
+  color: var(--d-on-accent);
+  font-weight: 600;
+  box-shadow: 0 3px 0 var(--d-accent-lip), inset 0 2px 0 rgba(255, 255, 255, 0.18);
+}
+.icon { display: inline-flex; font-size: 0.95em; opacity: 0.9; }
+.label { min-width: 0; }
+.badge {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--d-radius-pill);
+  background: var(--d-alert);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
+}
+.on .badge { background: #fff; color: var(--d-alert-ink); }
+
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-inline-start: auto; }
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  min-width: 0;
+  outline: none;
+  animation: paneIn 0.26s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes paneIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* The head of a tab: title + help on the left, the main action on the right. */
+.head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; min-width: 0; }
+.headText { flex: 1 1 260px; min-width: 0; }
+.headTitle { margin: 0; font-size: 1.25rem; line-height: 1.25; }
+.headHelp { margin: 2px 0 0; color: var(--d-muted); font-size: 0.95rem; line-height: 1.4; }
+.headActions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+@media (max-width: 700px) {
+  .tab { min-height: 38px; padding: 4px 12px; font-size: 0.92rem; gap: 6px; }
+  .long { display: none; }
+  .short { display: inline; }
+  .list { flex: 1 1 100%; }
+  .actions { margin-inline-start: 0; width: 100%; }
+  .actions > * { flex: 1 1 auto; }
+  .headTitle { font-size: 1.1rem; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .tab { min-height: 34px; padding: 2px 12px; }
+  /* every pixel of height counts here: the row scrolls away with the page */
+  .sticky { position: relative; top: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .panel { animation: none; }
+}
+@media print {
+  .sticky { position: static; }
+}

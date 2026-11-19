@@ -55,6 +55,14 @@ router.get('/students/:id/profile', permit('analytics.read'), a.studentProfile)
 router.post('/tutors/:id/transfer', permit('people.write'), s.transferTeacher)
 router.get('/seats', permit('people.read'), s.seats)
 
+// Connect by email: invite teachers and learners, answer teachers who ask to join (services/linkRequests.js)
+const links = require('../controllers/linkRequestController').admin
+router.get('/links', permit(), links.list)
+router.post('/links', permit('people.write'), links.create)
+router.post('/links/:id/accept', permit('people.write'), links.accept)
+router.post('/links/:id/decline', permit('people.write'), links.decline)
+router.post('/links/:id/cancel', permit('people.write'), links.cancel)
+
 // Staff roles (ADM-023)
 router.get('/staff', adminOnly, requireModule('staff.roles'), s.listStaff)
 router.post('/staff', adminOnly, requireModule('staff.roles'), s.addStaff)

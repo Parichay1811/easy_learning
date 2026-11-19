@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, DataTable } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, qs, dateOnly } from "./api";
-import { Facts, Loadable, Modal, Notice, Pager, Panel, Pill, ReasonDialog, StatusPill, Tabs } from "./ui";
+import { Facts, Loadable, Modal, Notice, Pager, Panel, Pill, ReasonDialog, Segmented, StatusPill } from "./ui";
 import s from "./console.module.css";
 
 function Request({ id, onClose, onChanged }) {
@@ -65,11 +65,12 @@ export default function Privacy({ params, setParams }) {
   const set = (patch) => setParams((p) => { const n = new URLSearchParams(p); for (const [k, v] of Object.entries(patch)) { if (v) n.set(k, v); else n.delete(k); } n.set("section", "privacy"); return n; });
   const Q = q.data;
   return (
-    <Panel title={t("sa.dr.title", "Data-rights requests")} sub={t("sa.dr.sub", "GDPR: answer within 30 days. Overdue first.")}>
-      <Tabs label={t("sa.dr.filter", "Show")} value={status} onChange={(k) => { setPage(1); set({ status: k }); }} tabs={[
+    <Panel title={t("sa.dr.title", "Data-rights requests")} sub={t("sa.dr.sub", "GDPR: answer within 30 days. Overdue first.")} actions={
+      <Segmented label={t("sa.dr.filter", "Show")} value={status} onChange={(k) => { setPage(1); set({ status: k }); }} options={[
         { key: "", label: t("sa.dr.openTab", "To do"), badge: (Q?.counts.pending || 0) + (Q?.counts.processing || 0) || undefined },
         { key: "done", label: t("sa.status.done", "Done") }, { key: "rejected", label: t("sa.status.rejected", "Rejected") }, { key: "all", label: t("sa.all", "All") },
       ]} />
+    }>
       <Loadable state={q} empty={Q && !Q.rows.length ? { title: t("sa.dr.none", "No requests here."), text: t("sa.dr.noneText", "Requests from parents, schools and adults appear here.") } : null}>
         {Q && (
           <>

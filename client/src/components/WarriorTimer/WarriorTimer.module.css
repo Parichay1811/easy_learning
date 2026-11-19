@@ -1,0 +1,115 @@
+/* The Warrior clock. Colours warm up as time runs down; nothing flashes. */
+.timer {
+  --c: #4dc9ff;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fff;
+  font-family: "Fredoka", sans-serif;
+  cursor: pointer;
+  flex: none;
+}
+.timer:disabled { cursor: default; }
+.timer:focus-visible { outline: 3px solid #ffd45c; outline-offset: 3px; border-radius: 999px; }
+
+.calm { --c: #4dc9ff; }
+.warm { --c: #ffc94d; }
+.last { --c: #ff9d4d; }
+.out { --c: #ffb38a; }
+
+.ring {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--timer-size, 46px);
+  height: var(--timer-size, 46px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, rgba(255, 255, 255, 0.16), rgba(10, 16, 34, 0.75));
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12), 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.4s ease;
+}
+.warm .ring, .last .ring { box-shadow: 0 0 0 2px rgba(255, 201, 77, 0.35), 0 0 14px rgba(255, 170, 70, 0.35); }
+
+.svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.track { fill: none; stroke: rgba(255, 255, 255, 0.14); stroke-width: 4.5; }
+.arc {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.95s linear, stroke 0.6s ease;
+}
+
+.num {
+  position: relative;
+  font-size: calc(var(--timer-size, 46px) * 0.36);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  line-height: 1;
+}
+
+/* One soft pulse per tick, in step with the sound. */
+.pulse { animation: tickPulse 0.42s ease-out; }
+.last .pulse { animation: tickPulseStrong 0.5s ease-out; }
+@keyframes tickPulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.07); }
+  100% { transform: scale(1); }
+}
+@keyframes tickPulseStrong {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* In the last five seconds a warm ring breathes outwards with each tick. */
+.glow {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: var(--timer-size, 46px);
+  height: var(--timer-size, 46px);
+  margin-top: calc(var(--timer-size, 46px) / -2);
+  border-radius: 50%;
+  border: 2px solid var(--c);
+  pointer-events: none;
+  animation: glowOut 0.8s ease-out forwards;
+}
+@keyframes glowOut {
+  from { opacity: 0.7; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.6); }
+}
+
+.state {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--c);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.state:empty { display: none; }
+
+.paused .ring { opacity: 0.85; }
+.paused .arc { transition: none; }
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulse, .last .pulse { animation: none; }
+  .glow { display: none; }
+  .arc { transition: stroke 0.6s ease; }
+}

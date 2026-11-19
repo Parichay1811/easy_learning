@@ -233,3 +233,74 @@
 .schoolStatus { font-size: .88rem; font-weight: 600; color: var(--d-accent-ink); }
 .schoolScore { font-weight: 700; color: var(--d-good-ink); }
 .schoolComment { margin: 4px 0 0; font-style: italic; color: var(--d-ink); }
+
+/* ── One screen per tab (sub-tabs) ─────────────────────────────────────── */
+.pageHead h1 { font-size: 1.4rem; }
+.pageHead p { font-size: 0.95rem; }
+/* chart + a small side card */
+.split { display: grid; gap: 14px; grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 1000px) { .split { grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr); } }
+.devices { align-self: stretch; }
+/* the activity log scrolls inside its card on tablets and up */
+@media (min-width: 701px) and (min-height: 501px) {
+  .logScroll { position: relative; max-height: max(320px, calc(100dvh - var(--d-topbar-h, 68px) - 330px)); overflow-y: auto; overscroll-behavior: contain; padding-inline-end: 4px; }
+  .chatList { max-height: max(240px, calc(100dvh - var(--d-topbar-h, 68px) - 360px)); }
+}
+.signOut { display: inline-flex; align-items: center; gap: 8px; }
+@media (max-width: 520px) {
+  .signOut { min-width: 44px; min-height: 44px; padding: 0; justify-content: center; border-radius: 50%; }
+  .signOutText { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+/* short landscape phones: smaller headings, no sub-line */
+@media (max-height: 500px) {
+  .pageHead h1 { font-size: 1.15rem; }
+  .pageHead p { display: none; }
+  .card { padding: 14px; }
+}
+
+/* ── Family sub-tabs (ParentFamily.jsx) ────────────────────────────────── */
+/* "2 requests are waiting": one calm line on the Children tab that opens Requests. */
+.famNudge {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px 14px; border-radius: var(--d-radius-sm);
+  background: var(--d-sun-soft, var(--d-attention-soft)); border: 2px solid color-mix(in srgb, var(--d-attention) 35%, transparent); color: var(--d-ink);
+}
+.famNudgeIcon { font-size: 1.4rem; line-height: 1; }
+.famNudgeText { flex: 1 1 180px; min-width: 0; font-weight: 500; }
+.famHead .headTitle, .famHead h2 { color: var(--d-ink); }
+/* Goal and Cheers are one card each: keep them a readable width on big screens. */
+.famNarrow { width: 100%; max-width: 760px; }
+/* Goal form: minutes and days side by side, even on phones. */
+.goalGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+/* Badges wide, milestones beside them on laptops; one column below. */
+.achGrid { display: grid; gap: 14px; grid-template-columns: minmax(0, 1fr); align-items: start; }
+@media (min-width: 1000px) { .achGrid { grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); } }
+.badgesFit { grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); }
+/* Phones and short landscape: the wall as small tiles (icon + name); the next badge is spelled out once. */
+.nextUp { display: none; margin: 10px 0 0; color: var(--d-muted); }
+@media (max-width: 700px), (max-height: 500px) {
+  .badgesFit { grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; }
+  .badgesFit .badge { padding: 10px 4px; gap: 2px; }
+  .badgesFit .badgeIcon { font-size: 1.6rem; }
+  .badgesFit strong { font-size: 0.8rem; line-height: 1.2; overflow-wrap: anywhere; }
+  .badgesFit .small { font-size: 0.75rem; }
+  .badgesFit .badgeNext { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .nextUp { display: block; }
+  .milestone { gap: 10px; font-size: 0.95rem; }
+}
+@media (max-width: 379px) { .badgesFit { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 380px) and (max-width: 700px) { .badgesFit { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+/* Phones and short landscape: the tabs say what the page holds, so the sub-lines go. */
+@media (max-width: 700px), (max-height: 500px) {
+  .famSub { display: none; }
+  .famHead p { display: none; }
+}
+/* Child cards on phones: smaller, two buttons in a row; "Stop following" becomes an icon in the corner. */
+.kid { position: relative; }
+@media (max-width: 700px) {
+  .kids { gap: 10px; }
+  .kid { padding: 14px; gap: 10px; }
+  .kid .avatarBig { width: 44px; height: 44px; font-size: 1.5rem; }
+  .kid .kidTop { padding-inline-end: 46px; }
+  .kid .kidStop { position: absolute; top: 10px; inset-inline-end: 10px; min-width: 44px; min-height: 44px; padding: 0; justify-content: center; border-radius: 50%; }
+  .kid .kidStop > span:last-child { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}

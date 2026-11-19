@@ -1,10 +1,12 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   useLocation,
+  useNavigationType,
 } from "react-router-dom";
+import { installUiSounds, navSoundWithin, sfx } from "./utils/sounds";
 
 import { AnimatePresence } from "framer-motion";
 
@@ -66,6 +68,26 @@ const SchoolApp = lazy(() => import("./pages/admin/school/SchoolApp"));
 const SuperAdminConsole = lazy(() => import("./pages/superadmin/console/SuperAdminConsole"));
 const ViewAsLanding = lazy(() => import("./pages/ViewAsLanding"));
 const StatusPage = lazy(() => import("./pages/StatusPage"));
+
+// Every button and link makes a sound that fits what it does (utils/sounds.js).
+installUiSounds();
+
+// Pages change with a sound that matches the motion: a whoosh forward into a
+// new page, a softer one back (the browser's Back, or a back button). A link or
+// button that already played its own navigation sound is not doubled.
+function RouteSounds() {
+  const { pathname } = useLocation();
+  const navType = useNavigationType();
+  const prev = useRef(pathname);
+  useEffect(() => {
+    if (prev.current === pathname) return;
+    prev.current = pathname;
+    if (navSoundWithin(900)) return;
+    if (navType === "POP") sfx.back();
+    else sfx.whoosh();
+  }, [pathname, navType]);
+  return null;
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -145,7 +167,7 @@ function AppLayout() {
   // question modules, Subject page, the Games/Camera Games hubs and the Student
   // Dashboard — shares the same full-viewport video background, so the app reads
   // as one place rather than switching backdrops page to page. The role-select
-  // gate and every login page share the RoboticBackground instead, and an active
+  // gate and every login page draw their own meadow scene (components/Entry) instead, and an active
   // camera session (gameplay or Insights) owns the whole viewport with its own
   // background.
   const hideBackground3D = isAR || isSchool || [
@@ -160,6 +182,7 @@ function AppLayout() {
 
   return (
     <>
+      <RouteSounds />
       <ViewAsBanner />
       <StatusBanner />
       {!hideBackground3D && <Background3D />}

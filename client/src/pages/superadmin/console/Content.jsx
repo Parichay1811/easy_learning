@@ -1,11 +1,11 @@
 // Content (SUP-030, SUP-032): the built-in Learnigo question banks with
 // translation coverage, browse, edit and tag; and the AI Teacher's content.
 // An organisation's own uploaded questions are approved by its admin, not here.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, DataTable } from "../../../components/dashboard";
+import { Button, DataTable, usePane } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, qs, dateTime } from "./api";
-import { Facts, Field, Loadable, Modal, Notice, Pager, Panel, Pill, Tabs } from "./ui";
+import { Facts, Field, Loadable, Modal, Notice, Pager, Panel, Pill, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 const EDIT = [["prompt", "Prompt", "textarea"], ["instruction", "Instruction", "textarea"], ["audio_text", "Spoken text", "textarea"], ["question", "Question (older format)", "textarea"], ["answer", "Answer (older format)", "input"], ["difficulty_band", "Difficulty band", "input"]];
@@ -90,8 +90,18 @@ function Bank({ bank, languages, onBack }) {
   );
 }
 
+// Phones get one "Translations" column instead of a column per language.
+function useNarrow() {
+  const q = "(max-width: 700px)";
+  const [n, setN] = useState(() => window.matchMedia(q).matches);
+  useEffect(() => { const m = window.matchMedia(q); const on = () => setN(m.matches); m.addEventListener("change", on); return () => m.removeEventListener("change", on); }, []);
+  return n;
+}
+const trTone = (pct) => (pct >= 90 ? "good" : pct >= 40 ? "attention" : "alert");
+
 function Banks() {
   const { t } = useTranslation();
+  const narrow = useNarrow();
   const b = useLoad("/content/banks");
   const [open, setOpen] = useState(null);
   const B = b.data;
@@ -104,7 +114,9 @@ function Banks() {
           { key: "builtIn", label: t("sa.ct.builtIn", "Built-in"), align: "end" },
           { key: "orgUploads", label: t("sa.ct.orgUploads", "Org uploads"), align: "end" },
           { key: "tagged", label: t("sa.ct.tagged", "Tagged"), align: "end" },
-          ...B.languages.map((l) => ({ key: `tr_${l}`, label: l.toUpperCase(), align: "end", sortValue: (r) => r.translations[l]?.pct ?? -1, render: (r) => (r.translations[l]?.pct == null ? "—" : <Pill tone={r.translations[l].pct >= 90 ? "good" : r.translations[l].pct >= 40 ? "attention" : "alert"}>{r.translations[l].pct} %</Pill>) })),
+          ...(narrow
+            ? [{ key: "tr", label: t("sa.ct.translations", "Translations"), render: (r) => <span className={s.pillWrap}>{B.languages.filter((l) => r.translations[l]?.pct != null).map((l) => <Pill key={l} tone={trTone(r.translations[l].pct)}>{l.toUpperCase()} {r.translations[l].pct} %</Pill>)}{!B.languages.some((l) => r.translations[l]?.pct != null) && "—"}</span> }]
+            : B.languages.map((l) => ({ key: `tr_${l}`, label: l.toUpperCase(), align: "end", sortValue: (r) => r.translations[l]?.pct ?? -1, render: (r) => (r.translations[l]?.pct == null ? "—" : <Pill tone={trTone(r.translations[l].pct)}>{r.translations[l].pct} %</Pill>) }))),
         ]} />}
       </Loadable>
       <p className={`${s.small} ${s.muted}`}>{t("sa.ct.qualityLater", "Quality flags from item analysis (likely wrong key, too easy, confusing) come with the test item analysis; until then staff tags mark questions to review.")}</p>
@@ -154,13 +166,15 @@ function AiTeacher() {
 
 export default function Content() {
   const { t } = useTranslation();
-  const [tab, setTab] = useState("banks");
+  const [tab, setTab] = usePane(["banks", "ai", "public"]);
   return (
     <>
       <Tabs label={t("sa.nav.content", "Content")} value={tab} onChange={setTab} tabs={[{ key: "banks", label: t("sa.ct.banks", "Question banks") }, { key: "ai", label: t("sa.ct.ai", "AI Teacher") }, { key: "public", label: t("sa.ct.public", "Public bank submissions") }]} />
-      {tab === "banks" && <Banks />}
-      {tab === "ai" && <AiTeacher />}
-      {tab === "public" && <Panel title={t("sa.ct.public", "Public bank submissions")}><p className={s.muted}>{t("sa.ct.publicNot", "Not available yet: teachers cannot share questions publicly until the question-sharing feature (TCH-025) exists. Organisation question approval stays with each organisation's admin.")}</p></Panel>}
+      <TabBody value={tab}>
+        {tab === "banks" && <Banks />}
+        {tab === "ai" && <AiTeacher />}
+        {tab === "public" && <Panel title={t("sa.ct.public", "Public bank submissions")}><p className={s.muted}>{t("sa.ct.publicNot", "Not available yet: teachers cannot share questions publicly until the question-sharing feature (TCH-025) exists. Organisation question approval stays with each organisation's admin.")}</p></Panel>}
+      </TabBody>
     </>
   );
 }

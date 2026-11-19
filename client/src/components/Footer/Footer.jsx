@@ -1,10 +1,25 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { FaGlobe, FaShieldAlt, FaFileContract, FaTags } from "react-icons/fa";
 import styles from "./Footer.module.css";
 
+// The game screens (Home, a subject, a question round, the games hubs, the
+// student's dashboard, the AI teacher) are one screen each, with nothing below
+// the fold, so the footer steps aside there.
+// Its links stay one tap away in the navbar's menu and on every content page
+// (About, Contact, FAQ, Policy…), which keep the full footer.
+const PLAY_PATHS = ["/home", "/games", "/games/ar", "/dashboard", "/ai-teacher"];
+const PLAY_PREFIXES = ["/subject/", "/module/"];
+
+function isPlayPath(pathname) {
+  return PLAY_PATHS.includes(pathname) || PLAY_PREFIXES.some((p) => pathname.startsWith(p));
+}
+
 const Footer = () => {
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+
+  if (isPlayPath(pathname)) return null;
 
   return (
     <footer className={styles.footer}>

@@ -1,7 +1,11 @@
 // Small building blocks shared by the school pages.
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NO_DATA } from "../../../components/dashboard";
+import { FaCalendarAlt, FaChevronDown, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { NO_DATA, Sheet, TimeRangeBar, Button, fmtDate, parseISO, today } from "../../../components/dashboard";
+import { RANGE_COMPACT, useMedia } from "./useMedia";
+import { sfx } from "../../../utils/sounds";
+import st from "../../../components/dashboard/subtabs.module.css";
 import s from "./school.module.css";
 
 // One heatmap cell: the number is always printed, the tint only backs it up.
@@ -44,42 +48,83 @@ export function StatusPill({ status, label }) {
   return <span className={`${s.pill} ${s[STATUS_TONE[status]] || ""}`}>{label || t(`school.status.${status}`, { defaultValue: words[status] || status })}</span>;
 }
 
-// Accessible tabs bound to a value. tabs: [{ key, label }]
-export function Tabs({ tabs, value, onChange, label }) {
+// Accessible tabs bound to a value, drawn like the kit's sub-tabs (a tray with the
+// green pill). tabs: [{ key, label, badge? }]. Arrow keys, Home and End move between them.
+export function Tabs({ tabs, value, onChange, label, sticky = true }) {
   const refs = useRef({});
+  useEffect(() => {
+    const el = refs.current[value];
+    const list = el?.parentElement;
+    if (el && list && list.scrollWidth > list.clientWidth) el.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }, [value]);
   const onKey = (e, i) => {
-    if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
-    const next = tabs[(i + (e.key === "ArrowRight" ? 1 : tabs.length - 1)) % tabs.length];
-    onChange(next.key); refs.current[next.key]?.focus();
+    const rtl = getComputedStyle(e.currentTarget).direction === "rtl";
+    let j = null;
+    if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) j = (i + 1) % tabs.length;
+    else if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) j = (i - 1 + tabs.length) % tabs.length;
+    else if (e.key === "Home") j = 0;
+    else if (e.key === "End") j = tabs.length - 1;
+    if (j == null) return;
+    e.preventDefault();
+    sfx.tab();
+    onChange(tabs[j].key);
+    refs.current[tabs[j].key]?.focus();
   };
   return (
-    <div className={s.tabs} role="tablist" aria-label={label}>
-      {tabs.map((tb, i) => (
-        <button key={tb.key} ref={(el) => { refs.current[tb.key] = el; }} type="button" role="tab" className={s.tab}
-          aria-selected={value === tb.key} tabIndex={value === tb.key ? 0 : -1} onClick={() => onChange(tb.key)} onKeyDown={(e) => onKey(e, i)}>
-          {tb.label}
-        </button>
-      ))}
+    <div className={`${st.bar} ${sticky ? st.sticky : ""}`} data-print="hide">
+      <div className={st.list} role="tablist" aria-label={label}>
+        {tabs.map((tb, i) => {
+          const on = value === tb.key;
+          return (
+            <button key={tb.key} ref={(el) => { refs.current[tb.key] = el; }} type="button" role="tab" className={`${st.tab} ${on ? st.on : ""}`}
+              aria-selected={on} tabIndex={on ? 0 : -1} onClick={() => { if (!on) onChange(tb.key); }} onKeyDown={(e) => onKey(e, i)}>
+              <span className={st.label}>{tb.label}</span>
+              {tb.badge ? <span className={st.badge}>{tb.badge}</span> : null}
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
 
-// A small modal dialog with focus on open and Escape to close.
-export function Dialog({ title, onClose, children }) {
-  const box = useRef(null);
-  useEffect(() => {
-    const prev = document.activeElement;
-    box.current?.querySelector("input,select,textarea,button")?.focus();
-    const esc = (e) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("keydown", esc);
-    return () => { document.removeEventListener("keydown", esc); prev?.focus?.(); };
-  }, [onClose]);
+// A small dialog (the kit Sheet: centred on wide screens, a bottom sheet on phones),
+// focus on open, Escape or a tap outside to close, with the open / close sounds.
+export function Dialog({ title, text, onClose, children, size }) {
+  return <Sheet title={title} text={text} onClose={onClose} size={size}>{children}</Sheet>;
+}
+
+// The time range. Wide, tall screens get the full bar; phones, tablets and short screens a
+// one-line pill (earlier · the period · later) that opens the full bar in a sheet.
+export function RangeControl({ tr, ranges = ["week", "month", "year", "custom"], showCompare = true }) {
+  const { t } = useTranslation();
+  const compact = useMedia(RANGE_COMPACT);
+  const [open, setOpen] = useState(false);
+  if (!compact) return <TimeRangeBar value={tr} ranges={ranges} showCompare={showCompare} />;
+  const period = fmtDate({ from: tr.from, to: tr.to }, { style: tr.range === "month" ? "month" : "short" });
+  // Short words on the pill; the sheet shows the full range.
+  const short = tr.range === "month" ? fmtDate(tr.from, { style: "month" })
+    : tr.range === "year" ? String(parseISO(tr.from)?.getFullYear() ?? period)
+      : tr.range === "custom" || tr.range === "term" ? period : fmtDate({ from: tr.from, to: tr.to }, { style: "day" });
+  const canNext = tr.range === "custom" || tr.range === "term" ? true : parseISO(tr.to) < today();
+  const word = t(`dash.range.${tr.range}`, { defaultValue: { day: "Day", week: "Week", month: "Month", year: "Year", custom: "Custom", term: "Term" }[tr.range] || tr.range });
   return (
-    <div className={s.dlg} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className={s.dlgBox} role="dialog" aria-modal="true" aria-labelledby="dlg-title" ref={box}>
-        <h2 id="dlg-title" className={s.cardTitle} style={{ marginBottom: 14 }}>{title}</h2>
-        {children}
-      </div>
+    <div className={s.rangeRow} data-print="hide">
+      <button type="button" className={s.iconBtn} onClick={() => tr.shift(-1)} aria-label={t("dash.range.back", { defaultValue: "Earlier period" })}><FaChevronLeft aria-hidden="true" /></button>
+      <button type="button" className={s.rangePill} aria-haspopup="dialog" onClick={() => setOpen(true)}
+        aria-label={t("school.range.change", { defaultValue: "Time range: {{period}}. Change it", period })}>
+        <FaCalendarAlt aria-hidden="true" />
+        <span className={s.rangeText}>{short}</span>
+        <span className={s.rangeWord}>{word}</span>
+        <FaChevronDown aria-hidden="true" />
+      </button>
+      <button type="button" className={s.iconBtn} onClick={() => tr.shift(1)} disabled={!canNext} aria-label={t("dash.range.forward", { defaultValue: "Later period" })}><FaChevronRight aria-hidden="true" /></button>
+      {open && (
+        <Sheet title={t("school.range.title", { defaultValue: "Time range" })} text={t("school.range.text", { defaultValue: "Which days to show, and what to compare them with." })}
+          onClose={() => setOpen(false)} footer={<Button onClick={() => setOpen(false)}>{t("school.range.done", { defaultValue: "Done" })}</Button>}>
+          <TimeRangeBar value={tr} ranges={ranges} showCompare={showCompare} />
+        </Sheet>
+      )}
     </div>
   );
 }

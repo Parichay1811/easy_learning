@@ -10,21 +10,25 @@
    blurb. The level pips are the LAST thing to go, because they are the only
    part of a tile that tells a child where they are. */
 
-/* Sits below the site navbar like any other page (the shared .overlay dims
-   the site's video background behind it for legibility), rather than owning
-   the whole viewport the way an active camera session does. */
+/* Sits below the site navbar like any other game screen: it owns exactly the
+   viewport under the bar (fixed, so nothing — not a scroll position left over
+   from the previous page, not the footer — can push it up under the navbar).
+   The shared .overlay dims the site's video background behind it. */
 .hub {
-  position: relative;
+  position: fixed;
+  top: var(--nav-h, 64px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
   /* Capped and centred so a 4K or ultra-wide monitor gets a well-proportioned
      board instead of four tiles stretched edge-to-edge with their content
      stranded in a corner — the same "centred card, not a full-bleed page"
-     treatment the rest of the site gives large screens (see GamesPage's
-     .arCard). Small and medium screens never reach the cap. */
+     treatment the rest of the site gives large screens. Small and medium
+     screens never reach the cap. */
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
-  height: calc(100dvh - 80px);
-  max-height: calc(100dvh - 80px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -36,8 +40,15 @@
   -webkit-user-select: none;
 }
 
-@supports not (height: 100dvh) {
-  .hub { height: calc(100vh - 80px); max-height: calc(100vh - 80px); }
+/* The language switch lives in the site navbar; the hub's own copy shows only
+   if the hub is ever shown without it. */
+:global(body:has([data-site-navbar])) .hubLang { display: none; }
+.hubLang { display: contents; }
+
+/* The floating AI Teacher button sits bottom-right (from 430px wide): the
+   board and footer keep that corner clear rather than slide under it. */
+@media (min-width: 430px) and (max-width: 1759px) {
+  .board, .foot { margin-right: 76px; }
 }
 
 .overlay {
@@ -117,6 +128,35 @@
 }
 
 .headRight { display: flex; align-items: center; gap: 6px; }
+
+/* Back: the same frosted pill with an arrow and a word as the other game
+   screens' top bars (the word drops on narrow screens). */
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-shrink: 0;
+  min-width: clamp(36px, 6.5vw, 44px);
+  height: clamp(36px, 6.5vw, 44px);
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+.backBtn:hover { background: rgba(255, 255, 255, 0.24); }
+.backBtn:active { transform: scale(0.94); }
+.backBtn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+@media (max-width: 600px), (orientation: landscape) and (max-height: 500px) {
+  .backText { display: none; }
+  .backBtn { padding: 0; }
+}
 
 /* Same frosted pill as the back button used on every other secondary page,
    with a bit more glass depth and a soft glow on hover instead of a flat

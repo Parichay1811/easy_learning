@@ -21,6 +21,14 @@ module.exports = function mountParentFamily(router) {
   router.get('/guardian-invites', fam.myInvites)
   router.post('/guardian-invites/accept', fam.acceptInvite)
 
+  // Connect by email with a learner: send, answer, cancel (services/linkRequests.js)
+  const links = require('../controllers/linkRequestController').parent
+  router.get('/links', links.list)
+  router.post('/links', links.create)
+  router.post('/links/:id/accept', links.accept)
+  router.post('/links/:id/decline', links.decline)
+  router.post('/links/:id/cancel', links.cancel)
+
   // Settings, goal, cheers (PAR-004, PAR-012, PAR-042, PAR-060, PAR-061)
   router.patch('/children/:id/settings', own, fam.updateSettings)
   router.get('/children/:id/goal', own, fam.getGoal)

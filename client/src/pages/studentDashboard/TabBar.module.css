@@ -1,0 +1,188 @@
+/* ── The game-menu tab bar ─────────────────────────────────────────────────
+   Phones / portrait tablets: a chunky bar along the bottom.
+   Landscape (phones turned sideways, tablets, laptops): a rail on the left. */
+.bar {
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  background: rgba(255, 255, 255, 0.92);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 2px solid #fff;
+  border-radius: 26px;
+  box-shadow: 0 5px 0 rgba(31, 64, 120, 0.16), 0 18px 36px -20px rgba(31, 64, 120, 0.55);
+}
+
+.tab {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px 2px 4px;
+  border: 0;
+  border-radius: 20px;
+  background: transparent;
+  color: var(--d-muted);
+  font: 600 0.74rem/1.15 var(--d-font);
+  letter-spacing: 0.01em;
+  word-spacing: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon {
+  position: relative;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font-size: 1.15rem;
+  line-height: 1;
+  background: var(--hue-soft);
+  color: var(--hue-ink);
+  transition: transform 0.28s cubic-bezier(0.3, 1.6, 0.5, 1), background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tab:hover .icon { transform: translateY(-2px); }
+.tab:active .icon { transform: translateY(1px) scale(0.96); }
+
+.tab[aria-selected="true"] {
+  color: var(--d-ink);
+  background: var(--hue-soft);
+}
+
+.tab[aria-selected="true"] .icon {
+  background: var(--hue);
+  color: var(--hue-on);
+  box-shadow: 0 3px 0 var(--hue-lip);
+  transform: translateY(-2px) scale(1.07);
+}
+
+.text {
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.15;
+}
+
+.dot {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff6b6b;
+  border: 2px solid #fff;
+}
+
+@media (max-width: 389px) {
+  .bar { gap: 2px; padding: 5px 4px; }
+  .tab { font-size: 0.68rem; letter-spacing: 0; padding: 5px 0 4px; }
+}
+
+/* Side rail */
+@media (orientation: landscape) and (min-width: 600px) {
+  .bar {
+    flex-direction: column;
+    justify-content: center;
+    width: clamp(86px, 7.2vw, 108px);
+    padding: 8px 6px;
+  }
+  .tab {
+    flex: 0 1 76px;
+    min-height: 50px;
+    width: 100%;
+    font-size: clamp(0.68rem, 0.82vw, 0.84rem);
+    letter-spacing: 0;
+  }
+  .icon {
+    width: clamp(34px, 3.4vw, 44px);
+    height: clamp(34px, 3.4vw, 44px);
+    font-size: clamp(1.05rem, 1.3vw, 1.35rem);
+  }
+}
+
+/* Short landscape phones: tighter rail so five tabs fit in ~290px. */
+@media (orientation: landscape) and (min-width: 600px) and (max-height: 520px) {
+  .bar { gap: 2px; padding: 4px; border-radius: 22px; width: 80px; }
+  .tab { flex: 1 1 0; min-height: 44px; gap: 1px; padding: 3px 2px; font-size: 0.66rem; border-radius: 16px; }
+  .icon { width: 30px; height: 30px; font-size: 0.98rem; border-radius: 11px; }
+}
+
+/* ── Segmented switch inside a tab ─────────────────────────────────────── */
+.seg {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  max-width: 100%;
+  background: rgba(255, 255, 255, 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 2px solid #fff;
+  border-radius: 999px;
+  box-shadow: 0 3px 0 rgba(31, 64, 120, 0.12);
+}
+
+.segBtn {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--d-muted);
+  font: 600 0.92rem/1.1 var(--d-font);
+  letter-spacing: 0.01em;
+  word-spacing: 0;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+
+.segBtn:hover { color: var(--d-ink); }
+
+.segBtn[aria-selected="true"] {
+  background: var(--d-accent);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--d-accent-lip);
+}
+
+.segIcon { display: inline-grid; place-items: center; font-size: 1rem; line-height: 1; }
+.segText { overflow: hidden; text-overflow: ellipsis; line-height: 1.15; }
+
+@media (max-width: 599px), (orientation: portrait) {
+  .segBtn { flex: 1 1 0; }
+}
+
+@media (max-width: 420px) {
+  .segBtn { padding: 6px 8px; font-size: 0.86rem; gap: 5px; }
+}
+
+@media (max-height: 520px) and (orientation: landscape) {
+  .segBtn { min-height: 36px; padding: 4px 12px; font-size: 0.84rem; }
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

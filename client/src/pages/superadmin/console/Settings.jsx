@@ -3,9 +3,9 @@
 // legal versions, email templates, AI Teacher profile, canned support replies.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "../../../components/dashboard";
+import { Button, usePane } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, dateTime } from "./api";
-import { Field, Loadable, Notice, Panel, Pill, SecretBox } from "./ui";
+import { Field, Loadable, Modal, Notice, Panel, Pill, SecretBox, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 function MyAccount({ me }) {
@@ -42,24 +42,30 @@ function MyAccount({ me }) {
   );
 }
 
-function JsonSetting({ k, item, canEdit, onSave }) {
+// One JSON setting, edited in a dialog (the list shows a one-line preview).
+function JsonSetting({ k, item, canEdit, onSave, onClose }) {
   const { t } = useTranslation();
   const [text, setText] = useState(() => JSON.stringify(item.value, null, 2));
   const [err, setErr] = useState("");
   const save = async () => {
     let value;
     try { value = JSON.parse(text); } catch { setErr(t("sa.set.json", "That is not valid JSON.")); return; }
-    try { await onSave(k, value); setErr(""); } catch (e) { setErr(e.message); }
+    try { await onSave(k, value); setErr(""); onClose(); } catch (e) { setErr(e.message); }
   };
   return (
-    <div className={s.stack}>
-      <Field label={<>{item.label} {item.isDefault && <Pill>{t("sa.set.default", "default")}</Pill>}</>} error={err}>
-        <textarea className={`${s.textarea} ${s.mono}`} rows={Math.min(14, text.split("\n").length + 1)} value={text} readOnly={!canEdit} onChange={(e) => setText(e.target.value)} spellCheck={false} />
+    <Modal wide title={item.label} onClose={onClose} footer={canEdit ? <>
+      <Button variant="ghost" onClick={onClose}>{t("sa.cancel", "Cancel")}</Button>
+      <Button onClick={save}>{t("sa.save", "Save")}</Button>
+    </> : <Button variant="ghost" onClick={onClose}>{t("sa.close", "Close")}</Button>}>
+      <Field label={<>{t("sa.set.value", "Value (JSON)")} {item.isDefault && <Pill>{t("sa.set.default", "default")}</Pill>}</>} hint={<span className={s.mono}>{k}</span>} error={err}>
+        <textarea className={`${s.textarea} ${s.mono}`} rows={Math.min(18, text.split("\n").length + 1)} value={text} readOnly={!canEdit} onChange={(e) => setText(e.target.value)} spellCheck={false} />
       </Field>
-      {canEdit && <div><Button size="sm" variant="soft" onClick={save}>{t("sa.save", "Save")}</Button></div>}
-    </div>
+    </Modal>
   );
 }
+
+const JSON_KEYS = ["platform.retention", "platform.legal", "platform.defaultOrgPolicy", "platform.aiTeacher", "platform.emailTemplates", "support.cannedReplies"];
+const preview = (v) => { const x = JSON.stringify(v); return x.length > 90 ? `${x.slice(0, 90)}…` : x; };
 
 function Platform({ role }) {
   const { t } = useTranslation();
@@ -68,6 +74,7 @@ function Platform({ role }) {
   const legacy = useLoad("/settings", { skip: !["owner", "engineer", "support"].includes(role) });
   const [msg, setMsg] = useState({ tone: "good", text: "" });
   const [langs, setLangs] = useState(null);
+  const [editing, setEditing] = useState(null);
   const canEdit = role === "owner";
   const S = st.data?.settings;
   const save = async (key, value) => { await api.put(`/settings/platform/${key}`, { value }); setMsg({ tone: "good", text: t("sa.set.saved", "Saved and recorded in the audit log.") }); st.reload({ quiet: true }); };
@@ -82,9 +89,18 @@ function Platform({ role }) {
               <Field label={S["platform.languages"].label} hint={t("sa.set.langHint", "Language codes, comma separated (e.g. en, de, hi)")}><input className={`${s.input} ${s.search}`} value={L} readOnly={!canEdit} onChange={(e) => setLangs(e.target.value)} /></Field>
               {canEdit && <Button size="sm" variant="soft" onClick={() => save("platform.languages", L.split(",").map((x) => x.trim()).filter(Boolean)).catch((e) => setMsg({ tone: "alert", text: e.message }))}>{t("sa.save", "Save")}</Button>}
             </div>
-            <div className={s.grid2}>
-              {["platform.retention", "platform.legal", "platform.defaultOrgPolicy", "platform.aiTeacher", "platform.emailTemplates", "support.cannedReplies"].map((k) => <JsonSetting key={k} k={k} item={S[k]} canEdit={canEdit} onSave={save} />)}
-            </div>
+            <ul className={s.list}>
+              {JSON_KEYS.filter((k) => S[k]).map((k) => (
+                <li key={k} className={s.listItem}>
+                  <span style={{ minWidth: 0 }}>
+                    <span className={s.strong}>{S[k].label}</span> {S[k].isDefault && <Pill>{t("sa.set.default", "default")}</Pill>}<br />
+                    <span className={`${s.mono} ${s.muted} ${s.small}`}>{preview(S[k].value)}</span>
+                  </span>
+                  <Button size="sm" variant={canEdit ? "soft" : "ghost"} onClick={() => setEditing(k)}>{canEdit ? t("sa.edit", "Edit") : t("sa.view", "View")}</Button>
+                </li>
+              ))}
+            </ul>
+            {editing && S[editing] && <JsonSetting k={editing} item={S[editing]} canEdit={canEdit} onSave={save} onClose={() => setEditing(null)} />}
           </div>
         )}
       </Loadable>
@@ -99,10 +115,17 @@ function Platform({ role }) {
 }
 
 export default function Settings({ role, me }) {
+  const { t } = useTranslation();
+  const [pane, setPane] = usePane(["me", "platform"]);
   return (
     <>
-      <MyAccount me={me} />
-      <Platform role={role} />
+      <Tabs label={t("sa.nav.settings", "Settings")} value={pane} onChange={setPane} tabs={[
+        { key: "me", label: t("sa.set.me", "My account") },
+        { key: "platform", label: t("sa.set.platform", "Platform settings") },
+      ]} />
+      <TabBody value={pane}>
+        {pane === "me" ? <MyAccount me={me} /> : <Platform role={role} />}
+      </TabBody>
     </>
   );
 }

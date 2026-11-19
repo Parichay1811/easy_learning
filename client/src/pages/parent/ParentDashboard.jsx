@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaHome, FaChartLine, FaClock, FaUsers, FaFileAlt, FaShieldAlt, FaHeadset, FaSchool, FaComments } from "react-icons/fa";
+import { FaHome, FaChartLine, FaClock, FaUsers, FaFileAlt, FaShieldAlt, FaHeadset, FaSchool, FaComments, FaSignOutAlt } from "react-icons/fa";
 import { useAdminAuth } from "../../context/AdminAuthContext";
-import { DashboardShell, EmptyState, Skeleton } from "../../components/dashboard";
+import { DashboardShell, EmptyState, Skeleton, SubTabs, SubPanel, usePane, WelcomeToast } from "../../components/dashboard";
+import { useLinks } from "../../components/links";
 import { useParentApi } from "./parentApi";
 import ChildSwitcher from "./ChildSwitcher";
 import ParentHome from "./ParentHome";
@@ -22,7 +23,8 @@ const TABS = ["home", "learning", "activity", "school", "messages", "family", "r
 const INVITE_KEY = "parent_invite";
 
 // The parent's dashboard (PAR-*): one shell, a child switcher, and a page per tab.
-// State lives in the URL (?tab=&child=&range=…) so a link opens the same view.
+// State lives in the URL (?tab=&pane=&child=&range=…) so a link opens the same view:
+// `tab` is the menu entry, `pane` the sub-tab inside it.
 const ParentDashboard = () => {
   const { t } = useTranslation();
   const T = (k, d, o) => t(`parent.${k}`, { defaultValue: d, ...o });
@@ -38,6 +40,9 @@ const ParentDashboard = () => {
   const [chatUnread, setChatUnread] = useState(0);
   const [setupFor, setSetupFor] = useState(null);
   const [notice, setNotice] = useState("");
+  // "Connect by email" requests waiting for this parent: counted on the Family entry.
+  const links = useLinks("parent", { poll: 60000, enabled: Boolean(token) });
+  const linkRequests = links.data?.incoming?.length || 0;
 
   useEffect(() => {
     if (!parentUser && parentUser !== undefined) navigate("/parent-login");
@@ -96,6 +101,7 @@ const ParentDashboard = () => {
     setParams((prev) => {
       const n = new URLSearchParams(prev);
       n.set("tab", nextTab);
+      if (nextTab !== prev.get("tab")) n.delete("pane");
       for (const [k, v] of Object.entries(extra)) { if (v == null) n.delete(k); else n.set(k, v); }
       return n;
     });
@@ -104,16 +110,19 @@ const ParentDashboard = () => {
 
   const selectChild = (id) => setParams((prev) => { const n = new URLSearchParams(prev); n.set("child", id); return n; });
 
+  // Grouped by what a parent comes to do: follow the child, talk, family settings.
+  // The first four are the phone's tab bar; the rest sit under "More".
+  const G = { child: T("group.child", "Your child"), talk: T("group.talk", "Talk"), family: T("group.family", "Family and settings") };
   const nav = [
-    { key: "home", label: T("nav.home", "Home"), icon: FaHome, onClick: () => go("home") },
-    { key: "learning", label: T("nav.learning", "Learning"), icon: FaChartLine, onClick: () => go("learning") },
-    { key: "activity", label: T("nav.activity", "Activity"), icon: FaClock, onClick: () => go("activity") },
-    { key: "school", label: T("nav.school", "School"), icon: FaSchool, onClick: () => go("school") },
-    { key: "messages", label: T("nav.messages", "Messages"), icon: FaComments, onClick: () => go("messages") },
-    { key: "family", label: T("nav.family", "Family"), icon: FaUsers, onClick: () => go("family"), badge: invites.length || undefined },
-    { key: "reports", label: T("nav.reports", "Reports"), icon: FaFileAlt, onClick: () => go("reports") },
-    { key: "privacy", label: T("nav.privacy", "Privacy"), icon: FaShieldAlt, onClick: () => go("privacy") },
-    { key: "support", label: T("nav.support", "Support"), icon: FaHeadset, onClick: () => go("support"), badge: chatUnread || undefined },
+    { key: "home", group: G.child, label: T("nav.home", "Home"), icon: FaHome, onClick: () => go("home") },
+    { key: "learning", group: G.child, label: T("nav.learning", "Learning"), icon: FaChartLine, onClick: () => go("learning") },
+    { key: "activity", group: G.child, label: T("nav.activity", "Activity"), icon: FaClock, onClick: () => go("activity") },
+    { key: "school", group: G.child, label: T("nav.school", "School"), icon: FaSchool, onClick: () => go("school") },
+    { key: "reports", group: G.child, label: T("nav.reports", "Reports"), icon: FaFileAlt, onClick: () => go("reports") },
+    { key: "messages", group: G.talk, label: T("nav.messages", "Messages"), icon: FaComments, onClick: () => go("messages") },
+    { key: "support", group: G.talk, label: T("nav.support", "Support"), icon: FaHeadset, onClick: () => go("support"), badge: chatUnread || undefined },
+    { key: "family", group: G.family, label: T("nav.family", "Family"), icon: FaUsers, onClick: () => go("family"), badge: (invites.length + linkRequests) || undefined },
+    { key: "privacy", group: G.family, label: T("nav.privacy", "Privacy"), icon: FaShieldAlt, onClick: () => go("privacy") },
   ];
 
   const signOut = () => { parentLogout(); navigate("/"); };
@@ -128,7 +137,7 @@ const ParentDashboard = () => {
   } else if (tab === "support") {
     page = <ParentChat api={api} onRead={() => setChatUnread(0)} />;
   } else if (tab === "messages") {
-    page = <><MessageCenter role="parent" initialThreadId={params.get("thread") || undefined} /><NotificationPrefs role="parent" /></>;
+    page = <ParentMessages thread={params.get("thread") || undefined} />;
   } else if (needsChild && !child) {
     page = (
       <div className={s.card}>
@@ -160,7 +169,9 @@ const ParentDashboard = () => {
       user={(
         <span className={s.topUser}>
           <span className={s.srOnly}>{parentUser?.email}</span>
-          <button type="button" className={s.signOut} onClick={signOut}>{T("signOut", "Sign out")}</button>
+          <button type="button" className={s.signOut} onClick={signOut}><FaSignOutAlt aria-hidden="true" /><span className={s.signOutText}>{T("signOut", "Sign out")}</span></button>
+          {/* Here, not in the page, so moving between tabs doesn't cut the hello short. */}
+          <WelcomeToast name={parentUser?.name} place="parent" ready={parentUser !== undefined} />
         </span>
       )}
     >
@@ -178,5 +189,22 @@ const ParentDashboard = () => {
     </DashboardShell>
   );
 };
+
+// Messages: the conversations, and how the parent wants to hear about new ones.
+function ParentMessages({ thread }) {
+  const { t } = useTranslation();
+  const [pane, setPane] = usePane(["inbox", "settings"]);
+  return (
+    <>
+      <SubTabs label={t("parent.msg.tabs", { defaultValue: "Messages" })} value={pane} onChange={setPane}
+        tabs={[
+          { id: "inbox", label: t("parent.msg.inbox", { defaultValue: "Conversations" }) },
+          { id: "settings", label: t("parent.msg.settings", { defaultValue: "How I get notified" }), short: t("parent.msg.settingsShort", { defaultValue: "Settings" }) },
+        ]} />
+      <SubPanel id="inbox" value={pane}><MessageCenter role="parent" initialThreadId={thread} /></SubPanel>
+      <SubPanel id="settings" value={pane}><NotificationPrefs role="parent" /></SubPanel>
+    </>
+  );
+}
 
 export default ParentDashboard;

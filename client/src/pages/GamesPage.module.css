@@ -1,164 +1,270 @@
-/* The games hub is one screen: the navbar takes 80px and everything else fits
-   in what is left. Nothing on this page scrolls, on any device — a child
-   reaching at a screen must not be able to shift the layout under their hand,
-   and the camera-games section below depends on the same rule. */
+/* The Game Zone is one screen: exactly the viewport below the navbar.
+   Nothing on this page scrolls, on any device — a child reaching at a screen
+   must not be able to shift the layout under their hand. */
 .page {
-  height: calc(100dvh - 80px);
-  max-height: calc(100dvh - 80px);
+  position: fixed;
+  top: var(--nav-h, 64px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
   overflow: hidden;
-  position: relative;
-}
-
-@supports not (height: 100dvh) {
-  .page {
-    height: calc(100vh - 80px);
-    max-height: calc(100vh - 80px);
-  }
+  font-family: "Fredoka", sans-serif;
+  color: #fff;
 }
 
 .overlay {
-  position: fixed;
+  position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.52);
+  background: radial-gradient(120% 90% at 50% 40%, rgba(10, 12, 40, 0.35), rgba(6, 8, 24, 0.72));
   pointer-events: none;
-  z-index: 0;
 }
 
 .content {
   position: relative;
   z-index: 1;
-  padding: clamp(6px, 1.4vh, 12px) clamp(12px, 4vw, 40px) clamp(6px, 1.4vh, 16px);
+  height: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 2vh, 22px);
+  padding:
+    clamp(8px, 1.6vh, 18px)
+    max(clamp(10px, 2.4vw, 28px), var(--fab-r, 0px))
+    max(clamp(10px, 2vh, 22px), var(--fab-b, 0px), env(safe-area-inset-bottom))
+    clamp(10px, 2.4vw, 28px);
+}
+
+/* ── HUD ── */
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: none;
+  padding: 8px 14px 8px 8px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: none;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.backBtn:hover { background: rgba(255, 255, 255, 0.24); }
+.backBtn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+.titleIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #ff9d3b, #ef6c00);
+  font-size: 22px;
+  box-shadow: 0 3px 0 #b45309;
+  animation: wobble 2.4s ease-in-out infinite;
+}
+@keyframes wobble { 0%, 100% { transform: rotate(-6deg); } 50% { transform: rotate(6deg); } }
+.titleText { display: flex; flex-direction: column; min-width: 0; }
+.title {
+  margin: 0;
+  font-size: clamp(22px, 3.6vh, 32px);
+  font-weight: 800;
+  line-height: 1.05;
+  background: linear-gradient(90deg, #ffd166, #ff9d6b, #c7a6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle { font-size: clamp(13px, 1.9vh, 16px); color: rgba(255, 255, 255, 0.85); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── the arena: the big way in, and the worlds ── */
+.arena {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr);
+  gap: clamp(12px, 2.4vw, 28px);
+  align-items: stretch;
+}
+
+.arCard {
+  position: relative;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(10px, 2.4vh, 22px);
-  height: 100%;
+  gap: clamp(6px, 1.4vh, 14px);
+  padding: clamp(14px, 3vh, 28px) clamp(14px, 2.4vw, 28px);
+  border-radius: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  background: linear-gradient(170deg, #ffffff, #eef4ff);
+  color: #1f2937;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.15), 0 18px 40px rgba(10, 20, 50, 0.4);
   overflow: hidden;
 }
-
-.backBtn {
-  position: absolute;
-  top: clamp(6px, 1.4vh, 12px);
-  left: clamp(12px, 4vw, 40px);
-  background: rgba(255, 255, 255, 0.15);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  color: white;
-  padding: 8px 20px;
-  border-radius: 20px;
-  cursor: pointer;
-  font-size: 16px;
-  font-family: "Fredoka", sans-serif;
-  backdrop-filter: blur(4px);
-  transition: background 0.2s;
+.arCard:focus-visible { outline: 4px solid #ffd45c; outline-offset: 3px; }
+.arMascot { --mascot-size: clamp(70px, 16vh, 140px) !important; }
+.arText { display: flex; flex-direction: column; align-items: center; gap: clamp(4px, 1vh, 8px); min-height: 0; }
+.arIconBadge {
+  display: grid;
+  place-items: center;
+  width: clamp(40px, 6vh, 56px);
+  height: clamp(40px, 6vh, 56px);
+  margin-top: -8px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #42a5f5, #1565c0);
+  color: #fff;
+  font-size: clamp(17px, 2.6vh, 24px);
+  box-shadow: 0 5px 12px rgba(21, 101, 192, 0.35);
 }
-.backBtn:hover { background: rgba(255, 255, 255, 0.25); }
-
-.header {
-  text-align: center;
-}
-
-.headerEmoji {
-  font-size: 50px;
-  animation: bounce 1.2s ease-in-out infinite;
-  display: block;
-  margin-bottom: 2px;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0) rotate(-5deg); }
-  50% { transform: translateY(-12px) rotate(5deg); }
+.arCardTitle { font-size: clamp(20px, 3.4vh, 28px); font-weight: 800; color: #1f2937; }
+.arCardDesc { font-size: clamp(13px, 1.9vh, 16px); color: #4b5563; line-height: 1.4; max-width: 420px; }
+.arCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 50px;
+  margin-top: 4px;
+  padding: 10px 26px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffb347, #ef6c00);
+  color: #fff;
+  font-size: clamp(16px, 2.4vh, 19px);
+  font-weight: 800;
+  box-shadow: 0 5px 0 #b45309;
 }
 
-.title {
-  font-size: 36px;
-  font-weight: bold;
-  margin: 0 0 4px;
-  background: linear-gradient(to right, #ff6b6b, #a29bfe);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.subtitle {
-  font-size: 15px;
-  color: rgba(255, 255, 255, 0.85);
+.groupsWrap { min-height: 0; display: flex; flex-direction: column; gap: 10px; }
+.groupsTitle {
   margin: 0;
+  font-size: clamp(15px, 2.2vh, 19px);
+  font-weight: 700;
+  color: #ffe38a;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
-
-/* ── camera games card ───────────────────────────────────────────────────
-   Mirrors the Home hero's white "adventure card" + gradient CTA, so the
-   Game Zone reads as the same product rather than a bolted-on sub-app. */
-.arCard {
-  width: 100%;
-  max-width: 480px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 22px;
-  padding: clamp(16px, 3vh, 28px) clamp(20px, 4vw, 32px);
-  box-shadow: 0 16px 40px rgba(10, 30, 15, 0.3);
+.groups {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.4vw, 16px);
+}
+.group {
+  --c1: #26a69a;
+  --c2: #00796b;
+  position: relative;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
+  justify-content: center;
   gap: clamp(4px, 1vh, 8px);
-  flex-shrink: 0;
+  padding: 10px 8px;
+  border-radius: 24px;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  background: linear-gradient(165deg, var(--c1), var(--c2));
+  color: #fff;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.22), 0 12px 24px rgba(0, 0, 0, 0.3), inset 0 2px 0 rgba(255, 255, 255, 0.35);
+  overflow: hidden;
 }
-
-.arIconBadge {
-  width: clamp(52px, 9vh, 68px);
-  height: clamp(52px, 9vh, 68px);
-  border-radius: 50%;
+.group:focus-visible { outline: 4px solid #ffd45c; outline-offset: 3px; }
+.group:hover .groupIcon { animation: hop 0.5s ease; }
+@keyframes hop { 40% { transform: translateY(-6px) scale(1.08); } }
+.teal { --c1: #2cc4b4; --c2: #00796b; }
+.blue { --c1: #49a8ff; --c2: #1565c0; }
+.red { --c1: #ff6f61; --c2: #c62828; }
+.purple { --c1: #9b8cff; --c2: #4527a0; }
+.orange { --c1: #ffb24d; --c2: #e65100; }
+.pink { --c1: #ff7eb0; --c2: #c2185b; }
+.green { --c1: #6fd27a; --c2: #2e7d32; }
+.yellow { --c1: #ffe066; --c2: #f0a500; }
+.yellow { color: #3f2a00; }
+.groupIcon {
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #42a5f5, #1565c0);
-  color: #fff;
-  font-size: clamp(20px, 3.6vh, 28px);
-  box-shadow: 0 6px 14px rgba(21, 101, 192, 0.35);
-  margin-bottom: 4px;
+  width: clamp(40px, 8vh, 64px);
+  height: clamp(40px, 8vh, 64px);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: clamp(18px, 3.6vh, 30px);
 }
-
-.arCardTitle {
-  margin: 0;
-  font-family: "Fredoka", sans-serif;
-  font-size: clamp(1.2rem, 3vh, 1.5rem);
-  font-weight: 700;
-  color: #1f2937;
-}
-
-.arCardDesc {
-  margin: 0;
-  color: #4b5563;
-  font-size: clamp(0.82rem, 1.8vh, 0.95rem);
-  line-height: 1.45;
-}
-
-.arCta {
-  width: 100%;
-  min-height: 44px;
-  margin-top: clamp(6px, 1.4vh, 12px);
-  background: linear-gradient(180deg, #ff9d3b, #ef6c00);
-  color: white;
-  border: none;
-  padding: 10px 24px;
+.groupName { font-size: clamp(14px, 2.2vh, 18px); font-weight: 800; line-height: 1.15; }
+.groupCount {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
   border-radius: 999px;
-  font-family: "Fredoka", sans-serif;
-  font-size: clamp(1rem, 2.2vw, 1.15rem);
+  background: rgba(0, 0, 0, 0.2);
+  font-size: clamp(11px, 1.7vh, 13px);
   font-weight: 700;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  box-shadow: 0 6px #c25400;
-  transition: transform 0.15s, box-shadow 0.15s;
 }
-.arCta:hover { transform: scale(1.02); }
-.arCta:active { transform: scale(0.97); box-shadow: 0 4px #c25400; }
 
-@media (max-height: 560px) {
-  .headerEmoji { display: none; }
+/* Upright: the big card on top, the worlds two by four below. */
+@media (orientation: portrait) and (max-width: 899px), (max-width: 640px) and (min-height: 501px) {
+  .arena { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); }
+  .arCard { flex-direction: row; text-align: left; justify-content: flex-start; padding: 12px 16px; border-radius: 26px; }
+  .arText { align-items: flex-start; }
+  .arIconBadge { display: none; }
+  .arMascot { --mascot-size: clamp(64px, 11vh, 110px) !important; }
+  .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(4, minmax(0, 1fr)); }
+  .group { flex-direction: row; justify-content: flex-start; text-align: left; padding: 8px 10px; gap: 8px; }
+  .groupIcon { width: clamp(36px, 10vw, 52px); height: clamp(36px, 10vw, 52px); font-size: clamp(16px, 4.6vw, 24px); flex: none; }
+  .groupName { flex: 1; min-width: 0; font-size: clamp(13px, 3.9vw, 18px); overflow-wrap: anywhere; hyphens: auto; }
+  .groupCount { display: none; }
+  .arCta { white-space: nowrap; padding: 10px 18px; font-size: clamp(15px, 4.2vw, 18px); }
+}
+@media (max-width: 420px) {
+  .arCardDesc { display: none; }
+  .backText { display: none; }
+  .backBtn { padding: 6px; }
   .subtitle { display: none; }
 }
 
-@media (max-width: 440px) {
-  .content { padding: 16px 14px 30px; }
-  .title { font-size: 26px; }
-  .subtitle { font-size: 14px; }
-  .arCard { padding: 18px 20px; }
+/* A phone on its side: slim header, compact card and tiles. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hud { padding: 4px 10px 4px 4px; }
+  .backText, .subtitle { display: none; }
+  .backBtn { min-height: 40px; min-width: 40px; padding: 4px; }
+  .titleIcon { width: 36px; height: 36px; font-size: 18px; }
+  .title { font-size: 22px; }
+  .arena { grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.4fr); }
+  .arMascot { --mascot-size: 64px !important; }
+  .arIconBadge, .arCardDesc { display: none; }
+  .arCta { min-height: 44px; padding: 8px 16px; font-size: 15px; }
+  .groupsTitle { font-size: 14px; }
+  .group { border-radius: 18px; padding: 6px; }
+  .groupCount { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .titleIcon, .group:hover .groupIcon { animation: none; }
 }

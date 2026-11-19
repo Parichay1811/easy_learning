@@ -1,15 +1,16 @@
 // The platform console (SUPER_ADMIN.md): one frame, sections by staff role,
-// a live bar on top. The section lives in the URL (?section=orgs&org=…), so a
-// link shares the exact view.
+// grouped by task in the menu (pills switch the pages of a group), live counters
+// in the top bar. The section lives in the URL (?section=orgs&org=…), so a link
+// shares the exact view.
 import { lazy, Suspense, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   FaBuilding, FaChartLine, FaClipboardCheck, FaCog, FaComments, FaFlag, FaHeartbeat, FaHome, FaHistory,
-  FaMoneyBillWave, FaQuestionCircle, FaSignOutAlt, FaUserShield, FaUsers, FaChild, FaUserSecret, FaBullhorn,
+  FaMoneyBillWave, FaQuestionCircle, FaSignOutAlt, FaUserShield, FaUsers, FaChild, FaUserSecret, FaBullhorn, FaGraduationCap,
 } from "react-icons/fa";
-import { DashboardShell, Skeleton } from "../../../components/dashboard";
-import { NotificationBell, AnnouncementComposer, AnnouncementsPanel } from "../../../components/comms";
+import { DashboardShell, Skeleton, SubTabs } from "../../../components/dashboard";
+import { NotificationBell } from "../../../components/comms";
 import { useAdminAuth } from "../../../context/AdminAuthContext";
 import { API, useLoad, money } from "./api";
 import s from "./console.module.css";
@@ -28,14 +29,10 @@ const Health = lazy(() => import("./Health"));
 const Flags = lazy(() => import("./Flags"));
 const Audit = lazy(() => import("./Audit"));
 const Staff = lazy(() => import("./Staff"));
+const Announcements = lazy(() => import("./Announcements"));
 const Settings = lazy(() => import("./Settings"));
 
 // Who sees which section (owners see everything). Mirrors the server's gates.
-// Platform announcements (FND-052 / SUP-063): compose for everyone or a segment, see read rates.
-function Announcements() {
-  return <><AnnouncementComposer role="superadmin" /><AnnouncementsPanel role="superadmin" compact /></>;
-}
-
 const SECTIONS = [
   { key: "overview", icon: FaHome, label: "Overview", roles: "*", C: Overview },
   { key: "orgs", icon: FaBuilding, label: "Organisations", roles: ["support", "finance", "analyst"], C: Orgs },
@@ -59,6 +56,26 @@ const canSee = (role, section) => {
   return !!sec && (role === "owner" || sec.roles === "*" || sec.roles.includes(role));
 };
 
+// The menu groups the sections by task (6 entries instead of 16, so it fits every
+// screen and the phone's tab bar). Inside a group, pills switch between its pages.
+// A page is a section, or a section with a preset ?tab= (the analytics views).
+const GROUPS = [
+  { key: "home", icon: FaHome, label: "Overview", pages: [{ key: "overview", section: "overview" }] },
+  { key: "orgs", icon: FaBuilding, label: "Organisations", pages: [{ key: "orgs", section: "orgs" }, { key: "approvals", section: "approvals" }] },
+  { key: "people", icon: FaUsers, label: "People", pages: [{ key: "people", section: "people" }, { key: "families", section: "families" }, { key: "staff", section: "staff" }] },
+  { key: "help", icon: FaComments, label: "Support", pages: [{ key: "support", section: "support", label: "Inbox" }, { key: "privacy", section: "privacy" }, { key: "announcements", section: "announcements" }] },
+  { key: "insights", icon: FaChartLine, label: "Insights", pages: [
+    { key: "growth", section: "analytics", tab: "growth", label: "Growth", icon: FaChartLine },
+    { key: "learning", section: "analytics", tab: "learning", label: "Learning", icon: FaGraduationCap },
+    { key: "revenue", section: "analytics", tab: "revenue", label: "Revenue", icon: FaMoneyBillWave, roles: ["owner", "finance", "analyst"] },
+    { key: "orghealth", section: "analytics", tab: "health", label: "Organisation health", icon: FaBuilding },
+    { key: "health", section: "health" },
+    { key: "audit", section: "audit" },
+  ] },
+  { key: "platform", icon: FaCog, label: "Platform", pages: [{ key: "content", section: "content" }, { key: "billing", section: "billing" }, { key: "flags", section: "flags" }, { key: "settings", section: "settings" }] },
+];
+const pageOk = (role, p) => canSee(role, p.section) && (!p.roles || role === "owner" || p.roles.includes(role));
+
 export default function SuperAdminConsole() {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -75,13 +92,23 @@ export default function SuperAdminConsole() {
   const active = visible.some((x) => x.key === params.get("section")) ? params.get("section") : "overview";
   const go = (section, extra = {}) => setParams(() => new URLSearchParams({ section, ...extra }));
   const Current = SECTIONS.find((x) => x.key === active).C;
+  const groups = useMemo(() => GROUPS.map((g) => ({ ...g, pages: g.pages.filter((p) => pageOk(role, p)) })).filter((g) => g.pages.length), [role]);
 
   if (!superAdminUser) return null;
 
-  const nav = visible.map((x) => ({
-    key: x.key, label: t(`sa.nav.${x.key}`, x.label), icon: x.icon, onClick: () => go(x.key),
-    badge: x.badge && L?.[x.badge] ? L[x.badge] : undefined,
-  }));
+  const sectionOf = (key) => SECTIONS.find((x) => x.key === key);
+  const pageLabel = (p) => (p.label ? t(`sa.page.${p.key}`, p.label) : t(`sa.nav.${p.section}`, sectionOf(p.section).label));
+  const pageBadge = (p) => { const b = sectionOf(p.section).badge; return b && L?.[b] ? L[b] : undefined; };
+  const tabNow = params.get("tab") || "growth";
+  const isPage = (p) => p.section === active && (!p.tab || p.tab === tabNow);
+  const group = groups.find((g) => g.pages.some(isPage)) || groups.find((g) => g.pages.some((p) => p.section === active)) || groups[0];
+  const page = group.pages.find(isPage) || group.pages.find((p) => p.section === active) || group.pages[0];
+  const open = (p) => go(p.section, p.tab ? { tab: p.tab } : {});
+
+  const nav = groups.map((g) => {
+    const badge = g.pages.reduce((n, p) => n + (pageBadge(p) || 0), 0);
+    return { key: g.key, label: t(`sa.group.${g.key}`, g.label), icon: g.icon, onClick: () => open(g.pages[0]), badge: badge || undefined };
+  });
 
   const logout = async () => {
     try {
@@ -91,18 +118,34 @@ export default function SuperAdminConsole() {
     navigate("/superadmin-login");
   };
 
+  const liveBar = (where) => (
+    <div className={`${s.live} ${where === "top" ? s.liveTop : s.liveMain}`} role="region" aria-label={t("sa.live.label", "Live platform counters")} aria-live="off" data-print="hide">
+      <span className={s.liveTitle}><span className={s.liveDot} aria-hidden="true" />{t("sa.live.title", "Live")}</span>
+      {L ? (
+        <>
+          <button type="button" className={s.liveItem} onClick={() => canSee(role, "analytics") && go("analytics")}><strong>{L.learnersNow.toLocaleString()}</strong> {t("sa.live.now", "learners now")}</button>
+          <button type="button" className={`${s.liveItem} ${s.liveLong}`} onClick={() => canSee(role, "analytics") && go("analytics")}><strong>{L.dau.toLocaleString()}</strong> {t("sa.live.dau", "learners today")}</button>
+          {L.mrrCents != null && <button type="button" className={`${s.liveItem} ${s.liveLong}`} onClick={() => canSee(role, "billing") && go("analytics", { tab: "revenue" })}><strong>{money(L.mrrCents, L.currency)}</strong> MRR</button>}
+          <button type="button" className={`${s.liveItem} ${L.pendingOrgs ? s.liveWarn : ""}`} onClick={() => canSee(role, "approvals") && go("approvals")}><strong>{L.pendingOrgs}</strong> {t("sa.live.pending", "awaiting approval")}</button>
+          <button type="button" className={`${s.liveItem} ${L.openSupport ? s.liveWarn : ""}`} onClick={() => canSee(role, "support") && go("support")}><strong>{L.openSupport}</strong> {t("sa.live.support", "open support")}</button>
+          <button type="button" className={`${s.liveItem} ${L.dataOverdue ? s.liveWarn : ""}`} onClick={() => canSee(role, "privacy") && go("privacy")}><strong>{L.dataPending}</strong> {t("sa.live.gdpr", "data requests")}{L.dataOverdue ? ` (${L.dataOverdue} ${t("sa.live.overdue", "overdue")})` : ""}</button>
+        </>
+      ) : <Skeleton variant="text" width={240} />}
+    </div>
+  );
+
   return (
     <DashboardShell
       brand={{ label: "LEARNIGO · Console", to: "/superadmin-dashboard" }}
       sideNote={false}
       nav={nav}
-      active={active}
+      active={group.key}
+      topbar={liveBar("top")}
       bell={<NotificationBell role="superadmin" />}
-      breadcrumbs={[{ label: t("sa.platform", "Platform"), to: "/superadmin-dashboard" }, { label: t(`sa.nav.${active}`, SECTIONS.find((x) => x.key === active).label) }]}
       user={
         <div className={s.userMenu}>
           <span className={s.avatar} aria-hidden="true">{(superAdminUser.name || "S").slice(0, 1)}</span>
-          <span className={s.hideSm}>
+          <span className={s.hideMd}>
             <span className={s.strong}>{superAdminUser.name}</span><br />
             <span className={s.roleTag}>{superAdminUser.breakGlass ? t("sa.breakGlass", "break-glass owner") : role}</span>
           </span>
@@ -110,21 +153,22 @@ export default function SuperAdminConsole() {
         </div>
       }
     >
-      <div className={s.live} role="region" aria-label={t("sa.live.label", "Live platform counters")} aria-live="off">
-        <span><span className={s.liveDot} aria-hidden="true" />{t("sa.live.title", "Live")}</span>
-        {L ? (
-          <>
-            <button type="button" className={s.liveItem} onClick={() => canSee(role, "analytics") && go("analytics")}><strong>{L.learnersNow.toLocaleString()}</strong> {t("sa.live.now", "learners now")}</button>
-            <button type="button" className={s.liveItem} onClick={() => canSee(role, "analytics") && go("analytics")}><strong>{L.dau.toLocaleString()}</strong> {t("sa.live.dau", "learners today")}</button>
-            {L.mrrCents != null && <button type="button" className={s.liveItem} onClick={() => canSee(role, "billing") && go("analytics", { tab: "revenue" })}><strong>{money(L.mrrCents, L.currency)}</strong> MRR</button>}
-            <button type="button" className={s.liveItem} onClick={() => canSee(role, "approvals") && go("approvals")}><strong>{L.pendingOrgs}</strong> {t("sa.live.pending", "awaiting approval")}</button>
-            <button type="button" className={s.liveItem} onClick={() => canSee(role, "support") && go("support")}><strong>{L.openSupport}</strong> {t("sa.live.support", "open support")}</button>
-            <button type="button" className={s.liveItem} onClick={() => canSee(role, "privacy") && go("privacy")}><strong>{L.dataPending}</strong> {t("sa.live.gdpr", "data requests")}{L.dataOverdue ? ` (${L.dataOverdue} ${t("sa.live.overdue", "overdue")})` : ""}</button>
-          </>
-        ) : <Skeleton variant="text" width={420} />}
-      </div>
+      {liveBar("main")}
+      <h1 className={s.srOnly}>{pageLabel(page)}</h1>
+      {group.pages.length > 1 && (
+        <SubTabs
+          idBase="sa-page"
+          sticky={false}
+          label={t(`sa.group.${group.key}`, group.label)}
+          value={page.key}
+          onChange={(k) => open(group.pages.find((p) => p.key === k))}
+          tabs={group.pages.map((p) => ({ id: p.key, label: pageLabel(p), icon: p.icon || sectionOf(p.section).icon, badge: pageBadge(p) }))}
+        />
+      )}
       <Suspense fallback={<Skeleton variant="chart" />}>
-        <Current role={role} go={go} params={params} setParams={setParams} me={superAdminUser} live={L} />
+        <div id={`sa-page-panel-${page.key}`} role={group.pages.length > 1 ? "tabpanel" : undefined} aria-labelledby={group.pages.length > 1 ? `sa-page-tab-${page.key}` : undefined} className={s.sectionBody}>
+          <Current role={role} go={go} params={params} setParams={setParams} me={superAdminUser} live={L} />
+        </div>
       </Suspense>
     </DashboardShell>
   );

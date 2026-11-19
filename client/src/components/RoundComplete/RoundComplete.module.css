@@ -1,0 +1,138 @@
+/* The round's celebration: a calm overlay below the navbar, one card. */
+.backdrop {
+  position: fixed;
+  top: var(--nav-h, 64px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(8px, 2vh, 20px);
+  background: radial-gradient(120% 90% at 50% 30%, rgba(40, 30, 90, 0.88), rgba(8, 10, 26, 0.94));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow: hidden;
+  font-family: "Fredoka", sans-serif;
+}
+
+/* Soft paper confetti drifting down, once. */
+.confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.bit {
+  position: absolute;
+  top: -12px;
+  left: var(--x);
+  width: 9px;
+  height: 14px;
+  border-radius: 3px;
+  background: hsl(var(--h), 85%, 68%);
+  opacity: 0;
+  animation: fall 3.2s ease-in var(--d) 1 forwards;
+}
+@keyframes fall {
+  0% { opacity: 0; transform: translateY(0) rotate(0); }
+  10% { opacity: 0.9; }
+  100% { opacity: 0; transform: translateY(105vh) rotate(540deg); }
+}
+
+.panel {
+  position: relative;
+  width: min(100%, 460px);
+  max-height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.8vh, 16px);
+  padding: clamp(14px, 3vh, 28px) clamp(14px, 4vw, 30px);
+  border-radius: 28px;
+  background: linear-gradient(160deg, #24245a, #17193d);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6), 0 0 0 6px rgba(255, 216, 77, 0.08);
+  text-align: center;
+  color: #fff;
+}
+.won { border-color: rgba(255, 216, 77, 0.55); }
+.almost { border-color: rgba(255, 179, 102, 0.5); }
+
+.hero { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.mascot { margin-bottom: -6px; }
+.heading { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.swords { font-size: 26px; color: #ffd84d; }
+.almost .swords { color: #ffb366; }
+.title { margin: 0; font-size: clamp(1.35rem, 4.4vh, 1.8rem); font-weight: 800; color: #fff; }
+.won .title { color: #ffd84d; }
+.almost .title { color: #ffc58a; }
+.sub { margin: 0; color: rgba(255, 255, 255, 0.72); font-size: 0.95rem; }
+
+.body { display: flex; flex-direction: column; gap: clamp(8px, 1.8vh, 14px); }
+.starsBlock { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.caption { margin: 0; color: rgba(255, 255, 255, 0.55); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.stars { display: flex; justify-content: center; gap: 4px; flex-wrap: wrap; font-size: clamp(1.2rem, 3.4vh, 1.5rem); }
+.starOn { color: #ffd84d; filter: drop-shadow(0 0 6px rgba(255, 216, 77, 0.5)); display: inline-flex; }
+.starOff { color: rgba(255, 255, 255, 0.22); display: inline-flex; }
+.score { margin: 0; color: #ffd84d; font-size: 1.5rem; font-weight: 800; }
+.passing { margin: 0; color: rgba(255, 255, 255, 0.5); font-size: 0.8rem; }
+
+.bonus {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px 16px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 216, 77, 0.1);
+  border: 1px solid rgba(255, 216, 77, 0.3);
+}
+.bonusLine { display: inline-flex; align-items: center; gap: 6px; color: #ffe38a; font-weight: 700; }
+
+.actions { display: flex; gap: 10px; }
+.backBtn, .againBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s, filter 0.15s;
+}
+.backBtn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+}
+.againBtn {
+  flex: 2;
+  border: none;
+  color: #fff;
+  background: linear-gradient(180deg, #8475ff, #6c5ce7);
+  box-shadow: 0 5px 0 #4527a0;
+}
+.againWarrior { background: linear-gradient(180deg, #ffb347, #f2760c); box-shadow: 0 5px 0 #b45309; }
+.backBtn:hover, .againBtn:hover { transform: translateY(-1px); filter: brightness(1.06); }
+.backBtn:focus-visible, .againBtn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 3px; }
+
+/* A phone on its side: mascot and title on the left, the rest on the right. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .panel {
+    width: min(100%, 720px);
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: center;
+    gap: 16px;
+    padding: 12px 18px;
+  }
+  .mascot { --mascot-size: 84px !important; }
+  .sub { font-size: 0.85rem; }
+  .backBtn, .againBtn { min-height: 46px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bit { animation: none; display: none; }
+  .backBtn:hover, .againBtn:hover { transform: none; }
+}

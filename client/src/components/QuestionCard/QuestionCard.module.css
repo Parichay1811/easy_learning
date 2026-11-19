@@ -1,9 +1,22 @@
 /* The question on a chalkboard in a wooden frame, like the AI Teacher's board:
-   white chalk on dark slate for the question, white cards for the answers. */
+   white chalk on dark slate for the question, white cards for the answers.
+
+   The card sizes itself to the space it is given (the round's "arena" is a
+   size container, see ModulePlayer): text and spacing use container units,
+   on a narrow screen the card fills the height with the answers at the bottom
+   where a thumb is, and on a short, wide screen (a phone on its side, a small
+   laptop) it splits into two columns: the question left, the answers right.
+   If something is still too long, the part that overflows scrolls inside the
+   card; the page itself never scrolls. */
 .card {
+  --pad-y: clamp(10px, 2.4cqh, 26px);
+  --pad-x: clamp(12px, 3cqw, 34px);
   width: 100%;
-  max-width: 720px;
-  border: 14px solid transparent;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.8cqh, 16px);
+  border: clamp(8px, 1.5cqh, 14px) solid transparent;
   border-radius: 26px;
   background:
     radial-gradient(120% 90% at 50% 0%, #22346b 0%, #16234a 45%, #0d1530 100%) padding-box,
@@ -13,10 +26,11 @@
     inset 0 0 0 2px rgba(0, 0, 0, 0.35),
     0 0 0 2px rgba(120, 60, 20, 0.6),
     0 18px 40px rgba(20, 10, 0, 0.45);
-  padding: 26px 34px 30px;
+  padding: var(--pad-y) var(--pad-x);
   text-align: center;
   position: relative;
   overflow: hidden;
+  font-family: "Fredoka", sans-serif;
 }
 /* A faint chalk haze across the board. */
 .card::before {
@@ -27,33 +41,66 @@
   background: radial-gradient(520px 220px at 50% 0%, rgba(255, 255, 255, 0.06), transparent 70%);
 }
 
-.stimulus { position: relative; z-index: 1; }
+.stimulus {
+  position: relative;
+  z-index: 1;
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(6px, 1.4cqh, 14px);
+}
+
+.answer {
+  position: relative;
+  z-index: 1;
+  flex: 0 1 auto;
+  padding: 2px 4px 6px; /* room for the tiles' shadows and focus rings */
+}
+
+/* Inside a round's arena (and only there — the test player lets its card
+   grow with the page), the card never outgrows its space: the part that is
+   too long scrolls inside it. */
+@container arena (min-width: 1px) {
+  .card { max-height: 100%; }
+  .stimulus, .answer { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+}
 
 /* The instruction: a chalk heading with a short underline. */
 .instruction {
-  margin: 0 auto 18px;
-  font-size: 21px;
+  margin: 0 auto;
+  font-size: clamp(16px, 3.3cqh, 22px);
   font-weight: 700;
-  line-height: 1.35;
+  line-height: 1.3;
   color: #ffffff;
 }
 .instruction::after {
   content: "";
   display: block;
-  width: 64px;
-  height: 5px;
-  margin: 10px auto 0;
+  width: 56px;
+  height: 4px;
+  margin: clamp(4px, 1cqh, 10px) auto 0;
   border-radius: 3px;
   background: #4dd9ff;
   box-shadow: 0 0 10px rgba(77, 217, 255, 0.6);
 }
 
+.stimRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 2cqw, 18px);
+  width: 100%;
+}
+.stimRow:empty { display: none; }
+.stimRow > .emoji, .stimRow > .picture { margin-inline: 0; }
+
 /* A teacher-uploaded picture (question editor). */
 .picture {
   display: block;
-  max-width: 100%;
-  max-height: 220px;
-  margin: 0 auto 16px;
+  margin-inline: auto;
+  max-width: min(100%, 320px);
+  max-height: clamp(80px, 26cqh, 220px);
   border-radius: 14px;
   border: 3px solid rgba(255, 255, 255, 0.25);
   object-fit: contain;
@@ -61,87 +108,255 @@
 }
 
 .emoji {
-  width: 84px;
-  height: 84px;
-  margin: 0 auto 16px;
+  flex: none;
+  margin-inline: auto;
+  width: clamp(48px, 11cqh, 84px);
+  height: clamp(48px, 11cqh, 84px);
   display: grid;
   place-items: center;
-  font-size: 46px;
+  font-size: clamp(26px, 6cqh, 46px);
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   border: 2px dashed rgba(255, 255, 255, 0.25);
+  animation: floaty 4s ease-in-out infinite;
 }
+@keyframes floaty { 50% { transform: translateY(-4px); } }
 
 /* The question itself: the biggest, clearest text on the board. */
 .promptBox {
-  margin: 0 0 20px;
-  padding: 16px 20px;
+  margin: 0;
+  padding: clamp(8px, 1.8cqh, 16px) clamp(12px, 2cqw, 20px);
   border-radius: 18px;
   border: 2px dashed rgba(77, 217, 255, 0.55);
   background: rgba(255, 255, 255, 0.06);
-  font-size: 23px;
+  font-size: clamp(16px, 3.4cqh, 23px);
   font-weight: 700;
-  line-height: 1.45;
+  line-height: 1.4;
   color: #fff7d6;
+  text-align: left;
+  min-width: 0;
 }
+.promptWide { text-align: center; }
+/* A passage reads best left-aligned and a little smaller. */
+.card[data-long] .promptBox { font-size: clamp(15px, 2.7cqh, 19px); line-height: 1.45; text-align: left; font-weight: 600; }
 
-.toolRow { display: flex; justify-content: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.toolRow { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 
 .toolBtn {
   display: inline-flex;
   align-items: center;
+  gap: 7px;
+  min-height: 40px;
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.45);
   color: white;
-  padding: 8px 18px;
+  padding: 6px 16px;
   border-radius: 999px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: clamp(14px, 2.4cqh, 16px);
   font-family: "Fredoka", sans-serif;
   font-weight: 600;
   transition: background 0.15s, transform 0.15s;
 }
 .toolBtn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
-.toolBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+.toolBtn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+.toolBtn:disabled { opacity: 0.7; cursor: default; }
+.listenBtn { border-color: #4dd9ff; background: rgba(77, 217, 255, 0.14); }
+.playing { animation: listenGlow 1.2s ease-in-out infinite; }
+@keyframes listenGlow { 50% { box-shadow: 0 0 0 6px rgba(77, 217, 255, 0.18); } }
 
 /* A hint: a sticky note pinned on the board. */
 .hintBubble {
-  margin: 0 auto 18px;
+  margin: 0 auto;
   max-width: 90%;
-  padding: 10px 16px 12px;
-  transform: rotate(-1deg);
+  padding: 8px 16px 10px;
   border-radius: 4px 4px 12px 4px;
   background: linear-gradient(170deg, #ffe680, #ffd23f);
   color: #3b2f00;
-  font-size: 16px;
+  font-size: clamp(14px, 2.5cqh, 16px);
   font-weight: 600;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
+  transform-origin: 50% 0;
 }
 
-.feedback { margin-top: 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; z-index: 1; }
-.correctText { font-size: 20px; font-weight: bold; color: #2ecc71; margin: 0; }
-.wrongText { font-size: 18px; font-weight: bold; color: #ff7675; margin: 0; }
-.workedExample { font-size: 14px; color: rgba(255,255,255,0.75); margin: 0; }
-.revealText { font-size: 15px; color: #a0e8ff; margin: 0; }
+/* ── the answer sheet ─────────────────────────────────────────────────── */
+/* It rises from the bottom edge of the board, in the layout (so it never
+   covers the answers: the space above gives way to it instead). */
+.sheet {
+  position: relative;
+  z-index: 3;
+  flex: none;
+  margin: auto calc(-1 * var(--pad-x)) calc(-1 * var(--pad-y));
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "mascot text action";
+  align-items: center;
+  gap: clamp(6px, 1.4cqh, 12px) clamp(8px, 2cqw, 16px);
+  max-height: 58%;
+  padding: clamp(8px, 1.6cqh, 14px) clamp(10px, 2.4cqw, 20px) max(clamp(8px, 1.6cqh, 14px), env(safe-area-inset-bottom));
+  border-top: 3px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px 18px 0 0;
+  text-align: left;
+  box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.35);
+}
+.sheet > .sheetMascot { grid-area: mascot; }
+.sheet > .sheetText { grid-area: text; }
+.sheet > .nextBtn, .sheet > .retryBtn { grid-area: action; }
+.good { background: linear-gradient(180deg, #1f6f4a, #17573a); border-top-color: #6fe3a5; }
+.soft { background: linear-gradient(180deg, #3b2f6b, #2b2254); border-top-color: #b8a9ff; }
+
+.sheetMascot { position: relative; flex: none; display: grid; place-items: center; }
+/* The words scroll if they are long; the button below never moves out of reach. */
+.sheetText { min-width: 0; min-height: 0; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; align-self: stretch; justify-content: safe center; }
+.sheetTitle { margin: 0; font-size: clamp(17px, 3cqh, 21px); font-weight: 800; color: #ffd8a8; }
+
+.feedback { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; z-index: 1; }
+.correctText { font-size: clamp(16px, 2.9cqh, 20px); font-weight: 700; color: #b8ffd6; margin: 0; line-height: 1.3; }
+.wrongText { font-size: clamp(15px, 2.7cqh, 18px); font-weight: 700; color: #ffd2b8; margin: 0; line-height: 1.3; }
+.workedExample { font-size: clamp(13px, 2.2cqh, 15px); color: rgba(255, 255, 255, 0.8); margin: 0; line-height: 1.35; }
+.revealText { font-size: clamp(14px, 2.5cqh, 16px); color: #a0e8ff; margin: 0; font-weight: 600; }
 
 .retryBtn, .nextBtn {
-  padding: 12px 30px;
-  border-radius: 24px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 10px 26px;
+  border-radius: 999px;
   border: none;
-  background: #6c5ce7;
   color: white;
-  font-size: 17px;
-  font-weight: bold;
+  font-size: clamp(17px, 3cqh, 20px);
+  font-weight: 800;
   font-family: "Fredoka", sans-serif;
   cursor: pointer;
-  box-shadow: 0 6px #4527a0;
+  white-space: nowrap;
+  transition: transform 0.15s, filter 0.15s;
+}
+.nextBtn { background: linear-gradient(180deg, #ffb347, #f2760c); box-shadow: 0 5px 0 #b45309; }
+.retryBtn { background: linear-gradient(180deg, #8475ff, #6c5ce7); box-shadow: 0 5px 0 #4527a0; }
+.retryBtn:hover, .nextBtn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+.retryBtn:active, .nextBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 #4527a0; }
+.retryBtn:focus-visible, .nextBtn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 3px; }
+
+/* Stars bursting out of the mascot on a right answer. */
+.burst { position: absolute; left: 50%; top: 40%; width: 0; height: 0; pointer-events: none; }
+.burstStar {
+  position: absolute;
+  left: -8px;
+  top: -8px;
+  font-size: 16px;
+  color: #ffd84d;
+  filter: drop-shadow(0 0 4px rgba(255, 216, 77, 0.7));
+  animation: burst 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) var(--d, 0ms) both;
+}
+@keyframes burst {
+  0% { opacity: 0; transform: rotate(var(--a)) translateY(0) scale(0.4); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--a)) translateY(-46px) scale(1); }
 }
 
+/* Old flat-schema questions */
+.legacyOptions { display: grid; gap: 10px; }
+.legacyOption {
+  min-height: 48px;
+  padding: 10px 16px;
+  border-radius: 16px;
+  border: none;
+  background: #fff;
+  color: #1f2937;
+  font: 600 18px "Fredoka", sans-serif;
+  box-shadow: 0 4px 0 #c7cde0;
+  cursor: pointer;
+}
 .legacyText { color: white; font-size: 19px; margin-bottom: 20px; }
 
-@media (max-width: 480px) {
-  .card { padding: 18px 14px 20px; border-width: 9px; border-radius: 20px; }
-  .instruction { font-size: 17px; margin-bottom: 14px; }
-  .emoji { width: 66px; height: 66px; font-size: 36px; margin-bottom: 12px; }
-  .promptBox { font-size: 19px; padding: 12px 14px; }
+/* ── narrow arena (a phone upright): fill the height, answers at the bottom ── */
+@container arena (max-width: 640px) {
+  .card { height: 100%; border-radius: 22px; }
+  .stimulus { margin-block: auto; }
+  /* Once answered, the question steps back to make room for the sheet. */
+  .hasSheet .toolRow, .hasSheet .instruction::after { display: none; }
+  .hasSheet .emoji { width: 44px; height: 44px; font-size: 24px; }
+  .hasSheet .promptBox { padding: 6px 12px; font-size: clamp(15px, 3cqh, 19px); }
+  .sheet .correctText, .sheet .wrongText { font-size: clamp(15px, 2.6cqh, 18px); }
+}
+@container arena (max-width: 460px) {
+  .sheet {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas: "mascot text" "action action";
+  }
+  .sheet > .nextBtn, .sheet > .retryBtn { width: 100%; }
+}
+
+/* ── short, wide arena (a phone on its side, a small laptop): two columns ── */
+@container arena (min-aspect-ratio: 3/2) and (max-height: 640px) {
+  .card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: clamp(12px, 3cqw, 32px);
+    row-gap: clamp(6px, 1.6cqh, 12px);
+    max-width: 1180px;
+    min-height: min(100%, 420px);
+  }
+  .stimulus { grid-column: 1; grid-row: 1; max-height: 100%; justify-content: safe center; }
+  .answer { grid-column: 2; grid-row: 1 / -1; max-height: 100%; align-self: center; }
+  /* Once answered, the left half becomes the coach's corner: the mascot, what
+     happened and the next button, while the answers (now marked right or
+     wrong) stay in full view on the right. On a phone held sideways both
+     thumbs reach it. */
+  .hasSheet .stimulus { display: none; }
+  .sheet {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: stretch;
+    max-height: none;
+    margin: calc(-1 * var(--pad-y)) 0 calc(-1 * var(--pad-y)) calc(-1 * var(--pad-x));
+    border-top: none;
+    border-right: 3px solid rgba(255, 255, 255, 0.18);
+    border-radius: 0 20px 20px 0;
+    box-shadow: 10px 0 24px rgba(0, 0, 0, 0.3);
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas: "mascot text" "action action";
+  }
+  .good.sheet { border-right-color: #6fe3a5; }
+  .soft.sheet { border-right-color: #b8a9ff; }
+  .sheet > .nextBtn, .sheet > .retryBtn { justify-self: stretch; }
+  .instruction { font-size: clamp(15px, 4.2cqh, 21px); }
+  .promptBox { font-size: clamp(15px, 4.6cqh, 22px); }
+  .emoji { width: clamp(48px, 16cqh, 96px); height: clamp(48px, 16cqh, 96px); font-size: clamp(26px, 9cqh, 54px); }
+}
+/* Narrow or short: with a passage, the decorative picture steps aside. */
+@container arena (max-width: 640px) {
+  .card[data-long] .emoji { display: none; }
+}
+@container arena (min-aspect-ratio: 3/2) and (max-height: 640px) {
+  .card[data-long] .emoji { display: none; }
+}
+
+/* Very short (a small phone on its side): slimmer buttons and frame. */
+@container arena (max-height: 300px) {
+  .retryBtn, .nextBtn { min-height: 46px; padding: 8px 20px; }
+  .card { border-width: 7px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emoji, .playing { animation: none; }
+  .burst { display: none; }
+  .retryBtn:hover, .nextBtn:hover, .toolBtn:hover:not(:disabled) { transform: none; }
+}
+
+/* Big screens (a laptop or monitor with room to spare): a bigger board. */
+@container arena (min-width: 900px) and (min-height: 700px) {
+  .card { max-width: 900px; }
+  .instruction { font-size: 26px; }
+  .promptBox { font-size: 28px; }
+  .card[data-long] .promptBox { font-size: 22px; }
+  .emoji { width: 96px; height: 96px; font-size: 54px; }
+  .toolBtn { font-size: 18px; min-height: 46px; padding: 8px 20px; }
 }

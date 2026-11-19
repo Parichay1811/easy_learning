@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import {
   TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, StackedBars, TrendLine, CalendarHeatmap,
   SubjectModuleMatrix, HourWeekdayHeatmap, ProgressRing, Timeline, Button, toTable, fmtDuration, fmtPercent, fmtDate,
+  SubTabs, SubPanel, usePane,
 } from "../../components/dashboard";
 import { useLoad, rangeQuery, matrixCells, frac } from "./parentApi";
 import { eventsToTimeline } from "./timelineMap";
@@ -12,11 +13,14 @@ const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : "");
 const hourLabel = (h) => new Intl.DateTimeFormat(undefined, { hour: "numeric" }).format(new Date(2026, 0, 1, h));
 const DAY_LETTERS = (lang) => Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(lang, { weekday: "narrow" }).format(new Date(2026, 0, 5 + i)));
 
-// Home (PAR-010..013, PAR-020..022): story, tiles, goal ring, next steps, then the evidence.
+// Home (PAR-010..013, PAR-020..022), in four sub-tabs that each fit a screen:
+// Summary (story, tiles, goal, next steps) · Learning time · Subjects · Habits.
+const HOME_PANES = ["summary", "time", "subjects", "habits"];
 export default function ParentHome({ api, child, go }) {
   const { t, i18n } = useTranslation();
   const T = (k, d, o) => t(`parent.home.${k}`, { defaultValue: d, ...o });
   const tr = useTimeRange({ defaultRange: "week", defaultCmp: "prev" });
+  const [pane, setPane] = usePane(HOME_PANES);
   const base = `/children/${child._id}`;
   const ov = useLoad(api.get, `${base}/analytics/overview?${rangeQuery(tr)}`);
   const prevOv = useLoad(api.get, tr.prevFrom && tr.range !== "day" && tr.range !== "year" ? `${base}/analytics/overview?from=${tr.prevFrom}&to=${tr.prevTo}&cmp=none` : null);
@@ -36,14 +40,13 @@ export default function ParentHome({ api, child, go }) {
   const cells = useMemo(() => matrixCells(d?.matrix), [d]);
   const mastered = cells.filter((c) => c.level === "mastered").length;
 
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   const chips = (d?.insights || []).slice(0, 4).map((x) => {
     const p = x.params || {};
     const text = t(`parent.insight.${x.key}`, { defaultValue: x.text, ...p, module: cap(p.module), subject: cap(p.subject), hour: p.hour != null ? hourLabel(p.hour) : undefined });
     const onClick = ["practise_next", "strongest"].includes(x.key) ? () => go("learning", { subject: p.subject, module: p.module })
-      : x.key === "best_time" ? () => scrollTo("p-patterns")
+      : x.key === "best_time" ? () => setPane("habits")
         : ["accuracy_up", "accuracy_down"].includes(x.key) ? () => go("learning")
-          : () => scrollTo("p-main");
+          : () => setPane("time");
     return { kind: x.kind, text, onClick };
   });
 
@@ -125,121 +128,133 @@ export default function ParentHome({ api, child, go }) {
         </div>
       )}
 
-      <StoryCard
-        title={T("storyTitle", "{{name}}'s learning", { name: first })}
-        sentence={d?.story}
-        chips={chips}
-        loading={ov.loading && !d}
-      />
+      <SubTabs label={T("tabs", "{{name}}'s learning", { name: first })} value={pane} onChange={setPane}
+        tabs={[
+          { id: "summary", label: T("tab.summary", "Summary") },
+          { id: "time", label: T("tab.time", "Learning time"), short: T("tab.timeShort", "Time") },
+          { id: "subjects", label: T("tab.subjects", "Subjects") },
+          { id: "habits", label: T("tab.habits", "Habits") },
+        ]}
+        actions={<TimeRangeBar value={tr} ranges={["day", "week", "month", "year", "custom"]} showCompare compact />} />
 
-      <TimeRangeBar value={tr} ranges={["day", "week", "month", "year", "custom"]} showCompare sticky />
+      <SubPanel id="summary" value={pane}>
+        <StoryCard
+          title={T("storyTitle", "{{name}}'s learning", { name: first })}
+          sentence={d?.story}
+          chips={chips}
+          loading={ov.loading && !d}
+        />
 
-      {ov.error && !d ? null : (
-        <div className={s.kpis}>
-          <KpiTile loading={ov.loading && !d} label={T("k.time", "Learning time")} value={d ? fmtDuration(d.totals.minutes) : null}
-            delta={d?.previous && { current: d.totals.minutes, previous: d.previous.minutes, mode: "duration", vs }}
-            sparkline={points.map((p) => p.minutes)} helpText={T("k.timeHelp", "Time spent learning. Idle gaps are not counted.")} onClick={() => scrollTo("p-main")} />
-          <KpiTile loading={ov.loading && !d} label={T("k.days", "Active days")} value={d ? `${d.totals.activeDays} / ${d.range.days}` : null}
-            delta={d?.previous && { current: d.totals.activeDays, previous: d.previous.activeDays, mode: "number", vs }}
-            helpText={T("k.daysHelp", "Days with at least one answered question or 3 minutes of learning.")} onClick={() => go("activity")} />
-          <KpiTile loading={ov.loading && !d} label={T("k.acc", "Accuracy")} value={d?.totals.accuracy != null ? fmtPercent(frac(d.totals.accuracy)) : null}
-            delta={d?.previous && { current: frac(d.totals.accuracy), previous: frac(d.previous.accuracy), mode: "points", vs }}
-            sparkline={points.filter((p) => p.accuracy != null).map((p) => p.accuracy)} helpText={T("k.accHelp", "Correct answers divided by answers given.")} onClick={() => go("learning")} />
-          <KpiTile loading={ov.loading && !d} label={T("k.mastered", "Areas mastered")} value={d ? `${mastered} / 12` : null}
-            helpText={T("k.masteredHelp", "Listen, Read, Write and Speak in English, Maths and Science. Mastered means 80 % or more right, over at least 5 answers.")} onClick={() => scrollTo("p-matrix")} />
-          <KpiTile loading={ov.loading && !d} label={T("k.streak", "Streak")} value={d?.streak ? T("k.streakVal", "{{n}} days", { n: d.streak.current, count: d.streak.current }) : null}
-            tone={d?.streak?.current >= 3 ? "good" : "neutral"}
-            helpText={T("k.streakHelp", "Days in a row with learning. Longest so far: {{n}} days.", { n: d?.streak?.longest ?? 0 })} />
-          <KpiTile loading={ov.loading && !d} label={T("k.stars", "Stars")} value={d ? d.totals.stars : null}
-            delta={d?.previous && { current: d.totals.stars, previous: d.previous.stars, mode: "number", vs }} helpText={T("k.starsHelp", "Stars earned in finished rounds.")} />
-        </div>
-      )}
-
-      <div className={s.grid2}>
-        <section className={s.card} aria-labelledby="p-goal-h">
-          <div className={s.cardHead}>
-            <h2 id="p-goal-h">{T("goal.title", "This week's goal")}</h2>
-            <Button variant="ghost" size="sm" onClick={() => go("family", { edit: "goal" })}>{goalProg ? T("goal.edit", "Change") : T("goal.set", "Set a goal")}</Button>
+        {ov.error && !d ? null : (
+          <div className={s.kpis}>
+            <KpiTile loading={ov.loading && !d} label={T("k.time", "Learning time")} value={d ? fmtDuration(d.totals.minutes) : null}
+              delta={d?.previous && { current: d.totals.minutes, previous: d.previous.minutes, mode: "duration", vs }}
+              sparkline={points.map((p) => p.minutes)} helpText={T("k.timeHelp", "Time spent learning. Idle gaps are not counted.")} onClick={() => setPane("time")} />
+            <KpiTile loading={ov.loading && !d} label={T("k.days", "Active days")} value={d ? `${d.totals.activeDays} / ${d.range.days}` : null}
+              delta={d?.previous && { current: d.totals.activeDays, previous: d.previous.activeDays, mode: "number", vs }}
+              helpText={T("k.daysHelp", "Days with at least one answered question or 3 minutes of learning.")} onClick={() => go("activity")} />
+            <KpiTile loading={ov.loading && !d} label={T("k.acc", "Accuracy")} value={d?.totals.accuracy != null ? fmtPercent(frac(d.totals.accuracy)) : null}
+              delta={d?.previous && { current: frac(d.totals.accuracy), previous: frac(d.previous.accuracy), mode: "points", vs }}
+              sparkline={points.filter((p) => p.accuracy != null).map((p) => p.accuracy)} helpText={T("k.accHelp", "Correct answers divided by answers given.")} onClick={() => go("learning")} />
+            <KpiTile loading={ov.loading && !d} label={T("k.mastered", "Areas mastered")} value={d ? `${mastered} / 12` : null}
+              helpText={T("k.masteredHelp", "Listen, Read, Write and Speak in English, Maths and Science. Mastered means 80 % or more right, over at least 5 answers.")} onClick={() => setPane("subjects")} />
+            <KpiTile loading={ov.loading && !d} label={T("k.streak", "Streak")} value={d?.streak ? T("k.streakVal", "{{n}} days", { n: d.streak.current, count: d.streak.current }) : null}
+              tone={d?.streak?.current >= 3 ? "good" : "neutral"}
+              helpText={T("k.streakHelp", "Days in a row with learning. Longest so far: {{n}} days.", { n: d?.streak?.longest ?? 0 })} />
+            <KpiTile loading={ov.loading && !d} label={T("k.stars", "Stars")} value={d ? d.totals.stars : null}
+              delta={d?.previous && { current: d.totals.stars, previous: d.previous.stars, mode: "number", vs }} helpText={T("k.starsHelp", "Stars earned in finished rounds.")} />
           </div>
-          {goalProg ? (
-            <>
-              <div className={s.goal}>
-                <ProgressRing value={goalProg.daysMet} goal={goalProg.daysPerWeek} unit="" label={T("goal.ring", "Goal days this week")}
-                  centerText={`${goalProg.daysMet}/${goalProg.daysPerWeek}`} color={goalProg.reached ? "var(--d-good)" : "var(--d-accent)"} />
-                <div>
-                  <p style={{ margin: 0, fontWeight: 600 }}>{goalProg.reached ? T("goal.reached", "Goal reached. Wonderful!") : T("goal.progress", "{{met}} of {{n}} days done", { met: goalProg.daysMet, n: goalProg.daysPerWeek })}</p>
-                  <p className={`${s.muted} ${s.small}`} style={{ margin: "4px 0 0" }}>{T("goal.rule", "A goal day is {{min}} minutes or more.", { min: goalProg.minutesPerDay })}</p>
+        )}
+
+        <div className={s.grid2}>
+          <section className={s.card} aria-labelledby="p-goal-h">
+            <div className={s.cardHead}>
+              <h2 id="p-goal-h">{T("goal.title", "This week's goal")}</h2>
+              <Button variant="ghost" size="sm" onClick={() => go("family", { edit: "goal" })}>{goalProg ? T("goal.edit", "Change") : T("goal.set", "Set a goal")}</Button>
+            </div>
+            {goalProg ? (
+              <>
+                <div className={s.goal}>
+                  <ProgressRing value={goalProg.daysMet} goal={goalProg.daysPerWeek} unit="" label={T("goal.ring", "Goal days this week")}
+                    centerText={`${goalProg.daysMet}/${goalProg.daysPerWeek}`} color={goalProg.reached ? "var(--d-good)" : "var(--d-accent)"} />
+                  <div>
+                    <p style={{ margin: 0, fontWeight: 600 }}>{goalProg.reached ? T("goal.reached", "Goal reached. Wonderful!") : T("goal.progress", "{{met}} of {{n}} days done", { met: goalProg.daysMet, n: goalProg.daysPerWeek })}</p>
+                    <p className={`${s.muted} ${s.small}`} style={{ margin: "4px 0 0" }}>{T("goal.rule", "A goal day is {{min}} minutes or more.", { min: goalProg.minutesPerDay })}</p>
+                  </div>
                 </div>
-              </div>
-              <ol className={s.ticks} aria-label={T("goal.days", "Days this week")}>
-                {goalProg.days.map((x, i) => (
-                  <li key={x.date} className={s.tick}>
-                    <span className={`${s.tickDot} ${x.met ? s.tickMet : ""} ${x.today ? s.tickToday : ""}`} aria-hidden="true">{x.met ? "✓" : ""}</span>
-                    <span aria-hidden="true">{letters[i]}</span>
-                    <span className={s.srOnly}>{fmtDate(x.date, { style: "weekday" })}: {x.met ? T("goal.met", "goal met") : x.future ? T("goal.future", "still to come") : T("goal.notMet", "{{m}} minutes", { m: Math.round(x.minutes) })}</span>
-                  </li>
-                ))}
-              </ol>
-              {goal.data.goal?.reward && (
-                <p className={s.reward}>{goal.data.goal.rewardEmoji || "🎁"} {goalProg.reached ? T("goal.rewardWon", "Reward earned: {{r}}", { r: goal.data.goal.reward }) : T("goal.reward", "When the goal is reached: {{r}}", { r: goal.data.goal.reward })}</p>
-              )}
-            </>
-          ) : (
-            <p className={s.muted}>{T("goal.none", "A small weekly goal, like 20 minutes on 5 days, helps a habit grow. {{name}} sees it on their home screen.", { name: first })}</p>
-          )}
-        </section>
+                <ol className={s.ticks} aria-label={T("goal.days", "Days this week")}>
+                  {goalProg.days.map((x, i) => (
+                    <li key={x.date} className={s.tick}>
+                      <span className={`${s.tickDot} ${x.met ? s.tickMet : ""} ${x.today ? s.tickToday : ""}`} aria-hidden="true">{x.met ? "✓" : ""}</span>
+                      <span aria-hidden="true">{letters[i]}</span>
+                      <span className={s.srOnly}>{fmtDate(x.date, { style: "weekday" })}: {x.met ? T("goal.met", "goal met") : x.future ? T("goal.future", "still to come") : T("goal.notMet", "{{m}} minutes", { m: Math.round(x.minutes) })}</span>
+                    </li>
+                  ))}
+                </ol>
+                {goal.data.goal?.reward && (
+                  <p className={s.reward}>{goal.data.goal.rewardEmoji || "🎁"} {goalProg.reached ? T("goal.rewardWon", "Reward earned: {{r}}", { r: goal.data.goal.reward }) : T("goal.reward", "When the goal is reached: {{r}}", { r: goal.data.goal.reward })}</p>
+                )}
+              </>
+            ) : (
+              <p className={s.muted}>{T("goal.none", "A small weekly goal, like 20 minutes on 5 days, helps a habit grow. {{name}} sees it on their home screen.", { name: first })}</p>
+            )}
+          </section>
 
-        <section className={s.card} aria-labelledby="p-next-h">
-          <div className={s.cardHead}><h2 id="p-next-h">{T("next.title", "What to do next")}</h2></div>
-          <ul className={s.next}>
-            {next.map((n) => (
-              <li key={n.title} className={s.nextItem}>
-                <span className={s.nextIcon} aria-hidden="true">{n.icon}</span>
-                <span className={s.nextBody}><strong>{n.title}</strong><span>{n.text}</span></span>
-                <Button variant="soft" size="sm" to={n.to}>{T("next.open", "Open")}</Button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      </div>
+          <section className={s.card} aria-labelledby="p-next-h">
+            <div className={s.cardHead}><h2 id="p-next-h">{T("next.title", "What to do next")}</h2></div>
+            <ul className={s.next}>
+              {next.map((n) => (
+                <li key={n.title} className={s.nextItem}>
+                  <span className={s.nextIcon} aria-hidden="true">{n.icon}</span>
+                  <span className={s.nextBody}><strong>{n.title}</strong><span>{n.text}</span></span>
+                  <Button variant="soft" size="sm" to={n.to}>{T("next.open", "Open")}</Button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+      </SubPanel>
 
-      <div id="p-main">{main}</div>
+      <SubPanel id="time" value={pane}>
+        {main}
+        {tr.range !== "year" && (
+          <ChartCard title={T("glance", "{{y}} at a glance", { y: year })} loading={cal.loading} error={cal.error} onRetry={cal.reload}
+            table={toTable.calendar((cal.data?.days || []).map((x) => ({ date: x.date, value: x.minutes })), t)}
+            actions={<Button variant="ghost" size="sm" onClick={() => go("activity")}>{T("log", "Activity log")}</Button>}>
+            <CalendarHeatmap data={(cal.data?.days || []).map((x) => ({ date: x.date, value: x.minutes }))} mode="year" to={tr.to} goal={goalProg?.minutesPerDay} />
+          </ChartCard>
+        )}
+      </SubPanel>
 
-      <div id="p-matrix">
+      <SubPanel id="subjects" value={pane}>
         <ChartCard title={T("matrixTitle", "How is {{name}} doing in each subject?", { name: first })}
           answer={cells.some((c) => c.answered) ? T("matrixAnswer", "{{n}} of 12 areas mastered {{when}}. Tap a tile to see the questions.", { n: mastered, when: rangeWord }) : undefined}
           info={T("matrixInfo", "Colour shows mastery, the number is the share of right answers.")}
           loading={ov.loading && !d} error={ov.error} onRetry={ov.reload} table={toTable.matrix(cells, t)}
           empty={d && !cells.some((c) => c.answered) && { title: T("matrixEmpty", "No answers in this period"), text: T("matrixEmptyText", "Pick a longer range, or check back after the next session.") }}>
-          <SubjectModuleMatrix cells={cells} onSelect={(subject, module) => go("learning", { subject, module })} />
+          <SubjectModuleMatrix cells={cells} onSelect={(subject, module) => go("learning", { subject, module, pane: "questions" })} />
         </ChartCard>
-      </div>
+      </SubPanel>
 
-      <div id="p-patterns" className={s.grid2}>
-        <ChartCard title={T("patternsTitle", "When does {{name}} learn?", { name: first })}
-          answer={d?.patterns?.bestHour != null ? T("patternsAnswer", "Most often around {{h}}.", { h: hourLabel(d.patterns.bestHour) }) : undefined}
-          loading={ov.loading && !d} table={toTable.hourWeekday(heat, t)}
-          empty={d && !heat.length && { title: T("patternsEmpty", "Not enough learning yet to see a pattern") }}>
-          <HourWeekdayHeatmap data={heat} unit={T("activities", "activities")} />
-        </ChartCard>
-        <section className={s.card} aria-labelledby="p-habit-h">
-          <div className={s.cardHead}><h2 id="p-habit-h">{T("habits", "Learning habits")}</h2></div>
-          <ul className={s.list}>
-            <li><span>{T("weekday", "Average on a school day")}</span><strong>{d?.patterns?.weekdayAvgMinutes != null ? fmtDuration(d.patterns.weekdayAvgMinutes) : "—"}</strong></li>
-            <li><span>{T("weekend", "Average on a weekend day")}</span><strong>{d?.patterns?.weekendAvgMinutes != null ? fmtDuration(d.patterns.weekendAvgMinutes) : "—"}</strong></li>
-            <li><span>{T("session", "Average session")}</span><strong>{avgSession != null ? fmtDuration(avgSession) : "—"}</strong></li>
-            <li><span>{T("longest", "Longest streak")}</span><strong>{d?.streak ? T("k.streakVal", "{{n}} days", { n: d.streak.longest, count: d.streak.longest }) : "—"}</strong></li>
-          </ul>
-        </section>
-      </div>
-
-      {tr.range !== "year" && (
-        <ChartCard title={T("glance", "{{y}} at a glance", { y: year })} loading={cal.loading} error={cal.error} onRetry={cal.reload}
-          table={toTable.calendar((cal.data?.days || []).map((x) => ({ date: x.date, value: x.minutes })), t)}
-          actions={<Button variant="ghost" size="sm" onClick={() => go("activity")}>{T("log", "Activity log")}</Button>}>
-          <CalendarHeatmap data={(cal.data?.days || []).map((x) => ({ date: x.date, value: x.minutes }))} mode="year" to={tr.to} goal={goalProg?.minutesPerDay} />
-        </ChartCard>
-      )}
+      <SubPanel id="habits" value={pane}>
+        <div className={s.grid2}>
+          <ChartCard title={T("patternsTitle", "When does {{name}} learn?", { name: first })}
+            answer={d?.patterns?.bestHour != null ? T("patternsAnswer", "Most often around {{h}}.", { h: hourLabel(d.patterns.bestHour) }) : undefined}
+            loading={ov.loading && !d} table={toTable.hourWeekday(heat, t)}
+            empty={d && !heat.length && { title: T("patternsEmpty", "Not enough learning yet to see a pattern") }}>
+            <HourWeekdayHeatmap data={heat} unit={T("activities", "activities")} />
+          </ChartCard>
+          <section className={s.card} aria-labelledby="p-habit-h">
+            <div className={s.cardHead}><h2 id="p-habit-h">{T("habits", "Learning habits")}</h2></div>
+            <ul className={s.list}>
+              <li><span>{T("weekday", "Average on a school day")}</span><strong>{d?.patterns?.weekdayAvgMinutes != null ? fmtDuration(d.patterns.weekdayAvgMinutes) : "—"}</strong></li>
+              <li><span>{T("weekend", "Average on a weekend day")}</span><strong>{d?.patterns?.weekendAvgMinutes != null ? fmtDuration(d.patterns.weekendAvgMinutes) : "—"}</strong></li>
+              <li><span>{T("session", "Average session")}</span><strong>{avgSession != null ? fmtDuration(avgSession) : "—"}</strong></li>
+              <li><span>{T("longest", "Longest streak")}</span><strong>{d?.streak ? T("k.streakVal", "{{n}} days", { n: d.streak.longest, count: d.streak.longest }) : "—"}</strong></li>
+            </ul>
+          </section>
+        </div>
+      </SubPanel>
     </>
   );
 }

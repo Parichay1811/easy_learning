@@ -6,6 +6,10 @@ import './tokens.css';
 // Frame, controls
 export { default as DashboardShell } from './DashboardShell';
 export { default as TimeRangeBar } from './TimeRangeBar';
+export { default as SubTabs, SubPanel, PanelHead } from './SubTabs';
+export { usePane } from './usePane';
+export { default as Sheet } from './Sheet';
+export { default as WelcomeToast } from './WelcomeToast';
 export { useTimeRange, resolveRange, resolveCompare, RANGES, COMPARES } from './useTimeRange';
 
 // Cards and states

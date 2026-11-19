@@ -36,4 +36,14 @@ router.post('/cheers/:id/seen',     learnerFamily.markCheerSeen)
 router.get('/cheers/:id/voice',     learnerFamily.cheerVoice)
 router.post('/ai-teacher-log',      learnerFamily.aiTeacherLog)
 
+// Connect by email: requests to and from grown-ups, teachers and schools (services/linkRequests.js)
+const links = require('../controllers/linkRequestController').student
+router.get('/links',                 links.list)
+router.post('/links',                links.create)
+router.get('/links/people',          links.people)
+router.post('/links/people/unlink',  links.unlink)
+router.post('/links/:id/accept',     links.accept)
+router.post('/links/:id/decline',    links.decline)
+router.post('/links/:id/cancel',     links.cancel)
+
 module.exports = router

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaChevronLeft, FaChevronRight, FaCheck, FaTimes } from "react-icons/fa";
-import { Button, Skeleton, EmptyState, fmtDate, subjectLabel, moduleLabel } from "../../../components/dashboard";
+import { Button, Skeleton, EmptyState, usePane, fmtDate, subjectLabel, moduleLabel } from "../../../components/dashboard";
 import board from "../../../components/QuestionCard/QuestionCard.module.css";
 import { api, useLoad, qs } from "./api";
 import { Tabs, StatusPill, Field, Result } from "./bits";
@@ -179,7 +179,7 @@ function Bank() {
         </div>
       )}
       <Result result={result} />
-      <ul className={s.list}>
+      <ul className={`${s.list} ${s.fitCard}`} style={{ "--fit": "300px" }}>
         {(data.data?.items || []).map((b) => (
           <li key={b._id} className={s.listItem}>
             <span><span className={s.strong}>{subjectLabel(t, b.subject)} · {moduleLabel(t, b.module)}</span> · {b.rowCount} {t("school.review.qs", { defaultValue: "questions" })} · <span className={s.muted}>{b.submittedByName}</span></span>
@@ -205,17 +205,17 @@ function Bank() {
 
 export default function ReviewPage() {
   const { t } = useTranslation();
-  const [tab, setTab] = useState("queue");
+  const [tab, setTab] = usePane(["queue", "bank"], { param: "tab" });
   return (
-    <div className={s.page}>
+    <div className={`${s.page} ${s.pageTight}`}>
       <div className={s.head}>
         <div>
           <h1 className={s.title}>{t("school.review.title", { defaultValue: "Questions" })}</h1>
-          <p className={s.sub}>{t("school.review.subtitle", { defaultValue: "Check what teachers upload before learners see it." })}</p>
+          <p className={`${s.sub} ${s.subOptional}`}>{t("school.review.subtitle", { defaultValue: "Check what teachers upload before learners see it." })}</p>
         </div>
       </div>
       <Tabs label={t("school.review.title", { defaultValue: "Questions" })} tabs={[{ key: "queue", label: t("school.review.tabQueue", { defaultValue: "Review queue" }) }, { key: "bank", label: t("school.review.tabBank", { defaultValue: "School bank" }) }]} value={tab} onChange={setTab} />
-      <div role="tabpanel">{tab === "queue" ? <Queue /> : <Bank />}</div>
+      <div role="tabpanel" className={s.panel}>{tab === "queue" ? <Queue /> : <Bank />}</div>
     </div>
   );
 }

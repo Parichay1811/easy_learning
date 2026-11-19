@@ -2,9 +2,9 @@
 // the numbers, plus the teacher's private notes and the parent link status.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaArrowLeft, FaThumbtack, FaTrash, FaLock } from "react-icons/fa";
+import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote } from "react-icons/fa";
 import {
-  TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button,
+  TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel, PanelHead, Sheet, usePane,
   SubjectModuleMatrix, CalendarHeatmap, Timeline, toTable, fmtDuration, fmtPercent, fmtDate, moduleLabel, subjectLabel,
 } from "../../components/dashboard";
 import { useLoad, useTeacherApi } from "./teacherApi";
@@ -14,38 +14,35 @@ import s from "./teacher.module.css";
 
 const KIND = { session: "session", round: "game", test: "test", answer: "session" };
 
-function Notes({ studentId, initial }) {
+function Notes({ studentId, initial, onChanged }) {
   const { t } = useTranslation();
   const { send } = useTeacherApi();
   const [notes, setNotes] = useState(initial);
   const [body, setBody] = useState("");
   const [err, setErr] = useState("");
+  const [open, setOpen] = useState(false);
   const add = async (e) => {
-    e.preventDefault();
+    e?.preventDefault?.();
     const r = await send("POST", `/students/${studentId}/notes`, { body });
     if (!r.ok) return setErr(r.message);
-    setNotes((n) => [r.note, ...n]); setBody(""); setErr("");
+    setNotes((n) => [r.note, ...n]); setBody(""); setErr(""); setOpen(false); onChanged?.();
   };
   const pin = async (n) => {
     const r = await send("PATCH", `/students/${studentId}/notes/${n._id}`, { pinned: !n.pinned });
-    if (r.ok) setNotes((list) => list.map((x) => (x._id === n._id ? r.note : x)).sort((a, b) => Number(b.pinned) - Number(a.pinned)));
+    if (r.ok) { setNotes((list) => list.map((x) => (x._id === n._id ? r.note : x)).sort((a, b) => Number(b.pinned) - Number(a.pinned))); onChanged?.(); }
   };
   const remove = async (n) => {
     if (!window.confirm(t("teacher.notes.deleteConfirm", { defaultValue: "Delete this note?" }))) return;
     const r = await send("DELETE", `/students/${studentId}/notes/${n._id}`);
-    if (r.ok) setNotes((list) => list.filter((x) => x._id !== n._id));
+    if (r.ok) { setNotes((list) => list.filter((x) => x._id !== n._id)); onChanged?.(); }
   };
   return (
     <section className={s.card} aria-labelledby="notes-title">
-      <h2 id="notes-title" className={s.h2}><FaLock aria-hidden="true" /> {t("teacher.notes.title", { defaultValue: "My private notes" })}</h2>
-      <p className={`${s.muted} ${s.small}`} style={{ marginTop: -6 }}>{t("teacher.notes.private", { defaultValue: "Only you can see these. Not shared with the student, parents or your admin." })}</p>
-      <form className={s.form} onSubmit={add}>
-        <label className="d-sr-only" htmlFor="note-body">{t("teacher.notes.new", { defaultValue: "New note" })}</label>
-        <textarea id="note-body" className={`${s.textarea} ${s.notesArea}`} value={body} onChange={(e) => setBody(e.target.value)} maxLength={2000} placeholder={t("teacher.notes.ph", { defaultValue: "What helps, what to watch, what to try next…" })} />
-        {err && <p className={s.error}>{err}</p>}
-        <div><Button type="submit" size="sm" disabled={!body.trim()}>{t("teacher.notes.add", { defaultValue: "Save note" })}</Button></div>
-      </form>
-      <ul className={s.noteList} style={{ marginTop: 14 }}>
+      <PanelHead
+        title={<span id="notes-title"><FaLock aria-hidden="true" /> {t("teacher.notes.title", { defaultValue: "My private notes" })}</span>}
+        text={t("teacher.notes.private", { defaultValue: "Only you can see these. Not shared with the student, parents or your admin." })}
+        actions={<Button icon={FaPlus} onClick={() => setOpen(true)} aria-haspopup="dialog">{t("teacher.notes.addBtn", { defaultValue: "Add a note" })}</Button>} />
+      <ul className={`${s.noteList} ${s.scrollArea}`} style={{ marginTop: 14 }}>
         {notes.map((n) => (
           <li key={n._id} className={`${s.noteItem} ${n.pinned ? s.notePinned : ""}`}>
             <p>{n.body}</p>
@@ -58,21 +55,39 @@ function Notes({ studentId, initial }) {
             </div>
           </li>
         ))}
-        {!notes.length && <li className={s.muted}>{t("teacher.notes.none", { defaultValue: "No notes yet." })}</li>}
+        {!notes.length && <li className={s.muted}>{t("teacher.notes.noneHelp", { defaultValue: "No notes yet. Jot down what helps, what to watch and what to try next." })}</li>}
       </ul>
+      {open && (
+        <Sheet title={t("teacher.notes.new", { defaultValue: "New note" })} text={t("teacher.notes.private", { defaultValue: "Only you can see these. Not shared with the student, parents or your admin." })}
+          onClose={() => setOpen(false)}
+          footer={<>
+            <Button variant="ghost" onClick={() => setOpen(false)}>{t("teacher.cancel", { defaultValue: "Cancel" })}</Button>
+            <Button type="submit" form="note-form" disabled={!body.trim()}>{t("teacher.notes.add", { defaultValue: "Save note" })}</Button>
+          </>}>
+          <form id="note-form" className={s.form} onSubmit={add}>
+            <label className="d-sr-only" htmlFor="note-body">{t("teacher.notes.new", { defaultValue: "New note" })}</label>
+            <textarea id="note-body" className={`${s.textarea} ${s.notesArea}`} value={body} onChange={(e) => setBody(e.target.value)} maxLength={2000} placeholder={t("teacher.notes.ph", { defaultValue: "What helps, what to watch, what to try next…" })} />
+            {err && <p className={s.error}>{err}</p>}
+          </form>
+        </Sheet>
+      )}
     </section>
   );
 }
 
-function Analytics({ id, name, notes }) {
+function Analytics({ id, name, part }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const tr = useTimeRange({ defaultRange: "month", defaultCmp: "prev" });
   const rq = rangeQuery(tr);
   const year = Number(tr.to.slice(0, 4));
+  // The calendar and the timeline load the first time "Activity" is opened.
+  const [seenActivity, setSeenActivity] = useState(part === "activity");
+  if (part === "activity" && !seenActivity) setSeenActivity(true);
+  const idle = () => Promise.resolve({ ok: true });
   const ov = useLoad(() => get(`/students/${id}/analytics/overview?${rq}`), [id, rq]);
-  const cal = useLoad(() => get(`/students/${id}/analytics/calendar?year=${year}`), [id, year]);
-  const tl = useLoad(() => get(`/students/${id}/analytics/timeline?from=${tr.from}&to=${tr.to}&limit=150`), [id, tr.from, tr.to]);
+  const cal = useLoad(() => (seenActivity ? get(`/students/${id}/analytics/calendar?year=${year}`) : idle()), [id, year, seenActivity]);
+  const tl = useLoad(() => (seenActivity ? get(`/students/${id}/analytics/timeline?from=${tr.from}&to=${tr.to}&limit=150`) : idle()), [id, tr.from, tr.to, seenActivity]);
   const o = ov.data;
   const cells = matrixCells(o?.matrix);
   const calData = (cal.data?.days || []).map((d) => ({ date: d.date, value: d.minutes }));
@@ -82,34 +97,51 @@ function Analytics({ id, name, notes }) {
     subtitle: e.kind === "round" ? t("teacher.tl.round", { defaultValue: "Game round · {{stars}} stars", stars: e.stars ?? 0 }) : e.mode || "",
     minutes: e.minutes, subject: e.subject,
   }));
+  const range = <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare compact="auto" />;
+  const error = ov.error && <EmptyState tone="error" title={t("teacher.loadError", { defaultValue: "We couldn't load this page" })} text={ov.error} actionLabel={t("teacher.retry", { defaultValue: "Try again" })} onAction={ov.reload} />;
+
+  if (part === "subjects") {
+    return (
+      <>
+        {range}
+        {error}
+        <ChartCard title={t("teacher.stu.matrixTitle", { defaultValue: "How is {{name}} doing in each subject and skill?", name })} answer={t("teacher.subj.matrixAnswer", { defaultValue: "Colour shows mastery, the number is accuracy." })} loading={ov.loading} table={toTable.matrix(cells, t)}>
+          <SubjectModuleMatrix cells={cells} />
+        </ChartCard>
+      </>
+    );
+  }
+  if (part === "activity") {
+    return (
+      <>
+        {range}
+        <div className={s.grid2wide}>
+          <ChartCard title={t("teacher.stu.calTitle", { defaultValue: "How often does {{name}} learn?", name })} answer={t("teacher.stu.calAnswer", { defaultValue: "Minutes per day in {{year}}.", year })} loading={cal.loading} error={cal.error} onRetry={cal.reload} table={toTable.calendar(calData, t)}>
+            <CalendarHeatmap data={calData} to={tr.to} />
+          </ChartCard>
+          <ChartCard title={t("teacher.stu.tlTitle", { defaultValue: "What did {{name}} do?", name })} answer={events.length ? t("teacher.stu.tlAnswer", { defaultValue: "Sessions and game rounds, newest first." }) : ""} loading={tl.loading}
+            empty={tl.data && !events.length && { title: t("teacher.stu.tlEmpty", { defaultValue: "Nothing in this period" }), text: t("teacher.stu.tlEmptyText", { defaultValue: "Pick a longer period above." }) }}>
+            <div className={s.scrollArea}><Timeline events={events} max={40} /></div>
+          </ChartCard>
+        </div>
+      </>
+    );
+  }
   return (
     <>
-      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare />
+      {range}
       {ov.loading ? <Skeleton variant="tile" /> : o && (
-        <StoryCard sentence={o.story} chips={(o.insights || []).slice(0, 4).map((i) => ({ kind: ["alert", "celebrate", "nudge"].includes(i.kind) ? i.kind : "info", text: t(`dash.insight.${i.key}`, { defaultValue: i.text, ...i.params }) }))} />
+        <StoryCard className={s.storyCompact} sentence={o.story} chips={(o.insights || []).slice(0, 4).map((i) => ({ kind: ["alert", "celebrate", "nudge"].includes(i.kind) ? i.kind : "info", text: t(`dash.insight.${i.key}`, { defaultValue: i.text, ...i.params }) }))} />
       )}
-      {ov.error && <EmptyState tone="error" title={t("teacher.loadError", { defaultValue: "We couldn't load this page" })} text={ov.error} actionLabel={t("teacher.retry", { defaultValue: "Try again" })} onAction={ov.reload} />}
+      {error}
       {o && (
-        <div className={s.tiles}>
+        <div className={s.kpiRow}>
           <KpiTile label={t("teacher.kpi.time", { defaultValue: "Learning time" })} value={fmtDuration(o.totals.minutes)} sparkline={(o.series?.points || []).map((p) => p.minutes)} delta={o.previous ? { current: o.totals.minutes, previous: o.previous.minutes, mode: "duration" } : undefined} />
           <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={o.totals.accuracy == null ? null : fmtPercent(o.totals.accuracy / 100)} delta={o.previous?.accuracy != null && o.totals.accuracy != null ? { current: o.totals.accuracy / 100, previous: o.previous.accuracy / 100, mode: "points" } : undefined} />
           <KpiTile label={t("teacher.kpi.days", { defaultValue: "Active days" })} value={o.totals.activeDays} delta={o.previous ? { current: o.totals.activeDays, previous: o.previous.activeDays, mode: "number" } : undefined} />
           <KpiTile label={t("teacher.kpi.streak", { defaultValue: "Streak" })} value={o.streak ? t("teacher.kpi.streakDays", { defaultValue: "{{count}} days", defaultValue_one: "{{count}} day", count: o.streak.current }) : null} helpText={o.streak ? t("teacher.kpi.longest", { defaultValue: "Longest: {{count}} days", count: o.streak.longest }) : undefined} />
         </div>
       )}
-      <div className={s.grid2}>
-        <ChartCard title={t("teacher.stu.matrixTitle", { defaultValue: "How is {{name}} doing in each subject and skill?", name })} answer={t("teacher.subj.matrixAnswer", { defaultValue: "Colour shows mastery, the number is accuracy." })} loading={ov.loading} table={toTable.matrix(cells, t)}>
-          <SubjectModuleMatrix cells={cells} />
-        </ChartCard>
-        <ChartCard title={t("teacher.stu.calTitle", { defaultValue: "How often does {{name}} learn?", name })} answer={t("teacher.stu.calAnswer", { defaultValue: "Minutes per day in {{year}}.", year })} loading={cal.loading} error={cal.error} onRetry={cal.reload} table={toTable.calendar(calData, t)}>
-          <CalendarHeatmap data={calData} to={tr.to} />
-        </ChartCard>
-      </div>
-      {notes}
-      <ChartCard title={t("teacher.stu.tlTitle", { defaultValue: "What did {{name}} do?", name })} answer={events.length ? t("teacher.stu.tlAnswer", { defaultValue: "Sessions and game rounds, newest first." }) : ""} loading={tl.loading}
-        empty={tl.data && !events.length && { title: t("teacher.stu.tlEmpty", { defaultValue: "Nothing in this period" }) }}>
-        <Timeline events={events} max={40} />
-      </ChartCard>
     </>
   );
 }
@@ -118,33 +150,45 @@ export default function StudentView({ id, go }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const q = useLoad(() => get(`/students/${id}/profile`), [id]);
+  const [pane, setPane] = usePane(["overview", "subjects", "activity", "notes"]);
   if (q.loading && !q.data) return <><Skeleton variant="text" lines={2} /><Skeleton variant="chart" /></>;
   if (q.error) return <EmptyState tone="error" title={t("teacher.stu.notFound", { defaultValue: "Student not found" })} text={q.error} actionLabel={t("teacher.groups.back", { defaultValue: "Back to my groups" })} onAction={() => go("groups")} />;
   const d = q.data;
   const st = d.student;
   const first = d.groups[0];
+  const firstName = st.name.split(" ")[0];
+  const tabs = d.hasAnalytics ? [
+    { id: "overview", label: t("teacher.stu.tabOverview", { defaultValue: "Overview" }), icon: FaChartPie },
+    { id: "subjects", label: t("teacher.stu.tabSubjects", { defaultValue: "Subjects" }), icon: FaThLarge },
+    { id: "activity", label: t("teacher.stu.tabActivity", { defaultValue: "Activity" }), icon: FaCalendarAlt },
+    { id: "notes", label: t("teacher.stu.tabNotes", { defaultValue: "My notes" }), icon: FaStickyNote, badge: d.notes.length || undefined },
+  ] : [
+    { id: "overview", label: t("teacher.stu.tabOverview", { defaultValue: "Overview" }), icon: FaChartPie },
+    { id: "notes", label: t("teacher.stu.tabNotes", { defaultValue: "My notes" }), icon: FaStickyNote },
+  ];
+  const current = tabs.some((x) => x.id === pane) ? pane : "overview";
   return (
     <>
-      <div className={s.pageHead}>
-        <div>
+      <div className={s.titleRow}>
+        <div className={s.titleMain}>
           <Button variant="ghost" size="sm" icon={FaArrowLeft} onClick={() => (first ? go("group", { id: first.id, tab: "students" }) : go("groups"))}>{first ? first.name : t("teacher.groups.title", { defaultValue: "My groups" })}</Button>
-          <h1 style={{ marginTop: 8 }}>{st.name}</h1>
+          <h1 style={{ marginTop: 6 }}>{st.name}</h1>
           <p>{[st.grade, st.age ? t("teacher.stu.age", { defaultValue: "age {{age}}", age: st.age }) : null, st.email || t("teacher.noEmailYet", { defaultValue: "no email yet" })].filter(Boolean).join(" · ")}</p>
+          <div className={s.row} style={{ marginTop: 6, gap: 8 }}>
+            <span className={s.small}>{t("teacher.stu.parent", { defaultValue: "Parent:" })}</span> <ParentStatus status={d.parents.status} />
+            {d.parents.parents.map((p) => <span key={p.id} className={s.small}>{p.email}</span>)}
+          </div>
         </div>
         <div className={s.headActions}>
           {d.groups.map((g) => <Button key={g.id} size="sm" variant="soft" style={groupStyle(g)} onClick={() => go("group", { id: g.id })}>{g.emoji} {g.name}</Button>)}
         </div>
       </div>
-      <div className={s.row}>
-        <span>{t("teacher.stu.parent", { defaultValue: "Parent:" })}</span> <ParentStatus status={d.parents.status} />
-        {d.parents.parents.map((p) => <span key={p.id} className={s.small}>{p.email}</span>)}
-      </div>
-      {d.hasAnalytics ? <Analytics id={id} name={st.name.split(" ")[0]} notes={<Notes studentId={id} initial={d.notes} />} /> : (
-        <>
-          <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} />
-          <Notes studentId={id} initial={d.notes} />
-        </>
-      )}
+      <SubTabs label={t("teacher.stu.tabs", { defaultValue: "About {{name}}", name: firstName })} tabs={tabs} value={current} onChange={setPane} idBase="stu" />
+      <SubPanel key={current} id={current} value={current} idBase="stu">
+        {current === "notes" ? <Notes studentId={id} initial={d.notes} onChanged={q.reload} />
+          : d.hasAnalytics ? <Analytics id={id} name={firstName} part={current} />
+            : <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} actionLabel={t("teacher.stu.writeNote", { defaultValue: "Write a private note" })} onAction={() => setPane("notes")} />}
+      </SubPanel>
     </>
   );
 }

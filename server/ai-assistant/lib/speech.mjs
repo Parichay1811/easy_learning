@@ -25,6 +25,9 @@ export const VOICE_LANGS = new Set(['en', 'ko', 'ja', 'ar', 'bg', 'cs', 'da', 'd
 const HEARING = (process.env.LT_ASR || 'moonshine') !== 'off';
 const noHearing = () => Object.assign(new Error('speech recognition is off: type the question'), { code: 503 });
 const VOICE = process.env.LT_VOICE || (ENGINE === 'kokoro' ? 'af_heart' : 'F1');
+// Part of every cache key: lines made before the voice's pace changed
+// (speech-worker.mjs) are made again, so every sentence sounds the same.
+const SPEECH_STYLE = `relaxed1|${process.env.LT_TTS_PACE || ''}`;
 
 // A model in a child process: call(message) resolves with its reply. A
 // process that dies (out of memory, a model error) fails the calls it had and
@@ -133,7 +136,7 @@ export function createSpeech({ dataDir, log = () => {} }) {
 
   // WAV bytes of the text in that voice and speed.
   // lang: the language of the text (two letters; Supertonic speaks 31, see
-  // VOICE_LANGS). English keeps its old cache keys, so cached lines stay valid.
+  // VOICE_LANGS).
   async function speak(text, { voice = VOICE, speed = 1, priority = 'live', cancelled, lang = 'en' } = {}) {
     if (BROWSER_VOICE) throw Object.assign(new Error('the voice is made in the browser'), { code: 503 });
     if (!(ENGINE === 'kokoro' ? isKokoroVoice(voice) : isSupertonicVoice(voice))) voice = VOICE;
@@ -141,7 +144,7 @@ export function createSpeech({ dataDir, log = () => {} }) {
       throw Object.assign(new Error(`no voice for language ${lang}`), { code: 422 });
     // Symbols said as words are English words: other languages are only tidied.
     const clean = lang === 'en' ? speakable(text) : String(text).replace(/\s+/g, ' ').trim();
-    const key = crypto.createHash('sha1').update(`${ENGINE}|${voice}|${speed}|${clean}${lang === 'en' ? '' : `|${lang}`}`).digest('hex');
+    const key = crypto.createHash('sha1').update(`${SPEECH_STYLE}|${ENGINE}|${voice}|${speed}|${clean}${lang === 'en' ? '' : `|${lang}`}`).digest('hex');
     if (memory.has(key)) { stats.cached++; return memory.get(key); }
     const file = path.join(dir, `${key}.wav`);
     if (fs.existsSync(file)) { const b = fs.readFileSync(file); remember(key, b); stats.cached++; return b; }

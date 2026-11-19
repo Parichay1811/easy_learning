@@ -2,9 +2,9 @@
 // usage (the shared analytics), billing, support, audit and feature overrides.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, ChartCard, KpiTile, TrendLine, toTable } from "../../../components/dashboard";
+import { Button, ChartCard, KpiTile, TrendLine, toTable, usePane } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, dateOnly, dateTime, money } from "./api";
-import { Facts, Loadable, Notice, Panel, Pill, ReasonDialog, StatusPill } from "./ui";
+import { Facts, Loadable, Notice, Panel, Pill, ReasonDialog, StatusPill, TabBody, Tabs } from "./ui";
 import { FlagPills, HealthBar } from "./orgBits";
 import ViewAsDialog from "./ViewAsDialog";
 import s from "./console.module.css";
@@ -21,6 +21,7 @@ export default function OrgDetail({ id, role, onBack, go }) {
   const [note, setNote] = useState({ tone: "good", text: "" });
   const [overrides, setOverrides] = useState(null);
   const support = role === "owner" || role === "support";
+  const [pane, setPane] = usePane(["profile", "usage", "setup", "support", "features"]);
 
   const D = d.data;
   const ov = overrides ?? D?.entitlements.overrides ?? [];
@@ -31,23 +32,36 @@ export default function OrgDetail({ id, role, onBack, go }) {
 
   return (
     <>
-      <div className={s.row}>
-        <Button variant="ghost" size="sm" onClick={onBack}>← {t("sa.orgs.back", "All organisations")}</Button>
-      </div>
+      {!D && <div className={s.row}><Button variant="ghost" size="sm" onClick={onBack} data-sound="back">← {t("sa.orgs.back", "All organisations")}</Button></div>}
       <Loadable state={d}>
         {D && (
           <>
-            <Panel
-              title={D.org.name}
-              sub={<span className={s.row}><StatusPill status={D.org.suspendedAt ? "suspended" : D.org.status} /><Pill tone="accent">{D.org.kind === "solo" ? t("sa.solo", "Solo") : t("sa.institute", "Institute")}</Pill>{D.row && <FlagPills flags={D.row.flags} />}</span>}
-              actions={support && <>
-                {D.admins[0] && <Button size="sm" variant="soft" onClick={() => setDialog({ kind: "viewas", target: { role: "admin", id: D.admins[0].id, name: D.admins[0].name, email: D.admins[0].email } })}>{t("sa.viewAsAdmin", "View as admin")}</Button>}
-                {D.org.suspendedAt
-                  ? <Button size="sm" variant="ghost" onClick={() => setDialog({ kind: "unsuspend" })}>{t("sa.unsuspend", "Lift suspension")}</Button>
-                  : <Button size="sm" variant="ghost" onClick={() => setDialog({ kind: "suspend" })}>{t("sa.suspend", "Suspend")}</Button>}
-              </>}
-            >
-              <Notice tone={note.tone} onClose={() => setNote({ text: "" })}>{note.text}</Notice>
+            <div className={s.orgHead}>
+              <Button variant="ghost" size="sm" onClick={onBack} data-sound="back">← {t("sa.orgs.back", "All organisations")}</Button>
+              <div className={s.orgTitle}>
+                <h2 className={s.panelTitle}>{D.org.name}</h2>
+                <span className={s.row}><StatusPill status={D.org.suspendedAt ? "suspended" : D.org.status} /><Pill tone="accent">{D.org.kind === "solo" ? t("sa.solo", "Solo") : t("sa.institute", "Institute")}</Pill>{D.row && <FlagPills flags={D.row.flags} />}</span>
+              </div>
+              {support && (
+                <div className={s.panelActions}>
+                  {D.admins[0] && <Button size="sm" variant="soft" onClick={() => setDialog({ kind: "viewas", target: { role: "admin", id: D.admins[0].id, name: D.admins[0].name, email: D.admins[0].email } })}>{t("sa.viewAsAdmin", "View as admin")}</Button>}
+                  {D.org.suspendedAt
+                    ? <Button size="sm" variant="ghost" onClick={() => setDialog({ kind: "unsuspend" })}>{t("sa.unsuspend", "Lift suspension")}</Button>
+                    : <Button size="sm" variant="ghost" onClick={() => setDialog({ kind: "suspend" })}>{t("sa.suspend", "Suspend")}</Button>}
+                </div>
+              )}
+            </div>
+            <Notice tone={note.tone} onClose={() => setNote({ text: "" })}>{note.text}</Notice>
+            <Tabs label={D.org.name} value={pane} onChange={setPane} tabs={[
+              { key: "profile", label: t("sa.org.profile", "Profile") },
+              { key: "usage", label: t("sa.org.usage", "Usage") },
+              { key: "setup", label: t("sa.org.setup", "Structure and billing") },
+              { key: "support", label: t("sa.org.supportAudit", "Support and audit") },
+              { key: "features", label: t("sa.org.features", "Features") },
+            ]} />
+            <TabBody value={pane}>
+            {pane === "profile" && <>
+            <Panel title={t("sa.org.profile", "Profile")}>
               <Facts items={[
                 [t("sa.f.admin", "Admin"), `${D.org.adminName || D.admins[0]?.name || "—"} · ${D.org.adminEmail}`],
                 [t("sa.f.phone", "Phone"), D.org.phone || "—"],
@@ -66,15 +80,15 @@ export default function OrgDetail({ id, role, onBack, go }) {
                 </>
               )}
             </Panel>
-
             <div className={s.kpis}>
               <KpiTile label={t("sa.people.students", "Learners")} value={D.people.students} helpText={D.row?.seatLimit ? t("sa.orgs.seatsOf", "of {{n}} seats", { n: D.row.seatLimit }) : undefined} tone={D.row?.flags.includes("over_limit") ? "alert" : "neutral"} />
               <KpiTile label={t("sa.people.active7", "Active in 7 days")} value={D.row?.active7 ?? null} />
               <KpiTile label={t("sa.people.teachers", "Teachers")} value={D.people.teachers} helpText={t("sa.orgs.activeTeachers", "{{n}} active in 14 days", { n: D.row?.activeTutors ?? 0 })} />
               <KpiTile label={t("sa.people.parents", "Parents")} value={D.people.parents} helpText={t("sa.orgs.linked", "{{n}} learners with a linked parent", { n: D.row?.linkedParents ?? 0 })} />
             </div>
+            </>}
 
-            <ChartCard
+            {pane === "usage" && <ChartCard
               title={t("sa.orgs.usageQ", "How much are they learning?")}
               answer={usage.data ? usage.data.story : ""}
               info={t("sa.orgs.usageInfo", "Minutes of learning per day across this organisation's learners, last 30 days (shared analytics).")}
@@ -82,9 +96,9 @@ export default function OrgDetail({ id, role, onBack, go }) {
               table={pts.length ? toTable.trend(pts.map((p) => ({ x: p.key, value: p.minutes })), t) : undefined}
             >
               <TrendLine data={pts.map((p) => ({ x: p.key, value: p.minutes }))} unit="min" seriesLabel={t("sa.minutes", "Minutes")} />
-            </ChartCard>
+            </ChartCard>}
 
-            <div className={s.grid2}>
+            {pane === "setup" && <div className={s.grid2}>
               <Panel title={t("sa.orgs.tree", "Structure")} sub={t("sa.orgs.treeSub", "Read-only. Groups (and units, when the school uses them).")}>
                 {D.tree.units.length > 0 && <ul className={s.list}>{D.tree.units.map((u) => <li key={u.id} className={s.listItem}><span>{u.path || u.name}</span><Pill>{u.type}</Pill></li>)}</ul>}
                 {D.tree.batches.length ? (
@@ -111,9 +125,9 @@ export default function OrgDetail({ id, role, onBack, go }) {
                   </>
                 )}
               </Panel>
-            </div>
+            </div>}
 
-            <div className={s.grid2}>
+            {pane === "support" && <div className={s.grid2}>
               <Panel title={t("sa.orgs.support", "Support")} sub={t("sa.orgs.chatCount", "Chat messages with this admin: {{n}}", { n: D.support.chatMessages })}>
                 {D.support.contacts.length ? <ul className={s.list}>{D.support.contacts.map((c) => <li key={c._id} className={s.listItem}><span>{c.subject}</span><StatusPill status={c.status === "in_progress" ? "pending" : c.status} /></li>)}</ul> : <p className={s.muted}>{t("sa.orgs.noContacts", "No contact messages.")}</p>}
               </Panel>
@@ -122,9 +136,9 @@ export default function OrgDetail({ id, role, onBack, go }) {
                   <ul className={s.list}>{D.audit.slice(0, 10).map((e) => <li key={e.id} className={s.listItem}><span><span className={s.mono}>{e.action}</span><br /><span className={`${s.small} ${s.muted}`}>{e.actorEmail || e.actorRole}{e.reason ? ` · ${e.reason}` : ""}</span></span><span className={`${s.small} ${s.muted}`}>{dateTime(e.at)}</span></li>)}</ul>
                 ) : <p className={s.muted}>{t("sa.orgs.noAudit", "Nothing recorded yet.")}</p>}
               </Panel>
-            </div>
+            </div>}
 
-            <Panel
+            {pane === "features" && <Panel
               title={t("sa.orgs.features", "Features for this organisation")}
               sub={t("sa.orgs.featuresSub", "Plan: {{p}}. Override single modules here; a platform kill switch still wins.", { p: D.entitlements.plan })}
               actions={["owner", "support", "engineer"].includes(role) && overrides && <Button size="sm" onClick={() => setDialog({ kind: "overrides" })}>{t("sa.save", "Save changes")}</Button>}
@@ -146,7 +160,8 @@ export default function OrgDetail({ id, role, onBack, go }) {
                   ))}
                 </tbody>
               </table>
-            </Panel>
+            </Panel>}
+            </TabBody>
           </>
         )}
       </Loadable>

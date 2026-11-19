@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, DataTable } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, qs, dateTime } from "./api";
-import { Field, Loadable, Notice, Pager, Panel, Pill, Tabs } from "./ui";
+import { Field, Loadable, Notice, Pager, Panel, Pill, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 const FIELDS = ["actor", "org", "target", "action", "q", "from", "to"];
@@ -18,6 +18,8 @@ function Events({ role, params, setParams }) {
   const [form, setForm] = useState(f);
   const [check, setCheck] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [more, setMore] = useState(false);
+  const filtersOn = ["org", "target", "action", "from", "to"].filter((k) => f[k]).length;
   const list = useLoad(`/audit${qs({ ...f, page, limit: 50 })}`);
   const set = (patch) => setParams(() => new URLSearchParams(Object.fromEntries(Object.entries({ section: "audit", ...f, ...patch }).filter(([, v]) => v))));
   const L = list.data;
@@ -35,6 +37,10 @@ function Events({ role, params, setParams }) {
           : <Notice tone="alert" onClose={() => setCheck(null)}>{t("sa.au.broken", "Broken at event {{id}} ({{action}}, {{at}}): {{p}} {{n}} events before it are intact.", { id: check.firstBreak.id, action: check.firstBreak.action, at: dateTime(check.firstBreak.at), p: check.firstBreak.problem, n: check.checked })}</Notice>)}
       <form className={s.toolbar} role="search" onSubmit={(e) => { e.preventDefault(); set({ ...form, page: "" }); }}>
         <Field label={t("sa.au.actor", "Who (email)")}><input className={s.input} value={form.actor} onChange={(e) => setForm({ ...form, actor: e.target.value })} /></Field>
+        <button type="button" className={`${s.chipBtn} ${s.filterToggle}`} aria-expanded={more} aria-controls="sa-audit-filters" onClick={() => setMore((v) => !v)}>
+          {t("sa.filters", "Filters")}{filtersOn ? ` (${filtersOn})` : ""}
+        </button>
+        <div id="sa-audit-filters" className={`${s.moreFilters} ${more ? s.moreOpen : ""}`}>
         <Field label={t("sa.au.org", "Organisation id")}><input className={s.input} value={form.org} onChange={(e) => setForm({ ...form, org: e.target.value })} /></Field>
         <Field label={t("sa.au.target", "About (learner email or id)")}><input className={s.input} value={form.target} onChange={(e) => setForm({ ...form, target: e.target.value })} /></Field>
         <Field label={t("sa.au.action", "Action")}>
@@ -46,6 +52,7 @@ function Events({ role, params, setParams }) {
         </Field>
         <Field label={t("sa.au.from", "From")}><input type="date" className={s.input} value={form.from} onChange={(e) => setForm({ ...form, from: e.target.value })} /></Field>
         <Field label={t("sa.au.to", "To")}><input type="date" className={s.input} value={form.to} onChange={(e) => setForm({ ...form, to: e.target.value })} /></Field>
+        </div>
         <Button type="submit" size="sm">{t("sa.apply", "Search")}</Button>
         <Button type="button" size="sm" variant="ghost" onClick={() => { setForm(Object.fromEntries(FIELDS.map((k) => [k, ""]))); setParams(new URLSearchParams({ section: "audit" })); }}>{t("sa.clear", "Clear")}</Button>
       </form>
@@ -53,12 +60,10 @@ function Events({ role, params, setParams }) {
         {L && (
           <>
             <DataTable caption={t("sa.au.title", "Audit log")} rows={L.events} getRowKey={(e) => e.id} columns={[
-              { key: "at", label: t("sa.au.when", "When"), render: (e) => dateTime(e.at) },
-              { key: "actor", label: t("sa.au.who", "Who"), render: (e) => <span>{e.actorEmail || e.actorId || "—"}<br /><span className={`${s.small} ${s.muted}`}>{e.actorRole}</span></span> },
-              { key: "action", label: t("sa.au.action", "Action"), render: (e) => <span className={s.mono}>{e.action}</span> },
-              { key: "target", label: t("sa.au.about", "About"), render: (e) => <span>{e.targetType ? `${e.targetType} ` : ""}<span className={s.mono}>{e.targetId || ""}</span></span> },
+              { key: "at", label: t("sa.au.whenWho", "When and who"), render: (e) => <span><span className={s.strong}>{dateTime(e.at)}</span><br />{e.actorEmail || e.actorId || "—"}<br /><span className={`${s.small} ${s.muted}`}>{e.actorRole}</span></span> },
+              { key: "action", label: t("sa.au.what", "What"), render: (e) => <span><span className={s.mono}>{e.action}</span><br /><span className={`${s.small} ${s.muted}`}>{e.targetType ? `${e.targetType} ` : ""}<span className={s.mono}>{e.targetId || ""}</span></span></span> },
               { key: "orgId", label: t("sa.au.orgCol", "Org"), render: (e) => (e.orgId ? <button type="button" className={s.linkBtn} onClick={() => set({ org: e.orgId, page: "" })}>{e.orgId.slice(-6)}</button> : "—") },
-              { key: "reason", label: t("sa.au.why", "Why"), render: (e) => e.reason || (e.meta ? <span className={`${s.small} ${s.muted}`}>{JSON.stringify(e.meta).slice(0, 80)}</span> : "—") },
+              { key: "reason", label: t("sa.au.why", "Why"), render: (e) => e.reason || (e.meta ? <span className={`${s.small} ${s.muted} ${s.mono} ${s.breakAny}`}>{JSON.stringify(e.meta).slice(0, 80)}</span> : "—") },
             ]} />
             <Pager page={L.page} limit={L.limit} total={L.total} onPage={(p) => set({ page: String(p) })} />
           </>
@@ -93,7 +98,7 @@ export default function Audit(props) {
   return (
     <>
       <Tabs label={t("sa.au.title", "Audit log")} value={tab} onChange={(k) => props.setParams(new URLSearchParams({ section: "audit", tab: k }))} tabs={[{ key: "events", label: t("sa.au.events", "Events") }, { key: "viewas", label: t("sa.au.viewAs", "View-as sessions") }]} />
-      {tab === "events" ? <Events {...props} /> : <ViewAsSessions />}
+      <TabBody value={tab}>{tab === "events" ? <Events {...props} /> : <ViewAsSessions />}</TabBody>
     </>
   );
 }

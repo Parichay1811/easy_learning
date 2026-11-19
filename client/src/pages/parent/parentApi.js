@@ -91,3 +91,9 @@ export const STICKERS = {
   star: "⭐", trophy: "🏆", heart: "💖", rocket: "🚀", rainbow: "🌈", thumbs: "👍", party: "🎉", medal: "🏅", sun: "🌞", hug: "🤗",
 };
 export const avatarOf = (child) => child?.avatar || (child?.name || "?").charAt(0).toUpperCase();
+
+// Connect by email (server: services/linkRequests.js). The parent types the child's
+// Learnigo email; the child accepts under Dashboard → My people.
+//   sendChildRequest(api, { name, age, email }) -> { success, request } | { success, linked, child }
+export const sendChildRequest = (api, { name, age, email }) => api.post("/links", { to: "student", name, age, email });
+export const childRequestFor = (outgoing, child) => (outgoing || []).find((r) => r.kind === "family" && r.child?.id === child?._id) || null;

@@ -25,6 +25,7 @@
 .small { font-size: 0.875rem; }
 
 .grid2 { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.grid2wide { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr)); }
 .grid3 { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); }
 .tiles { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
 
@@ -234,6 +235,14 @@
   padding: 22px;
 }
 .modalWide { width: min(920px, 100%); }
+@media (max-width: 700px) {
+  .backdrop { place-items: end stretch; padding: 0; }
+  .modal, .modalWide { width: 100%; max-height: 92dvh; border-radius: 26px 26px 0 0; padding: 18px 16px calc(18px + env(safe-area-inset-bottom)); }
+}
+@media (max-height: 500px) {
+  .backdrop { padding: 8px; }
+  .modal { max-height: calc(100dvh - 16px); }
+}
 .modalHead { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
 .modalHead h2 { margin: 0; font-size: 1.25rem; color: var(--d-ink); }
 .iconBtn {
@@ -299,8 +308,8 @@
 .compareBar span { display: block; height: 100%; border-radius: 99px; }
 .compareMe { font-weight: 700; }
 
-/* Workspace switcher */
-.switcher { position: relative; }
+/* Workspace switcher: shrinks (ellipsis) so it never runs into the bell on phones */
+.switcher { position: relative; min-width: 0; max-width: 100%; display: flex; }
 .switchBtn {
   font: inherit;
   display: inline-flex;
@@ -313,9 +322,11 @@
   background: var(--d-card);
   color: var(--d-ink);
   cursor: pointer;
-  max-width: 260px;
+  min-width: 0;
+  max-width: min(260px, 100%);
 }
-.switchBtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.switchBtn span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.switchBtn svg { flex: 0 0 auto; }
 .switchMenu {
   position: absolute;
   z-index: 50;
@@ -366,7 +377,8 @@
 
 @media (max-width: 700px) {
   .hideNarrow { display: none; }
-  .switchBtn { max-width: 160px; }
+  .switchBtn { max-width: 100%; padding: 6px 10px; gap: 6px; }
+  .switchBtn > svg:first-child { display: none; }
   .joinBox { grid-template-columns: 1fr; justify-items: center; text-align: center; }
   .classItem { grid-template-columns: 64px 1fr; }
   .classItem > :last-child { grid-column: 1 / -1; justify-self: start; }
@@ -412,3 +424,69 @@
 }
 .checkChip input { width: 18px; height: 18px; accent-color: var(--d-accent); }
 .checkChipOn { border-color: var(--d-accent); background: var(--d-accent-soft); color: var(--d-accent-ink); }
+
+/* ── Regrouped views (sub-tabs, HUD) ─────────────────────────────────── */
+/* A slimmer story board: the meadow stays, the card is not a full screen tall. */
+.storyCompact.storyCompact { padding-block: 16px; min-height: 0; }
+.storyCompact.storyCompact p:last-of-type { font-size: 1.15rem; line-height: 1.45; }
+.storyCompact.storyCompact ul { margin-top: 10px; gap: 8px; }
+@media (max-width: 900px) {
+  .storyCompact.storyCompact { padding-top: 84px; }
+  .storyCompact.storyCompact > span[aria-hidden="true"] { height: 92px; }
+}
+@media (max-width: 520px) {
+  .storyCompact.storyCompact { padding: 74px 14px 14px; }
+  .storyCompact.storyCompact > span[aria-hidden="true"] { height: 84px; }
+  .storyCompact.storyCompact p:last-of-type { font-size: 1.04rem; }
+}
+/* Short laptop screens: the words get more room so the chips sit on one or two lines. */
+@media (min-width: 901px) and (max-height: 820px) {
+  .storyCompact.storyCompact > span[aria-hidden="true"] { width: 34%; }
+  .storyCompact.storyCompact > div { max-width: 72%; }
+}
+@media (max-height: 500px) {
+  .storyCompact.storyCompact { padding-top: 14px; }
+  .storyCompact.storyCompact > span[aria-hidden="true"] { display: none; }
+  .storyCompact.storyCompact > div { max-width: none; }
+}
+
+/* Today: the three answers side by side on wide screens, each scrolling inside itself. */
+.hud { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: stretch; }
+.hud > * { min-width: 0; }
+.hudList { max-height: clamp(220px, calc(100dvh - 560px), 520px); overflow-y: auto; overscroll-behavior: contain; padding-inline-end: 4px; }
+@media (max-width: 1099px) { .hud { grid-template-columns: 1fr; } .hudList { max-height: none; } }
+/* Short laptop screens: smaller puppies in the empty answers so the HUD stays on one screen. */
+@media (min-width: 1100px) and (max-height: 960px) { .hud img { width: 52px; } }
+.headRow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.headRow h1 { margin: 0; font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.6rem); line-height: 1.2; color: var(--d-ink); }
+.headRow p { margin: 2px 0 0; color: var(--d-muted); }
+
+/* A long list (timeline, uploads) scrolls inside its card instead of stretching the page. */
+.scrollArea { max-height: min(62dvh, 640px); overflow-y: auto; overscroll-behavior: contain; padding-inline-end: 4px; }
+@media (max-width: 700px) { .scrollArea { max-height: none; } }
+
+/* Simple tables turn into small cards on phones (each cell shows its column name). */
+@media (max-width: 700px) {
+  .tableCards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .tableCards, .tableCards tbody, .tableCards tr, .tableCards td { display: block; width: 100%; box-sizing: border-box; }
+  .tableCards tr { margin-bottom: 10px; padding: 6px 0; border: 2px solid var(--d-line); border-radius: var(--d-radius-sm); background: var(--d-card); }
+  .tableCards td { display: flex; justify-content: space-between; gap: 12px; border: 0; padding: 6px 12px; text-align: end; }
+  .tableCards td::before { content: attr(data-label); color: var(--d-muted); font-size: 0.82rem; text-align: start; flex-shrink: 0; }
+}
+
+/* Group / student header: back link, name and the main actions on one compact row */
+.backRow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.titleRow { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.titleRow h1 { margin: 0; font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.6rem); line-height: 1.2; color: var(--d-ink); }
+.titleRow p { margin: 2px 0 0; color: var(--d-muted); }
+.titleMain { min-width: 0; flex: 1 1 260px; }
+.kpiRow { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+@media (max-width: 420px) { .kpiRow { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Short landscape phones: smaller page titles, no subtitle line, so the content starts higher. */
+@media (max-height: 500px) {
+  .headRow h1, .titleRow h1, .pageHead h1 { font-size: 1.2rem; }
+  .headRow > div:first-child > p, .pageHead > div:first-child > p { display: none; }
+  .titleRow { gap: 6px 12px; }
+  .titleRow h1 { margin-top: 2px !important; }
+}

@@ -42,8 +42,15 @@ export default function WorkspaceSwitcher({ current, onSwitched }) {
   const switchTo = useSwitchWorkspace();
   const [list, setList] = useState([]);
   const [open, setOpen] = useState(false);
+  const [menuTop, setMenuTop] = useState(null);
   const ref = useRef(null);
   const token = getTeacherToken();
+  // On phones the menu spans the screen width just under the button (it would not fit beside it).
+  const toggle = () => {
+    const phone = window.matchMedia("(max-width: 700px)").matches;
+    setMenuTop(phone && ref.current ? Math.round(ref.current.getBoundingClientRect().bottom + 6) : null);
+    setOpen((v) => !v);
+  };
 
   useEffect(() => {
     apiCall("/teacher/auth/workspaces", { token }).then((r) => { if (r.ok) setList(r.workspaces); });
@@ -61,12 +68,12 @@ export default function WorkspaceSwitcher({ current, onSwitched }) {
   const hasSolo = list.some((w) => w.kind === "solo");
   return (
     <div className={s.switcher} ref={ref}>
-      <button type="button" className={s.switchBtn} aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((v) => !v)}
+      <button type="button" className={s.switchBtn} aria-haspopup="menu" aria-expanded={open} onClick={toggle}
         aria-label={t("teacher.ws.current", { defaultValue: "Workspace: {{name}}. Switch workspace", name: me.name || "" })}>
         <Icon kind={me.kind} /> <span>{me.name}</span> <FaChevronDown aria-hidden="true" />
       </button>
       {open && (
-        <ul className={s.switchMenu} role="menu">
+        <ul className={s.switchMenu} role="menu" style={menuTop != null ? { position: "fixed", top: menuTop, left: 12, right: 12, minWidth: 0 } : undefined}>
           {list.map((w) => (
             <li key={w.tutorId} role="none">
               <button type="button" role="menuitemradio" aria-checked={w.orgId === String(current?.id)} className={s.switchItem}

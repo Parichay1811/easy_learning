@@ -41,6 +41,7 @@ import {
 } from '../core/journey'
 import { speak } from '../core/tts'
 import { haptic } from '../core/feedback'
+import { sfx } from '../../utils/sounds'
 import { tGame, tGroup, tDomain, tLifeSkill, tRecommend } from '../core/arText'
 import LevelPips from '../core/LevelPips'
 import SettingsSheet from '../core/SettingsSheet'
@@ -201,15 +202,25 @@ export default function ARHub() {
       <div className={styles.glow} aria-hidden />
 
       <header className={styles.head}>
-        <button className={styles.iconBtn} onClick={() => navigate('/games')} aria-label={t('ar.hub.back', 'Back')}>
-          <FaArrowLeft />
+        <button
+          className={styles.backBtn}
+          onClick={() => { sfx.back(); navigate('/games') }}
+          aria-label={t('ar.hub.back', 'Back')}
+          data-sound="none"
+        >
+          <FaArrowLeft aria-hidden />
+          <span className={styles.backText}>{t('ar.hub.back', 'Back')}</span>
         </button>
         <div className={styles.headTitle}>
           <FaGamepad className={styles.headIcon} />
           <span>{t('ar.hub.title', 'Camera Games')}</span>
         </div>
         <div className={styles.headRight}>
-          <LanguageSwitcher />
+          {/* Only when the hub stands alone: under the site navbar, which
+              has its own language switch, this one is hidden (see .hubLang). */}
+          <span className={styles.hubLang}>
+            <LanguageSwitcher />
+          </span>
           {/* Points and rank: the one number that is the child's alone, and a
               door into their own progress screen. */}
           <button

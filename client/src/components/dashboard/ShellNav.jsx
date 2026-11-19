@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { renderIcon, useActive } from './shellUtils';
+import { groupStarts, renderIcon, useActive } from './shellUtils';
 import s from './shell.module.css';
 
 /** One sidebar / tab-bar / sheet entry. `variant`: 'side' | 'sub' | 'tab' | 'sheet'. */
@@ -28,9 +28,13 @@ export function NavEntry({ item, on, current, variant = 'side', onNavigate, coll
 
 export function SideNav({ nav, active, collapsed }) {
   const { is, within } = useActive(active);
+  const starts = groupStarts(nav);
   return (
     <ul className={s.navList}>
-      {nav.map((item) => (
+      {nav.map((item, i) => [
+        starts[i] && (collapsed
+          ? (i > 0 && <li key={`g-${item.group}`} className={s.navRule} aria-hidden="true" />)
+          : <li key={`g-${item.group}`} className={s.navGroup} aria-hidden="true">{item.group}</li>),
         <li key={item.key}>
           <NavEntry item={item} on={within(item)} current={is(item)} variant="side" collapsed={collapsed} />
           {item.children?.length > 0 && !collapsed && within(item) && (
@@ -42,8 +46,8 @@ export function SideNav({ nav, active, collapsed }) {
               ))}
             </ul>
           )}
-        </li>
-      ))}
+        </li>,
+      ])}
     </ul>
   );
 }

@@ -1,15 +1,19 @@
 import { useState } from "react";
 import ManagedLogin from "../components/family/ManagedLogin";
 import { useTranslation } from "react-i18next";
-import * as FramerMotion from "framer-motion";
 import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+import { FaEnvelope, FaLock, FaUser, FaKey } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import RoboticBackground from "../components/RoboticBackground/RoboticBackground";
-import styles from "./Login.module.css";
+import EntryShell, { GoogleButton, EntryError, EntryDivider } from "../components/Entry/EntryShell";
+import { StudentEmblem } from "../components/Entry/RoleEmblems";
+import { sfx, haptic } from "../utils/sounds";
+import e from "../components/Entry/Entry.module.css";
 
+const OFFLINE = /failed to fetch|networkerror|load failed|network request failed/i;
+
+// Student sign in (and "create an account"): Google, or email + password, or
+// a class code with picture password for young learners (ManagedLogin).
 const Login = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [classCode, setClassCode] = useState(false); // young learners: code + picture password
@@ -22,8 +26,8 @@ const Login = () => {
   const { loginManual, registerManual } = useAuth();
   const { t } = useTranslation();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
     setError("");
     setLoading(true);
     try {
@@ -32,9 +36,12 @@ const Login = () => {
       } else {
         await loginManual(email, password);
       }
+      sfx.enter();
+      haptic("success");
       navigate("/home");
     } catch (err) {
-      setError(err.message || t("login.errorDefault"));
+      const msg = err?.message || "";
+      setError(OFFLINE.test(msg) ? t("login.networkError") : msg || t("login.errorDefault"));
     } finally {
       setLoading(false);
     }
@@ -45,6 +52,8 @@ const Login = () => {
     setLoading(true);
     try {
       await signInWithGoogle();
+      sfx.enter();
+      haptic("success");
       navigate("/home");
     } catch (err) {
       const cancelled = [
@@ -59,6 +68,8 @@ const Login = () => {
         setError(t("login.networkError"));
       } else if (err.code === "auth/operation-not-allowed") {
         setError(t("login.operationNotAllowed"));
+      } else if (err.code === "auth/not-configured") {
+        setError(t("entry.errors.googleOffStudent", "Google sign-in isn't available right now. You can use your email and password instead."));
       } else {
         setError(t("login.errorDefault"));
       }
@@ -72,106 +83,98 @@ const Login = () => {
     setError("");
   };
 
+  const footer = (
+    <>
+      <div className={e.footRow}>
+        <span>{isSignup ? t("login.alreadyAccount") : t("entry.newHere", "New here?")}</span>
+        <button className={e.link} onClick={switchMode} type="button" data-sound="tab">
+          {isSignup ? t("login.signInBtn") : t("entry.student.create", "Create an account")}
+        </button>
+      </div>
+      <button className={e.soft} onClick={() => { sfx.open(); setClassCode(true); }} type="button" data-sound="none">
+        <FaKey aria-hidden="true" />
+        {t("login.classCode", { defaultValue: "I have a class code" })}
+      </button>
+    </>
+  );
+
   return (
-    <FramerMotion.motion.div
-      className={styles.page}
-      initial={{ opacity: 0, x: -80 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 80 }}
-      transition={{ duration: 0.4 }}
-    >
-      <RoboticBackground />
+    <>
+      <EntryShell
+        role="student"
+        emblem={StudentEmblem}
+        title={isSignup ? t("entry.student.signupTitle", "Create your student account") : t("entry.student.title", "Student sign in")}
+        subtitle={isSignup ? t("login.createAccountSubtitle") : t("login.continueJourneySubtitle")}
+        tip={isSignup
+          ? t("entry.student.signupTip", "Ask a grown-up to help you make your account. It's free!")
+          : t("entry.student.tip", "Got a class code from your teacher or a grown-up? Tap “I have a class code”.")}
+        footer={footer}
+        error={error}
+      >
+        <GoogleButton onClick={handleGoogle} disabled={loading}>
+          {t("login.continueGoogle")}
+        </GoogleButton>
 
-      <div className={styles.content}>
-        <div className={styles.card}>
-          <h1 className={styles.title}>
-            {isSignup ? t("login.joinTitle") : t("login.welcomeBack")}
-          </h1>
-          <p className={styles.subtitle}>
-            {isSignup ? t("login.createAccountSubtitle") : t("login.continueJourneySubtitle")}
-          </p>
+        <EntryDivider>{t("entry.orEmail", "or use your email")}</EntryDivider>
 
-          <button
-            className={styles.googleBtn}
-            onClick={handleGoogle}
-            disabled={loading}
-            type="button"
-          >
-            <FcGoogle className={styles.googleIcon} />
-            {t("login.continueGoogle")}
-          </button>
+        <form onSubmit={handleSubmit} className={e.form}>
+          {isSignup && (
+            <div className={e.field}>
+              <FaUser className={e.fieldIcon} aria-hidden="true" />
+              <input
+                type="text"
+                placeholder={t("login.namePlaceholder")}
+                aria-label={t("login.namePlaceholder")}
+                autoComplete="name"
+                value={name}
+                onChange={(ev) => setName(ev.target.value)}
+                className={e.input}
+                required
+              />
+            </div>
+          )}
 
-          <div className={styles.divider}>
-            <span>{t("login.or")}</span>
+          <div className={e.field}>
+            <FaEnvelope className={e.fieldIcon} aria-hidden="true" />
+            <input
+              type="email"
+              placeholder={t("login.emailPlaceholder")}
+              aria-label={t("login.emailPlaceholder")}
+              autoComplete="email"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+              className={e.input}
+              required
+            />
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.form}>
-            {isSignup && (
-              <div className={styles.inputGroup}>
-                <FaUser className={styles.inputIcon} />
-                <input
-                  type="text"
-                  placeholder={t("login.namePlaceholder")}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className={styles.input}
-                  required
-                />
-              </div>
-            )}
+          <div className={e.field}>
+            <FaLock className={e.fieldIcon} aria-hidden="true" />
+            <input
+              type="password"
+              placeholder={t("login.passwordPlaceholder")}
+              aria-label={t("login.passwordPlaceholder")}
+              autoComplete={isSignup ? "new-password" : "current-password"}
+              value={password}
+              onChange={(ev) => setPassword(ev.target.value)}
+              className={e.input}
+              required
+            />
+          </div>
 
-            <div className={styles.inputGroup}>
-              <FaEnvelope className={styles.inputIcon} />
-              <input
-                type="email"
-                placeholder={t("login.emailPlaceholder")}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={styles.input}
-                required
-              />
-            </div>
+          {error && <EntryError>{error}</EntryError>}
 
-            <div className={styles.inputGroup}>
-              <FaLock className={styles.inputIcon} />
-              <input
-                type="password"
-                placeholder={t("login.passwordPlaceholder")}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={styles.input}
-                required
-              />
-            </div>
-
-            {error && <p className={styles.error}>{error}</p>}
-
-            <button
-              type="submit"
-              className={styles.submitBtn}
-              disabled={loading}
-            >
-              {loading
-                ? t("login.loading")
-                : isSignup
-                ? t("login.createAccountBtn")
-                : t("login.signInBtn")}
-            </button>
-          </form>
-
-          <p className={styles.toggle}>
-            {isSignup ? t("login.alreadyAccount") : t("login.noAccount")}{" "}
-            <button className={styles.toggleBtn} onClick={switchMode} type="button">
-              {isSignup ? t("login.signInBtn") : t("login.signUpBtn")}
-            </button>
-          </p>
-          <button className={styles.toggleBtn} onClick={() => setClassCode(true)} type="button">
-            {t("login.classCode", { defaultValue: "I have a class code" })}
+          <button type="submit" className={e.primary} disabled={loading} data-sound="none">
+            {loading
+              ? t("login.loading")
+              : isSignup
+              ? t("login.createAccountBtn")
+              : t("login.signInBtn")}
           </button>
-        </div>
-      </div>
+        </form>
+      </EntryShell>
       {classCode && <ManagedLogin onClose={() => setClassCode(false)} />}
-    </FramerMotion.motion.div>
+    </>
   );
 };
 

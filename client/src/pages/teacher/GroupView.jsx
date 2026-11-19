@@ -2,10 +2,11 @@
 // other groups), TCH-053 subject and module view, TCH-055 suggested practice groups, plus the
 // roster (TCH-011 move/copy), parents (TCH-012) and weekly schedule (TCH-010).
 import { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaUserPlus, FaPen, FaExchangeAlt, FaUserMinus, FaMagic, FaArrowLeft } from "react-icons/fa";
+import { FaUserPlus, FaPen, FaExchangeAlt, FaUserMinus, FaMagic, FaArrowLeft, FaChartPie, FaHandsHelping, FaThLarge, FaUsers, FaUserFriends, FaClock } from "react-icons/fa";
 import {
-  TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button,
+  TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel,
   StudentSkillHeatmap, DistributionStrip, SubjectModuleMatrix, TrendLine, toTable,
   SUBJECTS, MODULES, subjectLabel, moduleLabel, fmtDuration, fmtPercent,
 } from "../../components/dashboard";
@@ -18,7 +19,8 @@ import AddStudentsPanel from "./AddStudentsPanel";
 import ParentsPanel from "./ParentsPanel";
 import s from "./teacher.module.css";
 
-function Overview({ group, go }) {
+// "Overview" = how the group is doing; "help" = who needs help on what, and who could practise together.
+function Overview({ group, go, part = "overview" }) {
   const { t } = useTranslation();
   const { get, send } = useTeacherApi();
   const tr = useTimeRange({ defaultRange: "week", defaultCmp: "prev" });
@@ -26,8 +28,9 @@ function Overview({ group, go }) {
   const ov = useLoad(() => get(`/batches/${group._id}/analytics/overview?${rq}`), [group._id, rq]);
   const lr = useLoad(() => get(`/batches/${group._id}/analytics/learners?${rq}`), [group._id, rq]);
   const hm = useLoad(() => get(`/groups/${group._id}/heatmap?${rq}`), [group._id, rq]);
-  const cmp = useLoad(() => get(`/groups/compare?${rq}`), [rq]);
-  const sug = useLoad(() => get(`/groups/${group._id}/suggestions?${rq}`), [group._id, rq]);
+  const help = part === "help";
+  const cmp = useLoad(() => (help ? Promise.resolve({ ok: true }) : get(`/groups/compare?${rq}`)), [rq, help]);
+  const sug = useLoad(() => (help ? get(`/groups/${group._id}/suggestions?${rq}`) : Promise.resolve({ ok: true })), [group._id, rq, help]);
   const [made, setMade] = useState("");
 
   const o = ov.data;
@@ -50,66 +53,27 @@ function Overview({ group, go }) {
   if (!n) {
     return <EmptyState title={t("teacher.group.noStudents", { defaultValue: "No students yet" })} text={t("teacher.group.noStudentsText", { defaultValue: "Add students to see how the group is doing." })} actionLabel={t("teacher.add.btn", { defaultValue: "Add students" })} onAction={() => go("group", { id: group._id, tab: "students", add: "1" })} />;
   }
-  return (
-    <>
-      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare />
-      {ov.loading ? <Skeleton variant="tile" /> : o && (
-        <StoryCard sentence={o.story} chips={[
-          lr.data?.atRisk ? { kind: "nudge", text: t("teacher.group.chipRisk", { defaultValue: "{{count}} need a nudge", defaultValue_one: "{{count}} needs a nudge", count: lr.data.atRisk }) } : null,
-          ...(o.insights || []).slice(0, 3).map((i) => ({ kind: ["alert", "celebrate", "nudge"].includes(i.kind) ? i.kind : "info", text: t(`dash.insight.${i.key}`, { defaultValue: i.text, ...i.params }) })),
-        ].filter(Boolean).slice(0, 4)} />
-      )}
-      {o && (
-        <div className={s.tiles}>
-          <KpiTile label={t("teacher.kpi.active", { defaultValue: "Active students" })} value={`${o.totals.learners} / ${n}`} delta={o.previous ? { current: o.totals.learners, previous: o.previous.learners, mode: "number" } : undefined} />
-          <KpiTile label={t("teacher.kpi.minutesPer", { defaultValue: "Minutes per student" })} value={fmtDuration(Math.round(o.totals.minutes / n))} sparkline={trend.map((p) => p.value)} delta={o.previous ? { current: o.totals.minutes / n, previous: o.previous.minutes / n, mode: "duration" } : undefined} />
-          <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={o.totals.accuracy == null ? null : fmtPercent(o.totals.accuracy / 100)} delta={o.previous?.accuracy != null && o.totals.accuracy != null ? { current: o.totals.accuracy / 100, previous: o.previous.accuracy / 100, mode: "points" } : undefined} helpText={t("teacher.kpi.accuracyHelp", { defaultValue: "Correct answers divided by all answers." })} />
-          <KpiTile label={t("teacher.kpi.consistency", { defaultValue: "Days with learning" })} value={o.totals.consistency == null ? null : fmtPercent(o.totals.consistency / 100)} helpText={t("teacher.kpi.consistencyHelp", { defaultValue: "Share of days in the period when someone in the group learned." })} />
-        </div>
-      )}
+  const range = <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare compact="auto" />;
 
-      <ChartCard title={t("teacher.group.heatTitle", { defaultValue: "Who needs help on what?" })}
-        answer={hm.data ? t("teacher.group.heatAnswer", { defaultValue: "Students needing a nudge are pinned on top. Click a name to open their profile." }) : ""}
-        info={t("teacher.group.heatInfo", { defaultValue: "Each cell is the student's accuracy in that module and subject for the period. Empty cells: not practised yet." })}
-        loading={hm.loading} error={hm.error} onRetry={hm.reload}
-        table={hm.data && toTable.studentSkills(heatStudents, usedSkills.length ? usedSkills : skills, t)}
-        empty={hm.data && !usedSkills.length && { title: t("teacher.group.heatEmpty", { defaultValue: "No practice in this period" }), text: t("teacher.group.heatEmptyText", { defaultValue: "Pick a longer period, or check back once students have learned." }) }}>
-        <StudentSkillHeatmap students={heatStudents} skills={usedSkills.length ? usedSkills : skills} onStudentClick={(st) => go("student", { id: st.id })} onCellClick={(st) => go("student", { id: st.id })} />
-      </ChartCard>
-
-      <div className={s.grid2}>
-        <ChartCard title={t("teacher.group.distTitle", { defaultValue: "How is the class spread?" })}
-          answer={dist.length ? t("teacher.group.distAnswer", { defaultValue: "Each dot is a student's accuracy." }) : ""}
-          loading={lr.loading} error={lr.error} onRetry={lr.reload} table={toTable.distribution(dist, t)}
-          empty={lr.data && !dist.length && { title: t("teacher.group.distEmpty", { defaultValue: "No answers yet in this period" }) }}>
-          <DistributionStrip data={dist} onSelect={(item) => studentIdByEmail[item.id] && go("student", { id: studentIdByEmail[item.id] })} />
+  if (help) {
+    return (
+      <>
+        {range}
+        <ChartCard title={t("teacher.group.heatTitle", { defaultValue: "Who needs help on what?" })}
+          answer={hm.data ? t("teacher.group.heatAnswer", { defaultValue: "Students needing a nudge are pinned on top. Click a name to open their profile." }) : ""}
+          info={t("teacher.group.heatInfo", { defaultValue: "Each cell is the student's accuracy in that module and subject for the period. Empty cells: not practised yet." })}
+          loading={hm.loading} error={hm.error} onRetry={hm.reload}
+          table={hm.data && toTable.studentSkills(heatStudents, usedSkills.length ? usedSkills : skills, t)}
+          empty={hm.data && !usedSkills.length && { title: t("teacher.group.heatEmpty", { defaultValue: "No practice in this period" }), text: t("teacher.group.heatEmptyText", { defaultValue: "Pick a longer period, or check back once students have learned." }) }}>
+          <StudentSkillHeatmap students={heatStudents} skills={usedSkills.length ? usedSkills : skills} onStudentClick={(st) => go("student", { id: st.id })} onCellClick={(st) => go("student", { id: st.id })} />
         </ChartCard>
-        <ChartCard title={t("teacher.group.trendTitle", { defaultValue: "Is the group learning more?" })} answer={o ? t("teacher.group.trendAnswer", { defaultValue: "Minutes learned by the whole group." }) : ""}
-          loading={ov.loading} error={ov.error} onRetry={ov.reload} table={toTable.trend(trend, t, { unit: "min" })}>
-          <TrendLine data={trend} unit="min" height={200} />
-        </ChartCard>
-      </div>
 
-      {cmp.data?.groups?.length > 1 && (
-        <ChartCard title={t("teacher.group.cmpTitle", { defaultValue: "How does it compare with my other groups?" })} answer={t("teacher.group.cmpAnswer", { defaultValue: "Accuracy in each of your groups for the same period." })}
-          table={{ columns: [{ key: "name", label: t("teacher.group.group", { defaultValue: "Group" }) }, { key: "accuracy", label: t("teacher.kpi.accuracy", { defaultValue: "Accuracy" }) }, { key: "minutes", label: t("teacher.kpi.minutesPer", { defaultValue: "Minutes per student" }) }], rows: cmp.data.groups.map((g) => ({ id: g.id, name: g.name, accuracy: g.accuracy == null ? "—" : `${g.accuracy} %`, minutes: g.minutesPerStudent ?? "—" })) }}>
-          <div className={s.compare}>
-            {cmp.data.groups.map((g) => (
-              <div key={g.id} className={s.compareRow}>
-                <span className={g.id === group._id ? s.compareMe : ""}>{g.emoji} {g.name}</span>
-                <span className={s.compareBar} aria-hidden="true"><span style={{ width: `${g.accuracy || 0}%`, background: g.color || "var(--d-accent)" }} /></span>
-                <span>{g.accuracy == null ? "—" : `${g.accuracy} %`}</span>
-              </div>
-            ))}
-          </div>
-        </ChartCard>
-      )}
-
-      {sug.data?.suggestions?.length > 0 && (
-        <ChartCard title={t("teacher.sug.title", { defaultValue: "Who could practise together?" })} answer={t("teacher.sug.answer", { defaultValue: "Students below 60 % on the same skill. One tap makes a short-term practice group." })}>
+        <ChartCard title={t("teacher.sug.title", { defaultValue: "Who could practise together?" })} answer={t("teacher.sug.answer", { defaultValue: "Students below 60 % on the same skill. One tap makes a short-term practice group." })}
+          loading={sug.loading}
+          empty={sug.data && !sug.data.suggestions?.length && { title: t("teacher.sug.none", { defaultValue: "No practice groups to suggest" }), text: t("teacher.sug.noneText", { defaultValue: "Nobody is below 60 % on the same skill in this period." }) }}>
           {made && <p className={s.note} role="status">{made}</p>}
           <ul className={s.personList}>
-            {sug.data.suggestions.map((sg) => (
+            {(sug.data?.suggestions || []).map((sg) => (
               <li key={sg.title} className={s.personRow}>
                 <span className={s.avatar} aria-hidden="true"><FaMagic /></span>
                 <span className={s.personMain}>
@@ -121,7 +85,54 @@ function Overview({ group, go }) {
             ))}
           </ul>
         </ChartCard>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {range}
+      {ov.loading ? <Skeleton variant="tile" /> : o && (
+        <StoryCard className={s.storyCompact} sentence={o.story} chips={[
+          lr.data?.atRisk ? { kind: "nudge", text: t("teacher.group.chipRisk", { defaultValue: "{{count}} need a nudge", defaultValue_one: "{{count}} needs a nudge", count: lr.data.atRisk }), onClick: () => go("group", { id: group._id, tab: "help" }) } : null,
+          ...(o.insights || []).slice(0, 3).map((i) => ({ kind: ["alert", "celebrate", "nudge"].includes(i.kind) ? i.kind : "info", text: t(`dash.insight.${i.key}`, { defaultValue: i.text, ...i.params }) })),
+        ].filter(Boolean).slice(0, 4)} />
       )}
+      {o && (
+        <div className={s.kpiRow}>
+          <KpiTile label={t("teacher.kpi.active", { defaultValue: "Active students" })} value={`${o.totals.learners} / ${n}`} delta={o.previous ? { current: o.totals.learners, previous: o.previous.learners, mode: "number" } : undefined} />
+          <KpiTile label={t("teacher.kpi.minutesPer", { defaultValue: "Minutes per student" })} value={fmtDuration(Math.round(o.totals.minutes / n))} sparkline={trend.map((p) => p.value)} delta={o.previous ? { current: o.totals.minutes / n, previous: o.previous.minutes / n, mode: "duration" } : undefined} />
+          <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={o.totals.accuracy == null ? null : fmtPercent(o.totals.accuracy / 100)} delta={o.previous?.accuracy != null && o.totals.accuracy != null ? { current: o.totals.accuracy / 100, previous: o.previous.accuracy / 100, mode: "points" } : undefined} helpText={t("teacher.kpi.accuracyHelp", { defaultValue: "Correct answers divided by all answers." })} />
+          <KpiTile label={t("teacher.kpi.consistency", { defaultValue: "Days with learning" })} value={o.totals.consistency == null ? null : fmtPercent(o.totals.consistency / 100)} helpText={t("teacher.kpi.consistencyHelp", { defaultValue: "Share of days in the period when someone in the group learned." })} />
+        </div>
+      )}
+
+      <div className={s.grid3}>
+        <ChartCard title={t("teacher.group.trendTitle", { defaultValue: "Is the group learning more?" })} answer={o ? t("teacher.group.trendAnswer", { defaultValue: "Minutes learned by the whole group." }) : ""}
+          loading={ov.loading} error={ov.error} onRetry={ov.reload} table={toTable.trend(trend, t, { unit: "min" })}>
+          <TrendLine data={trend} unit="min" height={180} />
+        </ChartCard>
+        <ChartCard title={t("teacher.group.distTitle", { defaultValue: "How is the class spread?" })}
+          answer={dist.length ? t("teacher.group.distAnswer", { defaultValue: "Each dot is a student's accuracy." }) : ""}
+          loading={lr.loading} error={lr.error} onRetry={lr.reload} table={toTable.distribution(dist, t)}
+          empty={lr.data && !dist.length && { title: t("teacher.group.distEmpty", { defaultValue: "No answers yet in this period" }) }}>
+          <DistributionStrip data={dist} onSelect={(item) => studentIdByEmail[item.id] && go("student", { id: studentIdByEmail[item.id] })} />
+        </ChartCard>
+        {cmp.data?.groups?.length > 1 && (
+          <ChartCard title={t("teacher.group.cmpTitle", { defaultValue: "How does it compare with my other groups?" })} answer={t("teacher.group.cmpAnswer", { defaultValue: "Accuracy in each of your groups for the same period." })}
+            table={{ columns: [{ key: "name", label: t("teacher.group.group", { defaultValue: "Group" }) }, { key: "accuracy", label: t("teacher.kpi.accuracy", { defaultValue: "Accuracy" }) }, { key: "minutes", label: t("teacher.kpi.minutesPer", { defaultValue: "Minutes per student" }) }], rows: cmp.data.groups.map((g) => ({ id: g.id, name: g.name, accuracy: g.accuracy == null ? "—" : `${g.accuracy} %`, minutes: g.minutesPerStudent ?? "—" })) }}>
+            <div className={s.compare}>
+              {cmp.data.groups.map((g) => (
+                <div key={g.id} className={s.compareRow}>
+                  <span className={g.id === group._id ? s.compareMe : ""}>{g.emoji} {g.name}</span>
+                  <span className={s.compareBar} aria-hidden="true"><span style={{ width: `${g.accuracy || 0}%`, background: g.color || "var(--d-accent)" }} /></span>
+                  <span>{g.accuracy == null ? "—" : `${g.accuracy} %`}</span>
+                </div>
+              ))}
+            </div>
+          </ChartCard>
+        )}
+      </div>
     </>
   );
 }
@@ -137,8 +148,8 @@ function SubjectsTab({ group }) {
   const untouched = cols.filter((c) => c.touched === 0);
   return (
     <>
-      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} />
-      <div className={s.grid2}>
+      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} compact="auto" />
+      <div className={s.grid2wide}>
         <ChartCard title={t("teacher.subj.matrixTitle", { defaultValue: "How is the group doing in each subject and skill?" })} answer={t("teacher.subj.matrixAnswer", { defaultValue: "Colour shows mastery, the number is accuracy." })}
           loading={hm.loading} error={hm.error} onRetry={hm.reload} table={toTable.matrix(cells, t)}>
           <SubjectModuleMatrix cells={cells} />
@@ -153,9 +164,9 @@ function SubjectsTab({ group }) {
               <tbody>
                 {cols.map((c) => (
                   <tr key={c.key}>
-                    <td>{moduleLabel(t, c.module)} · {subjectLabel(t, c.subject)}</td>
-                    <td>{c.touched ? `${c.touched} / ${c.of}` : <span className={`${s.badge} ${s.badgeAttention}`}>{t("teacher.subj.notYet", { defaultValue: "Not yet" })}</span>}</td>
-                    <td>{c.mastered} / {c.of}</td>
+                    <td data-label={t("teacher.subj.area", { defaultValue: "Area" })}>{moduleLabel(t, c.module)} · {subjectLabel(t, c.subject)}</td>
+                    <td data-label={t("teacher.subj.practised", { defaultValue: "Practised" })}>{c.touched ? `${c.touched} / ${c.of}` : <span className={`${s.badge} ${s.badgeAttention}`}>{t("teacher.subj.notYet", { defaultValue: "Not yet" })}</span>}</td>
+                    <td data-label={t("teacher.subj.mastered", { defaultValue: "Mastered" })}>{c.mastered} / {c.of}</td>
                   </tr>
                 ))}
               </tbody>
@@ -283,6 +294,7 @@ function ScheduleTab({ data, reload, onEdit }) {
 export default function GroupView({ id, tab = "overview", go, params }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
+  const [, setParams] = useSearchParams();
   const q = useLoad(() => get(`/groups/${id}`), [id]);
   const [adding, setAdding] = useState(params.get("add") === "1");
   const [editing, setEditing] = useState(false);
@@ -293,19 +305,23 @@ export default function GroupView({ id, tab = "overview", go, params }) {
 
   const g = d.group;
   const TABS = [
-    ["overview", t("teacher.tab.overview", { defaultValue: "Overview" })],
-    ["subjects", t("teacher.tab.subjects", { defaultValue: "Subjects and skills" })],
-    ["students", t("teacher.tab.students", { defaultValue: "Students" })],
-    ["parents", t("teacher.tab.parents", { defaultValue: "Parents" })],
-    ["schedule", t("teacher.tab.schedule", { defaultValue: "Schedule" })],
+    { id: "overview", label: t("teacher.tab.overview", { defaultValue: "Overview" }), icon: FaChartPie },
+    { id: "help", label: t("teacher.tab.help", { defaultValue: "Who needs help" }), icon: FaHandsHelping },
+    { id: "subjects", label: t("teacher.tab.subjects", { defaultValue: "Subjects and skills" }), icon: FaThLarge },
+    { id: "students", label: t("teacher.tab.students", { defaultValue: "Students" }), icon: FaUsers },
+    { id: "parents", label: t("teacher.tab.parents", { defaultValue: "Parents" }), icon: FaUserFriends },
+    { id: "schedule", label: t("teacher.tab.schedule", { defaultValue: "Schedule" }), icon: FaClock },
   ];
+  const current = TABS.some((x) => x.id === tab) ? tab : "overview";
+  // Only the tab changes; the time range and other settings in the URL stay.
+  const pick = (next) => setParams((prev) => { const n = new URLSearchParams(prev); n.set("tab", next); n.delete("add"); return n; });
   const groupForPanels = { ...g, studentIdList: d.students.map((x) => x.id) };
   return (
     <>
-      <div className={s.pageHead} style={groupStyle(g)}>
-        <div>
+      <div className={s.titleRow} style={groupStyle(g)}>
+        <div className={s.titleMain}>
           <Button variant="ghost" size="sm" icon={FaArrowLeft} onClick={() => go("groups")}>{t("teacher.groups.title", { defaultValue: "My groups" })}</Button>
-          <h1 style={{ marginTop: 8 }}><span aria-hidden="true">{g.emoji || "👥"}</span> {g.name}</h1>
+          <h1 style={{ marginTop: 6 }}><span aria-hidden="true">{g.emoji || "👥"}</span> {g.name}</h1>
           <p>{[g.gradeBand, t("teacher.nStudents", { defaultValue: (d.students.length) === 1 ? "1 student" : "{{count}} students", count: d.students.length }), g.subjects.map((a) => a.subject?.name).join(", ")].filter(Boolean).join(" · ")}</p>
         </div>
         <div className={s.headActions}>
@@ -313,16 +329,15 @@ export default function GroupView({ id, tab = "overview", go, params }) {
           {d.permissions.canManage && <Button variant="ghost" icon={FaPen} onClick={() => setEditing(true)}>{t("teacher.edit", { defaultValue: "Edit" })}</Button>}
         </div>
       </div>
-      <div className={s.tabs} role="tablist" aria-label={t("teacher.group.sections", { defaultValue: "Group sections" })}>
-        {TABS.map(([key, label]) => (
-          <button key={key} type="button" role="tab" aria-selected={tab === key} className={`${s.tab} ${tab === key ? s.tabOn : ""}`} onClick={() => go("group", { id, tab: key })}>{label}</button>
-        ))}
-      </div>
-      {tab === "overview" && <Overview group={{ ...g, studentCount: d.students.length }} go={go} />}
-      {tab === "subjects" && <SubjectsTab group={g} />}
-      {tab === "students" && <StudentsTab data={d} go={go} reload={q.reload} openAdd={() => setAdding(true)} />}
-      {tab === "parents" && <section className={s.card}><ParentsPanel groupId={id} /></section>}
-      {tab === "schedule" && <ScheduleTab data={d} reload={q.reload} onEdit={() => setEditing(true)} />}
+      <SubTabs label={t("teacher.group.sections", { defaultValue: "Group sections" })} tabs={TABS} value={current} onChange={pick} idBase="group" />
+      <SubPanel key={current} id={current} value={current} idBase="group">
+        {current === "overview" && <Overview group={{ ...g, studentCount: d.students.length }} go={go} />}
+        {current === "help" && <Overview part="help" group={{ ...g, studentCount: d.students.length }} go={go} />}
+        {current === "subjects" && <SubjectsTab group={g} />}
+        {current === "students" && <StudentsTab data={d} go={go} reload={q.reload} openAdd={() => setAdding(true)} />}
+        {current === "parents" && <section className={s.card}><ParentsPanel groupId={id} /></section>}
+        {current === "schedule" && <ScheduleTab data={d} reload={q.reload} onEdit={() => setEditing(true)} />}
+      </SubPanel>
       {adding && <AddStudentsPanel group={groupForPanels} permissions={d.permissions} onClose={() => { setAdding(false); q.reload(); }} onChanged={q.reload} />}
       {editing && <GroupEditor group={g} subjects={d.subjects} go={go} onClose={() => setEditing(false)} onSaved={() => { setEditing(false); q.reload(); }} />}
     </>

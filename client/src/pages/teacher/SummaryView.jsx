@@ -23,7 +23,7 @@ export default function SummaryView({ workspace }) {
             : t("teacher.sum.sub", { defaultValue: "The same numbers your school admin sees about your teaching. Transparent by design." })}</p>
         </div>
       </div>
-      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare />
+      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare compact="auto" />
       {q.loading && <div className={s.tiles}>{[0, 1, 2, 3, 4, 5].map((i) => <Skeleton key={i} variant="tile" />)}</div>}
       {q.error && <EmptyState tone="error" title={t("teacher.loadError", { defaultValue: "We couldn't load this page" })} text={q.error} actionLabel={t("teacher.retry", { defaultValue: "Try again" })} onAction={q.reload} />}
       {d && (

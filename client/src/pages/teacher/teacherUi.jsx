@@ -3,24 +3,28 @@ import { useEffect, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { FaTimes } from "react-icons/fa";
 import { encodeQr, qrPath } from "../../components/teacher/qr";
+import { sfx } from "../../utils/sounds";
 import s from "./teacher.module.css";
 
+// A dialog (a bottom sheet on phones) with the open / close sounds.
 export function Modal({ title, onClose, children, wide }) {
   const { t } = useTranslation();
   const ref = useRef(null);
+  useEffect(() => { sfx.open(); }, []);
+  const close = () => { sfx.close(); onClose(); };
   useEffect(() => {
     const prev = document.activeElement;
     ref.current?.querySelector("input, select, textarea, button")?.focus();
-    const onKey = (e) => { if (e.key === "Escape") onClose(); };
+    const onKey = (e) => { if (e.key === "Escape") { sfx.close(); onClose(); } };
     document.addEventListener("keydown", onKey);
     return () => { document.removeEventListener("keydown", onKey); prev?.focus?.(); };
   }, [onClose]);
   return (
-    <div className={s.backdrop} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+    <div className={s.backdrop} onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
       <div ref={ref} className={`${s.modal} ${wide ? s.modalWide : ""}`} role="dialog" aria-modal="true" aria-label={title}>
         <div className={s.modalHead}>
           <h2>{title}</h2>
-          <button type="button" className={s.iconBtn} onClick={onClose} aria-label={t("teacher.close", { defaultValue: "Close" })}><FaTimes aria-hidden="true" /></button>
+          <button type="button" className={s.iconBtn} onClick={close} data-sound="none" aria-label={t("teacher.close", { defaultValue: "Close" })}><FaTimes aria-hidden="true" /></button>
         </div>
         {children}
       </div>

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaPlus, FaPen, FaArchive, FaUndo, FaUsers, FaClock } from "react-icons/fa";
-import { Button, EmptyState, Skeleton, PlanLockCard } from "../../components/dashboard";
+import { Button, EmptyState, Skeleton, PlanLockCard, SubTabs, SubPanel, usePane } from "../../components/dashboard";
 import { dayLabel } from "../../utils/schedule";
 import { useLoad, useTeacherApi } from "./teacherApi";
 import { Modal, Meter } from "./teacherUi";
@@ -107,7 +107,8 @@ function scheduleSummary(g, t) {
 export default function GroupsView({ go, params }) {
   const { t } = useTranslation();
   const { get, send } = useTeacherApi();
-  const [archived, setArchived] = useState(false);
+  const [pane, setPane] = usePane(["active", "archived"]);
+  const archived = pane === "archived";
   const [editing, setEditing] = useState(params.get("create") === "1" ? "new" : null);
   const [msg, setMsg] = useState("");
   const q = useLoad(() => get(`/groups${archived ? "?archived=1" : ""}`), [archived]);
@@ -128,19 +129,20 @@ export default function GroupsView({ go, params }) {
   const atLimit = d && d.limits.groups != null && d.usage.groups >= d.limits.groups;
   return (
     <>
-      <div className={s.pageHead}>
+      <div className={s.headRow}>
         <div>
-          <h1>{archived ? t("teacher.groups.archivedTitle", { defaultValue: "Archived groups" }) : t("teacher.groups.title", { defaultValue: "My groups" })}</h1>
+          <h1>{t("teacher.groups.title", { defaultValue: "My groups" })}</h1>
           <p>{t("teacher.groups.sub", { defaultValue: "Your classes, with their students, schedule and progress." })}</p>
         </div>
-        <div className={s.headActions}>
-          <Button variant="ghost" icon={archived ? FaUsers : FaArchive} onClick={() => setArchived((v) => !v)}>
-            {archived ? t("teacher.groups.showActive", { defaultValue: "Active groups" }) : t("teacher.groups.showArchived", { defaultValue: "Archived ({{count}})", count: d?.archivedCount || 0 })}
-          </Button>
-          {d?.canCreateGroups && !archived && !atLimit && <Button icon={FaPlus} onClick={() => setEditing("new")}>{t("teacher.group.new", { defaultValue: "New group" })}</Button>}
-        </div>
       </div>
+      <SubTabs label={t("teacher.groups.tabs", { defaultValue: "Which groups" })} value={pane} onChange={setPane} idBase="groups"
+        tabs={[
+          { id: "active", label: t("teacher.groups.showActive", { defaultValue: "Active groups" }), icon: FaUsers },
+          { id: "archived", label: t("teacher.groups.showArchived", { defaultValue: "Archived ({{count}})", count: d?.archivedCount || 0 }), icon: FaArchive },
+        ]}
+        actions={d?.canCreateGroups && !archived && !atLimit ? <Button icon={FaPlus} onClick={() => setEditing("new")}>{t("teacher.group.new", { defaultValue: "New group" })}</Button> : null} />
 
+      <SubPanel key={pane} id={pane} value={pane} idBase="groups">
       {msg && <p className={s.note} role="status">{msg}</p>}
 
       {d && (d.limits.groups != null || d.limits.students != null) && (
@@ -200,6 +202,7 @@ export default function GroupsView({ go, params }) {
           text={t("teacher.groups.limitText", { defaultValue: "Your plan includes {{max}} group. Solo Pro has unlimited groups, branding and deeper analytics.", max: d.limits.groups })}
           ctaLabel={t("teacher.seePlans", { defaultValue: "See plans" })} onUpgrade={() => go("plan")} />
       )}
+      </SubPanel>
 
       {editing && d && (
         <GroupEditor group={editing === "new" ? null : editing} subjects={d.subjects} go={go} onClose={() => setEditing(null)}

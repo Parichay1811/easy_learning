@@ -4,11 +4,18 @@
 // English-subject questions are intentionally never translated here (that
 // module teaches English spelling/reading — see questionsSlice.js on the
 // client, which only sends ?lang= for non-english subjects).
+//
+// Every question it returns says which language its spoken text is in
+// (`audio_lang`) and which language the rest of it is in (`lang`), so the
+// narrator always reads it in a voice of that language: a German voice never
+// reads English words, whatever the site's language is.
 function applyQuestionTranslation(questionDoc, lang) {
   const question = typeof questionDoc.toObject === 'function' ? questionDoc.toObject() : questionDoc
   const translation = lang && lang !== 'en' && question.translations && question.translations[lang]
   if (!translation) {
     delete question.translations
+    question.lang = 'en'
+    question.audio_lang = 'en'
     return question
   }
 
@@ -23,6 +30,9 @@ function applyQuestionTranslation(questionDoc, lang) {
     merged.speech_scoring = { ...question.speech_scoring, ...translation.speech_scoring }
   }
   delete merged.translations
+  merged.lang = lang
+  // Spoken text with no translation of its own stays English, and is read in English.
+  merged.audio_lang = translation.audio_text ? lang : 'en'
   return merged
 }
 

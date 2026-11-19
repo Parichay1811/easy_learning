@@ -1,12 +1,18 @@
 import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { FaCheck, FaTimes, FaUndo } from "react-icons/fa";
+import { sfx } from "../../utils/sounds";
 import styles from "./QuestionWidgets.module.css";
 
 // One component per interaction "family" (several new-schema interaction
 // types share the same tap-based mechanic — see the registry at the bottom).
-// Contract: every widget receives {question, onSubmit, disabled, speech} and
-// calls onSubmit(userAnswer) once the student commits an answer. Shapes of
-// userAnswer are documented per widget and matched by scoreAnswer.js.
+// Contract: every widget receives {question, onSubmit, disabled, speech,
+// feedback} and calls onSubmit(userAnswer) once the student commits an
+// answer. Shapes of userAnswer are documented per widget and matched by
+// scoreAnswer.js, which compares VALUES (never positions), so shuffling the
+// options on screen can never change what counts as right.
+// `feedback` ({ result: null|"correct"|"wrong", revealed }) only changes how
+// the tiles look once the card has judged the answer.
 
 function shuffledIndices(length) {
   const idx = Array.from({ length }, (_, i) => i);
@@ -17,46 +23,104 @@ function shuffledIndices(length) {
   return idx;
 }
 
+const norm = (v) => String(v).trim().toLowerCase();
+
+// The accepted answers for a single-choice question, normalised.
+function acceptedSet(question) {
+  const list = Array.isArray(question.accepted_answers) && question.accepted_answers.length
+    ? question.accepted_answers
+    : [question.correct_answer];
+  return new Set(list.map(norm));
+}
+
+// The letter a tile shows is its place ON SCREEN (A, B, C… top to bottom),
+// never its index in the original, unshuffled list.
+const letterFor = (position) => String.fromCharCode(65 + position);
+
+// Options pop in one after another; the stagger comes from --i.
+const popStyle = (position) => ({ "--i": position });
+
 // tap_mcq, true_false, drag_to_blank — tap one option, compare to correct_answer.
-export function SingleChoice({ question, onSubmit, disabled }) {
+export function SingleChoice({ question, onSubmit, disabled, feedback }) {
   const options = question.options || [];
   const order = useMemo(() => shuffledIndices(options.length), [question.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  const [picked, setPicked] = useState(null);
+  const accepted = useMemo(() => acceptedSet(question), [question]);
+  const judged = feedback?.result;
+  const two = options.length >= 4 && options.every((o) => String(o).length <= 18);
   return (
-    <div className={styles.options}>
-      {order.map((i) => (
-        <button key={i} className={styles.option} disabled={disabled} onClick={() => onSubmit(options[i])}>
-          <span className={styles.letter}>{String.fromCharCode(65 + i)}</span>
-          {options[i]}
-        </button>
-      ))}
+    <div className={`${styles.options} ${two ? styles.twoUp : ""}`} role="group">
+      {order.map((i, position) => {
+        const value = options[i];
+        const isPicked = picked === value;
+        const isRight = accepted.has(norm(value));
+        const state = isPicked && judged === "correct" ? styles.right
+          : isPicked && judged === "wrong" ? styles.wrongPick
+          : feedback?.revealed && isRight ? styles.reveal
+          : "";
+        return (
+          <button
+            key={i}
+            type="button"
+            className={`${styles.option} ${styles.pop} ${state}`}
+            style={popStyle(position)}
+            disabled={disabled}
+            onClick={() => { setPicked(value); onSubmit(value); }}
+          >
+            <span className={styles.letter} aria-hidden="true">{letterFor(position)}</span>
+            <span className={styles.optText}>{value}</span>
+            {state === styles.right || state === styles.reveal ? <FaCheck className={styles.mark} aria-hidden="true" /> : null}
+            {state === styles.wrongPick ? <FaTimes className={styles.mark} aria-hidden="true" /> : null}
+          </button>
+        );
+      })}
     </div>
   );
 }
 
 // multi_select — toggle several options, then submit; compared as a set.
-export function MultiSelect({ question, onSubmit, disabled }) {
+export function MultiSelect({ question, onSubmit, disabled, feedback }) {
   const { t } = useTranslation();
   const options = question.options || [];
   const order = useMemo(() => shuffledIndices(options.length), [question.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const [selected, setSelected] = useState([]);
+  const correct = useMemo(
+    () => new Set((Array.isArray(question.correct_answer) ? question.correct_answer : []).map(norm)),
+    [question],
+  );
   const toggle = (opt) => setSelected((s) => (s.includes(opt) ? s.filter((x) => x !== opt) : [...s, opt]));
+  const judged = feedback?.result;
   return (
     <>
-      <div className={styles.options}>
-        {order.map((i) => (
-          <button
-            key={i}
-            className={`${styles.option} ${selected.includes(options[i]) ? styles.selected : ""}`}
-            disabled={disabled}
-            onClick={() => toggle(options[i])}
-          >
-            {options[i]}
-          </button>
-        ))}
+      <div className={styles.options} role="group">
+        {order.map((i, position) => {
+          const value = options[i];
+          const on = selected.includes(value);
+          const isRight = correct.has(norm(value));
+          const state = judged && on ? (isRight ? styles.right : styles.wrongPick)
+            : feedback?.revealed && isRight ? styles.reveal : "";
+          return (
+            <button
+              key={i}
+              type="button"
+              aria-pressed={on}
+              className={`${styles.option} ${styles.pop} ${on ? styles.selected : ""} ${state}`}
+              style={popStyle(position)}
+              disabled={disabled}
+              onClick={() => toggle(value)}
+              data-sound="toggle"
+            >
+              <span className={styles.letter} aria-hidden="true">{on ? <FaCheck /> : letterFor(position)}</span>
+              <span className={styles.optText}>{value}</span>
+            </button>
+          );
+        })}
       </div>
-      <button className={styles.submitBtn} disabled={disabled || selected.length === 0} onClick={() => onSubmit(selected)}>
-        {t("questionCard.check")}
-      </button>
+      {!disabled && (
+        <button type="button" className={styles.submitBtn} disabled={selected.length === 0} onClick={() => onSubmit(selected)}>
+          {t("questionCard.check")}
+        </button>
+      )}
     </>
   );
 }
@@ -71,6 +135,8 @@ export function SequenceBuilder({ question, onSubmit, disabled }) {
   const [picked, setPicked] = useState([]);
   const targetLen = Array.isArray(question.correct_answer) ? question.correct_answer.length : options.length;
   const remaining = order.filter((i) => !picked.includes(i));
+  // Single letters or emoji become big square tiles; words flow as chips.
+  const letters = options.length > 0 && options.every((o) => [...String(o)].length <= 2);
 
   const pick = (i) => {
     if (disabled || picked.length >= targetLen) return;
@@ -80,19 +146,22 @@ export function SequenceBuilder({ question, onSubmit, disabled }) {
   };
 
   return (
-    <div>
-      <div className={styles.builtRow}>
+    <div className={styles.sequence}>
+      <div className={styles.builtRow} aria-live="polite">
         {picked.map((i, pos) => (
-          <span key={pos} className={styles.builtChip}>{options[i]}</span>
+          <span key={pos} className={`${styles.builtChip} ${styles.pop}`}>{options[i]}</span>
         ))}
+        {picked.length === 0 && <span className={styles.builtHint} aria-hidden="true">…</span>}
         {picked.length > 0 && !disabled && (
-          <button className={styles.undoBtn} onClick={() => setPicked((p) => p.slice(0, -1))}>{t("questionCard.undo")}</button>
+          <button type="button" className={styles.undoBtn} onClick={() => setPicked((p) => p.slice(0, -1))} data-sound="back">
+            <FaUndo aria-hidden="true" /> {t("questionCard.undo")}
+          </button>
         )}
       </div>
-      <div className={styles.options}>
-        {remaining.map((i) => (
-          <button key={i} className={styles.option} disabled={disabled} onClick={() => pick(i)}>
-            {options[i]}
+      <div className={`${styles.options} ${letters ? styles.tiles : styles.chips}`}>
+        {remaining.map((i, position) => (
+          <button key={i} type="button" className={`${styles.option} ${styles.pop}`} style={popStyle(position)} disabled={disabled} onClick={() => pick(i)}>
+            <span className={styles.optText}>{options[i]}</span>
           </button>
         ))}
       </div>
@@ -129,8 +198,11 @@ export function MatchPairs({ question, onSubmit, disabled }) {
       const next = [...solved, [selectedLeft, r]];
       setSolved(next);
       setSelectedLeft(null);
+      // The last pair finishes the question, which makes its own sound.
       if (next.length === leftItems.length) onSubmit(next);
+      else sfx.select();
     } else {
+      sfx.wrong();
       setWrongFlash({ left: selectedLeft, right: r });
       setTimeout(() => setWrongFlash(null), 450);
       setSelectedLeft(null);
@@ -140,11 +212,14 @@ export function MatchPairs({ question, onSubmit, disabled }) {
   return (
     <div className={styles.matchGrid}>
       <div className={styles.matchCol}>
-        {leftItems.map((l) => (
+        {leftItems.map((l, position) => (
           <button
             key={l}
+            type="button"
             disabled={disabled || solvedLefts.includes(l)}
-            className={`${styles.matchItem} ${selectedLeft === l ? styles.matchSelected : ""} ${solvedLefts.includes(l) ? styles.matchSolved : ""} ${wrongFlash?.left === l ? styles.matchWrong : ""}`}
+            className={`${styles.matchItem} ${styles.pop} ${selectedLeft === l ? styles.matchSelected : ""} ${solvedLefts.includes(l) ? styles.matchSolved : ""} ${wrongFlash?.left === l ? styles.matchWrong : ""}`}
+            style={popStyle(position)}
+            aria-pressed={selectedLeft === l}
             onClick={() => pickLeft(l)}
           >
             {l}
@@ -152,12 +227,15 @@ export function MatchPairs({ question, onSubmit, disabled }) {
         ))}
       </div>
       <div className={styles.matchCol}>
-        {rightItems.map((r) => (
+        {rightItems.map((r, position) => (
           <button
             key={r}
+            type="button"
             disabled={disabled || solvedRights.includes(r)}
-            className={`${styles.matchItem} ${solvedRights.includes(r) ? styles.matchSolved : ""} ${wrongFlash?.right === r ? styles.matchWrong : ""}`}
+            className={`${styles.matchItem} ${styles.pop} ${solvedRights.includes(r) ? styles.matchSolved : ""} ${wrongFlash?.right === r ? styles.matchWrong : ""}`}
+            style={popStyle(position + leftItems.length)}
             onClick={() => pickRight(r)}
+            data-sound={selectedLeft ? "none" : undefined}
           >
             {r}
           </button>
@@ -190,32 +268,47 @@ export function SortBins({ question, onSubmit, disabled }) {
       bins.forEach((b) => { result[b] = []; });
       Object.entries(next).forEach(([item, b]) => result[b].push(item));
       onSubmit(result);
+    } else {
+      sfx.select();
     }
   };
   const unplace = (it) => {
     if (disabled) return;
+    sfx.tap();
     const next = { ...placed };
     delete next[it];
     setPlaced(next);
   };
 
   return (
-    <div>
-      <div className={styles.options}>
-        {pool.map((it) => (
+    <div className={styles.sortWrap}>
+      <div className={`${styles.options} ${styles.chips}`}>
+        {pool.map((it, position) => (
           <button
             key={it}
-            className={`${styles.option} ${selectedItem === it ? styles.selected : ""}`}
+            type="button"
+            aria-pressed={selectedItem === it}
+            className={`${styles.option} ${styles.pop} ${selectedItem === it ? styles.selected : ""}`}
+            style={popStyle(position)}
             disabled={disabled}
             onClick={() => setSelectedItem(it)}
           >
-            {it}
+            <span className={styles.optText}>{it}</span>
           </button>
         ))}
       </div>
       <div className={styles.binsRow}>
         {bins.map((bin) => (
-          <div key={bin} className={styles.bin} onClick={() => pickBin(bin)}>
+          <div
+            key={bin}
+            role="button"
+            tabIndex={disabled ? -1 : 0}
+            aria-disabled={disabled || !selectedItem}
+            className={`${styles.bin} ${selectedItem ? styles.binReady : ""}`}
+            onClick={() => pickBin(bin)}
+            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pickBin(bin); } }}
+            data-sound="none"
+          >
             <div className={styles.binLabel}>{label(bin)}</div>
             <div className={styles.binItems}>
               {Object.entries(placed).filter(([, b]) => b === bin).map(([it]) => (
@@ -235,6 +328,10 @@ export function TypedAnswer({ question, onSubmit, disabled }) {
   const multiline = question.interaction === "typed_long";
   const [value, setValue] = useState("");
   const submit = () => { if (value.trim()) onSubmit(value.trim()); };
+  const onKey = (e) => {
+    if (e.key.length === 1 || e.key === "Backspace") sfx.type();
+    if (!multiline && e.key === "Enter") submit();
+  };
   return (
     <div className={styles.typedWrap}>
       {multiline ? (
@@ -244,6 +341,9 @@ export function TypedAnswer({ question, onSubmit, disabled }) {
           value={value}
           disabled={disabled}
           onChange={(e) => setValue(e.target.value)}
+          onKeyDown={onKey}
+          aria-label={question.instruction}
+          spellCheck={false}
         />
       ) : (
         <input
@@ -252,17 +352,23 @@ export function TypedAnswer({ question, onSubmit, disabled }) {
           value={value}
           disabled={disabled}
           onChange={(e) => setValue(e.target.value)}
-          onKeyDown={(e) => { if (e.key === "Enter") submit(); }}
+          onKeyDown={onKey}
+          aria-label={question.instruction}
+          autoComplete="off"
+          spellCheck={false}
         />
       )}
-      <button className={styles.submitBtn} disabled={disabled || !value.trim()} onClick={submit}>{t("questionCard.check")}</button>
+      {!disabled && (
+        <button type="button" className={styles.submitBtn} disabled={!value.trim()} onClick={submit}>{t("questionCard.check")}</button>
+      )}
     </div>
   );
 }
 
 // mic_record — record + transcribe via the shared speech hook, scored by
-// scoreAnswer.js against speech_scoring.expected_keywords.
-export function MicRecord({ onSubmit, disabled, speech }) {
+// scoreAnswer.js against speech_scoring.expected_keywords. Listens in the
+// language the question's spoken text is in (`audio_lang`, from the server).
+export function MicRecord({ question, onSubmit, disabled, speech }) {
   const { t } = useTranslation();
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -295,7 +401,7 @@ export function MicRecord({ onSubmit, disabled, speech }) {
       setIsRecording(true);
       setMicError(null);
 
-      const result = await speech.recognizeSpeech();
+      const result = await speech.recognizeSpeech(question?.audio_lang);
       stopRecording();
       onSubmit(result);
     } catch (err) {
@@ -310,9 +416,11 @@ export function MicRecord({ onSubmit, disabled, speech }) {
   return (
     <div className={styles.micWrap}>
       {!isRecording ? (
-        <button className={styles.recordBtn} disabled={disabled} onClick={startRecording}>{t("questionCard.record")}</button>
+        <button type="button" className={`${styles.recordBtn} ${styles.pop}`} disabled={disabled} onClick={startRecording} data-sound="select">{t("questionCard.record")}</button>
       ) : (
-        <button className={styles.stopBtn} onClick={stopRecording}>{t("questionCard.stop")}</button>
+        <button type="button" className={styles.stopBtn} onClick={stopRecording}>
+          <span className={styles.recDot} aria-hidden="true" /> {t("questionCard.stop")}
+        </button>
       )}
       {micError && <p className={styles.voiceWarning}>{micError}</p>}
       {audioUrl && <audio src={audioUrl} controls className={styles.audioPlayer} />}

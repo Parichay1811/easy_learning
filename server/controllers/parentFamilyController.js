@@ -131,7 +131,7 @@ const inviteGuardian = handle(async (req, res) => {
     html: `<p>Hello,</p><p>${escapeHtml(from)} invited you to see how ${escapeHtml(req.child.name)} is learning on Learnigo.</p><p><a href="${link}">Accept the invitation</a> (sign in with this email address: ${escapeHtml(email)}).</p><p>The invitation is valid for 14 days. If you weren't expecting it, you can ignore this email.</p>`,
   })
   const existing = await ParentAccount.findOne({ email }).select('_id')
-  if (existing) notify({ role: 'parent', id: String(existing._id) }, { kind: 'guardian_invite', title: `${from} invited you to follow ${req.child.name}`, body: 'Open your kids page to accept.', link: '/parent-dashboard?tab=kids' })
+  if (existing) notify({ role: 'parent', id: String(existing._id) }, { kind: 'guardian_invite', title: `${from} invited you to follow ${req.child.name}`, body: 'Open Family → Requests to accept.', link: '/parent-dashboard?tab=family&pane=requests' })
   await audit(req, 'guardian.invite', { targetType: 'child_link', targetId: String(req.child._id), meta: { email } })
   ok(res, { invite: { id: String(invite._id), email, expiresAt: invite.expiresAt } }, 201)
 })
@@ -194,7 +194,7 @@ const acceptInvite = handle(async (req, res) => {
   inv.status = 'accepted'
   inv.acceptedAt = new Date()
   await inv.save()
-  notify({ role: 'parent', id: String(inv.fromParentId) }, { kind: 'guardian_joined', title: `${req.parent.name || inv.email} can now follow ${row.name}'s learning`, link: '/parent-dashboard?tab=kids' })
+  notify({ role: 'parent', id: String(inv.fromParentId) }, { kind: 'guardian_joined', title: `${req.parent.name || inv.email} can now follow ${row.name}'s learning`, link: '/parent-dashboard?tab=family&pane=grownups' })
   await audit(actorOf(req) && req, 'guardian.accept', { targetType: 'child_link', targetId: String(row._id), meta: { inviteId: String(inv._id) } })
   ok(res, { child: row })
 })
