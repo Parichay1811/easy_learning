@@ -3,9 +3,9 @@
 // out by percentage. Every change asks why and is audited.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, DataTable } from "../../../components/dashboard";
+import { Button, DataTable, usePane } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, ago } from "./api";
-import { Field, Loadable, Modal, Panel, Pill, ReasonDialog } from "./ui";
+import { Field, Loadable, Modal, Panel, Pill, ReasonDialog, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 const STATES = ["default", "on", "off"];
@@ -63,10 +63,16 @@ export default function Flags({ role }) {
   const [editing, setEditing] = useState(null);
   const [del, setDel] = useState(null);
   const canEdit = ["owner", "engineer"].includes(role);
+  const [pane, setPane] = usePane(["flags", "preview"]);
   const L = list.data;
   return (
     <>
-      <Panel title={t("sa.fl.title", "Feature flags")} sub={t("sa.fl.sub", "Precedence: plan → plan rule → platform on → organisation override → platform off (kill switch).")} actions={canEdit && <Button size="sm" onClick={() => setEditing({})}>{t("sa.fl.new", "New flag")}</Button>}>
+      <Tabs label={t("sa.fl.title", "Feature flags")} value={pane} onChange={setPane} tabs={[
+        { key: "flags", label: t("sa.fl.title", "Feature flags") },
+        { key: "preview", label: t("sa.fl.preview", "Who gets what") },
+      ]} />
+      <TabBody value={pane}>
+      {pane === "flags" && <Panel title={t("sa.fl.title", "Feature flags")} sub={t("sa.fl.sub", "Precedence: plan → plan rule → platform on → organisation override → platform off (kill switch).")} actions={canEdit && <Button onClick={() => setEditing({})}>{t("sa.fl.new", "New flag")}</Button>}>
         <Loadable state={list} empty={L && !L.flags.length ? { title: t("sa.fl.none", "No flags yet."), text: t("sa.fl.noneText", "Every module follows the plans.") } : null}>
           {L && <DataTable caption={t("sa.fl.title", "Feature flags")} rows={L.flags} getRowKey={(f) => f.key} onRowClick={canEdit ? (f) => setEditing(f) : undefined} columns={[
             { key: "key", label: t("sa.fl.key", "Key"), render: (f) => <span><span className={`${s.strong} ${s.mono}`}>{f.key}</span><br /><span className={`${s.small} ${s.muted}`}>{f.description || L.modules[f.key] || ""}</span></span> },
@@ -78,8 +84,8 @@ export default function Flags({ role }) {
             ...(canEdit ? [{ key: "x", label: "", render: (f) => <Button size="sm" variant="ghost" onClick={(e) => { e.stopPropagation(); setDel(f); }}>{t("sa.delete", "Delete")}</Button> }] : []),
           ]} />}
         </Loadable>
-      </Panel>
-      <Panel title={t("sa.fl.preview", "Who gets what")} sub={t("sa.fl.previewSub", "Effective modules for a plan right now, and why. For one organisation, open it in Organisations.")} actions={
+      </Panel>}
+      {pane === "preview" && <Panel title={t("sa.fl.preview", "Who gets what")} sub={t("sa.fl.previewSub", "Effective modules for a plan right now, and why. For one organisation, open it in Organisations.")} actions={
         <select className={s.select} aria-label={t("sa.col.plan", "Plan")} value={plan} onChange={(e) => setPlan(e.target.value)}>{(L?.plans || ["institute"]).map((p) => <option key={p}>{p}</option>)}</select>
       }>
         <Loadable state={preview}>
@@ -89,7 +95,8 @@ export default function Flags({ role }) {
             { key: "why", label: t("sa.col.why", "Why"), render: (r) => r.why || "—" },
           ]} />}
         </Loadable>
-      </Panel>
+      </Panel>}
+      </TabBody>
       {editing && L && <Editor flag={editing.key ? editing : null} modules={L.modules} plans={L.plans} onClose={() => setEditing(null)} onSaved={() => { list.reload(); preview.reload(); }} />}
       {del && <ReasonDialog danger title={t("sa.fl.delete", "Delete {{k}}", { k: del.key })} onClose={() => setDel(null)} onConfirm={async () => { await api.del(`/ops/flags/${encodeURIComponent(del.key)}`); list.reload(); preview.reload(); }} />}
     </>

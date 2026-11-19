@@ -41,13 +41,15 @@ export default function TeacherTestsApp() {
   const base = "/teacher/tests";
   const active = pathname.startsWith(`${base}/bank`) ? "bank" : pathname.startsWith(`${base}/marking`) ? "marking"
     : pathname.startsWith(`${base}/accommodations`) ? "acc" : pathname.startsWith(`${base}/practice`) ? "practice" : "tests";
+  // Grouped by task: make tests, check answers, and the way back.
+  const G = { make: tt("navGroup.make", "Make"), check: tt("navGroup.check", "Check"), back: tt("navGroup.back", "Go back") };
   const nav = [
-    { key: "tests", label: tt("nav.tests", "Tests"), icon: FaClipboardList, to: base },
-    { key: "practice", label: tt("nav.practice", "Practice sets"), icon: FaLeaf, to: `${base}/practice` },
-    { key: "bank", label: tt("nav.bank", "Question bank"), icon: FaQuestionCircle, to: `${base}/bank` },
-    { key: "marking", label: tt("nav.marking", "Marking"), icon: FaPenNib, to: `${base}/marking` },
-    { key: "acc", label: tt("nav.acc", "Accommodations"), icon: FaUniversalAccess, to: `${base}/accommodations` },
-    { key: "back", label: tt("nav.back", "Teacher home"), icon: FaArrowLeft, to: "/teacher-dashboard" },
+    { key: "tests", group: G.make, label: tt("nav.tests", "Tests"), icon: FaClipboardList, to: base },
+    { key: "practice", group: G.make, label: tt("nav.practice", "Practice sets"), icon: FaLeaf, to: `${base}/practice` },
+    { key: "bank", group: G.make, label: tt("nav.bank", "Question bank"), icon: FaQuestionCircle, to: `${base}/bank` },
+    { key: "marking", group: G.check, label: tt("nav.marking", "Marking"), icon: FaPenNib, to: `${base}/marking` },
+    { key: "acc", group: G.check, label: tt("nav.acc", "Accommodations"), icon: FaUniversalAccess, to: `${base}/accommodations` },
+    { key: "back", group: G.back, label: tt("nav.back", "Teacher home"), icon: FaArrowLeft, to: "/teacher-dashboard" },
   ];
 
   if (!teacherUser) return null;

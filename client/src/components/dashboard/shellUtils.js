@@ -24,3 +24,8 @@ export function useActive(active) {
   const within = (item) => is(item) || (item.children || []).some(within);
   return { is, within };
 }
+
+/** A heading (or, in the narrow rail, a thin rule) where the `group` of the entries changes. */
+export function groupStarts(nav) {
+  return nav.map((item, i) => (item.group && item.group !== nav[i - 1]?.group ? item.group : null));
+}

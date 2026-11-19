@@ -35,6 +35,12 @@ export function useQuestionRound({ module, subject, warriorSeconds = 30 }) {
   const [idx, setIdx] = useState(0);
   const [answered, setAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(warriorSeconds);
+  // Warrior clock state: the child can pause it, it stops by itself while the
+  // tab is hidden, and when it runs out the question shows "time's up" for a
+  // moment before the round moves on (rather than jumping without a word).
+  const [userPaused, setUserPaused] = useState(false);
+  const [pageHidden, setPageHidden] = useState(() => typeof document !== "undefined" && document.hidden);
+  const [timedOut, setTimedOut] = useState(false);
   const [roundDone, setRoundDone] = useState(false);
   const [roundResult, setRoundResult] = useState({ stars: 0, bonusStars: 0 });
   const [totalScore, setTotalScore] = useState(0);
@@ -53,7 +59,15 @@ export function useQuestionRound({ module, subject, warriorSeconds = 30 }) {
     setPrevIdx(idx);
     setAnswered(false);
     setTimeLeft(warriorSeconds);
+    setTimedOut(false);
+    setUserPaused(false);
   }
+
+  useEffect(() => {
+    const onVis = () => setPageHidden(document.hidden);
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
 
   useEffect(() => {
     questionStartRef.current = new Date().toISOString();
@@ -77,6 +91,7 @@ export function useQuestionRound({ module, subject, warriorSeconds = 30 }) {
   };
 
   const recordAnswer = (correct, timeTaken, userAnswer) => {
+    if (timedOut) return; // too late: the clock already ran out on this one
     setAnswered(true);
     const xp = correct ? (current?.points || 10) : 0;
     dispatch(logDashboardSession({
@@ -99,7 +114,13 @@ export function useQuestionRound({ module, subject, warriorSeconds = 30 }) {
     }
   };
 
-  const setMode = (m) => { setModeState(m); setTimeLeft(warriorSeconds); };
+  const setMode = (m) => {
+    setModeState(m);
+    setTimeLeft(warriorSeconds);
+    setTimedOut(false);
+    setUserPaused(false);
+  };
+  const togglePause = () => setUserPaused((p) => !p);
 
   const handlePlayAgain = () => {
     setRoundDone(false);
@@ -110,24 +131,41 @@ export function useQuestionRound({ module, subject, warriorSeconds = 30 }) {
     setTotalScore(0);
     setAnswered(false);
     setTimeLeft(warriorSeconds);
+    setTimedOut(false);
+    setUserPaused(false);
   };
 
   const retry = () => dispatch(fetchQuestions({ module, subject, lang: getQuestionLang(i18n.language) }));
 
-  // Warrior countdown — auto-advances once time runs out, unless already answered.
+  // Warrior countdown. Runs only while a question is waiting for an answer,
+  // the clock isn't paused, the page is visible and the round isn't over.
+  const paused = userPaused || pageHidden;
+  const clockRunning = mode === "warrior" && !answered && !!current && !roundDone && !paused && !timedOut;
   useEffect(() => {
-    if (mode !== "warrior" || answered || !current || roundDone) return;
+    if (!clockRunning) return undefined;
     const t = setTimeout(() => {
-      if (timeLeft <= 0) advance();
-      else setTimeLeft((p) => p - 1);
-    }, timeLeft <= 0 ? 0 : 1000);
+      if (timeLeft <= 1) {
+        setTimeLeft(0);
+        setTimedOut(true);
+      } else {
+        setTimeLeft(timeLeft - 1);
+      }
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [clockRunning, timeLeft]);
+
+  // Time's up: a short pause on the "time's up" card, then the next question.
+  useEffect(() => {
+    if (!timedOut || roundDone) return undefined;
+    const t = setTimeout(() => advance(), 1800);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mode, timeLeft, answered, current, roundDone]);
+  }, [timedOut, roundDone]);
 
   return {
     data, status, noOrgQuestions, current, idx, mode, setMode,
     answered, timeLeft, warriorSeconds, roundDone, roundResult, totalScore,
     recordAnswer, advance, handlePlayAgain, retry,
+    paused, userPaused, togglePause, clockRunning, timedOut,
   };
 }

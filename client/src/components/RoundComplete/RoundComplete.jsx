@@ -1,192 +1,129 @@
+import { useEffect, useRef } from "react";
 import * as FramerMotion from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { FaStar, FaRegStar, FaTrophy, FaRedo, FaArrowLeft, FaBolt } from "react-icons/fa";
-import { GiCrossedSwords, GiPartyPopper } from "react-icons/gi";
+import { GiCrossedSwords } from "react-icons/gi";
+import Mascot, { FloatingButterflies } from "../Mascot/Mascot";
+import { sfx, haptic } from "../../utils/sounds";
+import styles from "./RoundComplete.module.css";
 
-const TOTAL = 10;
 const WARRIOR_PASS = 6;
+const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
 
-export default function RoundComplete({ module: mod, subject, mode, stars, bonusStars, onPlayAgain, onBack }) {
+// The end of a round: the mascot celebrates, the stars land one by one, and
+// there are two clear ways on: play again, or go back.
+export default function RoundComplete({ module: mod, subject, mode, stars, bonusStars, total = 10, onPlayAgain, onBack }) {
   const { t } = useTranslation();
+  const reduce = useReducedMotion();
   const isPractice = mode !== "warrior";
   const passed = !isPractice ? stars >= WARRIOR_PASS : null;
   const totalStars = stars + bonusStars;
+  const slots = Math.max(total, stars);
+
+  // One fanfare when the round ends (guarded: StrictMode runs effects twice in development).
+  const played = useRef(false);
+  useEffect(() => {
+    if (played.current) return;
+    played.current = true;
+    sfx.levelUp();
+    haptic("success");
+  }, []);
+
+  const subtitle = `${t(`subjectPage.modules.${mod}.label`, { defaultValue: mod })} · ${t(`subjectPage.${subject}.label`, { defaultValue: subject })}`;
 
   return (
     <FramerMotion.motion.div
-      style={{
-        position: "fixed", inset: 0, zIndex: 300,
-        background: "rgba(10,10,26,0.92)",
-        backdropFilter: "blur(10px)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        padding: 20,
-      }}
+      className={styles.backdrop}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="round-complete-title"
     >
-      <FramerMotion.motion.div
-        style={{
-          background: "linear-gradient(135deg,#1a1a3e,#16213e)",
-          borderRadius: 24,
-          padding: "clamp(20px, 6vw, 36px) clamp(16px, 5vw, 32px)",
-          maxWidth: 420,
-          width: "100%",
-          boxShadow: "0 24px 64px rgba(0,0,0,0.7)",
-          border: "1px solid rgba(255,255,255,0.08)",
-          textAlign: "center",
-        }}
-        initial={{ scale: 0.75, y: 60 }}
-        animate={{ scale: 1, y: 0 }}
-        transition={{ type: "spring", stiffness: 300, damping: 25 }}
-      >
-        {/* Header */}
-        {!isPractice ? (
-          <div style={{ marginBottom: 8 }}>
-            <GiCrossedSwords style={{ fontSize: "clamp(2rem, 8vw, 2.5rem)", color: passed ? "#FFD700" : "#e74c3c" }} />
-            <h1 style={{
-              color: passed ? "#FFD700" : "#e74c3c",
-              fontSize: "clamp(1.35rem, 6vw, 1.7rem)", fontWeight: 800, margin: "10px 0 4px",
-            }}>
-              {passed ? t("roundComplete.warriorPassed") : t("roundComplete.warriorFailed")}
-            </h1>
-            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem", margin: 0 }}>
-              {passed
-                ? t("roundComplete.conquered")
-                : t("roundComplete.neededToPass", { count: WARRIOR_PASS })}
-            </p>
-          </div>
-        ) : (
-          <div style={{ marginBottom: 8 }}>
-            <GiPartyPopper style={{ fontSize: "clamp(2rem, 8vw, 2.5rem)", color: "#6c63ff" }} />
-            <h1 style={{ color: "#fff", fontSize: "clamp(1.35rem, 6vw, 1.7rem)", fontWeight: 800, margin: "10px 0 4px" }}>
-              {t("roundComplete.title")}
-            </h1>
-            <p style={{ color: "rgba(255,255,255,0.6)", fontSize: "0.9rem", margin: 0 }}>
-              {t(`subjectPage.modules.${mod}.label`, { defaultValue: mod })} · {t(`subjectPage.${subject}.label`, { defaultValue: subject })}
-            </p>
-          </div>
-        )}
+      <FloatingButterflies count={3} />
+      {!reduce && (
+        <div className={styles.confetti} aria-hidden="true">
+          {CONFETTI.map((i) => (
+            <span key={i} className={styles.bit} style={{ "--x": `${(i * 37) % 100}%`, "--d": `${(i % 7) * 0.18}s`, "--h": `${(i * 53) % 360}` }} />
+          ))}
+        </div>
+      )}
 
-        {/* Base stars */}
-        <div style={{ margin: "24px 0 8px" }}>
-          <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.8rem", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-            {t("roundComplete.correctAnswers")}
-          </p>
-          <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap", marginBottom: 8 }}>
-            {Array.from({ length: TOTAL }).map((_, i) => (
-              <FramerMotion.motion.span
-                key={i}
-                initial={{ scale: 0, rotate: -20 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: i * 0.06, type: "spring", stiffness: 400 }}
-              >
-                {i < stars
-                  ? <FaStar color="#FFD700" style={{ fontSize: "1.4rem" }} />
-                  : <FaRegStar color="rgba(255,255,255,0.2)" style={{ fontSize: "1.4rem" }} />
-                }
-              </FramerMotion.motion.span>
-            ))}
+      <FramerMotion.motion.div
+        className={`${styles.panel} ${!isPractice ? (passed ? styles.won : styles.almost) : ""}`}
+        initial={reduce ? { opacity: 0 } : { scale: 0.8, y: 50, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 24 }}
+      >
+        <div className={styles.hero}>
+          <Mascot size={110} mood={isPractice || passed ? "cheer" : "wave"} className={styles.mascot} />
+          <div className={styles.heading}>
+            {!isPractice && <GiCrossedSwords className={styles.swords} aria-hidden="true" />}
+            <h1 id="round-complete-title" className={styles.title}>
+              {isPractice
+                ? t("roundComplete.title")
+                : passed
+                  ? t("roundComplete.warriorPassed")
+                  : t("roundComplete.warriorAlmost", { defaultValue: "So close, warrior!" })}
+            </h1>
+            <p className={styles.sub}>
+              {isPractice
+                ? subtitle
+                : passed
+                  ? t("roundComplete.conquered")
+                  : t("roundComplete.neededToPass", { count: WARRIOR_PASS })}
+            </p>
           </div>
-          <p style={{ color: "#FFD700", fontSize: "1.5rem", fontWeight: 700, margin: "8px 0 0" }}>
-            {stars} / {TOTAL}
-          </p>
         </div>
 
-        {/* Warrior passing line */}
-        {!isPractice && (
-          <p style={{
-            color: "rgba(255,255,255,0.4)", fontSize: "0.78rem",
-            margin: "0 0 16px",
-            borderBottom: "1px solid rgba(255,255,255,0.08)",
-            paddingBottom: 16,
-          }}>
-            {t("roundComplete.passingMark", { count: WARRIOR_PASS })}
-          </p>
-        )}
-
-        {/* Bonus stars (warrior only) */}
-        {!isPractice && bonusStars > 0 && (
-          <FramerMotion.motion.div
-            style={{
-              background: "rgba(108,99,255,0.12)",
-              border: "1px solid rgba(108,99,255,0.3)",
-              borderRadius: 14,
-              padding: "12px 16px",
-              margin: "0 0 16px",
-            }}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-              <FaBolt color="#FFD700" />
-              <span style={{ color: "#FFD700", fontWeight: 700, fontSize: "1.1rem" }}>
-                {t("roundComplete.speedBonusStars", { count: bonusStars })}
-              </span>
+        <div className={styles.body}>
+          <div className={styles.starsBlock}>
+            <p className={styles.caption}>{t("roundComplete.correctAnswers")}</p>
+            <div className={styles.stars}>
+              {Array.from({ length: slots }).map((_, i) => (
+                <FramerMotion.motion.span
+                  key={i}
+                  className={i < stars ? styles.starOn : styles.starOff}
+                  initial={reduce ? false : { scale: 0, rotate: -30 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ delay: 0.35 + i * 0.07, type: "spring", stiffness: 420, damping: 14 }}
+                >
+                  {i < stars ? <FaStar /> : <FaRegStar />}
+                </FramerMotion.motion.span>
+              ))}
             </div>
-            <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.78rem", margin: "4px 0 0" }}>
-              {t("roundComplete.earnedQuickly")}
-            </p>
-          </FramerMotion.motion.div>
-        )}
-
-        {/* Total stars (warrior with bonus) */}
-        {!isPractice && bonusStars > 0 && (
-          <div style={{
-            background: "rgba(255,215,0,0.08)",
-            border: "1px solid rgba(255,215,0,0.2)",
-            borderRadius: 12,
-            padding: "10px 14px",
-            margin: "0 0 20px",
-          }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-              <FaTrophy color="#FFD700" />
-              <span style={{ color: "#fff", fontWeight: 700, fontSize: "1.1rem" }}>
-                {t("roundComplete.totalStars", { count: totalStars })}
-              </span>
-            </div>
+            <p className={styles.score}>{stars} / {total}</p>
+            {!isPractice && <p className={styles.passing}>{t("roundComplete.passingMark", { count: WARRIOR_PASS })}</p>}
           </div>
-        )}
 
-        {/* Action buttons */}
-        <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-          <FramerMotion.motion.button
-            onClick={onBack}
-            style={{
-              flex: 1, padding: "12px 0",
-              background: "rgba(255,255,255,0.07)",
-              border: "1px solid rgba(255,255,255,0.12)",
-              borderRadius: 12,
-              color: "rgba(255,255,255,0.7)",
-              fontSize: "0.95rem", fontWeight: 600,
-              cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            }}
-            whileHover={{ scale: 1.03, background: "rgba(255,255,255,0.11)" }}
-            whileTap={{ scale: 0.97 }}
-          >
-            <FaArrowLeft /> {t("roundComplete.back")}
-          </FramerMotion.motion.button>
-          <FramerMotion.motion.button
-            onClick={onPlayAgain}
-            style={{
-              flex: 2, padding: "12px 0",
-              background: mode === "warrior"
-                ? "linear-gradient(135deg,#e74c3c,#c0392b)"
-                : "linear-gradient(135deg,#6c63ff,#8e85ff)",
-              border: "none",
-              borderRadius: 12,
-              color: "#fff",
-              fontSize: "0.95rem", fontWeight: 700,
-              cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            }}
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
-          >
-            <FaRedo /> {t("roundComplete.playAgain")}
-          </FramerMotion.motion.button>
+          {!isPractice && bonusStars > 0 && (
+            <FramerMotion.motion.div
+              className={styles.bonus}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.9 }}
+            >
+              <span className={styles.bonusLine}><FaBolt aria-hidden="true" /> {t("roundComplete.speedBonusStars", { count: bonusStars })}</span>
+              <span className={styles.bonusLine}><FaTrophy aria-hidden="true" /> {t("roundComplete.totalStars", { count: totalStars })}</span>
+            </FramerMotion.motion.div>
+          )}
+
+          <div className={styles.actions}>
+            <button type="button" className={styles.backBtn} onClick={() => { sfx.back(); onBack(); }} data-sound="none">
+              <FaArrowLeft aria-hidden="true" /> {t("roundComplete.back")}
+            </button>
+            <button
+              type="button"
+              className={`${styles.againBtn} ${mode === "warrior" ? styles.againWarrior : ""}`}
+              onClick={() => { sfx.select(); onPlayAgain(); }}
+              data-sound="none"
+              autoFocus
+            >
+              <FaRedo aria-hidden="true" /> {t("roundComplete.playAgain")}
+            </button>
+          </div>
         </div>
       </FramerMotion.motion.div>
     </FramerMotion.motion.div>

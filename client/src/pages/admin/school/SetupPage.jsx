@@ -7,10 +7,11 @@ import { BASE } from "./context";
 import s from "./school.module.css";
 
 const STEPS = {
-  profile: { title: "School profile approved", text: "Your registration is reviewed by Learnigo.", to: "/admin-dashboard", action: "Open profile" },
+  // Schools are self-serve now (approved straight away), hence the new wording and keys.
+  profile: { title: "School profile ready", text: "Your school's name, type and contact details. Free, and ready straight away.", tk: "titleReady", xk: "textReady", to: "/admin-dashboard?section=org", action: "Open profile" },
   structure: { title: "Build the school tree", text: 'Grades and sections in one go: "Grades 1-8, sections A-C".', to: `${BASE}/tree`, action: "Build the tree" },
   people: { title: "Import students and teachers", text: "From a CSV or Excel file. Re-importing updates, never duplicates.", to: `${BASE}/people/import`, action: "Import" },
-  assign: { title: "Give groups their teachers", text: "Each group needs at least one teacher.", to: "/admin-dashboard", action: "Open groups" },
+  assign: { title: "Give groups their teachers", text: "Each group needs at least one teacher.", to: "/admin-dashboard?section=batches", action: "Open groups" },
   parents: { title: "Invite parents", text: "One email each; signing in with that address links them.", to: `${BASE}/people/parents`, action: "Invite parents" },
   policies: { title: "Choose your policies", text: "Messaging, class averages, leaderboards, what the school sees.", to: `${BASE}/settings?tab=policies`, action: "Set policies" },
   dpa: { title: "Sign the data-processing agreement", text: "Required before students' data is processed for your school.", to: `${BASE}/settings?tab=privacy`, action: "Review and sign" },
@@ -42,10 +43,10 @@ export default function SetupPage() {
                 <li key={st.key} className={s.checkItem} aria-current={next?.key === st.key ? "step" : undefined}>
                   <span className={`${s.checkMark} ${st.done ? s.checkMarkDone : ""}`} aria-hidden="true">{st.done ? "✓" : i + 1}</span>
                   <span className={s.grow}>
-                    <span className={s.strong}>{t(`school.setup.${st.key}.title`, { defaultValue: info.title })}</span>
+                    <span className={s.strong}>{t(`school.setup.${st.key}.${info.tk || "title"}`, { defaultValue: info.title })}</span>
                     <span className="d-sr-only">{st.done ? t("school.setup.done", { defaultValue: " (done)" }) : t("school.setup.todo", { defaultValue: " (to do)" })}</span>
                     {st.optional && <span className={s.muted}> · {t("school.setup.optional", { defaultValue: "optional" })}</span>}
-                    <br /><span className={`${s.small} ${s.muted}`}>{t(`school.setup.${st.key}.text`, { defaultValue: info.text })}</span>
+                    <br /><span className={`${s.small} ${s.muted}`}>{t(`school.setup.${st.key}.${info.xk || "text"}`, { defaultValue: info.text })}</span>
                   </span>
                   <Button size="sm" variant={next?.key === st.key ? "primary" : "ghost"} to={info.to}>{t(`school.setup.${st.key}.action`, { defaultValue: info.action })}</Button>
                 </li>

@@ -1,8 +1,24 @@
+import { useCallback, useState, useSyncExternalStore } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
+import { FaCalendarAlt, FaChevronDown, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { fmtDate } from './format';
 import { parseISO, today, toISO } from './dates';
+import Sheet from './Sheet';
+import Button from './Button';
 import s from './timerange.module.css';
+
+// Where the full bar would wrap onto several rows or eat a short screen.
+const COMPACT_QUERY = '(max-width: 1100px), (max-height: 820px)';
+function useCompact(mode) {
+  const subscribe = useCallback((cb) => {
+    if (mode !== 'auto') return () => {};
+    const mq = window.matchMedia(COMPACT_QUERY);
+    mq.addEventListener('change', cb);
+    return () => mq.removeEventListener('change', cb);
+  }, [mode]);
+  const auto = useSyncExternalStore(subscribe, () => (mode === 'auto' ? window.matchMedia(COMPACT_QUERY).matches : false), () => false);
+  return mode === 'auto' ? auto : !!mode;
+}
 
 const LABELS = { day: 'Day', week: 'Week', month: 'Month', year: 'Year', custom: 'Custom' };
 const PREV_WORD = { day: 'day', week: 'week', month: 'month', year: 'year', custom: 'period', term: 'term' };
@@ -19,8 +35,47 @@ const PREV_WORD = { day: 'day', week: 'week', month: 'month', year: 'year', cust
  *   ranges       which presets to offer, default ['day','week','month','year','custom']
  *   showCompare  show the "compare with" menu (default true)
  *   sticky       stick to the top of the scrolling page (default false)
+ *   compact      true | 'auto': one short row (‹ period ›) whose middle opens the full
+ *                controls in a sheet; 'auto' does that on phones, tablets and short screens
  */
-export default function TimeRangeBar({ value: tr, ranges = ['day', 'week', 'month', 'year', 'custom'], showCompare = true, sticky = false, className = '' }) {
+export default function TimeRangeBar({ compact = false, ...props }) {
+  const small = useCompact(compact);
+  return small ? <RangePill {...props} /> : <FullBar {...props} />;
+}
+
+function RangePill({ value: tr, ranges = ['day', 'week', 'month', 'year', 'custom'], showCompare = true, className = '' }) {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const period = fmtDate({ from: tr.from, to: tr.to }, { style: tr.range === 'month' ? 'month' : 'short' });
+  const canNext = tr.range === 'custom' || tr.range === 'term' ? true : parseISO(tr.to) < today();
+  const word = t(`dash.range.${tr.range}`, { defaultValue: LABELS[tr.range] || tr.range });
+  return (
+    <div className={`${s.pillRow} ${className}`} role="group" aria-label={t('dash.range.aria', { defaultValue: 'Time range' })} data-print="hide">
+      <button type="button" className={s.navBtn} onClick={() => tr.shift(-1)} aria-label={t('dash.range.back', { defaultValue: 'Earlier period' })}>
+        <FaChevronLeft aria-hidden="true" />
+      </button>
+      <button type="button" className={s.pill} aria-haspopup="dialog" onClick={() => setOpen(true)}
+        aria-label={t('dash.range.change', { defaultValue: 'Time range: {{period}}. Change it', period })}>
+        <FaCalendarAlt aria-hidden="true" />
+        <span className={s.pillText} aria-live="polite">{period}</span>
+        <span className={s.pillWord}>{word}</span>
+        <FaChevronDown aria-hidden="true" />
+      </button>
+      <button type="button" className={s.navBtn} onClick={() => tr.shift(1)} disabled={!canNext} aria-label={t('dash.range.forward', { defaultValue: 'Later period' })}>
+        <FaChevronRight aria-hidden="true" />
+      </button>
+      {open && (
+        <Sheet size="sm" title={t('dash.range.title', { defaultValue: 'Time range' })}
+          text={t('dash.range.sheetText', { defaultValue: 'Which days to show, and what to compare them with.' })}
+          onClose={() => setOpen(false)} footer={<Button onClick={() => setOpen(false)}>{t('dash.range.done', { defaultValue: 'Done' })}</Button>}>
+          <FullBar value={tr} ranges={ranges} showCompare={showCompare} className={s.inSheet} />
+        </Sheet>
+      )}
+    </div>
+  );
+}
+
+function FullBar({ value: tr, ranges = ['day', 'week', 'month', 'year', 'custom'], showCompare = true, sticky = false, className = '' }) {
   const { t } = useTranslation();
   const rangeLabel = (r) => t(`dash.range.${r}`, { defaultValue: LABELS[r] });
   const period = fmtDate({ from: tr.from, to: tr.to }, { style: tr.range === 'month' ? 'month' : 'short' });

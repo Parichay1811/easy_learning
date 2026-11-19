@@ -17,9 +17,15 @@ const googleSignIn = async (req, res) => {
 
     const all = await Tutor.find({ email: email.toLowerCase() }).sort({ lastLoginAt: -1, createdAt: 1 })
     if (!all.length) {
+      // A school may have invited this email already (services/linkRequests.js): say so,
+      // and the /teach page shows the invitation to accept.
+      const LinkRequest = require('../models/LinkRequest')
+      const pendingInvites = await LinkRequest.countDocuments({ toRole: 'teacher', toEmail: email.toLowerCase(), kind: 'staff', status: 'pending', expiresAt: { $gt: new Date() } })
       return res.status(404).json({
-        success: false, code: 'NO_TEACHER_ACCOUNT', canStartSolo: true,
-        message: "We couldn't find a teacher account for this email. If your school uses Learnigo, ask your school admin to add you with this email. If you teach privately, you can start your own free workspace.",
+        success: false, code: 'NO_TEACHER_ACCOUNT', canStartSolo: true, pendingInvites,
+        message: pendingInvites
+          ? 'A school invited you to teach on Learnigo. Tap “Start your own free workspace” below, then “Invited by a school?” at the top of that page, and accept the invitation in one tap.'
+          : "We couldn't find a teacher account for this email. If your school uses Learnigo, ask your school admin to add you with this email (or ask them yourself from the teacher start page). If you teach privately, you can start your own free workspace.",
       })
     }
     const usable = all.filter((t) => t.authStatus !== 'disabled' && (!t.uid || t.uid === uid))

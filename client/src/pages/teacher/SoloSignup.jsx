@@ -1,13 +1,14 @@
 // TCH-001 "I teach privately": a few details, Google sign-in, and a free Solo workspace.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { FaChalkboardTeacher, FaCheck } from "react-icons/fa";
 import { signInWithGoogle } from "../../firebase/auth";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import RoboticBackground from "../../components/RoboticBackground/RoboticBackground";
 import { apiCall } from "./teacherApi";
+import TeacherHub from "../../components/links/TeacherHub";
 import loginStyles from "../Login.module.css";
 import teacherLoginStyles from "../TeacherLogin.module.css";
 import s from "./SoloSignup.module.css";
@@ -29,9 +30,14 @@ function Chips({ options, value, onChange, label }) {
   );
 }
 
+// TCH-001 and connect-by-email: /teach is the teacher's front door. Start a free workspace,
+// or (/teach?invite=1) see the schools that invited you and ask your school to add you.
 export default function SoloSignup() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [params, setParams] = useSearchParams();
+  const invites = params.get("invite") === "1";
+  const setInvites = (on) => setParams((p) => { const n = new URLSearchParams(p); if (on) n.set("invite", "1"); else n.delete("invite"); return n; });
   const { teacherUseToken } = useAdminAuth();
   const [f, setF] = useState({ name: "", workspaceName: "", subjects: ["Maths"], other: "", grades: [], country: "" });
   const [busy, setBusy] = useState(false);
@@ -57,11 +63,34 @@ export default function SoloSignup() {
     }
   };
 
+  if (invites) {
+    return (
+      <div className={loginStyles.page}>
+        <RoboticBackground />
+        <div className={loginStyles.content}>
+          <div className={`${loginStyles.card} ${s.card} ${s.hubCard}`}>
+            <div style={{ fontSize: "3rem", textAlign: "center" }} aria-hidden="true">🏫</div>
+            <h1 className={`${loginStyles.title} ${teacherLoginStyles.title} ${s.title}`}>{t("teacher.hub.title", { defaultValue: "Your invitations" })}</h1>
+            <p className={s.lead}>{t("teacher.hub.lead", { defaultValue: "Schools that invited you, students who asked to join your class, and a quick way to ask your school to add you. Free, no approval needed." })}</p>
+            <div className={s.hubPanel}><TeacherHub onStartOwn={() => setInvites(false)} /></div>
+            <p className={s.small}><button type="button" className={s.textBtn} data-sound="back" onClick={() => setInvites(false)}>{t("teacher.hub.back", { defaultValue: "Back to “I teach privately”" })}</button></p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={loginStyles.page}>
       <RoboticBackground />
       <div className={loginStyles.content}>
         <form className={`${loginStyles.card} ${s.card}`} onSubmit={start}>
+          <button type="button" className={s.inviteBanner} data-sound="open" onClick={() => setInvites(true)}>
+            <span aria-hidden="true">💌</span>
+            <span><strong>{t("teacher.hub.bannerT", { defaultValue: "Invited by a school, or want to join yours?" })}</strong>
+              <small>{t("teacher.hub.bannerD", { defaultValue: "See your invitations and accept in one tap" })}</small></span>
+            <span aria-hidden="true">›</span>
+          </button>
           <div style={{ fontSize: "3rem", color: "#22c55e", textAlign: "center" }} aria-hidden="true"><FaChalkboardTeacher /></div>
           <h1 className={`${loginStyles.title} ${teacherLoginStyles.title} ${s.title}`}>{t("teacher.signup.title", { defaultValue: "I teach privately" })}</h1>
           <p className={s.lead}>{t("teacher.signup.lead", { defaultValue: "Start your own free tutoring workspace. Set up a class in five minutes and see who needs help, on what." })}</p>

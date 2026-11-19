@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigationType } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaEllipsisH, FaTimes } from 'react-icons/fa';
 import { NavEntry, SideNav } from './ShellNav';
-import { useActive } from './shellUtils';
+import { groupStarts, useActive } from './shellUtils';
 import logoImg from '../../assets/dash/logo.webp';
 import mascotImg from '../../assets/dash/mascot.webp';
 import './tokens.css';
@@ -11,6 +11,7 @@ import s from './shell.module.css';
 
 const PREF_KEY = 'dash.sidebar';
 const NARROW = '(max-width: 1279px)';
+const SHORT = '(max-height: 500px)'; // landscape phones: always the slim rail
 
 function useMedia(query) {
   const [match, setMatch] = useState(() => (typeof window !== 'undefined' ? window.matchMedia(query).matches : false));
@@ -35,20 +36,25 @@ const levelKeyOf = (loc) => {
 // Back (and Forward) returns to where you were on that page. New pages start at
 // the top as before (the role dashboards scroll up when they navigate).
 const SCROLL_KEY = 'dash.scroll';
-function useScrollMemory(rootRef, fill) {
+function useScrollMemory(rootRef, level) {
   const location = useLocation();
   const navType = useNavigationType();
   const pos = useRef(0);
+  // The shell scrolls itself, so window.scrollTo() in a page does nothing: a new
+  // level (not Back / Forward) starts at the top here instead.
   useEffect(() => {
-    const el = fill ? rootRef.current : null;
+    if (navType !== 'POP') rootRef.current?.scrollTo?.({ top: 0 });
+  }, [level, navType, rootRef]);
+  useEffect(() => {
+    const el = rootRef.current;
     const target = el || window;
     const onScroll = () => { pos.current = el ? el.scrollTop : window.scrollY; };
     target.addEventListener('scroll', onScroll, { passive: true });
     return () => target.removeEventListener('scroll', onScroll);
-  }, [rootRef, fill]);
+  }, [rootRef]);
   useEffect(() => {
     const key = location.key;
-    const el = fill ? rootRef.current : null;
+    const el = rootRef.current;
     let saved = {};
     try { saved = JSON.parse(sessionStorage.getItem(SCROLL_KEY) || '{}'); } catch { /* storage unavailable */ }
     const timers = [];
@@ -68,7 +74,7 @@ function useScrollMemory(rootRef, fill) {
         sessionStorage.setItem(SCROLL_KEY, JSON.stringify(next));
       } catch { /* storage unavailable: Back starts at the top */ }
     };
-  }, [location.key, navType, rootRef, fill]);
+  }, [location.key, navType, rootRef]);
 }
 
 function readPref() {
@@ -87,7 +93,8 @@ function roleOf(b) {
 }
 
 // The real puppy logo of the learning site; the puppy alone when the menu is narrow.
-function Brand({ brand, collapsed }) {
+// `top`: the phone bar's copy, which shrinks to the puppy on the narrowest screens.
+function Brand({ brand, collapsed, top }) {
   const b = brand && typeof brand === 'object' && !('props' in brand) ? brand : { node: brand };
   if (b.node) return <div className={s.brand}>{b.node}</div>;
   const role = roleOf(b);
@@ -96,6 +103,7 @@ function Brand({ brand, collapsed }) {
       {collapsed
         ? <img src={mascotImg} alt="Learnigo" className={s.brandMascot} width="52" height="58" />
         : <img src={logoImg} alt="Learnigo" className={s.brandLogo} width="160" height="58" />}
+      {top && <img src={mascotImg} alt="Learnigo" className={s.brandPup} width="36" height="40" />}
       {!collapsed && role && <span className={s.brandRole}>{role}</span>}
     </>
   );
@@ -124,7 +132,8 @@ function Brand({ brand, collapsed }) {
  *   sideNote         text in the friendly note at the foot of the sidebar; false hides it
  *   zoomKey          what counts as "a new level" for the zoom-in (default: the path plus the
  *                    tab / view / section / id / org / child URL parameters)
- *   nav[]            { key, label, icon (component or element), to | onClick, badge, children? }
+ *   nav[]            { key, label, icon (component or element), to | onClick, badge, children?, group? }
+ *                    `group` (a short label like "Manage") puts a heading above the first entry of each group
  *   active           key of the current nav item (if omitted the current URL decides)
  *   topbar           slot, grows to fill the bar (search, command palette button)
  *   contextSwitcher  slot, left of the topbar: role / org / child switcher
@@ -134,7 +143,9 @@ function Brand({ brand, collapsed }) {
  *   theme            'light' | 'dark' | undefined (follow the OS)
  *   fill             true = position: fixed over the whole viewport (for pages that still live under the site Navbar)
  * Under 1280px the sidebar shows icons only; on phones (<= 700px) it becomes a
- * bottom tab bar with at most 5 entries, the rest under "More".
+ * bottom tab bar with at most 5 entries, the rest under "More". On short
+ * landscape phones (height <= 500px) it stays a slim side rail with a compact
+ * top bar. `--d-topbar-h` on the shell is the bar's height (for sticky rows).
  */
 export default function DashboardShell({
   brand, nav = [], active, topbar, breadcrumbs = [], contextSwitcher, bell, user, actions, theme, fill, sideNote, zoomKey, className = '', children,
@@ -142,14 +153,15 @@ export default function DashboardShell({
   const { t } = useTranslation();
   const location = useLocation();
   const rootRef = useRef(null);
-  useScrollMemory(rootRef, fill);
   const level = zoomKey ?? levelKeyOf(location);
+  useScrollMemory(rootRef, level);
   const narrow = useMedia(NARROW);
+  const short = useMedia(SHORT);
   const [pref, setPref] = useState(readPref);
   const [more, setMore] = useState(false);
   const mainRef = useRef(null);
   const { is, within } = useActive(active);
-  const collapsed = pref ?? narrow;
+  const collapsed = short || (pref ?? narrow);
 
   const toggle = () => {
     const next = !collapsed;
@@ -158,6 +170,22 @@ export default function DashboardShell({
       localStorage.setItem(PREF_KEY, next ? 'collapsed' : 'expanded');
     } catch { /* storage unavailable: preference lasts for this visit only */ }
   };
+
+  // A long menu in a short rail: keep the current entry in view.
+  const sideRef = useRef(null);
+  useEffect(() => {
+    const side = sideRef.current;
+    const on = side?.querySelector('[aria-current="page"]');
+    if (!side || !on || side.scrollHeight <= side.clientHeight) return;
+    const top = on.getBoundingClientRect().top - side.getBoundingClientRect().top + side.scrollTop;
+    if (top < side.scrollTop || top + on.offsetHeight > side.scrollTop + side.clientHeight) {
+      side.scrollTop = Math.max(0, top - (side.clientHeight - on.offsetHeight) / 2);
+    }
+  }, [active, location.pathname, collapsed]);
+
+  // Any navigation (Back, a link in the page) closes the "More" sheet.
+  const [moreAt, setMoreAt] = useState(location.key);
+  if (moreAt !== location.key) { setMoreAt(location.key); if (more) setMore(false); }
 
   useEffect(() => {
     if (!more) return undefined;
@@ -170,11 +198,15 @@ export default function DashboardShell({
   const tabs = needMore ? nav.slice(0, 4) : nav;
   const rest = needMore ? nav.slice(4) : [];
   const moreOn = rest.some(within);
+  const restStarts = groupStarts(rest);
+  // Badges of the entries tucked under "More" add up on the More button.
+  const moreBadge = rest.reduce((n, x) => n + (Number(x.badge) || 0), 0);
 
   return (
     <div
       ref={rootRef}
       className={`dash ${s.shell} ${fill ? s.fill : ''} ${className}`}
+      data-scroll-root=""
       data-theme={theme}
       data-collapsed={collapsed ? 'true' : 'false'}
     >
@@ -186,7 +218,7 @@ export default function DashboardShell({
         {t('dash.shell.skip', { defaultValue: 'Skip to main content' })}
       </a>
 
-      <aside className={s.sidebar} data-print="hide">
+      <aside ref={sideRef} className={s.sidebar} data-print="hide">
         <Brand brand={brand} collapsed={collapsed} />
         <nav aria-label={t('dash.shell.nav', { defaultValue: 'Main' })} className={s.sideNav}>
           <SideNav nav={nav} active={active} collapsed={collapsed} />
@@ -211,7 +243,7 @@ export default function DashboardShell({
 
       <div className={s.column}>
         <header className={s.topbar} data-print="hide">
-          <div className={s.topBrand}><Brand brand={brand} collapsed={false} /></div>
+          <div className={s.topBrand}><Brand brand={brand} collapsed={false} top /></div>
           {contextSwitcher && <div className={s.context}>{contextSwitcher}</div>}
           <div className={s.topSlot}>{topbar}</div>
           {bell && <div className={s.bell}>{bell}</div>}
@@ -250,6 +282,7 @@ export default function DashboardShell({
           <button type="button" className={`${s.nav_tab} ${moreOn ? s.navOn : ''}`} aria-expanded={more} onClick={() => setMore((v) => !v)}>
             <span className={s.navIcon}><FaEllipsisH aria-hidden="true" /></span>
             <span className={s.navLabel}>{t('dash.shell.more', { defaultValue: 'More' })}</span>
+            {moreBadge > 0 && <span className={s.badge}>{moreBadge}</span>}
           </button>
         )}
       </nav>
@@ -260,9 +293,10 @@ export default function DashboardShell({
             <button type="button" className={s.sheetClose} onClick={() => setMore(false)} aria-label={t('dash.shell.close', { defaultValue: 'Close' })} autoFocus>
               <FaTimes aria-hidden="true" />
             </button>
-            {rest.map((item) => (
-              <NavEntry key={item.key} item={item} on={within(item)} current={is(item)} variant="sheet" onNavigate={() => setMore(false)} />
-            ))}
+            {rest.map((item, i) => [
+              restStarts[i] && <p key={`g-${item.group}`} className={s.sheetGroup} aria-hidden="true">{item.group}</p>,
+              <NavEntry key={item.key} item={item} on={within(item)} current={is(item)} variant="sheet" onNavigate={() => setMore(false)} />,
+            ])}
           </div>
         </div>
       )}

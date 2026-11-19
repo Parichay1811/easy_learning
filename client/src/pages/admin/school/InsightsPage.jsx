@@ -3,13 +3,13 @@ import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
-  TimeRangeBar, ChartCard, TrendLine, HourWeekdayHeatmap, DataTable, KpiTile, Skeleton, Button,
+  ChartCard, TrendLine, HourWeekdayHeatmap, DataTable, KpiTile, Skeleton, Button,
   fmtDuration, fmtDate, fmtPercent, NO_DATA, subjectLabel, toTable,
 } from "../../../components/dashboard";
 import { useLoad, qs } from "./api";
 import { useSchoolRange } from "./useSchoolRange";
 import { useSchool, BASE } from "./context";
-import { Tabs, Health, Field } from "./bits";
+import { Tabs, Health, Field, RangeControl } from "./bits";
 import s from "./school.module.css";
 
 const flatten = (nodes, depth = 0, out = []) => { for (const n of nodes || []) { out.push({ ...n, depth }); flatten(n.children, depth + 1, out); } return out; };
@@ -99,7 +99,7 @@ function Lists({ params }) {
   const d = data.data;
   return (
     <div className={s.grid2}>
-      <section className={s.card} aria-labelledby="ar-h">
+      <section className={`${s.card} ${s.fitCard}`} aria-labelledby="ar-h">
         <h2 id="ar-h" className={s.cardTitle}>{t("school.risk.title", { defaultValue: "Who needs a nudge?" })}</h2>
         <p className={s.cardSub}>{(d.atRiskCount === 1 ? t("school.risk.listSub1", { defaultValue: "1 student, with their teachers and why." }) : t("school.risk.listSub", { defaultValue: "{{n}} students, by class, with their teachers and why.", n: d.atRiskCount }))}</p>
         {!d.atRiskCount && <p className={s.okText}>{t("school.risk.none", { defaultValue: "Nobody right now. Lovely." })}</p>}
@@ -117,7 +117,7 @@ function Lists({ params }) {
           </div>
         ))}
       </section>
-      <section className={s.card} aria-labelledby="w-h">
+      <section className={`${s.card} ${s.fitCard}`} aria-labelledby="w-h">
         <h2 id="w-h" className={s.cardTitle}>{t("school.wins.title", { defaultValue: "Who should we celebrate?" })}</h2>
         <p className={s.cardSub}>{t("school.wins.sub", { defaultValue: "The biggest improvers compared with the period before." })}</p>
         {!d.wins.length && <p className={s.muted}>{t("school.wins.none", { defaultValue: "No big jumps yet in this period." })}</p>}
@@ -136,7 +136,8 @@ function Lists({ params }) {
 
 const FEATURE = { practice: "Practice", warrior: "Warrior mode", test: "Tests", homework: "Homework", ar: "AR games", ai_teacher: "AI Teacher" };
 
-function Usage({ params }) {
+// part "people": who uses Learnigo and how many learn each day; part "habits": when, what and on what.
+function Usage({ params, part = "people" }) {
   const { t } = useTranslation();
   const data = useLoad(`/school/usage${qs(params)}`);
   const d = data.data;
@@ -146,7 +147,7 @@ function Usage({ params }) {
   if (data.error) return <p className={s.errorText}>{data.error.message}</p>;
   const totalF = Object.values(d.features).reduce((a, b) => a + b, 0) || 1;
   const totalD = Object.values(d.devices).reduce((a, b) => a + b, 0) || 1;
-  return (
+  if (part === "people") return (
     <div className={s.page}>
       <div className={s.tiles}>
         <KpiTile label={t("school.usage.learners", { defaultValue: "Students who learned" })} value={`${d.learners.activeInRange} / ${d.learners.total}`} helpText={t("school.usage.learnersHelp", { defaultValue: "At least one answer or 3 minutes in this period." })} />
@@ -157,6 +158,10 @@ function Usage({ params }) {
       <ChartCard title={t("school.usage.trendTitle", { defaultValue: "How many students learn each day?" })} answer={t("school.usage.trendAnswer", { defaultValue: "Peak: {{n}} students on one day.", n: Math.max(0, ...trend.map((p) => p.value)) })} table={toTable.trend(trend, t, { unit: "" })}>
         <TrendLine data={trend} unit={t("school.usage.studentsUnit", { defaultValue: "students" })} seriesLabel={t("school.usage.activeStudents", { defaultValue: "Active students" })} />
       </ChartCard>
+    </div>
+  );
+  return (
+    <div className={s.page}>
       <div className={s.grid2}>
         <ChartCard title={t("school.usage.heatTitle", { defaultValue: "When do students learn?" })} answer={d.bestHour != null ? t("school.usage.heatAnswer", { defaultValue: "Busiest around {{h}}:00.", h: d.bestHour }) : ""} table={toTable.hourWeekday(heat, t)}>
           <HourWeekdayHeatmap data={heat} unit={t("school.usage.events", { defaultValue: "answers" })} />
@@ -190,26 +195,28 @@ export default function InsightsPage() {
   const [sp, setSp] = useSearchParams();
   const tab = sp.get("tab") || "lists";
   const { tr, params } = useSchoolRange({ defaultRange: "month" });
-  const setTab = (k) => setSp((p) => { const n = new URLSearchParams(p); n.set("tab", k); return n; }, { replace: true });
+  const setTab = (k) => setSp((p) => { const n = new URLSearchParams(p); n.set("tab", k); return n; });
   const tabs = [
     { key: "lists", label: t("school.insights.lists", { defaultValue: "Needs a nudge & wins" }) },
     { key: "compare", label: t("school.insights.compare", { defaultValue: "Compare" }) },
-    { key: "usage", label: t("school.insights.usage", { defaultValue: "Usage & adoption" }) },
+    { key: "usage", label: t("school.insights.usagePeople", { defaultValue: "Who uses it" }) },
+    { key: "habits", label: t("school.insights.usageHabits", { defaultValue: "When & how" }) },
   ];
   return (
-    <div className={s.page}>
+    <div className={`${s.page} ${s.pageTight}`}>
       <div className={s.head}>
         <div>
           <h1 className={s.title}>{t("school.insights.title", { defaultValue: "Insights" })}</h1>
-          <p className={s.sub}>{t("school.insights.sub", { defaultValue: "Who needs help, who to celebrate, and how the school uses Learnigo." })}</p>
+          <p className={`${s.sub} ${s.subOptional}`}>{t("school.insights.sub", { defaultValue: "Who needs help, who to celebrate, and how the school uses Learnigo." })}</p>
         </div>
       </div>
-      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare={false} />
       <Tabs label={t("school.insights.title", { defaultValue: "Insights" })} tabs={tabs} value={tab} onChange={setTab} />
-      <div role="tabpanel">
+      <RangeControl tr={tr} showCompare={false} />
+      <div role="tabpanel" className={s.panel}>
         {tab === "lists" && <Lists params={params} />}
         {tab === "compare" && <Compare params={params} />}
-        {tab === "usage" && <Usage params={params} />}
+        {tab === "usage" && <Usage params={params} part="people" />}
+        {tab === "habits" && <Usage params={params} part="habits" />}
       </div>
     </div>
   );

@@ -2,9 +2,9 @@
 // disable, unlock, reset two-factor sign-in, and end sessions.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button, DataTable } from "../../../components/dashboard";
+import { Button, DataTable, usePane } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, ago, dateTime } from "./api";
-import { Field, Loadable, Modal, Notice, Panel, Pill, ReasonDialog, SecretBox, StatusPill } from "./ui";
+import { Field, Loadable, Modal, Notice, Panel, Pill, ReasonDialog, SecretBox, StatusPill, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 const ROLE_HELP = {
@@ -24,13 +24,20 @@ export default function Staff({ me }) {
   const [secret, setSecret] = useState(null);
   const [dialog, setDialog] = useState(null);
   const [msg, setMsg] = useState({ tone: "good", text: "" });
+  const [pane, setPane] = usePane(["staff", "sessions", "breakglass"]);
   const L = list.data;
   const run = async (fn, ok) => { try { await fn(); setMsg({ tone: "good", text: ok }); list.reload({ quiet: true }); } catch (e) { setMsg({ tone: "alert", text: e.message }); } };
 
   return (
     <>
-      <Panel title={t("sa.st.title", "Staff")} sub={t("sa.st.sub", "Every console action is recorded under a named person. Everyone signs in with a password and an authenticator app.")} actions={<Button size="sm" onClick={() => setAdding({ name: "", email: "", role: "support" })}>{t("sa.st.add", "Add staff member")}</Button>}>
-        <Notice tone={msg.tone} onClose={() => setMsg({ text: "" })}>{msg.text}</Notice>
+      <Tabs label={t("sa.st.title", "Staff")} value={pane} onChange={setPane} tabs={[
+        { key: "staff", label: t("sa.st.people", "Staff accounts") },
+        { key: "sessions", label: t("sa.st.sessions", "Signed-in sessions"), badge: L?.sessions.length || undefined },
+        { key: "breakglass", label: t("sa.st.bgShort", "Break-glass") },
+      ]} />
+      <Notice tone={msg.tone} onClose={() => setMsg({ text: "" })}>{msg.text}</Notice>
+      <TabBody value={pane}>
+      {pane === "staff" && <Panel title={t("sa.st.title", "Staff")} sub={t("sa.st.sub", "Every console action is recorded under a named person. Everyone signs in with a password and an authenticator app.")} actions={<Button onClick={() => setAdding({ name: "", email: "", role: "support" })}>{t("sa.st.add", "Add staff member")}</Button>}>
         <Loadable state={list}>
           {L && <DataTable caption={t("sa.st.title", "Staff")} rows={L.staff} getRowKey={(x) => x.id} columns={[
             { key: "name", label: t("sa.col.name", "Name"), render: (x) => <span><span className={s.strong}>{x.name}</span><br /><span className={`${s.small} ${s.muted}`}>{x.email}</span></span> },
@@ -52,10 +59,13 @@ export default function Staff({ me }) {
             ) },
           ]} />}
         </Loadable>
-        <ul className={`${s.list} ${s.small}`} style={{ marginTop: 12 }}>{Object.entries(ROLE_HELP).map(([r, h]) => <li key={r}><span className={s.strong}>{r}</span>: {t(`sa.st.help.${r}`, h)}</li>)}</ul>
-      </Panel>
+        <details className={s.small} style={{ marginTop: 12 }}>
+          <summary className={s.label}>{t("sa.st.rolesHelp", "What each role can do")}</summary>
+          <ul className={s.list} style={{ marginTop: 8 }}>{Object.entries(ROLE_HELP).map(([r, h]) => <li key={r}><span className={s.strong}>{r}</span>: {t(`sa.st.help.${r}`, h)}</li>)}</ul>
+        </details>
+      </Panel>}
 
-      <Panel title={t("sa.st.sessions", "Signed-in sessions")}>
+      {pane === "sessions" && <Panel title={t("sa.st.sessions", "Signed-in sessions")}>
         {L && !L.sessions.length && <p className={s.muted}>{t("sa.st.noSessions", "No named staff are signed in. (Break-glass tokens from before this console have no session record.)")}</p>}
         {L && L.sessions.length > 0 && <DataTable caption={t("sa.st.sessions", "Signed-in sessions")} rows={L.sessions} getRowKey={(x) => x.id} columns={[
           { key: "email", label: t("sa.st.who", "Who"), render: (x) => <span>{x.name || x.email}{x.breakGlass && <> <Pill tone="alert">{t("sa.breakGlass", "break-glass owner")}</Pill></>}<br /><span className={`${s.small} ${s.muted}`}>{x.role}</span></span> },
@@ -63,11 +73,12 @@ export default function Staff({ me }) {
           { key: "createdAt", label: t("sa.st.since", "Since"), render: (x) => dateTime(x.createdAt) },
           { key: "end", label: "", render: (x) => (x.id === me.sid ? <Pill>{t("sa.st.this", "this session")}</Pill> : <Button size="sm" variant="ghost" onClick={() => run(() => api.del(`/staff/sessions/${x.id}`), t("sa.st.ended", "Session ended."))}>{t("sa.st.end", "End")}</Button>) },
         ]} />}
-      </Panel>
+      </Panel>}
 
-      <Panel title={t("sa.st.bg", "Break-glass account")} sub={t("sa.st.bgSub", "The account from the server's environment (SUPER_ADMIN_EMAIL). For emergencies only: every use is audited and owners are notified.")} actions={<Button size="sm" variant="ghost" onClick={() => setDialog({ kind: "bg" })}>{t("sa.st.bgRevoke", "End all break-glass sessions")}</Button>}>
+      {pane === "breakglass" && <Panel title={t("sa.st.bg", "Break-glass account")} sub={t("sa.st.bgSub", "The account from the server's environment (SUPER_ADMIN_EMAIL). For emergencies only: every use is audited and owners are notified.")} actions={<Button size="sm" variant="ghost" onClick={() => setDialog({ kind: "bg" })}>{t("sa.st.bgRevoke", "End all break-glass sessions")}</Button>}>
         <p className={s.small}>{L ? (L.breakGlassTotp ? t("sa.st.bgTotp", "Protected with a code (SUPER_ADMIN_TOTP_SECRET).") : t("sa.st.bgNoTotp", "Not protected with a code. Set SUPER_ADMIN_TOTP_SECRET on the server to require one.")) : ""}</p>
-      </Panel>
+      </Panel>}
+      </TabBody>
 
       {adding && (
         <Modal title={t("sa.st.add", "Add staff member")} onClose={() => setAdding(null)} footer={<Button onClick={() => run(async () => { const r = await api.post("/staff", adding); setAdding(null); setSecret({ email: r.staff.email, password: r.temporaryPassword }); }, t("sa.st.added", "Added."))}>{t("sa.st.create", "Create account")}</Button>}>

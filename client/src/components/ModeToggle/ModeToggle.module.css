@@ -1,55 +1,60 @@
+/* A two-way switch: a sliding thumb under the chosen mode. */
 .wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 14px;
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(10, 16, 34, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  flex: none;
+}
+
+.thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #6c63ff, #43c0a0);
+  box-shadow: 0 3px 10px rgba(108, 99, 255, 0.45);
+  transition: transform 0.28s cubic-bezier(0.34, 1.4, 0.64, 1), background 0.28s;
+}
+.wrapper[data-mode="warrior"] .thumb {
+  transform: translateX(100%);
+  background: linear-gradient(135deg, #ff9d4d, #e8590c);
+  box-shadow: 0 3px 10px rgba(232, 89, 12, 0.45);
 }
 
 .btn {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  min-height: 40px;
-  padding: 7px 18px;
-  border-radius: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.25);
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
+  min-height: 38px;
+  padding: 4px 14px;
+  border: none;
+  border-radius: 999px;
+  background: none;
+  color: rgba(255, 255, 255, 0.72);
   font-family: "Fredoka", sans-serif;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s;
+  white-space: nowrap;
+  transition: color 0.2s;
 }
+.btn:hover { color: #fff; }
+.btn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 1px; }
+.active, .activeWarrior { color: #fff; }
 
-.btn:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-}
+/* Compact: icons only (each keeps its name as a tooltip and a label). */
+.compact .btn { padding: 4px 11px; font-size: 17px; }
+.compact .text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-.active {
-  background: linear-gradient(135deg, #6c63ff, #43c0a0);
-  border-color: transparent;
-  color: white;
-  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.4);
-}
-
-.activeWarrior {
-  background: linear-gradient(135deg, #e74c3c, #c0392b);
-  border-color: transparent;
-  color: white;
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.45);
-}
-
-@media (max-width: 360px) {
-  .wrapper {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .btn {
-    width: 100%;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .thumb { transition: none; }
 }

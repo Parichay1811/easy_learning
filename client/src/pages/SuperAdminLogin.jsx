@@ -2,13 +2,14 @@
 // First sign-in: choose a new password, add Learnigo to the app (key shown),
 // confirm with a code and save the recovery codes.
 import { useState } from "react";
-import * as FramerMotion from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaCrown, FaEnvelope, FaLock, FaKey } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaKey } from "react-icons/fa";
 import { useAdminAuth } from "../context/AdminAuthContext";
-import RoboticBackground from "../components/RoboticBackground/RoboticBackground";
-import styles from "./Login.module.css";
+import EntryShell, { EntryError } from "../components/Entry/EntryShell";
+import { TeamEmblem } from "../components/Entry/RoleEmblems";
+import { sfx, haptic } from "../utils/sounds";
+import e from "../components/Entry/Entry.module.css";
 import saStyles from "./SuperAdminLogin.module.css";
 
 const API = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
@@ -37,6 +38,12 @@ const SuperAdminLogin = () => {
   const navigate = useNavigate();
   const { superAdminLogin, superAdminCompleteLogin } = useAdminAuth();
 
+  const enter = () => {
+    sfx.enter();
+    haptic("success");
+    navigate("/superadmin-dashboard");
+  };
+
   const guard = async (fn) => {
     setError(""); setLoading(true);
     try { await fn(); } catch (err) {
@@ -45,8 +52,8 @@ const SuperAdminLogin = () => {
     } finally { setLoading(false); }
   };
 
-  const submitPassword = (e) => {
-    e.preventDefault();
+  const submitPassword = (ev) => {
+    ev.preventDefault();
     guard(async () => {
       const d = await superAdminLogin(email, password);
       if (d.step === "totp") { setChallenge(d.challengeToken); setStep("totp"); return; }
@@ -55,21 +62,21 @@ const SuperAdminLogin = () => {
         setSetup(await post("/2fa/setup", { setupToken: d.setupToken }));
         setStep("setup"); return;
       }
-      navigate("/superadmin-dashboard");
+      enter();
     });
   };
 
-  const submitCode = (e) => {
-    e.preventDefault();
+  const submitCode = (ev) => {
+    ev.preventDefault();
     guard(async () => {
       const d = await post("/2fa/verify", useRecovery ? { challengeToken: challenge, recoveryCode: code } : { challengeToken: challenge, code });
       superAdminCompleteLogin(d);
-      navigate("/superadmin-dashboard");
+      enter();
     });
   };
 
-  const submitSetup = (e) => {
-    e.preventDefault();
+  const submitSetup = (ev) => {
+    ev.preventDefault();
     guard(async () => {
       const d = await post("/2fa/enable", { setupToken: challenge, code, ...(mustChange ? { newPassword } : {}) });
       setCodes({ list: d.recoveryCodes, data: d });
@@ -77,87 +84,93 @@ const SuperAdminLogin = () => {
     });
   };
 
-  const title = { password: t("saLogin.title", "Learnigo console"), totp: t("saLogin.codeTitle", "Enter your code"), setup: t("saLogin.setupTitle", "Set up two-factor sign-in"), codes: t("saLogin.codesTitle", "Save your recovery codes") }[step];
+  const restart = () => { setStep("password"); setCode(""); setError(""); };
+
+  const title = { password: t("entry.team.title", "Staff sign in"), totp: t("saLogin.codeTitle", "Enter your code"), setup: t("saLogin.setupTitle", "Set up two-factor sign-in"), codes: t("saLogin.codesTitle", "Save your recovery codes") }[step];
+  const subtitle = {
+    password: t("saLogin.subtitle", "Learnigo staff only. Every action is recorded under your name."),
+    totp: useRecovery ? t("saLogin.recoveryHelp", "Type one of your recovery codes. Each works once.") : t("saLogin.codeHelp", "Open your authenticator app and type the 6-digit code for Learnigo."),
+    setup: null,
+    codes: t("saLogin.codesHelp", "If you lose your phone, each of these codes signs you in once. Store them somewhere safe now: they are not shown again."),
+  }[step];
 
   return (
-    <FramerMotion.motion.div className={styles.page} initial={{ opacity: 0, x: -80 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 80 }} transition={{ duration: 0.4 }}>
-      <RoboticBackground />
-      <div className={styles.content}>
-        <div className={`${styles.card} ${saStyles.card}`}>
-          <div className={saStyles.iconWrap}><FaCrown aria-hidden="true" /></div>
-          <h1 className={`${styles.title} ${saStyles.title}`}>{title}</h1>
+    <EntryShell
+      role="team"
+      emblem={TeamEmblem}
+      title={title}
+      badge={step === "password" ? t("roleSelect.roles.teamSub", "Super admin") : null}
+      subtitle={subtitle}
+      tip={t("entry.team.tip", "Two steps: your password, then a 6-digit code from your authenticator app.")}
+      error={error}
+    >
+      {step === "password" && (
+        <form onSubmit={submitPassword} className={e.form}>
+          <div className={e.field}>
+            <FaEnvelope className={e.fieldIcon} aria-hidden="true" />
+            <input type="email" autoComplete="username" aria-label={t("saLogin.email", "Email")} placeholder={t("saLogin.email", "Email")} value={email} onChange={(ev) => setEmail(ev.target.value)} className={e.input} required />
+          </div>
+          <div className={e.field}>
+            <FaLock className={e.fieldIcon} aria-hidden="true" />
+            <input type="password" autoComplete="current-password" aria-label={t("saLogin.password", "Password")} placeholder={t("saLogin.password", "Password")} value={password} onChange={(ev) => setPassword(ev.target.value)} className={e.input} required />
+          </div>
+          {error && <EntryError>{error}</EntryError>}
+          <button type="submit" className={e.primary} disabled={loading}>{loading ? t("saLogin.signingIn", "Signing in…") : t("saLogin.next", "Continue")}</button>
+        </form>
+      )}
 
-          {step === "password" && (
-            <>
-              <p className={styles.subtitle}>{t("saLogin.subtitle", "Learnigo staff only. Every action is recorded under your name.")}</p>
-              <form onSubmit={submitPassword} className={`${styles.form} ${saStyles.form}`}>
-                <div className={styles.inputGroup}>
-                  <FaEnvelope className={styles.inputIcon} aria-hidden="true" />
-                  <input type="email" autoComplete="username" aria-label={t("saLogin.email", "Email")} placeholder={t("saLogin.email", "Email")} value={email} onChange={(e) => setEmail(e.target.value)} className={`${styles.input} ${saStyles.input}`} required />
-                </div>
-                <div className={styles.inputGroup}>
-                  <FaLock className={styles.inputIcon} aria-hidden="true" />
-                  <input type="password" autoComplete="current-password" aria-label={t("saLogin.password", "Password")} placeholder={t("saLogin.password", "Password")} value={password} onChange={(e) => setPassword(e.target.value)} className={`${styles.input} ${saStyles.input}`} required />
-                </div>
-                {error && <p className={styles.error} role="alert">{error}</p>}
-                <button type="submit" className={saStyles.submitBtn} disabled={loading}>{loading ? t("saLogin.signingIn", "Signing in…") : t("saLogin.next", "Continue")}</button>
-              </form>
-            </>
-          )}
+      {step === "totp" && (
+        <form onSubmit={submitCode} className={e.form}>
+          <div className={e.field}>
+            <FaKey className={e.fieldIcon} aria-hidden="true" />
+            <input autoFocus inputMode={useRecovery ? "text" : "numeric"} autoComplete="one-time-code" aria-label={useRecovery ? t("saLogin.recovery", "Recovery code") : t("saLogin.code", "6-digit code")} placeholder={useRecovery ? "abcde-fghij" : "123456"} value={code} onChange={(ev) => setCode(ev.target.value)} className={e.input} required />
+          </div>
+          {error && <EntryError>{error}</EntryError>}
+          <button type="submit" className={e.primary} disabled={loading}>{loading ? t("saLogin.checking", "Checking…") : t("saLogin.signIn", "Sign in")}</button>
+          <div className={saStyles.row}>
+            <button type="button" className={e.link} data-sound="toggle" onClick={() => { setUseRecovery(!useRecovery); setCode(""); setError(""); }}>{useRecovery ? t("saLogin.useApp", "Use a code from the app") : t("saLogin.lostPhone", "Lost your phone? Use a recovery code")}</button>
+            <button type="button" className={e.link} data-sound="back" onClick={restart}>{t("saLogin.restart", "Start again")}</button>
+          </div>
+        </form>
+      )}
 
-          {step === "totp" && (
-            <form onSubmit={submitCode} className={`${styles.form} ${saStyles.form}`}>
-              <p className={styles.subtitle}>{useRecovery ? t("saLogin.recoveryHelp", "Type one of your recovery codes. Each works once.") : t("saLogin.codeHelp", "Open your authenticator app and type the 6-digit code for Learnigo.")}</p>
-              <div className={styles.inputGroup}>
-                <FaKey className={styles.inputIcon} aria-hidden="true" />
-                <input autoFocus inputMode={useRecovery ? "text" : "numeric"} autoComplete="one-time-code" aria-label={useRecovery ? t("saLogin.recovery", "Recovery code") : t("saLogin.code", "6-digit code")} placeholder={useRecovery ? "abcde-fghij" : "123456"} value={code} onChange={(e) => setCode(e.target.value)} className={`${styles.input} ${saStyles.input}`} required />
-              </div>
-              {error && <p className={styles.error} role="alert">{error}</p>}
-              <button type="submit" className={saStyles.submitBtn} disabled={loading}>{loading ? t("saLogin.checking", "Checking…") : t("saLogin.signIn", "Sign in")}</button>
-              <button type="button" className={saStyles.backBtn} onClick={() => { setUseRecovery(!useRecovery); setCode(""); setError(""); }}>{useRecovery ? t("saLogin.useApp", "Use a code from the app") : t("saLogin.lostPhone", "Lost your phone? Use a recovery code")}</button>
-            </form>
-          )}
-
-          {step === "setup" && setup && (
-            <form onSubmit={submitSetup} className={`${styles.form} ${saStyles.form}`}>
-              <ol className={saStyles.steps}>
-                <li>{t("saLogin.s1", "Open an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…) and add an account.")}</li>
-                <li>
-                  {t("saLogin.s2", "Choose \"enter a setup key\" and type this key (time-based):")}
-                  <code className={saStyles.secret} aria-label={t("saLogin.key", "Setup key")}>{setup.secret.replace(/(.{4})/g, "$1 ").trim()}</code>
-                  <a className={saStyles.otpLink} href={setup.otpauthUri}>{t("saLogin.openApp", "On this phone? Open in your authenticator app")}</a>
-                </li>
-                <li>{t("saLogin.s3", "Type the 6-digit code the app shows.")}</li>
-              </ol>
-              {mustChange && (
-                <div className={styles.inputGroup}>
-                  <FaLock className={styles.inputIcon} aria-hidden="true" />
-                  <input type="password" autoComplete="new-password" aria-label={t("saLogin.newPassword", "New password (12+ characters)")} placeholder={t("saLogin.newPassword", "New password (12+ characters)")} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} className={`${styles.input} ${saStyles.input}`} minLength={12} required />
-                </div>
-              )}
-              <div className={styles.inputGroup}>
-                <FaKey className={styles.inputIcon} aria-hidden="true" />
-                <input inputMode="numeric" autoComplete="one-time-code" aria-label={t("saLogin.code", "6-digit code")} placeholder="123456" value={code} onChange={(e) => setCode(e.target.value)} className={`${styles.input} ${saStyles.input}`} required />
-              </div>
-              {error && <p className={styles.error} role="alert">{error}</p>}
-              <button type="submit" className={saStyles.submitBtn} disabled={loading}>{loading ? t("saLogin.checking", "Checking…") : t("saLogin.turnOn", "Turn on and sign in")}</button>
-            </form>
-          )}
-
-          {step === "codes" && codes && (
-            <div className={`${styles.form} ${saStyles.form}`}>
-              <p className={styles.subtitle}>{t("saLogin.codesHelp", "If you lose your phone, each of these codes signs you in once. Store them somewhere safe now: they are not shown again.")}</p>
-              <pre className={saStyles.codes}>{codes.list.join("\n")}</pre>
-              <button type="button" className={saStyles.backBtn} onClick={() => navigator.clipboard?.writeText(codes.list.join("\n"))}>{t("saLogin.copy", "Copy codes")}</button>
-              <button type="button" className={saStyles.submitBtn} onClick={() => { superAdminCompleteLogin(codes.data); navigate("/superadmin-dashboard"); }}>{t("saLogin.saved", "I saved them, continue")}</button>
+      {step === "setup" && setup && (
+        <form onSubmit={submitSetup} className={e.form}>
+          <ol className={saStyles.steps}>
+            <li>{t("saLogin.s1", "Open an authenticator app (Google Authenticator, Microsoft Authenticator, 1Password…) and add an account.")}</li>
+            <li>
+              {t("saLogin.s2", "Choose \"enter a setup key\" and type this key (time-based):")}
+              <code className={saStyles.secret} aria-label={t("saLogin.key", "Setup key")}>{setup.secret.replace(/(.{4})/g, "$1 ").trim()}</code>
+              <a className={saStyles.otpLink} href={setup.otpauthUri}>{t("saLogin.openApp", "On this phone? Open in your authenticator app")}</a>
+            </li>
+            <li>{t("saLogin.s3", "Type the 6-digit code the app shows.")}</li>
+          </ol>
+          {mustChange && (
+            <div className={e.field}>
+              <FaLock className={e.fieldIcon} aria-hidden="true" />
+              <input type="password" autoComplete="new-password" aria-label={t("saLogin.newPassword", "New password (12+ characters)")} placeholder={t("saLogin.newPassword", "New password (12+ characters)")} value={newPassword} onChange={(ev) => setNewPassword(ev.target.value)} className={e.input} minLength={12} required />
             </div>
           )}
+          <div className={e.field}>
+            <FaKey className={e.fieldIcon} aria-hidden="true" />
+            <input inputMode="numeric" autoComplete="one-time-code" aria-label={t("saLogin.code", "6-digit code")} placeholder="123456" value={code} onChange={(ev) => setCode(ev.target.value)} className={e.input} required />
+          </div>
+          {error && <EntryError>{error}</EntryError>}
+          <button type="submit" className={e.primary} disabled={loading}>{loading ? t("saLogin.checking", "Checking…") : t("saLogin.turnOn", "Turn on and sign in")}</button>
+          <div className={saStyles.row}>
+            <button type="button" className={e.link} data-sound="back" onClick={restart}>{t("saLogin.restart", "Start again")}</button>
+          </div>
+        </form>
+      )}
 
-          {step === "password" && <button className={saStyles.backBtn} onClick={() => navigate("/")} type="button">{t("saLogin.back", "Back to Role Selection")}</button>}
-          {step !== "password" && step !== "codes" && <button className={saStyles.backBtn} onClick={() => { setStep("password"); setCode(""); setError(""); }} type="button">{t("saLogin.restart", "Start again")}</button>}
+      {step === "codes" && codes && (
+        <div className={e.form}>
+          <pre className={saStyles.codes}>{codes.list.join("\n")}</pre>
+          <button type="button" className={e.ghost} onClick={() => navigator.clipboard?.writeText(codes.list.join("\n"))}>{t("saLogin.copy", "Copy codes")}</button>
+          <button type="button" className={e.primary} data-sound="none" onClick={() => { superAdminCompleteLogin(codes.data); enter(); }}>{t("saLogin.saved", "I saved them, continue")}</button>
         </div>
-      </div>
-    </FramerMotion.motion.div>
+      )}
+    </EntryShell>
   );
 };
 

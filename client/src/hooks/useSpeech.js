@@ -8,7 +8,7 @@ import { narrate, stopNarration } from "../utils/narrator";
 // server voice, or the browser's best voice for the language. A little slower
 // than normal for young readers.
 function speakText(text, langCode, callbacks = {}) {
-  narrate(text, { lang: langCode, rate: 0.85, ...callbacks });
+  narrate(text, { rate: 0.85, ...callbacks, lang: langCode });
 }
 
 // Shared TTS + SpeechRecognition wiring for question audio playback
@@ -25,23 +25,29 @@ export function useSpeech(subject) {
     };
   }, []);
 
-  const speechLangFor = () => {
+  // The language to speak and listen in. A question says which language its
+  // spoken text is in (`audio_lang`, set by the server): that always wins, so
+  // the voice matches the words. Otherwise English lessons are English, and
+  // the rest follow the site's language.
+  const speechLangFor = (textLang) => {
+    if (textLang) return getSpeechLang(String(textLang).split("-")[0].toLowerCase());
     const useEnglish = subject === "english" || getQuestionLang(i18n.language) === "en";
     return useEnglish ? "en-US" : getSpeechLang(i18n.language);
   };
 
-  const speak = (text, callbacks) => speakText(text, speechLangFor(), callbacks);
+  // speak(text, { lang?, onStart?, onEnd?, onError? })
+  const speak = (text, { lang, ...callbacks } = {}) => speakText(text, speechLangFor(lang), callbacks);
 
   // Records the mic and transcribes it. Resolves with {transcript} or
   // {unsupported: true} if the browser has no SpeechRecognition, so callers
   // can fall back to a best-effort pass rather than failing the attempt.
-  const recognizeSpeech = () =>
+  const recognizeSpeech = (lang) =>
     new Promise((resolve, reject) => {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SR) { resolve({ unsupported: true }); return; }
 
       const rec = new SR();
-      rec.lang = speechLangFor();
+      rec.lang = speechLangFor(lang);
       rec.interimResults = false;
       rec.maxAlternatives = 1;
       recognitionRef.current = rec;

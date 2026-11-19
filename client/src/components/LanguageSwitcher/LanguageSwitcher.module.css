@@ -8,10 +8,11 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  background: rgba(51, 65, 92, 0.08);
-  border: 1px solid rgba(51, 65, 92, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   color: #ffffff;
-  padding: 8px 13px;
+  min-height: 40px;
+  padding: 6px 12px;
   border-radius: 20px;
   cursor: pointer;
   font-family: "Fredoka", sans-serif;
@@ -22,8 +23,10 @@
   white-space: nowrap;
 }
 
+.trigger:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+
 .trigger:hover {
-  background: rgba(51, 65, 92, 0.16);
+  background: rgba(255, 255, 255, 0.16);
   transform: translateY(-2px);
 }
 
@@ -127,19 +130,23 @@
   flex-shrink: 0;
 }
 
-/* ── Mobile adjustments ───────────────────────────────────────── */
-@media (max-width: 768px) {
-  .trigger {
-    width: 100%;
-    justify-content: center;
-    padding: 12px;
-    border-radius: 12px;
-  }
-
-  .dropdown {
-    right: auto;
-    left: 0;
-    max-height: 260px;
-    min-width: 180px;
-  }
+/* ── Inside a menu panel: full width, the list opens in place ─── */
+.inMenu .trigger {
+  width: 100%;
+  min-height: 46px;
+  justify-content: flex-start;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.inMenu .arrow { margin-left: auto; }
+.native { font-weight: 600; letter-spacing: 0.02em; }
+.inMenu .dropdown {
+  position: static;
+  margin-top: 6px;
+  min-width: 0;
+  max-height: 220px;
+  box-shadow: none;
+  animation: none;
 }

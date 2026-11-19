@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { FaCloudUploadAlt, FaFileDownload, FaEye, FaFileExcel } from "react-icons/fa";
-import { Button, DataTable, EmptyState } from "../../components/dashboard";
+import { FaCloudUploadAlt, FaFileDownload, FaEye, FaFileExcel, FaListUl } from "react-icons/fa";
+import { Button, DataTable, EmptyState, SubTabs, SubPanel, usePane } from "../../components/dashboard";
 import { MODULES, SUBJECTS, moduleLabel, subjectLabel } from "../../components/dashboard/constants";
 import QuestionBatchDetailModal from "../../components/Admin/QuestionBatchDetailModal";
 import s from "./teacher.module.css";
@@ -31,6 +31,7 @@ export default function TeacherQuestionUpload({ get, post, postForm, token }) {
   const [selectedBatchIds, setSelectedBatchIds] = useState([]);
   const [viewUploadId, setViewUploadId] = useState(null);
   const [fileKey, setFileKey] = useState(0);
+  const [pane, setPane] = usePane(["upload", "mine"]);
 
   const loadUploads = useCallback(async () => {
     const d = await get("/questions/uploads");
@@ -100,13 +101,21 @@ export default function TeacherQuestionUpload({ get, post, postForm, token }) {
 
   return (
     <>
-      <div className={s.pageHead}>
+      <div className={s.headRow}>
         <div>
           <h1>{T("title", "Upload questions")}</h1>
           <p>{T("lede", "Add many questions at once from a spreadsheet. Your school admin checks them before students see them.")}</p>
         </div>
       </div>
 
+      <SubTabs label={T("tabs", "Upload questions")} value={pane} onChange={setPane} idBase="upl"
+        tabs={[
+          { id: "upload", label: T("tabUpload", "Upload a spreadsheet"), icon: FaCloudUploadAlt },
+          { id: "mine", label: T("tabMine", "My uploads ({{count}})", { count: uploads.length }), icon: FaListUl },
+        ]} />
+
+      <SubPanel key={pane} id={pane} value={pane} idBase="upl">
+      {pane === "upload" && <>
       <form onSubmit={handleUpload} className={s.uploadSteps}>
         <section className={`${s.card} ${s.step}`} aria-labelledby="up-step1">
           <h2 id="up-step1" className={s.stepTitle}><span className={s.stepNum}>1</span>{T("step1", "What are the questions for?")}</h2>
@@ -178,6 +187,7 @@ export default function TeacherQuestionUpload({ get, post, postForm, token }) {
             {T("resultText", "{{count}} questions sent for review", { count: result.insertedCount || 0, defaultValue_one: "{{count}} question sent for review" })}
             {result.skippedCount ? T("skipped", ", {{count}} rows skipped", { count: result.skippedCount, defaultValue_one: ", {{count}} row skipped" }) : ""}.
           </p>
+          <div className={s.row} style={{ marginBottom: 10 }}><Button size="sm" variant="soft" icon={FaListUl} onClick={() => setPane("mine")}>{T("seeMine", "See my uploads")}</Button></div>
           {result.rowErrors?.length > 0 && (
             <DataTable
               caption={T("rowErrors", "Rows that need fixing")}
@@ -192,12 +202,15 @@ export default function TeacherQuestionUpload({ get, post, postForm, token }) {
           )}
         </section>
       )}
+      </>}
 
+      {pane === "mine" && (
       <section className={s.card} aria-labelledby="up-mine">
         <h2 id="up-mine" className={s.h2}>{T("mine", "My uploads")}</h2>
         {uploads.length === 0 ? (
-          <EmptyState compact title={T("noneTitle", "No uploads yet")} text={T("none", "Your first spreadsheet of questions will show up here with its review status.")} />
+          <EmptyState compact title={T("noneTitle", "No uploads yet")} text={T("none", "Your first spreadsheet of questions will show up here with its review status.")} actionLabel={T("tabUpload", "Upload a spreadsheet")} onAction={() => setPane("upload")} />
         ) : (
+          <div className={s.scrollArea}>
           <DataTable
             columns={[
               { key: "module", label: T("what", "Skill · subject"), render: (r) => `${mod(r.module)} · ${sub(r.subject)}` },
@@ -212,8 +225,11 @@ export default function TeacherQuestionUpload({ get, post, postForm, token }) {
             getRowKey={(r) => r._id}
             defaultSort={{ key: "createdAt", dir: "desc" }}
           />
+          </div>
         )}
       </section>
+      )}
+      </SubPanel>
 
       {viewUploadId && (
         <QuestionBatchDetailModal batchId={viewUploadId} get={get} post={post} onClose={() => setViewUploadId(null)} />

@@ -1,4 +1,5 @@
 // Non-component helpers shared by the teacher pages.
+import { useEffect, useState } from "react";
 import { SUBJECTS, MODULES, today, toISO } from "../../components/dashboard";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { apiCall, pctToFraction } from "./teacherApi";
@@ -45,4 +46,16 @@ export function useSwitchWorkspace() {
     if (r.ok) teacherUseToken(r.token, r.adminToken);
     return r;
   };
+}
+
+/** True while a media query matches (e.g. narrow screens get sub-tabs instead of side-by-side cards). */
+export function useMedia(query) {
+  const [match, setMatch] = useState(() => (typeof window !== "undefined" ? window.matchMedia(query).matches : false));
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const on = () => setMatch(mq.matches);
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, [query]);
+  return match;
 }

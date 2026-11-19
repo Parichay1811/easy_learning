@@ -55,8 +55,12 @@ async function loadVoice(engine) {
     return styles.get(n);
   };
   const steps = Number(process.env.LT_TTS_STEPS || 5);
+  // The teacher's pace: relaxed and comfortable (a little slower than the
+  // model's own), with a calm breath between the parts of a long line.
+  // Changing these changes the sound: bump SPEECH_STYLE in speech.mjs too.
+  const pace = Number(process.env.LT_TTS_PACE || 0.94);
   return async (text, voice, speed, lang = 'en') => {
-    const out = await tts.call(text, lang, style(voice), steps, 1.05 * (speed || 1), 0.15);
+    const out = await tts.call(text, lang, style(voice), steps, pace * (speed || 1), 0.3);
     return { audio: Float32Array.from(out.wav), rate: tts.sampleRate };
   };
 }

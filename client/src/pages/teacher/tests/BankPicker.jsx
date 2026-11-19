@@ -5,8 +5,10 @@ import { Button, Skeleton } from "../../../components/dashboard";
 import { useTeacherApi, useT, MODULE_KEYS, SUBJECT_KEYS, INTERACTION_LABELS, cap } from "./api";
 import { QuestionLine } from "./BankBrowser";
 import s from "./tests.module.css";
+import { sfx } from "../../../utils/sounds";
 
 export default function BankPicker({ onAdd, onClose, already = [] }) {
+  useEffect(() => { sfx.open(); }, []);
   const api = useTeacherApi();
   const tt = useT();
   const [scope, setScope] = useState("mine");

@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import * as FramerMotion from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { MdFamilyRestroom } from "react-icons/md";
-import { FcGoogle } from "react-icons/fc";
 import { useAdminAuth } from "../context/AdminAuthContext";
-import RoboticBackground from "../components/RoboticBackground/RoboticBackground";
-import styles from "./Login.module.css";
-import parentStyles from "./ParentLogin.module.css";
+import EntryShell, { GoogleButton, EntryError } from "../components/Entry/EntryShell";
+import { ParentEmblem } from "../components/Entry/RoleEmblems";
+import { sfx, haptic } from "../utils/sounds";
+import e from "../components/Entry/Entry.module.css";
 
+// Parent sign in: Google only. The first sign-in makes the (free) parent
+// account; children are added from the dashboard afterwards.
 const ParentLogin = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { parentGoogleSignIn } = useAdminAuth();
   // A co-guardian invite link (/parent-login?invite=…) is kept until sign-in; the dashboard accepts it.
   useEffect(() => {
@@ -27,16 +29,20 @@ const ParentLogin = () => {
     setLoading(true);
     try {
       const result = await signInWithGoogle();
-            await parentGoogleSignIn(await result.user.getIdToken());
+      await parentGoogleSignIn(await result.user.getIdToken());
+      sfx.enter();
+      haptic("success");
       navigate("/parent-dashboard");
     } catch (err) {
       const cancelled = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
       if (cancelled.includes(err.code)) {
-        setError("Sign-in cancelled.");
+        setError(t("login.googleCancelled", "Google sign-in was cancelled."));
       } else if (err.code === "auth/popup-blocked") {
-        setError("Popup was blocked. Please allow popups for this site.");
+        setError(t("login.popupBlocked", "Pop-up was blocked. Please allow pop-ups for this site."));
+      } else if (err.code === "auth/network-request-failed") {
+        setError(t("login.networkError", "Network error. Please check your connection."));
       } else {
-        setError(err.message || "Sign-in failed. Please try again.");
+        setError(err.message || t("entry.errors.signInFailed", "We couldn't sign you in. Please try again."));
       }
     } finally {
       setLoading(false);
@@ -44,46 +50,26 @@ const ParentLogin = () => {
   };
 
   return (
-    <FramerMotion.motion.div
-      className={styles.page}
-      initial={{ opacity: 0, x: -80 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 80 }}
-      transition={{ duration: 0.4 }}
+    <EntryShell
+      role="parent"
+      emblem={ParentEmblem}
+      title={t("entry.parent.title", "Parent sign in")}
+      subtitle={t("entry.parent.subtitle", "Follow your child's learning, all in one place.")}
+      tip={t("entry.parent.tip", "After signing in, add your child: make them a picture sign-in, or link the account they already use.")}
+      error={error}
+      footer={(
+        <p className={e.note}>
+          <strong>{t("entry.newHere", "New here?")}</strong>{" "}
+          {t("entry.parent.new", "Just continue with Google: your parent account is made the first time.")}{" "}
+          <span className={e.free}>{t("entry.freeFamilies", "Free for families")}</span>
+        </p>
+      )}
     >
-      <RoboticBackground />
-      <div className={styles.content}>
-        <div className={`${styles.card} ${parentStyles.card}`}>
-          <div className={parentStyles.iconWrap}>
-            <MdFamilyRestroom />
-          </div>
-          <h1 className={`${styles.title} ${parentStyles.title}`}>Parent Login</h1>
-          <p className={styles.subtitle}>
-            Sign in with your Google account to add your kids and track their learning progress.
-          </p>
-
-          <button
-            className={`${styles.googleBtn} ${parentStyles.googleBtn}`}
-            onClick={handleGoogle}
-            disabled={loading}
-            type="button"
-          >
-            <FcGoogle className={styles.googleIcon} />
-            {loading ? "Signing in…" : "Continue with Google"}
-          </button>
-
-          {error && <p className={styles.error}>{error}</p>}
-
-          <button
-            className={parentStyles.backBtn}
-            onClick={() => navigate("/")}
-            type="button"
-          >
-            Back to Role Selection
-          </button>
-        </div>
-      </div>
-    </FramerMotion.motion.div>
+      <GoogleButton main onClick={handleGoogle} disabled={loading}>
+        {loading ? t("entry.signingIn", "Signing in…") : t("login.continueGoogle", "Continue with Google")}
+      </GoogleButton>
+      {error && <EntryError>{error}</EntryError>}
+    </EntryShell>
   );
 };
 

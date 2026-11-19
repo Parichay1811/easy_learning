@@ -1,0 +1,470 @@
+/* Overview ("Today"): a game HUD. Phones stack hero / numbers / goal / play;
+   landscape puts the hero beside the goal and the big button, numbers below. */
+.grid {
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  gap: clamp(8px, 1.4vh, 14px);
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(auto, 1fr) auto auto auto;
+  grid-template-areas: "hero" "counters" "goal" "play";
+}
+
+@media (orientation: landscape) and (min-width: 600px) {
+  .grid {
+    grid-template-columns: minmax(0, 1.55fr) minmax(220px, 1fr);
+    grid-template-rows: minmax(auto, 1fr) auto auto;
+    grid-template-areas:
+      "hero goal"
+      "hero play"
+      "counters counters";
+  }
+}
+
+/* ── Hero ───────────────────────────────────────────────────────────────── */
+.hero {
+  grid-area: hero;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 30px);
+  padding: clamp(12px, 2.2vh, 30px) clamp(14px, 2.4vw, 36px);
+  overflow: hidden;
+  --hero-mascot: clamp(66px, min(12vh, 24vw), 200px);
+}
+
+@media (orientation: landscape) and (min-width: 600px) {
+  .hero { --hero-mascot: clamp(62px, min(28vh, 16vw), 300px); }
+}
+
+/* Portrait tablets: a big, centred hero (puppy on top) fills the space. */
+@media (orientation: portrait) and (min-width: 700px) {
+  .hero {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    --hero-mascot: clamp(120px, min(20vh, 28vw), 240px);
+  }
+  .heroBody { flex: 0 1 auto; width: min(600px, 100%); align-items: center; }
+  .hello { font-size: clamp(2rem, 4.6vw, 3rem); }
+  .levelRow { width: 100%; text-align: left; }
+  .newBadge { align-self: center; }
+}
+
+.heroSky {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(90% 120% at 0% 0%, rgba(255, 236, 179, 0.75), transparent 55%),
+    radial-gradient(70% 90% at 100% 100%, rgba(211, 249, 216, 0.8), transparent 60%),
+    linear-gradient(160deg, rgba(219, 238, 254, 0.85), rgba(255, 255, 255, 0) 70%);
+}
+
+.heroMascot {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: flex-end;
+}
+
+.avatar {
+  position: absolute;
+  right: -6px;
+  bottom: 2px;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: 0 3px 8px rgba(31, 42, 68, 0.25);
+}
+
+.heroBody {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 1vh, 12px);
+}
+
+.hello {
+  margin: 0;
+  font: 700 clamp(1.35rem, min(3.4vw, 5vh), 3.2rem)/1.12 var(--d-font);
+  color: var(--d-ink);
+  overflow-wrap: anywhere;
+}
+
+.helloSub {
+  margin: 0;
+  color: var(--d-muted);
+  font-size: clamp(0.84rem, min(1.25vw, 2vh), 1.3rem);
+  line-height: 1.4;
+}
+
+.levelRow {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.2vw, 16px);
+  margin-top: clamp(2px, 0.6vh, 8px);
+}
+
+.levelBadge {
+  flex: none;
+  width: clamp(50px, min(9vh, 8vw), 104px);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 28%, #fff7d6 0%, #ffd43b 45%, #f59f00 100%);
+  border: 3px solid #fff;
+  box-shadow: 0 4px 0 #c27c00, 0 10px 18px -8px rgba(138, 90, 0, 0.6);
+  color: #4a2f00;
+}
+.levelBadge small { font: 700 0.56rem/1 var(--d-font); letter-spacing: 0.12em; }
+.levelBadge b { font: 700 clamp(1.15rem, min(3.2vh, 2.6vw), 2.3rem)/1 var(--d-font); letter-spacing: 0; }
+
+.xpWrap { flex: 1 1 auto; min-width: 0; }
+
+.xpTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  column-gap: 10px;
+  margin-bottom: 5px;
+  color: var(--d-muted);
+  font-size: clamp(0.74rem, 1vw, 0.92rem);
+  line-height: 1.25;
+}
+.xpTop strong { color: var(--d-ink); font-size: clamp(0.95rem, 1.3vw, 1.15rem); }
+
+.xpBar {
+  position: relative;
+  height: clamp(14px, 2.4vh, 28px);
+  border-radius: 999px;
+  background: #e6ecf4;
+  box-shadow: inset 0 2px 0 rgba(31, 42, 68, 0.08);
+  overflow: hidden;
+}
+.xpFill {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, #2f9e44, #69db7c 60%, #a9e34b);
+}
+.xpShine {
+  position: absolute;
+  top: 3px;
+  left: 8px;
+  right: 8px;
+  height: 30%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.newBadge {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 2px solid #ffe066;
+  border-radius: 999px;
+  background: #fff9db;
+  color: #6b4500;
+  font: 600 clamp(0.82rem, 1.1vw, 0.98rem)/1.2 var(--d-font);
+  cursor: pointer;
+  box-shadow: 0 3px 0 #f2c94c;
+  animation: nudge 2.4s ease-in-out 1.2s 2;
+}
+.newIcon { font-size: 1.15em; line-height: 1; }
+.newPill {
+  flex: none;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #e03131;
+  color: #fff;
+  font-size: 0.68em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+}
+.newBadgeText { min-width: 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.newBadge svg { flex: none; font-size: 0.8em; }
+@keyframes nudge {
+  0%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-3px); }
+  60% { transform: translateY(0); }
+}
+
+/* ── Counters ───────────────────────────────────────────────────────────── */
+.counters {
+  grid-area: counters;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(6px, 1vw, 14px);
+}
+
+.counter {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: clamp(6px, 1.2vh, 14px) 4px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #fff;
+  border-radius: clamp(16px, 1.8vw, 22px);
+  box-shadow: 0 4px 0 rgba(31, 64, 120, 0.12), 0 14px 30px -22px rgba(31, 64, 120, 0.6);
+}
+
+.counterIcon {
+  width: clamp(28px, 3.6vh, 40px);
+  height: clamp(28px, 3.6vh, 40px);
+  display: grid;
+  place-items: center;
+  margin-bottom: 2px;
+  border-radius: 12px;
+  background: var(--c-bg);
+  color: var(--c-fg);
+  font-size: clamp(0.9rem, 1.8vh, 1.2rem);
+  line-height: 1;
+}
+
+.counterText {
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.counterNum {
+  font: 700 clamp(1.05rem, min(2.2vw, 3.4vh), 1.8rem)/1.1 var(--d-font);
+  letter-spacing: 0;
+  color: var(--d-ink);
+  white-space: nowrap;
+}
+.counterNum small { font-size: 0.58em; color: var(--d-muted); font-weight: 600; }
+
+.counterLabel {
+  max-width: 100%;
+  color: var(--d-muted);
+  font: 600 clamp(0.66rem, 0.95vw, 0.86rem)/1.15 var(--d-font);
+  letter-spacing: 0;
+  word-spacing: 0;
+}
+
+.counterSub {
+  display: none;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--d-muted);
+  font: 500 0.74rem/1.2 var(--d-font);
+  opacity: 0.85;
+}
+
+@media (min-width: 900px) and (min-height: 640px) {
+  .counterSub { display: block; }
+}
+
+/* New learner: three first steps instead of empty numbers */
+.steps {
+  grid-area: counters;
+  padding: clamp(10px, 1.8vh, 20px) clamp(14px, 2vw, 24px);
+}
+.stepList {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 6px 12px;
+}
+.stepList li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--d-ink);
+  font-size: clamp(0.88rem, 1.2vw, 1.02rem);
+  line-height: 1.3;
+}
+.stepList li span {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--d-grass-soft);
+  color: var(--d-grass-ink);
+  font-weight: 700;
+}
+
+/* ── Today's goal ───────────────────────────────────────────────────────── */
+.goal {
+  grid-area: goal;
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 1.8vw, 22px);
+  padding: clamp(10px, 1.8vh, 24px) clamp(12px, 1.8vw, 26px);
+}
+
+@media (orientation: landscape) and (min-width: 600px) and (min-height: 560px) {
+  .goal { flex-direction: column; justify-content: center; text-align: center; }
+  .goal .goalBody { flex: 0 1 auto; }
+  .goal .week { justify-content: center; }
+}
+
+.ring {
+  position: relative;
+  flex: none;
+  width: clamp(68px, min(13vh, 14vw), 150px);
+  aspect-ratio: 1;
+}
+.ring > svg { width: 100%; height: 100%; transform: rotate(-90deg); overflow: visible; }
+.ringTrack { fill: none; stroke: #e6ecf4; stroke-width: 11; }
+.ringFill { fill: none; stroke: #ff922b; stroke-width: 11; stroke-linecap: round; }
+.ring[data-done] .ringFill { stroke: #40c057; }
+.ringText {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  color: var(--d-ink);
+  font-family: var(--d-font);
+  letter-spacing: 0;
+}
+.ringText b { font-size: clamp(1.1rem, min(2.8vh, 2.6vw), 2rem); font-weight: 700; }
+.ringText small { font-size: clamp(0.7rem, 1.4vh, 0.95rem); color: var(--d-muted); font-weight: 600; }
+.ring[data-done] .ringText { color: #2f9e44; font-size: clamp(1.5rem, min(4vh, 4vw), 3rem); }
+
+.goalBody { min-width: 0; flex: 1 1 auto; }
+.goalTitle {
+  margin: 0;
+  font: 700 clamp(1rem, 1.5vw, 1.3rem)/1.2 var(--d-font);
+  color: var(--d-ink);
+}
+.goalLine {
+  margin: 2px 0 0;
+  color: var(--d-coral-ink);
+  font: 600 clamp(0.88rem, 1.2vw, 1.05rem)/1.3 var(--d-font);
+}
+.goal:has(.ring[data-done]) .goalLine { color: var(--d-grass-ink); }
+.goalMeta {
+  margin: 2px 0 0;
+  color: var(--d-muted);
+  font-size: clamp(0.76rem, 1vw, 0.9rem);
+  line-height: 1.35;
+}
+.goalMeta b { color: var(--d-ink); }
+
+.week {
+  display: flex;
+  gap: clamp(3px, 0.6vw, 8px);
+  margin-top: clamp(4px, 1vh, 10px);
+}
+.day {
+  flex: 1 1 0;
+  max-width: 34px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--d-muted);
+  font: 600 0.66rem/1 var(--d-font);
+  letter-spacing: 0;
+}
+.day i {
+  width: 100%;
+  max-width: 26px;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #e6ecf4;
+  color: #fff;
+  font-size: 0.66rem;
+  font-style: normal;
+}
+.day[data-state="played"] i { background: #ffc078; }
+.day[data-state="met"] i { background: #40c057; box-shadow: 0 2px 0 #2b8a3e; }
+.day[data-state="future"] i { background: transparent; border: 2px dashed #cbd5e1; }
+.day[data-today] { color: var(--d-ink); font-weight: 700; }
+.day[data-today] i { outline: 3px solid rgba(255, 146, 43, 0.5); outline-offset: 1px; }
+
+.reward {
+  margin: 6px 0 0;
+  color: var(--d-ink);
+  font: 600 0.86rem/1.3 var(--d-font);
+}
+
+/* Admin viewer: no play button, the goal takes its place. */
+@media (orientation: landscape) and (min-width: 600px) {
+  .grid[data-readonly] { grid-template-areas: "hero goal" "hero goal" "counters counters"; }
+}
+
+/* ── Play ───────────────────────────────────────────────────────────────── */
+.play { grid-area: play; display: flex; min-width: 0; }
+.playBtn { flex: 1 1 auto; min-width: 0; justify-content: flex-start; }
+.playIcon {
+  flex: none;
+  width: clamp(36px, 5vh, 50px);
+  height: clamp(36px, 5vh, 50px);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.24);
+  font-size: 0.9em;
+}
+.playText { min-width: 0; display: flex; flex-direction: column; }
+.playText small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font: 600 clamp(0.8rem, 1.1vw, 0.95rem)/1.25 var(--d-font);
+  opacity: 0.95;
+}
+
+@media (orientation: landscape) and (min-width: 600px) and (min-height: 560px) {
+  .playBtn { min-height: clamp(64px, 10vh, 92px); justify-content: center; }
+}
+
+/* Short landscape phones: everything a notch smaller. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .grid { grid-template-columns: minmax(0, 1.25fr) minmax(190px, 1fr); }
+  .hero { padding: 8px 12px; gap: 8px; --hero-mascot: clamp(56px, 22vh, 92px); }
+  .hello { font-size: 1.3rem; }
+  .helloSub { display: none; }
+  .toNext { display: none; }
+  .newBadge { min-height: 36px; padding: 4px 10px; font-size: 0.8rem; }
+  .levelBadge { width: 44px; }
+  .goal { padding: 8px 10px; gap: 8px; }
+  .ring { width: 58px; }
+  .goalMeta { display: none; }
+  .week { margin-top: 3px; }
+  .day { font-size: 0.6rem; }
+  .day i { max-width: 18px; }
+  .counter { flex-direction: row; gap: 6px; padding: 5px 6px; }
+  .counterIcon { width: 26px; height: 26px; margin: 0; border-radius: 9px; font-size: 0.85rem; }
+  .counterText { align-items: flex-start; }
+  .counterNum { font-size: 1rem; }
+  .counterLabel { font-size: 0.62rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .playIcon { display: none; }
+  .playBtn { justify-content: center; text-align: center; padding: 6px 12px; }
+  .playText > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.05rem; }
+}

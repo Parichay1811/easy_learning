@@ -18,7 +18,8 @@ const SERVER_LANGS = new Set([
   "id", "it", "lt", "lv", "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi",
 ]);
 const SERVER_WAIT_MS = 8000; // longer than this, and the browser's voice takes over
-// Children listen best a little slower; the server keeps one cached version per speed.
+// Children listen best a little slower; the server keeps one cached version per
+// speed (and its voice is relaxed already: server/ai-assistant/lib/speech-worker.mjs).
 const DEFAULT_RATE = 0.9;
 
 const synth = typeof window !== "undefined" ? window.speechSynthesis : null;
@@ -43,19 +44,34 @@ if (typeof document !== "undefined") {
   document.addEventListener("pointerdown", unlock, { once: true, capture: true });
 }
 
-// The most natural installed voice for a language, or null.
+// Browsers load their voice list late (Chrome fills it after the first
+// "voiceschanged"); keep the latest list so the first sentence gets a real choice.
+let voices = [];
+function loadVoices() { try { voices = synth?.getVoices() || []; } catch { voices = []; } }
+if (synth) {
+  loadVoices();
+  synth.addEventListener?.("voiceschanged", loadVoices);
+}
+const norm = (tag) => String(tag || "").toLowerCase().replace("_", "-");
+// Novelty and robotic voices (macOS ships "Bells", "Zarvox"…) never read a lesson.
+const NOVELTY = /albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy|compact|espeak|robot/;
+
+// The most natural installed voice that speaks this language, or null. A voice
+// of another language is never used: a wrong voice reads the words in its own
+// accent, which sounds like another language altogether.
 function browserVoice(lang) {
   if (!synth) return null;
-  const want = lang.toLowerCase();
+  if (!voices.length) loadVoices();
+  const want = norm(lang);
   const base = want.split("-")[0];
-  const all = synth.getVoices().filter((v) => v.lang?.toLowerCase().replace("_", "-").startsWith(base));
+  const all = voices.filter((v) => norm(v.lang).split("-")[0] === base && !NOVELTY.test(v.name.toLowerCase()));
   const rank = (v) => {
     const name = v.name.toLowerCase();
     let r = 0;
-    if (/natural|neural|premium|enhanced|online/.test(name)) r -= 4;
-    if (/google|siri|samantha|serena|daniel|karen|moira|aria|jenny|libby|sonia|amelie|thomas|anna|helena|monica|paulina|luciana/.test(name)) r -= 2;
-    if (v.lang?.toLowerCase().replace("_", "-") === want) r -= 1;
-    if (/compact|espeak|robot/.test(name)) r += 5;
+    if (norm(v.lang) === want) r -= 3; // the same country's accent first
+    if (/natural|neural|premium|enhanced|online/.test(name)) r -= 2;
+    if (/google|siri|samantha|serena|daniel|karen|moira|aria|jenny|libby|sonia|amelie|thomas|anna|helena|monica|paulina|luciana/.test(name)) r -= 1;
+    if (v.localService === false) r += 0.5; // network voices can be slow to start
     return r;
   };
   return all.sort((a, b) => rank(a) - rank(b))[0] || null;
@@ -73,6 +89,8 @@ function speakWithBrowser(text, lang, { rate, pitch, volume }, done) {
   const u = new SpeechSynthesisUtterance(text);
   const v = browserVoice(lang);
   if (v) u.voice = v;
+  // Always the text's language, even with no voice chosen: the browser then
+  // picks its own voice for that language, never the page's default.
   u.lang = v?.lang || lang;
   u.rate = rate;
   u.pitch = pitch;

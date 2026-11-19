@@ -1,140 +1,551 @@
+/* "/" — choose your player. One screen on every device: a game menu, not a
+   document. Phones and tablets in portrait: logo, puppy + speech bubble, a
+   2x2 grid of cards. Wide screens: the four cards in a row. Short landscape
+   phones: logo and puppy on the left, cards on the right. */
+
 .page {
-  min-height: 100vh;
   position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: max(10px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
   overflow: hidden;
+  color: #1d3b66;
 }
 
-.content {
+.stage {
   position: relative;
   z-index: 1;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.5rem;
-  gap: 3rem;
+  width: 100%;
+  max-width: 560px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "word"
+    "greet"
+    "cards"
+    "extra"
+    "foot";
+  justify-items: center;
+  align-content: center;
+  row-gap: clamp(8px, 1.5vh, 20px);
+  transition: transform 0.6s cubic-bezier(0.5, 0, 0.75, 0);
 }
 
-.header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.75rem;
-  text-align: center;
+/* A role was chosen: the whole menu leans in towards that card. */
+.choosing {
+  transform: scale(1.12);
+  pointer-events: none;
 }
 
-.logo {
-  width: min(300px, 100%);
-  height: 72px;
-  object-fit: contain;
-  filter: drop-shadow(0 0 16px rgba(34, 211, 238, 0.5));
+.still.choosing {
+  transform: none;
+}
+
+/* ── Logo + greeting ─────────────────────────────────────────────────── */
+
+.word {
+  grid-area: word;
+  display: block;
+  height: clamp(52px, 10vh, 128px);
+  width: auto;
+  max-width: 82vw;
+  filter: drop-shadow(0 6px 12px rgba(24, 70, 130, 0.22));
+  user-select: none;
+}
+
+.greet {
+  grid-area: greet;
+  --pup: clamp(52px, 8.4vh, 118px);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.4vw, 16px);
+  max-width: 100%;
+}
+
+.bubble {
+  position: relative;
+  min-width: 0;
+  background: #fff;
+  border-radius: 20px;
+  padding: clamp(6px, 1vh, 12px) clamp(12px, 1.6vw, 20px);
+  box-shadow: 0 4px 0 #d3e2f2, 0 14px 26px -16px rgba(31, 64, 120, 0.55);
+  transform-origin: 0 50%;
+}
+
+.bubble::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  margin-top: -9px;
+  background: #fff;
+  border-radius: 3px;
+  transform: rotate(45deg);
 }
 
 .title {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.5px;
+  position: relative;
   margin: 0;
+  font-size: clamp(1.05rem, 2.7vh, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #1d3b66;
 }
 
 .subtitle {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.55);
-  margin: 0;
+  position: relative;
+  margin: 2px 0 0;
+  font-size: clamp(0.84rem, 1.85vh, 1.15rem);
+  font-weight: 500;
+  line-height: 1.3;
+  color: #44587a;
 }
 
-.loginAs {
-  font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin: 0;
-  text-align: center;
-  text-shadow: 0 0 12px rgba(34, 211, 238, 0.5);
-}
+/* ── Role cards ──────────────────────────────────────────────────────── */
 
 .cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2.5rem;
-  justify-content: center;
+  grid-area: cards;
   width: 100%;
-  max-width: 1100px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(8px, 1.5vh, 18px);
+}
+
+.slot {
+  display: flex;
+  min-width: 0;
 }
 
 .card {
+  --em: clamp(56px, 9.4vh, 124px);
+  position: relative;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.9rem;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: clamp(9px, 1.5vh, 20px) 8px clamp(10px, 1.6vh, 18px);
+  border: 3px solid #fff;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 52%, var(--role-soft) 100%);
+  box-shadow: 0 5px 0 var(--role-lip), 0 16px 26px -14px rgba(31, 64, 120, 0.5);
+  font: inherit;
+  color: #1d3b66;
+  text-align: center;
   cursor: pointer;
-  width: 140px;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.iconWrap {
-  width: 96px;
-  height: 96px;
+.emblem {
+  display: block;
+  flex: none;
+  width: var(--em);
+  height: var(--em);
+  filter: drop-shadow(0 4px 6px rgba(31, 64, 120, 0.2));
+  transition: transform 0.25s ease;
+}
+
+.emblem svg,
+.tutorEmblem svg,
+.teamEmblem svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+}
+
+.name {
+  margin-top: 3px;
+  font-size: clamp(1.02rem, 2.4vh, 1.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--role-ink);
+}
+
+.sub {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--role-soft);
+  color: var(--role-ink);
+  font-size: clamp(0.72rem, 1.5vh, 0.92rem);
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.desc {
+  margin-top: 3px;
+  font-size: clamp(0.8rem, 1.7vh, 1.02rem);
+  font-weight: 500;
+  line-height: 1.3;
+  color: #44587a;
+}
+
+/* The little "go" button in the corner: it says "press me". */
+.go {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: clamp(22px, 3.2vh, 32px);
+  height: clamp(22px, 3.2vh, 32px);
+  padding: 4px;
   border-radius: 50%;
+  background: var(--role);
+  color: #fff;
+  box-shadow: 0 2px 0 var(--role-lip);
+  transition: transform 0.2s ease;
+}
+
+.go svg {
+  display: block;
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 9px 0 var(--role-lip), 0 22px 30px -14px rgba(31, 64, 120, 0.55);
+  }
+  .card:hover .emblem {
+    transform: scale(1.06) rotate(-3deg);
+  }
+  .card:hover .go,
+  .tutor:hover .go {
+    transform: translateX(3px);
+  }
+  .tutor:hover,
+  .team:hover {
+    transform: translateY(-2px);
+  }
+}
+
+.card:active {
+  transform: translateY(3px);
+  box-shadow: 0 2px 0 var(--role-lip), 0 8px 16px -10px rgba(31, 64, 120, 0.4);
+}
+
+.card:focus-visible,
+.tutor:focus-visible,
+.team:focus-visible {
+  outline: 4px solid #1971c2;
+  outline-offset: 3px;
+}
+
+/* The chosen card glows; the others step back. */
+.choosing .card:not(.chosen),
+.choosing .tutor:not(.chosen),
+.choosing .team:not(.chosen) {
+  opacity: 0.35;
+  transform: scale(0.96);
+}
+
+.card.chosen,
+.tutor.chosen,
+.team.chosen {
+  transform: scale(1.06);
+  box-shadow: 0 0 0 5px var(--role), 0 0 44px 12px color-mix(in srgb, var(--role) 50%, transparent);
+}
+
+/* ── "I teach privately" ─────────────────────────────────────────────── */
+
+.extra {
+  grid-area: extra;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.tutor {
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 2.6rem;
-  line-height: 1;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: box-shadow 0.25s ease;
+  gap: 12px;
+  width: 100%;
+  max-width: 520px;
+  min-height: 52px;
+  padding: 6px 48px 6px 8px;
+  border: 3px solid #fff;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 0 var(--role-lip), 0 12px 22px -14px rgba(31, 64, 120, 0.5);
+  font: inherit;
+  color: #1d3b66;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.card:hover .iconWrap {
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55), 0 0 0 3px rgba(34, 211, 238, 0.3);
+.tutor:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--role-lip);
 }
 
-.roleTitle {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #fff;
-  margin: 0;
-  text-align: center;
+.tutor .go {
+  top: 50%;
+  margin-top: calc(clamp(22px, 3.2vh, 32px) / -2);
+  right: 12px;
+}
+
+.tutorEmblem {
+  flex: none;
+  width: clamp(38px, 5.6vh, 56px);
+  height: clamp(38px, 5.6vh, 56px);
+}
+
+.tutorText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.tutorText strong {
+  font-size: clamp(0.95rem, 2vh, 1.15rem);
+  color: var(--role-ink);
+}
+
+.tutorText span {
+  font-size: clamp(0.8rem, 1.7vh, 0.98rem);
+  font-weight: 500;
+  color: #44587a;
+}
+
+/* ── Footer: the Learnigo team's door, small, and the small print ───── */
+
+.foot {
+  grid-area: foot;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.team {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 4px 16px 4px 6px;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 2px 0 rgba(103, 65, 217, 0.35);
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #4b2d9a;
+  cursor: pointer;
+  transition: transform 0.18s ease, opacity 0.3s ease, box-shadow 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.teamEmblem {
+  flex: none;
+  width: 30px;
+  height: 30px;
+}
+
+.teamSub {
+  font-weight: 500;
+  color: #55607a;
 }
 
 .copyright {
-  color: aliceblue;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  margin-top: auto;
-  padding-bottom: 1rem;
-  text-shadow: 0 0 8px rgba(173, 216, 230, 0.9), 0 0 20px rgba(34, 211, 238, 0.5), 0 0 40px rgba(34, 211, 238, 0.3);
+  margin: 0;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.6);
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #1f3a5e;
+  text-align: center;
 }
-@media (max-width: 640px) {
-  .cards {
-    gap: 1.5rem 1.25rem;
-  }
 
+/* ── Wider tablets in portrait ───────────────────────────────────────── */
+
+@media (min-width: 700px) {
+  .stage {
+    max-width: 660px;
+  }
   .card {
-    width: 100px;
-  }
-
-  .iconWrap {
-    width: 72px;
-    height: 72px;
-    font-size: 2rem;
-  }
-
-  .roleTitle {
-    font-size: 0.9rem;
+    --em: clamp(80px, 11vh, 140px);
+    border-radius: 28px;
   }
 }
 
-@media (max-width: 380px) {
-  .content {
-    padding: 1.5rem 1rem;
-    gap: 2rem;
-  }
+/* ── Wide screens: the four cards in one row ──────────────────────────── */
 
-  .logo {
-    height: 58px;
+@media (min-width: 900px) and (min-height: 560px) and (min-aspect-ratio: 1/1) {
+  .stage {
+    max-width: 1120px;
+    row-gap: clamp(10px, 2vh, 26px);
+  }
+  .word {
+    height: clamp(68px, 11.5vh, 140px);
+  }
+  .greet {
+    --pup: clamp(76px, 12.5vh, 150px);
+  }
+  .cards {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(14px, 1.8vw, 26px);
+  }
+  .card {
+    --em: clamp(84px, 16vh, 160px);
+    padding: clamp(14px, 2.2vh, 26px) 14px clamp(14px, 2.2vh, 24px);
+  }
+  .name {
+    font-size: clamp(1.1rem, 2.8vh, 1.7rem);
+  }
+  .desc {
+    font-size: clamp(0.85rem, 1.9vh, 1.08rem);
+  }
+  .foot {
+    flex-direction: row;
+    gap: 14px;
+  }
+}
+
+/* ── Short landscape phones: logo + puppy left, cards right ─────────── */
+
+@media (orientation: landscape) and (max-height: 540px) {
+  .page {
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .stage {
+    max-width: 980px;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.5fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "word  cards"
+      "greet cards"
+      "foot  extra";
+    column-gap: clamp(12px, 3vw, 36px);
+    row-gap: 8px;
+    align-items: center;
+  }
+  .word {
+    height: clamp(42px, 16vh, 84px);
+    max-width: 100%;
+    align-self: end;
+  }
+  .greet {
+    --pup: clamp(44px, 13vh, 74px);
+    align-self: start;
+  }
+  .title {
+    font-size: clamp(0.98rem, 4.6vh, 1.3rem);
+  }
+  .subtitle {
+    font-size: clamp(0.78rem, 3.4vh, 0.95rem);
+  }
+  .cards {
+    gap: 8px;
+    align-self: center;
+  }
+  .card {
+    --em: clamp(40px, 12.5vh, 66px);
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 30px 7px 7px;
+    border-radius: 20px;
+    text-align: left;
+  }
+  .text {
+    align-items: flex-start;
+  }
+  .name {
+    margin-top: 0;
+    font-size: clamp(0.95rem, 4.4vh, 1.2rem);
+  }
+  .sub {
+    margin-top: 1px;
+    font-size: 0.7rem;
+  }
+  .desc {
+    margin-top: 1px;
+    font-size: clamp(0.72rem, 3.3vh, 0.86rem);
+    line-height: 1.25;
+  }
+  .go {
+    top: 50%;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    padding: 3px;
+  }
+  .tutor {
+    min-height: 44px;
+    padding: 4px 40px 4px 6px;
+    border-radius: 16px;
+  }
+  .tutor .go {
+    margin-top: -10px;
+    right: 10px;
+  }
+  .tutorEmblem {
+    width: clamp(32px, 10vh, 46px);
+    height: clamp(32px, 10vh, 46px);
+  }
+  .tutorText strong {
+    font-size: 0.92rem;
+  }
+  .tutorText span {
+    font-size: 0.78rem;
+  }
+  .foot {
+    align-self: center;
+  }
+  .team {
+    min-height: 36px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+  .teamSub {
+    display: none;
+  }
+  .teamEmblem {
+    width: 26px;
+    height: 26px;
+  }
+  .copyright {
+    font-size: 0.62rem;
+    line-height: 1.35;
+    padding: 1px 10px;
+    border-radius: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage,
+  .card,
+  .emblem,
+  .go,
+  .tutor,
+  .team {
+    transition: none;
   }
 }

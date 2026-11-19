@@ -58,6 +58,7 @@ export default function ParentReports({ api, child }) {
           text={T("lockD", "Print a beautiful report, share it with a tutor or grandparent, and watch the year's story together.")} ctaLabel={T("lockCta", "Ask us about Family Plus")} />
       )}
 
+      <div className={s.grid2}>
       <section className={s.card} aria-labelledby="rep-h">
         <div className={s.cardHead}><h2 id="rep-h">{T("report", "Learning report")}</h2></div>
         <div className={s.filters} role="group" aria-label={T("period", "Period")}>
@@ -95,6 +96,7 @@ export default function ParentReports({ api, child }) {
         <p className={s.muted} style={{ marginTop: 0 }}>{T("yearD", "A short animated story to watch together: time learned, favourite subject, best month, milestones and a certificate to print.")}</p>
         <Button onClick={openYear}>{T("watch", "Watch the story")}</Button>
       </section>
+      </div>
 
       {year && <YearInReview data={year} onClose={() => setYear(null)} />}
     </>

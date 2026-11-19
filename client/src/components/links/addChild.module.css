@@ -1,0 +1,53 @@
+/* Extras for the parent's "Add a child" sheet (pages/parent/AddChildSheet.jsx):
+   the email door is the main one, the others sit below it. */
+.doors { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; }
+.doors > :first-child { grid-column: 1 / -1; }
+.main {
+  border-color: var(--d-accent) !important; background: var(--d-accent-soft) !important;
+  box-shadow: 0 4px 0 color-mix(in srgb, var(--d-accent) 35%, transparent);
+  flex-direction: row !important; align-items: center; gap: 14px !important; min-height: 96px !important;
+}
+.main .text { display: grid; gap: 4px; color: var(--d-ink); }
+.main strong { font-size: 1.15rem; }
+.main .badge {
+  justify-self: start; display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+  background: var(--d-accent); color: var(--d-on-accent);
+}
+.main .text > span:not(.badge) { color: var(--d-ink); }
+@media (max-width: 520px) {
+  .doors { grid-template-columns: 1fr; }
+}
+
+.how {
+  display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; align-items: center; margin: 0; padding: 12px 14px;
+  border-radius: var(--d-radius-sm); background: var(--d-card-alt); list-style: none;
+}
+.how li { display: contents; }
+.step {
+  width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 0.95rem;
+  background: var(--d-accent); color: var(--d-on-accent);
+}
+
+.other {
+  border-radius: var(--d-radius-sm); border: 2px dashed var(--d-line); padding: 4px 14px;
+}
+.other[open] { padding-bottom: 14px; }
+.other summary {
+  min-height: 44px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: var(--d-accent-ink);
+  list-style: none;
+}
+.other summary::-webkit-details-marker { display: none; }
+.other summary::before { content: "▸"; transition: transform 0.15s ease; }
+.other[open] summary::before { transform: rotate(90deg); }
+.where { margin: 4px 0 10px; padding: 10px 12px; border-radius: 12px; background: var(--d-sun-soft); color: var(--d-ink); }
+.where b { white-space: nowrap; }
+
+.sent { display: grid; gap: 12px; justify-items: center; text-align: center; padding: 8px 0 4px; }
+.sentIcon { font-size: 3.4rem; line-height: 1; animation: pop 0.5s ease-out; }
+.sent h3 { margin: 0; font-size: 1.3rem; }
+.sent p { margin: 0; max-width: 46ch; }
+@keyframes pop { from { transform: scale(0.5); opacity: 0; } 70% { transform: scale(1.12); } to { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .sentIcon { animation: none; }
+  .other summary::before { transition: none; }
+}

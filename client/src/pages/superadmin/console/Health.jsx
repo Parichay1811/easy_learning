@@ -4,14 +4,14 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, ChartCard, DataTable, KpiTile, TrendLine, toTable } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, qs, dateTime, ago } from "./api";
-import { Facts, Field, Loadable, Modal, Notice, Pager, Panel, Pill, StatusPill, Tabs } from "./ui";
+import { Facts, Field, Loadable, Modal, Notice, Pager, Panel, Pill, StatusPill, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 const dur = (sec) => (sec == null ? "—" : sec < 3600 ? `${Math.round(sec / 60)} min` : sec < 86400 ? `${Math.round(sec / 3600)} h` : `${Math.round(sec / 86400)} d`);
 const ms = (v) => (v == null ? null : `${Math.round(v)} ms`);
 const pct = (v) => (v == null ? null : `${v} %`);
 
-function Live() {
+function Live({ part }) {
   const { t } = useTranslation();
   const api = useConsoleApi();
   const h = useLoad("/ops/health", { pollMs: 30_000 });
@@ -20,7 +20,7 @@ function Live() {
   const tone = (v, warn, bad) => (v == null ? "neutral" : v >= bad ? "alert" : v >= warn ? "attention" : "good");
   return (
     <Loadable state={h}>
-      {H && (
+      {H && part === "live" && (
         <>
           {H.alerts.length > 0 && <Notice tone="alert">{H.alerts.map((a) => a.text).join(" · ")}</Notice>}
           <div className={s.kpis}>
@@ -38,7 +38,11 @@ function Live() {
               <TrendLine data={H.history.map((x) => ({ x: x.at.slice(11, 16), value: x.p95 || 0 }))} unit="ms" xFormat={(x) => x} />
             </ChartCard>
           )}
-          <div className={s.grid2}>
+        </>
+      )}
+      {H && part === "servers" && (
+        <>
+          <div className={s.gridAuto}>
             <Panel title={t("sa.h.dbs", "Databases")}>
               <DataTable caption={t("sa.h.dbs", "Databases")} rows={H.dbs} getRowKey={(d) => d.name} columns={[
                 { key: "name", label: t("sa.h.db", "Database"), render: (d) => <span><span className={s.strong}>{d.name}</span><br /><span className={`${s.small} ${s.muted}`}>{(d.top || []).slice(0, 3).map((c) => `${c.name} ${c.count.toLocaleString()}`).join(" · ")}</span></span> },
@@ -50,7 +54,7 @@ function Live() {
               {H.api.slowest.length ? <DataTable caption={t("sa.h.slow", "Slowest routes")} rows={H.api.slowest} getRowKey={(r) => r.route} columns={[{ key: "route", label: t("sa.h.route", "Route"), render: (r) => <span className={s.mono}>{r.route}</span> }, { key: "count", label: "n", align: "end" }, { key: "avgMs", label: t("sa.h.avg", "Avg ms"), align: "end" }, { key: "maxMs", label: t("sa.h.max", "Max ms"), align: "end" }]} /> : <p className={s.muted}>{t("sa.h.noTraffic", "No traffic in the last 5 minutes.")}</p>}
             </Panel>
           </div>
-          <div className={s.grid2}>
+          <div className={s.gridAuto}>
             <Panel title={t("sa.h.pm2", "Processes (PM2)")}>
               {H.pm2 ? <DataTable caption="PM2" rows={H.pm2} getRowKey={(p) => p.name} columns={[{ key: "name", label: t("sa.col.name", "Name") }, { key: "status", label: t("sa.col.status", "Status"), render: (p) => <StatusPill status={p.status === "online" ? "active" : "failed"} label={p.status} /> }, { key: "restarts", label: t("sa.h.restarts", "Restarts"), align: "end" }, { key: "memMb", label: "MB", align: "end" }, { key: "cpu", label: "CPU %", align: "end" }]} /> : <p className={s.muted}>{t("sa.h.noPm2", "PM2 is not available on this machine.")}</p>}
             </Panel>
@@ -115,8 +119,8 @@ function Incidents() {
   };
   return (
     <Panel title={t("sa.inc.title", "Incidents and maintenance")} sub={t("sa.inc.sub", "Active items with a banner show on every page of the site and on the public status page (/status).")} actions={<>
-      <Button size="sm" variant="ghost" onClick={() => setForm({ kind: "maintenance", title: "", severity: "minor", message: "", banner: true, startsAt: "", endsAt: "" })}>{t("sa.inc.planMaint", "Plan maintenance")}</Button>
-      <Button size="sm" onClick={() => setForm({ kind: "incident", title: "", severity: "major", message: "", banner: true })}>{t("sa.inc.new", "Report incident")}</Button>
+      <Button variant="soft" onClick={() => setForm({ kind: "maintenance", title: "", severity: "minor", message: "", banner: true, startsAt: "", endsAt: "" })}>{t("sa.inc.planMaint", "Plan maintenance")}</Button>
+      <Button onClick={() => setForm({ kind: "incident", title: "", severity: "major", message: "", banner: true })}>{t("sa.inc.new", "Report incident")}</Button>
     </>}>
       <Loadable state={list} empty={list.data && !list.data.incidents.length ? { title: t("sa.inc.none", "No incidents recorded.") } : null}>
         {list.data && <DataTable caption={t("sa.inc.title", "Incidents")} rows={list.data.incidents} getRowKey={(i) => i.id} onRowClick={(i) => setUpd({ id: i.id, title: i.title, status: i.status, update: "", banner: i.banner })} columns={[
@@ -189,12 +193,14 @@ export default function Health({ params, setParams }) {
   return (
     <>
       <Tabs label={t("sa.nav.health", "Health & ops")} value={tab} onChange={(k) => setParams(new URLSearchParams({ section: "health", tab: k }))} tabs={[
-        { key: "live", label: t("sa.h.live", "System health") }, { key: "jobs", label: t("sa.jobs.title", "Background jobs") }, { key: "incidents", label: t("sa.inc.short", "Incidents") }, { key: "outbox", label: t("sa.ob.title", "Outbox") },
+        { key: "live", label: t("sa.h.live", "System health") }, { key: "servers", label: t("sa.h.servers", "Databases and servers") }, { key: "jobs", label: t("sa.jobs.title", "Background jobs") }, { key: "incidents", label: t("sa.inc.short", "Incidents") }, { key: "outbox", label: t("sa.ob.title", "Outbox") },
       ]} />
-      {tab === "live" && <Live />}
-      {tab === "jobs" && <Jobs />}
-      {tab === "incidents" && <Incidents />}
-      {tab === "outbox" && <Outbox />}
+      <TabBody value={tab}>
+        {(tab === "live" || tab === "servers") && <Live key={tab} part={tab} />}
+        {tab === "jobs" && <Jobs />}
+        {tab === "incidents" && <Incidents />}
+        {tab === "outbox" && <Outbox />}
+      </TabBody>
     </>
   );
 }

@@ -86,7 +86,7 @@ export default function MarkingQueue() {
       <div className={s.head}>
         <div>
           <h1>{tt("mark.title", "Marking")}</h1>
-          <p>{tt("mark.sub", "Typed and spoken answers waiting for you.")} <span className={s.small}>{tt("mark.keys", "Keys:")} <span className={s.kbd}>J</span>/<span className={s.kbd}>K</span> {tt("mark.keysNav", "next/previous")}, <span className={s.kbd}>1</span>–<span className={s.kbd}>9</span> {tt("mark.keysLevel", "level or mark")}, <span className={s.kbd}>C</span> {tt("mark.keysComment", "comment")}, <span className={s.kbd}>Enter</span> {tt("mark.keysSave", "save and next")}</span></p>
+          <p>{tt("mark.sub", "Typed and spoken answers waiting for you.")} <span className={`${s.small} ${s.keysHint}`}>{tt("mark.keys", "Keys:")} <span className={s.kbd}>J</span>/<span className={s.kbd}>K</span> {tt("mark.keysNav", "next/previous")}, <span className={s.kbd}>1</span>–<span className={s.kbd}>9</span> {tt("mark.keysLevel", "level or mark")}, <span className={s.kbd}>C</span> {tt("mark.keysComment", "comment")}, <span className={s.kbd}>Enter</span> {tt("mark.keysSave", "save and next")}</span></p>
         </div>
       </div>
       {msg && <p role={msg.kind === "error" ? "alert" : "status"} className={`${s.notice} ${msg.kind === "error" ? s.noticeError : s.noticeGood}`}>{msg.text}</p>}
@@ -96,7 +96,7 @@ export default function MarkingQueue() {
         <div className={s.markLayout}>
           <nav aria-label={tt("mark.queue", "Queue")} className={s.card} style={{ padding: 12 }}>
             <h2 className={s.small} style={{ margin: "0 0 8px" }}>{tt("mark.count", "{{n}} to mark", { n: data.queue.length })}</h2>
-            <ul className={s.list} style={{ gap: 6, maxHeight: "60vh", overflow: "auto" }}>
+            <ul className={`${s.list} ${s.queueList}`} style={{ gap: 6, maxHeight: "60vh", overflow: "auto" }}>
               {data.queue.map((q, j) => (
                 <li key={`${q.attemptId}-${q.itemId}`}>
                   <button type="button" className={s.queueBtn} aria-current={j === i} onClick={() => setI(j)}>

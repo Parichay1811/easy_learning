@@ -134,7 +134,7 @@ export default function JoinGroup() {
                     </button>
                   ))}
                   {!verified.length && (
-                    <p className={s.note}>{t("join.noChildren", { defaultValue: "To add a child, first connect them in your parent dashboard (their email and a link code), then open this link again." })} <Link to="/parent-dashboard">{t("join.parentDash", { defaultValue: "Open parent dashboard" })}</Link></p>
+                    <p className={s.note}>{t("join.noChildren2", { defaultValue: "To add a child, first connect them in your parent dashboard: type their Learnigo email and they tap Accept. Then open this link again." })} <Link to="/parent-dashboard">{t("join.parentDash", { defaultValue: "Open parent dashboard" })}</Link></p>
                   )}
                 </div>
               )}

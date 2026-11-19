@@ -2,13 +2,14 @@
 // in sections, points, rules, student preview, assign and publish.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaPlus, FaTrash, FaArrowUp, FaArrowDown, FaDice, FaEye, FaSave, FaPaperPlane, FaTimes, FaChartBar } from "react-icons/fa";
+import { FaPlus, FaTrash, FaArrowUp, FaArrowDown, FaDice, FaEye, FaSave, FaPaperPlane, FaTimes, FaChartBar, FaListOl, FaSlidersH, FaUsers } from "react-icons/fa";
 import QuestionCard from "../../../components/QuestionCard/QuestionCard";
-import { Button, Skeleton } from "../../../components/dashboard";
+import { Button, Skeleton, SubTabs, SubPanel, EmptyState, usePane } from "../../../components/dashboard";
 import { useTeacherApi, useT, INTERACTION_LABELS, MODULE_KEYS, SUBJECT_KEYS, cap, toLocalInput } from "./api";
 import BankPicker from "./BankPicker";
 import { Locked } from "./TeacherTestsApp";
 import s from "./tests.module.css";
+import { sfx } from "../../../utils/sounds";
 
 const TZ = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
 const MANUAL_OK = ["typed_long", "typed_short", "mic_record"];
@@ -227,6 +228,7 @@ function PoolForm({ onAdd, onCancel }) {
 }
 
 function PreviewModal({ testId, onClose }) {
+  useEffect(() => { sfx.open(); }, []);
   const api = useTeacherApi();
   const tt = useT();
   const [items, setItems] = useState(null);
@@ -272,6 +274,7 @@ export default function TestBuilder() {
   const [locked, setLocked] = useState(null);
   const [advanced, setAdvanced] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [pane, setPane] = usePane(["questions", "rules", "assign"]);
 
   const load = useCallback(async () => {
     const [r, m] = await Promise.all([api.get(`/tests/${id}`), api.get("/bank/meta")]);
@@ -339,7 +342,15 @@ export default function TestBuilder() {
       </div>
       {msg && <p role={msg.kind === "error" ? "alert" : "status"} className={`${s.notice} ${msg.kind === "error" ? s.noticeError : s.noticeGood}`}>{msg.text}</p>}
 
-      <div className={s.split}>
+      <SubTabs label={tt("build.sections", "Build steps")} value={pane} onChange={setPane} idBase="build"
+        tabs={[
+          { id: "questions", label: tt("build.tabQuestions", "1. Questions ({{n}})", { n: total }), icon: FaListOl },
+          { id: "rules", label: tt("build.tabRules", "2. Rules"), icon: FaSlidersH },
+          { id: "assign", label: tt("build.tabAssign", "3. Who it's for"), icon: FaUsers },
+        ]} />
+
+      <SubPanel key={pane} id={pane} value={pane} idBase="build">
+        {pane === "questions" && (
         <div className={s.page}>
           <section className={s.card}>
             <label className={s.field}><span>{tt("build.desc", "Note for students (optional)")}</span>
@@ -367,7 +378,7 @@ export default function TestBuilder() {
                 <Check label={tt("build.fixed", "Keep this order")} checked={sec.fixedOrder} onChange={(v) => setSec(si, { fixedOrder: v })} />
                 {sections.length > 1 && <button type="button" className={s.iconBtn} onClick={() => touch(() => setSections(sections.filter((_, j) => j !== si)))} aria-label={tt("build.removeSection", "Remove section {{n}}", { n: si + 1 })}><FaTrash aria-hidden="true" /></button>}
               </div>
-              <ol className={s.list} style={{ marginTop: 12 }}>
+              <ol className={`${s.list} ${s.scrollArea}`} style={{ marginTop: 12 }}>
                 {sec.items.map((it, ii) => {
                   const q = it._summary || summaries[it._id];
                   return (
@@ -419,14 +430,28 @@ export default function TestBuilder() {
               </div>
             </section>
           ))}
-          <div><Button variant="ghost" icon={FaPlus} onClick={() => touch(() => setSections([...sections, { title: "", fixedOrder: false, items: [] }]))}>{tt("build.addSection", "Add a section")}</Button></div>
+          <div className={s.actions}>
+            <Button variant="ghost" icon={FaPlus} onClick={() => touch(() => setSections([...sections, { title: "", fixedOrder: false, items: [] }]))}>{tt("build.addSection", "Add a section")}</Button>
+            {total > 0 && <Button variant="soft" onClick={() => setPane("rules")}>{tt("build.nextRules", "Next: rules")}</Button>}
+          </div>
         </div>
+        )}
 
-        <div className={s.page}>
-          <RulesPanel r={rules} set={(r) => touch(() => setRules(r))} advanced={advanced} />
-          {!test.isTemplate && (dirty ? <p className={`${s.notice} ${s.noticeWarn}`}>{tt("build.saveFirst", "Save your changes, then assign.")}</p> : <AssignPanel key={assignment?._id || "new"} test={test} assignment={assignment} onPublished={load} />)}
-        </div>
-      </div>
+        {pane === "rules" && (
+          <>
+            <RulesPanel r={rules} set={(r) => touch(() => setRules(r))} advanced={advanced} />
+            <div className={s.actions}><Button variant="soft" onClick={() => setPane("assign")}>{tt("build.nextAssign", "Next: who it's for")}</Button></div>
+          </>
+        )}
+
+        {pane === "assign" && (
+          test.isTemplate
+            ? <EmptyState compact title={tt("build.templateNoAssign", "Templates can't be assigned")} text={tt("build.templateNoAssignText", "Untick \"Keep as a template\" on the Questions step, or duplicate it from the tests list.")} actionLabel={tt("build.tabQuestionsShort", "Questions")} onAction={() => setPane("questions")} />
+            : dirty
+              ? <div className={`${s.notice} ${s.noticeWarn}`}><p style={{ margin: "0 0 10px" }}>{tt("build.saveFirst", "Save your changes, then assign.")}</p><Button icon={FaSave} onClick={save}>{tt("build.save", "Save")}</Button></div>
+              : <AssignPanel key={assignment?._id || "new"} test={test} assignment={assignment} onPublished={load} />
+        )}
+      </SubPanel>
 
       {picker !== null && <BankPicker already={already} onClose={() => setPicker(null)} onAdd={(qs) => addQuestions(picker, qs)} />}
       {preview && <PreviewModal testId={id} onClose={() => setPreview(false)} />}

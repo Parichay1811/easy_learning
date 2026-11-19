@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, DataTable } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, qs, money, dateOnly, dateTime } from "./api";
-import { Facts, Field, Loadable, Modal, Notice, Pager, Panel, Pill, ReasonDialog, StatusPill, Tabs } from "./ui";
+import { Facts, Field, Loadable, Modal, Notice, Pager, Panel, Pill, ReasonDialog, Segmented, StatusPill, TabBody, Tabs } from "./ui";
 import s from "./console.module.css";
 
 const toCents = (v) => Math.round(Number(String(v).replace(",", ".")) * 100) || 0;
@@ -175,9 +175,7 @@ function Subscriptions({ role, params, setParams }) {
   const L = list.data;
   return (
     <Panel title={t("sa.bill.subs", "Subscriptions")} sub={t("sa.bill.subsSub", "Start one from an organisation's page. Card payments (Stripe) update these automatically when configured.")}>
-      <div className={s.chipsRow} role="group" aria-label={t("sa.col.status", "Status")}>
-        {["", "active", "trialing", "past_due", "paused", "cancelled"].map((x) => <button key={x || "all"} type="button" className={s.chipBtn} aria-pressed={status === x} onClick={() => { setPage(1); setStatus(x); }}>{x ? t(`sa.status.${x}`, x.replace("_", " ")) : t("sa.all", "All")}</button>)}
-      </div>
+      <Segmented label={t("sa.col.status", "Status")} value={status} onChange={(x) => { setPage(1); setStatus(x); }} options={["", "active", "trialing", "past_due", "paused", "cancelled"].map((x) => ({ key: x, label: x ? t(`sa.status.${x}`, x.replace("_", " ")) : t("sa.all", "All") }))} />
       <Loadable state={list} empty={L && !L.rows.length ? { title: t("sa.bill.noSubs", "No subscriptions yet.") } : null}>
         {L && (
           <>
@@ -203,7 +201,9 @@ export default function Billing({ role, params, setParams }) {
   return (
     <>
       <Tabs label={t("sa.nav.billing", "Plans & billing")} value={tab} onChange={(k) => setParams(new URLSearchParams({ section: "billing", tab: k }))} tabs={[{ key: "subs", label: t("sa.bill.subs", "Subscriptions") }, { key: "plans", label: t("sa.bill.plans", "Plan catalogue") }]} />
-      {tab === "plans" ? <Plans role={role} /> : <Subscriptions role={role} params={params} setParams={setParams} />}
+      <TabBody value={tab}>
+        {tab === "plans" ? <Plans role={role} /> : <Subscriptions role={role} params={params} setParams={setParams} />}
+      </TabBody>
     </>
   );
 }

@@ -3,14 +3,15 @@
 import { useMemo } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { FaHome, FaChartPie, FaTh, FaChartLine, FaUserFriends, FaPrint } from "react-icons/fa";
 import {
-  TimeRangeBar, StoryCard, KpiTile, ChartCard, TrendLine, UnitSunburst, Button, PlanLockCard, EmptyState,
-  fmtDuration, fmtPercent, NO_DATA, toTable, subjectLabel,
+  StoryCard, KpiTile, ChartCard, TrendLine, UnitSunburst, Button, PlanLockCard, EmptyState,
+  SubTabs, SubPanel, usePane, fmtDuration, fmtPercent, NO_DATA, toTable, subjectLabel,
 } from "../../../components/dashboard";
 import { useLoad, qs } from "./api";
 import { useSchoolRange } from "./useSchoolRange";
 import { useSchool, BASE } from "./context";
-import { HeatCell } from "./bits";
+import { HeatCell, RangeControl } from "./bits";
 import s from "./school.module.css";
 
 const f = (v) => (v == null ? null : v / 100);
@@ -57,26 +58,27 @@ function toSunburst(name, nodes) {
   return { id: "root", name, score, children };
 }
 
+// "School setup: 5 of 7" – a small pill in the page head (links to the setup steps).
 function SetupNudge() {
   const { t } = useTranslation();
   const setup = useLoad("/setup");
   if (!setup.data || setup.data.percent >= 100) return null;
   return (
-    <div className={`${s.banner} ${s.attention}`}>
-      <div className={s.grow}>
-        <p className={s.strong}>{t("school.setup.nudge", { defaultValue: "School setup: {{done}} of {{total}} steps done", done: setup.data.done, total: setup.data.total })}</p>
-        <div className={s.meter} style={{ marginTop: 8 }} role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={setup.data.percent} aria-label={t("school.setup.progress", { defaultValue: "Setup progress" })}>
-          <div className={s.meterFill} style={{ width: `${setup.data.percent}%` }} />
-        </div>
-      </div>
-      <Button size="sm" to={`${BASE}/setup`}>{t("school.setup.continue", { defaultValue: "Continue setup" })}</Button>
-    </div>
+    <Link to={`${BASE}/setup`} className={s.setupPill}
+      aria-label={t("school.setup.nudge", { defaultValue: "School setup: {{done}} of {{total}} steps done", done: setup.data.done, total: setup.data.total })}>
+      <span className={s.setupPillText}>{t("school.setup.pill", { defaultValue: "Setup {{done}}/{{total}}", done: setup.data.done, total: setup.data.total })}</span>
+      <span className={s.setupPillMeter} aria-hidden="true"><span style={{ width: `${setup.data.percent}%` }} /></span>
+      <span className={s.setupPillGo}>{t("school.setup.continue", { defaultValue: "Continue setup" })}</span>
+    </Link>
   );
 }
+
+const PANES = ["summary", "map", "grades", "trend", "people"];
 
 export default function OverviewPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [pane, setPane] = usePane(PANES);
   const { unitId } = useParams();
   const { access, has, isAdmin } = useSchool();
   const { tr, params } = useSchoolRange();
@@ -108,49 +110,61 @@ export default function OverviewPage() {
     ...(d?.insights || []).slice(0, 1).map((i) => ({ kind: i.kind, text: i.text })),
   ].slice(0, 4);
 
+  const tabs = [
+    { id: "summary", label: t("school.ov.summary", { defaultValue: "Summary" }), icon: FaHome },
+    { id: "map", label: t("school.ov.map", { defaultValue: "School map" }), icon: FaChartPie },
+    { id: "grades", label: t("school.ov.grades", { defaultValue: "Grades & subjects" }), icon: FaTh },
+    { id: "trend", label: t("school.ov.trend", { defaultValue: "Learning time" }), icon: FaChartLine },
+    { id: "people", label: t("school.ov.people", { defaultValue: "Nudges & wins" }), icon: FaUserFriends, badge: lists.data?.atRiskCount || undefined },
+  ];
+
   return (
-    <div className={s.page}>
+    <div className={`${s.page} ${s.pageTight}`}>
       <div className={s.head}>
-        <div>
+        <div className={s.grow}>
           <h1 className={s.title}>{unitId ? (d?.who || t("school.unit", { defaultValue: "Unit" })) : access.org.name}</h1>
-          <p className={s.sub}>
+          <p className={`${s.sub} ${unitId ? "" : s.subOptional}`}>
             {unitId
               ? <><Link to={BASE}>{access.org.name}</Link> › {d?.who}</>
               : t("school.overviewSub", { defaultValue: "How every grade, class and teacher is doing." })}
           </p>
         </div>
         <div className={s.row}>
+          {!unitId && isAdmin && <SetupNudge />}
           {unitId && <Button size="sm" variant="soft" to={`${BASE}/tree?unit=${unitId}`}>{t("school.seePeople", { defaultValue: "People in this unit" })}</Button>}
-          <Button size="sm" variant="ghost" onClick={() => window.print()}>{t("school.print", { defaultValue: "Print" })}</Button>
+          <Button size="sm" variant="ghost" icon={FaPrint} className={s.phoneIcon} aria-label={t("school.print", { defaultValue: "Print" })} onClick={() => window.print()}>{t("school.print", { defaultValue: "Print" })}</Button>
         </div>
       </div>
-      {!unitId && isAdmin && <SetupNudge />}
-      <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} sticky />
+      <SubTabs idBase="ov" label={t("school.ov.tabs", { defaultValue: "Overview views" })} value={pane} onChange={setPane} tabs={tabs} />
+      <RangeControl tr={tr} />
       {ov.error ? (
         <EmptyState tone="error" title={t("school.err", { defaultValue: "This view didn't load" })} text={ov.error.message} actionLabel={t("school.retry", { defaultValue: "Try again" })} onAction={ov.reload} />
       ) : (
         <>
-          <StoryCard loading={ov.loading} sentence={d?.story} chips={chips} />
-          <div className={s.tiles}>
-            <KpiTile loading={ov.loading} label={t("school.tile.active", { defaultValue: "Active students" })} value={T ? fmtPercent(f(T.activePct)) : NO_DATA}
-              helpText={t("school.tile.activeHelp", { defaultValue: "{{a}} of {{n}} students learned at least once in this period.", a: T?.activeLearners ?? 0, n: T?.learners ?? 0 })} />
-            <KpiTile loading={ov.loading} label={t("school.tile.minutes", { defaultValue: "Minutes per student" })} value={T?.minutesPerStudent != null ? fmtDuration(T.minutesPerStudent) : NO_DATA}
-              delta={T?.prevMinutesPerStudent != null ? { current: T.minutesPerStudent, previous: T.prevMinutesPerStudent, mode: "duration", vs } : undefined}
-              sparkline={trend.map((p) => p.value)} helpText={t("school.tile.minutesHelp", { defaultValue: "Learning time divided by all students in view, including those who didn't learn." })} />
-            <KpiTile loading={ov.loading} label={t("school.tile.accuracy", { defaultValue: "Accuracy" })} value={T?.accuracy != null ? fmtPercent(f(T.accuracy)) : NO_DATA}
-              delta={T?.prevAccuracy != null && T?.accuracy != null ? { current: T.accuracy / 100, previous: T.prevAccuracy / 100, mode: "points", vs } : undefined}
-              helpText={t("school.tile.accuracyHelp", { defaultValue: "Correct answers divided by answers given." })} />
-            <KpiTile loading={ov.loading} label={t("school.tile.mastery", { defaultValue: "Practising or mastered" })} value={T?.masteryPct != null ? fmtPercent(f(T.masteryPct)) : NO_DATA}
-              helpText={t("school.tile.masteryHelp", { defaultValue: "Share of student-subject pairs (with at least 5 answers) at Practising (50 %+) or Mastered (80 %+)." })} />
-            <KpiTile loading={ov.loading} label={t("school.tile.tests", { defaultValue: "Tests completed" })} value={T?.testsCompleted ?? NO_DATA}
-              helpText={T?.testsAvailable ? "" : t("school.tile.testsHelp", { defaultValue: "Tests appear here once your teachers use the Tests module." })} />
-            <KpiTile loading={ov.loading} label={t("school.tile.risk", { defaultValue: "Need a nudge" })} value={T ? String(T.atRisk) : NO_DATA} tone={T?.atRisk ? "attention" : "good"} to={`${BASE}/insights?tab=lists`}
-              helpText={t("school.tile.riskHelp", { defaultValue: "No learning for 7 days, or accuracy down more than 15 points over two weeks." })} />
-            <KpiTile loading={ov.loading} label={t("school.tile.parents", { defaultValue: "Parents linked" })} value={T?.parentsLinkedPct != null ? fmtPercent(f(T.parentsLinkedPct)) : NO_DATA}
-              to={`${BASE}/people/parents`} helpText={t("school.tile.parentsHelp", { defaultValue: "Students with at least one parent following their learning." })} />
-          </div>
-          <div className={s.grid2}>
+          <SubPanel idBase="ov" id="summary" value={pane}>
+            <StoryCard loading={ov.loading} sentence={d?.story} chips={chips} />
+            <div className={s.tilesTight}>
+              <KpiTile loading={ov.loading} label={t("school.tile.active", { defaultValue: "Active students" })} value={T ? fmtPercent(f(T.activePct)) : NO_DATA}
+                helpText={t("school.tile.activeHelp", { defaultValue: "{{a}} of {{n}} students learned at least once in this period.", a: T?.activeLearners ?? 0, n: T?.learners ?? 0 })} />
+              <KpiTile loading={ov.loading} label={t("school.tile.minutes", { defaultValue: "Minutes per student" })} value={T?.minutesPerStudent != null ? fmtDuration(T.minutesPerStudent) : NO_DATA}
+                delta={T?.prevMinutesPerStudent != null ? { current: T.minutesPerStudent, previous: T.prevMinutesPerStudent, mode: "duration", vs } : undefined}
+                sparkline={trend.map((p) => p.value)} helpText={t("school.tile.minutesHelp", { defaultValue: "Learning time divided by all students in view, including those who didn't learn." })} />
+              <KpiTile loading={ov.loading} label={t("school.tile.accuracy", { defaultValue: "Accuracy" })} value={T?.accuracy != null ? fmtPercent(f(T.accuracy)) : NO_DATA}
+                delta={T?.prevAccuracy != null && T?.accuracy != null ? { current: T.accuracy / 100, previous: T.prevAccuracy / 100, mode: "points", vs } : undefined}
+                helpText={t("school.tile.accuracyHelp", { defaultValue: "Correct answers divided by answers given." })} />
+              <KpiTile loading={ov.loading} label={t("school.tile.mastery", { defaultValue: "Practising or mastered" })} value={T?.masteryPct != null ? fmtPercent(f(T.masteryPct)) : NO_DATA}
+                helpText={t("school.tile.masteryHelp", { defaultValue: "Share of student-subject pairs (with at least 5 answers) at Practising (50 %+) or Mastered (80 %+)." })} />
+              <KpiTile loading={ov.loading} label={t("school.tile.tests", { defaultValue: "Tests completed" })} value={T?.testsCompleted ?? NO_DATA}
+                helpText={T?.testsAvailable ? "" : t("school.tile.testsHelp", { defaultValue: "Tests appear here once your teachers use the Tests module." })} />
+              <KpiTile loading={ov.loading} label={t("school.tile.risk", { defaultValue: "Need a nudge" })} value={T ? String(T.atRisk) : NO_DATA} tone={T?.atRisk ? "attention" : "good"} to={`${BASE}/insights?tab=lists`}
+                helpText={t("school.tile.riskHelp", { defaultValue: "No learning for 7 days, or accuracy down more than 15 points over two weeks." })} />
+              <KpiTile loading={ov.loading} label={t("school.tile.parents", { defaultValue: "Parents linked" })} value={T?.parentsLinkedPct != null ? fmtPercent(f(T.parentsLinkedPct)) : NO_DATA}
+                to={`${BASE}/people/parents`} helpText={t("school.tile.parentsHelp", { defaultValue: "Students with at least one parent following their learning." })} />
+            </div>
+          </SubPanel>
+          <SubPanel idBase="ov" id="map" value={pane}>
             <ChartCard
+              className={s.sunFit}
               title={t("school.sun.title", { defaultValue: "How is the school organised and doing?" })}
               answer={t("school.sun.answer", { defaultValue: "Size = students, colour = engagement. Click a unit to open it." })}
               info={t("school.sun.info", { defaultValue: "Engagement mixes active days (50 %), time against 20 minutes a day (30 %) and answers (20 %)." })}
@@ -166,6 +180,8 @@ export default function OverviewPage() {
                 />
               )}
             </ChartCard>
+          </SubPanel>
+          <SubPanel idBase="ov" id="grades" value={pane}>
             <ChartCard
               title={t("school.heat.title", { defaultValue: "Which grade needs help in which subject?" })}
               answer={d?.dip && d.dip.delta <= -5
@@ -176,16 +192,20 @@ export default function OverviewPage() {
             >
               <SubjectHeatmap heatmap={d?.heatmap} onRow={d?.heatmap?.rowsAre !== "group" ? (r) => navigate(`${BASE}/units/${r.id}${window.location.search}`) : null} />
             </ChartCard>
-          </div>
-          <ChartCard
-            title={t("school.trend.title", { defaultValue: "Is learning time per student going up?" })}
-            answer={T ? t("school.trend.answer", { defaultValue: "{{m}} per student in this period.", m: fmtDuration(T.minutesPerStudent || 0) }) : ""}
-            loading={ov.loading}
-            table={toTable.trend(trend, t)}
-          >
-            <TrendLine data={trend} unit="min" seriesLabel={t("school.trend.now", { defaultValue: "This period" })} prevLabel={d?.range?.term ? (d.range.term.previous || "") : t("school.trend.before", { defaultValue: "Period before" })} />
-          </ChartCard>
-          <AtRiskPreview lists={lists} />
+          </SubPanel>
+          <SubPanel idBase="ov" id="trend" value={pane}>
+            <ChartCard
+              title={t("school.trend.title", { defaultValue: "Is learning time per student going up?" })}
+              answer={T ? t("school.trend.answer", { defaultValue: "{{m}} per student in this period.", m: fmtDuration(T.minutesPerStudent || 0) }) : ""}
+              loading={ov.loading}
+              table={toTable.trend(trend, t)}
+            >
+              <TrendLine data={trend} unit="min" seriesLabel={t("school.trend.now", { defaultValue: "This period" })} prevLabel={d?.range?.term ? (d.range.term.previous || "") : t("school.trend.before", { defaultValue: "Period before" })} />
+            </ChartCard>
+          </SubPanel>
+          <SubPanel idBase="ov" id="people" value={pane}>
+            <AtRiskPreview lists={lists} />
+          </SubPanel>
         </>
       )}
     </div>

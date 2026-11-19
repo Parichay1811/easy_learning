@@ -1,18 +1,10 @@
-import { FaRobot, FaMicrochip, FaNetworkWired, FaBolt } from "react-icons/fa";
-import styles from "./RoboticBackground.module.css";
+import EntryScene from "../Entry/EntryScene";
 
-// Shared dark/circuit backdrop used on the role-select gate and every
-// role's login page so the entry flow reads as one consistent screen.
-const RoboticBackground = () => (
-  <>
-    <div className={styles.base} aria-hidden="true" />
-    <div className={styles.grid} aria-hidden="true" />
-    <div className={styles.scanline} aria-hidden="true" />
-    <FaRobot className={styles.botIcon} style={{ top: "8%", left: "6%", fontSize: "5rem", animationDelay: "0s" }} aria-hidden="true" />
-    <FaMicrochip className={styles.botIcon} style={{ top: "68%", left: "4%", fontSize: "4rem", animationDelay: "-3s" }} aria-hidden="true" />
-    <FaNetworkWired className={styles.botIcon} style={{ top: "10%", right: "6%", fontSize: "4.5rem", animationDelay: "-6s" }} aria-hidden="true" />
-    <FaBolt className={styles.botIcon} style={{ bottom: "8%", right: "8%", fontSize: "3.5rem", animationDelay: "-2s" }} aria-hidden="true" />
-  </>
-);
+// Kept under its old name for the pages that still import it (the "I teach
+// privately" sign-up, pages/teacher/SoloSignup.jsx): the dark circuit-board
+// backdrop with robot icons is gone, and it now shows the same sunny meadow as
+// the role page and every sign-in page, so the entry flow reads as one place.
+// New pages should use components/Entry (EntryScene, EntryShell) directly.
+const RoboticBackground = () => <EntryScene tint="#20c997" butterflies={2} />;
 
 export default RoboticBackground;

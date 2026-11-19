@@ -4,10 +4,11 @@
 import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaGripVertical, FaPen, FaPlus, FaTrash, FaChartPie, FaCheck, FaTimes } from "react-icons/fa";
-import { Button, EmptyState, PlanLockCard, Skeleton } from "../../../components/dashboard";
+import { FaGripVertical, FaPen, FaPlus, FaTrash, FaChartPie, FaCheck, FaTimes, FaMagic } from "react-icons/fa";
+import { Button, EmptyState, PlanLockCard, Skeleton, Sheet } from "../../../components/dashboard";
 import { api, useLoad } from "./api";
 import { useSchool, BASE } from "./context";
+import { useMedia } from "./useMedia";
 import { Health, Field, Result, Dialog } from "./bits";
 import s from "./school.module.css";
 
@@ -75,16 +76,17 @@ function Node({ node, selected, onSelect, canEdit, onRename, onAddChild, onDelet
   );
 }
 
-function UnitPanel({ unitId, all, canEdit, canMove, onChanged }) {
+function UnitPanel({ unitId, all, canEdit, canMove, onChanged, bare }) {
   const { t } = useTranslation();
   const people = useLoad(unitId ? `/units/${unitId}/people` : null, { skip: !unitId });
   const unplaced = useLoad("/people/students", { skip: !unitId || !canMove });
   const [picked, setPicked] = useState([]);
   const [moveTo, setMoveTo] = useState("");
   const [result, setResult] = useState(null);
-  if (!unitId) return <div className={s.card}><p className={s.muted}>{t("school.tree.pick", { defaultValue: "Choose a unit to see its students, teachers and groups." })}</p></div>;
-  if (people.loading) return <div className={s.card}><Skeleton variant="text" lines={6} /></div>;
-  if (people.error) return <div className={s.card}><p className={s.errorText}>{people.error.message}</p></div>;
+  const box = bare ? undefined : s.card;
+  if (!unitId) return <div className={box}><p className={s.muted}>{t("school.tree.pick", { defaultValue: "Choose a unit to see its students, teachers and groups." })}</p></div>;
+  if (people.loading) return <div className={box}><Skeleton variant="text" lines={6} /></div>;
+  if (people.error) return <div className={box}><p className={s.errorText}>{people.error.message}</p></div>;
   const p = people.data;
   const free = (unplaced.data?.students || []).filter((x) => !x.unitId).slice(0, 300);
   const me = all.find((n) => n.id === unitId);
@@ -98,8 +100,8 @@ function UnitPanel({ unitId, all, canEdit, canMove, onChanged }) {
     catch (e) { setResult({ ok: false, text: e.message }); }
   };
   return (
-    <section className={`${s.card} ${s.sticky}`} aria-labelledby="unit-h">
-      <h2 id="unit-h" className={s.cardTitle}>{p.unit.label}</h2>
+    <section className={bare ? undefined : `${s.card} ${s.sticky}`} aria-labelledby={bare ? undefined : "unit-h"}>
+      {!bare && <h2 id="unit-h" className={s.cardTitle}>{p.unit.label}</h2>}
       <p className={s.cardSub}>{countsText(t, { students: p.students.length, teachers: p.teachers.length, groups: p.groups.length })}</p>
       <div className={s.actions} style={{ marginTop: 0 }}>
         <Button size="sm" to={`${BASE}/units/${unitId}`}>{t("school.tree.dashboard", { defaultValue: "Open dashboard" })}</Button>
@@ -159,6 +161,9 @@ export default function TreePage() {
   const [result, setResult] = useState(null);
   const [adding, setAdding] = useState(null); // { parent?, type }
   const [newName, setNewName] = useState("");
+  const [bulkOpen, setBulkOpen] = useState(false);
+  // Wide screens show the unit beside the tree; narrower ones open it in a sheet.
+  const wide = useMedia("(min-width: 1200px)");
   const selected = params.get("unit");
   const all = useMemo(() => flatten(data.data?.tree || []), [data.data]);
   const canEdit = Boolean(isAdmin && data.data?.canEdit);
@@ -180,51 +185,59 @@ export default function TreePage() {
     setAdding(null); setNewName("");
   };
   const select = (id) => setParams((p) => { const n = new URLSearchParams(p); n.set("unit", id); return n; }, { replace: true });
+  const unselect = () => setParams((p) => { const n = new URLSearchParams(p); n.delete("unit"); return n; }, { replace: true });
+  const bulk = async () => {
+    setResult(null);
+    try {
+      const r = await api.post("/units/bulk", { spec, parentId: bulkParent || null });
+      setResult({ ok: true, text: t("school.tree.bulkDone", { defaultValue: "{{n}} units added.", n: r.created }) });
+      setBulkOpen(false);
+      data.reload();
+    } catch (e) { setResult({ ok: false, text: e.message }); }
+  };
 
   return (
-    <div className={s.page}>
+    <div className={`${s.page} ${s.pageTight}`}>
       <div className={s.head}>
-        <div>
+        <div className={s.grow}>
           <h1 className={s.title}>{t("school.tree.title", { defaultValue: "School tree" })}</h1>
-          <p className={s.sub}>{t("school.tree.sub", { defaultValue: "Campus → grade → section. Drag to move, double-click a name to rename." })}</p>
+          <p className={`${s.sub} ${s.subOptional}`}>{wide ? t("school.tree.sub", { defaultValue: "Campus → grade → section. Drag to move, double-click a name to rename." }) : t("school.tree.subTouch", { defaultValue: "Campus → grade → section. Tap a unit to see its people." })}</p>
         </div>
         {canEdit && (
           <div className={s.row}>
-            <Button size="sm" variant="soft" icon={FaPlus} onClick={() => setAdding({ type: "campus" })}>{t("school.tree.addCampus", { defaultValue: "Campus" })}</Button>
-            <Button size="sm" variant="soft" icon={FaPlus} onClick={() => setAdding({ type: "grade" })}>{t("school.tree.addGrade", { defaultValue: "Grade" })}</Button>
-            <Button size="sm" variant="soft" icon={FaPlus} onClick={() => setAdding({ type: "department" })}>{t("school.tree.addDept", { defaultValue: "Department" })}</Button>
+            <Button size="sm" icon={FaMagic} aria-haspopup="dialog" onClick={() => setBulkOpen(true)}>{t("school.tree.bulkBtn", { defaultValue: "Build grades & sections" })}</Button>
+            <Button size="sm" variant="soft" icon={FaPlus} aria-haspopup="dialog" onClick={() => setAdding({ type: "campus" })}>{t("school.tree.addCampus", { defaultValue: "Campus" })}</Button>
+            <Button size="sm" variant="soft" icon={FaPlus} aria-haspopup="dialog" onClick={() => setAdding({ type: "grade" })}>{t("school.tree.addGrade", { defaultValue: "Grade" })}</Button>
+            <Button size="sm" variant="soft" icon={FaPlus} aria-haspopup="dialog" onClick={() => setAdding({ type: "department" })}>{t("school.tree.addDept", { defaultValue: "Department" })}</Button>
           </div>
         )}
       </div>
-      {canEdit && (
-        <section className={s.card} aria-labelledby="bulk-h">
-          <h2 id="bulk-h" className={s.cardTitle}>{t("school.tree.bulkTitle", { defaultValue: "Create many at once" })}</h2>
-          <div className={s.row} style={{ alignItems: "flex-end" }}>
-            <div className={s.grow} style={{ minWidth: 240 }}>
-              <Field id="bulk-spec" label={t("school.tree.bulkLabel", { defaultValue: "Grades and sections" })} hint={t("school.tree.bulkHint", { defaultValue: 'For example "Grades 1-8, sections A-C" or "Year 4-6, sections Red, Blue". Existing ones are kept.' })}>
-                <input id="bulk-spec" className={s.input} value={spec} onChange={(e) => setSpec(e.target.value)} aria-describedby="bulk-spec-hint" />
-              </Field>
-            </div>
-            {all.some((n) => n.type === "campus") && (
-              <Field id="bulk-parent" label={t("school.tree.inCampus", { defaultValue: "In campus" })}>
-                <select id="bulk-parent" className={s.select} value={bulkParent} onChange={(e) => setBulkParent(e.target.value)}>
-                  <option value="">{t("school.tree.noCampus", { defaultValue: "No campus" })}</option>
-                  {all.filter((n) => n.type === "campus").map((n) => <option key={n.id} value={n.id}>{n.name}</option>)}
-                </select>
-              </Field>
-            )}
-            <Button onClick={() => run(() => api.post("/units/bulk", { spec, parentId: bulkParent || null }), (r) => t("school.tree.bulkDone", { defaultValue: "{{n}} units added.", n: r.created }))}>{t("school.tree.create", { defaultValue: "Create" })}</Button>
-          </div>
-        </section>
+      {canEdit && bulkOpen && (
+        <Sheet title={t("school.tree.bulkTitle", { defaultValue: "Create many at once" })} text={t("school.tree.bulkSub", { defaultValue: "Every grade and section in one go. Existing ones are kept." })} onClose={() => setBulkOpen(false)}
+          footer={<><Button variant="ghost" onClick={() => setBulkOpen(false)}>{t("school.cancel", { defaultValue: "Cancel" })}</Button><Button disabled={!spec.trim()} onClick={bulk}>{t("school.tree.create", { defaultValue: "Create" })}</Button></>}>
+          <Field id="bulk-spec" label={t("school.tree.bulkLabel", { defaultValue: "Grades and sections" })} hint={t("school.tree.bulkHint", { defaultValue: 'For example "Grades 1-8, sections A-C" or "Year 4-6, sections Red, Blue". Existing ones are kept.' })}>
+            <input id="bulk-spec" className={s.input} value={spec} onChange={(e) => setSpec(e.target.value)} aria-describedby="bulk-spec-hint" onKeyDown={(e) => { if (e.key === "Enter" && spec.trim()) bulk(); }} />
+          </Field>
+          {all.some((n) => n.type === "campus") && (
+            <Field id="bulk-parent" label={t("school.tree.inCampus", { defaultValue: "In campus" })}>
+              <select id="bulk-parent" className={s.select} value={bulkParent} onChange={(e) => setBulkParent(e.target.value)}>
+                <option value="">{t("school.tree.noCampus", { defaultValue: "No campus" })}</option>
+                {all.filter((n) => n.type === "campus").map((n) => <option key={n.id} value={n.id}>{n.name}</option>)}
+              </select>
+            </Field>
+          )}
+          <Result result={result} />
+        </Sheet>
       )}
       <Result result={result} />
       <div className={s.treeLayout}>
-        <section className={s.card} aria-labelledby="tree-h">
+        <section className={`${s.card} ${s.treeScroll}`} aria-labelledby="tree-h">
           <h2 id="tree-h" className="d-sr-only">{t("school.tree.title", { defaultValue: "School tree" })}</h2>
           {data.loading && <Skeleton variant="text" lines={8} />}
           {data.error && <p className={s.errorText}>{data.error.message}</p>}
           {data.data && !all.length && (
-            <EmptyState title={t("school.tree.emptyTitle", { defaultValue: "No structure yet" })} text={canEdit ? t("school.tree.emptyText", { defaultValue: "Start with the bulk box above: it builds every grade and section in one go." }) : t("school.tree.emptyStaff", { defaultValue: "Your admin hasn't set up the structure yet." })} compact />
+            <EmptyState title={t("school.tree.emptyTitle", { defaultValue: "No structure yet" })} text={canEdit ? t("school.tree.emptyTextBtn", { defaultValue: "Build every grade and section in one go, then add students." }) : t("school.tree.emptyStaff", { defaultValue: "Your admin hasn't set up the structure yet." })}
+              actionLabel={canEdit ? t("school.tree.bulkBtn", { defaultValue: "Build grades & sections" }) : undefined} onAction={canEdit ? () => setBulkOpen(true) : undefined} compact />
           )}
           {canEdit && dragId && (
             <div className={`${s.node} ${s.nodeDrop}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => { e.preventDefault(); run(() => api.patch(`/units/${dragId}`, { parentId: null }), () => t("school.tree.moved", { defaultValue: "Moved." })); }}>
@@ -242,8 +255,13 @@ export default function TreePage() {
             </p>
           )}
         </section>
-        <UnitPanel unitId={selected} all={all} canEdit={canEdit} canMove={can("people.move")} onChanged={data.reload} />
+        {wide && <UnitPanel unitId={selected} all={all} canEdit={canEdit} canMove={can("people.move")} onChanged={data.reload} />}
       </div>
+      {!wide && selected && (
+        <Sheet title={all.find((n) => n.id === selected)?.name || t("school.unit", { defaultValue: "Unit" })} onClose={unselect} size="lg">
+          <UnitPanel bare unitId={selected} all={all} canEdit={canEdit} canMove={can("people.move")} onChanged={data.reload} />
+        </Sheet>
+      )}
       {adding && (
         <Dialog title={adding.parent ? t("school.tree.addInTitle", { defaultValue: "Add a {{type}} in {{name}}", type: adding.type, name: adding.parent.name }) : t("school.tree.addTitle", { defaultValue: "Add a {{type}}", type: adding.type })} onClose={() => setAdding(null)}>
           <Field id="unit-type" label={t("school.tree.type", { defaultValue: "Type" })}>

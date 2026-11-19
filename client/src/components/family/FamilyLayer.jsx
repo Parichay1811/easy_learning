@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { authHeaders } from "../../utils/authHeaders";
+import { useLinks } from "../links";
 import s from "./FamilyLayer.module.css";
 
 const API = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
@@ -11,13 +12,15 @@ const STICKERS = { star: "⭐", trophy: "🏆", heart: "💖", rocket: "🚀", r
 const LEARNER = /^\/(home|dashboard|subject|module|games|ai-teacher|about-us|contact-us)(\/|$)/;
 const LEARNING = /^\/(home|subject|module|games|ai-teacher)(\/|$)/;
 const BREAK_KEY = "family_break";
+const TOAST_KEY = "links_toast_dismissed";
+const dismissedIds = () => { try { return new Set(JSON.parse(sessionStorage.getItem(TOAST_KEY) || "[]")); } catch { return new Set(); } };
 
 // What the child sees of their family's settings (PAR-012, PAR-042, PAR-060, PAR-061):
 // cheers from their guardians, their weekly goal and reward, and gentle healthy-use screens.
 export default function FamilyLayer() {
   const { t } = useTranslation();
   const T = (k, d, o) => t(`family.${k}`, { defaultValue: d, ...o });
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const navigate = useNavigate();
   const [fam, setFam] = useState(null);
   const [goalHidden, setGoalHidden] = useState(false);
@@ -27,6 +30,32 @@ export default function FamilyLayer() {
   const learnerPage = LEARNER.test(pathname);
 
   const signedIn = Boolean(authHeaders().Authorization);
+
+  // Requests from grown-ups, teachers and schools waiting for the learner (services/linkRequests.js):
+  // a friendly toast on learner pages, linking to Dashboard → My people. The hook plays the
+  // notify sound once for a request that wasn't seen before.
+  const links = useLinks("student", { enabled: learnerPage && signedIn, poll: 60000 });
+  const [hiddenReqs, setHiddenReqs] = useState(dismissedIds);
+  const onPeopleTab = pathname === "/dashboard" && new URLSearchParams(search).get("tab") === "people";
+  const waiting = (links.data?.incoming || []).filter((r) => !hiddenReqs.has(r.id));
+  const hideRequests = () => {
+    const next = new Set([...hiddenReqs, ...waiting.map((r) => r.id)]);
+    setHiddenReqs(next);
+    try { sessionStorage.setItem(TOAST_KEY, JSON.stringify([...next])); } catch { /* private mode */ }
+  };
+  const requestToast = learnerPage && signedIn && !onPeopleTab && waiting.length > 0 ? (
+    <div className={s.reqToast} role="status" aria-live="polite">
+      <span className={s.reqIcon} aria-hidden="true">💌</span>
+      <span className={s.reqText}>
+        <strong>{waiting.length === 1
+          ? T("reqOne", "{{name}} sent you a request!", { name: waiting[0].from.name || waiting[0].org?.name || waiting[0].from.email })
+          : T("reqMany", "You have {{n}} new requests!", { n: waiting.length })}</strong>
+        <span>{T("reqHelp", "Tap to see it and say yes or no.")}</span>
+      </span>
+      <button type="button" data-sound="forward" className={s.btnSmall} onClick={() => { hideRequests(); navigate("/dashboard?tab=people"); }}>{T("reqSee", "See it")}</button>
+      <button type="button" data-sound="close" className={s.close} aria-label={T("hide", "Hide")} onClick={hideRequests}>✕</button>
+    </div>
+  ) : null;
   useEffect(() => {
     if (!learnerPage || !signedIn) return undefined;
     let live = true;
@@ -70,7 +99,8 @@ export default function FamilyLayer() {
   }, [cheer?.id, cheer?.hasVoice]);
   const voiceUrl = cheer && voice.id === cheer.id ? voice.url : null;
 
-  if (!learnerPage || !signedIn || !fam) return null;
+  if (!learnerPage || !signedIn) return null;
+  if (!fam) return requestToast;
 
   const seen = async () => {
     try { await fetch(`${API}/api/dashboard/cheers/${cheer.id}/seen`, { method: "POST", headers: authHeaders() }); } catch { /* ignore */ }
@@ -96,6 +126,7 @@ export default function FamilyLayer() {
 
   return (
     <>
+      {!cheer && requestToast}
       {cheer && (
         <div className={s.backdrop} role="presentation">
           <div className={s.cheer} role="dialog" aria-modal="true" aria-labelledby="cheer-h">
@@ -117,7 +148,7 @@ export default function FamilyLayer() {
           <button type="button" className={s.btnSmall} onClick={() => { setBreakDue(false); try { sessionStorage.setItem(BREAK_KEY, "0"); } catch { /* ignore */ } }}>{T("done", "Done")}</button>
         </div>
       )}
-      {fam.goal && fam.progress && !goalHidden && /^\/(home|dashboard)$/.test(pathname) && (
+      {fam.goal && fam.progress && !goalHidden && /^\/home$/.test(pathname) && (
         <aside className={s.goal} aria-label={T("goalLabel", "My weekly goal")}>
           <span className={s.goalRing} aria-hidden="true">{fam.progress.reached ? "🏆" : "🎯"}</span>
           <span>

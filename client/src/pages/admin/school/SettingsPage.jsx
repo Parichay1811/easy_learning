@@ -438,10 +438,15 @@ export default function SettingsPage() {
     { key: "audit", label: t("school.set.audit", { defaultValue: "Audit log" }) },
   ];
   return (
-    <div className={s.page}>
-      <div className={s.head}><div><h1 className={s.title}>{t("school.nav.settings", { defaultValue: "Settings" })}</h1></div></div>
-      <Tabs label={t("school.nav.settings", { defaultValue: "Settings" })} tabs={tabs} value={tab} onChange={(k) => setSp({ tab: k }, { replace: true })} />
-      <div role="tabpanel">
+    <div className={`${s.page} ${s.pageTight}`}>
+      <div className={s.head}>
+        <div>
+          <h1 className={s.title}>{t("school.nav.settings", { defaultValue: "Settings" })}</h1>
+          <p className={`${s.sub} ${s.subOptional}`}>{t("school.set.sub", { defaultValue: "Your school's rules, calendar, look, data protection and billing. Each tab saves on its own." })}</p>
+        </div>
+      </div>
+      <Tabs label={t("school.nav.settings", { defaultValue: "Settings" })} tabs={tabs} value={tab} onChange={(k) => setSp({ tab: k })} />
+      <div role="tabpanel" className={s.panel}>
         {tab === "policies" && <Policies />}
         {tab === "calendar" && <Calendar />}
         {tab === "promotion" && <Promotion />}

@@ -1,8 +1,9 @@
 // Small building blocks shared by the console sections. Data-dense, calm,
 // keyboard friendly; colours come from the dashboard kit tokens.
 import { cloneElement, isValidElement, useEffect, useId, useRef, useState } from "react";
+import { sfx } from "../../../utils/sounds";
 import { useTranslation } from "react-i18next";
-import { Button, EmptyState, Skeleton } from "../../../components/dashboard";
+import { Button, EmptyState, Sheet, Skeleton } from "../../../components/dashboard";
 import s from "./console.module.css";
 import { STATUS_TONE } from "./labels";
 
@@ -35,40 +36,10 @@ export function StatusPill({ status, label }) {
   return <Pill tone={STATUS_TONE[status] || "neutral"}>{label || t(`sa.status.${status}`, String(status || "—").replace(/_/g, " "))}</Pill>;
 }
 
+// Dialogs use the kit's Sheet: centred on wide screens, a sheet from the bottom
+// on phones, with the open / close sounds. `wide` makes it the large size.
 export function Modal({ title, onClose, children, footer, wide }) {
-  const ref = useRef(null);
-  const hid = useId();
-  const closeRef = useRef(onClose);
-  useEffect(() => { closeRef.current = onClose; }, [onClose]);
-  useEffect(() => {
-    const prev = document.activeElement;
-    const el = ref.current;
-    const first = el?.querySelector("input, textarea, select, button:not([data-close])");
-    (first || el)?.focus();
-    const onKey = (e) => {
-      if (e.key === "Escape") closeRef.current();
-      if (e.key === "Tab" && el) {
-        const f = [...el.querySelectorAll("a[href], button:not([disabled]), input, textarea, select, [tabindex]:not([tabindex='-1'])")];
-        if (!f.length) return;
-        if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
-        else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
-      }
-    };
-    document.addEventListener("keydown", onKey);
-    return () => { document.removeEventListener("keydown", onKey); prev?.focus?.(); };
-  }, []);
-  return (
-    <div className={s.overlay} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div ref={ref} className={`${s.modal} ${wide ? s.modalWide : ""}`} role="dialog" aria-modal="true" aria-labelledby={hid} tabIndex={-1}>
-        <header className={s.modalHead}>
-          <h2 id={hid}>{title}</h2>
-          <button type="button" className={s.closeBtn} onClick={onClose} aria-label="Close" data-close>×</button>
-        </header>
-        <div className={s.modalBody}>{children}</div>
-        {footer && <footer className={s.modalFoot}>{footer}</footer>}
-      </div>
-    </div>
-  );
+  return <Sheet title={title} onClose={onClose} footer={footer} size={wide ? "lg" : "md"}>{children}</Sheet>;
 }
 
 export function Field({ label, hint, children, error }) {
@@ -131,12 +102,59 @@ export function Pager({ page, limit, total, onPage }) {
   );
 }
 
-export function Tabs({ tabs, value, onChange, label }) {
+// The parts of one page (underline tabs under the page's pill row): role=tablist,
+// arrow keys / Home / End, scrolls sideways instead of wrapping. Pair with
+// <TabBody idBase value> so each panel is labelled by its tab.
+export function Tabs({ tabs, value, onChange, label, idBase = "part", end }) {
+  const ref = useRef(null);
+  const list = tabs.filter(Boolean);
+  useEffect(() => {
+    const el = ref.current?.querySelector('[aria-selected="true"]');
+    if (el && ref.current.scrollWidth > ref.current.clientWidth) el.scrollIntoView?.({ block: "nearest", inline: "nearest" });
+  }, [value]);
+  const onKey = (e) => {
+    const i = list.findIndex((tb) => tb.key === value);
+    const rtl = getComputedStyle(e.currentTarget).direction === "rtl";
+    let j = null;
+    if (e.key === (rtl ? "ArrowLeft" : "ArrowRight")) j = (i + 1) % list.length;
+    else if (e.key === (rtl ? "ArrowRight" : "ArrowLeft")) j = (i - 1 + list.length) % list.length;
+    else if (e.key === "Home") j = 0;
+    else if (e.key === "End") j = list.length - 1;
+    if (j == null) return;
+    e.preventDefault();
+    sfx.tab();
+    onChange(list[j].key);
+    requestAnimationFrame(() => ref.current?.querySelector(`[data-key="${CSS.escape(String(list[j].key))}"]`)?.focus());
+  };
   return (
-    <div className={s.tabs} role="tablist" aria-label={label}>
-      {tabs.map((tb) => (
-        <button key={tb.key} type="button" role="tab" aria-selected={value === tb.key} className={s.tab} onClick={() => onChange(tb.key)}>
-          {tb.label}{tb.badge ? <span className={s.tabBadge}>{tb.badge}</span> : null}
+    <div className={s.tabsRow}>
+      <div ref={ref} className={s.tabs} role="tablist" aria-label={label} onKeyDown={onKey}>
+        {list.map((tb) => {
+          const on = value === tb.key;
+          return (
+            <button key={tb.key} data-key={tb.key} id={`${idBase}-tab-${tb.key === "" ? "_" : tb.key}`} type="button" role="tab" aria-selected={on} aria-controls={`${idBase}-panel`} tabIndex={on ? 0 : -1} className={s.tab} onClick={() => { if (!on) onChange(tb.key); }}>
+              {tb.label}{tb.badge ? <span className={s.tabBadge}>{tb.badge}</span> : null}
+            </button>
+          );
+        })}
+      </div>
+      {end && <div className={s.tabsEnd}>{end}</div>}
+    </div>
+  );
+}
+
+// The panel of the open part (only one is rendered at a time).
+export function TabBody({ idBase = "part", value, children }) {
+  return <div id={`${idBase}-panel`} role="tabpanel" aria-labelledby={`${idBase}-tab-${value === "" ? "_" : value}`} className={s.tabBody}>{children}</div>;
+}
+
+// A filter (not navigation): a row of pressable chips, one chosen.
+export function Segmented({ options, value, onChange, label }) {
+  return (
+    <div className={s.seg} role="group" aria-label={label}>
+      {options.filter(Boolean).map((o) => (
+        <button key={`k-${o.key}`} type="button" className={s.segBtn} aria-pressed={value === o.key} onClick={() => onChange(o.key)}>
+          {o.label}{o.badge ? <span className={s.tabBadge}>{o.badge}</span> : null}
         </button>
       ))}
     </div>

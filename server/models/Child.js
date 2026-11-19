@@ -37,9 +37,11 @@ const schema = new mongoose.Schema({
   verifiedAt: { type: Date, default: null },
   // How the link was proven: 'school' (an org admin already linked this parent
   // and student), 'child_code' (the learner generated a one-time code),
-  // 'parent_created' (this parent created the managed learner) or
-  // 'co_guardian' (a verified guardian invited this parent).
-  verifiedBy: { type: String, enum: ['school', 'child_code', 'parent_created', 'co_guardian', null], default: null },
+  // 'parent_created' (this parent created the managed learner),
+  // 'co_guardian' (a verified guardian invited this parent) or 'child_request'
+  // (the learner accepted the parent's request, or asked the parent themselves:
+  // services/linkRequests.js).
+  verifiedBy: { type: String, enum: ['school', 'child_code', 'parent_created', 'co_guardian', 'child_request', null], default: null },
   consentVersion: { type: String, default: '' },
 
   // FND-011 / FND-013

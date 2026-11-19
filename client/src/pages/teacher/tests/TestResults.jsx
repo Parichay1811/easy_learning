@@ -2,11 +2,12 @@
 // practice suggestions after a test (TCH-061).
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { FaFileExport, FaBullhorn, FaPen, FaUnlock, FaPenNib, FaTimes, FaLeaf } from "react-icons/fa";
-import { Button, KpiTile, ChartCard, ItemAnalysisTable, DataTable, Skeleton, EmptyState } from "../../../components/dashboard";
+import { FaFileExport, FaBullhorn, FaPen, FaUnlock, FaPenNib, FaTimes, FaLeaf, FaChartPie, FaQuestionCircle, FaUsers, FaBroadcastTower } from "react-icons/fa";
+import { Button, KpiTile, ChartCard, ItemAnalysisTable, DataTable, Skeleton, EmptyState, SubTabs, SubPanel, usePane } from "../../../components/dashboard";
 import { useTeacherApi, useT, fmtWhen, INTERACTION_LABELS } from "./api";
 import { Locked } from "./TeacherTestsApp";
 import s from "./tests.module.css";
+import { sfx } from "../../../utils/sounds";
 
 const fmtAnswer = (a) => {
   if (a === null || a === undefined || a === "") return "—";
@@ -42,6 +43,7 @@ function Distribution({ summary, passMark }) {
 }
 
 function AttemptDrawer({ testId, attemptId, onClose }) {
+  useEffect(() => { sfx.open(); }, []);
   const api = useTeacherApi();
   const tt = useT();
   const [a, setA] = useState(null);
@@ -173,7 +175,7 @@ export default function TestResults() {
   const tt = useT();
   const { id } = useParams();
   const [r, setR] = useState(null);
-  const [tab, setTab] = useState("results");
+  const [tab, setTab] = usePane(["overview", "questions", "students", "monitor", "practice"]);
   const [attempt, setAttempt] = useState(null);
   const [msg, setMsg] = useState("");
   const [locked, setLocked] = useState(null);
@@ -215,27 +217,47 @@ export default function TestResults() {
       </div>
       {msg && <p className={`${s.notice} ${s.noticeGood}`} role="status">{msg}</p>}
 
-      <div className={s.tabs} role="tablist">
-        {[["results", tt("res.tabResults", "Results")], ["monitor", tt("res.tabMonitor", "Live monitor")], ["practice", tt("res.tabPractice", "Practice next")]].map(([k, l]) => (
-          <button key={k} type="button" role="tab" aria-selected={tab === k} className={s.tab} onClick={() => setTab(k)}>{l}</button>
-        ))}
-      </div>
+      <SubTabs label={tt("res.sections", "Results sections")} value={tab} onChange={setTab} idBase="res"
+        tabs={[
+          { id: "overview", label: tt("res.tabOverview", "How it went"), icon: FaChartPie },
+          { id: "questions", label: tt("res.tabQuestions", "Questions"), icon: FaQuestionCircle },
+          { id: "students", label: tt("res.tabStudents", "Students"), icon: FaUsers, badge: summary.needsMarking || undefined },
+          { id: "monitor", label: tt("res.tabMonitor", "Live monitor"), icon: FaBroadcastTower },
+          { id: "practice", label: tt("res.tabPractice", "Practice next"), icon: FaLeaf },
+        ]} />
 
-      {tab === "monitor" ? <Monitor testId={id} /> : tab === "practice" ? <Suggestions testId={id} /> : (
-        <>
-          <div className={s.kpis}>
-            <KpiTile label={tt("res.finished", "Finished")} value={`${summary.finished} / ${summary.assigned}`} helpText={tt("res.finishedHelp", "Students whose attempt counts, out of everyone assigned.")} />
-            <KpiTile label={tt("res.average", "Average")} value={summary.mean == null ? null : `${summary.mean} %`} helpText={tt("res.averageHelp", "Mean of each student's counted attempt.")} />
-            <KpiTile label={tt("res.median", "Middle score")} value={summary.median == null ? null : `${summary.median} %`} />
-            <KpiTile label={tt("res.passed", "Passed")} value={summary.n ? `${summary.passed} / ${summary.n}` : null} tone={summary.n && summary.passed / summary.n < 0.5 ? "attention" : "neutral"} />
-            <KpiTile label={tt("res.toMark", "To mark")} value={String(summary.needsMarking)} tone={summary.needsMarking ? "attention" : "good"} />
-          </div>
-          <Distribution summary={summary} passMark={test.rules.passMark ?? 50} />
+      <SubPanel key={tab} id={tab} value={tab} idBase="res">
+        {tab === "monitor" && <Monitor testId={id} />}
+        {tab === "practice" && <Suggestions testId={id} />}
+        {tab === "overview" && (
+          <>
+            <div className={s.kpis}>
+              <KpiTile label={tt("res.finished", "Finished")} value={`${summary.finished} / ${summary.assigned}`} helpText={tt("res.finishedHelp", "Students whose attempt counts, out of everyone assigned.")} />
+              <KpiTile label={tt("res.average", "Average")} value={summary.mean == null ? null : `${summary.mean} %`} helpText={tt("res.averageHelp", "Mean of each student's counted attempt.")} />
+              <KpiTile label={tt("res.median", "Middle score")} value={summary.median == null ? null : `${summary.median} %`} />
+              <KpiTile label={tt("res.passed", "Passed")} value={summary.n ? `${summary.passed} / ${summary.n}` : null} tone={summary.n && summary.passed / summary.n < 0.5 ? "attention" : "neutral"} />
+              <KpiTile label={tt("res.toMark", "To mark")} value={String(summary.needsMarking)} tone={summary.needsMarking ? "attention" : "good"} />
+            </div>
+            <div className={s.grid2}>
+              <Distribution summary={summary} passMark={test.rules.passMark ?? 50} />
+              {attemptsCompare.length > 1 && (
+                <section className={s.card}>
+                  <h2>{tt("res.compare", "Compare tries")}</h2>
+                  <ul className={s.list}>{attemptsCompare.map((a) => <li key={a.attemptNo} className={s.listRow}><strong>{tt("res.tryN", "Try {{n}}", { n: a.attemptNo })}</strong><span className={s.grow}><span className={s.progress} style={{ display: "block" }}><span style={{ width: `${a.mean}%` }} /></span></span><span>{a.mean} % <span className={s.small}>({a.n})</span></span></li>)}</ul>
+                </section>
+              )}
+            </div>
+          </>
+        )}
+        {tab === "questions" && (
           <ChartCard title={tt("res.itemsQ", "Which questions were hard or broken?")} answer={items.some((i) => flagOf(i) === "check") ? tt("res.itemsCheck", "Some questions need a look: strong students missed them, or most chose the same wrong answer.") : tt("res.itemsOk", "No question looks broken.")} info={tt("res.itemsInfo", "Separates strong from weak: the share right among the top 27 % minus the bottom 27 %. Below 0 means strong students did worse: check the answer key.")}>
             <ItemAnalysisTable items={items.map((it) => ({ id: it.questionId, question: `${it.instruction}${it.prompt ? ` · ${it.prompt}` : ""}`, attempts: it.marked, pctCorrect: it.percentCorrect == null ? null : it.percentCorrect / 100, discrimination: it.discrimination, avgSeconds: it.avgSeconds, commonWrong: it.commonWrong ? { answer: it.commonWrong.answer, pct: it.commonWrong.share / 100 } : null, flag: flagOf(it) }))} />
           </ChartCard>
+        )}
+        {tab === "students" && (
           <section className={s.card}>
             <h2>{tt("res.perStudent", "Students")}</h2>
+            <p className={s.small} style={{ marginTop: -6 }}>{tt("res.perStudentCap", "One row per student. Open a row to see their answers.")}</p>
             <DataTable
               caption={tt("res.perStudentCap", "One row per student. Open a row to see their answers.")}
               getRowKey={(x) => x.studentId}
@@ -253,14 +275,8 @@ export default function TestResults() {
               ]}
             />
           </section>
-          {attemptsCompare.length > 1 && (
-            <section className={s.card}>
-              <h2>{tt("res.compare", "Compare tries")}</h2>
-              <ul className={s.list}>{attemptsCompare.map((a) => <li key={a.attemptNo} className={s.listRow}><strong>{tt("res.tryN", "Try {{n}}", { n: a.attemptNo })}</strong><span className={s.grow}><span className={s.progress} style={{ display: "block" }}><span style={{ width: `${a.mean}%` }} /></span></span><span>{a.mean} % <span className={s.small}>({a.n})</span></span></li>)}</ul>
-            </section>
-          )}
-        </>
-      )}
+        )}
+      </SubPanel>
       {attempt && <AttemptDrawer testId={id} attemptId={attempt} onClose={() => setAttempt(null)} />}
     </div>
   );

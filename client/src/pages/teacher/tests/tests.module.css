@@ -64,7 +64,8 @@
 .chipWarn { background: var(--d-attention-soft); color: var(--d-attention-ink); }
 .chipAlert { background: var(--d-alert-soft); color: var(--d-alert-ink); }
 .chipAccent { background: var(--d-accent-soft); color: var(--d-accent-ink); }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; min-width: 0; }
+.chips > .ellipsis { min-width: 0; max-width: 100%; }
 
 .iconBtn {
   min-width: 40px; min-height: 40px; display: inline-grid; place-items: center; border-radius: 12px;
@@ -99,10 +100,15 @@
   .itemRow > .itemTools { justify-content: flex-start; }
 }
 
-.modalBack { position: fixed; inset: 0; background: var(--d-overlay); z-index: 60; display: grid; place-items: center; padding: 16px; }
+.modalBack { position: fixed; inset: 0; background: var(--d-overlay); z-index: 1000; display: grid; place-items: center; padding: 16px; }
 .modal { width: min(920px, 100%); max-height: calc(100vh - 32px); overflow: auto; background: var(--d-card); border-radius: 22px; padding: 20px; box-shadow: var(--d-shadow-pop); display: flex; flex-direction: column; gap: 14px; }
 .modalHead { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .modalHead h2 { margin: 0; }
+@media (max-width: 700px) {
+  .modalBack { place-items: end stretch; padding: 0; }
+  .modal { width: 100%; max-height: 92dvh; border-radius: 24px 24px 0 0; padding: 16px 14px calc(16px + env(safe-area-inset-bottom)); }
+}
+@media (max-height: 500px) { .modalBack { padding: 8px; } .modal { max-height: calc(100dvh - 16px); } }
 
 /* Results */
 .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
@@ -131,6 +137,7 @@
 .table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
 .table th, .table td { padding: 8px; border-bottom: 1px solid var(--d-line); text-align: left; vertical-align: top; color: var(--d-ink); }
 .table th { font-weight: 700; color: var(--d-muted); white-space: nowrap; }
+.scrollArea .table thead th { position: sticky; top: 0; z-index: 1; background: var(--d-card); }
 .table input, .table select { min-height: 36px; width: 100%; box-sizing: border-box; border-radius: 8px; border: 1.5px solid var(--d-control); padding: 4px 8px; font: inherit; background: var(--d-card); color: var(--d-ink); }
 .tableWrap { overflow-x: auto; }
 .dirty td { background: var(--d-attention-soft); }
@@ -144,3 +151,51 @@
 .qline > .itemTools { margin-left: auto; }
 @media (max-width: 700px) { .qline > .itemTools { flex-basis: 100%; justify-content: flex-start; padding-left: 48px; } }
 .qline > .grow { flex: 1 1 200px; }
+
+/* ── Regrouped (sub-tabs) ────────────────────────────────────────────── */
+/* A list row whose buttons drop under the text when space runs out (never on top of it). */
+.wrapRow { flex-wrap: wrap; }
+.wrapRow > .grow { flex: 1 1 240px; }
+.wrapRow > .itemTools { flex: 0 0 auto; margin-inline-start: auto; }
+@media (max-width: 560px) { .wrapRow > .itemTools { flex-basis: 100%; justify-content: flex-start; } }
+
+/* A long list scrolls inside its card instead of stretching the page. */
+.scrollArea { max-height: min(62dvh, 680px); overflow-y: auto; overscroll-behavior: contain; padding-inline-end: 4px; }
+@media (max-width: 700px) { .scrollArea { max-height: none; } }
+
+/* Filters: inline on wide screens; a "Filters" button that opens a sheet on narrow ones. */
+.filterBar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; }
+.filterBar > .field { flex: 1 1 150px; }
+.filterSearch { flex: 2 1 220px !important; }
+
+/* Marking on narrow screens: the queue becomes a row of chips you swipe through. */
+@media (max-width: 900px) {
+  .queueList { flex-direction: row !important; overflow-x: auto; max-height: none !important; padding-bottom: 4px; scrollbar-width: thin; }
+  .queueList > li { flex: 0 0 auto; }
+  .queueList .queueBtn { width: auto; min-width: 140px; }
+}
+
+/* Editable grid and simple tables turn into small cards on phones (each cell shows its column name). */
+@media (max-width: 700px) {
+  .tableCards thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .tableCards, .tableCards tbody, .tableCards tr, .tableCards td { display: block; width: 100%; box-sizing: border-box; }
+  .tableCards tr { margin-bottom: 10px; padding: 6px 0; border: 2px solid var(--d-line); border-radius: 14px; background: var(--d-card); }
+  .tableCards td { display: flex; align-items: center; justify-content: space-between; gap: 12px; border: 0; padding: 6px 12px; min-width: 0 !important; width: 100% !important; }
+  .tableCards td::before { content: attr(data-label); color: var(--d-muted); font-size: 0.82rem; font-weight: 600; flex: 0 0 34%; }
+  .tableCards td > input:not([type="checkbox"]), .tableCards td > select { flex: 1 1 auto; min-width: 0; }
+  .tableCards td[data-label=""]::before { content: none; }
+  .tableCards td:empty { display: none; }
+}
+
+/* Keyboard shortcuts are only worth showing where there is a keyboard. */
+@media (hover: none) and (pointer: coarse) { .keysHint { display: none; } }
+
+/* Steps of a form that are not open (sub-tabs keep them mounted so nothing typed is lost). */
+.page[hidden], .card[hidden], .previewWrap[hidden] { display: none !important; }
+
+/* Short landscape phones: smaller page titles, no subtitle line, so the content starts higher. */
+@media (max-height: 500px) {
+  .head h1 { font-size: 1.25rem; }
+  .head > div:first-child > p { display: none; }
+  .page { gap: 12px; }
+}

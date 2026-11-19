@@ -3,10 +3,11 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { FaCheckCircle, FaRegCircle, FaUsers, FaUserPlus, FaClipboardList, FaChartLine, FaTrophy } from "react-icons/fa";
-import { StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, fmtDuration, fmtPercent, fmtDate, today } from "../../components/dashboard";
+import { StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel, usePane, fmtDuration, fmtPercent, fmtDate, today } from "../../components/dashboard";
 import { useLoad, useTeacherApi } from "./teacherApi";
 import { Avatar } from "./teacherUi";
-import { groupStyle, RISK_TEXT } from "./teacherShared";
+import { TeacherRequests } from "../../components/links";
+import { groupStyle, RISK_TEXT, useMedia } from "./teacherShared";
 import s from "./teacher.module.css";
 
 function greeting(t) {
@@ -40,7 +41,7 @@ function Checklist({ data, workspace, go, onDismiss }) {
       </div>
       <div className={s.progressBar} aria-hidden="true"><span style={{ width: `${(done / steps.length) * 100}%` }} /></div>
       <ol className={s.checklist} style={{ marginTop: 14 }}>
-        {steps.map((st) => (
+        {steps.filter((st) => !st.done).map((st) => (
           <li key={st.key} className={`${s.checkItem} ${st.done ? s.checkDone : ""}`}>
             <span className={s.checkIcon} aria-hidden="true">{st.done ? <FaCheckCircle color="var(--d-good)" /> : <FaRegCircle />}</span>
             <div>
@@ -57,18 +58,26 @@ function Checklist({ data, workspace, go, onDismiss }) {
 
 export default function TodayView({ teacher, workspace, go, onWorkspaceChange }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { get, send } = useTeacherApi();
   const q = useLoad(() => get("/today"), []);
   const d = q.data;
+  // Wide screens: the three answers side by side (a HUD). Narrow: one at a time, as sub-tabs.
+  const narrow = useMedia("(max-width: 1099px)");
+  const [pane, setPane] = usePane(["classes", "nudge", "wins"]);
 
   const dismiss = async () => { await send("PATCH", "/workspace", { checklistDismissed: true }); onWorkspaceChange?.(); };
 
   const name = teacher?.name?.split(" ")[0] || "";
   const head = (
-    <div className={s.pageHead}>
+    <div className={s.headRow}>
       <div>
         <h1>{greeting(t)}{name ? `, ${name}` : ""}</h1>
         <p>{fmtDate(today(), { style: "long" })}</p>
+      </div>
+      <div className={s.headActions}>
+        <Button variant="soft" icon={FaUsers} onClick={() => go("groups")}>{t("teacher.today.openGroups", { defaultValue: "Open my groups" })}</Button>
+        <Button icon={FaClipboardList} onClick={() => navigate("/teacher/tests")}>{t("teacher.today.setTest", { defaultValue: "Set a test" })}</Button>
       </div>
     </div>
   );
@@ -76,19 +85,94 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
   if (q.error) return <>{head}<EmptyState tone="error" title={t("teacher.loadError", { defaultValue: "We couldn't load this page" })} text={q.error} actionLabel={t("teacher.retry", { defaultValue: "Try again" })} onAction={q.reload} /></>;
 
   const w = d.week;
+  const showNudge = () => {
+    if (narrow) setPane("nudge");
+    requestAnimationFrame(() => document.getElementById("needs-attention")?.focus());
+  };
   const chips = [];
-  if (d.attentionCount) chips.push({ kind: "nudge", text: t("teacher.today.chipAttention", { defaultValue: "{{count}} need a nudge", defaultValue_one: "{{count}} needs a nudge", count: d.attentionCount }), onClick: () => document.getElementById("needs-attention")?.focus() });
-  if (d.wins.length) chips.push({ kind: "celebrate", text: t("teacher.today.chipWins", { defaultValue: "{{count}} recent wins", count: d.wins.length }) });
-  if (d.classes.length) chips.push({ kind: "info", text: t("teacher.today.chipClasses", { defaultValue: "{{count}} classes today", count: d.classes.length }) });
+  if (d.attentionCount) chips.push({ kind: "nudge", text: t("teacher.today.chipAttention", { defaultValue: "{{count}} need a nudge", defaultValue_one: "{{count}} needs a nudge", count: d.attentionCount }), onClick: showNudge });
+  if (d.wins.length) chips.push({ kind: "celebrate", text: t("teacher.today.chipWins", { defaultValue: "{{count}} recent wins", count: d.wins.length }), onClick: narrow ? () => setPane("wins") : undefined });
+  if (d.classes.length) chips.push({ kind: "info", text: t("teacher.today.chipClasses", { defaultValue: "{{count}} classes today", count: d.classes.length }), onClick: narrow ? () => setPane("classes") : undefined });
+
+  const classes = (
+    <ChartCard title={t("teacher.today.classes", { defaultValue: "What's on today?" })}
+      answer={d.classes.length ? t("teacher.today.classesAnswer", { defaultValue: "{{count}} classes on your timetable.", count: d.classes.length }) : t("teacher.today.noClasses", { defaultValue: "No classes on your timetable today." })}
+      empty={!d.classes.length && { title: t("teacher.today.noClassesTitle", { defaultValue: "A free day" }), text: t("teacher.today.noClassesText", { defaultValue: "Add a weekly time to a group and it shows up here." }), actionLabel: t("teacher.today.openGroups", { defaultValue: "Open my groups" }), onAction: () => go("groups") }}>
+      <ul className={`${s.classList} ${s.hudList}`}>
+        {d.classes.map((c, i) => (
+          <li key={i} className={s.classItem} style={groupStyle(c)}>
+            <span className={s.classTime}>{c.startTime}<span>{c.endTime}</span></span>
+            <span>
+              <span className={s.className}>{c.emoji} {c.groupName}</span>
+              <span className={s.muted} style={{ display: "block", fontSize: "0.9rem" }}>{[c.subject, t("teacher.nStudents", { defaultValue: (c.studentCount) === 1 ? "1 student" : "{{count}} students", count: c.studentCount })].filter(Boolean).join(" · ")}</span>
+            </span>
+            <span className={s.row}>
+              {c.state === "now" && <span className={`${s.badge} ${s.badgeGood}`}>{t("teacher.today.now", { defaultValue: "Now" })}</span>}
+              {c.state === "done" && <span className={s.badge}>{t("teacher.today.done", { defaultValue: "Done" })}</span>}
+              <Button size="sm" variant="ghost" onClick={() => go("group", { id: c.groupId })}>{t("teacher.open", { defaultValue: "Open" })}</Button>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </ChartCard>
+  );
+
+  const attention = (
+    <ChartCard title={t("teacher.today.attention", { defaultValue: "Who needs a nudge?" })}
+      answer={d.attentionCount ? t("teacher.today.attentionAnswer", { defaultValue: "{{count}} students could use a check-in.", defaultValue_one: "{{count}} student could use a check-in.", count: d.attentionCount }) : t("teacher.today.attentionNone", { defaultValue: "Everyone is on track." })}
+      info={t("teacher.today.attentionInfo", { defaultValue: "No learning for 7 days, or accuracy down more than 15 points over two weeks." })}
+      empty={!d.attentionCount && { title: t("teacher.today.allGood", { defaultValue: "All on track" }), text: d.counts.students ? t("teacher.today.allGoodText", { defaultValue: "Nobody needs a nudge right now." }) : t("teacher.today.noStudentsText", { defaultValue: "Add students to a group to see who needs help." }), actionLabel: d.counts.students ? undefined : t("teacher.add.btn", { defaultValue: "Add students" }), onAction: d.counts.students ? undefined : () => go("groups") }}>
+      <ul className={`${s.personList} ${s.hudList}`} id="needs-attention" tabIndex={-1}>
+        {d.attention.map((a) => (
+          <li key={a.studentId} className={s.personRow}>
+            <button type="button" className={s.personBtn} onClick={() => go("student", { id: a.studentId })}>
+              <Avatar name={a.name} />
+              <span className={s.personMain}>
+                <strong>{a.name}</strong>
+                <span>{t(`teacher.risk.${a.reason}`, { defaultValue: RISK_TEXT[a.reason] || "Needs a nudge" })}{a.lastActive ? ` · ${t("teacher.lastActive", { defaultValue: "last active {{date}}", date: fmtDate(a.lastActive, { style: "short" }) })}` : ""}</span>
+              </span>
+            </button>
+            <span className={`${s.badge} ${s.badgeAttention}`}>{a.groups[0]?.emoji} {a.groups[0]?.name}</span>
+          </li>
+        ))}
+      </ul>
+    </ChartCard>
+  );
+
+  const wins = (
+    <ChartCard title={t("teacher.today.wins", { defaultValue: "What went well?" })}
+      answer={d.wins.length ? t("teacher.today.winsAnswer", { defaultValue: "Celebrate these with your students." }) : t("teacher.today.noWins", { defaultValue: "Wins show up here as students learn." })}
+      empty={!d.wins.length && { title: t("teacher.today.noWinsTitle", { defaultValue: "No wins yet this week" }), text: t("teacher.today.noWins", { defaultValue: "Wins show up here as students learn." }) }}>
+      <ul className={`${s.personList} ${s.hudList}`}>
+        {d.wins.map((wn) => (
+          <li key={`${wn.studentId}-${wn.kind}`} className={s.personRow}>
+            <button type="button" className={s.personBtn} onClick={() => go("student", { id: wn.studentId })}>
+              <span className={s.avatar} aria-hidden="true"><FaTrophy /></span>
+              <span className={s.personMain}>
+                <strong>{wn.name}</strong>
+                <span>
+                  {wn.kind === "accuracy_up" && t("teacher.win.accuracy", { defaultValue: "Accuracy up {{value}} points this week", value: wn.value })}
+                  {wn.kind === "consistent" && t("teacher.win.consistent", { defaultValue: "Learned on {{value}} of the last 7 days", value: wn.value })}
+                  {wn.kind === "high_accuracy" && t("teacher.win.high", { defaultValue: "{{value}} % right this week", value: wn.value })}
+                </span>
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </ChartCard>
+  );
 
   return (
     <>
       {head}
+      {/* "Connect by email" invitations and requests: only takes space when there are some. */}
+      <TeacherRequests />
       <Checklist data={d} workspace={workspace} go={go} onDismiss={dismiss} />
-      {d.counts.students > 0 && <StoryCard title={t("teacher.today.storyTitle", { defaultValue: "This week" })} sentence={w.story} chips={chips} />}
+      {d.counts.students > 0 && <StoryCard className={s.storyCompact} title={t("teacher.today.storyTitle", { defaultValue: "This week" })} sentence={w.story} chips={chips} />}
 
       {d.counts.students > 0 && (
-        <div className={s.tiles}>
+        <div className={s.kpiRow}>
           <KpiTile label={t("teacher.kpi.active", { defaultValue: "Active students" })} value={`${w.totals.learners} / ${d.counts.students}`} helpText={t("teacher.kpi.activeHelp", { defaultValue: "Students with any learning in the last 7 days." })} />
           <KpiTile label={t("teacher.kpi.time", { defaultValue: "Learning time" })} value={fmtDuration(w.totals.minutes)} sparkline={w.series} delta={w.previous ? { current: w.totals.minutes, previous: w.previous.minutes, mode: "duration", vs: t("teacher.vsPrevWeek", { defaultValue: "the week before" }) } : undefined} />
           <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={w.totals.accuracy == null ? null : fmtPercent(w.totals.accuracy / 100)} delta={w.previous && w.previous.accuracy != null && w.totals.accuracy != null ? { current: w.totals.accuracy / 100, previous: w.previous.accuracy / 100, mode: "points", vs: t("teacher.vsPrevWeek", { defaultValue: "the week before" }) } : undefined} />
@@ -96,70 +180,21 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
         </div>
       )}
 
-      <div className={s.grid2}>
-        <ChartCard title={t("teacher.today.classes", { defaultValue: "What's on today?" })}
-          answer={d.classes.length ? t("teacher.today.classesAnswer", { defaultValue: "{{count}} classes on your timetable.", count: d.classes.length }) : t("teacher.today.noClasses", { defaultValue: "No classes on your timetable today." })}
-          empty={!d.classes.length && { title: t("teacher.today.noClassesTitle", { defaultValue: "A free day" }), text: t("teacher.today.noClassesText", { defaultValue: "Add a weekly time to a group and it shows up here." }), actionLabel: t("teacher.today.openGroups", { defaultValue: "Open my groups" }), onAction: () => go("groups") }}>
-          <ul className={s.classList}>
-            {d.classes.map((c, i) => (
-              <li key={i} className={s.classItem} style={groupStyle(c)}>
-                <span className={s.classTime}>{c.startTime}<span>{c.endTime}</span></span>
-                <span>
-                  <span className={s.className}>{c.emoji} {c.groupName}</span>
-                  <span className={s.muted} style={{ display: "block", fontSize: "0.9rem" }}>{[c.subject, t("teacher.nStudents", { defaultValue: (c.studentCount) === 1 ? "1 student" : "{{count}} students", count: c.studentCount })].filter(Boolean).join(" · ")}</span>
-                </span>
-                <span className={s.row}>
-                  {c.state === "now" && <span className={`${s.badge} ${s.badgeGood}`}>{t("teacher.today.now", { defaultValue: "Now" })}</span>}
-                  {c.state === "done" && <span className={s.badge}>{t("teacher.today.done", { defaultValue: "Done" })}</span>}
-                  <Button size="sm" variant="ghost" onClick={() => go("group", { id: c.groupId })}>{t("teacher.open", { defaultValue: "Open" })}</Button>
-                </span>
-              </li>
-            ))}
-          </ul>
-        </ChartCard>
-
-        <ChartCard title={t("teacher.today.attention", { defaultValue: "Who needs a nudge?" })}
-          answer={d.attentionCount ? t("teacher.today.attentionAnswer", { defaultValue: "{{count}} students could use a check-in.", defaultValue_one: "{{count}} student could use a check-in.", count: d.attentionCount }) : t("teacher.today.attentionNone", { defaultValue: "Everyone is on track." })}
-          info={t("teacher.today.attentionInfo", { defaultValue: "No learning for 7 days, or accuracy down more than 15 points over two weeks." })}
-          empty={!d.attentionCount && { title: t("teacher.today.allGood", { defaultValue: "All on track" }), text: d.counts.students ? t("teacher.today.allGoodText", { defaultValue: "Nobody needs a nudge right now." }) : t("teacher.today.noStudentsText", { defaultValue: "Add students to a group to see who needs help." }) }}>
-          <ul className={s.personList} id="needs-attention" tabIndex={-1}>
-            {d.attention.map((a) => (
-              <li key={a.studentId} className={s.personRow}>
-                <button type="button" className={s.personBtn} onClick={() => go("student", { id: a.studentId })}>
-                  <Avatar name={a.name} />
-                  <span className={s.personMain}>
-                    <strong>{a.name}</strong>
-                    <span>{t(`teacher.risk.${a.reason}`, { defaultValue: RISK_TEXT[a.reason] || "Needs a nudge" })}{a.lastActive ? ` · ${t("teacher.lastActive", { defaultValue: "last active {{date}}", date: fmtDate(a.lastActive, { style: "short" }) })}` : ""}</span>
-                  </span>
-                </button>
-                <span className={`${s.badge} ${s.badgeAttention}`}>{a.groups[0]?.emoji} {a.groups[0]?.name}</span>
-              </li>
-            ))}
-          </ul>
-        </ChartCard>
-      </div>
-
-      <ChartCard title={t("teacher.today.wins", { defaultValue: "What went well?" })}
-        answer={d.wins.length ? t("teacher.today.winsAnswer", { defaultValue: "Celebrate these with your students." }) : t("teacher.today.noWins", { defaultValue: "Wins show up here as students learn." })}
-        empty={!d.wins.length}>
-        <ul className={s.personList}>
-          {d.wins.map((wn) => (
-            <li key={`${wn.studentId}-${wn.kind}`} className={s.personRow}>
-              <button type="button" className={s.personBtn} onClick={() => go("student", { id: wn.studentId })}>
-                <span className={s.avatar} aria-hidden="true"><FaTrophy /></span>
-                <span className={s.personMain}>
-                  <strong>{wn.name}</strong>
-                  <span>
-                    {wn.kind === "accuracy_up" && t("teacher.win.accuracy", { defaultValue: "Accuracy up {{value}} points this week", value: wn.value })}
-                    {wn.kind === "consistent" && t("teacher.win.consistent", { defaultValue: "Learned on {{value}} of the last 7 days", value: wn.value })}
-                    {wn.kind === "high_accuracy" && t("teacher.win.high", { defaultValue: "{{value}} % right this week", value: wn.value })}
-                  </span>
-                </span>
-              </button>
-            </li>
-          ))}
-        </ul>
-      </ChartCard>
+      {narrow ? (
+        <>
+          <SubTabs label={t("teacher.today.tabs", { defaultValue: "Today at a glance" })} value={pane} onChange={setPane} idBase="today"
+            tabs={[
+              { id: "classes", label: t("teacher.today.tabClasses", { defaultValue: "Classes" }) },
+              { id: "nudge", label: t("teacher.today.tabNudge", { defaultValue: "Needs a nudge" }), badge: d.attentionCount || undefined },
+              { id: "wins", label: t("teacher.today.tabWins", { defaultValue: "Wins" }) },
+            ]} />
+          <SubPanel id="classes" value={pane} idBase="today">{classes}</SubPanel>
+          <SubPanel id="nudge" value={pane} idBase="today">{attention}</SubPanel>
+          <SubPanel id="wins" value={pane} idBase="today">{wins}</SubPanel>
+        </>
+      ) : (
+        <div className={s.hud}>{classes}{attention}{wins}</div>
+      )}
     </>
   );
 }

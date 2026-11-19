@@ -2,9 +2,10 @@
 // with a live preview on the real wooden-board QuestionCard.
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaPlus, FaTrash, FaArrowUp, FaArrowDown, FaMobileAlt, FaDesktop, FaRedo, FaCopy, FaShareAlt, FaImage, FaSave } from "react-icons/fa";
+import { FaPlus, FaTrash, FaArrowUp, FaArrowDown, FaMobileAlt, FaDesktop, FaRedo, FaCopy, FaShareAlt, FaImage, FaSave, FaQuestion, FaCheckSquare, FaLightbulb, FaTags, FaEye } from "react-icons/fa";
 import QuestionCard from "../../../components/QuestionCard/QuestionCard";
-import { Button, Skeleton } from "../../../components/dashboard";
+import { Button, Skeleton, SubTabs, usePane } from "../../../components/dashboard";
+import { useMedia } from "../teacherShared";
 import { useTeacherApi, useT, INTERACTION_LABELS, MODULE_KEYS, SUBJECT_KEYS, cap } from "./api";
 import { EMPTY, fromQuestion, toPayload, toPreview, starterFor } from "./questionForm";
 import { Locked } from "./TeacherTestsApp";
@@ -192,6 +193,12 @@ export default function QuestionEditor() {
 
   const set = (patch) => setF((x) => ({ ...x, ...patch }));
   const preview = useMemo(() => toPreview(f), [f]);
+  // The form in steps (sub-tabs). Wide screens keep the live preview beside it; narrow ones get a Preview tab.
+  const [pane, setPane] = usePane(["question", "answers", "help", "tags", "preview"]);
+  const wide = useMedia("(min-width: 1101px)");
+  const cur = wide && pane === "preview" ? "question" : pane;
+  const tabFields = { question: ["instruction", "imageUrl", "interaction", "module", "subject"], answers: ["options", "correct_answer", "speech_scoring"], tags: ["difficulty", "gradeBand", "estimatedSeconds", "points", "skillIds", "curriculumCode"] };
+  const errCount = (k) => errors.filter((e) => (tabFields[k] || []).includes(e.field)).length;
   const readOnly = !!meta && !meta.question.mine;
   const err = (field) => errors.filter((e) => e.field === field).map((e) => e.message).join(" ");
 
@@ -201,7 +208,13 @@ export default function QuestionEditor() {
     const r = id ? await api.put(`/bank/questions/${pm}/${ps}/${id}`, body) : await api.post("/bank/questions", body);
     setSaving(false);
     if (r.locked) { setLocked(r.locked); return; }
-    if (!r.ok) { setErrors(r.errors || []); setMsg({ kind: "error", text: r.message || tt("ed.saveError", "Could not save") }); return; }
+    if (!r.ok) {
+      setErrors(r.errors || []);
+      setMsg({ kind: "error", text: r.message || tt("ed.saveError", "Could not save") });
+      const first = Object.keys(tabFields).find((k) => (r.errors || []).some((e) => tabFields[k].includes(e.field)));
+      if (first) setPane(first);
+      return;
+    }
     const pending = r.status === "pending";
     setMsg({ kind: pending ? "warn" : "good", text: pending ? tt("ed.savedPending", "Saved. It is waiting for your admin's review before students can see it.") : tt("ed.saved", "Saved and ready to use.") })
     if (!id) navigate(`/teacher/tests/bank/${f.module}/${f.subject}/${r.question._id}`, { replace: true });
@@ -254,9 +267,18 @@ export default function QuestionEditor() {
       {review?.status === "rejected" && <p className={`${s.notice} ${s.noticeError}`}>{tt("ed.rejected", "Your admin sent this back: {{reason}}. Edit and save to send it again.", { reason: review.rejectionReason || "—" })}</p>}
       {meta?.share && <p className={s.notice}>{tt("ed.shareStatus", "Community sharing: {{status}}", { status: meta.share.status })}</p>}
 
-      <div className={s.split}>
-        <fieldset disabled={readOnly} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }} className={s.page}>
-          <section className={s.card}>
+      <SubTabs label={tt("ed.steps", "Question steps")} value={cur} onChange={setPane} idBase="qed"
+        tabs={[
+          { id: "question", label: tt("ed.tabQuestion", "Question"), icon: FaQuestion, badge: errCount("question") || undefined },
+          { id: "answers", label: tt("ed.answers", "Answers"), icon: FaCheckSquare, badge: errCount("answers") || undefined },
+          { id: "help", label: tt("ed.tabHelp", "Hints"), icon: FaLightbulb },
+          { id: "tags", label: tt("ed.tags", "Tags"), icon: FaTags, badge: errCount("tags") || undefined },
+          !wide && { id: "preview", label: tt("ed.tabPreview", "Preview"), icon: FaEye },
+        ]} />
+
+      <div className={wide ? s.split : s.page} id={`qed-panel-${cur}`} role="tabpanel" aria-labelledby={`qed-tab-${cur}`}>
+        <fieldset disabled={readOnly} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }} className={s.page} hidden={!wide && cur === "preview"}>
+          <section className={s.card} hidden={cur !== "question"}>
             <h2>{tt("ed.type", "Question type")}</h2>
             <div className={s.row}>
               <label className={s.field}><span>{tt("ed.kind", "Type")}</span>
@@ -277,7 +299,7 @@ export default function QuestionEditor() {
             </div>
           </section>
 
-          <section className={s.card}>
+          <section className={s.card} hidden={cur !== "question"}>
             <h2>{tt("ed.question", "The question")}</h2>
             <div className={s.page} style={{ gap: 12 }}>
               <label className={s.field}><span>{tt("ed.instruction", "Instruction")}</span>
@@ -310,13 +332,13 @@ export default function QuestionEditor() {
             </div>
           </section>
 
-          <section className={s.card}>
+          <section className={s.card} hidden={cur !== "answers"}>
             <h2>{tt("ed.answers", "Answers")}</h2>
             <AnswerFields f={f} set={set} />
             {["options", "correct_answer", "speech_scoring"].map((k) => err(k) && <p key={k} className={s.fieldError} role="alert">{err(k)}</p>)}
           </section>
 
-          <section className={s.card}>
+          <section className={s.card} hidden={cur !== "help"}>
             <h2>{tt("ed.help", "Hints and feedback")}</h2>
             <div className={s.page} style={{ gap: 12 }}>
               <TextList label={tt("ed.hints", "Hints")} items={f.hints} max={5} onChange={(hints) => set({ hints })} />
@@ -329,7 +351,7 @@ export default function QuestionEditor() {
             </div>
           </section>
 
-          <section className={s.card}>
+          <section className={s.card} hidden={cur !== "tags"}>
             <h2>{tt("ed.tags", "Tags")}</h2>
             <div className={s.row}>
               <label className={s.field} style={{ flexBasis: "100%" }}><span>{tt("ed.skills", "Skills (comma separated)")}</span><input value={f.skills} onChange={(e) => set({ skills: e.target.value })} placeholder={tt("ed.skillsPh", "fractions, adding fractions")} /></label>
@@ -363,7 +385,7 @@ export default function QuestionEditor() {
           </section>
 
           {stats && (
-            <section className={s.card}>
+            <section className={s.card} hidden={cur !== "tags"}>
               <h2>{tt("ed.quality", "How it went in tests")}</h2>
               {stats.used ? (
                 <div className={s.grid3}>
@@ -378,7 +400,7 @@ export default function QuestionEditor() {
           )}
         </fieldset>
 
-        <aside className={s.previewWrap} aria-label={tt("ed.preview", "Live preview")}>
+        <aside className={s.previewWrap} aria-label={tt("ed.preview", "Live preview")} hidden={!wide && cur !== "preview"}>
           <div className={s.row} style={{ justifyContent: "space-between", alignItems: "center" }}>
             <h2 style={{ margin: 0, fontSize: "1.1rem" }}>{tt("ed.preview", "Live preview")}</h2>
             <div className={s.tabs} role="group" aria-label={tt("ed.device", "Preview size")}>

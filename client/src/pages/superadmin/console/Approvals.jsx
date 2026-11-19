@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../../components/dashboard";
 import { useConsoleApi, useLoad, dateTime } from "./api";
-import { Loadable, Notice, Panel, Pill, ReasonDialog, StatusPill, Tabs } from "./ui";
+import { Loadable, Notice, Panel, Pill, ReasonDialog, Segmented, StatusPill } from "./ui";
 import s from "./console.module.css";
 
 const HINT = { good: s.hintGood, attention: s.hintAttention, alert: s.hintAlert, info: s.hintInfo };
@@ -23,17 +23,18 @@ export default function Approvals({ go }) {
   };
 
   return (
-    <Panel title={t("sa.appr.title", "Approvals")} sub={t("sa.appr.sub", "Target: decide within {{h}} hours of (re)submission. Hints are checks, not verdicts.", { h: q.data?.slaHours || 48 })}>
-      <Tabs label={t("sa.appr.filter", "Show")} value={status} onChange={setStatus} tabs={[
+    <Panel title={t("sa.appr.title", "Approvals")} sub={t("sa.appr.sub", "Target: decide within {{h}} hours of (re)submission. Hints are checks, not verdicts.", { h: q.data?.slaHours || 48 })} actions={
+      <Segmented label={t("sa.appr.filter", "Show")} value={status} onChange={setStatus} options={[
         { key: "pending", label: t("sa.status.pending", "Pending") }, { key: "rejected", label: t("sa.status.rejected", "Rejected") }, { key: "approved", label: t("sa.status.approved", "Approved") },
       ]} />
+    }>
       <Notice tone="good" onClose={() => setNote("")}>{note}</Notice>
       <Loadable state={q} empty={q.data && !rows.length ? { title: t("sa.appr.none", "Nothing waiting."), text: t("sa.appr.noneText", "New registrations appear here.") } : null}>
         <ul className={s.list}>
           {rows.map((o) => (
-            <li key={o.id} className={s.panel} style={{ boxShadow: "none", background: "var(--d-card-alt)" }}>
+            <li key={o.id} className={s.apprCard}>
               <div className={s.row}>
-                <h3 style={{ margin: 0 }}>{o.name}</h3>
+                <h3 className={s.apprName}>{o.name}</h3>
                 <StatusPill status={o.status} />
                 {o.sla.state !== "done" && <Pill tone={o.sla.state === "overdue" ? "alert" : o.sla.state === "due_soon" ? "attention" : "good"}>
                   {o.sla.state === "overdue" ? t("sa.appr.overdue", "Overdue: waiting {{h}} h", { h: o.sla.hoursWaiting }) : t("sa.appr.waiting", "Waiting {{h}} h", { h: o.sla.hoursWaiting })}

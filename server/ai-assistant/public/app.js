@@ -158,6 +158,46 @@ window.teacher = {
   },
 };
 
+// While an answer is on its way (the question sent, or only the quick "let me
+// think" said so far) the board shows the teacher sketching an idea, with a
+// line about what she is doing. It appears only if the wait lasts a moment.
+const THINKING_LINES = [
+  "Thinking about your question…",
+  "Finding the best way to explain it…",
+  "Picking a good example…",
+  "Getting the board ready…",
+  "Drawing a picture for you…",
+  "Almost there…",
+];
+const thinkingLine = $("thinkingLine");
+const holoEl = document.querySelector(".holo");
+let thinkingOn = false;
+let thinkingShow = null;
+let thinkingTurn = null;
+function showThinking(on) {
+  if (on === thinkingOn || !holoEl || !thinkingLine) return;
+  thinkingOn = on;
+  clearTimeout(thinkingShow);
+  clearInterval(thinkingTurn);
+  if (!on) {
+    holoEl.classList.remove("is-thinking");
+    return;
+  }
+  thinkingShow = setTimeout(() => {
+    let i = 0;
+    thinkingLine.textContent = THINKING_LINES[0];
+    holoEl.classList.add("is-thinking");
+    thinkingTurn = setInterval(() => {
+      if (i >= THINKING_LINES.length - 1) return clearInterval(thinkingTurn);
+      thinkingLine.classList.add("fading");
+      setTimeout(() => {
+        thinkingLine.textContent = THINKING_LINES[++i];
+        thinkingLine.classList.remove("fading");
+      }, 300);
+    }, 2600);
+  }, 220);
+}
+
 const PHONE = matchMedia("(max-width: 700px)");
 let quietTimer = null;
 function setMode(m) {
@@ -165,6 +205,7 @@ function setMode(m) {
   if (m !== mode) history.push(`${mode}→${m}`);
   mode = m;
   document.body.dataset.mode = m;
+  showThinking(m === "thinking" || (m === "teaching" && run?.plan?.kind === "ack" && !run.dead));
   orb.setState(m);
   scene.setMode(m);
   if (m !== prev) {
@@ -243,6 +284,8 @@ function teach(plan) {
       offer: plan.context?.offer ?? null,
     };
   run = { plan, i: 0, ctrl: new AbortController() };
+  // Only "let me think" so far: the sketch stays up until the answer arrives.
+  showThinking(plan.kind === "ack");
   run.audio = plan.steps.map((s) =>
     voice.load(s.say, run.ctrl.signal).catch(() => null),
   );
@@ -390,14 +433,14 @@ function sayFrom(r, offset) {
   const done = () =>
     setTimeout(() => {
       if (!r.dead && !r.paused && run === r) startStep(r, r.i + 1);
-    }, 250);
+    }, 420); // a relaxed breath between sentences
   if (r.buffer) voice.play(r.buffer, offset, done);
   else {
     const u = new SpeechSynthesisUtterance(r.plan.steps[r.i].say);
     const v = browserVoice();
     if (v) u.voice = v;
     u.lang = v?.lang || "en-GB";
-    u.rate = voice.speed;
+    u.rate = voice.speed * 0.92; // relaxed, like the server voice
     // The lesson never waits on the browser's voice: if it fails, or never
     // says it has finished (some browsers have no voices), carry on after
     // about as long as the sentence would take to say.
@@ -425,6 +468,13 @@ function finish(r) {
     r.next = null;
     return teach(next);
   } // the answer after its "let me think"
+  // "Let me think" said, the answer not here yet: keep thinking (and sketching)
+  // until it comes, but never for ever.
+  if (r.plan.kind === "ack") {
+    setMode("thinking");
+    setTimeout(() => { if (run === r && mode === "thinking") setMode("idle"); }, 30000);
+    return;
+  }
   if (r.plan.awaiting) awaiting = r.plan.awaiting;
   setMode("idle");
   if (test && r.plan.kind === "test") return nextQuestion();

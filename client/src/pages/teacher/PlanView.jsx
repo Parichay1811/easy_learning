@@ -1,8 +1,8 @@
 // TCH-080 plan, limits and usage; TCH-081 branding; TCH-082 public tutor page; workspace details.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaRocket, FaCheck, FaExternalLinkAlt } from "react-icons/fa";
-import { Button, PlanLockCard, EmptyState } from "../../components/dashboard";
+import { FaRocket, FaCheck, FaExternalLinkAlt, FaIdCard, FaPalette, FaGlobe } from "react-icons/fa";
+import { Button, PlanLockCard, EmptyState, SubTabs, SubPanel, usePane } from "../../components/dashboard";
 import { useLoad, useTeacherApi } from "./teacherApi";
 import { Meter, Modal } from "./teacherUi";
 import { GROUP_COLORS, limitText } from "./teacherShared";
@@ -62,7 +62,7 @@ function Details({ w, onSaved }) {
   );
 }
 
-function Branding({ w, onSaved }) {
+function Branding({ w, onSaved, onSeePlans }) {
   const { t } = useTranslation();
   const { send, upload } = useTeacherApi();
   const [color, setColor] = useState(w.workspace.brandColor || "#5b4fd6");
@@ -71,7 +71,7 @@ function Branding({ w, onSaved }) {
     return (
       <PlanLockCard module="reports.branded" title={t("teacher.brand.lockTitle", { defaultValue: "Your logo and colour" })}
         text={t("teacher.brand.lockText", { defaultValue: "Put your own logo and colour on parent invites, the join page and reports. Part of Solo Pro." })}
-        ctaLabel={t("teacher.seePlans", { defaultValue: "See plans" })} onUpgrade={() => document.getElementById("upgrade")?.scrollIntoView({ behavior: "smooth" })} />
+        ctaLabel={t("teacher.seePlans", { defaultValue: "See plans" })} onUpgrade={onSeePlans} />
     );
   }
   const saveColor = async () => {
@@ -137,7 +137,7 @@ function PublicPage({ w, onSaved }) {
       <div className={s.form}>
         <label className={s.field}>
           <span>{t("teacher.pub.address", { defaultValue: "Page address" })}</span>
-          <div className={s.row} style={{ flexWrap: "nowrap" }}><span className={s.muted}>{window.location.origin}/tutor/</span><input className={s.input} value={f.slug} onChange={(e) => setF({ ...f, slug: e.target.value.toLowerCase() })} placeholder="ms-rao" maxLength={40} /></div>
+          <div className={s.row} style={{ gap: 6 }}><span className={s.muted} style={{ overflowWrap: "anywhere", minWidth: 0 }}>{window.location.origin}/tutor/</span><input className={s.input} style={{ flex: "1 1 160px", width: "auto", minWidth: 0 }} value={f.slug} onChange={(e) => setF({ ...f, slug: e.target.value.toLowerCase() })} placeholder="ms-rao" maxLength={40} /></div>
         </label>
         <label className={s.field}><span>{t("teacher.pub.headline", { defaultValue: "Headline" })}</span><input className={s.input} value={f.headline} onChange={(e) => setF({ ...f, headline: e.target.value })} maxLength={120} placeholder={t("teacher.pub.headlinePh", { defaultValue: "Patient maths tutoring for ages 7 to 11" })} /></label>
         <label className={s.field}><span>{t("teacher.pub.bio", { defaultValue: "About you" })}</span><textarea className={`${s.textarea} ${s.notesArea}`} value={f.bio} onChange={(e) => setF({ ...f, bio: e.target.value })} maxLength={1200} /></label>
@@ -170,34 +170,52 @@ function PublicPage({ w, onSaved }) {
 
 export default function PlanView({ workspace: w, reload }) {
   const { t } = useTranslation();
+  const [pane, setPane] = usePane(["plan", "workspace", "branding", "page"]);
   if (!w) return null;
   const solo = w.workspace.kind === "solo";
+  const planCard = (
+    <section className={`${s.card} ${s.planCard}`}>
+      <h2 className={s.h2}>{t("teacher.plan.current", { defaultValue: "You are on {{plan}}", plan: w.plan.label })}</h2>
+      <div className={s.usage}>
+        <Meter label={t("teacher.usage.groups", { defaultValue: "Groups" })} used={w.usage.groups} max={w.limits.groups} />
+        <Meter label={t("teacher.usage.students", { defaultValue: "Students" })} used={w.usage.students} max={w.limits.students} />
+      </div>
+      {!solo && <p className={s.muted} style={{ margin: 0 }}>{t("teacher.plan.school", { defaultValue: "Your school looks after the plan. Ask your admin about extra features." })}</p>}
+    </section>
+  );
+  const head = (
+    <div className={s.headRow}>
+      <div>
+        <h1>{solo ? t("teacher.plan.title", { defaultValue: "Plan and settings" }) : t("teacher.plan.titleSchool", { defaultValue: "Your plan" })}</h1>
+        <p>{w.workspace.name}</p>
+      </div>
+    </div>
+  );
+  if (!solo) {
+    return (
+      <>
+        {head}
+        {planCard}
+        <EmptyState compact title={t("teacher.plan.schoolSettings", { defaultValue: "Settings are managed by your school" })} text={t("teacher.plan.schoolSettingsText", { defaultValue: "Want to tutor privately too? Start your own free Solo workspace and switch between them at the top." })} actionLabel={t("teacher.plan.startSolo", { defaultValue: "Start a Solo workspace" })} to="/teach" />
+      </>
+    );
+  }
   return (
     <>
-      <div className={s.pageHead}>
-        <div>
-          <h1>{solo ? t("teacher.plan.title", { defaultValue: "Plan and settings" }) : t("teacher.plan.titleSchool", { defaultValue: "Your plan" })}</h1>
-          <p>{w.workspace.name}</p>
-        </div>
-      </div>
-      <section className={`${s.card} ${s.planCard}`}>
-        <h2 className={s.h2}>{t("teacher.plan.current", { defaultValue: "You are on {{plan}}", plan: w.plan.label })}</h2>
-        <div className={s.usage}>
-          <Meter label={t("teacher.usage.groups", { defaultValue: "Groups" })} used={w.usage.groups} max={w.limits.groups} />
-          <Meter label={t("teacher.usage.students", { defaultValue: "Students" })} used={w.usage.students} max={w.limits.students} />
-        </div>
-        {!solo && <p className={s.muted} style={{ margin: 0 }}>{t("teacher.plan.school", { defaultValue: "Your school looks after the plan. Ask your admin about extra features." })}</p>}
-      </section>
-      {solo && <Upgrade w={w} />}
-      {solo ? (
-        <>
-          <Details w={w} onSaved={reload} />
-          <Branding w={w} onSaved={reload} />
-          <PublicPage w={w} onSaved={reload} />
-        </>
-      ) : (
-        <EmptyState compact title={t("teacher.plan.schoolSettings", { defaultValue: "Settings are managed by your school" })} text={t("teacher.plan.schoolSettingsText", { defaultValue: "Want to tutor privately too? Start your own free Solo workspace and switch between them at the top." })} actionLabel={t("teacher.plan.startSolo", { defaultValue: "Start a Solo workspace" })} to="/teach" />
-      )}
+      {head}
+      <SubTabs label={t("teacher.plan.tabs", { defaultValue: "Plan and settings" })} value={pane} onChange={setPane} idBase="plan"
+        tabs={[
+          { id: "plan", label: t("teacher.plan.tabPlan", { defaultValue: "My plan" }), icon: FaRocket },
+          { id: "workspace", label: t("teacher.plan.details", { defaultValue: "Your workspace" }), icon: FaIdCard },
+          { id: "branding", label: t("teacher.brand.title", { defaultValue: "Branding" }), icon: FaPalette },
+          { id: "page", label: t("teacher.plan.tabPage", { defaultValue: "Public page" }), icon: FaGlobe },
+        ]} />
+      <SubPanel key={pane} id={pane} value={pane} idBase="plan">
+        {pane === "plan" && <>{planCard}<Upgrade w={w} /></>}
+        {pane === "workspace" && <Details w={w} onSaved={reload} />}
+        {pane === "branding" && <Branding w={w} onSaved={reload} onSeePlans={() => setPane("plan")} />}
+        {pane === "page" && <PublicPage w={w} onSaved={reload} />}
+      </SubPanel>
     </>
   );
 }

@@ -2,13 +2,41 @@
 // uploaded class list (checked first, then added), and students already in the school.
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaQrcode, FaFileCsv, FaSchool, FaIdCard, FaCopy, FaExpand, FaSyncAlt, FaTimes } from "react-icons/fa";
+import { FaQrcode, FaFileCsv, FaSchool, FaIdCard, FaCopy, FaExpand, FaSyncAlt, FaTimes, FaEnvelope } from "react-icons/fa";
 import { Button } from "../../components/dashboard";
 import { useTeacherApi } from "./teacherApi";
 import { Modal, QrCode } from "./teacherUi";
 import { limitText } from "./teacherShared";
 import { parseRoster, SAMPLE_CSV } from "./rosterCsv";
+import { useLinks, RequestInbox, InviteByEmail } from "../../components/links";
 import s from "./teacher.module.css";
+
+// Connect by email (services/linkRequests.js): invite a learner into this group, and
+// answer learners who asked to join (they join this group). Nothing is shared and
+// nobody joins until the learner taps Join.
+function EmailTab({ group, onDone }) {
+  const { t } = useTranslation();
+  const links = useLinks("teacher", { poll: 30000 });
+  const mine = useMemo(() => {
+    if (!links.data) return links;
+    const outgoing = (links.data.outgoing || []).filter((r) => r.kind === "class" && r.group?.id === String(group._id));
+    return { ...links, data: { ...links.data, outgoing } };
+  }, [links, group._id]);
+  return (
+    <div className={s.form}>
+      <InviteByEmail id={`invite-${group._id}`}
+        label={t("teacher.email.label", { defaultValue: "Student's email" })}
+        placeholder={t("teacher.email.ph", { defaultValue: "the email they sign in with" })}
+        hint={t("teacher.email.hint", { defaultValue: "They get a request and join {{name}} when they tap Join. Nothing is shared before that.", name: group.name })}
+        onSend={(email) => links.send({ to: "student", email, groupId: String(group._id) })}
+        sentText={(email) => t("teacher.email.sent", { defaultValue: "Sent! {{email}} joins as soon as they tap Join.", email })} />
+      <RequestInbox links={mine} viewer="teacher" kinds={["class"]} groups={[{ id: String(group._id), name: group.name, emoji: group.emoji || "" }]}
+        title={t("teacher.email.wantToJoin", { defaultValue: "Students who want to join" })}
+        outgoingTitle={t("teacher.email.invited", { defaultValue: "Invited to this group" })}
+        onAccepted={() => onDone?.()} />
+    </div>
+  );
+}
 
 function JoinTab({ group }) {
   const { t } = useTranslation();
@@ -199,6 +227,7 @@ function SchoolTab({ group, onDone }) {
 export default function AddStudentsPanel({ group, permissions, onClose, onChanged }) {
   const { t } = useTranslation();
   const tabs = [
+    { key: "email", label: t("teacher.add.email", { defaultValue: "By email" }), icon: FaEnvelope },
     permissions.canAddNewStudents && { key: "join", label: t("teacher.add.join", { defaultValue: "Join code" }), icon: FaQrcode },
     permissions.canAddNewStudents && { key: "list", label: t("teacher.add.list", { defaultValue: "Paste or upload a list" }), icon: FaFileCsv },
     !permissions.isSolo && { key: "school", label: t("teacher.add.school", { defaultValue: "From your school" }), icon: FaSchool },
@@ -209,12 +238,13 @@ export default function AddStudentsPanel({ group, permissions, onClose, onChange
     <Modal wide title={t("teacher.add.title", { defaultValue: "Add students to {{name}}", name: group.name })} onClose={onClose}>
       <div className={s.tabs} role="tablist" style={{ marginBottom: 16 }}>
         {tabs.map((x) => (
-          <button key={x.key} type="button" role="tab" aria-selected={tab === x.key} className={`${s.tab} ${tab === x.key ? s.tabOn : ""}`} onClick={() => setTab(x.key)}>
+          <button key={x.key} type="button" role="tab" data-sound="tab" aria-selected={tab === x.key} className={`${s.tab} ${tab === x.key ? s.tabOn : ""}`} onClick={() => setTab(x.key)}>
             <x.icon aria-hidden="true" /> {x.label}
           </button>
         ))}
       </div>
       <div role="tabpanel">
+        {tab === "email" && <EmailTab group={group} onDone={onChanged} />}
         {tab === "join" && <JoinTab group={group} />}
         {tab === "list" && <ListTab group={group} onDone={onChanged} />}
         {tab === "school" && <SchoolTab group={group} onDone={onChanged} />}

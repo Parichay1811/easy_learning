@@ -19,8 +19,12 @@ export class Voice {
     this.out = ctx.createGain();
     const low = ctx.createBiquadFilter();
     set(low, { type: 'highpass', frequency: 75, Q: 0.7 });
+    // A touch of warmth low down and a gentler lift up top: clear, but soft
+    // and comfortable to listen to for a whole lesson.
+    const warmth = ctx.createBiquadFilter();
+    set(warmth, { type: 'lowshelf', frequency: 220, gain: 2 });
     const presence = ctx.createBiquadFilter();
-    set(presence, { type: 'peaking', frequency: 3000, Q: 0.9, gain: 3 });
+    set(presence, { type: 'peaking', frequency: 3000, Q: 0.9, gain: 1.8 });
     const even = ctx.createDynamicsCompressor();
     set(even, { threshold: -24, knee: 10, ratio: 3, attack: 0.005, release: 0.2 });
     const makeup = ctx.createGain();
@@ -28,7 +32,7 @@ export class Voice {
     this.analyser = ctx.createAnalyser();
     this.analyser.fftSize = 512;
     this.buf = new Float32Array(512);
-    this.out.connect(low).connect(presence).connect(even).connect(makeup).connect(this.analyser);
+    this.out.connect(low).connect(warmth).connect(presence).connect(even).connect(makeup).connect(this.analyser);
     this.analyser.connect(this.master);
     this.fx = ctx.createGain();
     this.fx.connect(this.master);
