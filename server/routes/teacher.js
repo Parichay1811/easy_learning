@@ -37,6 +37,9 @@ router.get('/questions/uploads/:id', getMyUploadBatchDetail)
 router.patch('/questions/:module/:subject/:id', updateQuestion)
 
 analyticsMounts.mountTeacher(router)
+// Learning plan of a student in one of my groups (controllers/learningPlanController.js)
+router.get('/students/:studentEmail/learning', require('../controllers/learningPlanController').getStudentLearning)
+router.put('/students/:studentEmail/learning', require('../controllers/learningPlanController').putStudentLearning)
 router.use(require('./teacherClasses')) // groups, students, Today, workspace (TCH-010..082)
 
 module.exports = router

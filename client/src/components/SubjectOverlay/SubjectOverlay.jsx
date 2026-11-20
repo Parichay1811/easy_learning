@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,6 +9,8 @@ import styles from "./SubjectOverlay.module.css";
 import { sfx } from "../../utils/sounds";
 import { fetchModuleStars } from "../../store/slices/dashboardSlice";
 import { SUBJECT_ICON_IMAGES } from "../../data/subjectIcons";
+import PlacementSheet from "../Placement/PlacementSheet";
+import { needsPlacement } from "../Placement/placementApi";
 import {
   FaHeadphones, FaBookOpen, FaPencilAlt, FaMicrophone,
   FaStar, FaRegStar, FaTimes, FaPlay,
@@ -82,6 +84,7 @@ export function ModuleGrid({ subject, onPick }) {
             onClick={() => onPick(type)}
             aria-label={`${label}. ${t(`subjectPage.modules.${type}.desc`)}`}
             data-sound="none"
+            data-hover-sound=""
           >
             <span className={styles.levelBadge}>{t(`subjectPage.modules.${type}.level`)}</span>
             <span className={styles.cardIconWrap} aria-hidden="true"><Icon /></span>
@@ -128,14 +131,27 @@ const SubjectOverlay = ({ subject, onClose }) => {
     };
   }, [onClose]);
 
+  // The first time in a subject: "Where would you like to start?" (components/Placement).
+  const [placementFor, setPlacementFor] = useState(null);
+  const [needsLevel, setNeedsLevel] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    needsPlacement(subject).then((v) => { if (alive) setNeedsLevel(v); });
+    return () => { alive = false; };
+  }, [subject]);
+
   const close = () => { sfx.close(); onClose(); };
-  const pick = (type) => {
+  const go = (type) => {
     sfx.forward();
     onClose();
     navigate(`/module/${type}/${subject}`);
   };
+  const pick = (type) => {
+    if (needsLevel) { sfx.select(); setPlacementFor(type); return; }
+    go(type);
+  };
 
-  return createPortal(
+  const overlay = createPortal(
     <FramerMotion.motion.div
       className={styles.backdrop}
       initial={{ opacity: 0 }}
@@ -171,6 +187,22 @@ const SubjectOverlay = ({ subject, onClose }) => {
       </FramerMotion.motion.div>
     </FramerMotion.motion.div>,
     document.body
+  );
+
+  // The placement sheet is a sibling (not inside the overlay), so its clicks
+  // never reach the overlay's "tap outside to close".
+  return (
+    <>
+      {overlay}
+      {placementFor && (
+        <PlacementSheet
+          subject={subject}
+          module={placementFor}
+          onDone={() => { const type = placementFor; setPlacementFor(null); setNeedsLevel(false); go(type); }}
+          onClose={() => { const type = placementFor; setPlacementFor(null); setNeedsLevel(false); go(type); }}
+        />
+      )}
+    </>
   );
 };
 

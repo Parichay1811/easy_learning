@@ -12,6 +12,7 @@ import { GREETING, FILLERS, NOT_HEARD, GO_AHEAD } from "./shared/lines.js";
 import { createOrb } from "./orb.js";
 import { createScene } from "./scene.js";
 import { createHaptics } from "./haptics.js";
+import { readCompanion, companionLines, chipLabel, lower } from "./companion.js";
 
 const $ = (id) => document.getElementById(id);
 const els = {
@@ -86,9 +87,12 @@ const board = new Board(els.board, {
   onOption: (i) => {
     if (awaiting) teach(answerPlan(awaiting, i, test ? "" : undefined));
   },
-  // A chip on the board ("What is soap bubble?") is asked as if said.
+  // A chip on the board ("What is soap bubble?") is asked as if said; a
+  // chip for one of the learner's own skills opens its lesson.
   onChip: (text) => {
     if (mode === "teaching") interrupt();
+    const focus = focusChips.get(text);
+    if (focus) return openFocus(focus);
     ask(text);
   },
 });
@@ -682,6 +686,8 @@ async function ask(text, seq = ++askSeq, open = null) {
           test: !!test,
           history: talk.slice(-3),
           ...(open && { open }),
+          // "visual" | "guided" | "words": not used by the router yet (see companion.js).
+          ...(companion?.prefers && { style: companion.prefers }),
         },
       }),
     });
@@ -806,6 +812,18 @@ async function begin() {
     setMode(mode);
   }
   FILLERS.forEach((f) => voice.load(f).catch(() => {}));
+  // Started from one of the learner's own skills on the start screen: that lesson, no hello first.
+  if (openOnStart) {
+    const f = openOnStart;
+    openOnStart = null;
+    openFocus(f);
+    return true;
+  }
+  const personal = companionGreeting();
+  if (personal) {
+    teach(personal);
+    return true;
+  }
   teach({
     kind: "greet",
     title: "Hello!",
@@ -832,6 +850,106 @@ async function begin() {
 
 const GREETING_TYPED =
   "Hi, I'm your Learnigo teacher. Type any question, or start typing a topic and pick it from the list. Type test me for some questions.";
+
+// ── The learner, when signed in on the site ─────────────────────────────
+// The site's AI Teacher page (client/src/pages/AITeacher.jsx) sends a short
+// summary of the signed-in learner from GET /api/learn/companion: the first
+// name, a few skills to work on (with the way of explaining that helped:
+// pictures, step by step, simpler first), recent wins and how they like
+// things explained. Nothing the learner typed or said is in it. Only a message
+// from this origin, from the page around this one, is read; without one (not
+// signed in, the site's own pop-up, an older server) nothing changes.
+let companion = null;
+let openOnStart = null; // a skill picked on the start screen, opened once started
+const focusChips = new Map(); // a chip's label -> the skill it opens
+
+function companionGreeting() {
+  const words = companionLines(companion);
+  if (!words) return null;
+  focusChips.clear();
+  const chips = companion.focus.map((f) => {
+    const label = chipLabel(f, companion);
+    focusChips.set(label, f);
+    return label;
+  });
+  const tail = serverHearing ? "Tap one below, or ask me anything." : "Tap one below, or type any question.";
+  // Two short sentences: the hello is ready to say at once while the rest is made.
+  return {
+    kind: "greet",
+    title: words.hello,
+    steps: [
+      { say: words.hello, draw: [{ op: "clear" }, { op: "title", text: words.hello }] },
+      {
+        say: `${words.line} ${tail}`,
+        draw: [
+          { op: "text", text: words.line },
+          { op: "chips", items: [...chips, ...examples].slice(0, 6) },
+        ],
+      },
+    ],
+  };
+}
+
+// A focus skill: its lesson when one has the same name, else asked for by name.
+const topicFor = new Map();
+async function findTopic(name) {
+  if (topicFor.has(name)) return topicFor.get(name);
+  let topic = null;
+  try {
+    const r = await fetch(`/api/ai-assistant/topics?q=${encodeURIComponent(name)}`);
+    topic = (await r.json()).topics?.[0] || null;
+  } catch {
+    /* no lesson list: asked by name */
+  }
+  topicFor.set(name, topic);
+  return topic;
+}
+async function openFocus(f) {
+  const topic = await findTopic(f.name);
+  if (topic?.id) openTopic(topic.id, topic.title);
+  else askNow(`Teach me about ${lower(f.name)}`);
+}
+
+// The start screen says hello by name and offers the learner's own skills.
+function personaliseHero() {
+  const words = companionLines(companion);
+  const line = $("hero-personal");
+  const row = $("hero-focus");
+  if (!words || !line || !row) return;
+  line.textContent = `${words.hello} ${words.line}`;
+  line.hidden = false;
+  row.replaceChildren(
+    ...companion.focus.slice(0, 2).map((f) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "focus-chip";
+      b.textContent = chipLabel(f, companion);
+      b.addEventListener("click", () => {
+        if (starting) return openFocus(f);
+        openOnStart = f;
+        start();
+      });
+      return b;
+    }),
+  );
+  row.hidden = !row.children.length;
+}
+
+window.addEventListener("message", (e) => {
+  if (e.origin !== location.origin || e.source !== window.parent || window.parent === window) return;
+  if (e.data?.type !== "learnigo:companion" || companion) return;
+  companion = readCompanion(e.data.companion);
+  // Already started: the usual hello was said, and nothing is said twice.
+  if (companion && !starting) personaliseHero();
+});
+// Tell the page around this one that the teacher is listening for the summary.
+if (window.parent !== window) {
+  try {
+    window.parent.postMessage({ type: "learnigo:teacher-ready" }, location.origin);
+  } catch {
+    /* another origin around us: nothing is sent */
+  }
+}
 
 // ── The page around the board ───────────────────────────────────────────
 // The sticky note says what kind of lesson is on the board; the subject card

@@ -4,10 +4,24 @@ html {
   scrollbar-width: none;
 }
 
+/* The learner's comfort settings (utils/learnerPrefs.js), applied by
+   components/settings/PrefsProvider.jsx as attributes and variables on <html>. */
+:root {
+  --lp-text-scale: 1;
+  --lp-target: 44px;
+  --lp-font: "Fredoka", sans-serif;
+  --lp-letter: 0.05em;
+  --lp-word: 0.1em;
+}
+
+html {
+  font-size: calc(100% * var(--lp-text-scale));
+}
+
 body {
   margin: 0;
-  font-family: "Fredoka", sans-serif;
-  font-size: 18px;
+  font-family: var(--lp-font);
+  font-size: calc(18px * var(--lp-text-scale));
   background: radial-gradient(ellipse at top, #16234a 0%, #060912 78%);
   width: 100vw;
   /* clip, not hidden: hidden would make body a scroll container and stop
@@ -27,9 +41,9 @@ body {
 
 /* Dyslexia-friendly base styles */
 * {
-  letter-spacing: 0.05em;
+  letter-spacing: var(--lp-letter);
   line-height: 1.6;
-  word-spacing: 0.1em;
+  word-spacing: var(--lp-word);
   box-sizing: border-box;
 }
 
@@ -79,4 +93,71 @@ textarea {
 /* Smooth direction transition so flipping feels intentional */
 html {
   transition: direction 0.15s ease;
+}
+
+/* ── Comfort settings ───────────────────────────────────────────────────────
+   Letters: many components name "Fredoka" themselves, so the chosen letters
+   win everywhere (a sample of each font in the settings keeps its own). */
+html[data-font="readable"] { --lp-font: "Lexend", "Fredoka", sans-serif; --d-font: "Lexend", "Fredoka", sans-serif; }
+html[data-font="dyslexic"] { --lp-font: "OpenDyslexic", "Fredoka", sans-serif; --d-font: "OpenDyslexic", "Fredoka", sans-serif; }
+html[data-font] body :not(svg, svg *, code, pre, kbd, samp, [data-font-sample], [data-font-sample] *) {
+  font-family: var(--lp-font) !important;
+}
+
+/* Spacing: more room between letters, words and lines (WCAG 1.4.12 levels). */
+html[data-spacing="wide"] { --lp-letter: 0.12em; --lp-word: 0.16em; }
+html[data-spacing="wide"] body :not(svg, svg *, [data-font-sample], [data-font-sample] *) {
+  letter-spacing: 0.12em !important;
+  word-spacing: 0.16em !important;
+}
+html[data-spacing="wide"] body :is(p, li, label, h1, h2, h3, h4, dd, dt, blockquote) { line-height: 1.75; }
+
+/* Less movement: animations and transitions end at once (framer-motion
+   follows the same setting through MotionConfig). */
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  animation-delay: 0s !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0s !important;
+  scroll-behavior: auto !important;
+}
+
+/* Fewer distractions: decorative video backgrounds, butterflies and confetti
+   go. Mark any other decoration with data-decorative. */
+html[data-focus-mode] [aria-hidden="true"] > video,
+html[data-focus-mode] [data-decorative],
+html[data-focus-mode] [class*="_flock_"],
+html[data-focus-mode] [class*="_confetti_"] {
+  display: none !important;
+}
+
+/* Bigger buttons: every control at least 56 px. */
+html[data-big-targets] body :is(button, [role="button"], [role="tab"], [role="switch"], [role="radio"], [role="checkbox"], select, summary, input[type="checkbox"], input[type="radio"]):not([data-no-big]) {
+  min-height: 56px;
+  min-width: 56px;
+}
+html[data-big-targets] body :is(input[type="text"], input[type="email"], input[type="number"], input[type="search"], input[type="password"], textarea) {
+  min-height: 56px;
+}
+
+/* High contrast: solid dark ground, clear outlines on every control, a bright
+   focus ring. Components add their own details (question card, captions). */
+html[data-contrast="high"] body {
+  background: #000000;
+}
+html[data-contrast="high"] [aria-hidden="true"] > video {
+  opacity: 0.25;
+}
+html[data-contrast="high"] body :is(button, [role="button"], a[href], input, select, textarea) {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+  text-shadow: none;
+}
+html[data-contrast="high"] body :focus-visible,
+html[data-big-targets] body :focus-visible {
+  outline: 3px solid #ffdd00 !important;
+  outline-offset: 2px !important;
 }

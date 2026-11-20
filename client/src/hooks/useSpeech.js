@@ -4,16 +4,11 @@ import { getSpeechLang } from "../utils/speechLang";
 import { getQuestionLang } from "../utils/questionLang";
 import { narrate, stopNarration } from "../utils/narrator";
 
-// Speaks `text` through the site's narrator (utils/narrator.js): the natural
-// server voice, or the browser's best voice for the language. A little slower
-// than normal for young readers.
-function speakText(text, langCode, callbacks = {}) {
-  narrate(text, { rate: 0.85, ...callbacks, lang: langCode });
-}
-
-// Shared TTS + SpeechRecognition wiring for question audio playback
-// (QuestionCard's "Listen" button) and speech-graded interactions
-// (the mic_record widget).
+// Shared voice + SpeechRecognition wiring for the question card ("Read to
+// me", "Listen", hints and feedback) and speech-graded interactions (the
+// mic_record widget). Everything is said through the site's narrator
+// (utils/narrator.js): the AI teacher's voice, at the learner's own speed,
+// with maths made speakable.
 export function useSpeech(subject) {
   const { i18n } = useTranslation();
   const recognitionRef = useRef(null);
@@ -35,39 +30,56 @@ export function useSpeech(subject) {
     return useEnglish ? "en-US" : getSpeechLang(i18n.language);
   };
 
-  // speak(text, { lang?, onStart?, onEnd?, onError? })
-  const speak = (text, { lang, ...callbacks } = {}) => speakText(text, speechLangFor(lang), callbacks);
+  // speak(text | [parts], { lang?, user?, caption?, queue?, onStart?, onEnd?, onError?, onNoVoice? })
+  // `user: true` when the learner pressed something to hear it (spoken even
+  // when the teacher's voice is set not to speak by herself).
+  const speak = (text, { lang, ...opts } = {}) => narrate(text, { ...opts, lang: speechLangFor(lang) });
 
-  // Records the mic and transcribes it. Resolves with {transcript} or
-  // {unsupported: true} if the browser has no SpeechRecognition, so callers
-  // can fall back to a best-effort pass rather than failing the attempt.
+  /**
+   * Listens once and resolves with what was heard:
+   *  { transcript, alternatives, confidence }   something was said
+   *  { error: "not-allowed" | "no-speech" | "audio-capture" | "network" | … }
+   *  { unsupported: true }                     this browser cannot transcribe
+   * It never rejects: a problem is an answer the card can be kind about.
+   */
   const recognizeSpeech = (lang) =>
-    new Promise((resolve, reject) => {
+    new Promise((resolve) => {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SR) { resolve({ unsupported: true }); return; }
 
-      const rec = new SR();
+      let rec;
+      try {
+        rec = new SR();
+      } catch {
+        resolve({ unsupported: true });
+        return;
+      }
       rec.lang = speechLangFor(lang);
       rec.interimResults = false;
-      rec.maxAlternatives = 1;
+      rec.maxAlternatives = 5;
       recognitionRef.current = rec;
 
       let settled = false;
-      rec.onresult = (e) => {
+      const done = (value) => {
+        if (settled) return;
         settled = true;
-        resolve({ transcript: e.results[0][0].transcript });
+        resolve(value);
       };
-      rec.onerror = () => {
-        if (!settled) { settled = true; resolve({ unsupported: true }); }
+      rec.onresult = (e) => {
+        const res = e.results?.[0];
+        const alts = res ? Array.from(res).map((a) => a.transcript).filter(Boolean) : [];
+        done({ transcript: alts[0] || "", alternatives: alts.slice(1), confidence: res?.[0]?.confidence ?? null });
       };
+      rec.onerror = (e) => done({ error: e?.error || "error" });
       rec.onend = () => {
         recognitionRef.current = null;
-        if (!settled) { settled = true; resolve({ unsupported: true }); }
+        done({ error: "no-speech" });
       };
       try {
         rec.start();
       } catch (e) {
-        reject(e);
+        recognitionRef.current = null;
+        done({ error: e?.name === "NotAllowedError" ? "not-allowed" : "start-failed" });
       }
     });
 
@@ -75,5 +87,5 @@ export function useSpeech(subject) {
     if (recognitionRef.current) recognitionRef.current.stop();
   };
 
-  return { speak, recognizeSpeech, stopRecognition };
+  return { speak, recognizeSpeech, stopRecognition, speechLangFor };
 }

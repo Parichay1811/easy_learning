@@ -12,6 +12,10 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import ModeToggle from "../ModeToggle/ModeToggle";
 import WarriorTimer from "../WarriorTimer/WarriorTimer";
 import Mascot from "../Mascot/Mascot";
+import { ComfortSettingsButton } from "../settings/ComfortSettings";
+import PlacementSheet from "../Placement/PlacementSheet";
+import { needsPlacement } from "../Placement/placementApi";
+import { useVoiceBarHost } from "../VoiceBar/useNarration";
 import { sfx } from "../../utils/sounds";
 import styles from "./ModulePlayer.module.css";
 
@@ -53,7 +57,28 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
   const {
     data, status, noOrgQuestions, current, idx, mode, setMode, timeLeft, roundDone, roundResult,
     totalScore, recordAnswer, advance, handlePlayAgain, retry, paused, togglePause, clockRunning, timedOut,
+    warriorSeconds: clockSeconds, noClock, learn, choicePool, voiceBusy,
   } = round;
+  // The question card shows the teacher's words in place (and has its own
+  // Read to me / pause), so the floating caption bar steps aside here.
+  useVoiceBarHost(true);
+
+  // The first time in a subject (when it was not already asked on Home):
+  // "Where would you like to start?". A new level fetches a new round.
+  const [placementOpen, setPlacementOpen] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    needsPlacement(subject).then((v) => { if (alive) setPlacementOpen(v); });
+    return () => { alive = false; };
+  }, [subject]);
+  const placement = placementOpen && (
+    <PlacementSheet
+      subject={subject}
+      module={module}
+      onDone={(lv) => { setPlacementOpen(false); if (lv != null) retry(); }}
+      onClose={() => setPlacementOpen(false)}
+    />
+  );
 
   // The stars counter gives a little hop when it goes up.
   const [bumpKey, setBumpKey] = useState(0);
@@ -93,6 +118,7 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
       <VideoBackground />
       <div className={styles.shade} aria-hidden="true" />
       {children}
+      {placement}
     </FramerMotion.motion.div>
   );
 
@@ -141,14 +167,22 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
         <div className={styles.progressSlot}>
           <ProgressBar current={idx + 1} total={data.length} />
         </div>
-        {mode === "warrior" && (
+        {mode === "warrior" && noClock && (
+          <div className={styles.timerSlot}>
+            <span className={styles.noClock} title={t("modules.noClockHelp", "No clock: you chose to play without one (Comfort settings).")}>
+              {t("modules.noClock", "No clock")}
+            </span>
+          </div>
+        )}
+        {mode === "warrior" && !noClock && (
           <div className={styles.timerSlot}>
             <WarriorTimer
-              total={warriorSeconds}
+              total={clockSeconds}
               left={timeLeft}
               running={clockRunning}
               paused={paused}
               timedOut={timedOut}
+              waiting={voiceBusy && !timedOut}
               onTogglePause={togglePause}
             />
           </div>
@@ -166,6 +200,7 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
             {ExtraIcon && <ExtraIcon aria-hidden="true" />}
           </button>
         )}
+        <ComfortSettingsButton variant="hud" className={styles.settingsBtn} />
         <div className={styles.stars} aria-label={t("modules.starsLabel", { defaultValue: "{{count}} stars", count: totalScore })}>
           <span key={bumpKey} className={bumpKey ? styles.bump : ""}><FaStar className={styles.starIcon} aria-hidden="true" /></span>
           <span className={styles.starCount}>{totalScore}</span>
@@ -194,10 +229,13 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
               <QuestionCard
                 question={current}
                 subject={subject}
+                module={module}
                 onAnswered={recordAnswer}
                 onNext={advance}
                 isLast={isLast}
                 locked={timedOut}
+                learn={learn}
+                choicePool={choicePool}
               />
             </FramerMotion.motion.div>
           </AnimatePresence>

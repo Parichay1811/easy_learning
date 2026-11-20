@@ -29,6 +29,11 @@ function applyQuestionTranslation(questionDoc, lang) {
   if (translation.speech_scoring) {
     merged.speech_scoring = { ...question.speech_scoring, ...translation.speech_scoring }
   }
+  // Checking rules written for this language (e.g. its own keyword lists) replace the English
+  // ones; without them the checker falls back to the translated expected keywords / answers.
+  if (translation.validation && question.validation) {
+    merged.validation = { ...question.validation, ...translation.validation, keywords_lang: lang }
+  }
   delete merged.translations
   merged.lang = lang
   // Spoken text with no translation of its own stays English, and is read in English.

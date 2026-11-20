@@ -1,16 +1,19 @@
-import { useContext, useMemo, useState } from 'react'
+import { useContext, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion as Motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
   FaStar, FaRegStar, FaGlobeEurope, FaMap, FaCamera, FaArrowRight, FaChartLine, FaClock, FaGamepad,
-  FaThumbsUp, FaHandsHelping, FaInfoCircle,
+  FaThumbsUp, FaHandsHelping, FaInfoCircle, FaSeedling,
 } from 'react-icons/fa'
 import Mascot from '../../components/Mascot/Mascot'
 import ProgressMap from '../ProgressMap'
 import { SUBJECT_ICON_IMAGES } from '../../data/subjectIcons'
 import { gameStrengthsAndGrowth, suggestNextGames } from '../../ar/core/recommend'
+import { usePane } from '../../components/dashboard/usePane'
 import TabBar from './TabBar'
+import LearningView from './LearningView'
+import { useLearnProfile } from './learnApi'
 import { ReadOnlyContext } from './context'
 import { SUBJECT_KEYS, MODULE_KEYS, SUBJECT_META, MODULE_META, moduleName, subjectName, worldName, fmtMs } from './helpers'
 import c from './common.module.css'
@@ -156,10 +159,19 @@ function CameraGames({ arInsights }) {
   )
 }
 
+const VIEWS = ['learning', 'worlds', 'map', 'camera']
+
 export default function ProgressTab({ moduleStars, achievements, stats, arInsights, disableProgressMapPersistence }) {
   const { t } = useTranslation()
-  const [view, setView] = useState('worlds')
+  const readOnly = useContext(ReadOnlyContext)
+  // "My learning" needs the learner's own sign-in and a server with the learning
+  // engine: hidden for someone else looking (admin viewer) and on older servers.
+  const learn = useLearnProfile({ enabled: !readOnly })
+  const hasLearning = !readOnly && learn.status !== 404
+  const [wanted, setView] = usePane(VIEWS, { param: 'view' })
+  const view = wanted === 'learning' && !hasLearning ? 'worlds' : wanted
   const views = [
+    ...(hasLearning ? [{ key: 'learning', label: t('studentDash.progress.learning', 'My learning'), Icon: FaSeedling }] : []),
     { key: 'worlds', label: t('studentDash.progress.worlds', 'Worlds'), Icon: FaGlobeEurope },
     { key: 'map', label: t('studentDash.progress.map', 'Map'), Icon: FaMap },
     { key: 'camera', label: t('studentDash.progress.camera', 'Camera'), Icon: FaCamera },
@@ -174,6 +186,7 @@ export default function ProgressTab({ moduleStars, achievements, stats, arInsigh
         aria-labelledby={`sd-progress-tab-${view}`}
         className={p.view}
       >
+        {view === 'learning' && <LearningView learn={learn} readOnly={readOnly} />}
         {view === 'worlds' && <Worlds moduleStars={moduleStars} />}
         {view === 'map' && (
           <div className={`${c.card} ${p.mapCard}`}>

@@ -14,23 +14,37 @@
 // element (or an ancestor) picks it; otherwise it follows the element's role.
 // A component that plays its own sound in its click handler wins over that.
 
-const STORE_KEY = "learnigo_sound"; // "off" mutes every effect (not the voice)
+//
+// The learner's settings (utils/learnerPrefs.js) decide: `uiSounds` switches
+// these interface sounds on or off (separately from the teacher's voice),
+// `soundVolume` sets how loud they are, `hoverSounds` the quiet pointer cue,
+// `haptics` the phone's little buzz. While the teacher is speaking every
+// effect is ducked well under her voice, and the pointer cue is silent.
+import { getPrefs, setPrefs, onPrefsChange, reducedMotion } from "./learnerPrefs";
+import { onNarration, isNarrating } from "./narrator";
+
 const MASTER = 0.32;
+const DUCKED = 0.35; // effects while the teacher talks: about 9 dB lower
 
 let ctx = null;
 let master = null;
+let duckNode = null;
 let unlocked = false;
 let pendingIntro = false;
 let lastExplicit = 0; // when a component last played a sound itself
 let lastNav = 0; // when a navigation sound last played
 
 function enabled() {
-  try { return localStorage.getItem(STORE_KEY) !== "off"; } catch { return true; }
+  return getPrefs().uiSounds !== false;
 }
 
+// soundVolume 0.2..1 (default 0.6) -> a level around the original one.
+const levelFor = (volume) => MASTER * (0.25 + 1.25 * (Number.isFinite(volume) ? volume : 0.6));
+
 export function isSoundEnabled() { return enabled(); }
+/** The old navbar switch: now the `uiSounds` setting. */
 export function setSoundEnabled(on) {
-  try { localStorage.setItem(STORE_KEY, on ? "on" : "off"); } catch { /* private mode */ }
+  setPrefs({ uiSounds: Boolean(on) });
 }
 
 function audio() {
@@ -47,10 +61,24 @@ function audio() {
   limit.knee.value = 8;
   limit.ratio.value = 6;
   master = ctx.createGain();
-  master.gain.value = MASTER;
-  master.connect(soften).connect(limit).connect(ctx.destination);
+  master.gain.value = levelFor(getPrefs().soundVolume);
+  duckNode = ctx.createGain();
+  duckNode.gain.value = isNarrating() ? DUCKED : 1;
+  master.connect(duckNode).connect(soften).connect(limit).connect(ctx.destination);
   return ctx;
 }
+
+// The volume setting applies at once; effects dip while the teacher talks.
+onPrefsChange((p) => {
+  if (master && ctx) master.gain.setTargetAtTime(levelFor(p.soundVolume), ctx.currentTime, 0.03);
+});
+onNarration((e) => {
+  if (!duckNode || !ctx) return;
+  const down = e.type === "start" || e.type === "sentence" || e.type === "resume";
+  const up = e.type === "end" || e.type === "pause";
+  if (down) duckNode.gain.setTargetAtTime(DUCKED, ctx.currentTime, 0.02);
+  else if (up) duckNode.gain.setTargetAtTime(1, ctx.currentTime, 0.15);
+});
 
 // Browsers keep sound off until the first tap or key. Unlock then, and play
 // the intro chime if the page asked for it before it was allowed.
@@ -212,10 +240,91 @@ export const playWrong = () => sfx.wrong();
 export function navSoundWithin(ms = 600) { return performance.now() - lastNav < ms; }
 
 const VIBES = { light: 8, tap: 8, select: 12, tick: 6, success: [12, 50, 18], error: [28, 40, 28], warn: [18, 60, 18] };
-/** A little buzz on phones that have one (ignored elsewhere and when sound is off). */
+let lastPointer = "mouse"; // the kind of pointer that last pressed something
+/**
+ * A little buzz on phones and tablets (the `haptics` setting). Only after a
+ * touch: a mouse click never buzzes, and a hover never does.
+ */
 export function haptic(kind = "light") {
-  if (!enabled()) return;
+  if (getPrefs().haptics === false || lastPointer !== "touch") return;
   try { navigator.vibrate?.(VIBES[kind] ?? 8); } catch { /* not supported */ }
+}
+
+/** Plays a sample at a given volume (the settings sheet's "Try a sound"). */
+export function previewSound(volume) {
+  const c = audio();
+  if (!c) return;
+  const run = () => {
+    if (!master) return;
+    const now = c.currentTime;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(levelFor(volume), now);
+    try { mallet(c, N.E5, { gain: 0.32 }); mallet(c, N.B5, { at: 0.06, gain: 0.28 }); } catch { /* never worth an error */ }
+    master.gain.setTargetAtTime(levelFor(getPrefs().soundVolume), now + 0.6, 0.05);
+  };
+  if (c.state === "running") run();
+  else c.resume().then(run).catch(() => {});
+}
+
+/* ── The pointer cue ───────────────────────────────────────────────────────
+   A very soft glass tap (about 30 ms, very low) when a mouse or pen moves
+   ONTO a card marked data-hover-sound. Only on entering (moving inside the
+   card is silent), at most one every 90 ms, never over the teacher's voice,
+   never for touch, and only with the `uiSounds` and `hoverSounds` settings on.
+   Each decision is announced as a "learnigo:hovercue" event on document
+   (detail: { played, reason }), so tests can count cues without sound. */
+const HOVER_GAP_MS = 90;
+let lastHover = 0;
+let hoverInstalled = false;
+
+function hoverCue(c, soft) {
+  const t = c.currentTime;
+  const level = soft ? 0.028 : 0.05;
+  // a short sine "glass" note with a quick fall, through a gentle band-pass
+  const o = c.createOscillator();
+  const g = c.createGain();
+  const bp = c.createBiquadFilter();
+  bp.type = "bandpass";
+  bp.frequency.value = 2600;
+  bp.Q.value = 0.8;
+  o.type = "sine";
+  o.frequency.setValueAtTime(2350, t);
+  o.frequency.exponentialRampToValueAtTime(1900, t + 0.03);
+  g.gain.setValueAtTime(0.0001, t);
+  g.gain.exponentialRampToValueAtTime(level, t + 0.003);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + 0.032);
+  o.connect(bp).connect(g).connect(master);
+  o.start(t);
+  o.stop(t + 0.045);
+}
+
+function announce(played, reason) {
+  try { document.dispatchEvent(new CustomEvent("learnigo:hovercue", { detail: { played, reason } })); } catch { /* old browser */ }
+}
+
+/** Gives cards marked data-hover-sound their soft pointer cue. Called by installUiSounds. */
+export function installHoverSounds() {
+  if (hoverInstalled || typeof document === "undefined") return;
+  hoverInstalled = true;
+  document.addEventListener("pointerover", (e) => {
+    if (e.pointerType !== "mouse" && e.pointerType !== "pen") return;
+    const card = e.target?.closest?.("[data-hover-sound]");
+    if (!card) return;
+    // Moving between parts of the same card is not entering it.
+    if (e.relatedTarget && card.contains(e.relatedTarget)) return;
+    if (card.disabled || card.getAttribute("aria-disabled") === "true" || card.getAttribute("data-hover-sound") === "off") return;
+    const p = getPrefs();
+    if (p.uiSounds === false || p.hoverSounds === false) return announce(false, "off");
+    if (isNarrating()) return announce(false, "voice");
+    if (document.hidden) return announce(false, "hidden");
+    const now = performance.now();
+    if (now - lastHover < HOVER_GAP_MS) return announce(false, "throttled");
+    lastHover = now;
+    const c = ready();
+    announce(Boolean(c), c ? "played" : "locked");
+    if (!c) return;
+    try { hoverCue(c, reducedMotion(p)); } catch { /* never worth an error */ }
+  }, { passive: true });
 }
 
 // The sound a pressed element makes when its component does not choose one.
@@ -242,6 +351,8 @@ let installed = false;
 export function installUiSounds() {
   if (installed || typeof document === "undefined") return;
   installed = true;
+  installHoverSounds();
+  document.addEventListener("pointerdown", (e) => { lastPointer = e.pointerType || "mouse"; }, { capture: true, passive: true });
   document.addEventListener("click", (e) => {
     const el = e.target?.closest?.("button, a[href], [role=button], [role=tab], [role=switch], [role=checkbox], [role=radio], [role=menuitem], input[type=checkbox], input[type=radio], summary, [data-sound]");
     if (!el || el.disabled || el.getAttribute("aria-disabled") === "true") return;

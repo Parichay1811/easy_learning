@@ -2,13 +2,14 @@
 // the numbers, plus the teacher's private notes and the parent link status.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote } from "react-icons/fa";
+import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling } from "react-icons/fa";
 import {
   TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel, PanelHead, Sheet, usePane,
   SubjectModuleMatrix, CalendarHeatmap, Timeline, toTable, fmtDuration, fmtPercent, fmtDate, moduleLabel, subjectLabel,
 } from "../../components/dashboard";
 import { useLoad, useTeacherApi } from "./teacherApi";
 import { ParentStatus } from "./ParentsPanel";
+import TeacherPlan from "./TeacherPlan";
 import { groupStyle, rangeQuery, matrixCells } from "./teacherShared";
 import s from "./teacher.module.css";
 
@@ -150,7 +151,7 @@ export default function StudentView({ id, go }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const q = useLoad(() => get(`/students/${id}/profile`), [id]);
-  const [pane, setPane] = usePane(["overview", "subjects", "activity", "notes"]);
+  const [pane, setPane] = usePane(["overview", "subjects", "activity", "plan", "notes"]);
   if (q.loading && !q.data) return <><Skeleton variant="text" lines={2} /><Skeleton variant="chart" /></>;
   if (q.error) return <EmptyState tone="error" title={t("teacher.stu.notFound", { defaultValue: "Student not found" })} text={q.error} actionLabel={t("teacher.groups.back", { defaultValue: "Back to my groups" })} onAction={() => go("groups")} />;
   const d = q.data;
@@ -161,6 +162,7 @@ export default function StudentView({ id, go }) {
     { id: "overview", label: t("teacher.stu.tabOverview", { defaultValue: "Overview" }), icon: FaChartPie },
     { id: "subjects", label: t("teacher.stu.tabSubjects", { defaultValue: "Subjects" }), icon: FaThLarge },
     { id: "activity", label: t("teacher.stu.tabActivity", { defaultValue: "Activity" }), icon: FaCalendarAlt },
+    ...(st.email ? [{ id: "plan", label: t("teacher.stu.tabPlan", { defaultValue: "Learning plan" }), short: t("teacher.stu.tabPlanShort", { defaultValue: "Plan" }), icon: FaSeedling }] : []),
     { id: "notes", label: t("teacher.stu.tabNotes", { defaultValue: "My notes" }), icon: FaStickyNote, badge: d.notes.length || undefined },
   ] : [
     { id: "overview", label: t("teacher.stu.tabOverview", { defaultValue: "Overview" }), icon: FaChartPie },
@@ -186,6 +188,7 @@ export default function StudentView({ id, go }) {
       <SubTabs label={t("teacher.stu.tabs", { defaultValue: "About {{name}}", name: firstName })} tabs={tabs} value={current} onChange={setPane} idBase="stu" />
       <SubPanel key={current} id={current} value={current} idBase="stu">
         {current === "notes" ? <Notes studentId={id} initial={d.notes} onChanged={q.reload} />
+          : current === "plan" ? <TeacherPlan student={id} name={firstName} />
           : d.hasAnalytics ? <Analytics id={id} name={firstName} part={current} />
             : <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} actionLabel={t("teacher.stu.writeNote", { defaultValue: "Write a private note" })} onAction={() => setPane("notes")} />}
       </SubPanel>

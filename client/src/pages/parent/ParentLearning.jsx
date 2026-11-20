@@ -7,6 +7,7 @@ import {
 } from "../../components/dashboard";
 import { useLoad, rangeQuery, matrixCells, masteryKey, frac } from "./parentApi";
 import QuestionReview from "./QuestionReview";
+import ParentPlan from "./ParentPlan";
 import s from "./parent.module.css";
 
 const LEVEL = { notStarted: 0, learning: 1, practising: 2, mastered: 3 };
@@ -16,7 +17,7 @@ const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : "");
 
 // Learning in depth (PAR-030..036): subjects, skills, trends, modes, the exact questions, AI Teacher, games,
 // one sub-tab each so every view fits a screen. A tile opens "Questions" filtered to that area.
-const PANES = ["subjects", "skills", "progress", "questions", "extras"];
+const PANES = ["subjects", "skills", "progress", "questions", "extras", "plan"];
 export default function ParentLearning({ api, child, go }) {
   const { t } = useTranslation();
   const T = (k, d, o) => t(`parent.learn.${k}`, { defaultValue: d, ...o });
@@ -71,8 +72,9 @@ export default function ParentLearning({ api, child, go }) {
           { id: "progress", label: T("tab.progress", "Progress") },
           { id: "questions", label: T("tab.questions", "Questions") },
           { id: "extras", label: T("tab.extras", "AI Teacher and games"), short: T("tab.extrasShort", "AI & games") },
+          { id: "plan", label: T("tab.plan", "Learning plan"), short: T("tab.planShort", "Plan") },
         ]}
-        actions={<TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare compact />} />
+        actions={pane === "plan" ? null : <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare compact />} />
 
       <SubPanel id="subjects" value={pane}>
         <ChartCard title={T("matrix", "Which areas are strong, and which need practice?")}
@@ -183,7 +185,10 @@ export default function ParentLearning({ api, child, go }) {
           </section>
         </div>
       </SubPanel>
-      <p className={`${s.muted} ${s.small}`}>{cap(T("periodNote", "showing {{from}} to {{to}}", { from: fmtDate(tr.from, { style: "short" }), to: fmtDate(tr.to, { style: "short" }) }))}</p>
+      <SubPanel id="plan" value={pane}>
+        <ParentPlan api={api} child={child} />
+      </SubPanel>
+      {pane !== "plan" && <p className={`${s.muted} ${s.small}`}>{cap(T("periodNote", "showing {{from}} to {{to}}", { from: fmtDate(tr.from, { style: "short" }), to: fmtDate(tr.to, { style: "short" }) }))}</p>}
     </>
   );
 }

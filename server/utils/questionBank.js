@@ -26,7 +26,8 @@ async function orgUploadBatchIds(orgId, { approvedOnly = false } = {}) {
   return (await QuestionUploadBatch.find(filter).select('_id').lean()).map((b) => b._id)
 }
 
-const learnigoFilter = () => ({ uploadBatchId: null, submittedBy: null, orgId: null })
+// Built-in questions the content audit excluded (qa.status "excluded") are never offered.
+const learnigoFilter = () => ({ uploadBatchId: null, submittedBy: null, orgId: null, 'qa.status': { $ne: 'excluded' } })
 
 // Which questions a teacher can see, per scope. Returns a Mongo filter.
 async function scopeFilter(teacher, scope) {
@@ -195,7 +196,7 @@ async function drawPool(teacher, pool, exclude = new Set(), rand = Math.random) 
     }
     if (pool.interactions?.length) and.push({ interaction: { $in: pool.interactions } })
     // Only questions a student may see: approved, or the teacher's own in a solo workspace.
-    and.push({ status: 'approved' })
+    and.push({ status: 'approved', 'qa.status': { $ne: 'excluded' } })
     for (const c of collectionsFor(pool.module, pool.subject)) {
       const docs = await c.Model.find({ $and: and }).limit(500)
       refs.push(...docs.map((doc) => ({ doc, module: c.module, subject: c.subject })))

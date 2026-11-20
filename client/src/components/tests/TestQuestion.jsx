@@ -132,7 +132,7 @@ export default function TestQuestion({ item, value, onChange, disabled, result, 
   const spoke = useRef(false);
   const readText = useMemo(() => [item.instruction, item.prompt, item.audio_text].filter(Boolean).join(". "), [item]);
 
-  const play = (text) => speech.speak(text, { onStart: () => setPlaying(true), onEnd: () => setPlaying(false), onError: () => setPlaying(false) });
+  const play = (text) => speech.speak(text, { user: true, onStart: () => setPlaying(true), onEnd: () => setPlaying(false), onError: () => setPlaying(false) });
   useEffect(() => {
     if (autoRead && !spoke.current && readText) { spoke.current = true; play(readText); }
   }, [autoRead, readText]); // eslint-disable-line react-hooks/exhaustive-deps

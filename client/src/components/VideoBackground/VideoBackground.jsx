@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./VideoBackground.module.css";
+import { usePrefs } from "../settings/usePrefs";
 import laptopVideo from "../../assets/videos/bg-laptop.mp4";
 import tabletVideo from "../../assets/videos/bg-tab.mp4";
 import mobileVideo from "../../assets/videos/bg-mobile.mp4";
@@ -20,6 +21,8 @@ function getSource() {
 // pointer events, no effect on page layout or functionality.
 const VideoBackground = () => {
   const [src, setSrc] = useState(getSource);
+  // "Fewer distractions" (focus mode): no moving video at all, just the calm overlay.
+  const { focusMode } = usePrefs();
 
   useEffect(() => {
     const mobileMql = window.matchMedia(MOBILE_QUERY);
@@ -36,7 +39,7 @@ const VideoBackground = () => {
 
   return (
     <div className={styles.wrapper} aria-hidden="true">
-      <video
+      {!focusMode && <video
         key={src}
         className={styles.video}
         src={src}
@@ -45,7 +48,7 @@ const VideoBackground = () => {
         loop
         playsInline
         preload="auto"
-      />
+      />}
       <div className={styles.overlay} />
     </div>
   );

@@ -1,0 +1,220 @@
+/* "My learning" inside the Progress tab: every part at once on wide screens,
+   one part at a time (with a small switch) on phones. Fits one screen; long
+   lists scroll inside their own card. */
+
+.root {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vh, 12px);
+}
+
+.grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  gap: clamp(8px, 1.4vh, 14px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1.15fr) minmax(0, 1fr);
+  grid-template-areas:
+    "levels next skills"
+    "time goals skills";
+}
+.root[data-layout="tablet"] .grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto minmax(0, 1fr) minmax(0, 0.85fr);
+  grid-template-areas:
+    "levels next"
+    "skills goals"
+    "time time";
+}
+.levelsCard { grid-area: levels; }
+.nextCol { grid-area: next; }
+.skillsCard { grid-area: skills; }
+.goalsCard { grid-area: goals; }
+.timeCard { grid-area: time; }
+
+.card {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vh, 12px);
+  padding: clamp(10px, 1.6vh, 18px) clamp(12px, 1.6vw, 20px);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+/* ── Phones: a small switch and one part ── */
+.partSeg { align-self: stretch; }
+.part {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 12px);
+}
+.part > .card { flex: 1 1 auto; }
+.part[data-part="me"] > .nextCol { flex: 1 1 auto; }
+@media (orientation: portrait) {
+  /* Upright phones: all three subjects show; what's next takes the rest and scrolls. */
+  .part[data-part="me"] > .levelsCard { flex: none; overflow: visible; }
+}
+@media (orientation: landscape) and (min-height: 521px) {
+  .part[data-part="me"] { flex-direction: row; }
+  .part[data-part="me"] > .card { flex: 1 1 0; min-width: 0; }
+}
+/* Short landscape phones: the levels (one line each) and what's next stack,
+   and this part scrolls as one. */
+@media (orientation: landscape) and (max-height: 520px) {
+  .part[data-part="me"] { overflow-y: auto; overscroll-behavior: contain; }
+  .part[data-part="me"] > .card { flex: none; overflow: visible; }
+}
+
+/* ── Levels ── */
+.levelList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: clamp(6px, 1vh, 10px); }
+.levelList { container-type: inline-size; }
+.levelRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: clamp(6px, 1vh, 10px) 10px;
+  border-radius: 16px;
+  background: var(--sk-soft);
+  border: 2px solid color-mix(in srgb, var(--sk) 30%, #fff);
+}
+.badge { flex: 1 1 0; min-width: 0; }
+.change {
+  flex: none;
+  margin-inline-start: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid color-mix(in srgb, var(--sk) 45%, var(--d-line));
+  background: var(--d-card);
+  color: var(--sk-ink);
+  font: 600 0.92rem/1.1 var(--d-font);
+  cursor: pointer;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--sk) 30%, var(--d-lip));
+}
+.change:hover { background: var(--sk-soft); }
+/* A narrow card: the pencil alone (its name stays for screen readers). */
+@container (max-width: 380px) {
+  .change { width: 44px; padding: 0; justify-content: center; }
+  .change span { display: none; }
+}
+.change:active { transform: translateY(2px); box-shadow: 0 1px 0 color-mix(in srgb, var(--sk) 30%, var(--d-lip)); }
+.levelHelp { margin: 0; color: var(--d-muted); font-size: 0.84rem; line-height: 1.4; }
+
+/* ── What's next ── */
+.nextCol { justify-content: flex-start; }
+.suggestions { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.suggestion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--d-sun-soft);
+  border: 2px solid #ffe066;
+}
+.suggestIcon { flex: none; color: var(--d-sun-ink); }
+.suggestText { flex: 1 1 12rem; min-width: 0; color: var(--d-ink); line-height: 1.35; font-size: 0.95rem; }
+.suggestBtns { display: flex; flex-wrap: wrap; gap: 6px; }
+.yes, .no {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font: 600 0.9rem/1.1 var(--d-font);
+  cursor: pointer;
+}
+.yes { border: 0; background: var(--d-accent); color: var(--d-on-accent); box-shadow: 0 3px 0 var(--d-accent-lip); }
+.no { border: 2px solid var(--d-control); background: var(--d-card); color: var(--d-ink); }
+.yes:disabled, .no:disabled { opacity: 0.6; cursor: wait; }
+
+.wins h4, .miniTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 4px;
+  font: 700 0.95rem/1.2 var(--d-font);
+  color: var(--d-ink);
+}
+.miniTitle svg { color: #f5b301; }
+.wins ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.wins li { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font-size: 0.9rem; color: var(--d-ink); }
+.wins small { flex: none; color: var(--d-muted); }
+
+/* ── Skills ── */
+.skills { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; gap: 8px; }
+.miniSeg { align-self: stretch; }
+.miniSeg > button { flex: 1 1 0; }
+.miniSeg :global([class*="segText"]) { white-space: normal; text-align: center; }
+.skillScroll { padding-bottom: 18px; }
+.practise {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  /* darker than the big orange button: white small text keeps 5:1 */
+  background: linear-gradient(180deg, #c2410c, #9a3412);
+  box-shadow: 0 3px 0 #6b2108;
+  color: #fff;
+  font: 700 0.88rem/1.1 var(--d-font);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.practise:active { transform: translateY(2px); box-shadow: 0 1px 0 #8a2d06; }
+
+/* ── Goals and weeks ── */
+.goalScroll { padding-bottom: 14px; }
+.weekly { flex: 1 1 auto; }
+
+.emptyLine { margin: 0; color: var(--d-muted); line-height: 1.45; font-size: 0.95rem; }
+
+/* The "Saved" line, shown for a few seconds over the bottom of the view. */
+.said {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  z-index: 5;
+  max-width: min(90%, 440px);
+  margin: 0;
+  padding: 8px 16px;
+  transform: translateX(-50%);
+  border-radius: 999px;
+  background: var(--d-ink);
+  color: var(--d-card);
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 8px 20px -8px rgba(31, 42, 68, 0.5);
+  pointer-events: none;
+}
+
+.lockedNote { display: flex; flex-direction: column; gap: 12px; }
+.lockedNote p { margin: 0; line-height: 1.5; color: var(--d-ink); }
+.sheetError { margin: 10px 0 0; color: var(--d-alert-ink); font-weight: 600; }
+
+/* Short landscape phones: tighter. */
+/* Phones: the help line moves into the "Change" sheet. */
+.root[data-layout="compact"] .levelHelp { display: none; }
+
+@media (orientation: landscape) and (max-height: 520px) {
+  .card { padding: 8px 10px; gap: 6px; }
+  .levelRow { padding: 4px 8px; gap: 6px; }
+  .change { min-height: 40px; padding: 4px 12px; }
+  /* The switch above already names the part: no card titles, smaller words. */
+  .root[data-layout="compact"] .card > h3 { display: none; }
+  .levelList { gap: 5px; }
+}

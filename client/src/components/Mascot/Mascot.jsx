@@ -60,7 +60,7 @@ export function FloatingButterflies({ count = 3 }) {
     { hue: "#8be28b", hue2: "#ffe270" },
   ];
   return (
-    <div className={styles.flock} aria-hidden="true">
+    <div className={styles.flock} aria-hidden="true" data-decorative>
       {all.slice(0, Math.max(1, Math.min(4, count))).map((b, i) => (
         <Butterfly key={i} className={`${styles.flyer} ${styles[`path${i}`]}`} hue={b.hue} hue2={b.hue2} />
       ))}

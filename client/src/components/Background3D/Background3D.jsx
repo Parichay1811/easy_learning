@@ -72,7 +72,7 @@ const Background3D = () => {
   }, []);
 
   return (
-    <div className={styles.wrapper} aria-hidden="true">
+    <div className={styles.wrapper} aria-hidden="true" data-decorative>
       <div className={styles.scene} ref={sceneRef}>
         {BRICKS.map((b) => (
           <div

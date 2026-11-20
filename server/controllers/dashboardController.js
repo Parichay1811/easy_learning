@@ -3,6 +3,7 @@ const StudentActivity   = require('../models/StudentActivity')
 const StudentAchievement = require('../models/StudentAchievement')
 const StudentAnswer      = require('../models/StudentAnswer')
 const StudentRound       = require('../models/StudentRound')
+const { processAnswer }  = require('../services/learning/engine')
 
 // ── Achievement definitions ────────────────────────────────────────────────────
 const ACHIEVEMENTS = [
@@ -249,32 +250,50 @@ const getPerformance = async (req, res) => {
   }
 }
 
+// Answers are stored as text; a structured answer (e.g. a speech result object) is kept as short JSON.
+const answerText = (v) => (v == null ? '' : typeof v === 'string' ? v : JSON.stringify(v).slice(0, 500))
+
+// Old body: { module, subject, question, userAnswer, correctAnswer, correct, xpEarned, timeTaken, mode, questionId, topic, hintsUsed }.
+// New body adds { status, firstTry, hintsUsed, supportStep, misconception, uncertain } for the learning
+// engine (services/learning/engine.js) and the reply adds `learn` (skill, mastery, support, message).
+// An "uncertain" answer (speech not heard, microphone blocked) is never counted: not stored as right
+// or wrong and not in the analytics.
 const logAnswer = async (req, res) => {
   try {
     const { email } = req.user
     const { module: mod, subject, question, userAnswer, correctAnswer, correct, xpEarned, timeTaken, mode } = req.body
-    await StudentAnswer.create({
-      email,
-      module: mod || 'unknown',
-      subject: subject || 'general',
-      question: question || '',
-      userAnswer: userAnswer || '',
-      correctAnswer: correctAnswer || '',
-      correct: !!correct,
-      xpEarned: xpEarned || 0,
-      timeTaken: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken : null,
-      mode: mode || 'practice',
-      questionId: typeof req.body.questionId === 'string' ? req.body.questionId.slice(0, 60) : null,
-      topic: typeof req.body.topic === 'string' ? req.body.topic.slice(0, 80) : null,
-      hintsUsed: Math.max(0, Math.min(10, Number(req.body.hintsUsed) || 0)),
-    })
-    await recordAnswer({
-      email, module: mod, subject, correct: !!correct, mode: mode || 'practice',
-      timeMs: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken * 1000 : null, // client sends seconds
-      hintsUsed: Number(req.body.hintsUsed) || 0, firstTry: req.body.firstTry ?? null, testId: req.body.testId,
-      ...contextFrom(req),
-    })
-    res.json({ success: true })
+    const uncertain = req.body.status === 'uncertain' || req.body.uncertain === true
+    if (!uncertain) {
+      await StudentAnswer.create({
+        email,
+        module: mod || 'unknown',
+        subject: subject || 'general',
+        question: question || '',
+        userAnswer: answerText(userAnswer),
+        correctAnswer: answerText(correctAnswer),
+        correct: !!correct,
+        xpEarned: xpEarned || 0,
+        timeTaken: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken : null,
+        mode: mode || 'practice',
+        questionId: typeof req.body.questionId === 'string' ? req.body.questionId.slice(0, 60) : null,
+        topic: typeof req.body.topic === 'string' ? req.body.topic.slice(0, 80) : null,
+        hintsUsed: Math.max(0, Math.min(10, Number(req.body.hintsUsed) || 0)),
+      })
+      await recordAnswer({
+        email, module: mod, subject, correct: !!correct, mode: mode || 'practice',
+        timeMs: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken * 1000 : null, // client sends seconds
+        hintsUsed: Number(req.body.hintsUsed) || 0, firstTry: req.body.firstTry ?? null, testId: req.body.testId,
+        ...contextFrom(req),
+      })
+    }
+    // The adaptive engine never breaks answer logging.
+    let learn = null
+    try {
+      learn = await processAnswer(email, req.body, { tz: contextFrom(req).tz })
+    } catch (err) {
+      console.error('learning engine error:', err.message)
+    }
+    res.json({ success: true, learn })
   } catch (err) {
     console.error('logAnswer error:', err)
     res.status(500).json({ success: false, message: 'Internal server error' })

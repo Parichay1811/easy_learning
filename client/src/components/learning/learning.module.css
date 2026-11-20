@@ -1,0 +1,482 @@
+/* The learning kit (levels, skills, goals, next up, the learning plan).
+   Uses the dashboard tokens (components/dashboard/tokens.css), so it follows
+   the light/dark theme of the page it sits in. Coloured text uses -ink tokens. */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.muted { color: var(--d-muted); margin: 0; line-height: 1.45; }
+
+/* ── LevelBadge ─────────────────────────────────────────────────────────── */
+.levelBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--d-ink);
+}
+/* The subject's ink colour (not its bright fill) behind the number, so the
+   number keeps 4.5:1 in both themes. */
+.levelNum {
+  flex: none;
+  width: 2.4em;
+  height: 2.4em;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--lv-ink);
+  color: var(--d-card, #fff);
+  font: 700 1.15rem/1 var(--d-font);
+  letter-spacing: 0;
+  border: 3px solid var(--lv);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--lv) 60%, #000);
+}
+.levelWords { display: flex; flex-direction: column; min-width: 0; line-height: 1.25; }
+.levelSubject { font-size: 0.82rem; font-weight: 600; color: var(--lv-ink); letter-spacing: 0.02em; }
+.levelNote { color: var(--d-ink); font-weight: 500; }
+.levelLine { font-size: 1rem; overflow-wrap: anywhere; }
+.levelLine b { font-weight: 700; }
+.lockMark { display: inline-flex; margin-inline-start: 6px; color: var(--d-muted); font-size: 0.85em; vertical-align: -1px; }
+.levelBadgeSm .levelNum { font-size: 0.98rem; width: 2.2em; height: 2.2em; }
+.levelBadgeSm .levelLine { font-size: 0.95rem; }
+
+/* ── LevelPicker ────────────────────────────────────────────────────────── */
+.picker {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.picker:disabled { opacity: 0.6; }
+.pickerLegend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 0.98rem;
+  color: var(--d-ink);
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 6px;
+}
+.step { position: relative; display: flex; }
+.stepInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.stepLabel {
+  flex: 1;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  border: 2px solid var(--d-control);
+  background: var(--d-card);
+  color: var(--d-ink);
+  font: 700 1.08rem/1 var(--d-font);
+  letter-spacing: 0;
+  cursor: pointer;
+  pointer-events: none; /* the radio on top takes the tap */
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+.stepLabel[data-now] { border-style: dashed; }
+.stepInput:hover + .stepLabel { background: var(--lv-soft); }
+.stepInput:checked + .stepLabel {
+  background: var(--lv-ink);
+  border-color: var(--lv);
+  color: var(--d-card, #fff);
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--lv) 55%, #000);
+}
+.stepInput:focus-visible + .stepLabel { outline: 3px solid var(--d-focus); outline-offset: 2px; }
+.pickDesc {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--lv-soft);
+  border: 2px solid color-mix(in srgb, var(--lv) 30%, var(--d-line));
+}
+.pickName { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; font-weight: 700; color: var(--d-ink); }
+.pickText { margin: 4px 0 0; color: var(--d-ink); line-height: 1.45; }
+.pickNote { margin: 6px 0 0; color: var(--d-muted); font-size: 0.86rem; }
+.nowTag {
+  padding: 1px 9px;
+  border-radius: 999px;
+  border: 2px dashed var(--d-control);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--d-ink);
+}
+
+/* ── SkillList ──────────────────────────────────────────────────────────── */
+.skillList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.skillRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 9px 2px;
+  border-bottom: 1px solid var(--d-line);
+}
+.skillRow:last-child { border-bottom: 0; }
+.skillDot {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sk, var(--d-neutral));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--sk, var(--d-neutral)) 25%, transparent);
+}
+.skillMain { flex: 1 1 12rem; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.skillName { font-weight: 600; color: var(--d-ink); line-height: 1.3; overflow-wrap: anywhere; }
+.skillMeta { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: 0.86rem; color: var(--d-muted); }
+.skillState { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
+.skillState[data-state="mastered"] { color: var(--d-good-ink); }
+.skillState[data-state="review_due"] { color: var(--d-sky-ink); }
+.skillState[data-state="learning"] { color: var(--d-attention-ink); }
+.skillHint { font-size: 0.88rem; color: var(--d-muted); line-height: 1.4; }
+.skillAction { flex: none; margin-inline-start: auto; }
+
+/* ── NextUpCard ─────────────────────────────────────────────────────────── */
+.nextCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: var(--sk-soft, var(--d-accent-soft));
+  border: 2px solid color-mix(in srgb, var(--sk, var(--d-accent)) 35%, var(--d-line));
+}
+.nextHead { display: flex; align-items: center; gap: 12px; min-width: 0; }
+/* Room enough: the button sits beside the title, the reason under both. */
+.nextWrap { container-type: inline-size; min-width: 0; }
+@container (min-width: 330px) {
+  .nextCard { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 12px; }
+  .nextReason { grid-column: 1 / -1; grid-row: 2; }
+  .nextGo { grid-column: 2; grid-row: 1; }
+}
+.nextIcon {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sk, var(--d-accent));
+  color: #fff;
+  font-size: 1.2rem;
+  box-shadow: 0 3px 0 color-mix(in srgb, var(--sk, var(--d-accent)) 60%, #000);
+}
+.nextWords { display: flex; flex-direction: column; min-width: 0; }
+.nextKicker { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--sk-ink, var(--d-accent-ink)); }
+.nextTitle { margin: 0; font: 700 1.15rem/1.2 var(--d-font); color: var(--d-ink); overflow-wrap: anywhere; }
+.nextWhere { font-size: 0.88rem; color: var(--d-muted); }
+.nextReason { margin: 0; color: var(--d-ink); line-height: 1.4; font-size: 0.95rem; }
+.nextGo {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: var(--d-accent);
+  color: var(--d-on-accent);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 0 var(--d-accent-lip);
+  transition: transform 0.15s ease;
+}
+.nextGo:hover { transform: translateY(-1px); }
+.nextGo:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--d-accent-lip); }
+
+/* ── GoalList ───────────────────────────────────────────────────────────── */
+.goals { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.goalList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.goalRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 4px 4px 4px 12px;
+  border-radius: 14px;
+  background: var(--d-card-alt);
+  border: 2px solid var(--d-line);
+}
+.goalRow[data-done] { background: var(--d-good-soft); border-color: color-mix(in srgb, var(--d-good) 40%, var(--d-line)); }
+.goalCheck { flex: none; width: 24px; height: 24px; margin: 0; accent-color: var(--d-accent); cursor: pointer; }
+.goalText { flex: 1; min-width: 0; color: var(--d-ink); line-height: 1.35; overflow-wrap: anywhere; cursor: pointer; padding: 6px 0; }
+.goalRow[data-done] .goalText { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: color-mix(in srgb, var(--d-good-ink) 60%, transparent); }
+.goalSubject { color: var(--d-muted); font-size: 0.88em; }
+.goalBy {
+  display: inline-block;
+  margin-inline-start: 8px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--d-neutral-soft);
+  color: var(--d-ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  vertical-align: 1px;
+}
+.iconGap { flex: none; width: 44px; }
+.iconBtn {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--d-muted);
+  cursor: pointer;
+}
+.iconBtn:hover { background: var(--d-card); color: var(--d-ink); }
+.goalAdd { display: flex; gap: 8px; flex-wrap: wrap; }
+.input, .select {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 2px solid var(--d-control);
+  border-radius: 12px;
+  background: var(--d-card);
+  color: var(--d-ink);
+  font: inherit;
+}
+.input { flex: 1 1 12rem; min-width: 0; }
+.select { max-width: 100%; }
+.input:focus-visible, .select:focus-visible { outline: 3px solid var(--d-focus); outline-offset: 1px; }
+.addBtn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 18px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--d-accent);
+  color: var(--d-on-accent);
+  font-weight: 700;
+  box-shadow: 0 3px 0 var(--d-accent-lip);
+  cursor: pointer;
+}
+.addBtn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
+
+/* ── WeeklyProgress ─────────────────────────────────────────────────────── */
+.weekly { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.weekAnswers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(52px, 1fr));
+  gap: 4px;
+}
+.weekAnswers li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 2px;
+  border-radius: 10px;
+  background: var(--d-card-alt);
+  font-size: 0.8rem;
+  color: var(--d-muted);
+}
+.weekAnswers b { color: var(--d-ink); font-size: 0.98rem; }
+.weekName { white-space: nowrap; }
+.weekNote { margin: 0; color: var(--d-muted); font-size: 0.88rem; line-height: 1.45; }
+
+/* ── LearningPlanEditor ─────────────────────────────────────────────────── */
+.plan {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+}
+.planPanel { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.planIntro { margin: 0; max-width: 75ch; color: var(--d-muted); line-height: 1.5; }
+
+.subjGrid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+.subjCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+  padding: 16px;
+  border-radius: var(--d-radius, 24px);
+  background: var(--d-card);
+  border: 2px solid var(--d-line);
+  border-top: 6px solid var(--sk);
+  box-shadow: var(--d-shadow);
+}
+.subjHead { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 10px; }
+.subjIcon {
+  flex: none;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--sk-soft);
+  color: var(--sk-ink);
+}
+.subjName { margin: 0; font: 700 1.15rem/1.2 var(--d-font); color: var(--d-ink); }
+.statusChip {
+  margin-inline-start: auto;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--d-neutral-soft);
+  color: var(--d-ink);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.statusChip[data-status="advancing"] { background: var(--d-good-soft); color: var(--d-good-ink); }
+.statusChip[data-status="support"] { background: var(--d-sky-soft); color: var(--d-sky-ink); }
+.subjNow { display: flex; flex-direction: column; gap: 6px; }
+.subjFacts { margin: 0; font-size: 0.86rem; color: var(--d-muted); line-height: 1.45; }
+.changeNote {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--d-attention-soft);
+  color: var(--d-ink);
+  font-size: 0.9rem;
+}
+.check { display: flex; align-items: flex-start; gap: 10px; min-height: 44px; cursor: pointer; color: var(--d-ink); }
+.check input { flex: none; width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--d-accent); cursor: pointer; }
+.check span { display: flex; flex-direction: column; gap: 2px; font-weight: 600; line-height: 1.35; }
+.check small { font-weight: 400; color: var(--d-muted); font-size: 0.86rem; }
+.otherNote { font-weight: 600 !important; color: var(--d-ink) !important; font-size: 0.82rem; }
+.skillPlan { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 4px 8px; }
+
+.suggestList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.suggestRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--d-sun-soft);
+  color: var(--d-ink);
+}
+.suggestRow > svg { flex: none; color: var(--d-sun-ink); }
+.suggestRow > span { flex: 1 1 14rem; min-width: 0; }
+
+.paceSet { margin: 0; padding: 0; border: 0; min-width: 0; }
+.paceGrid { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.paceOption {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 2px solid var(--d-line);
+  background: var(--d-card);
+  cursor: pointer;
+}
+.paceOption[data-on] { border-color: var(--d-accent); background: var(--d-accent-soft); }
+.paceOption input { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--d-accent); }
+.paceOption span { display: flex; flex-direction: column; gap: 2px; color: var(--d-ink); }
+.paceOption small { color: var(--d-muted); font-size: 0.86rem; line-height: 1.4; }
+.paceOption:has(input:focus-visible) { outline: 3px solid var(--d-focus); outline-offset: 2px; }
+
+.changes { color: var(--d-muted); font-size: 0.9rem; }
+.changes summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 600; color: var(--d-ink); }
+.changes ul { margin: 0; padding-inline-start: 20px; line-height: 1.6; }
+
+.filterRow { display: flex; flex-wrap: wrap; gap: 6px; }
+.filterBtn {
+  min-height: 40px;
+  padding: 4px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--d-line);
+  background: var(--d-card);
+  color: var(--d-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+.filterBtn[aria-pressed="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); box-shadow: 0 3px 0 var(--d-accent-lip); }
+
+.trickyList { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); }
+.tricky {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: var(--d-card);
+  border: 2px solid var(--d-line);
+  border-inline-start: 6px solid var(--sk, var(--d-neutral));
+}
+.trickyHead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; width: 100%; }
+.trickyName { margin: 0; font: 700 1.05rem/1.25 var(--d-font); color: var(--d-ink); }
+.countChip { padding: 2px 10px; border-radius: 999px; background: var(--d-neutral-soft); color: var(--d-ink); font-size: 0.8rem; font-weight: 600; }
+.trickyWhat, .trickyHome { margin: 0; color: var(--d-ink); line-height: 1.45; font-size: 0.95rem; }
+.trickyHome { display: flex; gap: 8px; padding: 8px 10px; border-radius: 12px; background: var(--d-grass-soft); }
+.trickyHome > svg { flex: none; margin-top: 3px; color: var(--d-grass-ink); }
+
+.saveBar {
+  position: sticky;
+  bottom: 0;
+  z-index: 15;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  padding: 10px 14px;
+  border-radius: 18px;
+  background: var(--d-card);
+  border: 2px solid var(--d-line);
+  box-shadow: 0 -6px 18px -12px rgba(31, 42, 68, 0.35), 0 3px 0 var(--d-lip);
+}
+.saveBar[data-dirty] { border-color: var(--d-attention); }
+/* Nothing to save: the bar stays at the end of the plan instead of floating over it. */
+.saveBar:not([data-dirty]):not([data-said]) { position: static; box-shadow: 0 3px 0 var(--d-lip); }
+.saveStatus { display: flex; align-items: center; gap: 8px; margin: 0; flex: 1 1 14rem; min-width: 0; color: var(--d-ink); line-height: 1.35; }
+.saveStatus[data-kind="ok"] > svg { color: var(--d-good-ink); flex: none; }
+.saveStatus[data-kind="error"] { color: var(--d-alert-ink); }
+.saveStatus[data-kind="error"] > svg { flex: none; }
+.saveBtns { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Phones: the dashboard's tab dock is fixed at the bottom; the save bar sits above it. */
+@media (max-width: 700px) and (min-height: 501px) {
+  .saveBar { bottom: calc(94px + env(safe-area-inset-bottom)); }
+}
+
+@media (max-width: 480px) {
+  .saveBar { padding: 8px 10px; gap: 6px 8px; }
+  .saveStatus { flex: 1 1 100%; font-size: 0.88rem; }
+  .saveBtns { flex: 1 1 auto; flex-wrap: nowrap; justify-content: flex-end; gap: 6px; }
+  .undoBtn { width: 44px; padding-inline: 0 !important; }
+  .undoBtn span { display: none; }
+  .subjCard { padding: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stepLabel, .nextGo { transition: none; }
+}

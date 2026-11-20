@@ -33,6 +33,9 @@ router.get('/children/:id/dashboard/achievements',  parentChildAccess, getChildD
 router.get('/children/:id/dashboard/performance',   parentChildAccess, getChildDashPerformance)
 router.get('/children/:id/dashboard/answers',       parentChildAccess, getChildDashAnswers)
 router.get('/children/:id/dashboard/rounds',        parentChildAccess, getChildDashRounds)
+// Learning plan: levels, pace, supports, goals, overrides (verified links only; controllers/learningPlanController.js)
+router.get('/children/:childId/learning', require('../controllers/learningPlanController').getChildLearning)
+router.put('/children/:childId/learning', require('../controllers/learningPlanController').putChildLearning)
 
 analyticsMounts.mountParent(router)
 require('./parentFamily')(router)
