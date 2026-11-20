@@ -10,6 +10,10 @@ const { applyQuestionTranslation } = require('./applyQuestionTranslation')
 // questions: [...]}. `module`/`subject` are the lowercase names
 // (e.g. 'listen', 'english') QuestionUploadBatch and the teacher/admin upload
 // flow already use.
+// Content QA (server/scripts/content/audit.js): questions the audit excluded are never served.
+// Teacher uploads have no qa block, and $ne matches a missing field, so they are unaffected.
+const NOT_EXCLUDED = { 'qa.status': { $ne: 'excluded' } }
+
 function createQuestionController(Model, seedFileName, module, subject) {
   const getAllQuestions = async (req, res) => {
     try {
@@ -19,7 +23,8 @@ function createQuestionController(Model, seedFileName, module, subject) {
       const filter = {
         status: 'approved',
         ...visibility,
-        ...(req.query.level ? { level: Number(req.query.level) } : {}),
+        ...NOT_EXCLUDED,
+        ...(req.query.level !== undefined && req.query.level !== '' ? { level: Number(req.query.level) } : {}),
       }
       const questions = await Model.find(filter).sort({ id: 1 })
       const lang = String(req.query.lang || '').toLowerCase()
@@ -35,7 +40,7 @@ function createQuestionController(Model, seedFileName, module, subject) {
       const { filter: visibility } = await buildQuestionVisibilityFilter(
         req.user.email, module, subject
       )
-      const question = await Model.findOne({ id: req.params.id, status: 'approved', ...visibility })
+      const question = await Model.findOne({ id: req.params.id, status: 'approved', ...visibility, ...NOT_EXCLUDED })
       if (!question) return res.status(404).json({ success: false, message: 'Question not found' })
       const lang = String(req.query.lang || '').toLowerCase()
       res.json({ success: true, data: applyQuestionTranslation(question, lang) })
@@ -67,4 +72,4 @@ function createQuestionController(Model, seedFileName, module, subject) {
   return { getAllQuestions, getQuestionById, seedQuestions, deleteAllQuestions }
 }
 
-module.exports = { createQuestionController }
+module.exports = { createQuestionController, NOT_EXCLUDED }

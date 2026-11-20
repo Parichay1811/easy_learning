@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { FaPause, FaPlay } from "react-icons/fa";
+import { FaPause, FaPlay, FaAssistiveListeningSystems } from "react-icons/fa";
 import { sfx, haptic } from "../../utils/sounds";
 import styles from "./WarriorTimer.module.css";
 
@@ -23,8 +23,12 @@ function ticksAt(left) {
  *
  * `running` is false whenever the question is answered, the clock is paused,
  * the page is hidden or the round is over — the clock is silent then.
+ * `waiting`: the teacher is reading the question, so the clock has not started
+ * (it shows a small "listening" ear instead of ticking).
+ * The learner's "Warrior clock" setting (more time / no clock) is applied by
+ * useQuestionRound, which passes the longer `total` or shows no clock at all.
  */
-export default function WarriorTimer({ total, left, running, paused, timedOut, onTogglePause, className = "" }) {
+export default function WarriorTimer({ total, left, running, paused, timedOut, onTogglePause, waiting = false, className = "" }) {
   const { t } = useTranslation();
   const last = useRef(left);
 
@@ -53,12 +57,14 @@ export default function WarriorTimer({ total, left, running, paused, timedOut, o
 
   const label = paused
     ? t("warriorTimer.resume", { defaultValue: "Resume the clock ({{n}} seconds left)", n: left })
-    : t("warriorTimer.pause", { defaultValue: "Pause the clock ({{n}} seconds left)", n: left });
+    : waiting
+      ? t("warriorTimer.waiting", { defaultValue: "The clock waits while the teacher reads ({{n}} seconds)", n: left })
+      : t("warriorTimer.pause", { defaultValue: "Pause the clock ({{n}} seconds left)", n: left });
 
   return (
     <button
       type="button"
-      className={`${styles.timer} ${styles[phase]} ${paused ? styles.paused : ""} ${className}`}
+      className={`${styles.timer} ${styles[phase]} ${paused ? styles.paused : ""} ${waiting && !paused ? styles.waiting : ""} ${className}`}
       onClick={onTogglePause}
       disabled={timedOut || !onTogglePause}
       aria-label={label}
@@ -84,7 +90,8 @@ export default function WarriorTimer({ total, left, running, paused, timedOut, o
       <span className={styles.state} aria-hidden="true">
         {timedOut
           ? t("warriorTimer.timeUp", { defaultValue: "Time's up!" })
-          : paused ? <><FaPlay /> {t("warriorTimer.paused", { defaultValue: "Paused" })}</> : null}
+          : paused ? <><FaPlay /> {t("warriorTimer.paused", { defaultValue: "Paused" })}</>
+            : waiting ? <><FaAssistiveListeningSystems /> {t("warriorTimer.listening", { defaultValue: "Listen first" })}</> : null}
       </span>
       <span className={styles.srOnly} aria-live="polite">
         {timedOut ? t("warriorTimer.timeUp", { defaultValue: "Time's up!" }) : left === 10 || left === 5 ? t("warriorTimer.secondsLeft", { defaultValue: "{{n}} seconds left", n: left }) : ""}

@@ -67,7 +67,7 @@ const updateQuestion = h(async (req) => {
   if (!q) throw fail(404, 'Question not found')
   const set = {}
   for (const k of EDITABLE) if (req.body?.[k] !== undefined) set[k] = req.body[k]
-  if (set.level !== undefined) { const n = Number(set.level); if (!(n >= 1 && n <= 5)) throw fail(400, 'Level is 1 to 5.'); set.level = n }
+  if (set.level !== undefined) { const n = Number(set.level); if (!(Number.isInteger(n) && n >= 0 && n <= 8)) throw fail(400, 'Level is 0 to 8.'); set.level = n }
   if (req.body?.staffTags !== undefined) {
     if (!Array.isArray(req.body.staffTags)) throw fail(400, 'staffTags must be a list.')
     set.staffTags = [...new Set(req.body.staffTags.map((t) => String(t).trim().toLowerCase().slice(0, 40)).filter(Boolean))].slice(0, 20)

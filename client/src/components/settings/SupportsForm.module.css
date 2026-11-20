@@ -1,0 +1,262 @@
+/* The comfort settings form. Works inside the dashboard kit's `.dash` scope
+   (it reads its --d-* tokens) and anywhere else (the fallbacks below). */
+.form {
+  --sf-ink: var(--d-ink, #1f2a44);
+  --sf-muted: var(--d-muted, #5a6680);
+  --sf-card: var(--d-card, #ffffff);
+  --sf-alt: var(--d-card-alt, #f3f7fc);
+  --sf-line: var(--d-line, #e3eaf3);
+  --sf-control: var(--d-control, #7d8aa3);
+  --sf-accent: var(--d-accent, #26853c);
+  --sf-accent-lip: var(--d-accent-lip, #1b5e2b);
+  --sf-on-accent: var(--d-on-accent, #ffffff);
+  --sf-soft: var(--d-accent-soft, #e3f6e7);
+  --sf-focus: var(--d-focus, #1971c2);
+  --sf-radius: var(--d-radius-sm, 16px);
+  --sf-touch: max(44px, var(--lp-target, 44px));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--sf-ink);
+  min-width: 0;
+}
+
+.group,
+.presets {
+  margin: 0;
+  padding: 14px 16px 16px;
+  border: 2px solid var(--sf-line);
+  border-radius: var(--sf-radius);
+  background: var(--sf-card);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+.group[disabled] { opacity: 0.75; }
+
+.groupTitle {
+  margin: 0;
+  padding: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--sf-ink);
+}
+.group > .groupTitle { float: left; width: 100%; margin-bottom: 2px; }
+.group > .groupTitle + * { clear: both; }
+.groupHelp { margin: -6px 0 0; color: var(--sf-muted); font-size: 0.92rem; line-height: 1.4; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--sf-line);
+}
+.group > .groupTitle + .row,
+.group > .groupTitle + .preview + .row { border-top: 0; padding-top: 0; }
+.stack { flex-direction: column; align-items: stretch; gap: 8px; }
+
+.text { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.label { font-weight: 600; font-size: 1rem; line-height: 1.3; }
+.help { color: var(--sf-muted); font-size: 0.9rem; line-height: 1.4; }
+
+/* On/off switch: a word inside it too, so colour never carries the meaning. */
+.switch {
+  flex: 0 0 auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 84px;
+  min-height: var(--sf-touch);
+  padding: 4px 12px 4px 4px;
+  border-radius: 999px;
+  border: 2px solid var(--sf-control);
+  background: var(--sf-alt);
+  color: var(--sf-ink);
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+.knob {
+  position: absolute;
+  left: 4px;
+  top: 50%;
+  width: 32px;
+  height: 32px;
+  margin-top: -16px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid var(--sf-control);
+  display: grid;
+  place-items: center;
+  font-size: 0.8rem;
+  color: var(--sf-accent);
+  transition: transform 0.18s ease;
+}
+.switchOn {
+  justify-content: flex-start;
+  padding: 4px 4px 4px 12px;
+  background: var(--sf-accent);
+  border-color: var(--sf-accent-lip);
+  color: var(--sf-on-accent);
+}
+.switchOn .knob { transform: translateX(42px); border-color: var(--sf-accent-lip); }
+.switch:disabled { cursor: default; opacity: 0.6; }
+
+/* Choices: a row of segments that wraps on a narrow screen. */
+.segments { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: max(88px, 22%);
+  min-height: var(--sf-touch);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 2px solid var(--sf-control);
+  background: var(--sf-alt);
+  color: var(--sf-ink);
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  text-align: center;
+  cursor: pointer;
+}
+.seg:hover { border-color: var(--sf-accent); }
+.segOn {
+  background: var(--sf-accent);
+  border-color: var(--sf-accent-lip);
+  color: var(--sf-on-accent);
+  box-shadow: 0 3px 0 var(--sf-accent-lip);
+}
+.radio {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.seg:has(.radio:focus-visible),
+.switch:focus-visible,
+.preset:focus-visible,
+.sample:focus-visible,
+.range:focus-visible {
+  outline: 3px solid var(--sf-focus);
+  outline-offset: 2px;
+}
+.seg[data-font-option="readable"] .segText { font-family: "Lexend", system-ui, sans-serif; }
+.seg[data-font-option="dyslexic"] .segText { font-family: "OpenDyslexic", system-ui, sans-serif; font-size: 0.85rem; }
+
+/* Sliders */
+.rangeRow { display: flex; align-items: center; gap: 12px; }
+.range {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: var(--sf-touch);
+  margin: 0;
+  background: transparent;
+  accent-color: var(--sf-accent);
+  cursor: pointer;
+}
+.rangeValue {
+  flex: 0 0 auto;
+  min-width: 4.5em;
+  text-align: center;
+  font-weight: 700;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: var(--sf-soft);
+  color: var(--d-accent-ink, #237032);
+}
+
+/* Presets */
+.presetGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 8px; }
+.preset {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-height: var(--sf-touch);
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 2px solid var(--sf-control);
+  background: var(--sf-alt);
+  color: var(--sf-ink);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.preset:hover { border-color: var(--sf-accent); }
+.presetOn { border-color: var(--sf-accent-lip); background: var(--sf-soft); box-shadow: inset 0 0 0 1px var(--sf-accent); }
+.presetName { font-weight: 700; font-size: 0.98rem; display: inline-flex; align-items: center; gap: 6px; color: var(--sf-ink); }
+.presetOn .presetName { color: var(--d-accent-ink, #237032); }
+.presetHelp { font-size: 0.85rem; color: var(--sf-muted); line-height: 1.35; }
+
+/* The reading preview takes the chosen letters, size, spacing and contrast. */
+.preview {
+  position: relative;
+  border-radius: 14px;
+  border: 2px dashed var(--sf-control);
+  background: var(--sf-alt);
+  padding: 22px 14px 12px;
+  font-family: "Fredoka", system-ui, sans-serif;
+}
+.previewTag {
+  position: absolute;
+  top: 4px;
+  left: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sf-muted);
+}
+.previewText {
+  margin: 0;
+  font-size: calc(1.05rem * var(--sf-scale, 1));
+  line-height: 1.5;
+  color: var(--sf-ink);
+}
+.preview[data-font="readable"] .previewText { font-family: "Lexend", system-ui, sans-serif; }
+.preview[data-font="dyslexic"] .previewText { font-family: "OpenDyslexic", system-ui, sans-serif; }
+.preview[data-spacing="wide"] .previewText { letter-spacing: 0.12em; word-spacing: 0.3em; line-height: 1.9; }
+.preview[data-contrast="high"] { background: #000000; border: 2px solid #ffffff; }
+.preview[data-contrast="high"] .previewText { color: #ffffff; }
+.preview[data-contrast="high"] .previewTag { color: #ffe066; }
+
+.sample {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: var(--sf-touch);
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 2px solid var(--sf-accent-lip);
+  background: var(--sf-soft);
+  color: var(--d-accent-ink, #237032);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.sample:disabled { opacity: 0.55; cursor: default; }
+
+@media (max-width: 420px) {
+  .group, .presets { padding: 12px; }
+  .row:not(.stack) { gap: 10px; }
+  .seg { min-width: calc(50% - 3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .knob, .switch { transition: none; }
+}
+:global(html[data-motion="reduced"]) .knob,
+:global(html[data-motion="reduced"]) .switch { transition: none; }

@@ -66,6 +66,7 @@ export function SingleChoice({ question, onSubmit, disabled, feedback }) {
             style={popStyle(position)}
             disabled={disabled}
             onClick={() => { setPicked(value); onSubmit(value); }}
+            data-hover-sound=""
           >
             <span className={styles.letter} aria-hidden="true">{letterFor(position)}</span>
             <span className={styles.optText}>{value}</span>
@@ -109,6 +110,7 @@ export function MultiSelect({ question, onSubmit, disabled, feedback }) {
               disabled={disabled}
               onClick={() => toggle(value)}
               data-sound="toggle"
+              data-hover-sound=""
             >
               <span className={styles.letter} aria-hidden="true">{on ? <FaCheck /> : letterFor(position)}</span>
               <span className={styles.optText}>{value}</span>
@@ -134,6 +136,13 @@ export function SequenceBuilder({ question, onSubmit, disabled }) {
   const order = useMemo(() => shuffledIndices(options.length), [question.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const [picked, setPicked] = useState([]);
   const targetLen = Array.isArray(question.correct_answer) ? question.correct_answer.length : options.length;
+  // "Try again" after a full answer: give the tiles back so they can be placed
+  // again (otherwise every tile is used up and nothing can be checked).
+  const [wasDisabled, setWasDisabled] = useState(disabled);
+  if (wasDisabled !== disabled) {
+    setWasDisabled(disabled);
+    if (!disabled && picked.length >= targetLen) setPicked([]);
+  }
   const remaining = order.filter((i) => !picked.includes(i));
   // Single letters or emoji become big square tiles; words flow as chips.
   const letters = options.length > 0 && options.every((o) => [...String(o)].length <= 2);
@@ -160,7 +169,7 @@ export function SequenceBuilder({ question, onSubmit, disabled }) {
       </div>
       <div className={`${styles.options} ${letters ? styles.tiles : styles.chips}`}>
         {remaining.map((i, position) => (
-          <button key={i} type="button" className={`${styles.option} ${styles.pop}`} style={popStyle(position)} disabled={disabled} onClick={() => pick(i)}>
+          <button key={i} type="button" className={`${styles.option} ${styles.pop}`} style={popStyle(position)} disabled={disabled} onClick={() => pick(i)} data-hover-sound="">
             <span className={styles.optText}>{options[i]}</span>
           </button>
         ))}
@@ -221,6 +230,7 @@ export function MatchPairs({ question, onSubmit, disabled }) {
             style={popStyle(position)}
             aria-pressed={selectedLeft === l}
             onClick={() => pickLeft(l)}
+            data-hover-sound=""
           >
             {l}
           </button>
@@ -236,6 +246,7 @@ export function MatchPairs({ question, onSubmit, disabled }) {
             style={popStyle(position + leftItems.length)}
             onClick={() => pickRight(r)}
             data-sound={selectedLeft ? "none" : undefined}
+            data-hover-sound=""
           >
             {r}
           </button>
@@ -292,6 +303,7 @@ export function SortBins({ question, onSubmit, disabled }) {
             style={popStyle(position)}
             disabled={disabled}
             onClick={() => setSelectedItem(it)}
+            data-hover-sound=""
           >
             <span className={styles.optText}>{it}</span>
           </button>
@@ -368,7 +380,10 @@ export function TypedAnswer({ question, onSubmit, disabled }) {
 // mic_record — record + transcribe via the shared speech hook, scored by
 // scoreAnswer.js against speech_scoring.expected_keywords. Listens in the
 // language the question's spoken text is in (`audio_lang`, from the server).
-export function MicRecord({ question, onSubmit, disabled, speech }) {
+// onSubmit gets { transcript, alternatives, confidence }, { unsupported: true }
+// or (with `reportErrors`) { error: "not-allowed" | "no-speech" | … } so the
+// card can be kind about a microphone that did not work instead of marking it.
+export function MicRecord({ question, onSubmit, disabled, speech, reportErrors = false }) {
   const { t } = useTranslation();
   const [isRecording, setIsRecording] = useState(false);
   const [audioUrl, setAudioUrl] = useState(null);
@@ -378,38 +393,57 @@ export function MicRecord({ question, onSubmit, disabled, speech }) {
 
   const stopRecording = () => {
     if (mediaRecorder.current && mediaRecorder.current.state !== "inactive") mediaRecorder.current.stop();
+    speech?.stopRecognition?.();
     setIsRecording(false);
   };
 
-  const startRecording = async () => {
-    if (!window.isSecureContext) { setMicError(t("questionCard.micInsecure")); return; }
-    if (!navigator.mediaDevices?.getUserMedia) { setMicError(t("questionCard.micUnsupported")); return; }
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      chunks.current = [];
-      const mimeType = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/ogg"]
-        .find((m) => MediaRecorder.isTypeSupported(m)) || "";
-      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
-      mediaRecorder.current = recorder;
-      recorder.ondataavailable = (e) => chunks.current.push(e.data);
-      recorder.onstop = () => {
-        const blob = new Blob(chunks.current, { type: recorder.mimeType || "audio/webm" });
-        setAudioUrl(URL.createObjectURL(blob));
-        stream.getTracks().forEach((t) => t.stop());
-      };
-      recorder.start();
-      setIsRecording(true);
-      setMicError(null);
+  const fail = (code, message) => {
+    setIsRecording(false);
+    if (reportErrors) onSubmit({ error: code });
+    else setMicError(message);
+  };
 
+  const startRecording = async () => {
+    setMicError(null);
+    let stream = null;
+    if (!window.isSecureContext) { fail("insecure", t("questionCard.micInsecure")); return; }
+    if (navigator.mediaDevices?.getUserMedia) {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      } catch (err) {
+        if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError" || err.name === "SecurityError") fail("not-allowed", t("questionCard.micPermission"));
+        else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") fail("audio-capture", t("questionCard.micNotFound"));
+        else if (err.name === "NotReadableError") fail("audio-busy", t("questionCard.micBusy"));
+        else fail("mic-error", t("questionCard.micError"));
+        return;
+      }
+    } else if (!reportErrors) {
+      setMicError(t("questionCard.micUnsupported"));
+      return;
+    }
+    try {
+      if (stream && typeof MediaRecorder !== "undefined") {
+        chunks.current = [];
+        const mimeType = ["audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/ogg", "audio/mp4"]
+          .find((m) => MediaRecorder.isTypeSupported?.(m)) || "";
+        const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : {});
+        mediaRecorder.current = recorder;
+        recorder.ondataavailable = (e) => chunks.current.push(e.data);
+        recorder.onstop = () => {
+          const blob = new Blob(chunks.current, { type: recorder.mimeType || "audio/webm" });
+          if (blob.size) setAudioUrl(URL.createObjectURL(blob));
+          stream.getTracks().forEach((tr) => tr.stop());
+        };
+        recorder.start();
+      }
+      setIsRecording(true);
       const result = await speech.recognizeSpeech(question?.audio_lang);
       stopRecording();
+      if (stream && !mediaRecorder.current) stream.getTracks().forEach((tr) => tr.stop());
       onSubmit(result);
-    } catch (err) {
-      let msg = t("questionCard.micError");
-      if (err.name === "NotAllowedError" || err.name === "PermissionDeniedError") msg = t("questionCard.micPermission");
-      else if (err.name === "NotFoundError" || err.name === "DevicesNotFoundError") msg = t("questionCard.micNotFound");
-      else if (err.name === "NotReadableError") msg = t("questionCard.micBusy");
-      setMicError(msg);
+    } catch {
+      stopRecording();
+      fail("mic-error", t("questionCard.micError"));
     }
   };
 
@@ -422,6 +456,7 @@ export function MicRecord({ question, onSubmit, disabled, speech }) {
           <span className={styles.recDot} aria-hidden="true" /> {t("questionCard.stop")}
         </button>
       )}
+      <p className={styles.listening} aria-live="polite">{isRecording ? t("questionCard.listening", "Listening… say your answer now.") : ""}</p>
       {micError && <p className={styles.voiceWarning}>{micError}</p>}
       {audioUrl && <audio src={audioUrl} controls className={styles.audioPlayer} />}
     </div>

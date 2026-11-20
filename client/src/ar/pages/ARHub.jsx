@@ -498,7 +498,7 @@ function GameTile({ game, index, onOpen }) {
         )}
         <button
           className={styles.speakBtn}
-          onClick={() => speak(`${title}. ${how}`)}
+          onClick={() => speak(`${title}. ${how}`, { user: true })}
           aria-label={t('ar.hub.readOutAriaLabel', 'Read out {{title}}', { title })}
           title={t('ar.hub.readThisOut', 'Read this out')}
         >

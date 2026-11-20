@@ -69,7 +69,7 @@
 /* The instruction: a chalk heading with a short underline. */
 .instruction {
   margin: 0 auto;
-  font-size: clamp(16px, 3.3cqh, 22px);
+  font-size: calc(clamp(16px, 3.3cqh, 22px) * var(--lp-text-scale, 1));
   font-weight: 700;
   line-height: 1.3;
   color: #ffffff;
@@ -114,7 +114,7 @@
   height: clamp(48px, 11cqh, 84px);
   display: grid;
   place-items: center;
-  font-size: clamp(26px, 6cqh, 46px);
+  font-size: calc(clamp(26px, 6cqh, 46px) * var(--lp-text-scale, 1));
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   border: 2px dashed rgba(255, 255, 255, 0.25);
@@ -129,16 +129,18 @@
   border-radius: 18px;
   border: 2px dashed rgba(77, 217, 255, 0.55);
   background: rgba(255, 255, 255, 0.06);
-  font-size: clamp(16px, 3.4cqh, 23px);
+  font-size: calc(clamp(16px, 3.4cqh, 23px) * var(--lp-text-scale, 1));
   font-weight: 700;
   line-height: 1.4;
+  /* A passage and its question can be on separate lines in the bank. */
+  white-space: pre-line;
   color: #fff7d6;
   text-align: left;
   min-width: 0;
 }
 .promptWide { text-align: center; }
 /* A passage reads best left-aligned and a little smaller. */
-.card[data-long] .promptBox { font-size: clamp(15px, 2.7cqh, 19px); line-height: 1.45; text-align: left; font-weight: 600; }
+.card[data-long] .promptBox { font-size: calc(clamp(15px, 2.7cqh, 19px) * var(--lp-text-scale, 1)); line-height: 1.45; text-align: left; font-weight: 600; }
 
 .toolRow { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
 
@@ -153,7 +155,7 @@
   padding: 6px 16px;
   border-radius: 999px;
   cursor: pointer;
-  font-size: clamp(14px, 2.4cqh, 16px);
+  font-size: calc(clamp(14px, 2.4cqh, 16px) * var(--lp-text-scale, 1));
   font-family: "Fredoka", sans-serif;
   font-weight: 600;
   transition: background 0.15s, transform 0.15s;
@@ -173,7 +175,7 @@
   border-radius: 4px 4px 12px 4px;
   background: linear-gradient(170deg, #ffe680, #ffd23f);
   color: #3b2f00;
-  font-size: clamp(14px, 2.5cqh, 16px);
+  font-size: calc(clamp(14px, 2.5cqh, 16px) * var(--lp-text-scale, 1));
   font-weight: 600;
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.35);
   transform-origin: 50% 0;
@@ -208,13 +210,13 @@
 .sheetMascot { position: relative; flex: none; display: grid; place-items: center; }
 /* The words scroll if they are long; the button below never moves out of reach. */
 .sheetText { min-width: 0; min-height: 0; max-height: 100%; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; align-self: stretch; justify-content: safe center; }
-.sheetTitle { margin: 0; font-size: clamp(17px, 3cqh, 21px); font-weight: 800; color: #ffd8a8; }
+.sheetTitle { margin: 0; font-size: calc(clamp(17px, 3cqh, 21px) * var(--lp-text-scale, 1)); font-weight: 800; color: #ffd8a8; }
 
 .feedback { margin-top: 18px; display: flex; flex-direction: column; align-items: center; gap: 10px; position: relative; z-index: 1; }
-.correctText { font-size: clamp(16px, 2.9cqh, 20px); font-weight: 700; color: #b8ffd6; margin: 0; line-height: 1.3; }
-.wrongText { font-size: clamp(15px, 2.7cqh, 18px); font-weight: 700; color: #ffd2b8; margin: 0; line-height: 1.3; }
-.workedExample { font-size: clamp(13px, 2.2cqh, 15px); color: rgba(255, 255, 255, 0.8); margin: 0; line-height: 1.35; }
-.revealText { font-size: clamp(14px, 2.5cqh, 16px); color: #a0e8ff; margin: 0; font-weight: 600; }
+.correctText { font-size: calc(clamp(16px, 2.9cqh, 20px) * var(--lp-text-scale, 1)); font-weight: 700; color: #b8ffd6; margin: 0; line-height: 1.3; }
+.wrongText { font-size: calc(clamp(15px, 2.7cqh, 18px) * var(--lp-text-scale, 1)); font-weight: 700; color: #ffd2b8; margin: 0; line-height: 1.3; }
+.workedExample { font-size: calc(clamp(13px, 2.2cqh, 15px) * var(--lp-text-scale, 1)); color: rgba(255, 255, 255, 0.8); margin: 0; line-height: 1.35; }
+.revealText { font-size: calc(clamp(14px, 2.5cqh, 16px) * var(--lp-text-scale, 1)); color: #a0e8ff; margin: 0; font-weight: 600; }
 
 .retryBtn, .nextBtn {
   flex: none;
@@ -227,7 +229,7 @@
   border-radius: 999px;
   border: none;
   color: white;
-  font-size: clamp(17px, 3cqh, 20px);
+  font-size: calc(clamp(17px, 3cqh, 20px) * var(--lp-text-scale, 1));
   font-weight: 800;
   font-family: "Fredoka", sans-serif;
   cursor: pointer;
@@ -246,7 +248,7 @@
   position: absolute;
   left: -8px;
   top: -8px;
-  font-size: 16px;
+  font-size: calc(16px * var(--lp-text-scale, 1));
   color: #ffd84d;
   filter: drop-shadow(0 0 4px rgba(255, 216, 77, 0.7));
   animation: burst 0.9s cubic-bezier(0.2, 0.7, 0.3, 1) var(--d, 0ms) both;
@@ -270,7 +272,7 @@
   box-shadow: 0 4px 0 #c7cde0;
   cursor: pointer;
 }
-.legacyText { color: white; font-size: 19px; margin-bottom: 20px; }
+.legacyText { color: white; font-size: calc(19px * var(--lp-text-scale, 1)); margin-bottom: 20px; }
 
 /* ── narrow arena (a phone upright): fill the height, answers at the bottom ── */
 @container arena (max-width: 640px) {
@@ -278,9 +280,9 @@
   .stimulus { margin-block: auto; }
   /* Once answered, the question steps back to make room for the sheet. */
   .hasSheet .toolRow, .hasSheet .instruction::after { display: none; }
-  .hasSheet .emoji { width: 44px; height: 44px; font-size: 24px; }
-  .hasSheet .promptBox { padding: 6px 12px; font-size: clamp(15px, 3cqh, 19px); }
-  .sheet .correctText, .sheet .wrongText { font-size: clamp(15px, 2.6cqh, 18px); }
+  .hasSheet .emoji { width: 44px; height: 44px; font-size: calc(24px * var(--lp-text-scale, 1)); }
+  .hasSheet .promptBox { padding: 6px 12px; font-size: calc(clamp(15px, 3cqh, 19px) * var(--lp-text-scale, 1)); }
+  .sheet .correctText, .sheet .wrongText { font-size: calc(clamp(15px, 2.6cqh, 18px) * var(--lp-text-scale, 1)); }
 }
 @container arena (max-width: 460px) {
   .sheet {
@@ -327,9 +329,9 @@
   .good.sheet { border-right-color: #6fe3a5; }
   .soft.sheet { border-right-color: #b8a9ff; }
   .sheet > .nextBtn, .sheet > .retryBtn { justify-self: stretch; }
-  .instruction { font-size: clamp(15px, 4.2cqh, 21px); }
-  .promptBox { font-size: clamp(15px, 4.6cqh, 22px); }
-  .emoji { width: clamp(48px, 16cqh, 96px); height: clamp(48px, 16cqh, 96px); font-size: clamp(26px, 9cqh, 54px); }
+  .instruction { font-size: calc(clamp(15px, 4.2cqh, 21px) * var(--lp-text-scale, 1)); }
+  .promptBox { font-size: calc(clamp(15px, 4.6cqh, 22px) * var(--lp-text-scale, 1)); }
+  .emoji { width: clamp(48px, 16cqh, 96px); height: clamp(48px, 16cqh, 96px); font-size: calc(clamp(26px, 9cqh, 54px) * var(--lp-text-scale, 1)); }
 }
 /* Narrow or short: with a passage, the decorative picture steps aside. */
 @container arena (max-width: 640px) {
@@ -354,9 +356,170 @@
 /* Big screens (a laptop or monitor with room to spare): a bigger board. */
 @container arena (min-width: 900px) and (min-height: 700px) {
   .card { max-width: 900px; }
-  .instruction { font-size: 26px; }
-  .promptBox { font-size: 28px; }
-  .card[data-long] .promptBox { font-size: 22px; }
-  .emoji { width: 96px; height: 96px; font-size: 54px; }
-  .toolBtn { font-size: 18px; min-height: 46px; padding: 8px 20px; }
+  .instruction { font-size: calc(26px * var(--lp-text-scale, 1)); }
+  .promptBox { font-size: calc(28px * var(--lp-text-scale, 1)); }
+  .card[data-long] .promptBox { font-size: calc(22px * var(--lp-text-scale, 1)); }
+  .emoji { width: 96px; height: 96px; font-size: calc(54px * var(--lp-text-scale, 1)); }
+  .toolBtn { font-size: calc(18px * var(--lp-text-scale, 1)); min-height: 46px; padding: 8px 20px; }
 }
+
+/* ── teaching support ──────────────────────────────────────────────────── */
+/* The words being read aloud right now: a soft highlight to follow along. */
+.speaking {
+  background-image: linear-gradient(transparent 62%, rgba(255, 214, 92, 0.38) 62%);
+  border-radius: 4px;
+}
+.hintBubble.speaking, .workedBubble.speaking { box-shadow: 0 0 0 3px #ffd45c, 0 6px 14px rgba(0, 0, 0, 0.35); background-image: none; }
+
+.helpArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(6px, 1.2cqh, 10px);
+}
+.stepTag {
+  margin: 0;
+  font-size: calc(clamp(12px, 2cqh, 14px) * var(--lp-text-scale, 1));
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #ffe38a;
+}
+.hintNum {
+  display: inline-grid;
+  place-items: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: #3b2f00;
+  color: #ffe680;
+  font-size: 0.8em;
+  font-weight: 800;
+}
+.hintDone { opacity: 0.72; transform: scale(0.97); }
+.workedBubble {
+  margin: 0 auto;
+  max-width: 92%;
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #1f2937;
+  font-size: calc(clamp(14px, 2.5cqh, 17px) * var(--lp-text-scale, 1));
+  font-weight: 600;
+  line-height: 1.4;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  text-align: left;
+}
+.workedBubble svg { flex: none; margin-top: 3px; color: #6c5ce7; }
+
+.readInstead {
+  margin: 0 auto;
+  max-width: 92%;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 2px dashed #4dd9ff;
+  background: rgba(77, 217, 255, 0.12);
+  color: #ffffff;
+  font-size: calc(clamp(15px, 2.8cqh, 19px) * var(--lp-text-scale, 1));
+  font-weight: 700;
+}
+.readInsteadTag { color: #a0e8ff; font-weight: 600; margin-right: 4px; }
+.altNote {
+  margin: 0 0 8px;
+  text-align: center;
+  color: #ffe38a;
+  font-weight: 700;
+  font-size: calc(clamp(14px, 2.5cqh, 17px) * var(--lp-text-scale, 1));
+}
+
+/* The sheet: extra lines and several actions. */
+.levelUp {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #ffd45c;
+  color: #3b2f00;
+  font-weight: 800;
+  font-size: calc(clamp(14px, 2.5cqh, 17px) * var(--lp-text-scale, 1));
+}
+.note, .heard, .offerText {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: calc(clamp(13px, 2.3cqh, 15px) * var(--lp-text-scale, 1));
+  line-height: 1.35;
+}
+.offerText { color: #ffe38a; font-weight: 700; font-size: calc(clamp(14px, 2.5cqh, 17px) * var(--lp-text-scale, 1)); }
+.heard { font-style: italic; }
+.actions {
+  grid-area: action;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  max-width: 340px;
+}
+.helpBtn, .skipBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font: inherit;
+  font-size: calc(clamp(15px, 2.6cqh, 18px) * var(--lp-text-scale, 1));
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.skipBtn { border-style: dashed; border-color: rgba(255, 255, 255, 0.45); font-weight: 600; }
+.helpBtn:hover, .skipBtn:hover { background: rgba(255, 255, 255, 0.22); }
+.helpBtn:focus-visible, .skipBtn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 3px; }
+@container arena (max-width: 640px) {
+  .hasSheet .helpArea { display: none; }
+}
+@container arena (max-width: 460px) {
+  .actions { max-width: none; justify-content: stretch; }
+  .actions > * { flex: 1 1 auto; }
+}
+@container arena (min-aspect-ratio: 3/2) and (max-height: 640px) {
+  .actions { max-width: none; justify-content: stretch; }
+  .actions > * { flex: 1 1 auto; }
+}
+
+/* ── comfort settings ──────────────────────────────────────────────────── */
+:global(html[data-big-targets]) .toolBtn,
+:global(html[data-big-targets]) .helpBtn,
+:global(html[data-big-targets]) .skipBtn,
+:global(html[data-big-targets]) .retryBtn,
+:global(html[data-big-targets]) .nextBtn { min-height: 56px; }
+:global(html[data-contrast="high"]) .card {
+  background: linear-gradient(#000000, #000000) padding-box, linear-gradient(#ffffff, #ffffff) border-box;
+  box-shadow: none;
+}
+:global(html[data-contrast="high"]) .card::before { display: none; }
+:global(html[data-contrast="high"]) .instruction { color: #ffffff; }
+:global(html[data-contrast="high"]) .promptBox { color: #ffffff; border-color: #ffffff; background: #000000; }
+:global(html[data-contrast="high"]) .toolBtn,
+:global(html[data-contrast="high"]) .helpBtn,
+:global(html[data-contrast="high"]) .skipBtn { background: #000000; border-color: #ffffff; color: #ffffff; }
+:global(html[data-contrast="high"]) .hintBubble { background: #ffe066; color: #000000; }
+:global(html[data-contrast="high"]) .good,
+:global(html[data-contrast="high"]) .soft { background: #000000; border-top-color: #ffffff; }
+:global(html[data-contrast="high"]) .correctText,
+:global(html[data-contrast="high"]) .wrongText,
+:global(html[data-contrast="high"]) .revealText,
+:global(html[data-contrast="high"]) .note,
+:global(html[data-contrast="high"]) .offerText { color: #ffffff; }
+:global(html[data-contrast="high"]) .speaking { background-image: none; outline: 2px solid #ffe066; outline-offset: 2px; }

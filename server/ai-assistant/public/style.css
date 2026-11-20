@@ -211,6 +211,30 @@ body:not(.started) .stage { opacity: 0; pointer-events: none; }
 .start:hover { transform: scale(1.02); }
 .start:active { transform: translateY(4px); box-shadow: 0 2px 0 var(--orange-edge); }
 .warm, .tip { margin: 0; font-size: 14px; font-weight: 500; color: var(--text-faint); }
+/* A signed-in learner: a personal hello and their own skills as chips. */
+.hero .personal { margin: 2px 0 0; max-width: 42ch; padding: 10px 14px; border-radius: 16px; background: #fff4e0; border: 2px solid #ffd8a8; color: var(--text); font-size: clamp(15px, 1.8vw, 17px); font-weight: 600; line-height: 1.4; }
+.focus-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.focus-chip { min-height: 44px; padding: 8px 16px; border-radius: 999px; border: 2px solid var(--blue); background: #eaf4ff; color: var(--blue-edge); font: 600 15px/1.2 var(--font); cursor: pointer; box-shadow: 0 3px 0 rgba(13, 71, 161, 0.35); }
+.focus-chip:hover { background: #d6eaff; }
+.focus-chip:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(13, 71, 161, 0.35); }
+.focus-chip:focus-visible, .start:focus-visible { outline: 3px solid #1971c2; outline-offset: 3px; }
+.personal[hidden], .focus-row[hidden] { display: none; }
+/* Less height: the personal hello takes the general line's place and the picture shrinks. */
+@media (max-height: 780px) {
+  .hero:has(.personal:not([hidden])) .hero-orb { width: min(16vmin, 120px); }
+  .hero:has(.personal:not([hidden])) #hero-sub { display: none; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .hero .personal { padding: 6px 10px; font-size: 14px; }
+  .focus-chip { min-height: 40px; padding: 6px 12px; font-size: 14px; }
+  /* One screen on a short phone: the personal hello replaces the picture, the general line and the tip; one skill. */
+  .hero:has(.personal:not([hidden])) .hero-orb,
+  .hero:has(.personal:not([hidden])) #hero-sub,
+  .hero:has(.personal:not([hidden])) .tip,
+  .focus-row .focus-chip:nth-child(n+2) { display: none; }
+  .hero:has(.personal:not([hidden])) h1 { font-size: 24px; }
+  .hero:has(.personal:not([hidden])) .start { padding: 10px 24px; margin-top: 2px; }
+}
 .warm[hidden] { display: none; }
 
 /* Tablets, and any upright screen: the menu becomes a row of pills above the

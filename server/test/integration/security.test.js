@@ -55,3 +55,21 @@ test('public plans endpoint lists every plan with human-readable modules and no 
   assert.ok(solo.modules.every((m) => m.key && m.label))
   assert.ok(!JSON.stringify(r.body).match(/price|eur|usd/i))
 })
+
+test('the built-in question bank can only be re-seeded or wiped by the platform owner', async () => {
+  const student = app.tokens.student('nosy.kid@example.com', 'Nosy')
+  for (const route of ['/api/read/maths/seed', '/api/speak/english/seed']) {
+    assert.equal((await app.call('POST', route)).status, 401, `${route} without a token`)
+    assert.equal((await app.call('POST', route, { token: student })).status, 401, `${route} with a student token`)
+  }
+  for (const route of ['/api/read/maths/all', '/api/listen/science/all']) {
+    assert.equal((await app.call('DELETE', route)).status, 401, `${route} without a token`)
+    assert.equal((await app.call('DELETE', route, { token: student })).status, 401, `${route} with a student token`)
+  }
+  // The owner still can (break-glass token = owner role).
+  const r = await app.call('POST', '/api/read/maths/seed', { token: app.tokens.superadmin() })
+  assert.equal(r.status, 201)
+  const list = await app.call('GET', '/api/read/maths', { token: student })
+  assert.equal(list.status, 200)
+  assert.ok(list.body.count > 100, 'the seeded bank is served')
+})

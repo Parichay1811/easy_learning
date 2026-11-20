@@ -139,7 +139,7 @@ const Hero = () => {
     sfx.tap();
     setGreeting(true);
     setTimeout(() => setGreeting(false), 3000);
-    narrate(bubbleText, { lang: getSpeechLang(i18n.language) });
+    narrate(bubbleText, { lang: getSpeechLang(i18n.language), user: true });
   };
 
   const ModuleIcon = lastRound ? (MODULE_ICONS[lastRound.module] || FaCompass) : FaCompass;

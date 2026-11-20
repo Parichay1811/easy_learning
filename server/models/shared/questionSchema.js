@@ -17,14 +17,15 @@ const mongoose = require('mongoose')
 // questions keep their content instead of Mongoose silently stripping it —
 // the client renders anything missing `interaction` via a generic fallback.
 function buildQuestionSchema() {
-  return new mongoose.Schema({
+  const schema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
     subject: { type: String },
     module: { type: String },
     type_index: { type: Number },
     question_type: { type: String },
     interaction: { type: String, index: true },
-    level: { type: Number, min: 1, max: 5 },
+    // Learning level, not age: 0 = starter ("foundation"), 1-5 the original bank, 6-8 stretch.
+    level: { type: Number, min: 0, max: 8 },
     level_name: { type: String },
     difficulty_band: { type: String },
     joy_flavor: { type: String },
@@ -55,6 +56,14 @@ function buildQuestionSchema() {
     wellbeing: { type: mongoose.Schema.Types.Mixed },
     accessibility: { type: mongoose.Schema.Types.Mixed },
     speech_scoring: { type: mongoose.Schema.Types.Mixed },
+
+    // Content v3 (server/data/README.md, docs/learning/QUESTION-BANK.md). All optional so
+    // teacher uploads and older documents stay valid; the answer checker has defaults.
+    skill: { type: String, index: true },          // one id from server/data/skills.json
+    age_band: { type: String, enum: ['all', 'young'] },
+    graded: { type: Boolean },                     // false = practice only, never counted for mastery
+    validation: { type: mongoose.Schema.Types.Mixed }, // { method, ...options } used by utils/scoreAnswer.js
+    qa: { type: mongoose.Schema.Types.Mixed },     // { status: verified|needs_review|excluded, checks, version, reviewed, reason? }
 
     // Old flat schema (teacher-upload pipeline, pre-migration content)
     sentence: { type: String },
@@ -91,6 +100,8 @@ function buildQuestionSchema() {
     copiedFrom: { type: mongoose.Schema.Types.Mixed },
     archived: { type: Boolean, default: false },
   }, { timestamps: true })
+  schema.index({ 'qa.status': 1 })
+  return schema
 }
 
 module.exports = { buildQuestionSchema }

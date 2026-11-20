@@ -46,6 +46,7 @@ const Cards = ({ onSelect }) => {
             onClick={() => { sfx.open(); onSelect?.(card.subject); }}
             aria-label={`${title}. ${t(card.taglineKey)}`}
             data-sound="none"
+            data-hover-sound
           >
             <span className={styles.art} aria-hidden="true">
               <span className={styles.halo} />

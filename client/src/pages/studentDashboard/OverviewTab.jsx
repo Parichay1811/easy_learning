@@ -4,6 +4,8 @@ import { motion as Motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { FaFire, FaStar, FaMedal, FaBolt, FaBookOpen, FaPlay, FaCheck, FaTrophy, FaChevronRight, FaGamepad, FaSeedling } from 'react-icons/fa'
 import Mascot, { FloatingButterflies } from '../../components/Mascot/Mascot'
+import NextUpCard from '../../components/learning/NextUpCard'
+import { useLearnProfile } from './learnApi'
 import { useCountUp } from './hooks'
 import { ReadOnlyContext } from './context'
 import { DEFAULT_DAILY_GOAL, fmtMinutes, fmtNumber, moduleName, subjectName, playTarget } from './helpers'
@@ -122,6 +124,10 @@ export default function OverviewTab({
     try { return new Date(`${iso}T12:00:00Z`).toLocaleDateString(lang || undefined, { weekday: 'narrow', timeZone: 'UTC' }) } catch { return '' }
   }
 
+  // The learning engine's suggestion, when this server has one: the big button starts it.
+  const learn = useLearnProfile({ enabled: !readOnly })
+  const next = learn.data?.next
+
   const target = playTarget(rounds)
   const targetLabel = target ? [moduleName(t, target.module), target.subject && subjectName(t, target.subject)].filter(Boolean).join(' · ') : null
 
@@ -153,10 +159,11 @@ export default function OverviewTab({
             </div>
             <div className={s.xpWrap}>
               <div className={s.xpTop}>
-                <strong>{t('dashboard.level', { level })}</strong>
+                {/* "XP level": game points, kept apart from the learning levels (Progress > My learning). */}
+                <strong>{t('studentDash.xpLevel', { defaultValue: 'XP level {{level}}', level })}</strong>
                 <span>
                   {t('studentDash.xpHave', '{{have}} / 100 XP', { have: inLevel })}
-                  <span className={s.toNext}> {t('studentDash.xpToNext', 'to level {{next}}', { next: level + 1 })}</span>
+                  <span className={s.toNext}> {t('studentDash.xpToNextLevel', { defaultValue: 'to XP level {{next}}', next: level + 1 })}</span>
                 </span>
               </div>
               <div
@@ -266,6 +273,9 @@ export default function OverviewTab({
       {/* ── The one big button ── */}
       {!readOnly && (
       <div className={s.play}>
+        {!isNew && next?.subject ? (
+          <NextUpCard next={next} skills={learn.data?.skills} variant="button" className={`${c.cta} ${s.playBtn}`} classes={{ icon: s.playIcon, text: s.playText }} />
+        ) : (
         <Link to={target ? target.to : '/home'} className={`${c.cta} ${s.playBtn}`}>
           <span className={s.playIcon} aria-hidden="true">{isNew ? <FaGamepad /> : <FaPlay />}</span>
           <span className={s.playText}>
@@ -273,6 +283,7 @@ export default function OverviewTab({
             {!isNew && <small>{targetLabel || t('studentDash.pickGame', 'Pick a game')}</small>}
           </span>
         </Link>
+        )}
       </div>
       )}
     </div>

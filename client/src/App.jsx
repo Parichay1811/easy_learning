@@ -47,6 +47,10 @@ import TutorPage from "./pages/join/TutorPage";
 import ParentDashboard from "./pages/parent/ParentDashboard";
 import { ParentReportPage, SharedReportPage } from "./pages/parent/ReportPage";
 import FamilyLayer from "./components/family/FamilyLayer";
+import PrefsProvider from "./components/settings/PrefsProvider";
+import { ComfortSettingsHost } from "./components/settings/ComfortSettings";
+import BreakReminder from "./components/settings/BreakReminder";
+import VoiceBar, { StopVoiceOnNavigate } from "./components/VoiceBar/VoiceBar";
 import TeacherTestsApp from "./pages/teacher/tests/TeacherTestsApp";
 import TestPlayer from "./pages/TestPlayer";
 import LearningSupportByCountry from "./pages/LearningSupportByCountry";
@@ -192,6 +196,11 @@ function AppLayout() {
       </div>
       {!hideNavbar && <Footer />}
       <FamilyLayer />
+      {/* The learner's comfort settings, the teacher's captions and break reminders (components/settings, VoiceBar). */}
+      <StopVoiceOnNavigate />
+      <VoiceBar hidden={isAR} />
+      <ComfortSettingsHost />
+      <BreakReminder />
     </>
   );
 }
@@ -202,14 +211,16 @@ function App() {
   return (
     <AuthProvider>
       <AdminAuthProvider>
-        <AnimatePresence>
-          {showSplash && (
-            <SplashPage onFinish={() => setShowSplash(false)} />
-          )}
-        </AnimatePresence>
-        <Router>
-          <AppLayout />
-        </Router>
+        <PrefsProvider>
+          <AnimatePresence>
+            {showSplash && (
+              <SplashPage onFinish={() => setShowSplash(false)} />
+            )}
+          </AnimatePresence>
+          <Router>
+            <AppLayout />
+          </Router>
+        </PrefsProvider>
       </AdminAuthProvider>
     </AuthProvider>
   );

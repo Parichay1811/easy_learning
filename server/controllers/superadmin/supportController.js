@@ -158,7 +158,7 @@ const reply = h(async (req) => {
 // ── SUP-061 data-rights queue ────────────────────────────────────────────────
 // Where a learner's data lives, by email, in all three databases.
 const FOOTPRINT = {
-  main: ['learnerdays', 'learningevents', 'studentactivities', 'studentrounds', 'studentanswers', 'studentachievements', 'arsessions', 'linkcodes', 'children', 'users'],
+  main: ['learnerdays', 'learningevents', 'studentactivities', 'studentrounds', 'studentanswers', 'studentachievements', 'arsessions', 'linkcodes', 'children', 'users', 'learnerprofiles', 'skillmasteries'],
   admin: ['students', 'parents'],
   superadmin: ['contactmessages'],
 }

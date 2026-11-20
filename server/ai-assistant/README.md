@@ -636,6 +636,28 @@ node eval-kb.mjs
 Card embeddings are cached in `data/` by their text, so a big database is
 embedded once.
 
+## The learner (personal start)
+
+When a learner is signed in on the site, the teacher knows a little about
+them: their first name, their level in each subject, the skills they are
+working on (with the way of explaining that has helped before: words,
+pictures or step by step) and recent wins. The site's AI Teacher page
+(client/src/pages/AITeacher.jsx) fetches this from `GET /api/learn/companion`
+with the learner's token and posts `{ type: "learnigo:companion", companion }`
+to this page, to this origin only. app.js reads it only from `window.parent`
+and this origin, and says `learnigo:teacher-ready` when it is listening.
+Nothing the learner typed or said is in it, and nothing they type here is sent
+back. Without it (not signed in, the site's pop-up, an older server) the page
+is exactly as before.
+
+With it, the start screen and the first spoken lines are personal ("Welcome
+back, Sam! Last time, taking away was tricky, so shall we try it with
+pictures?") and the focus skills become buttons and board chips that start a
+lesson on that skill. How the learner likes things explained (`prefers`) shapes
+the hello and the chip wording and rides along with every question as
+`context.style`. The router does not use `context.style` yet; what it would
+need is written at the top of `public/companion.js` (pure functions, tested).
+
 ## Tools and MCP
 
 `lib/tools.mjs` is one registry of tools with JSON schemas: `ask_teacher`,

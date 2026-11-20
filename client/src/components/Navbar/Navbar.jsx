@@ -3,11 +3,13 @@ import { useTranslation } from "react-i18next";
 import styles from "./Navbar.module.css";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "/brand/logo-clean.webp";
-import { sfx, isSoundEnabled, setSoundEnabled } from "../../utils/sounds";
+import { sfx, setSoundEnabled } from "../../utils/sounds";
+import { usePrefs } from "../settings/usePrefs";
+import { openComfortSettings } from "../settings/comfortEvents";
 import {
   FaHome, FaInfoCircle, FaEnvelope, FaSignOutAlt,
   FaHandPaper, FaLayerGroup, FaGamepad, FaVolumeUp, FaVolumeMute,
-  FaGlobe, FaTags, FaShieldAlt, FaFileContract,
+  FaGlobe, FaTags, FaShieldAlt, FaFileContract, FaSlidersH,
 } from "react-icons/fa";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { BsStars } from "react-icons/bs";
@@ -44,7 +46,8 @@ const LEGAL = [
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [level, setLevel] = useState(0);
-  const [soundOn, setSoundOn] = useState(() => isSoundEnabled());
+  // Interface sounds are the learner's `uiSounds` setting (also in Comfort settings).
+  const soundOn = usePrefs().uiSounds !== false;
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { user, logout } = useAuth();
@@ -129,7 +132,6 @@ const Navbar = () => {
   const toggleSound = () => {
     const next = !soundOn;
     setSoundEnabled(next);
-    setSoundOn(next);
     // Only the switch turning ON makes a sound (turning off is silent).
     if (next) sfx.toggle(true);
   };
@@ -192,6 +194,19 @@ const Navbar = () => {
             >
               {soundOn ? <FaVolumeUp /> : <FaVolumeMute />}
               <span className={styles.soundText}>{soundLabel}</span>
+            </button>
+
+            <button
+              type="button"
+              className={styles.soundBtn}
+              onClick={() => { closeMenu(); openComfortSettings(); }}
+              aria-haspopup="dialog"
+              aria-label={t("prefs.open", { defaultValue: "Comfort settings" })}
+              title={t("prefs.open", { defaultValue: "Comfort settings" })}
+              data-sound="none"
+            >
+              <FaSlidersH aria-hidden="true" />
+              <span className={styles.soundText}>{t("prefs.open", { defaultValue: "Comfort settings" })}</span>
             </button>
 
             {user ? (

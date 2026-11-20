@@ -89,7 +89,7 @@ export default function SettingsSheet({ onClose, getTracker, inGame = false }) {
                 on={s.speech}
                 onChange={(v) => {
                   set({ speech: v })
-                  if (v) speak(t('ar.settings.sound.speechTestHello', 'Hello'))
+                  if (v) speak(t('ar.settings.sound.speechTestHello', 'Hello'), { user: true })
                 }}
               />
               <Slider
@@ -102,7 +102,7 @@ export default function SettingsSheet({ onClose, getTracker, inGame = false }) {
                 disabled={!s.speech}
                 onChange={(v) => {
                   set({ speechRate: v })
-                  speak(t('ar.settings.sound.speechRateTest', 'Touch the red circle'))
+                  speak(t('ar.settings.sound.speechRateTest', 'Touch the red circle'), { user: true })
                 }}
               />
               <Choice

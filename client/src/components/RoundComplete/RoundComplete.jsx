@@ -6,6 +6,8 @@ import { FaStar, FaRegStar, FaTrophy, FaRedo, FaArrowLeft, FaBolt } from "react-
 import { GiCrossedSwords } from "react-icons/gi";
 import Mascot, { FloatingButterflies } from "../Mascot/Mascot";
 import { sfx, haptic } from "../../utils/sounds";
+import { narrate } from "../../utils/narrator";
+import { getSpeechLang } from "../../utils/speechLang";
 import styles from "./RoundComplete.module.css";
 
 const WARRIOR_PASS = 6;
@@ -14,7 +16,7 @@ const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
 // The end of a round: the mascot celebrates, the stars land one by one, and
 // there are two clear ways on: play again, or go back.
 export default function RoundComplete({ module: mod, subject, mode, stars, bonusStars, total = 10, onPlayAgain, onBack }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const reduce = useReducedMotion();
   const isPractice = mode !== "warrior";
   const passed = !isPractice ? stars >= WARRIOR_PASS : null;
@@ -29,6 +31,15 @@ export default function RoundComplete({ module: mod, subject, mode, stars, bonus
     sfx.levelUp();
     haptic("success");
   }, []);
+  // A few warm words in the teacher's voice, after the fanfare (praise for
+  // the effort, never a label).
+  useEffect(() => {
+    const line = isPractice || passed
+      ? t("roundComplete.say", { defaultValue: "You finished the round! You got {{count}} stars. Keep it up!", count: stars })
+      : t("roundComplete.sayAlmost", { defaultValue: "Good effort, warrior! {{count}} stars this time. Shall we try again?", count: stars });
+    const id = setTimeout(() => narrate(line, { lang: getSpeechLang(i18n.language || "en") }), 900);
+    return () => clearTimeout(id);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const subtitle = `${t(`subjectPage.modules.${mod}.label`, { defaultValue: mod })} · ${t(`subjectPage.${subject}.label`, { defaultValue: subject })}`;
 
@@ -44,7 +55,7 @@ export default function RoundComplete({ module: mod, subject, mode, stars, bonus
     >
       <FloatingButterflies count={3} />
       {!reduce && (
-        <div className={styles.confetti} aria-hidden="true">
+        <div className={styles.confetti} aria-hidden="true" data-decorative="">
           {CONFETTI.map((i) => (
             <span key={i} className={styles.bit} style={{ "--x": `${(i * 37) % 100}%`, "--d": `${(i % 7) * 0.18}s`, "--h": `${(i * 53) % 360}` }} />
           ))}
