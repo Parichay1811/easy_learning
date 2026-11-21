@@ -33,8 +33,13 @@ screen that never scrolls, on any device and either way round: the board keeps
 above the bar; tablets and upright screens put the menu in a row above the
 board, short landscape screens keep it at the side in a compact size, and
 upright phones stack subject, board, bar and menu in a column that scrolls.
-An answer's source (Wikipedia, open data) is a small link on the board's
-corner. The teacher stops talking when the page is hidden (another tab, a
+On an upright phone the board shows the whole lesson page at a readable size:
+the title and picture on top and the column beside the picture (its
+explanation, the answer options) under it, both the full width, with the board
+as tall as that needs (`board.js` `layout()`, asked for with a `boardshape`
+event that `scene.js` answers); a page of only text is laid out narrower there,
+with answer options one a row. An answer's source (Wikipedia, open data) is a
+small link on the board's corner (on an upright phone, on its frame). The teacher stops talking when the page is hidden (another tab, a
 locked phone, the site's pop-up closed) and carries on when it is back.
 Every moment that matters has a haptic: vibration patterns on
 Android, the switch trick on iPhone (iOS 17.4+; reported patched in 26.5),

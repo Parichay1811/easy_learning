@@ -152,6 +152,9 @@ function fitBoard() {
   if (!wrap || !box || !holo) return;
   // Phones upright: one column that scrolls (style.css), so the board's height is its own.
   const column = matchMedia('(max-width: 700px) and (orientation: portrait)');
+  // The shape the page on the board needs there (board.js "boardshape"):
+  // height / width with the picture above its explanation, 0 for one part.
+  let tall = 0;
   const fit = () => {
     const ws = getComputedStyle(wrap);
     // A box with a height of its own (style.css sets --fixed-height on it for
@@ -167,7 +170,10 @@ function fitBoard() {
     const room = height - 2 * frame;
     if (column.matches) {
       // A phone upright: nearly square, so the figure can fill it; the page below adapts.
+      // A picture with its explanation under it gets the height that needs,
+      // up to about three quarters of the screen (beyond that both shrink a little).
       h = Math.min(w * 0.92, Math.max(240, window.innerHeight * 0.46));
+      if (tall) h = Math.max(h, Math.min(w * tall, window.innerHeight * 0.74));
     } else {
       h = (w * 9) / 16;
       if (h > room) { h = Math.max(120, room); w = (h * 16) / 9; }
@@ -179,6 +185,10 @@ function fitBoard() {
   const ro = new ResizeObserver(fit);
   ro.observe(wrap);
   if (dock) ro.observe(dock);
+  holo.addEventListener('boardshape', (e) => {
+    tall = Number(e.detail?.ratio) || 0;
+    if (column.matches) fit();
+  });
   fit();
 }
 
