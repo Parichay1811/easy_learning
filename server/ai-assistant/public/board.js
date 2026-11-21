@@ -17,6 +17,9 @@ const glow = (ctx, c, blur = 14) => { ctx.shadowColor = c; ctx.shadowBlur = blur
 const FIG = { x: 60, y: 120, w: 800, h: 700 };
 const COL = { x: 920, y: 150, w: 620 };
 const WIDE = { x: 60, y: 150, w: 1480 };
+// A page of only text on an upright phone is laid out narrower, so its words
+// stay readable when the page is shrunk to the phone's width.
+const NARROW = { x: 60, y: 150, w: 700 };
 const FONT = 'Fredoka, system-ui, sans-serif';
 const FIGURES = new Set(['rect', 'tri', 'circle', 'vecgrid', 'vec', 'flow', 'cycle', 'timeline', 'compare', 'bullets', 'bignum', 'parts', 'tree', 'venn', 'bars', 'pyramid', 'map', 'line', 'pie', 'table', 'numberline', 'graph', 'forces', 'wave', 'circuit', 'atom', 'fraction', 'angle', 'orbits', 'quote', 'count', 'balance', 'shape', 'sim', 'cell', 'phscale', 'periodic', 'image', 'video', 'learn']);
 // Diagrams that fill the figure area: a second one starts a fresh board.
@@ -25,6 +28,15 @@ const HUES = ['blue', 'cyan', 'purple', 'teal', 'orange', 'green'];
 // Ops laid out in the text flow (the column beside a picture).
 const TEXTY = new Set(['text', 'formula', 'note', 'box', 'card', 'question', 'chips', 'facts']);
 const GAP = 26;
+// On an upright phone the page is shown in two parts, one above the other:
+// the title and picture, then the column beside it (its explanation, the
+// answer options), each the board's full width, so all of it can be read.
+const FIG_VIEW = { x: 30, y: 30, w: 860, h: 860 };
+const inColumn = (it) => {
+  if (it.op === 'mark') return Boolean(it.target) && it.target.x >= COL.x - 1;
+  const x = it.z ? it.z.x : it.x;
+  return x != null && x >= COL.x - 1;
+};
 
 const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 const easeOut = (p) => 1 - (1 - p) ** 3;
@@ -96,13 +108,13 @@ export class Board {
       this.cursor += it.z.h + GAP;
       layoutFigure(this, it);
     } else if (FIGURES.has(op.op)) {
-      if (!this.hasFigure && this.zone === WIDE) this.toColumn();
+      if (!this.hasFigure && (this.zone === WIDE || this.zone === NARROW)) this.toColumn();
       this.hasFigure = true;
       layoutFigure(this, it);
     } else if (op.op === 'mark') {
       it.target = this.options;
     } else if (op.op !== 'title') {
-      if (this.cursor == null) { this.zone = this.hasFigure ? COL : WIDE; this.cursor = this.zone.y; }
+      if (this.cursor == null) { this.zone = this.hasFigure ? COL : this.textZone(); this.cursor = this.zone.y; }
       it.w = this.zone.w;
       it.h = measure(ctx, it);
       if (this.cursor + it.h > H - 30 && this.cursor > this.zone.y && op.op !== 'options') {
@@ -119,6 +131,12 @@ export class Board {
     }
     if (op.op === 'title') this.title = op;
     this.items.push(it);
+  }
+
+  // Where a page of text goes: across the board, or narrower on an upright phone.
+  textZone() {
+    const { clientWidth: w, clientHeight: h } = this.canvas;
+    return w > 0 && h > 0 && w / h < 1.45 ? NARROW : WIDE;
   }
 
   // A picture arrived after text: the text moves beside it, into the column.
@@ -155,15 +173,17 @@ export class Board {
     const cw = Math.round(canvas.clientWidth * dpr);
     const ch = Math.round(canvas.clientHeight * dpr);
     if (canvas.width !== cw || canvas.height !== ch) { canvas.width = cw; canvas.height = ch; }
-    // A wide board shows all of it. A squarer one (a phone held upright)
-    // zooms onto the figure and its title, and the narration stays in the
-    // caption under the board; a page of only text still shows it all.
-    const square = cw / ch < 1.45;
-    const view = square && this.hasFigure ? { x: 30, y: 30, w: 860, h: 820 } : { x: 0, y: 0, w: W, h: H };
-    const k = Math.min(cw / view.w, ch / view.h);
-    this.view = { ...view, k, ox: (cw - view.w * k) / 2 - view.x * k, oy: (ch - view.h * k) / 2 - view.y * k, dpr };
-    ctx.setTransform(k, 0, 0, k, this.view.ox, this.view.oy);
-    ctx.clearRect(-W, -H, W * 3, H * 3); // the glass panel shows through
+    const views = this.layout(cw, ch, dpr);
+    this.views = views;
+    this.view = views[0];
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, cw, ch); // the glass panel shows through
+    if (views.length > 1) {
+      // A faint line between the picture and its column.
+      const y = views[1].clip.y;
+      ctx.fillStyle = COLORS.line;
+      ctx.fillRect(cw * 0.06, y - dpr, cw * 0.88, 2 * dpr);
+    }
     this.hits = [];
     for (const it of this.items) {
       const t = this.clock - it.t0;
@@ -182,20 +202,86 @@ export class Board {
         if (t - b.t < 0.3 && alpha === 1) this.onSfx?.(b.name, { pan: b.x / W * 2 - 1, step: b.step });
       }
       if (it.failed) continue;
+      const vi = views.length > 1 && inColumn(it) ? 1 : 0;
+      const v = views[vi];
+      const before = this.hits.length;
       ctx.save();
+      if (v.clip) { ctx.beginPath(); ctx.rect(v.clip.x, v.clip.y, v.clip.w, v.clip.h); ctx.clip(); }
+      ctx.setTransform(v.k, 0, 0, v.k, v.ox, v.oy);
       ctx.globalAlpha = alpha;
       // One broken item (a missing field) is left out; the rest still draw.
       try { DRAW[it.op]?.(this, ctx, it, t); } catch (e) { it.failed = true; console.warn('board: could not draw', it.op, e); }
       ctx.restore();
+      for (let j = before; j < this.hits.length; j += 1) this.hits[j].v = vi;
     }
+  }
+
+  // Where the page goes on the canvas: [{ k, ox, oy, clip?, dpr }], one view
+  // per part. A wide board shows the whole page. A squarer one (a phone held
+  // upright) shows the title and picture, and under them the column beside
+  // the picture (its explanation, the answer options), each the full width;
+  // the board asks for the height that needs ("boardshape", scene.js) and
+  // until it has it both parts shrink to fit. A page of only text, or only a
+  // picture, fills the board as one part.
+  layout(cw, ch, dpr) {
+    const square = cw / ch < 1.45;
+    let col = null;
+    if (square && this.hasFigure) {
+      let bottom = 0;
+      for (const it of this.items) {
+        if (it.clearAt != null || !inColumn(it) || it.op === 'mark') continue;
+        bottom = Math.max(bottom, it.z ? it.z.y + it.z.h : (it.y ?? 0) + (it.h ?? 0));
+      }
+      // Room above the first line and, below the last, for the source chip.
+      if (bottom > COL.y) col = { x: COL.x - 30, y: COL.y - 40, w: COL.w + 60, h: bottom - COL.y + 110 };
+    }
+    let views;
+    let ratio = 0;
+    if (col) {
+      const kT = cw / FIG_VIEW.w;
+      const kC = cw / col.w;
+      const need = FIG_VIEW.h * kT + col.h * kC;
+      ratio = need / cw;
+      const s = Math.min(1, ch / need);
+      const k1 = kT * s;
+      const k2 = kC * s;
+      const h1 = FIG_VIEW.h * k1;
+      const y0 = Math.max(0, (ch - need * s) / 2);
+      views = [
+        { k: k1, ox: (cw - FIG_VIEW.w * k1) / 2 - FIG_VIEW.x * k1, oy: y0 - FIG_VIEW.y * k1, clip: { x: 0, y: 0, w: cw, h: y0 + h1 }, dpr },
+        { k: k2, ox: (cw - col.w * k2) / 2 - col.x * k2, oy: y0 + h1 - col.y * k2, clip: { x: 0, y: y0 + h1, w: cw, h: ch - y0 - h1 }, dpr },
+      ];
+    } else if (square && !this.hasFigure && this.zone === NARROW) {
+      // Narrow text: the board shows it at the phone's width, as tall as it runs.
+      let bottom = 300;
+      for (const it of this.items) if (it.clearAt == null && it.y != null && it.h != null) bottom = Math.max(bottom, it.y + it.h);
+      const view = { x: 30, y: 30, w: 760, h: bottom + 50 - 30 };
+      ratio = view.h / view.w;
+      const k = Math.min(cw / view.w, ch / view.h);
+      views = [{ k, ox: (cw - view.w * k) / 2 - view.x * k, oy: -view.y * k, dpr }]; // from the top, like a page
+    } else {
+      const view = square && this.hasFigure ? FIG_VIEW : { x: 0, y: 0, w: W, h: H };
+      const k = Math.min(cw / view.w, ch / view.h);
+      views = [{ k, ox: (cw - view.w * k) / 2 - view.x * k, oy: (ch - view.h * k) / 2 - view.y * k, dpr }];
+    }
+    if (Math.abs(ratio - (this.shape || 0)) > 0.02) {
+      this.shape = ratio;
+      this.canvas.dispatchEvent(new CustomEvent('boardshape', { bubbles: true, detail: { ratio } }));
+    }
+    return views;
   }
 
   hit(e) {
     const r = this.canvas.getBoundingClientRect();
-    const v = this.view || { k: r.width / W, ox: 0, oy: 0, dpr: 1 };
-    const x = (((e.clientX - r.left) * v.dpr) - v.ox) / v.k;
-    const y = (((e.clientY - r.top) * v.dpr) - v.oy) / v.k;
-    return this.hits.find((h) => x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h)?.i ?? null;
+    const views = this.views || [{ k: r.width / W, ox: 0, oy: 0, dpr: 1 }];
+    const px = (e.clientX - r.left) * views[0].dpr;
+    const py = (e.clientY - r.top) * views[0].dpr;
+    // The part of the board that was tapped, then the thing under the finger there.
+    const vi = Math.max(0, views.findIndex((v) => !v.clip || (py >= v.clip.y && py < v.clip.y + v.clip.h)));
+    const v = views[vi];
+    const x = (px - v.ox) / v.k;
+    const y = (py - v.oy) / v.k;
+    return this.hits.find((h) => (h.v ?? 0) === vi && x >= h.x && x <= h.x + h.w && y >= h.y && y <= h.y + h.h)?.i ?? null;
   }
 }
 
@@ -255,7 +341,12 @@ function measure(ctx, it) {
   }
   if (it.op === 'box') return 96;
   if (it.op === 'colvec') return 140;
-  if (it.op === 'options') { it.cw = (it.w - 24) / 2; it.ch = 104; return Math.ceil(it.items.length / 2) * (it.ch + 20) - 20; }
+  if (it.op === 'options') {
+    // Two answers a row; one a row on a narrow page, so long answers fit.
+    it.cols = it.w === NARROW.w ? 1 : 2;
+    it.cw = it.cols === 1 ? it.w : (it.w - 24) / 2; it.ch = 104;
+    return Math.ceil(it.items.length / it.cols) * (it.ch + 20) - 20;
+  }
   if (it.op === 'card') {
     const k = it.small ? 0.78 : 1;
     it.qSize = Math.round(36 * k);
@@ -539,8 +630,9 @@ const DRAW = {
     it.items.forEach((o, i) => {
       const lt = t - i * 0.18;
       if (lt < 0) return;
-      const x = it.x + (i % 2) * (it.cw + 24);
-      const y = it.y + Math.floor(i / 2) * (it.ch + 20);
+      const cols = it.cols || 2;
+      const x = it.x + (i % cols) * (it.cw + 24);
+      const y = it.y + Math.floor(i / cols) * (it.ch + 20);
       b.hits.push({ i, x, y, w: it.cw, h: it.ch });
       ctx.save();
       const p = easeOut(clamp(lt / 0.35));
@@ -568,8 +660,9 @@ const DRAW = {
   mark(b, ctx, it, t) {
     const o = it.target;
     if (!o) return;
-    const x = o.x + (it.option % 2) * (o.cw + 24);
-    const y = o.y + Math.floor(it.option / 2) * (o.ch + 20);
+    const cols = o.cols || 2;
+    const x = o.x + (it.option % cols) * (o.cw + 24);
+    const y = o.y + Math.floor(it.option / cols) * (o.ch + 20);
     const p = easeOut(clamp(t / 0.35));
     const c = it.kind === 'tick' ? COLORS.green : COLORS.red;
     ctx.globalAlpha *= p;
