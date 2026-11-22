@@ -5,6 +5,10 @@ const LANGS = ['es', 'fr', 'pt', 'it', 'de', 'nl', 'ru', 'tr', 'zh', 'ja', 'ko',
 const SECOND_TRY = "Let's do this one together - watch how it works."
 const LEVEL_NAMES = { 0: 'Starter', 1: 'Foundation', 2: 'Early Developing', 3: 'Developing', 4: 'Secure', 5: 'Independent', 6: 'Extending', 7: 'Advanced', 8: 'Mastery' }
 const clone = (x) => JSON.parse(JSON.stringify(x))
+const STANDARD_FIELDS = new Set(['id', 'subject', 'module', 'type_index', 'question_type', 'interaction', 'level', 'level_name', 'difficulty_band', 'joy_flavor',
+  'instruction', 'prompt', 'audio_text', 'audio_link', 'module_image_link', 'question_image_link', 'image', 'options', 'correct_answer', 'accepted_answers',
+  'distractor_insight', 'hints', 'worked_example', 'feedback', 'points', 'bonus', 'readability', 'academic', 'life_skill', 'cognition', 'analysis', 'tags',
+  'telemetry', 'adaptive', 'wellbeing', 'accessibility', 'speech_scoring', 'translations'])
 
 // English text → { lang: text } from existing bank translations of the same English string.
 function translationIndex(banks) {
@@ -31,6 +35,9 @@ const pick = (v, lang) => (v && typeof v === 'object' && !Array.isArray(v) ? (v[
 function buildItem(spec, { bank, idx }) {
   const template = bank.data.questions.find((q) => q.interaction === spec.interaction && !/-(F00|S0\d)-/.test(q.id)) || bank.data.questions[0]
   const q = clone(template)
+  // Only the standard bank fields are inherited: the template's own widget data (letter_tiles,
+  // word_tiles, sequence_items, pairs, bins…) belongs to the template item, not to this one.
+  for (const k of Object.keys(q)) if (!STANDARD_FIELDS.has(k)) delete q[k]
   const translated = !!template.translations
   const level = spec.level ?? 0
   const en = (v) => pick(v, 'en')
@@ -74,7 +81,11 @@ function buildItem(spec, { bank, idx }) {
     parent_note: 'A starter question. Getting it right shows the first building block is in place.',
     teacher_action_if_missed: 'Model it once with real objects or a spoken example, then try a similar starter item.',
   }
-  q.tags = { cognitive: ['remember', 'sustained_attention'], life_skill: [q.life_skill.domain], emotional: ['neutral'], context: [q.life_skill.everyday_context], phonics: [] }
+  if (spec.life) q.life_skill = { ...q.life_skill, ...spec.life }
+  if (spec.cognition) q.cognition = { ...q.cognition, ...spec.cognition }
+  if (spec.analysis) q.analysis = { ...q.analysis, ...spec.analysis }
+  if (spec.difficulty_band) q.difficulty_band = spec.difficulty_band
+  q.tags = { cognitive: [q.cognition.bloom, ...q.cognition.executive_function], life_skill: [q.life_skill.domain], emotional: ['neutral'], context: [q.life_skill.everyday_context], phonics: [] }
   if (q.telemetry) q.telemetry = { ...q.telemetry, expected_response_time_ms: 8000, hesitation_concern_ms: 24000 }
   q.adaptive = { mastery_weight: 1, on_correct: 'advance', on_first_error: 'hint_1', on_second_error: 'worked_example', on_third_error: `reteach:${spec.question_type}`, revisit_after_days: 3 }
   q.wellbeing = { emotion_checkin_after: false, confidence_prompt: false, timer_pressure: false, guaranteed_win: false }

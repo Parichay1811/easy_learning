@@ -123,9 +123,80 @@ module.exports = {
     { key: 'speakInstead', type: 'choice', options: ['ask', 'type', 'choose'] },
   ],
 
+  // ── Adaptive journey (docs/learning/ADAPTIVE.md "Journey") ──────────────────
+  // Every number in this block is a STARTING HYPOTHESIS to validate with real
+  // learners (docs/learning/RESEARCH.md), not a proven value.
+
+  // Stage 0..5 per question = the kind of thinking asked for (separate from level 0..8).
+  // Items carry `stage` from the content; without one it is derived from cognition.bloom
+  // (everyday: true -> 0). `create` is only 5 (transfer) when a reviewed override says so.
+  STAGES: ['everyday', 'recognition', 'understanding', 'application', 'reasoning', 'transfer'],
+  stageOfBloom: { remember: 1, understand: 2, apply: 3, analyze: 4, evaluate: 4, create: 4 },
+
+  // Target success band: the share of right answers over the last `window` graded attempts in a
+  // subject. Below `low` the next round tilts easier, above `high` harder, in between it holds.
+  // No tilt before `minAttempts` answers (a handful of answers says little); a new level starts
+  // the count afresh. Once tilted, it only turns back to "hold" `hysteresis` inside the band, so
+  // it does not flip back and forth on one answer.
+  targetBand: { low: 0.75, high: 0.9, window: 20, minAttempts: 8, hysteresis: 0.05 },
+
+  // Diagnostic probe: the first contact with a skill is up to `items` accessible items. A confident
+  // start (right first try, no hint, at stage >= confidentStage) raises the starting mastery to at
+  // least `confidentMastery` and skips beginner repetition; no right answer in the probe starts the
+  // skill gently (support step >= gentleStep, lower stages first).
+  probe: { items: 2, confidentStage: 2, confidentMastery: 0.6, gentleStep: 1 },
+
+  // Guessing: a right answer on an item with only 2 or 3 choices counts for less. The multiplier
+  // scales the WEIGHT (step size) of that right answer in the mastery average, so such items still
+  // count and a skill made only of them can still be mastered (it just takes more right answers).
+  // Levels are not discounted (the level window keeps plain credit).
+  chanceDiscount: { 2: 0.6, 3: 0.8 },
+
+  // Mastered needs evidence, not just a high average: right answers on at least `minItems`
+  // different questions, one of them at stage >= `minStage` when the skill has such items
+  // (plus the delayed recall above: Leitner box >= masteredMinBox). Never speed.
+  masteryEvidence: { minItems: 2, minStage: 2 },
+
+  // The same misconception (distractor text) this many times on a skill: the next item of that
+  // skill comes with a short explanation of the idea (support.strategy "misconception").
+  misconceptionRepeat: 2,
+
+  // An unfinished round can be resumed for this long after its last answer.
+  resumeHours: 72,
+  // Decision log entries (LearningDecision) are deleted after this many days (TTL index).
+  decisionTtlDays: 180,
+
+  // Welcome back: "break" after this many days away (never framed as a fault); "success" and
+  // "struggle" look at the last `recentDays`; struggle = misses in a row on the last skill.
+  welcome: { breakDays: 14, recentDays: 7, struggleMisses: 2 },
+  next: { max: 6 },
+  // Today's discovery: never an everyday item answered in the last `avoidDays` days.
+  discovery: { avoidDays: 7, roundSize: 5 },
+  // Mini challenge: `items` items one stage up on a skill with mastery >= minMastery.
+  challenge: { items: 3, minMastery: 0.8 },
+  // Guardian/teacher evidence: baseline = placement, else the first `baselineAttempts` graded
+  // answers per subject; weekly series over `weeks`; the last `decisions` decisions.
+  evidence: { baselineAttempts: 10, weeks: 12, decisions: 20, minForInsight: 5 },
+
+  // Growth achievements (services/learning/achievements.js): what each badge needs.
+  achievements: {
+    conceptExplorer: 5, // different skills tried
+    threeMastered: 3, // skills mastered (with the evidence rule)
+    curious: 5, // discoveries answered, on different days
+    problemSolver: 5, // right first try, no hint, on items at stage >= problemSolverStage
+    problemSolverStage: 3,
+    reviewChampion: 10, // right answers on reviews that were due
+    comebackMisses: 2, // a right answer after at least this many misses in a row
+  },
+
   PACES: ['gentle', 'steady', 'brisk'],
   AGE_BANDS: ['child', 'teen', 'adult'],
   OVERRIDE_TYPES: ['hold_level', 'skip_skill', 'focus_skill'],
   LEVEL_SOURCES: ['default', 'baseline', 'self', 'guardian', 'teacher', 'engine'],
-  limits: { goals: 10, goalText: 120, overrides: 30, misconceptions: 3, misconceptionText: 160, history: 26 },
+  DECISION_TYPES: ['level_up', 'level_suggest', 'level_set', 'support_step', 'probe', 'band_tilt', 'misconception_explained', 'mastered'],
+  ROUND_MODES: ['challenge', 'discovery'],
+  // Where a round was started from by the learner's own choice (?source= on the round): counted in
+  // the evidence as `activity.chosen` (with challenge / discovery rounds and the daily discovery).
+  CHOICE_SOURCES: ['next', 'welcome', 'journey', 'explore', 'challenge', 'discovery'],
+  limits: { goals: 10, goalText: 120, overrides: 30, misconceptions: 3, misconceptionText: 160, history: 26, rightItems: 6, journalWeeks: 26, discoveryLog: 30 },
 }

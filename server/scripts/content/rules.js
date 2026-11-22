@@ -360,4 +360,4 @@ function deriveAgeBand(q) {
   return 'all'
 }
 
-module.exports = { typeKey, deriveSkill, deriveAgeBand, deriveValidation, arithmetic, YOUNG_TYPES }
+module.exports = { typeKey, deriveSkill, deriveAgeBand, deriveValidation, arithmetic, YOUNG_TYPES, RHYMES, ENGLISH_SPEAK_KEYWORDS }

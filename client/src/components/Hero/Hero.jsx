@@ -19,6 +19,9 @@ import { welcome } from "../../utils/greetings";
 import { getSpeechLang } from "../../utils/speechLang";
 import { useAuth } from "../../context/AuthContext";
 import { fetchRounds, fetchModuleStars } from "../../store/slices/dashboardSlice";
+import { journeyFetch, signedIn, langOf } from "../journey/journeyApi";
+import { msgText, actionHref, langOfKey } from "../journey/words";
+import { getPrefs, reducedMotion } from "../../utils/learnerPrefs";
 import { SUBJECT_ICON_IMAGES } from "../../data/subjectIcons";
 
 const MODULE_ICONS = {
@@ -58,6 +61,11 @@ const Hero = () => {
   const todoRef = useRef(null);
   const greeted = useRef(false);
   const spokenRef = useRef(null);
+  // The learning engine's welcome-back for a signed-in learner (built from their
+  // real history: an unfinished round, a recent success, a long break…):
+  // undefined while asking, false when there is none (visitor, older server, slow).
+  const [engineWelcome, setEngineWelcome] = useState(undefined);
+  const welcomeAsk = useRef(null);
 
   // Coming back from a module page reopens the subject overlay instead of
   // landing on a blank Home — then clear the state so it doesn't reopen again.
@@ -70,19 +78,50 @@ const Hero = () => {
   const fullName = user?.name || user?.email?.split("@")[0];
   const firstName = fullName?.split(" ")[0];
 
-  // The welcome, once per visit: spoken in the AI teacher's voice and shown
-  // in the mascot's bubble. (Guarded: React runs effects twice in development.)
+  // Ask the engine for the learner's welcome-back (at most 1.5 s, then the usual greeting).
   useEffect(() => {
     if (user === undefined) return undefined;
+    if (!user || !signedIn()) {
+      const id = setTimeout(() => setEngineWelcome(false), 0);
+      return () => clearTimeout(id);
+    }
+    let live = true;
+    if (!welcomeAsk.current) {
+      const prefs = getPrefs();
+      const calm = reducedMotion(prefs) || Boolean(prefs.focusMode);
+      const ask = journeyFetch(`/learn/welcome?lang=${encodeURIComponent(langOf(i18n.language))}${calm ? "&calm=1" : ""}`)
+        .then((w) => (w.ok && w.message ? w : false));
+      const slow = new Promise((resolve) => setTimeout(() => resolve(false), 1500));
+      welcomeAsk.current = Promise.race([ask, slow]);
+    }
+    welcomeAsk.current.then((w) => { if (live) setEngineWelcome(w); });
+    return () => { live = false; };
+  }, [user, i18n.language]);
+
+  // The welcome, once per visit: spoken in the AI teacher's voice and shown
+  // in the mascot's bubble. A learner with history hears the engine's
+  // welcome-back (true to what they did, never invented); everyone else one of
+  // the usual greetings. (Guarded: React runs effects twice in development.)
+  useEffect(() => {
+    if (user === undefined || engineWelcome === undefined) return undefined;
     if (!greeted.current) {
       greeted.current = true;
-      spokenRef.current = welcome({ name: firstName, place: "home" });
+      if (engineWelcome) {
+        const key = engineWelcome.message?.key;
+        const line = msgText(t, engineWelcome.message);
+        spokenRef.current = line;
+        let said = false;
+        try { said = Boolean(sessionStorage.getItem("learnigo_welcomed_home")); sessionStorage.setItem("learnigo_welcomed_home", "1"); } catch { /* private mode */ }
+        if (!said && line) setTimeout(() => { narrate(line, { lang: getSpeechLang(langOfKey(i18n, key)) }); }, 350);
+      } else {
+        spokenRef.current = welcome({ name: firstName, place: "home" });
+      }
     }
     const line = spokenRef.current;
     const id = setTimeout(() => { if (line) setSpoken(line); }, 0);
     const stop = setTimeout(() => setGreeting(false), 4200);
     return () => { clearTimeout(id); clearTimeout(stop); };
-  }, [user, firstName]);
+  }, [user, firstName, engineWelcome, t, i18n]);
 
   useEffect(() => {
     let active = true;
@@ -115,13 +154,19 @@ const Hero = () => {
 
   const lastRound = rounds?.[0] || null;
   const isReturningStudent = roundsLoaded && !!user && !!lastRound;
+  // The engine's first suggestion (carry on a saved round, review, start) leads the big button.
+  const engineAction = engineWelcome?.actions?.[0] || null;
+  const engineHref = engineAction ? actionHref(engineAction, engineAction.type === "new" ? "explore" : engineAction.type) : null;
 
-  const ctaLabel = isReturningStudent
-    ? t("hero.continueAdventure", { defaultValue: "Start where you left off" })
-    : t("hero.startAdventure", { defaultValue: "Start Your Adventure" });
+  const ctaLabel = engineHref
+    ? t(engineAction.key || "", { defaultValue: engineAction.text || t("hero.continueAdventure", { defaultValue: "Start where you left off" }) })
+    : isReturningStudent
+      ? t("hero.continueAdventure", { defaultValue: "Start where you left off" })
+      : t("hero.startAdventure", { defaultValue: "Start Your Adventure" });
 
   const handleCTA = () => {
     sfx.forward();
+    if (engineHref) { navigate(engineHref); return; }
     if (isReturningStudent) {
       navigate(getContinueRoute(lastRound));
       return;
@@ -139,16 +184,20 @@ const Hero = () => {
     sfx.tap();
     setGreeting(true);
     setTimeout(() => setGreeting(false), 3000);
-    narrate(bubbleText, { lang: getSpeechLang(i18n.language), user: true });
+    // The engine's words are in the site's language only once translated (else English).
+    const lang = engineWelcome ? langOfKey(i18n, engineWelcome.message?.key) : i18n.language;
+    narrate(bubbleText, { lang: getSpeechLang(lang), user: true });
   };
 
-  const ModuleIcon = lastRound ? (MODULE_ICONS[lastRound.module] || FaCompass) : FaCompass;
-  const subjectImage = lastRound?.subject && SUBJECT_ICON_IMAGES[lastRound.subject];
+  // What the big button's second line names: the engine's suggestion, else the last round.
+  const subRound = engineHref && engineAction?.subject ? { subject: engineAction.subject, module: engineAction.module } : lastRound;
+  const ModuleIcon = subRound ? (MODULE_ICONS[subRound.module] || FaCompass) : FaCompass;
+  const subjectImage = subRound?.subject && SUBJECT_ICON_IMAGES[subRound.subject];
   const subjectLabel = subjectImage
-    ? t(`subjectPage.${lastRound.subject}.label`)
+    ? t(`subjectPage.${subRound.subject}.label`)
     : null;
-  const moduleLabel = lastRound && ["listen", "read", "write", "speak"].includes(lastRound.module)
-    ? t(`subjectPage.modules.${lastRound.module}.label`)
+  const moduleLabel = subRound && ["listen", "read", "write", "speak"].includes(subRound.module)
+    ? t(`subjectPage.modules.${subRound.module}.label`)
     : null;
 
   const openTodo = () => { sfx.open(); setTodoOpen(true); };
@@ -196,7 +245,7 @@ const Hero = () => {
             <span className={styles.ctaPlay} aria-hidden="true"><FaPlay /></span>
             <span className={styles.ctaText}>
               <span className={styles.ctaLabel}>{ctaLabel}</span>
-              {isReturningStudent && lastRound ? (
+              {(engineHref && engineAction?.subject) || (isReturningStudent && lastRound) ? (
                 <span className={styles.ctaSub}>
                   {subjectImage
                     ? <img src={subjectImage} alt="" className={styles.resumeIconImg} />

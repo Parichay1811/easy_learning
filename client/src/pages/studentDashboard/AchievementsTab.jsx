@@ -3,19 +3,26 @@ import { createPortal } from 'react-dom'
 import { Link } from 'react-router-dom'
 import { motion as Motion, AnimatePresence } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { FaLock, FaBook, FaGamepad, FaFire, FaBolt, FaMagic, FaTrophy, FaTimes, FaMedal } from 'react-icons/fa'
+import { FaLock, FaBook, FaGamepad, FaFire, FaBolt, FaMagic, FaTrophy, FaTimes, FaMedal, FaSeedling } from 'react-icons/fa'
 import Mascot from '../../components/Mascot/Mascot'
+import { isGrowth, badgeName, badgeDesc, badgeEvidence, badgeIcon } from '../../components/journey/words'
 import { sfx } from '../../utils/sounds'
 import { fmtDay, isRecent, readSeenBadges, writeSeenBadges } from './helpers'
 import { ReadOnlyContext } from './context'
 import c from './common.module.css'
 import a from './AchievementsTab.module.css'
 
-const CAT_ORDER = ['learning', 'games', 'streak', 'xp', 'special']
-const CAT_ICON = { learning: FaBook, games: FaGamepad, streak: FaFire, xp: FaBolt, special: FaMagic }
+// Growth badges (contract §2: for how a learner learns, each with its evidence) sit after the learning ones.
+const CAT_ORDER = ['learning', 'growth', 'games', 'streak', 'xp', 'special']
+const CAT_ICON = { learning: FaBook, growth: FaSeedling, games: FaGamepad, streak: FaFire, xp: FaBolt, special: FaMagic }
 
-function achName(t, ach) { return t(`dashboard.achievements.${ach.id}.name`, { defaultValue: ach.name }) }
-function achDesc(t, ach) { return t(`dashboard.achievements.${ach.id}.description`, { defaultValue: ach.description }) }
+const achName = badgeName
+const achDesc = badgeDesc
+const achIcon = (ach) => (isGrowth(ach) ? badgeIcon(ach) : ach.icon)
+function catName(t, cat) {
+  if (cat === 'growth') return t('journey.growth.category', 'Growth')
+  return t(`dashboard.achievements.categories.${cat}`, { defaultValue: cat })
+}
 
 function BadgeDialog({ ach, fresh, onClose }) {
   const { t, i18n } = useTranslation()
@@ -53,19 +60,24 @@ function BadgeDialog({ ach, fresh, onClose }) {
         >
           <div className={a.spot} data-earned={ach.earned || undefined} aria-hidden="true">
             <span className={a.spotRays} />
-            <span className={a.spotMedal}>{ach.icon || '🏅'}</span>
+            <span className={a.spotMedal}>{achIcon(ach) || '🏅'}</span>
             {!ach.earned && <span className={a.spotLock}><FaLock /></span>}
           </div>
           {fresh && <span className={a.newTag}>{t('studentDash.badges.new', 'NEW')}</span>}
           <h3 id="sd-badge-name" className={a.dName}>{achName(t, ach)}</h3>
           <p id="sd-badge-desc" className={a.dDesc}>{achDesc(t, ach)}</p>
+          {ach.earned && badgeEvidence(t, ach) && (
+            <p className={a.dEvidence} data-evidence="">
+              <b>{t('journey.growth.evidence', 'How you earned it:')}</b> {badgeEvidence(t, ach)}
+            </p>
+          )}
           <p className={a.dMeta}>
             <span className={c.pill} style={{ background: 'var(--d-grape-soft)', color: 'var(--d-grape-ink)' }}>
-              <CatIcon aria-hidden="true" /> {t(`dashboard.achievements.categories.${ach.category}`, { defaultValue: ach.category })}
+              <CatIcon aria-hidden="true" /> {catName(t, ach.category)}
             </span>
             {ach.earned && ach.earnedAt
               ? <span className={c.pill} style={{ background: 'var(--d-grass-soft)', color: 'var(--d-grass-ink)' }}>{t('dashboard.achievements.earnedOn', { date: fmtDay(ach.earnedAt, i18n.language) })}</span>
-              : <span className={c.pill} style={{ background: 'var(--d-sun-soft)', color: 'var(--d-sun-ink)' }}>{ach.earned ? t('studentDash.badges.earned', 'Earned') : t('dashboard.achievements.xpReward', { xp: ach.xp })}</span>}
+              : (ach.earned || Number.isFinite(ach.xp)) && <span className={c.pill} style={{ background: 'var(--d-sun-soft)', color: 'var(--d-sun-ink)' }}>{ach.earned ? t('studentDash.badges.earned', 'Earned') : t('dashboard.achievements.xpReward', { xp: ach.xp })}</span>}
           </p>
           <button ref={closeRef} type="button" className={c.soft} onClick={onClose}>
             <FaTimes aria-hidden="true" /> {t('dashboard.progressMap.close')}
@@ -160,7 +172,7 @@ export default function AchievementsTab({ achievements, now, who, isNew }) {
                 onClick={() => setOpenId(ach.id)}
               >
                 <span className={a.medal} aria-hidden="true">
-                  {ach.earned ? <span className={a.emoji}>{ach.icon}</span> : <FaLock className={a.lock} />}
+                  {ach.earned ? <span className={a.emoji}>{achIcon(ach)}</span> : <FaLock className={a.lock} />}
                   <span className={a.cat}><CatIcon /></span>
                   {fresh && <span className={a.newTag}>{t('studentDash.badges.new', 'NEW')}</span>}
                 </span>

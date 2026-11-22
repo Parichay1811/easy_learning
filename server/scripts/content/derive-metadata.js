@@ -1,9 +1,11 @@
 #!/usr/bin/env node
-// Content v3 builder for the 12 question-bank files (reproducible; safe to re-run).
+// Content builder for the 12 question-bank files (v3 + v4; reproducible; safe to re-run).
 //   1. applies the hand repairs in patches.js (absolute values: re-running changes nothing),
 //   2. auto-fixes picture badges that show the answer and keeps level_name in step with level,
-//   3. adds the new items (level-0 foundation for every subject × mode, maths stretch 6-8),
-//   4. derives skill / age_band / graded / validation (rules.js) and qa (the audit's checks),
+//   3. adds the new items (level-0 foundation for every subject × mode, maths stretch 6-8,
+//      the everyday-curiosity pool),
+//   4. derives skill / age_band / graded / validation (rules.js), stage + everyday (stages.js),
+//      narration in English and every translation (narration.js) and qa (the audit's checks),
 //   5. writes server/data/skills.json and the bank files in their original formatting.
 //
 //   node server/scripts/content/derive-metadata.js          write the files
@@ -18,9 +20,12 @@ const SKILLS = require('./skills-source')
 const { buildNewItems } = require('./new-items')
 const { LEVEL_NAMES } = require('./new-items/build')
 
-const REVIEWED = '2026-11-20'
-const GENERATED = /-(F00|S0[6-8])-Q\d+$/
-const DERIVED = ['skill', 'age_band', 'graded', 'validation', 'qa']
+const REVIEWED = '2026-11-21'
+const QA_VERSION = 4
+const GENERATED = /-(F00|E00|S0[6-8])-Q\d+$/
+const DERIVED = ['skill', 'age_band', 'graded', 'validation', 'stage', 'everyday', 'narration', 'qa']
+const { deriveStage } = require('./stages')
+const narration = require('./narration')
 const NEUTRAL_BADGE = { listen: '👂', read: '📖', write: '✏️', speak: '🗣️' }
 const graphemes = (s) => { try { return [...new Intl.Segmenter(undefined, { granularity: 'grapheme' }).segment(String(s))].map((g) => g.segment) } catch { return [...String(s)] } }
 const strip = (s) => String(s).replace(/️/g, '')
@@ -60,6 +65,7 @@ function run({ dry = false } = {}) {
   for (const b of banks) {
     for (const q of b.data.questions) {
       for (const k of DERIVED) delete q[k]
+      narration.clearNarration(q)
       let excluded = null
       const h = {
         LANGS,
@@ -96,6 +102,7 @@ function run({ dry = false } = {}) {
   // Metadata + QA (audit needs skills.json, so load it fresh).
   try { delete require.cache[require.resolve('../../data/skills.json')] } catch { /* first run */ }
   const { auditQuestion, passedChecks } = require('./audit')
+  narration.resetCaches()
   for (const b of banks) {
     for (const q of b.data.questions) {
       const spec = q.__spec
@@ -113,12 +120,15 @@ function run({ dry = false } = {}) {
         q.graded = d.graded
         q.validation = d.validation
       }
+      q.everyday = !!(spec && spec.everyday)
+      q.stage = deriveStage(q).stage
       if (excluded) {
-        q.qa = { status: 'excluded', reason: excluded, checks: [], version: 3, reviewed: REVIEWED }
+        q.qa = { status: 'excluded', reason: excluded, checks: [], version: QA_VERSION, reviewed: REVIEWED }
         log.excluded.push({ id: q.id, reason: excluded })
         continue
       }
-      q.qa = { status: 'verified', checks: [], version: 3, reviewed: REVIEWED }
+      narration.applyNarration(q, { subject: b.subject, module: b.module, spec })
+      q.qa = { status: 'verified', checks: [], version: QA_VERSION, reviewed: REVIEWED }
       let findings = auditQuestion(q, { subject: b.subject, module: b.module })
       // Translated speech/typed items whose answers the checker cannot judge in one language
       // are practice-only in that language (listed in the audit), never marked wrong.
@@ -131,9 +141,9 @@ function run({ dry = false } = {}) {
         }
       }
       const blocking = findings.filter((f) => f.severity === 'blocking')
-      q.qa = { status: blocking.length ? 'needs_review' : 'verified', checks: passedChecks(findings), version: 3, reviewed: REVIEWED }
+      q.qa = { status: blocking.length ? 'needs_review' : 'verified', checks: passedChecks(findings), version: QA_VERSION, reviewed: REVIEWED }
     }
-    b.data.metadata = { ...b.data.metadata, version: '3.0', content_version: 3, total_questions: b.data.questions.length, reviewed: REVIEWED }
+    b.data.metadata = { ...b.data.metadata, version: '4.0', content_version: 4, total_questions: b.data.questions.length, reviewed: REVIEWED }
   }
 
   let changed = 0

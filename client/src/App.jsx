@@ -36,6 +36,7 @@ import SuperAdminLogin from "./pages/SuperAdminLogin";
 import TeacherLogin from "./pages/TeacherLogin";
 import ParentLogin from "./pages/ParentLogin";
 import Dashboard from "./pages/Dashboard";
+import Discovery from "./pages/Discovery";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import SuperAdminDashboard from "./pages/superadmin/SuperAdminDashboard";
 import ViewAsBanner from "./components/ViewAs/ViewAsBanner";
@@ -132,6 +133,7 @@ function AnimatedRoutes() {
         <Route path="/teacher-login" element={<TeacherLogin />} />
         <Route path="/parent-login" element={<ParentLogin />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/discovery" element={<Discovery />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/admin-school/*" element={<SchoolApp />} />
         <Route path="/superadmin-dashboard" element={<Suspense fallback={null}><SuperAdminConsole /></Suspense>} />
@@ -177,7 +179,7 @@ function AppLayout() {
   const hideBackground3D = isAR || isSchool || [
     "/", "/home", "/about-us", "/contact-us", "/faq", "/policy", "/terms-and-conditions",
     "/login", "/admin-login", "/superadmin-login", "/teacher-login", "/parent-login",
-    "/games", "/games/ar", "/dashboard", "/ai-teacher", "/parent-dashboard", "/parent/report",
+    "/games", "/games/ar", "/dashboard", "/discovery", "/ai-teacher", "/parent-dashboard", "/parent/report",
   ].includes(location.pathname)
     || location.pathname.startsWith("/shared-report/")
     || location.pathname.startsWith("/module/")

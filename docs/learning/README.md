@@ -7,7 +7,9 @@ describes the system that makes that true, and how to keep it working.
 |---|---|
 | [AUDIT.md](AUDIT.md) | What was wrong with the question bank, what was repaired, replaced or excluded, and the verified inventory |
 | [QUESTION-BANK.md](QUESTION-BANK.md) | How to maintain and extend the bank: fields, validation methods, the QA gate, adding a subject or question type, the database migration |
-| [ADAPTIVE.md](ADAPTIVE.md) | The adaptive engine: levels 0-8, mastery, the level policy, spaced repetition, teaching escalation, rounds, guardians and educators, privacy, tuning |
+| [ADAPTIVE.md](ADAPTIVE.md) | The adaptive engine: levels 0-8, stages 0-5, mastery, the level policy, the target band, probes, spaced repetition, teaching escalation, misconception explanations, rounds, continuity, "what next", growth badges, the decision log, guardians and educators, privacy, tuning |
+| [RESEARCH.md](RESEARCH.md) | The evidence behind each design decision, what Learnigo does with it, how to measure it, its limits, and which numbers are product hypotheses |
+| [JOURNEY-PROMPT.md](JOURNEY-PROMPT.md) | The "adaptive journey" brief adjusted to this codebase: what already existed, what was built, the project's rules |
 | this file | The architecture, the voice, sound and accessibility logic, privacy, testing, and what is not done yet |
 
 ## Architecture
@@ -53,10 +55,28 @@ describes the system that makes that true, and how to keep it working.
   learner (`GET /api/learn/companion`, via `postMessage`) and opens with something
   real ("Last time, taking away was tricky, so shall we try it with pictures?").
 
+## The adaptive journey (November 2026)
+
+What a learner, a parent and a visitor now see, and where it lives:
+
+| Feature | What it does | Where |
+|---|---|---|
+| **Stages 0-5** | Every question has a stage (0 everyday curiosity, 1 recognition, 2 understanding, 3 application, 4 reasoning, 5 transfer), separate from its level. There are 48 new everyday-curiosity questions. | `server/data`, `server/scripts/content/stages.js` |
+| **Narration scripts** | Each question has its own spoken script: 1,959 written by hand in English, templated in 13 languages for maths and science (marked `templated` until a person reviews them). A script never gives the answer and never reads what the item tests. | `narration` in the bank; `server/scripts/content/narration.js`; `QuestionCard` |
+| **Smarter engine** | A short check on first meeting a skill; a target success band (a hypothesis); guess-aware mastery that needs varied evidence; an explanation when the same misconception repeats; every change written to the decision log | `server/services/learning` |
+| **Continuity** | An unfinished round is resumed after logout. The welcome-back message is built only from real history (the home mascot says it). "What next?" is ranked, and there's a daily discovery and mini challenges. | `/api/learn/welcome`, `/next`, `/discovery`, `/journey`; `components/journey`, `pages/studentDashboard/TodayHub.jsx`, `pages/Discovery.jsx` |
+| **Growth badges** | First discovery, Concept explorer, Brilliant comeback, Three concepts mastered, Curious thinker, Problem-solving star, Review champion. Each records its evidence. No new late-night or early-morning badges. | `server/services/learning/achievements.js` |
+| **Evidence for grown-ups** | Baseline vs now, stage growth, success alone vs with help, retention, misconceptions resolved, insight sentences that cite their numbers, decisions in plain language | `components/learning/evidence`, the parent "Growth" tab, the teacher student view, the parent report |
+| **Landing page** | The tagline, a playable sample journey, the stage ladder, a narration demo, a multilingual preview, an example parent dashboard (labelled), privacy | `components/landing`, `pages/Home.jsx` (visitors only) |
+| **Wrong-language guard** | With no voice for a language, nothing is spoken and the words are shown with a note | `utils/narrator.js` |
+
 ## Database migration plan
 
+Content v4 (`2026-11-21-content-v4.js`: stages, everyday items, narration)
+supersedes v3 for a database that has not had v3 yet; it uses the same steps.
+
 1. Back up the production database (the usual backup), then run the migration in
-   dry-run mode: `cd server && node scripts/migrations/2026-11-20-content-v3.js`.
+   dry-run mode: `cd server && node scripts/migrations/2026-11-21-content-v4.js`.
    It prints what would change.
 2. `--apply` first writes every document it will touch to
    `server/backups/<timestamp>/<collection>.json` (git-ignored), then upserts the
@@ -149,7 +169,7 @@ English speaking items instead; that is not wired up yet.
 |---|---|
 | Server (unit + integration, in-memory MongoDB) | `cd server && npm test` |
 | AI Teacher | `npm --prefix server/ai-assistant test` |
-| Client pure helpers (speakMath, support strategies) | `node --test client/src/utils/speakMath.test.mjs client/src/components/QuestionCard/support.test.mjs` |
+| Client pure helpers (speakMath, support strategies, narrator, evidence model) | `node --test client/src/utils/speakMath.test.mjs client/src/components/QuestionCard/support.test.mjs client/src/utils/narrator.test.mjs client/src/components/learning/evidence/model.test.mjs` |
 | Question bank QA gate | `node server/scripts/content/audit.js --check` |
 | Lint / build | `cd client && npx eslint . && npm run build` |
 
@@ -173,6 +193,15 @@ Results on 2026-11-20:
   * On a slow connection, a second, slower round request could replace the round in the middle of a question. Now only the newest request counts, and the round is fetched again only when its language really changes.
 
 ## Not done yet (honest list)
+
+From the adaptive-journey round:
+
+* **Templated narration needs review.** The narration in the 13 languages other than English is built from a phrase bank and marked `templated`. No native speaker has reviewed it, and the same goes for the 568 new interface strings and the everyday items' translations.
+* **The thresholds are untested hypotheses.** The target band (75-90%), the probe rules, the chance discount and the badge thresholds are documented as hypotheses (see RESEARCH.md). They need a pilot with real learners and consent.
+* **Stage 5 has no graded items.** All 30 transfer items are practice-only.
+* **A language change on the first question gets a new round.** Switching language before the first answer fetches a new round, because only an answered round can be resumed.
+* **The maintenance banner covers the navbar.** The status banner (shown only when staff post a notice) covers the navbar and pushes fixed-height pages down. It can be closed, and it predates this work.
+* **Not checked with real people or devices.** Nothing here has been tested with real screen readers, real phones and voices, or real learners.
 
 * Content ceilings: science stops at level 4-5 (science speaking has no graded
   items above level 3), maths speaking at level 5; there is no content at levels

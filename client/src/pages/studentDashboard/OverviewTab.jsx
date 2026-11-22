@@ -5,10 +5,15 @@ import { useTranslation } from 'react-i18next'
 import { FaFire, FaStar, FaMedal, FaBolt, FaBookOpen, FaPlay, FaCheck, FaTrophy, FaChevronRight, FaGamepad, FaSeedling } from 'react-icons/fa'
 import Mascot, { FloatingButterflies } from '../../components/Mascot/Mascot'
 import NextUpCard from '../../components/learning/NextUpCard'
+import { useJourney, langOf } from '../../components/journey/journeyApi'
+import { badgeName } from '../../components/journey/words'
 import { useLearnProfile } from './learnApi'
 import { useCountUp } from './hooks'
 import { ReadOnlyContext } from './context'
 import { DEFAULT_DAILY_GOAL, fmtMinutes, fmtNumber, moduleName, subjectName, playTarget } from './helpers'
+import TodayHub from './TodayHub'
+import { usePrefs } from '../../components/settings/usePrefs'
+import { reducedMotion } from '../../utils/learnerPrefs'
 import c from './common.module.css'
 import s from './OverviewTab.module.css'
 
@@ -80,7 +85,41 @@ function weekDays(performance, now) {
   })
 }
 
-export default function OverviewTab({
+/**
+ * The "Today" tab. For a signed-in learner on a server with the journey
+ * endpoints (contract §2) it is the Today hub (welcome back, what next, the
+ * journey map, today's discovery, growth badges; the numbers below under "My
+ * stars"). Without them (an older server, or the admin's read-only viewer) it
+ * is the overview it always was.
+ */
+export default function OverviewTab(props) {
+  const { t, i18n } = useTranslation()
+  const readOnly = useContext(ReadOnlyContext)
+  const prefs = usePrefs()
+  const journey = useJourney({ enabled: !readOnly, lang: langOf(i18n.language), calm: reducedMotion(prefs) || Boolean(prefs.focusMode) })
+  const classic = <ClassicOverview {...props} />
+  if (readOnly || (!journey.loading && !journey.available)) return classic
+  if (journey.loading) {
+    return (
+      <div className={`${c.card} ${c.empty}`} role="status">
+        <Mascot size="clamp(50px, 14vh, 110px)" mood="think" />
+        <p>{t('journey.loading', 'Getting your day ready…')}</p>
+      </div>
+    )
+  }
+  return (
+    <TodayHub
+      journey={journey}
+      classic={classic}
+      achievements={props.achievements}
+      displayName={props.displayName}
+      now={props.now}
+      onGoTab={props.onGoTab}
+    />
+  )
+}
+
+function ClassicOverview({
   stats, achievements, rounds, performance, moduleStars, family,
   displayName, avatarUrl, isNew, newBadge, now, onGoTab,
 }) {
@@ -190,11 +229,11 @@ export default function OverviewTab({
               type="button"
               className={s.newBadge}
               onClick={() => onGoTab('achievements')}
-              aria-label={t('studentDash.newBadge', 'New badge: {{name}}!', { name: t(`dashboard.achievements.${newBadge.id}.name`, { defaultValue: newBadge.name }) })}
+              aria-label={t('studentDash.newBadge', 'New badge: {{name}}!', { name: badgeName(t, newBadge) })}
             >
               <span className={s.newPill} aria-hidden="true">{t('studentDash.badges.new', 'NEW')}</span>
               <span className={s.newIcon} aria-hidden="true">{newBadge.icon || <FaTrophy />}</span>
-              <span className={s.newBadgeText} aria-hidden="true">{t(`dashboard.achievements.${newBadge.id}.name`, { defaultValue: newBadge.name })}</span>
+              <span className={s.newBadgeText} aria-hidden="true">{badgeName(t, newBadge)}</span>
               <FaChevronRight aria-hidden="true" />
             </button>
           )}

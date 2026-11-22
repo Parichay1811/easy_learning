@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, useReducedMotion } from "framer-motion";
 import * as FramerMotion from "framer-motion";
 import { FaArrowLeft, FaStar, FaRedo, FaTimes } from "react-icons/fa";
 import { useQuestionRound } from "../../hooks/useQuestionRound";
 import QuestionCard from "../QuestionCard/QuestionCard";
+import ExplainCard from "../QuestionCard/ExplainCard";
+import ResumePrompt from "./ResumePrompt";
+import GrowthToast from "../journey/GrowthToast";
 import RoundComplete from "../RoundComplete/RoundComplete";
 import VideoBackground from "../VideoBackground/VideoBackground";
 import ProgressBar from "../ProgressBar/ProgressBar";
@@ -54,11 +57,16 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
   const [extraKey, setExtraKey] = useState(0);
 
   const round = useQuestionRound({ module, subject, warriorSeconds });
+  const [query] = useSearchParams();
+  const wantsChallenge = query.get("challenge") === "1";
   const {
     data, status, noOrgQuestions, current, idx, mode, setMode, timeLeft, roundDone, roundResult,
     totalScore, recordAnswer, advance, handlePlayAgain, retry, paused, togglePause, clockRunning, timedOut,
     warriorSeconds: clockSeconds, noClock, learn, choicePool, voiceBusy,
+    resumeOffer, acceptResume, startFresh, starting, explainNow, doneExplaining, newBadges, challenge,
   } = round;
+  // Growth badges earned in the round are shown quietly when it ends (never mid-question).
+  const [badgesSeen, setBadgesSeen] = useState(false);
   // The question card shows the teacher's words in place (and has its own
   // Read to me / pause), so the floating caption bar steps aside here.
   useVoiceBarHost(true);
@@ -66,9 +74,14 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
   // The first time in a subject (when it was not already asked on Home):
   // "Where would you like to start?". A new level fetches a new round.
   const [placementOpen, setPlacementOpen] = useState(false);
+  // The question waits until we know: it is not read aloud behind the sheet.
+  const [placementChecked, setPlacementChecked] = useState(false);
   useEffect(() => {
     let alive = true;
-    needsPlacement(subject).then((v) => { if (alive) setPlacementOpen(v); });
+    needsPlacement(subject)
+      .then((v) => { if (alive) setPlacementOpen(v); })
+      .catch(() => {})
+      .finally(() => { if (alive) setPlacementChecked(true); });
     return () => { alive = false; };
   }, [subject]);
   const placement = placementOpen && (
@@ -95,7 +108,9 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
 
   const leave = () => navigate("/home", { state: { openSubject: subject } });
   const goBack = () => { sfx.back(); leave(); };
-  const moduleLabel = t(`subjectPage.modules.${module}.label`, { defaultValue: module });
+  const moduleLabel = challenge
+    ? t("journey.challenge.title", "Mini challenge")
+    : t(`subjectPage.modules.${module}.label`, { defaultValue: module });
   const subjectLabel = t(`subjectPage.${subject}.label`, { defaultValue: subject });
   const Icon = icon;
 
@@ -122,7 +137,7 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
     </FramerMotion.motion.div>
   );
 
-  if (status === "loading" || status === "idle" || status === "failed" || data.length === 0 || !current) {
+  if (starting || status === "loading" || status === "idle" || status === "failed" || data.length === 0 || !current) {
     const failed = status === "failed";
     const empty = !failed && status !== "loading" && status !== "idle" && data.length === 0;
     return shell(
@@ -132,7 +147,9 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
           {failed
             ? t("modules.serverErr")
             : empty
-              ? t(noOrgQuestions ? "modules.noOrgQuestions" : "modules.noQuestions")
+              ? (wantsChallenge
+                ? t("journey.challenge.none", "There's no mini challenge ready right now. Keep exploring and one will come.")
+                : t(noOrgQuestions ? "modules.noOrgQuestions" : "modules.noQuestions"))
               : t(loadingKey)}
         </p>
         <div className={styles.messageActions}>
@@ -165,7 +182,7 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
           <ModeToggle mode={mode} onChange={setMode} compact={compactHud} />
         </div>
         <div className={styles.progressSlot}>
-          <ProgressBar current={idx + 1} total={data.length} />
+          <ProgressBar current={resumeOffer ? resumeOffer.position + 1 : idx + 1} total={data.length} />
         </div>
         {mode === "warrior" && noClock && (
           <div className={styles.timerSlot}>
@@ -219,24 +236,32 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
         <div className={styles.slot}>
           <AnimatePresence mode="wait" initial={false}>
             <FramerMotion.motion.div
-              key={current.id || idx}
+              key={resumeOffer ? "resume" : explainNow ? `explain-${current.id || idx}` : current.id || idx}
               className={styles.cardWrap}
               initial={reduce ? { opacity: 0 } : { opacity: 0, y: 36, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={reduce ? { opacity: 0 } : { opacity: 0, y: -28, scale: 0.98 }}
               transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             >
-              <QuestionCard
-                question={current}
-                subject={subject}
-                module={module}
-                onAnswered={recordAnswer}
-                onNext={advance}
-                isLast={isLast}
-                locked={timedOut}
-                learn={learn}
-                choicePool={choicePool}
-              />
+              {/* An unfinished round first asks "carry on?"; an idea that keeps
+                  tripping the learner up is explained before its question. */}
+              {!placementChecked || placementOpen ? null : resumeOffer ? (
+                <ResumePrompt position={resumeOffer.position} total={resumeOffer.total} onCarryOn={acceptResume} onFresh={startFresh} />
+              ) : explainNow ? (
+                <ExplainCard explain={explainNow} lang={current.lang} onReady={doneExplaining} />
+              ) : (
+                <QuestionCard
+                  question={current}
+                  subject={subject}
+                  module={module}
+                  onAnswered={recordAnswer}
+                  onNext={advance}
+                  isLast={isLast}
+                  locked={timedOut}
+                  learn={learn}
+                  choicePool={choicePool}
+                />
+              )}
             </FramerMotion.motion.div>
           </AnimatePresence>
         </div>
@@ -246,12 +271,15 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
         {roundDone && (
           <RoundComplete
             module={module} subject={subject || "general"} mode={mode}
-            stars={roundResult.stars} bonusStars={roundResult.bonusStars} total={data.length}
-            onPlayAgain={() => { handlePlayAgain(); setExtraKey((k) => k + 1); }}
+            stars={roundResult.stars} bonusStars={roundResult.bonusStars} total={data.length} challenge={challenge}
+            onPlayAgain={() => { handlePlayAgain(); setExtraKey((k) => k + 1); setBadgesSeen(false); }}
             onBack={leave}
           />
         )}
       </AnimatePresence>
+      {roundDone && !badgesSeen && newBadges.length > 0 && (
+        <GrowthToast badges={newBadges} onDone={() => setBadgesSeen(true)} />
+      )}
     </>
   );
 }

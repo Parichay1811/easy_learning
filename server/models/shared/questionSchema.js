@@ -65,6 +65,13 @@ function buildQuestionSchema() {
     validation: { type: mongoose.Schema.Types.Mixed }, // { method, ...options } used by utils/scoreAnswer.js
     qa: { type: mongoose.Schema.Types.Mixed },     // { status: verified|needs_review|excluded, checks, version, reviewed, reason? }
 
+    // Content v4 (docs/learning/QUESTION-BANK.md). Optional, like the v3 fields.
+    stage: { type: Number, min: 0, max: 5, index: true }, // kind of thinking: 0 everyday curiosity … 5 transfer
+    everyday: { type: Boolean, index: true },      // the everyday-curiosity pool (stage 0)
+    // { text, style: curious|story|detective|adventure|calm|challenge, v, status: authored|templated|reviewed }
+    // in English; translations.<lang>.narration has the same shape (translations is Mixed, so it passes through).
+    narration: { type: mongoose.Schema.Types.Mixed },
+
     // Old flat schema (teacher-upload pipeline, pre-migration content)
     sentence: { type: String },
     text: { type: String },

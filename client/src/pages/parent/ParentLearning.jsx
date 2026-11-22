@@ -3,8 +3,9 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   TimeRangeBar, useTimeRange, ChartCard, SubjectModuleMatrix, SkillMap, TrendLine, Button, toTable,
-  fmtDuration, fmtPercent, fmtDate, subjectLabel, moduleLabel, SubTabs, SubPanel, usePane,
+  fmtDuration, fmtPercent, fmtDate, subjectLabel, moduleLabel, SubTabs, SubPanel, usePane, EmptyState,
 } from "../../components/dashboard";
+import { EvidencePanel } from "../../components/learning/evidence";
 import { useLoad, rangeQuery, matrixCells, masteryKey, frac } from "./parentApi";
 import QuestionReview from "./QuestionReview";
 import ParentPlan from "./ParentPlan";
@@ -15,9 +16,11 @@ const LEVEL = { notStarted: 0, learning: 1, practising: 2, mastered: 3 };
 const pctFmt = (v) => (v == null ? "—" : `${Math.round(v)} %`);
 const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : "");
 
-// Learning in depth (PAR-030..036): subjects, skills, trends, modes, the exact questions, AI Teacher, games,
-// one sub-tab each so every view fits a screen. A tile opens "Questions" filtered to that area.
-const PANES = ["subjects", "skills", "progress", "questions", "extras", "plan"];
+// Learning in depth (PAR-030..036): first the evidence of growth (GET /children/:id/learning → evidence),
+// then subjects, skills, trends, modes, the exact questions, AI Teacher, games, one sub-tab each so every
+// view fits a screen. A tile opens "Questions" filtered to that area.
+const PANES = ["growth", "subjects", "skills", "progress", "questions", "extras", "plan"];
+const NO_RANGE = ["growth", "plan"];
 export default function ParentLearning({ api, child, go }) {
   const { t } = useTranslation();
   const T = (k, d, o) => t(`parent.learn.${k}`, { defaultValue: d, ...o });
@@ -34,6 +37,8 @@ export default function ParentLearning({ api, child, go }) {
   const src = useLoad(api.get, `${base}/analytics/sources?${q}`);
   const ai = useLoad(api.get, `${base}/analytics/ai-teacher?${q}`);
   const ar = useLoad(api.get, `${base}/analytics/ar?${q}`);
+  // Evidence is the learner's whole history (baseline vs now), not the picked period.
+  const lrn = useLoad(api.get, pane === "growth" ? `${base}/learning` : null);
   const first = child.name.split(" ")[0];
 
   const cells = useMemo(() => matrixCells(mx.data?.matrix), [mx.data]);
@@ -67,6 +72,7 @@ export default function ParentLearning({ api, child, go }) {
       </div>
       <SubTabs label={T("tabs", "Learning in depth")} value={pane} onChange={setPane}
         tabs={[
+          { id: "growth", label: t("evidence.tab", "Growth") },
           { id: "subjects", label: T("tab.subjects", "Subjects") },
           { id: "skills", label: T("tab.skills", "Skills") },
           { id: "progress", label: T("tab.progress", "Progress") },
@@ -74,7 +80,18 @@ export default function ParentLearning({ api, child, go }) {
           { id: "extras", label: T("tab.extras", "AI Teacher and games"), short: T("tab.extrasShort", "AI & games") },
           { id: "plan", label: T("tab.plan", "Learning plan"), short: T("tab.planShort", "Plan") },
         ]}
-        actions={pane === "plan" ? null : <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare compact />} />
+        actions={NO_RANGE.includes(pane) ? null : <TimeRangeBar value={tr} ranges={["week", "month", "year", "custom"]} showCompare compact />} />
+
+      <SubPanel id="growth" value={pane}>
+        {lrn.code === "LINK_NOT_VERIFIED" && !lrn.data ? (
+          <div className={s.card}>
+            <EmptyState icon="🔗" title={t("evidence.unverifiedTitle", "Confirm the link first")}
+              text={t("evidence.unverifiedText", { defaultValue: "Once the link to {{name}} is confirmed with a code or by the school, you can see how they are growing here.", name: first })} />
+          </div>
+        ) : (
+          <EvidencePanel key={child._id} evidence={lrn.data?.evidence} name={first} loading={lrn.loading} error={lrn.error} onRetry={lrn.reload} />
+        )}
+      </SubPanel>
 
       <SubPanel id="subjects" value={pane}>
         <ChartCard title={T("matrix", "Which areas are strong, and which need practice?")}
@@ -188,7 +205,7 @@ export default function ParentLearning({ api, child, go }) {
       <SubPanel id="plan" value={pane}>
         <ParentPlan api={api} child={child} />
       </SubPanel>
-      {pane !== "plan" && <p className={`${s.muted} ${s.small}`}>{cap(T("periodNote", "showing {{from}} to {{to}}", { from: fmtDate(tr.from, { style: "short" }), to: fmtDate(tr.to, { style: "short" }) }))}</p>}
+      {!NO_RANGE.includes(pane) && <p className={`${s.muted} ${s.small}`}>{cap(T("periodNote", "showing {{from}} to {{to}}", { from: fmtDate(tr.from, { style: "short" }), to: fmtDate(tr.to, { style: "short" }) }))}</p>}
     </>
   );
 }

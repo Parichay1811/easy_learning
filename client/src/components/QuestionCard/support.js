@@ -174,3 +174,21 @@ export function isHiddenAudio(question) {
   const shown = `${lower(question?.instruction)} ${lower(question?.prompt)}`;
   return !shown.includes(a);
 }
+
+/**
+ * The item's own spoken script (question.narration, contract §1), or null.
+ * It is used only when it is in the language of the words on the card (the
+ * server sends it in the chosen language): an English script on a translated
+ * card would be the wrong language, so the card is read as before instead.
+ * { text, lang }
+ */
+export function scriptOf(question) {
+  const n = question?.narration;
+  const text = typeof n?.text === "string" ? n.text.trim() : "";
+  if (!text) return null;
+  const cardLang = String(question.lang || "en").split("-")[0].toLowerCase();
+  const own = typeof n.lang === "string" && n.lang ? n.lang.split("-")[0].toLowerCase() : null;
+  // English scripts are written per item ("authored"); other languages are built ("templated").
+  const lang = own || (n.status === "authored" ? "en" : cardLang);
+  return lang === cardLang ? { text, lang } : null;
+}

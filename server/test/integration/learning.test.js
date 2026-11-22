@@ -112,7 +112,7 @@ test('round: level-appropriate, translated, deterministic per seed, never exclud
   assert.equal(r.body.ceiling, 3)
   for (const it of r.body.items) {
     assert.ok(it.level <= 1, it.id)
-    assert.ok(['new', 'practice', 'prerequisite', 'review', 'stretch'].includes(it.why))
+    assert.ok(['new', 'probe', 'practice', 'prerequisite', 'review', 'stretch'].includes(it.why))
     assert.ok(Number.isInteger(it.support.step) && it.support.strategy)
     assert.notEqual(it.id, 'T-RM-1-X')
     assert.ok(!it.id.startsWith('T-ORG'), 'school questions are not Learnigo questions')

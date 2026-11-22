@@ -29,8 +29,14 @@ export function ParentReportPage() {
     let live = true;
     (async () => {
       setState({ loading: true });
-      const d = await api.get(`/children/${child}/report?from=${from}&to=${to}`);
-      if (live) setState({ loading: false, report: d.success ? d.report : null, error: d.success ? null : d.message, code: d.code });
+      // The report, and the learning evidence for its "What we noticed" and goals
+      // (the evidence is optional: without it the report shows as before).
+      const [d, l] = await Promise.all([
+        api.get(`/children/${child}/report?from=${from}&to=${to}`),
+        api.get(`/children/${child}/learning`).catch(() => null),
+      ]);
+      const learning = l?.success ? l : null;
+      if (live) setState({ loading: false, report: d.success ? d.report : null, learning, error: d.success ? null : d.message, code: d.code });
     })();
     return () => { live = false; };
   }, [api, child, from, to]);
@@ -55,7 +61,10 @@ export function ParentReportPage() {
             text={T("lockD", "A beautiful monthly or term report you can print or share with a tutor or grandparent.")} ctaLabel={T("lockCta", "Ask us about Family Plus")} onUpgrade={() => navigate("/parent-dashboard?tab=support")} />
         )}
         {!state.loading && state.error && state.code !== "MODULE_LOCKED" && <EmptyState tone="error" title={T("error", "We couldn't make this report")} text={state.error} />}
-        {state.report && <ReportView report={state.report} />}
+        {state.report && (
+          <ReportView report={state.report} evidence={state.learning?.evidence} goals={state.learning?.profile?.goals}
+            next={state.learning?.next} learnSkills={state.learning?.skills} />
+        )}
       </main>
     </div>
   );

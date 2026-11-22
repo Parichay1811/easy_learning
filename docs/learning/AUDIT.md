@@ -1,4 +1,145 @@
-# Question bank audit: content v3 (2026-11-20)
+# Question bank audit: content v4 (2026-11-21) and v3 (2026-11-20)
+
+## Content v4 (2026-11-21)
+
+What v4 adds to every question: `stage` (0-5), `everyday`, and a `narration` script in English and
+in every translated language. It also adds the everyday-curiosity pool (48 items), the repairs
+found while writing narration, and a QA gate extended to stages, narration and badges.
+
+| | count |
+|---|---|
+| Questions | **1,970** (1,922 v3 + 48 everyday) |
+| Served | **1,959**: 1,781 graded, 178 practice-only (11 excluded, unchanged) |
+| QA gate (`audit.js --check`) | **passes**: 0 served items fail a blocking check (schema, unique_id, options, answer_key, round_trip, translations, audio, speech, qa, stage, narration, badge) |
+| Stage set by | 48 everyday (stage 0) · 1,603 derived from Bloom + interaction · 308 reviewed overrides (with reasons, `patches.js` `stageOverrides`) |
+| English narration | **1,959 authored** (1,911 by the narration writers, merged and checked against every rule, 0 rejected; 48 for the everyday pool), 0 templated |
+| Translated narration | **1,316 per language × 13 languages = 17,108 scripts, all templated** (maths and science; English-subject items are not translated) |
+| Skills | 96 (6 new for the everyday pool) |
+
+### Served items by stage × subject × mode
+
+Stages: 0 everyday curiosity · 1 recognition · 2 understanding · 3 application · 4 reasoning · 5 transfer.
+Reproduce with `node scripts/content/stages.js`.
+
+| subject × mode | S0 | S1 | S2 | S3 | S4 | S5 | total |
+|---|---|---|---|---|---|---|---|
+| English listen | 5 | 11 | 47 | 79 | 20 | 0 | 162 |
+| English read | 5 | 10 | 68 | 50 | 30 | 0 | 163 |
+| English write | 1 | 2 | 0 | 126 | 30 | 0 | 159 |
+| English speak | 1 | 44 | 32 | 72 | 10 | 0 | 159 |
+| Maths listen | 4 | 41 | 21 | 74 | 30 | 0 | 170 |
+| Maths read | 5 | 22 | 33 | 82 | 29 | 0 | 171 |
+| Maths write | 3 | 2 | 0 | 126 | 40 | 0 | 171 |
+| Maths speak | 0 | 25 | 28 | 63 | 30 | 10 | 156 |
+| Science listen | 9 | 28 | 50 | 50 | 26 | 0 | 163 |
+| Science read | 10 | 10 | 77 | 40 | 28 | 0 | 165 |
+| Science write | 3 | 12 | 10 | 115 | 20 | 0 | 160 |
+| Science speak | 2 | 37 | 30 | 41 | 30 | 20 | 160 |
+| **all** | **48** | **244** | **396** | **918** | **323** | **30** | **1,959** |
+
+What the table shows:
+- The write modules are almost all application (3): spelling, calculating, completing. Maths
+  write and English write have no understanding-stage (2) items.
+- Transfer (5) exists only in speaking: 10 "teach it to a friend" items and 20 investigation /
+  fair-test plans. These are all practice-only, so for mastery the highest graded stage is 4.
+- The main stage overrides:
+  - phonics "analyze" → 3 (60 items);
+  - "which is bigger" → 2 (40);
+  - choosing <, > or = → 3 (20);
+  - spotting a named word → 1 (10);
+  - selecting a named category → 3 (30);
+  - two-step problems → 4 (30);
+  - explaining why → 4 (10);
+  - designing a test → 5 (10);
+  - captions → 3 (10);
+  - the generated starter and stretch items, reviewed by type (88).
+
+### Narration coverage (served items)
+
+Reproduce with `node scripts/content/narration.js --report`.
+
+| language | authored | reviewed | templated | missing |
+|---|---|---|---|---|
+| en | 1,959 | 0 | 0 | 0 |
+| es, fr, pt, it, de, nl, ru, tr, zh, ja, ko, id, vi (each) | 0 | 0 | 1,316 | 0 |
+
+English by subject: English 643, maths 668, science 648 (all authored). Every script passes every
+rule (`narration.test.js` checks 18,000+ scripts). In 2 of the 17,108 translated scripts, the
+built variant drops the intro because the intro contains the spoken number word: MA-LIS-T01-Q02
+(vi) and MA-LIS-T01-Q06 (ja). Templated scripts are `status: "templated"` until a person
+reviews them.
+
+### Repairs in v4 (all in `patches.js` or the builders, with reasons)
+
+| what | items | fix |
+|---|---|---|
+| The picture badge on a listening item showed the answer (🧼 next to "soap", ⛑️ for "helmet", 📏 for "ruler"): it could be answered without listening | EN-LIS-T01 (10), EN-LIS-T09 (10), MA-LIS-T13 (10) | badge is now 👂. New blocking gate check `badge` (emoji answers, and word answers the bank pairs with that emoji) |
+| Generated items copied the template item's own widget data (`letter_tiles`, `word_tiles` …), e.g. EN-WR-F00-Q04 "sun" carried `letter_tiles` c,a,t,d,s. The widgets use `options` (s,u,n), so it was answerable, but the data was misleading | all generated items (EN-WR-F00-Q04/Q05 affected) | `build.js` keeps only the standard fields. New gate rule: legacy tile lists must be able to build the answer |
+| `speech_scoring.expected_keywords` held the card word (the word to rhyme with; the category). `validation` decides, so the card word was never accepted (verified on server and client). Another reader of `expected_keywords` would have accepted it | EN-SPK-T06 (10), EN-SPK-T12 (10) | they now list real rhymes or examples, never the card word. New round-trip rule: just saying the card word on a speaking item (where the card is not the answer) must not be correct. Test in `content-bank.test.js` |
+| An everyday item duplicated SCI-WR-T07-Q08 ("Ice ___ when it gets warm.") | SCI-WR-E00-Q01 | rewritten: "Chocolate ___ in a hot car." |
+
+### The everyday-curiosity pool (48 items)
+
+| subject | listen | read | write | speak | skills |
+|---|---|---|---|---|---|
+| science (24) | 9 | 10 | 3 | 2 | weather-seasons, heating-cooling (new), materials (new), light-sound (new), colour-mixing (new), living-things, life-cycles, observation, facts |
+| maths (12) | 4 | 5 | 3 | – | sharing-equally (new), money, counting, time, compare-numbers, subtraction/addition-within-10, measures, multiplication (its first items) |
+| English (12) | 5 | 5 | 1 | 1 | signs-labels (new), understanding-sentences, inference, reading-comprehension, missing-word, answering-aloud |
+
+All 48 items are:
+- stage 0, level 0 (21 items) or 1 (27 items);
+- graded, verified, `age_band: "all"`;
+- built with 29 tap_mcq, 7 true_false, 3 drag_to_blank, 1 multi_select, 1 drag_order,
+  4 typed_short and 3 mic_record;
+- given an authored English narration.
+
+Examples: an umbrella in the rain, ice melting on a warm plate, mixing red and yellow paint, which
+tool tells the time, sharing six sweets with a friend, coins left after buying a snack, a CLOSED
+shop sign, a WET FLOOR warning. Maths and science items are translated in all 13 languages. The
+answer checker accepts the right answer and rejects the wrong ones in every language, on server
+and client (`content-bank.test.js`, `answer-check-parity.test.js`). A reviewer read every item.
+Defensible-answer checks:
+- "Which one floats": a leaf vs a stone and a key.
+- "Which one gives off its own light": a bulb vs a mirror and a spoon.
+- "We wear a coat when it is ___": cold / hot / warm, so no second right answer.
+
+### Served items by level in v4 (graded + practice-only)
+
+| subject × mode | L0 | L1 | L2 | L3 | L4 | L5 | L6 | L7 | L8 | total |
+|---|---|---|---|---|---|---|---|---|---|---|
+| English listen | 10 | 35 | 51 | 33 | 21 + 1 | 10 + 1 | – | – | – | 160 + 2 |
+| English read | 10 | 23 | 40 | 30 | 40 | 20 | – | – | – | 163 |
+| English write | 9 | 20 | 30 | 30 | 37 + 3 | 18 + 12 | – | – | – | 144 + 15 |
+| English speak | 9 | 20 + 10 | 30 | 18 + 12 | 23 + 17 | 10 + 10 | – | – | – | 110 + 49 |
+| Maths listen | 10 | 42 | 43 | 39 | 20 | 8 | 4 | 2 | 2 | 170 |
+| Maths read | 10 | 27 | 43 | 52 | 20 | 10 | 4 | 3 | 2 | 171 |
+| Maths write | 9 | 20 | 45 | 36 | 31 | 20 | 4 | 3 | 3 | 171 |
+| Maths speak | 8 | 32 | 36 | 32 | 8 + 20 | 10 + 10 | – | – | – | 126 + 30 |
+| Science listen | 13 | 50 | 38 | 41 | 21 | – | – | – | – | 163 |
+| Science read | 9 | 31 | 36 | 64 | 17 | 8 | – | – | – | 165 |
+| Science write | 9 | 21 | 50 | 40 + 10 | 20 | 0 + 10 | – | – | – | 140 + 20 |
+| Science speak | 10 | 20 + 10 | 30 + 10 | 38 + 12 | 0 + 20 | 0 + 10 | – | – | – | 98 + 62 |
+| **all** | 116 | 341 + 20 | 472 + 10 | 453 + 34 | 258 + 61 | 114 + 53 | 12 | 8 | 7 | **1,781 + 178 = 1,959** |
+
+Age bands (served): English 487 all / 156 young; maths 468 all / 200 young; science 463 all / 185 young.
+
+### Reproduce (v4)
+
+```bash
+cd server
+node scripts/content/derive-metadata.js --dry     # "Would change: nothing"
+node scripts/content/audit.js --check             # QA gate passed
+node scripts/content/stages.js                    # the stage table above
+node scripts/content/narration.js --dry --report  # the narration coverage above
+npm test                                          # content-bank, narration, content-migration(-v4), parity, …
+```
+
+The rest of this file is the content v3 audit (2026-11-20). Its counts describe v3.
+
+---
+
+## Content v3 audit (2026-11-20)
+
 
 Scope: all 1,800 questions in `server/data/` (12 files, English, maths and science ×
 listen/read/write/speak) and every translation of the maths and science questions (13

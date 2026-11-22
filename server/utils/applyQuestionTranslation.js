@@ -8,7 +8,8 @@
 // Every question it returns says which language its spoken text is in
 // (`audio_lang`) and which language the rest of it is in (`lang`), so the
 // narrator always reads it in a voice of that language: a German voice never
-// reads English words, whatever the site's language is.
+// reads English words, whatever the site's language is. `narration` (the spoken
+// script, content v4) comes back in the same language as the rest of the question.
 function applyQuestionTranslation(questionDoc, lang) {
   const question = typeof questionDoc.toObject === 'function' ? questionDoc.toObject() : questionDoc
   const translation = lang && lang !== 'en' && question.translations && question.translations[lang]
@@ -34,6 +35,11 @@ function applyQuestionTranslation(questionDoc, lang) {
   if (translation.validation && question.validation) {
     merged.validation = { ...question.validation, ...translation.validation, keywords_lang: lang }
   }
+  // Narration script (content v4): the one written for this language, never the English one
+  // read by another language's voice. No script in this language → none (the client falls back
+  // to reading the instruction and prompt, as before).
+  if (translation.narration && translation.narration.text) merged.narration = translation.narration
+  else delete merged.narration
   delete merged.translations
   merged.lang = lang
   // Spoken text with no translation of its own stays English, and is read in English.

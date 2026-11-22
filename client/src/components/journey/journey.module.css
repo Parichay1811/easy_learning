@@ -1,0 +1,417 @@
+/* The learner's journey pieces (Today hub, discovery): calm glass cards on the
+   meadow, big targets, clear words. Colours come from the dashboard tokens
+   (components/dashboard/tokens.css, under `.dash`). Nothing flashes; motion
+   is limited to a short fade and follows the learner's motion setting. */
+
+.card {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vh, 12px);
+  padding: clamp(10px, 1.8vh, 20px) clamp(12px, 1.8vw, 22px);
+  background: rgba(255, 255, 255, 0.94);
+  border: 2px solid #fff;
+  border-radius: clamp(18px, 2.2vw, 26px);
+  box-shadow: 0 5px 0 rgba(31, 64, 120, 0.13), 0 18px 36px -22px rgba(31, 64, 120, 0.55);
+  color: var(--d-ink);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font: 700 clamp(1rem, 1.5vw, 1.2rem)/1.2 var(--d-font);
+  color: var(--d-ink);
+}
+.title svg { flex: none; }
+
+.help {
+  margin: 0;
+  color: var(--d-muted);
+  font-size: clamp(0.84rem, 1.1vw, 0.95rem);
+  line-height: 1.4;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.empty { margin: 0; color: var(--d-muted); font-size: 0.95rem; line-height: 1.45; }
+
+/* A card given less height than its content scrolls as a whole (its parts never squeeze into each other). */
+.shelf > *, .nextCard > *, .map > *, .discovery > * { flex-shrink: 0; }
+
+/* Focus: always visible, never only a colour change. */
+.card a:focus-visible,
+.card button:focus-visible,
+.toast button:focus-visible {
+  outline: 3px solid var(--d-focus);
+  outline-offset: 3px;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+.primary,
+.secondary,
+.speak {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 999px;
+  font: 700 clamp(1.02rem, 1.4vw, 1.15rem)/1.15 var(--d-font);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+.primary {
+  background: linear-gradient(180deg, #f76707, #c2410c);
+  box-shadow: 0 4px 0 #8a2d06;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(90, 30, 0, 0.35);
+}
+.secondary {
+  background: var(--d-card);
+  box-shadow: inset 0 0 0 2px var(--d-control), 0 3px 0 var(--d-lip);
+  color: var(--d-ink);
+}
+.primary:hover, .secondary:hover { transform: translateY(-1px); filter: brightness(1.03); }
+.primary:active, .secondary:active { transform: translateY(3px); box-shadow: none; }
+.btnText { display: flex; flex-direction: column; align-items: flex-start; text-align: start; min-width: 0; }
+.btnText small { font: 500 0.8rem/1.2 var(--d-font); opacity: 0.92; }
+.btnIcon { flex: none; display: inline-grid; place-items: center; }
+
+/* The quiet speaker button ("Read this to me"). */
+.speak {
+  flex: none;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 12px;
+  gap: 6px;
+  background: var(--d-sky-soft);
+  color: var(--d-sky-ink);
+  font-size: 0.92rem;
+}
+.speak[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--d-sky-ink); }
+
+/* ── Welcome back ────────────────────────────────────────────────────────── */
+/* Mascot beside the message; the actions underneath, across the whole card. */
+.welcome {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "mascot body" "actions actions";
+  align-items: center;
+  gap: clamp(8px, 1.4vh, 14px) clamp(10px, 1.6vw, 20px);
+  overflow: hidden;
+  background:
+    radial-gradient(90% 120% at 0% 0%, rgba(255, 236, 179, 0.7), transparent 55%),
+    radial-gradient(70% 90% at 100% 100%, rgba(211, 249, 216, 0.75), transparent 60%),
+    rgba(255, 255, 255, 0.95);
+}
+.welcome[data-calm] { background: rgba(255, 255, 255, 0.96); }
+.welcomeMascot { grid-area: mascot; align-self: center; }
+.welcomeBody { grid-area: body; min-width: 0; display: flex; flex-direction: column; gap: clamp(8px, 1.4vh, 14px); }
+.welcome > .actions { grid-area: actions; }
+.welcomeTop { display: flex; align-items: flex-start; gap: 10px; }
+.welcomeMsg {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  font: 700 clamp(1.1rem, min(1.7vw, 2.8vh), 1.5rem)/1.3 var(--d-font);
+  color: var(--d-ink);
+  overflow-wrap: anywhere;
+}
+.welcome[data-calm] .welcomeMsg { font-weight: 600; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.actions > :first-child { flex: 1 1 100%; justify-content: flex-start; }
+.actions > :not(:first-child) { flex: 1 1 140px; }
+@media (min-width: 560px) {
+  .actions > :first-child { flex: 0 1 auto; }
+  .actions > :not(:first-child) { flex: 0 1 auto; }
+}
+/* Calm: the main button is the quieter green one. */
+.welcome[data-calm] .primary { background: var(--d-accent); box-shadow: 0 4px 0 var(--d-accent-lip); text-shadow: none; }
+
+/* ── What next? ──────────────────────────────────────────────────────────── */
+.nextCard { min-height: 0; }
+.nextList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1vh, 10px);
+  min-height: 0;
+}
+.nextRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 8px 12px;
+  border-radius: 16px;
+  background: var(--d-card);
+  box-shadow: inset 0 0 0 2px var(--d-line), 0 3px 0 var(--d-lip);
+  color: var(--d-ink);
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.nextRow:hover { transform: translateY(-1px); box-shadow: inset 0 0 0 2px var(--k-fg), 0 4px 0 var(--d-lip); }
+.nextRow:active { transform: translateY(2px); box-shadow: inset 0 0 0 2px var(--k-fg); }
+.nextIcon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--k-bg);
+  color: var(--k-fg);
+  font-size: 1.05rem;
+}
+.nextText { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.nextTitle { font: 700 clamp(0.98rem, 1.25vw, 1.08rem)/1.25 var(--d-font); }
+.nextWhy { color: var(--d-muted); font-size: clamp(0.84rem, 1.05vw, 0.92rem); line-height: 1.35; }
+.nextGo { flex: none; color: var(--d-muted); }
+/* The main recommendation: the first row, bigger, with its own Start pill. */
+.nextRow[data-main] {
+  min-height: 72px;
+  padding: 12px 14px;
+  background: var(--k-bg);
+  box-shadow: inset 0 0 0 2px var(--k-fg), 0 4px 0 var(--d-lip);
+}
+.nextRow[data-main] .nextIcon { width: 48px; height: 48px; background: #fff; font-size: 1.25rem; }
+.nextRow[data-main] .nextTitle { font-size: clamp(1.08rem, 1.5vw, 1.25rem); }
+.nextRow[data-main] .nextWhy { color: var(--d-ink); }
+.startPill {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f76707, #c2410c);
+  color: #fff;
+  font: 700 0.98rem/1 var(--d-font);
+}
+/* A narrow list (a column on a big screen): the main row's Start pill goes under its words. */
+.nextCard { container: jnext / inline-size; }
+@container jnext (max-width: 420px) {
+  .nextRow[data-main] { flex-wrap: wrap; row-gap: 8px; }
+  .nextRow[data-main] .nextText { flex: 1 1 calc(100% - 70px); }
+  .nextRow[data-main] .startPill { margin-inline-start: 60px; }
+}
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font: 700 0.78rem/1.2 var(--d-font);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--d-muted);
+}
+
+/* ── Journey map ─────────────────────────────────────────────────────────── */
+.map { min-height: 0; container: jmap / inline-size; }
+.legend,
+.path {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.legend li {
+  text-align: center;
+  font: 600 clamp(0.7rem, 0.95vw, 0.8rem)/1.15 var(--d-font);
+  color: var(--d-muted);
+  padding: 0 2px;
+  overflow-wrap: break-word;
+  hyphens: auto;
+}
+.subjects { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: clamp(6px, 1.2vh, 12px); }
+.subject { display: flex; flex-direction: column; gap: 4px; }
+.subjectHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 10px;
+  margin: 0;
+  font: 700 clamp(0.95rem, 1.2vw, 1.05rem)/1.25 var(--d-font);
+  color: var(--sj-ink);
+}
+.subjectHead > span { display: inline-flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.subjectHead > span small { margin-inline-start: 4px; }
+.subjectHead small { font: 500 0.85rem/1.2 var(--d-font); color: var(--d-muted); }
+.path { position: relative; }
+/* The road between the stops. */
+.path::before {
+  content: "";
+  position: absolute;
+  left: calc(100% / 12);
+  right: calc(100% / 12);
+  top: 19px;
+  height: 4px;
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, var(--d-line) 0 10px, transparent 10px 16px);
+}
+.stop { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; }
+.dot {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font: 700 0.95rem/1 var(--d-font);
+  background: #fff;
+  color: var(--d-muted);
+  box-shadow: inset 0 0 0 2px var(--d-control);
+}
+/* Mastered: the share of the stage's skills mastered fills the stop. */
+.stop[data-state="full"] .dot { background: var(--sj); color: #fff; box-shadow: inset 0 0 0 2px var(--sj-ink); }
+.stop[data-state="some"] .dot {
+  background: conic-gradient(var(--sj) calc(var(--p) * 1%), #fff 0);
+  color: var(--d-ink);
+  box-shadow: inset 0 0 0 2px var(--sj-ink);
+}
+.stop[data-state="some"] .dot span { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #fff; }
+.stop[data-state="tried"] .dot { box-shadow: inset 0 0 0 3px var(--sj); color: var(--sj-ink); }
+.stop[data-state="empty"] .dot { background: transparent; box-shadow: inset 0 0 0 2px var(--d-line); color: var(--d-line); }
+/* Practice only: a soft dashed stop, open to try, nothing to master (never shown as 0%). */
+.stop[data-state="practice"] .dot { background: var(--d-sky-soft); color: var(--d-sky-ink); box-shadow: none; outline: 2px dashed var(--d-sky); outline-offset: -2px; }
+.stop[data-state="practice"] .count { font-style: italic; font-weight: 500; }
+.stop[data-here] .dot { outline: 3px solid var(--d-sun); outline-offset: 2px; }
+.count { font: 600 0.78rem/1.1 var(--d-font); color: var(--d-muted); white-space: nowrap; }
+@media (max-height: 820px) and (orientation: landscape) {
+  .dot { width: 36px; height: 36px; font-size: 0.88rem; }
+  .path::before { top: 16px; }
+  .stop[data-state="some"] .dot span { width: 22px; height: 22px; }
+  .map .help { display: none; }
+}
+.stop[data-state="empty"] .count { visibility: hidden; }
+/* A wide map: each subject on one line, its name beside its road. */
+@container jmap (min-width: 620px) {
+  .legend { padding-inline-start: calc(clamp(160px, 34%, 280px) + 12px); }
+  .subject { display: grid; grid-template-columns: clamp(160px, 34%, 280px) minmax(0, 1fr); align-items: center; gap: 12px; }
+  .subjectHead { flex-direction: column; align-items: flex-start; gap: 0; }
+}
+.mapKey { display: flex; flex-wrap: wrap; gap: 4px 14px; margin: 0; padding: 0; list-style: none; color: var(--d-muted); font-size: 0.8rem; }
+.mapKey li { display: inline-flex; align-items: center; gap: 6px; }
+.keyDot { width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--d-control); background: #fff; }
+.keyDot[data-k="full"] { background: var(--d-accent); box-shadow: none; }
+.keyDot[data-k="tried"] { box-shadow: inset 0 0 0 3px var(--d-accent); }
+.keyDot[data-k="here"] { outline: 2px solid var(--d-sun); outline-offset: 1px; }
+.keyDot[data-k="practice"] { background: var(--d-sky-soft); box-shadow: none; outline: 2px dashed var(--d-sky); outline-offset: -2px; }
+
+/* ── Today's discovery ───────────────────────────────────────────────────── */
+.discovery {
+  background:
+    radial-gradient(100% 120% at 100% 0%, rgba(255, 243, 191, 0.9), transparent 60%),
+    rgba(255, 255, 255, 0.95);
+}
+.discoveryRow { display: flex; align-items: center; gap: 12px; }
+.discoveryEmoji {
+  flex: none;
+  width: clamp(44px, 7vh, 60px);
+  height: clamp(44px, 7vh, 60px);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--d-sun-soft);
+  font-size: clamp(1.4rem, 3.4vh, 2rem);
+}
+.discoveryQ { margin: 0; font: 600 clamp(1rem, 1.4vw, 1.12rem)/1.35 var(--d-font); color: var(--d-ink); overflow-wrap: anywhere; }
+.discovery .primary { align-self: flex-start; }
+
+/* ── Growth shelf ────────────────────────────────────────────────────────── */
+.shelf { min-height: 0; }
+.badges { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.badge { display: flex; align-items: flex-start; gap: 10px; padding: 8px 10px; border-radius: 14px; background: var(--d-card-alt); }
+.badge[data-earned] { background: var(--d-grass-soft); }
+.medal {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 1.35rem;
+  box-shadow: inset 0 0 0 2px var(--d-line);
+}
+.badge:not([data-earned]) .medal { filter: grayscale(1); opacity: 0.55; box-shadow: inset 0 0 0 2px var(--d-control); }
+.badgeText { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.badgeText b { font: 700 0.98rem/1.25 var(--d-font); }
+.badgeText span { color: var(--d-muted); font-size: 0.86rem; line-height: 1.35; }
+.badge[data-earned] .badgeText span { color: var(--d-ink); }
+.newTag { margin-inline-start: 6px; padding: 1px 7px; border-radius: 999px; background: var(--d-sun); color: #4a2f00; font: 700 0.7rem/1.4 var(--d-font); }
+.linkBtn {
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 6px 4px;
+  border: 0;
+  background: none;
+  color: var(--d-sky-ink);
+  font: 700 0.95rem/1.2 var(--d-font);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+/* ── The quiet growth-badge toast ────────────────────────────────────────── */
+.toast {
+  position: fixed;
+  z-index: 400;
+  top: calc(var(--toast-top, 76px) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(440px, calc(100vw - 24px));
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 12px 12px 14px;
+  border-radius: 18px;
+  background: #fff;
+  color: var(--d-ink, #1f2a44);
+  box-shadow: 0 12px 34px rgba(16, 27, 48, 0.28);
+  font-family: var(--d-font, "Fredoka", system-ui, sans-serif);
+  animation: toastIn 0.25s ease-out;
+}
+@keyframes toastIn { from { opacity: 0; } to { opacity: 1; } }
+.toastText { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.toastText b { font: 700 1rem/1.3 var(--d-font, "Fredoka", sans-serif); }
+.toastText span { color: var(--d-muted, #5a6680); font-size: 0.9rem; line-height: 1.35; }
+.toastClose {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--d-card-alt, #f3f7fc);
+  color: var(--d-ink, #1f2a44);
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .primary, .secondary, .nextRow { transition: none; }
+  .toast { animation: none; }
+}
+:global(html[data-motion="reduced"]) .toast { animation: none; }
+:global(html[data-motion="reduced"]) .primary,
+:global(html[data-motion="reduced"]) .secondary,
+:global(html[data-motion="reduced"]) .nextRow { transition: none; }

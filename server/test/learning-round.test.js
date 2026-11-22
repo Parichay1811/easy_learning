@@ -39,7 +39,13 @@ test('beginner: a full round at their level, several new skills, deterministic p
   const r = round()
   assert.equal(r.items.length, 10)
   assert.ok(r.items.every((i) => i.level === 1))
-  assert.ok(r.items.every((i) => i.why === 'new'))
+  // Every skill is new: its first items (up to probe.items) are a diagnostic probe, the rest new.
+  assert.ok(r.items.every((i) => i.why === 'probe' || i.why === 'new'))
+  for (const sk of new Set(r.items.map((i) => i.skill))) {
+    const mine = r.items.filter((i) => i.skill === sk)
+    assert.ok(mine.filter((i) => i.why === 'probe').length <= cfg.probe.items, sk)
+    assert.equal(mine[0].why, 'probe', 'a probe comes first')
+  }
   assert.ok(new Set(r.items.map((i) => i.skill)).size >= 3)
   assert.ok(r.items.every((i) => i.support.step === 0 && i.support.strategy === 'words'))
   assert.deepEqual(round().items.map((i) => i.id), r.items.map((i) => i.id), 'same seed, same round')

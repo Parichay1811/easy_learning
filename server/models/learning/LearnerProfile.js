@@ -64,6 +64,34 @@ const overrideSchema = new mongoose.Schema({
   at: { type: Date, default: Date.now },
 }, { _id: false })
 
+// An unfinished (or just handed out) round per subject+module, for resuming after logout
+// (services/learning/roundState.js). Question ids only.
+const roundSchema = new mongoose.Schema({
+  key: { type: String, required: true }, // "<subject>|<module>"
+  slot: { type: String, enum: ['issued', 'active'], required: true },
+  id: { type: String, required: true },
+  mode: { type: String, enum: [...cfg.ROUND_MODES, null], default: null },
+  source: { type: String, enum: [...cfg.CHOICE_SOURCES, null], default: null }, // started by choice from there
+  skill: { type: String, default: null },
+  items: { type: [new mongoose.Schema({ q: String, oid: String, why: String, for: String }, { _id: false })], default: [] },
+  answered: { type: [String], default: [] },
+  position: { type: Number, default: -1 },
+  at: { type: Date, default: Date.now },
+  lastAt: { type: Date, default: Date.now },
+}, { _id: false })
+
+// Weekly counts per subject for the guardian/teacher evidence (no answers, no times).
+const journalSchema = new mongoose.Schema({
+  w: String, // Monday of the week
+  s: String, // subject
+  top: { type: Number, default: null }, // highest stage right first try without a hint
+  ind: { type: Number, default: 0 }, // right first try, no hint
+  ast: { type: Number, default: 0 }, // right with help or on a later try
+  rv: { type: Number, default: 0 }, // reviews that were due
+  rvc: { type: Number, default: 0 }, // ...remembered
+  disc: { type: Number, default: 0 }, // discoveries answered
+}, { _id: false })
+
 const schema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   levels: {
@@ -99,6 +127,20 @@ const schema = new mongoose.Schema({
   messageCount: { type: Number, default: 0 },
   last: { subject: { type: String, default: null }, module: { type: String, default: null } },
   lastActiveAt: { type: Date, default: null },
+
+  // ── Adaptive journey ──
+  // Target band per subject: { [subject]: { recent: [1, 0, ...] (last targetBand.window graded, 1 = right), tilt } }
+  band: { type: mongoose.Schema.Types.Mixed, default: {} },
+  rounds: { type: [roundSchema], default: [] },
+  // Baseline per subject, stored once: { [subject]: { level, accuracy, n, at, source: placement | first_attempts } }
+  baseline: { type: mongoose.Schema.Types.Mixed, default: {} },
+  // The first answers being collected for a baseline: { [subject]: { n, right, levels: { level: n } } }
+  baselineAcc: { type: mongoose.Schema.Types.Mixed, default: {} },
+  journal: { type: [journalSchema], default: [] },
+  // Counters for growth badges and the evidence: { discoveries, discoveryDays: [dates], firstDiscoveryDate, solved,
+  // reviews, reviewsRight, chosen (activities started by choice), badges: [ids earned],
+  // log: [{ q, d }] discoveries answered lately (content ids, dates) }
+  growth: { type: mongoose.Schema.Types.Mixed, default: {} },
 }, { timestamps: true, minimize: false })
 
 module.exports = mongoose.models.LearnerProfile || mongoose.model('LearnerProfile', schema)
