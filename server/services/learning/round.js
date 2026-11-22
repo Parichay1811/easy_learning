@@ -11,10 +11,24 @@
 // the last sitting are not repeated (except reviews) while others exist; for
 // teens and adults, items themed for young children come last; a learner who
 // chose to type or choose instead of speaking gets microphone items last.
+//
+// Adaptive journey (config: probe, targetBand, challenge, discovery):
+//   probe      the first contact with a skill: up to probe.items items, the most
+//              accessible (lowest stage) first, then one at stage >= 2 when there is
+//              one, so a confident start can show (why "probe");
+//   tilt       the target band of the subject: "easier" adds a warm-up from the level
+//              below, drops the stretch, meets fewer new skills and prefers lower stages;
+//              "harder" adds a stretch item (only at "practice" or "advancing", never held), more new
+//              skills, higher stages first; "hold" changes nothing;
+//   per skill  a confident probe skips beginner practice until it is due and prefers
+//              stage >= 2; a gentle one prefers the lowest stages;
+//   modes      "challenge": 3 items one stage up on a strong skill (why "challenge");
+//              "discovery": everyday-curiosity items (why "discovery").
 const cfg = require('../../config/learning')
 const { createRng } = require('./rng')
 const { isReviewDue } = require('./spacing')
 const { strategyFor, isParked } = require('./support')
+const { isMastered } = require('./mastery')
 
 const HOUR = 3600000
 
@@ -55,9 +69,11 @@ function servedLevel(level, levelsWithContent) {
  * @param {object} a.profile  { pace, ageBand, overrides, supports, recent }
  * @param {object} a.catalog  services/learning/catalog.js
  * @param {string} a.focusSkill  optional ("Practise now"): the round centres on this skill
- * -> { items: [{ id, _id, skill, level, why, support, for? }], level, servedLevel, ceiling, status, focus }
+ * @param {string} a.tilt     target band tilt of the subject: 'easier' | 'harder' | 'hold'
+ * @param {string} a.mode     null | 'challenge' | 'discovery'
+ * -> { items: [{ id, _id, skill, level, stage, why, support, for? }], level, servedLevel, ceiling, status, focus, challenge? }
  */
-function composeRound({ pool, subject, module, level, status = 'new', skills = new Map(), profile = {}, catalog, size = cfg.round.defaultSize, seed = 'x', now = new Date(), focusSkill = null }) {
+function composeRound({ pool, subject, module, level, status = 'new', skills = new Map(), profile = {}, catalog, size = cfg.round.defaultSize, seed = 'x', now = new Date(), focusSkill = null, tilt = 'hold', mode = null }) {
   const rng = createRng(seed)
   const n = Math.max(cfg.round.minSize, Math.min(cfg.round.maxSize, Number(size) || cfg.round.defaultSize))
   const levelsAll = [...new Set(pool.map((q) => q.level).filter((l) => Number.isInteger(l)))].sort((a, b) => a - b)
@@ -87,7 +103,24 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
   // Tiers: a poor fit (1000) outweighs a repeat (100), which outweighs spreading over skills (1 per item).
   const fit = (q) => (adultish && q.ageBand === 'young' ? 1 : 0) + (noSpeaking && q.interaction === 'mic_record' ? 1 : 0)
   const isRecent = (q) => recent.has(q.id)
-  const score = (q, why) => fit(q) * 1000 + (why !== 'review' && isRecent(q) ? 100 : 0) + rank.get(q.id)
+  // Stage preference. Per skill (strong: within that skill, items come in stage order): a gentle
+  // probe takes its lowest stages first, a confident one its highest. Per round (soft, a tilt
+  // among the random ranks): "easier" prefers low stages, "harder" high ones.
+  const stageRange = new Map()
+  for (const q of items) {
+    if (!Number.isInteger(q.stage)) continue
+    const r = stageRange.get(q.skill) || { min: q.stage, max: q.stage }
+    stageRange.set(q.skill, { min: Math.min(r.min, q.stage), max: Math.max(r.max, q.stage) })
+  }
+  const stageBias = (q) => {
+    if (!Number.isInteger(q.stage)) return 0
+    const st = skills.get(q.skill)?.probe?.state
+    const r = stageRange.get(q.skill)
+    if (st === 'gentle') return q.stage - r.min
+    if (st === 'confident') return r.max - q.stage
+    return tilt === 'easier' ? q.stage * 0.15 : tilt === 'harder' ? (5 - q.stage) * 0.15 : 0
+  }
+  const score = (q, why) => fit(q) * 1000 + (why !== 'review' && isRecent(q) ? 100 : 0) + rank.get(q.id) + stageBias(q)
 
   const picks = []
   const used = new Set()
@@ -109,7 +142,7 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
       const [q] = pool2.splice(best, 1)
       used.add(q.id)
       usedSkills.set(q.skill, (usedSkills.get(q.skill) || 0) + 1)
-      const pick = { id: q.id, _id: q._id, skill: q.skill, level: q.level, why, support: supportFor(skills.get(q.skill), why), ...extra }
+      const pick = { id: q.id, _id: q._id, skill: q.skill, level: q.level, stage: Number.isInteger(q.stage) ? q.stage : null, graded: q.graded !== false, why, support: supportFor(skills.get(q.skill), why), ...extra }
       out.push(pick)
       picks.push(pick)
     }
@@ -123,7 +156,36 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
     .sort((a, b) => Math.abs((a.level ?? L ?? 0) - (L ?? 0)) - Math.abs((b.level ?? L ?? 0) - (L ?? 0)))
 
   const mix = scaleMix(cfg.round.mix[profile.pace] || cfg.round.mix.steady, n)
+  if (tilt === 'easier') { mix.stretch = 0; mix.prerequisite += 1 }
+  if (tilt === 'harder') mix.stretch += 1
   const known = [...skills.values()].filter((s) => !skip.has(s.skill) && bySkill.has(s.skill))
+
+  // ── Modes: a mini challenge or a discovery round ──
+  if (mode === 'challenge') {
+    // A strong skill: mastery >= challenge.minMastery, mastered, or a confident probe.
+    const strong = (s) => !!s && (s.attempts || 0) > 0 && !isParked(s, now)
+      && ((s.mastery || 0) >= cfg.challenge.minMastery || isMastered(s) || s.probe?.state === 'confident')
+    const up = (s) => (Number.isInteger(s.topStage) ? s.topStage : 1) + 1
+    // graded items only: a challenge is there to show something (practice-only items never count)
+    const stageUp = (s) => (bySkill.get(s.skill) || []).filter((q) => q.graded !== false && Number.isInteger(q.stage) && q.stage >= up(s) && (L == null || q.level == null || q.level <= L + 1))
+    let target = focusSkill && strong(skills.get(focusSkill)) && stageUp(skills.get(focusSkill)).length ? skills.get(focusSkill) : null
+    if (!target) {
+      target = known.filter((s) => strong(s) && stageUp(s).length)
+        .sort((a, b) => (b.mastery || 0) - (a.mastery || 0) || new Date(b.lastAt || 0) - new Date(a.lastAt || 0) || (a.skill < b.skill ? -1 : 1))[0] || null
+    }
+    if (!target) return { ...empty, items: [], servedLevel: L, challenge: null }
+    const want = Math.min(n, cfg.challenge.items)
+    const groups = new Map()
+    for (const q of stageUp(target)) { if (!groups.has(q.stage)) groups.set(q.stage, []); groups.get(q.stage).push(q) }
+    for (const st of [...groups.keys()].sort((a, b) => a - b)) if (picks.length < want) take(groups.get(st), want - picks.length, 'challenge')
+    return { items: picks, level, servedLevel: L, ceiling, status, focus: target.skill, challenge: { skill: target.skill, stage: up(target) } }
+  }
+  if (mode === 'discovery') {
+    const everyday = items.filter((q) => q.everyday)
+    take(everyday.filter((q) => !fit(q) && !isRecent(q)), n, 'discovery')
+    if (left() > 0) take(everyday, left(), 'discovery')
+    return { items: rng.shuffle(picks), level, servedLevel: L, ceiling, status, focus: null }
+  }
 
   const prereqFor = new Map() // pick id -> the skill it prepares
   let prereqLeft = mix.prerequisite
@@ -172,9 +234,9 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
     if (prereqLeft <= 0) break
     takeEasier(s.skill, 1)
   }
-  if (status === 'support' && L != null && prereqLeft > 0) {
+  if ((status === 'support' || tilt === 'easier') && L != null && prereqLeft > 0) {
     const lower = levels.filter((l) => l < L)
-    if (lower.length) take(items.filter((q) => q.level === lower[lower.length - 1]), prereqLeft, 'prerequisite')
+    if (lower.length) take(items.filter((q) => q.level === lower[lower.length - 1]), status === 'support' ? prereqLeft : 1, 'prerequisite')
   }
 
   // ── 2. Reviews due (spaced repetition), most overdue first; parked skills come back here ──
@@ -184,6 +246,18 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
     reviewLeft -= take(skillItems(s.skill, Math.max(L ?? 0, s.level ?? 0)), 1, 'review').length
   }
 
+  // ── 2b. Probes still open (one probe answered): one more, at stage >= 2 when there is one ──
+  const cs = cfg.probe.confidentStage
+  const pending = known.filter((k) => k.probe?.state === 'pending' && !isParked(k, now) && k.skill !== focusOn)
+  for (const s of pending.slice(0, 2)) {
+    const all = skillItems(s.skill).filter((q) => !isRecent(q))
+    const cand = all.some((q) => q.graded !== false) ? all.filter((q) => q.graded !== false) : all
+    const high = cand.filter((q) => Number.isInteger(q.stage) && q.stage >= cs)
+    take(high.length ? high : cand, 1, 'probe')
+  }
+  // A confident start skips beginner practice until the skill is due.
+  const skipBeginner = (s) => s.probe?.state === 'confident' && !isReviewDue(s, now) && !(s.missesSinceSuccess > 0)
+
   // ── 3. Targeted practice: focus skills first, then the weakest skills ──
   const focusHere = focus.filter((f) => bySkill.has(f) && !isParked(skills.get(f), now))
   let practiceLeft = mix.practice + Math.min(2, focusHere.length)
@@ -192,7 +266,8 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
     practiceLeft -= take(skillItems(f, L == null ? null : L + 1), Math.min(2, practiceLeft), 'practice').length
   }
   const weakest = known
-    .filter((s) => s.attempts > 0 && (s.mastery || 0) < cfg.masteredAt && !isParked(s, now) && !focus.includes(s.skill) && s.skill !== focusOn)
+    .filter((s) => s.attempts > 0 && (s.mastery || 0) < cfg.masteredAt && !isParked(s, now) && !focus.includes(s.skill) && s.skill !== focusOn
+      && s.probe?.state !== 'pending' && !skipBeginner(s))
     .sort((a, b) => (a.mastery || 0) - (b.mastery || 0) || new Date(a.lastAt || 0) - new Date(b.lastAt || 0))
   const perSkill = profile.pace === 'gentle' ? 2 : 1 // gentle: more repetition of the same skill
   for (const s of weakest) {
@@ -201,23 +276,38 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
   }
 
   // ── 4. Stretch: the next level up, when advancing and not held ──
-  if (!hold && status === 'advancing' && L != null) {
+  if (!hold && (status === 'advancing' || (tilt === 'harder' && status === 'practice')) && L != null) {
     const above = levels.filter((l) => l > L)
-    if (above.length) take(items.filter((q) => q.level === above[0]), mix.stretch, 'stretch')
+    // Advancing: the pace's stretch places (+1 when "harder"); practising but above the band: one.
+    if (above.length) take(items.filter((q) => q.level === above[0]), status === 'advancing' ? mix.stretch : 1, 'stretch')
   }
 
-  // ── 5. New: fill up at the served level; one item per new skill first ──
+  // ── 5. New skills: a probe of up to probe.items items each, the most accessible first ──
   // (only well-fitting, unseen items here: nothing "young" for an adult, no
   // microphone for someone who chose to type, nothing from the last sitting)
   if (left() > 0) {
     const fresh = items.filter((q) => atLevel(q) && !skills.get(q.skill)?.attempts && !usedSkills.has(q.skill) && !fit(q) && !isRecent(q))
-      .sort((a, b) => score(a, 'new') - score(b, 'new'))
-    const onePerSkill = []
-    const seen = new Set()
-    for (const q of fresh) if (!seen.has(q.skill)) { seen.add(q.skill); onePerSkill.push(q) }
-    // Gentle pace meets fewer new things per round, brisk more.
-    const share = profile.pace === 'gentle' ? 4 : profile.pace === 'brisk' ? 2 : 3
-    take(onePerSkill, Math.ceil(n / share), 'new')
+    const groups = new Map()
+    for (const q of fresh) { if (!groups.has(q.skill)) groups.set(q.skill, []); groups.get(q.skill).push(q) }
+    // A probe needs answers that count: a skill's practice-only items only when it has nothing else.
+    for (const [id, list] of groups) if (list.some((q) => q.graded !== false)) groups.set(id, list.filter((q) => q.graded !== false))
+    const byStage = (a, b) => (a.stage ?? 9) - (b.stage ?? 9) || score(a, 'probe') - score(b, 'probe')
+    for (const list of groups.values()) list.sort(byStage)
+    const order = [...groups.keys()].sort((a, b) => Math.min(...groups.get(a).map((q) => score(q, 'probe'))) - Math.min(...groups.get(b).map((q) => score(q, 'probe'))))
+    // Gentle pace (or an "easier" tilt) meets fewer new things per round, brisk (or "harder") more.
+    const lean = tilt === 'easier' ? 'gentle' : tilt === 'harder' ? 'brisk' : profile.pace
+    const share = lean === 'gentle' ? 4 : lean === 'brisk' ? 2 : 3
+    const wantSkills = Math.max(1, Math.ceil(Math.ceil(n / share) / cfg.probe.items))
+    for (const id of order.slice(0, wantSkills)) {
+      if (left() <= 0) break
+      const list = groups.get(id)
+      const first = list[0]
+      const second = cfg.probe.items > 1
+        ? (list.find((q) => q !== first && Number.isInteger(q.stage) && q.stage >= cs && !((first.stage ?? -1) >= cs)) || list.find((q) => q !== first))
+        : null
+      take([first], 1, 'probe')
+      if (second) take([second], 1, 'probe')
+    }
   }
   const whyFor = (q) => (skills.get(q.skill)?.attempts ? 'practice' : 'new')
   const takeEach = (cand) => { for (const q of [...cand].sort((a, b) => score(a, whyFor(a)) - score(b, whyFor(b)))) take([q], 1, whyFor(q)) }
@@ -233,7 +323,30 @@ function composeRound({ pool, subject, module, level, status = 'new', skills = n
   if (L != null && left() > 0) take(items.filter((q) => q.level != null && q.level < L && !isRecent(q)), left(), 'practice')
   if (left() > 0) takeEach(items.filter(notAbove(L)))
 
-  return { items: sequenceRound(picks, prereqFor, rng), level, servedLevel: L, ceiling, status, focus: focusOn }
+  // The first items of a skill never seen are its probe (up to probe.items), wherever they came from.
+  const probes = new Map()
+  for (const p of picks) if (p.why === 'probe') probes.set(p.skill, (probes.get(p.skill) || 0) + 1)
+  for (const p of picks) {
+    if (p.why !== 'new' || skills.get(p.skill)?.attempts || !p.graded) continue
+    const c = probes.get(p.skill) || 0
+    if (c < cfg.probe.items) { p.why = 'probe'; probes.set(p.skill, c + 1) }
+  }
+
+  return { items: probeOrder(sequenceRound(picks, prereqFor, rng)), level, servedLevel: L, ceiling, status, focus: focusOn }
+}
+
+// Within each skill, its probe items come before its other new items, lowest stage first
+// (the places in the round stay; only which item of that skill sits where changes).
+function probeOrder(list) {
+  const out = [...list]
+  const bySkill = new Map()
+  out.forEach((p, i) => { if (p.why === 'probe' || p.why === 'new') { if (!bySkill.has(p.skill)) bySkill.set(p.skill, []); bySkill.get(p.skill).push(i) } })
+  for (const idx of bySkill.values()) {
+    if (idx.length < 2) continue
+    const sorted = idx.map((i) => out[i]).sort((a, b) => (a.why === 'probe' ? 0 : 1) - (b.why === 'probe' ? 0 : 1) || (a.stage ?? 9) - (b.stage ?? 9))
+    idx.forEach((i, k) => { out[i] = sorted[k] })
+  }
+  return out
 }
 
 // Order: start with something familiar, an easier item right before the skill
@@ -263,4 +376,4 @@ function sequenceRound(picks, prereqFor, rng) {
   return out
 }
 
-module.exports = { composeRound, supportFor, servedLevel, scaleMix }
+module.exports = { composeRound, supportFor, servedLevel, scaleMix, probeOrder }

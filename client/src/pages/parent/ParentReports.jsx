@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button, PlanLockCard, fmtDate } from "../../components/dashboard";
+import { WeekSummary } from "../../components/learning/evidence";
 import { useLoad } from "./parentApi";
 import YearInReview from "./YearInReview";
 import s from "./parent.module.css";
@@ -26,6 +27,8 @@ export default function ParentReports({ api, child }) {
   const P = presets(t);
   const [pick, setPick] = useState(P[0]);
   const shares = useLoad(api.get, `/children/${child._id}/report-shares`);
+  // This week's insight sentences, recent decisions and next goals (learning plan + engine's next step).
+  const lrn = useLoad(api.get, `/children/${child._id}/learning`);
   const [msg, setMsg] = useState(null);
   const [link, setLink] = useState(null);
   const [locked, setLocked] = useState(false);
@@ -56,6 +59,16 @@ export default function ParentReports({ api, child }) {
       {locked && (
         <PlanLockCard module="analytics.deep" title={T("lockT", "Reports and the Year in Learnigo are part of Family Plus")}
           text={T("lockD", "Print a beautiful report, share it with a tutor or grandparent, and watch the year's story together.")} ctaLabel={T("lockCta", "Ask us about Family Plus")} />
+      )}
+
+      {lrn.data && (
+        <section aria-labelledby="week-h" className={s.stack}>
+          <div className={s.spread}>
+            <h2 id="week-h" className={s.h2}>{t("evidence.week.title", "This week")}</h2>
+            <Button variant="ghost" size="sm" to={`/parent-dashboard?tab=learning&child=${child._id}`}>{t("evidence.week.all", "See all the evidence")}</Button>
+          </div>
+          <WeekSummary key={child._id} evidence={lrn.data.evidence} goals={lrn.data.profile?.goals} next={lrn.data.next} skills={lrn.data.skills} name={first} maxInsights={3} maxDecisions={2} />
+        </section>
       )}
 
       <div className={s.grid2}>

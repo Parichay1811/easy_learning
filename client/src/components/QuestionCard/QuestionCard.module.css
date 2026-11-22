@@ -523,3 +523,28 @@
 :global(html[data-contrast="high"]) .note,
 :global(html[data-contrast="high"]) .offerText { color: #ffffff; }
 :global(html[data-contrast="high"]) .speaking { background-image: none; outline: 2px solid #ffe066; outline-offset: 2px; }
+
+/* The narration script as captions while the teacher reads it: the words she
+   is saying now, under the tools (the card's own text stays as it is). */
+.scriptCaption {
+  margin: 0 auto;
+  max-width: 62ch;
+  padding: clamp(5px, 1cqh, 9px) clamp(10px, 2cqw, 16px);
+  border-radius: 12px;
+  border-left: 4px solid #ffd45c;
+  background: rgba(0, 0, 0, 0.42);
+  color: #ffffff;
+  font-size: calc(clamp(14px, 2.6cqh, 18px) * var(--lp-text-scale, 1));
+  line-height: 1.4;
+  text-align: start;
+}
+:global(html[data-contrast="high"]) .scriptCaption { background: #000; border-left-color: #ffe066; }
+
+/* No voice for this language on this device: a short note (and the script's words). */
+.noVoice { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.noVoiceNote {
+  margin: 0;
+  color: #ffe8a3;
+  font-size: calc(clamp(13px, 2.3cqh, 15px) * var(--lp-text-scale, 1));
+  font-weight: 600;
+}

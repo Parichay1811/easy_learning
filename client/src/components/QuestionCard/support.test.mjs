@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   findSmallSum, describeSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown,
-  messageArgs, isHiddenAudio, seedOf,
+  messageArgs, isHiddenAudio, seedOf, scriptOf,
 } from "./support.js";
 
 test("finds small sums to draw", () => {
@@ -77,4 +77,19 @@ test("hidden audio: hearing it is the task", () => {
   assert.equal(isHiddenAudio({ instruction: "Listen. Tap the number.", audio_text: "two" }), true);
   assert.equal(isHiddenAudio({ instruction: "Read it.", prompt: "The sun is hot.", audio_text: "The sun is hot." }), false);
   assert.equal(isHiddenAudio({ instruction: "Tap", audio_text: "" }), false);
+});
+
+test("a narration script is used only in the language of the card", () => {
+  const en = { lang: "en", instruction: "Tap the cat.", narration: { text: "Can you find the cat? Tap it.", style: "curious", v: 1, status: "authored" } };
+  assert.deepEqual(scriptOf(en), { text: "Can you find the cat? Tap it.", lang: "en" });
+  const de = { lang: "de", narration: { text: "Findest du die Katze? Tippe sie an.", status: "templated" } };
+  assert.deepEqual(scriptOf(de), { text: "Findest du die Katze? Tippe sie an.", lang: "de" });
+  // An English (authored) script left on a translated card: read the card instead.
+  assert.equal(scriptOf({ lang: "de", narration: { text: "Can you find the cat?", status: "authored" } }), null);
+  // The script says which language it is in: that wins.
+  assert.equal(scriptOf({ lang: "fr", narration: { text: "Can you find it?", lang: "en", status: "reviewed" } }), null);
+  assert.deepEqual(scriptOf({ lang: "fr", narration: { text: "Tu la trouves ?", lang: "fr-FR", status: "reviewed" } }), { text: "Tu la trouves ?", lang: "fr" });
+  assert.equal(scriptOf({ lang: "en", narration: { text: "   " } }), null);
+  assert.equal(scriptOf({ lang: "en" }), null);
+  assert.equal(scriptOf(null), null);
 });

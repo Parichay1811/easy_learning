@@ -13,9 +13,12 @@ import { useSpeech } from "../../hooks/useSpeech";
 import { sfx, haptic } from "../../utils/sounds";
 import { onNarration, pauseNarration, resumeNarration, preloadNarration } from "../../utils/narrator";
 import { getPrefs } from "../../utils/learnerPrefs";
+import { usePrefs } from "../settings/usePrefs";
+import { afterSplash } from "../Entry/splashSignal";
+import { langOfKey } from "../journey/words";
 import PictureMaths from "./PictureMaths";
 import {
-  findSmallSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown, messageArgs, isHiddenAudio, seedOf,
+  findSmallSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown, messageArgs, isHiddenAudio, seedOf, scriptOf,
 } from "./support";
 import styles from "./QuestionCard.module.css";
 
@@ -217,9 +220,16 @@ const OFFER_TEXT = {
  * `oneTry` (the placement check-in): the answer is shown after one miss.
  */
 export default function QuestionCard({ question, subject, module, onAnswered, onNext, isLast = false, locked = false, learn = null, choicePool = [], oneTry = false }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const speech = useSpeech(subject);
   const reduce = useReducedMotion();
+  const prefs = usePrefs();
+  // Each thing is said in its own language: the card's words in the card's
+  // language (question.lang), the site's own phrases (t()) in the site's
+  // language, and a listening item's sound in its own (audio_lang).
+  const cardLang = question.lang || undefined;
+  const uiLang = String(i18n.language || "en").split("-")[0];
+  const script = useMemo(() => scriptOf(question), [question]);
   const [phase, setPhase] = useState("open"); // open | correct | close | incorrect | revealed | uncertain | ungraded
   const [misses, setMisses] = useState(0);
   const [closes, setCloses] = useState(0);
@@ -246,7 +256,13 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   const startRef = useRef(0);
   const spokenRef = useRef("");
   const readIdRef = useRef(null);
+  const scriptIdRef = useRef(null);
   const judgedRef = useRef(null);
+  // The sentence of the narration script being said now (shown as a caption).
+  const [scriptLine, setScriptLine] = useState("");
+  // This device has no voice for the language of what was to be read: nothing
+  // is said, the words are shown (the whole script, when it was the script).
+  const [noVoice, setNoVoice] = useState(null); // null | { isScript }
 
   const hints = useMemo(() => (Array.isArray(question.hints) ? question.hints.filter(Boolean) : []), [question.hints]);
   const sum = useMemo(
@@ -264,13 +280,39 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
 
   // Words being spoken, for the "follow along" highlight on the card.
   useEffect(() => onNarration((e) => {
-    if (e.type === "sentence") setSpeaking(e.text || "");
-    else if (e.type === "end") {
+    // The note stays until something is actually said (a listening item's queued sound
+    // that cannot be said either must not hide the script's words).
+    if (e.type === "unavailable") setNoVoice((p) => ({ isScript: Boolean(p?.isScript) || e.id === scriptIdRef.current }));
+    else if (e.type === "sentence" && e.source && e.source !== "none") setNoVoice(null);
+    if (e.type === "sentence") {
+      setSpeaking(e.text || "");
+      setScriptLine(e.id === scriptIdRef.current ? e.text || "" : "");
+    } else if (e.type === "end") {
       setSpeaking("");
+      if (e.id === scriptIdRef.current) { scriptIdRef.current = null; setScriptLine(""); }
       if (e.id === readIdRef.current) setReading(null);
     } else if (e.type === "pause" && e.id === readIdRef.current) setReading("paused");
     else if (e.type === "resume" && e.id === readIdRef.current) setReading("playing");
   }), []);
+
+  // The question read aloud: its own narration script when it has one (in the
+  // chosen language), else the instruction and the question as before. Calls
+  // onId(id) with the narration's id as it starts (sent as narrate() begins).
+  const speakQuestion = (opts = {}, onId) => {
+    let id = null;
+    const off = onNarration((e) => { if (e.type === "start" && id == null) { id = e.id; onId?.(e.id); } });
+    let p;
+    if (script) {
+      p = speech.speak(script.text, { lang: script.lang, ...opts });
+      if (id != null) scriptIdRef.current = id;
+    } else {
+      // In an English reading round the passage itself is the exercise: read only on request.
+      const parts = [question.instruction, readingTask && !opts.user ? "" : question.prompt].filter(Boolean);
+      p = parts.length ? speech.speak(parts, { lang: cardLang, ...opts }) : Promise.resolve(false);
+    }
+    off();
+    return p;
+  };
 
   // A new question: start its clock, read it aloud when the learner asked for
   // that (Comfort settings: "Read each question aloud"), and get its sound ready.
@@ -279,12 +321,16 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     const prefs = getPrefs();
     if (question.audio_text && hiddenAudio && prefs.voice) preloadNarration(question.audio_text, { lang: speech.speechLangFor(question.audio_lang) });
     if (!prefs.autoRead) return undefined;
-    const id = setTimeout(() => {
-      const parts = [question.instruction, readingTask ? "" : question.prompt].filter(Boolean);
-      if (parts.length) speech.speak(parts, { lang: question.audio_lang });
-      if (question.audio_text && hiddenAudio) speech.speak(question.audio_text, { lang: question.audio_lang, queue: true, caption: false });
-    }, 450);
-    return () => clearTimeout(id);
+    // Not behind the splash screen (a page opened directly): once it can be seen.
+    let id = 0;
+    const cancel = afterSplash(() => {
+      id = setTimeout(() => {
+        speakQuestion();
+        // A listening item's own sound still follows (the script only frames the task).
+        if (question.audio_text && hiddenAudio) speech.speak(question.audio_text, { lang: question.audio_lang, queue: true, caption: false });
+      }, 450);
+    });
+    return () => { cancel(); clearTimeout(id); };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Help the learner asked for (a hint, pictures, step by step, "show me how").
@@ -313,10 +359,28 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     });
   };
 
+  // say(text) speaks the card's own words (hints, worked example, feedback
+  // from the question) in the card's language; sayUi(text) speaks the site's
+  // phrases in the site's language.
   const say = (text, opts = {}) => {
     const s = Array.isArray(text) ? text.filter(Boolean) : String(text || "").trim();
     if (!s || (Array.isArray(s) && !s.length)) return;
-    speech.speak(s, { lang: question.audio_lang, ...opts });
+    speech.speak(s, { lang: cardLang, ...opts });
+  };
+  const sayUi = (text, opts = {}) => say(text, { lang: uiLang, ...opts });
+  // [[text, "card" | "ui"], ...]: consecutive parts in one language are said
+  // together; a part in another language waits its turn.
+  const sayParts = (parts) => {
+    const groups = [];
+    for (const [text, kind] of parts) {
+      const str = String(text || "").trim();
+      if (!str) continue;
+      const lang = kind === "ui" ? uiLang : kind === "server" ? serverLang : cardLang;
+      const last = groups[groups.length - 1];
+      if (last && last.lang === lang) last.texts.push(str);
+      else groups.push({ lang, texts: [str] });
+    }
+    groups.forEach((g, i) => speech.speak(g.texts, { lang: g.lang, ...(i ? { queue: true } : {}) }));
   };
 
   // The question asked in another way (type it / choose it), for a speaking question.
@@ -415,7 +479,7 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     setUsed((u) => new Set(u).add(kind));
     if (kind === "pictures") {
       setShowPictures(true);
-      say(t("questionCard.pictureSay", "Let's look at it with pictures. Count them with me."));
+      sayUi(t("questionCard.pictureSay", "Let's look at it with pictures. Count them with me."));
     } else if (kind === "guided") {
       setGuided(true);
       const n = Math.max(1, hintsShown);
@@ -455,11 +519,9 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     if (reading === "playing") { pauseNarration(); return; }
     if (reading === "paused") { resumeNarration(); return; }
     sfx.tap();
-    const parts = [question.instruction, question.prompt].filter(Boolean);
     setReading("playing");
     // The narration's id comes with its first event (sent as it starts).
-    const off = onNarration((e) => { if (e.type === "start") { readIdRef.current = e.id; off(); } });
-    speech.speak(parts, { lang: question.audio_lang, user: true }).then(() => { off(); setReading(null); });
+    speakQuestion({ user: true }, (id) => { readIdRef.current = id; }).then(() => setReading(null));
   };
 
   const playAudio = () => {
@@ -477,32 +539,42 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   };
 
   // The server's personalised message, translated (contract §2), or null.
-  const serverMessage = useMemo(() => {
-    const args = messageArgs(learn?.message, (id, name) => t(`skills.${id}`, name));
-    return args ? t(args[0], args[1]) : null;
-  }, [learn, t]);
+  const serverArgs = useMemo(() => messageArgs(learn?.message, (id, name) => t(`skills.${id}`, name)), [learn, t]);
+  const serverMessage = serverArgs ? t(serverArgs[0], serverArgs[1]) : null;
+  // An untranslated message is the server's English words: said in English, never in another voice.
+  const serverLang = serverArgs ? langOfKey(i18n, serverArgs[0]) : uiLang;
   const levelChange = learn?.levelChange && learn.levelChange.to > learn.levelChange.from ? learn.levelChange : null;
 
   // A level up: a gentle moment (a fanfare, the mascot cheers, a few words).
   useEffect(() => {
     if (!levelChange) return;
     sfx.levelUp();
-    say(t("questionCard.levelUpSay", { defaultValue: "You've moved up to level {{to}}. Your practice is paying off!", to: levelChange.to }));
+    sayUi(t("questionCard.levelUpSay", { defaultValue: "You've moved up to level {{to}}. Your practice is paying off!", to: levelChange.to }));
   }, [levelChange?.to]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const offer = phase === "incorrect"
     ? nextStrategy({ canPicture: Boolean(sum), hintCount: hints.length, hasWorked: Boolean(question.worked_example), used: new Set([...used, ...(hintsShown >= hints.length && hints.length ? ["hints"] : [])]) })
     : null;
 
+  // What the teacher says on the answer sheet: [[text, "card" | "ui"], ...]
+  // (the question's own feedback is in the card's language, the rest in the site's).
   function sheetSpeech() {
     switch (phase) {
-      case "correct": return serverMessage || question.feedback?.correct || t("questionCard.wellDone", { defaultValue: "Well done!" });
-      case "close": return closeText(t, closeReason);
-      case "incorrect": return [question.feedback?.incorrect || t("questionCard.nearly", { defaultValue: "Nearly! Have another go." }), offer ? t(...OFFER_TEXT[offer]) : ""].filter(Boolean);
-      case "revealed": return [serverMessage || question.feedback?.second_try || "", t("questionCard.answerWas", { defaultValue: "The answer is {{answer}}.", answer: formatAnswer(question.correct_answer) })].filter(Boolean);
-      case "uncertain": return micText(t, micReason)[0];
-      case "ungraded": return serverMessage || t("questionCard.thanksSharing", "Thank you for sharing that. Lovely speaking!");
-      default: return "";
+      case "correct":
+        if (serverMessage) return [[serverMessage, "server"]];
+        return question.feedback?.correct ? [[question.feedback.correct, "card"]] : [[t("questionCard.wellDone", { defaultValue: "Well done!" }), "ui"]];
+      case "close": return [[closeText(t, closeReason), "ui"]];
+      case "incorrect": return [
+        question.feedback?.incorrect ? [question.feedback.incorrect, "card"] : [t("questionCard.nearly", { defaultValue: "Nearly! Have another go." }), "ui"],
+        [offer ? t(...OFFER_TEXT[offer]) : "", "ui"],
+      ];
+      case "revealed": return [
+        serverMessage ? [serverMessage, "server"] : [question.feedback?.second_try || "", "card"],
+        [t("questionCard.answerWas", { defaultValue: "The answer is {{answer}}.", answer: formatAnswer(question.correct_answer) }), "ui"],
+      ];
+      case "uncertain": return [[micText(t, micReason)[0], "ui"]];
+      case "ungraded": return [serverMessage ? [serverMessage, "server"] : [t("questionCard.thanksSharing", "Thank you for sharing that. Lovely speaking!"), "ui"]];
+      default: return [];
     }
   }
 
@@ -516,7 +588,7 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     const speakNow = () => {
       if (spokenRef.current === key) return;
       spokenRef.current = key;
-      say(sheetSpeech());
+      sayParts(sheetSpeech());
     };
     const id = setTimeout(speakNow, finished && !serverMessage ? 900 : 250);
     return () => clearTimeout(id);
@@ -716,6 +788,17 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
             </button>
           )}
         </div>
+
+        {/* The narration script as captions while it is read (Captions setting). */}
+        {script && prefs.captions && scriptLine && !noVoice && (
+          <p className={styles.scriptCaption} data-script-caption="" aria-hidden="true">{scriptLine}</p>
+        )}
+        {noVoice && (
+          <div className={styles.noVoice} role="status" data-no-voice="">
+            <p className={styles.noVoiceNote}>{t("journey.voice.noVoiceLang", "No voice for this language on this device. Here are the words.")}</p>
+            {noVoice.isScript && script?.text && <p className={styles.scriptCaption} data-script-caption="">{script.text}</p>}
+          </div>
+        )}
 
         {readInstead && (
           <p className={styles.readInstead}>

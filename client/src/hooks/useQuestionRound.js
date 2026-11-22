@@ -2,13 +2,14 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { fetchQuestions, resetQuestions, selectQuestionState } from "../store/slices/questionsSlice";
+import { fetchQuestions, resetQuestions, selectQuestionState, discardUnfinishedRound } from "../store/slices/questionsSlice";
 import { logDashboardSession, logDashboardAnswer, logRoundResult } from "../store/slices/dashboardSlice";
 import { getQuestionLang } from "../utils/questionLang";
 import { getWarriorBonus } from "../utils/warriorBonus";
 import { onNarration, isNarrating } from "../utils/narrator";
 import { usePrefs } from "../components/settings/usePrefs";
 import { HOLD_CLOCK_EVENT } from "../components/settings/comfortEvents";
+import { SOURCES } from "../components/journey/words";
 
 const describe = (v) => (typeof v === "string" ? v : JSON.stringify(v ?? ""));
 
@@ -23,22 +24,45 @@ const CLOCK_FACTOR = { on: 1, relaxed: 2, off: 0 };
 // Rounds come from the learning engine (/api/learn/round: the learner's level,
 // reviews due, the support strategy per item) for a signed-in learner, or the
 // question bank (10 at random) otherwise (store/slices/questionsSlice.js).
+//
+// Continuity (contract §2): the first fetch asks for the learner's unfinished
+// round (resume=1). When there is one, `resumeOffer` ({ position, total }) is
+// set and the page asks "Carry on from question N / Start fresh"
+// (acceptResume / startFresh). Every answer is logged with the round's id and
+// its position, so the server knows where the learner stopped.
+//
+// `?challenge=1` in the address plays a mini challenge (mode=challenge).
 export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds = 30 }) {
   const dispatch = useDispatch();
   const { i18n } = useTranslation();
   const prefs = usePrefs();
-  const { questions: data, status, noOrgQuestions, adaptive, lang: roundLang } = useSelector((s) => selectQuestionState(s, module, subject));
+  const {
+    questions: data, status, noOrgQuestions, adaptive, lang: roundLang, roundId = null, resume = null, resumeMode = null,
+    requestId = null, mode: roundKind = null,
+  } = useSelector((s) => selectQuestionState(s, module, subject));
   const clockFactor = CLOCK_FACTOR[prefs.timer] ?? 1;
   const warriorSeconds = Math.round(baseSeconds * (clockFactor || 1));
   const noClock = clockFactor === 0;
   // "Practise now" links from the dashboards name a skill (?skill=<id>).
   const [searchParams] = useSearchParams();
   const focusSkill = (searchParams.get("skill") || "").slice(0, 120) || undefined;
+  const challenge = searchParams.get("challenge") === "1";
+  // "Carry on with your round" links (?resume=1): the learner already chose to carry on.
+  const resumeAsked = searchParams.get("resume") === "1";
+  // Chosen on the Today hub (?source=welcome|next|…): told to the engine with the first round only.
+  const source = SOURCES.includes(searchParams.get("source")) ? searchParams.get("source") : undefined;
+  const wantKind = challenge ? "challenge" : null;
+  // What to ask for. An unfinished round is looked for only on a plain round
+  // (a chosen skill or a challenge is a new start the learner asked for).
+  const argsFor = (resumeHow, { first = false } = {}) => ({
+    module, subject, lang: getQuestionLang(i18n.language), skill: focusSkill,
+    mode: wantKind || undefined,
+    resume: !focusSkill && !challenge ? resumeHow : false,
+    ...(first && source ? { source } : {}),
+  });
 
   useEffect(() => {
-    if (status === "idle") {
-      dispatch(fetchQuestions({ module, subject, lang: getQuestionLang(i18n.language), skill: focusSkill }));
-    }
+    if (status === "idle") dispatch(fetchQuestions(argsFor(resumeAsked ? "auto" : "ask", { first: true })));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [module, subject, status, dispatch]);
 
@@ -46,18 +70,32 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
   useEffect(() => {
     if (!focusSkill || status === "idle") return;
     dispatch(resetQuestions({ module, subject }));
-    dispatch(fetchQuestions({ module, subject, lang: getQuestionLang(i18n.language), skill: focusSkill }));
+    dispatch(fetchQuestions(argsFor(false, { first: true })));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focusSkill]);
+
+  // A challenge round cached where a plain round is wanted (or the other way round): fetch the right one.
+  useEffect(() => {
+    if (status !== "succeeded" || (roundKind || null) === wantKind) return;
+    dispatch(resetQuestions({ module, subject }));
+    dispatch(fetchQuestions(argsFor("ask")));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wantKind, roundKind, status]);
+
+  // Leaving the round: forget it here. The server keeps the unfinished round,
+  // so coming back (or signing in again) offers to carry on from there.
+  useEffect(() => () => { dispatch(resetQuestions({ module, subject })); }, [dispatch, module, subject]);
 
   // A new language means translated questions: fetch again, but only when the
   // round on hand is in another language (not on a first load, which the
   // effect above covers: two fetches at once could swap the round mid-question).
+  // The same round comes back in the new language at the same question
+  // (resume, carried on at once); the narrator already stopped the old words.
   useEffect(() => {
     if (subject === "english" || status === "idle") return;
     if ((roundLang ?? null) === getQuestionLang(i18n.language)) return;
     dispatch(resetQuestions({ module, subject }));
-    dispatch(fetchQuestions({ module, subject, lang: getQuestionLang(i18n.language), skill: focusSkill }));
+    dispatch(fetchQuestions(argsFor("auto")));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i18n.language]);
 
@@ -79,12 +117,41 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
   const [totalScore, setTotalScore] = useState(0);
   // The server's reply per question (personal message, level change).
   const [learnById, setLearnById] = useState({});
+  // "Carry on from question N?" while it is being asked: { position, total }.
+  const [resumeOffer, setResumeOffer] = useState(null);
+  // Explanations of an idea that keeps tripping the learner up, shown before a
+  // question: from the round (support.strategy "misconception") or from the
+  // last answer's reply (learn.explain, for the next question).
+  const [extraExplain, setExtraExplain] = useState({}); // question id -> { text, skill }
+  const [explained, setExplained] = useState(() => new Set()); // question ids already explained
+  // Growth badges earned in this round (shown quietly when the round ends).
+  const [newBadges, setNewBadges] = useState([]);
+
+  // A round just arrived: an unfinished one is offered (or, fetched again in
+  // another language, simply carried on). Adjusted during render, not in an
+  // effect, so the first question never flashes before the offer.
+  const [seenRequest, setSeenRequest] = useState(null);
+  if (status === "succeeded" && requestId && requestId !== seenRequest) {
+    setSeenRequest(requestId);
+    setExtraExplain({});
+    if (resume && resume.position > 0 && resume.position < data.length) {
+      if (resumeMode === "auto") setIdx(resume.position);
+      else setResumeOffer({ position: resume.position, total: data.length });
+    } else {
+      setResumeOffer(null);
+    }
+  }
 
   const roundStarsRef = useRef(0);
   const roundBonusRef = useRef(0);
   const questionStartRef = useRef(new Date().toISOString());
 
   const current = data[idx];
+  // The question on screen now, for replies that arrive later (noteReply).
+  const idxRef = useRef(idx);
+  useEffect(() => { idxRef.current = idx; }, [idx]);
+  const ownExplain = current?.support?.strategy === "misconception" && current.support.explain?.text ? current.support.explain : null;
+  const explainNow = current && !explained.has(current.id) ? ownExplain || extraExplain[current.id] || null : null;
 
   // Reset per-question state when `idx` changes. Done during render (React's
   // recommended "adjusting state when a prop changes" pattern) rather than in
@@ -128,6 +195,27 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
     questionStartRef.current = new Date().toISOString();
   }, [idx]);
 
+  const acceptResume = () => {
+    if (!resumeOffer) return;
+    setIdx(resumeOffer.position);
+    setResumeOffer(null);
+  };
+  // "Start fresh": the server forgets the unfinished round, and a new one comes.
+  // (`starting` keeps the old round off screen until the new one is asked for.)
+  const [starting, setStarting] = useState(false);
+  const startFresh = async () => {
+    setStarting(true);
+    setResumeOffer(null);
+    setIdx(0);
+    await discardUnfinishedRound({ module, subject });
+    dispatch(fetchQuestions(argsFor(false)));
+    setStarting(false);
+  };
+  const doneExplaining = () => {
+    if (!current?.id) return;
+    setExplained((s) => new Set(s).add(current.id));
+  };
+
   const finishRound = () => {
     const s = roundStarsRef.current;
     const b = roundBonusRef.current;
@@ -163,12 +251,14 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
       module, subject: subject || "general", durationMinutes: 1,
       xpEarned: xp, score: correct ? 100 : 0, startTime: questionStartRef.current,
     }));
+    const at = idx;
     dispatch(logDashboardAnswer({
       module, subject: subject || "general",
       question: q?.instruction || q?.prompt || "",
       userAnswer: describe(o.userAnswer),
       correctAnswer: describe(q?.correct_answer),
-      correct, xpEarned: xp, timeTaken: o.timeTaken, mode,
+      // A mini challenge's answers say so (the engine never counts a challenge miss against the learner).
+      correct, xpEarned: xp, timeTaken: o.timeTaken, mode: roundKind === "challenge" ? "challenge" : mode,
       // Which bank question and topic, so a parent can review the exact card (PAR-033).
       questionId: q?.id, topic: q?.academic?.curriculum_strand,
       // The learning engine (contract §2): how it went and what help was used.
@@ -180,14 +270,39 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
       uncertain: o.status === "uncertain",
       ...(o.reason ? { reason: o.reason } : {}),
       timedOut: Boolean(o.timedOut),
+      // Where the learner is, so an unfinished round can be carried on later,
+      // and the language an explanation should come back in.
+      ...(roundId ? { roundId, position: at } : {}),
+      lang: getQuestionLang(i18n.language),
     })).then((action) => {
       const learn = action?.payload?.learn;
       if (learn && q?.id) setLearnById((m) => ({ ...m, [q.id]: learn }));
+      noteReply(learn, at);
     });
     if (correct) {
       setTotalScore((s) => s + 1);
       roundStarsRef.current += 1;
       if (mode === "warrior" && !noClock) roundBonusRef.current += getWarriorBonus(o.timeTaken);
+    }
+  };
+
+  // What else the server's reply says: new growth badges (kept for the end of
+  // the round) and an explanation due before the next question (given to the
+  // next question on the same skill, else simply the next one).
+  const noteReply = (learn, at) => {
+    if (!learn) return;
+    const badges = Array.isArray(learn.achievements) ? learn.achievements.filter((a) => a && a.id) : [];
+    if (badges.length) setNewBadges((list) => [...list, ...badges.filter((b) => !list.some((x) => x.id === b.id))]);
+    const ex = learn.explain;
+    if (ex && typeof ex.text === "string" && ex.text.trim()) {
+      // The reply can land after the learner has moved on (a slow connection, a
+      // quick Next): the explanation then goes to a question after the one on
+      // screen, never over a question the learner is already answering.
+      const rest = data.slice(Math.max(at, idxRef.current) + 1);
+      const target = rest.find((x) => x?.support?.skill && x.support.skill === ex.skill) || rest[0];
+      if (target?.id && !(target.support?.strategy === "misconception" && target.support.explain?.text)) {
+        setExtraExplain((m) => (m[target.id] ? m : { ...m, [target.id]: ex }));
+      }
     }
   };
 
@@ -211,17 +326,22 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
     setTimedOut(false);
     setUserPaused(false);
     setLearnById({});
+    setNewBadges([]);
+    setExplained(new Set());
+    setResumeOffer(null);
     // An adaptive round is made fresh each time (the engine has just learned more).
-    if (adaptive) dispatch(fetchQuestions({ module, subject, lang: getQuestionLang(i18n.language), skill: focusSkill }));
+    if (adaptive) dispatch(fetchQuestions(argsFor(false)));
   };
 
-  const retry = () => dispatch(fetchQuestions({ module, subject, lang: getQuestionLang(i18n.language), skill: focusSkill }));
+  const retry = () => dispatch(fetchQuestions(argsFor("ask")));
 
   // Warrior countdown. Runs only while a question is waiting for an answer,
   // the clock isn't paused, the page is visible, the teacher isn't speaking
   // and the round isn't over. With the "no clock" setting it never runs.
   const paused = userPaused || pageHidden || holds.size > 0;
-  const clockRunning = mode === "warrior" && !noClock && !answered && !!current && !roundDone && !paused && !timedOut && !voiceBusy;
+  // Not while "Carry on?" or an explanation is on screen instead of the question.
+  const clockRunning = mode === "warrior" && !noClock && !answered && !!current && !roundDone && !paused && !timedOut && !voiceBusy
+    && !resumeOffer && !explainNow;
   useEffect(() => {
     if (!clockRunning) return undefined;
     const t = setTimeout(() => {
@@ -245,9 +365,10 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
       module, subject: subject || "general",
       question: current.instruction || current.prompt || "",
       userAnswer: "", correctAnswer: describe(current.correct_answer),
-      correct: false, xpEarned: 0, timeTaken: warriorSeconds, mode,
+      correct: false, xpEarned: 0, timeTaken: warriorSeconds, mode: roundKind === "challenge" ? "challenge" : mode,
       questionId: current.id, topic: current.academic?.curriculum_strand,
       status: "uncertain", uncertain: true, timedOut: true, firstTry: false, hintsUsed: 0,
+      ...(roundId ? { roundId, position: idx } : {}),
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [timedOut]);
@@ -270,5 +391,9 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
     paused, userPaused, togglePause, clockRunning, timedOut, voiceBusy,
     learn: current?.id ? learnById[current.id] || null : null,
     choicePool, adaptive,
+    // Continuity, explanations, growth badges and challenges (contract §2-3).
+    roundId, resumeOffer, acceptResume, startFresh, starting,
+    explainNow, doneExplaining,
+    newBadges, challenge: challenge && roundKind === "challenge",
   };
 }

@@ -1,0 +1,129 @@
+/* The Today hub: a small switch (Up next / My journey / My stars) and the part
+   under it, filling the dashboard's stage. Big screens show the plan, the map
+   and the badges in one grid; smaller ones one part at a time, and a part that
+   is longer than the screen scrolls inside itself (never the page). */
+
+.hub {
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(6px, 1.2vh, 12px);
+}
+
+.seg { align-self: center; width: min(560px, 100%); flex: none; }
+
+.part {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* "My stars": the classic overview, as it was. */
+.me { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+
+/* A part that may be longer than the screen: it scrolls, with a soft fade at
+   the bottom (scrollbars are hidden site-wide) and room for the cards' lips. */
+.scrolls {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 2px 24px;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 22px), transparent);
+}
+
+/* ── Phones and tablets: "Up next" ── */
+.compact {
+  composes: scrolls;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 12px);
+}
+.compact > * { flex: none; }
+
+/* Upright tablets: the welcome across the top, the list and the discovery side by side. */
+@media (orientation: portrait) and (min-width: 700px) {
+  .compact {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    grid-template-areas: "welcome welcome" "next discovery";
+    align-content: start;
+    align-items: start;
+  }
+  .compact > .welcomeSlot { grid-area: welcome; }
+  .compact > .next { grid-area: next; }
+  .compact > .discovery { grid-area: discovery; }
+  /* No discovery today: the list takes the whole width. */
+  .compact:not(:has(> .discovery)) { grid-template-areas: "welcome welcome" "next next"; }
+}
+/* Phones and small tablets on their side: the welcome beside the list. */
+@media (orientation: landscape) and (max-width: 1099px), (orientation: landscape) and (max-height: 599px) {
+  .compact {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas: "welcome next" "discovery next";
+    align-content: start;
+    align-items: start;
+  }
+  .compact > .welcomeSlot { grid-area: welcome; }
+  .compact > .next { grid-area: next; }
+  .compact > .discovery { grid-area: discovery; }
+}
+
+.welcomeSlot { min-width: 0; display: flex; flex-direction: column; }
+.welcomeSlot > * { flex: 1 1 auto; }
+
+/* ── Phones and tablets: "My journey" (the map, then the growth badges) ── */
+.journeyPart {
+  composes: scrolls;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 12px);
+}
+.journeyPart > * { flex: none; }
+@media (orientation: landscape), (min-width: 700px) {
+  .journeyPart {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    align-items: start;
+    align-content: start;
+  }
+}
+
+/* ── Big screens: everything at once ──
+   welcome  next  discovery
+   map      map   growth
+   The top row grows with the list up to about half the height (the
+   list then scrolls inside), so the whole journey map always has room. */
+.wide {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  gap: clamp(10px, 1.4vh, 16px) clamp(10px, 1.2vw, 18px);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.85fr);
+  grid-template-rows: fit-content(48%) minmax(0, 1fr);
+  grid-template-areas:
+    "welcome next discovery"
+    "map map growth";
+  padding: 2px 2px 6px;
+}
+/* Tall screens: the list gets more of the height (the map still fits under it). */
+@media (min-height: 1000px) {
+  .wide { grid-template-rows: fit-content(58%) minmax(0, 1fr); }
+}
+.wide > .welcomeSlot { grid-area: welcome; min-height: 0; }
+.wide > .next { grid-area: next; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.wide > .discovery { grid-area: discovery; min-height: 0; overflow-y: auto; }
+.wide > .map { grid-area: map; overflow-y: auto; overscroll-behavior: contain; }
+.wide > .growth { grid-area: growth; overflow-y: auto; overscroll-behavior: contain; }
+/* No discovery today (or an older server): the badges take its place too. */
+.wide:not(:has(> .discovery)) > .growth { grid-row: 1 / span 2; }
+/* No map (an older server): the welcome and the list take the whole height. */
+.wide:not(:has(> .map)) { grid-template-rows: minmax(0, 1fr); grid-template-areas: "welcome next growth"; }
+.wide:not(:has(> .map)) > .discovery { display: none; }
+
+.next, .discovery, .map, .growth { min-width: 0; }

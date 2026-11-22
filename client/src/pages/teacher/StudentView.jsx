@@ -2,7 +2,7 @@
 // the numbers, plus the teacher's private notes and the parent link status.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling } from "react-icons/fa";
+import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling, FaChartLine } from "react-icons/fa";
 import {
   TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel, PanelHead, Sheet, usePane,
   SubjectModuleMatrix, CalendarHeatmap, Timeline, toTable, fmtDuration, fmtPercent, fmtDate, moduleLabel, subjectLabel,
@@ -10,10 +10,20 @@ import {
 import { useLoad, useTeacherApi } from "./teacherApi";
 import { ParentStatus } from "./ParentsPanel";
 import TeacherPlan from "./TeacherPlan";
+import { EvidencePanel } from "../../components/learning/evidence";
 import { groupStyle, rangeQuery, matrixCells } from "./teacherShared";
 import s from "./teacher.module.css";
 
 const KIND = { session: "session", round: "game", test: "test", answer: "session" };
+
+// The same evidence of growth a parent sees (GET /teacher/students/:id/learning → evidence):
+// baseline vs now, kind of thinking, on their own vs with help, reviews, tricky spots, decisions.
+function Growth({ id, name }) {
+  const { get } = useTeacherApi();
+  const path = `/students/${encodeURIComponent(id)}/learning`;
+  const q = useLoad(() => get(path), [path]);
+  return <EvidencePanel key={id} evidence={q.data?.evidence} name={name} audience="teacher" loading={q.loading} error={q.error} onRetry={q.reload} />;
+}
 
 function Notes({ studentId, initial, onChanged }) {
   const { t } = useTranslation();
@@ -151,7 +161,7 @@ export default function StudentView({ id, go }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const q = useLoad(() => get(`/students/${id}/profile`), [id]);
-  const [pane, setPane] = usePane(["overview", "subjects", "activity", "plan", "notes"]);
+  const [pane, setPane] = usePane(["overview", "growth", "subjects", "activity", "plan", "notes"]);
   if (q.loading && !q.data) return <><Skeleton variant="text" lines={2} /><Skeleton variant="chart" /></>;
   if (q.error) return <EmptyState tone="error" title={t("teacher.stu.notFound", { defaultValue: "Student not found" })} text={q.error} actionLabel={t("teacher.groups.back", { defaultValue: "Back to my groups" })} onAction={() => go("groups")} />;
   const d = q.data;
@@ -160,6 +170,7 @@ export default function StudentView({ id, go }) {
   const firstName = st.name.split(" ")[0];
   const tabs = d.hasAnalytics ? [
     { id: "overview", label: t("teacher.stu.tabOverview", { defaultValue: "Overview" }), icon: FaChartPie },
+    ...(st.email ? [{ id: "growth", label: t("evidence.tab", "Growth"), icon: FaChartLine }] : []),
     { id: "subjects", label: t("teacher.stu.tabSubjects", { defaultValue: "Subjects" }), icon: FaThLarge },
     { id: "activity", label: t("teacher.stu.tabActivity", { defaultValue: "Activity" }), icon: FaCalendarAlt },
     ...(st.email ? [{ id: "plan", label: t("teacher.stu.tabPlan", { defaultValue: "Learning plan" }), short: t("teacher.stu.tabPlanShort", { defaultValue: "Plan" }), icon: FaSeedling }] : []),
@@ -189,6 +200,7 @@ export default function StudentView({ id, go }) {
       <SubPanel key={current} id={current} value={current} idBase="stu">
         {current === "notes" ? <Notes studentId={id} initial={d.notes} onChanged={q.reload} />
           : current === "plan" ? <TeacherPlan student={id} name={firstName} />
+          : current === "growth" ? <Growth id={id} name={firstName} />
           : d.hasAnalytics ? <Analytics id={id} name={firstName} part={current} />
             : <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} actionLabel={t("teacher.stu.writeNote", { defaultValue: "Write a private note" })} onAction={() => setPane("notes")} />}
       </SubPanel>

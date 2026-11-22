@@ -2,6 +2,7 @@
 // pool. The rules live in the pure modules next to this file.
 const LearnerProfile = require('../../models/learning/LearnerProfile')
 const SkillMastery = require('../../models/learning/SkillMastery')
+const LearningDecision = require('../../models/learning/LearningDecision')
 const { getQuestionModel } = require('../../utils/questionModels')
 const { getStudentOrgInfo, getVisibleUploadBatchIds } = require('../../utils/questionVisibility')
 const { applyQuestionTranslation } = require('../../utils/applyQuestionTranslation')
@@ -39,7 +40,8 @@ async function getProfile(email) {
 }
 
 const STORED = ['levels', 'ageBand', 'pace', 'supports', 'goals', 'overrides', 'explanationPrefs', 'suggestions', 'baselineDone',
-  'recent', 'sitting', 'history', 'lastMessageKey', 'messageCount', 'last', 'lastActiveAt']
+  'recent', 'sitting', 'history', 'lastMessageKey', 'messageCount', 'last', 'lastActiveAt',
+  'band', 'rounds', 'baseline', 'baselineAcc', 'journal', 'growth']
 
 async function saveProfile(email, profile) {
   const $set = {}
@@ -58,7 +60,8 @@ async function getSkill(email, skill) {
 }
 
 const SKILL_FIELDS = ['subject', 'name', 'level', 'mastery', 'attempts', 'correct', 'independent', 'streak', 'missesSinceSuccess', 'box', 'due',
-  'supportStep', 'missesAtStep', 'parkedUntil', 'helpedBy', 'lastOutcome', 'lastAt', 'lastCorrectAt', 'lastMissAt', 'masteredAt', 'modules', 'misconceptions']
+  'supportStep', 'missesAtStep', 'parkedUntil', 'helpedBy', 'lastOutcome', 'lastAt', 'lastCorrectAt', 'lastMissAt', 'masteredAt', 'modules', 'misconceptions',
+  'rightItems', 'topStage', 'stageAvail', 'byStage', 'legacyEvidence', 'probe', 'explain']
 
 async function saveSkill(email, skill) {
   const $set = {}
@@ -72,6 +75,8 @@ async function saveSkill(email, skill) {
 async function resetProfile(email, { settings = false } = {}) {
   const e = lower(email)
   const removedSkills = (await SkillMastery.deleteMany({ email: e })).deletedCount
+  // The engine's decisions about what it forgot go too.
+  await LearningDecision.deleteMany({ email: e })
   const old = await LearnerProfile.findOne({ email: e }).lean()
   await LearnerProfile.deleteOne({ email: e })
   if (old) {
@@ -138,12 +143,19 @@ async function ceilings(email) {
 
 const ENGINE_FIELDS = `${META_FIELDS} distractor_insight`
 
-// One question the learner could see, for logging an answer.
+// One question the learner could see, for logging an answer. Older school uploads stored numeric
+// ids (e.g. 9001) although the schema says String: the query is cast to a string and would miss
+// them, so a numeric id is matched as a number too.
 async function findQuestion(email, module, subject, questionId) {
   const Model = getQuestionModel(module, subject)
-  if (!Model || typeof questionId !== 'string' || !questionId) return null
+  const qid = typeof questionId === 'number' && Number.isInteger(questionId) ? String(questionId) : questionId
+  if (!Model || typeof qid !== 'string' || !qid) return null
   const vis = await visibilityFor(email)(module, subject)
-  return Model.findOne({ id: questionId.slice(0, 80), status: 'approved', ...vis }).select(ENGINE_FIELDS).lean()
+  const base = { status: 'approved', ...vis }
+  const doc = await Model.findOne({ id: qid.slice(0, 80), ...base }).select(ENGINE_FIELDS).lean()
+  if (doc || !/^\d{1,15}$/.test(qid)) return doc
+  // (Mongoose casts a plain number here too, so compare the stored id as text.)
+  return Model.findOne({ $expr: { $eq: [{ $toString: '$id' }, qid] }, ...base }).select(ENGINE_FIELDS).lean()
 }
 
 // Levels of question ids within a subject (any module), for baseline results.
@@ -188,7 +200,126 @@ async function fullQuestions(subject, module, picks, lang) {
   return picks.filter((p) => byId.has(String(p._id))).map((p) => ({ pick: p, question: applyQuestionTranslation(byId.get(String(p._id)), lang) }))
 }
 
+// What content this learner can see, per skill (cached a minute): subject, modules, levels and
+// stages it has questions at, and the everyday-curiosity items (graded ones) for discoveries.
+//   -> { skills: Map id -> { skill, subject, modules: { module: n }, moduleMax: { module: highest graded stage }, levels: [],
+//        stages: [stages with graded items], practiceStages: [stages with practice-only items], maxStage (graded), count },
+//        everyday: [meta + subject, module] }
+async function skillIndex(email) {
+  return cached(`learn:skills:${lower(email)}`, 60_000, async () => {
+    const vis = visibilityFor(email)
+    const skills = new Map()
+    const everyday = []
+    for (const subject of cfg.SUBJECTS) {
+      for (const module of cfg.MODULES) {
+        for (const q of await loadPool(email, subject, module, vis)) {
+          let s = skills.get(q.skill)
+          if (!s) { s = { skill: q.skill, subject, modules: {}, moduleMax: {}, levels: [], stages: [], practiceStages: [], maxStage: null, count: 0 }; skills.set(q.skill, s) }
+          s.count += 1
+          s.modules[module] = (s.modules[module] || 0) + 1
+          if (Number.isInteger(q.level) && !s.levels.includes(q.level)) s.levels.push(q.level)
+          // Stages count only where an answer can count (graded items): e.g. the stage-5 transfer items
+          // are practice-only, so they never make "beyond recognition" or a challenge out of reach.
+          if (Number.isInteger(q.stage) && q.graded) {
+            s.moduleMax[module] = Math.max(s.moduleMax[module] ?? -1, q.stage)
+            if (!s.stages.includes(q.stage)) { s.stages.push(q.stage); s.maxStage = Math.max(s.maxStage ?? -1, q.stage) }
+          } else if (Number.isInteger(q.stage) && !s.practiceStages.includes(q.stage)) s.practiceStages.push(q.stage)
+          if (q.everyday && q.graded) everyday.push({ ...q, subject, module })
+        }
+      }
+    }
+    for (const s of skills.values()) { s.levels.sort((a, b) => a - b); s.stages.sort((a, b) => a - b) }
+    everyday.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
+    return { skills, everyday }
+  })
+}
+
+// A baseline for a learner whose first answers came before baselines were kept: their first
+// `evidence.baselineAttempts` answers in the subject from the answer history (timed games and
+// placement left out); the level is the most common level of those questions.
+async function historyBaseline(email, subject) {
+  const StudentAnswer = require('../../models/StudentAnswer')
+  const rows = await StudentAnswer.find({ email: lower(email), subject, mode: { $nin: cfg.ignoreModes } })
+    .sort({ timestamp: 1 }).limit(cfg.evidence.baselineAttempts).select('module questionId correct timestamp').lean()
+  if (!rows.length) return null
+  const levels = {}
+  const byModule = new Map()
+  for (const r of rows) if (r.questionId && cfg.MODULES.includes(r.module)) { if (!byModule.has(r.module)) byModule.set(r.module, []); byModule.get(r.module).push(r.questionId) }
+  for (const [module, ids] of byModule) {
+    const Model = getQuestionModel(module, subject)
+    if (!Model) continue
+    const docs = await Model.find({ id: { $in: ids } }).select('id level').lean()
+    const lv = new Map(docs.map((d) => [d.id, d.level]))
+    for (const id of ids) { const l = lv.get(id); if (Number.isInteger(l)) levels[l] = (levels[l] || 0) + 1 }
+  }
+  const e = Object.entries(levels).map(([l, n]) => [Number(l), n]).sort((a, b) => b[1] - a[1] || a[0] - b[0])
+  return {
+    level: e.length ? e[0][0] : null,
+    accuracy: Math.round((rows.filter((r) => r.correct).length / rows.length) * 100) / 100,
+    n: rows.length, at: rows[rows.length - 1].timestamp, source: 'first_attempts',
+  }
+}
+
+// The explanation for a repeated misconception, from the question it last came from:
+// its worked example (translated when there is a translation), else its note for grown-ups,
+// else the misconception itself. English-subject items are never translated.
+async function explainFor({ subject, module, q }, { skill, skillName, misconception = '', lang = 'en' } = {}) {
+  const { buildExplain } = require('./explain')
+  const Model = getQuestionModel(module, subject)
+  const useLang = subject === 'english' ? 'en' : (lang || 'en')
+  const fields = ['id', 'worked_example', 'analysis.teacher_action_if_missed']
+  if (useLang !== 'en') fields.push(`translations.${useLang}.worked_example`)
+  const doc = Model && typeof q === 'string' ? await Model.findOne({ id: q }).select(fields.join(' ')).lean() : null
+  return buildExplain(doc, { skill, skillName, misconception, lang: useLang })
+}
+
+// ── Decision log ────────────────────────────────────────────────────────────
+async function addDecisions(email, list) {
+  if (!list?.length) return
+  await LearningDecision.insertMany(list.map((d) => ({ ...d, email: lower(email) })), { ordered: false })
+}
+
+async function getDecisions(email, limit = 20) {
+  return LearningDecision.find({ email: lower(email) }).sort({ at: -1, _id: -1 }).limit(Math.max(1, Math.min(100, limit))).select('-_id -__v -email').lean()
+}
+
+// ── Growth badges (StudentAchievement) ──────────────────────────────────────
+// Stored once with their evidence (numbers only). Written through the collection so the
+// evidence is kept whatever the model's fields; the unique (email, achievementId) index keeps
+// it to one per learner. -> true when it is new.
+async function awardAchievement(email, id, evidence, now = new Date()) {
+  const StudentAchievement = require('../../models/StudentAchievement')
+  const r = await StudentAchievement.collection.updateOne(
+    { email: lower(email), achievementId: id },
+    { $setOnInsert: { email: lower(email), achievementId: id, earnedAt: now, evidence: evidence || {} } },
+    { upsert: true },
+  )
+  return !!r.upsertedCount
+}
+
+// Answers to these questions since a date (ids and times only), for today's discovery.
+async function answeredSince(email, questionIds, since) {
+  if (!questionIds.length) return []
+  const StudentAnswer = require('../../models/StudentAnswer')
+  return StudentAnswer.find({ email: lower(email), questionId: { $in: questionIds }, timestamp: { $gte: since } }).select('questionId timestamp -_id').lean()
+}
+
+// Rounds finished and days practised (counts, never time), for the evidence activity block.
+async function activityCounts(email) {
+  const StudentRound = require('../../models/StudentRound')
+  const StudentActivity = require('../../models/StudentActivity')
+  const e = lower(email)
+  const [rounds, days] = await Promise.all([StudentRound.countDocuments({ email: e }), StudentActivity.countDocuments({ email: e, totalSessions: { $gt: 0 } })])
+  return { rounds, days }
+}
+
+// Writes only the unfinished-round state (a GET round must not overwrite other profile fields).
+async function saveRounds(email, rounds) {
+  await LearnerProfile.updateOne({ email: lower(email) }, { $set: { rounds } }, { upsert: true, runValidators: true })
+}
+
 module.exports = {
   serial, defaultProfile, getProfile, saveProfile, getSkills, getSkill, saveSkill, resetProfile,
-  visibilityFor, loadPool, ceilings, findQuestion, levelsOf, fullQuestions, questionNotes, LearnerProfile, SkillMastery,
+  visibilityFor, loadPool, ceilings, findQuestion, levelsOf, fullQuestions, questionNotes, LearnerProfile, SkillMastery, LearningDecision,
+  skillIndex, historyBaseline, explainFor, addDecisions, getDecisions, awardAchievement, saveRounds, answeredSince, activityCounts,
 }

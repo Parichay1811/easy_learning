@@ -10,19 +10,22 @@
 //   node server/scripts/content/audit.js --verbose       list every finding, not just counts
 //
 // Blocking checks: schema, unique_id, options, answer_key, round_trip, translations, audio,
-// speech, qa. Warnings: duplicate_content, mode, level, untranslated, word_problem.
+// speech, qa, stage, narration, badge. Warnings: duplicate_content, mode, level, untranslated,
+// word_problem.
 const path = require('path')
 const { loadAll } = require('./lib/bankio')
 const scorer = require('../../utils/scoreAnswer')
 const { applyQuestionTranslation } = require('../../utils/applyQuestionTranslation')
+const { checkNarration, norm: nnorm } = require('./lib/narration-rules')
 
 const { checkAnswer, canon, loose, parseEquation, numberTokens } = scorer
 const LANGS = ['es', 'fr', 'pt', 'it', 'de', 'nl', 'ru', 'tr', 'zh', 'ja', 'ko', 'id', 'vi']
 const INTERACTIONS = ['tap_mcq', 'true_false', 'drag_to_blank', 'multi_select', 'drag_order', 'tap_sequence', 'letter_bank', 'match_pairs', 'sort_bins', 'typed_short', 'typed_long', 'mic_record']
 const METHODS = ['choice', 'set', 'sequence', 'pairs', 'bins', 'text', 'number', 'speech_keywords', 'speech_open', 'rubric']
-const BLOCKING = new Set(['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa'])
-const ALL_CHECKS = ['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa', 'duplicate_content', 'mode', 'level', 'untranslated', 'word_problem']
-const ID_RE = /^(EN|MA|SCI)-(LIS|RD|WR|SPK)-(T\d{2}|F00|S0[6-8])-Q\d{2}$/
+const BLOCKING = new Set(['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa', 'stage', 'narration', 'badge'])
+const ALL_CHECKS = ['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa', 'stage', 'narration', 'badge', 'duplicate_content', 'mode', 'level', 'untranslated', 'word_problem']
+const ID_RE = /^(EN|MA|SCI)-(LIS|RD|WR|SPK)-(T\d{2}|F00|E00|S0[6-8])-Q\d{2}$/
+const QA_VERSION = 4
 
 let skillsCache = null
 function skillCatalogue() {
@@ -125,6 +128,15 @@ function submissions(q) {
         wrong.push({ transcript: `${v.compare.more[0]} is smaller` })
       }
       if (v.time && en) { const [hh, mm] = v.time.split(':').map(Number); wrong.push({ transcript: `${(hh % 12) + 1}:${String(mm).padStart(2, '0')}` }) }
+      // Just saying the word on the card (the word to rhyme with, the category to name, the word
+      // to give the opposite of) is not an answer, unless the card shows what to say (read aloud,
+      // or retell these steps in order).
+      if (!v.ordered && typeof q.prompt === 'string' && /\p{L}/u.test(q.prompt) && !/\p{Extended_Pictographic}/u.test(q.prompt)) {
+        const pw = nnorm(q.prompt).split(' ').filter(Boolean)
+        const targets = [ss.sample_answer, q.correct_answer, ...acc].filter((x) => typeof x === 'string' && x !== 'open')
+        const cardIsAnswer = targets.some((a) => { const aw = nnorm(a).split(' ').filter(Boolean); return aw.length && nnorm(` ${a} `).includes(nnorm(q.prompt)) && pw.length / aw.length >= 0.6 })
+        if (pw.length && pw.length <= 8 && !cardIsAnswer) wrong.push({ transcript: q.prompt })
+      }
       break
     }
     default: break
@@ -224,7 +236,15 @@ function auditQuestion(q, ctx = {}) {
   if (!['all', 'young'].includes(q.age_band)) add('schema', `age_band "${q.age_band}"`)
   if (typeof q.graded !== 'boolean') add('schema', 'graded is not a boolean')
   if (!q.validation || !METHODS.includes(q.validation.method)) add('schema', `validation.method "${q.validation && q.validation.method}"`)
-  if (!q.qa || q.qa.version !== 3 || !['verified', 'needs_review', 'excluded'].includes(q.qa.status)) add('schema', 'qa block missing or not version 3')
+  if (!q.qa || q.qa.version !== QA_VERSION || !['verified', 'needs_review', 'excluded'].includes(q.qa.status)) add('schema', `qa block missing or not version ${QA_VERSION}`)
+  // stage (content v4): 0..5; 0 only for the everyday pool, which is graded, level 0-1
+  if (!Number.isInteger(q.stage) || q.stage < 0 || q.stage > 5) add('stage', `stage ${q.stage} is not an integer 0..5`)
+  if (typeof q.everyday !== 'boolean') add('stage', 'everyday is not a boolean')
+  if (q.everyday === true) {
+    if (q.stage !== 0) add('stage', `everyday item at stage ${q.stage} (must be 0)`)
+    if (!(q.level === 0 || q.level === 1)) add('stage', `everyday item at level ${q.level} (must be 0 or 1)`)
+    if (q.graded !== true) add('stage', 'everyday items are graded')
+  } else if (q.stage === 0) add('stage', 'stage 0 is only for everyday items')
   }
 
   // qa consistency
@@ -249,6 +269,7 @@ function auditQuestion(q, ctx = {}) {
       if (q.correct_answer.length === opts.length) add('options', 'every option is right (nothing to discriminate)')
     }
   } else if (it === 'drag_order' || it === 'tap_sequence') {
+    legacyTiles(q, add)
     if (!opts || !Array.isArray(q.correct_answer)) add('options', 'sequence needs options and an answer list')
     else {
       const pool = opts.map(canon)
@@ -256,6 +277,7 @@ function auditQuestion(q, ctx = {}) {
       if (it === 'drag_order' && q.correct_answer.length !== opts.length) add('options', 'drag_order answer is not a permutation of the options')
     }
   } else if (it === 'letter_bank') {
+    legacyTiles(q, add)
     if (!opts) add('options', 'letter_bank without tiles')
     else if (Array.isArray(q.correct_answer)) {
       const pool = opts.map(canon)
@@ -354,6 +376,32 @@ function auditQuestion(q, ctx = {}) {
     }
   }
 
+  // badge: on a listening item the picture next to the prompt must not show the right answer
+  // (an emoji answer, or a word answer the bank pairs with that emoji, e.g. 🧼 = "soap").
+  const badgeImg = q.image && q.image.emoji
+  if (module === 'listen' && badgeImg && ['tap_mcq', 'true_false', 'drag_to_blank', 'multi_select'].includes(it)) {
+    const lex = badgeLexicon()
+    const e = String(badgeImg).replace(/\uFE0F/g, '')
+    for (const r of [].concat(q.correct_answer).filter((x) => typeof x === 'string')) {
+      const pic = String(r).replace(/\uFE0F/g, '').trim()
+      const word = nnorm(r.replace(/\p{Extended_Pictographic}|\uFE0F|\u200D/gu, ''))
+      if (pic === e || (graphemes(pic)[0] === e && graphemes(pic).length <= 2) || (word && lex.has(e) && lex.get(e).has(word))) { add('badge', `the picture badge ${badgeImg} shows the answer "${r}"`); break }
+    }
+  }
+
+  // narration (content v4): every served item, English and every translated language
+  if (served && !ctx.baseline) {
+    for (const p of checkNarration(q, q.narration, { lang: 'en', subject, module })) add('narration', `en: ${p}`)
+    if (q.narration && q.narration.status && !['authored', 'templated', 'reviewed'].includes(q.narration.status)) add('narration', `en: status ${q.narration.status}`)
+    if (q.translations) for (const lang of LANGS) {
+      if (!q.translations[lang]) continue
+      const tq = applyQuestionTranslation(clone(q), lang)
+      if (!tq.narration) { add('narration', `${lang}: no narration`); continue }
+      if (q.narration && tq.narration.style !== q.narration.style) add('narration', `${lang}: style ${tq.narration.style} differs from English ${q.narration.style}`)
+      for (const p of checkNarration(tq, tq.narration, { lang, subject, module, baseInstruction: q.instruction })) add('narration', `${lang}: ${p}`)
+    }
+  }
+
   // mode: picture badge or prompt that shows the answer
   const img = q.image && q.image.emoji
   if (img && ['listen', 'read'].includes(module) && ['tap_mcq', 'true_false', 'drag_to_blank', 'multi_select'].includes(it)) {
@@ -368,6 +416,37 @@ function auditQuestion(q, ctx = {}) {
   if (subject === 'maths' && q.level <= 1 && /\d{2}\s*[+\-x×]\s*\d{2}/.test(`${q.prompt} ${q.audio_text}`)) add('level', 'two-digit arithmetic at level 0/1')
 
   return findings
+}
+
+// Older items also carry letter_tiles / word_tiles / number_tiles. The widgets build the answer
+// from `options`, but if anything shows the legacy list it must be able to build the answer too.
+function legacyTiles(q, add) {
+  const want = Array.isArray(q.correct_answer) ? q.correct_answer.map(String)
+    : q.validation && q.validation.equation ? String(q.correct_answer).trim().split(/\s+/)
+      : (Array.isArray(q.options) && q.options.some((o) => [...String(o)].length > 1)) ? [String(q.correct_answer)] : [...String(q.correct_answer)]
+  for (const field of ['letter_tiles', 'word_tiles', 'number_tiles']) {
+    if (!Array.isArray(q[field])) continue
+    const pool = q[field].map((x) => canon(String(x)))
+    for (const w of want) { const i = pool.indexOf(canon(w)); if (i < 0) { add('options', `${field} cannot build the answer: "${w}" is missing`); break } pool.splice(i, 1) }
+  }
+}
+
+// emoji → words the bank pairs with it ("🧼 soap" options, [word, emoji] pairs).
+let lexCache = null
+function badgeLexicon() {
+  if (lexCache) return lexCache
+  lexCache = new Map()
+  const put = (e, w) => { const k = String(e).replace(/\uFE0F/g, '').trim(); const v = nnorm(w); if (!k || !v) return; if (!lexCache.has(k)) lexCache.set(k, new Set()); lexCache.get(k).add(v) }
+  for (const b of loadAll()) for (const q of b.data.questions) {
+    for (const o of Array.isArray(q.options) ? q.options : []) {
+      const m = typeof o === 'string' && o.match(/^((?:\p{Extended_Pictographic}|\uFE0F|\u200D)+)\s+(\p{L}[\p{L}\s'-]*)$/u)
+      if (m) put(m[1], m[2])
+    }
+    if (q.interaction === 'match_pairs' && Array.isArray(q.correct_answer)) for (const p of q.correct_answer) {
+      if (Array.isArray(p) && /\p{Extended_Pictographic}/u.test(String(p[1])) && /^\p{L}/u.test(String(p[0]))) put(p[1], p[0])
+    }
+  }
+  return lexCache
 }
 
 // Builds each widget submission and runs the checker on it.

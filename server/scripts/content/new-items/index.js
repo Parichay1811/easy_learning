@@ -6,6 +6,7 @@ const SOURCES = [
   require('./foundation-english'),
   require('./foundation-maths'),
   require('./foundation-science'),
+  require('./everyday'),
 ]
 let stretch = null
 try { stretch = require('./stretch-maths') } catch (e) { if (e.code !== 'MODULE_NOT_FOUND') throw e }

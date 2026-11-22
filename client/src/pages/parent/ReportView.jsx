@@ -2,6 +2,8 @@ import { useTranslation } from "react-i18next";
 import {
   StackedBars, SubjectModuleMatrix, HourWeekdayHeatmap, CalendarHeatmap, MasteryChips, fmtDuration, fmtPercent, fmtDate, subjectLabel, moduleLabel,
 } from "../../components/dashboard";
+import { say, pickInsights } from "../../components/learning/evidence";
+import { describeNext, subjectName } from "../../components/learning/levels";
 import { matrixCells, masteryKey, frac } from "./parentApi";
 import r from "./report.module.css";
 
@@ -10,8 +12,11 @@ const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : "");
 const ICON = { celebrate: "🎉", info: "💡", nudge: "🎯", alert: "⚠️" };
 
 // The report body, shared by the parent's print page and the read-only shared link.
-export default function ReportView({ report }) {
-  const { t } = useTranslation();
+// The learning engine's weekly insight sentences and the next goals come from `evidence`,
+// `goals`, `next`, `learnSkills` (evidence, profile.goals, next, skills of the /children/:id/learning reply) when the page passes them,
+// else from the same fields on the report itself; without them those parts are left out.
+export default function ReportView({ report, evidence, goals, next, learnSkills }) {
+  const { t, i18n } = useTranslation();
   const T = (k, d, o) => t(`parent.report.${k}`, { defaultValue: d, ...o });
   const { child, range, totals: tot, previous: prev, series, matrix, patterns, skills, sources, aiTeacher, achievements, milestones, calendar, insights, streak } = report;
   const first = (child?.name || "").split(" ")[0];
@@ -30,6 +35,11 @@ export default function ReportView({ report }) {
     id: x.key, label: `${skills.level === "topic" ? x.label : moduleLabel(t, x.module)} · ${subjectLabel(t, g.subject)}`, level: LEVEL[masteryKey(x.mastery)], prevLevel: LEVEL[masteryKey(x.then?.mastery)],
   })));
   const nextSteps = (insights || []).filter((i) => i.key === "practise_next");
+  const learning = report.learning || {};
+  const ev = evidence ?? report.evidence ?? learning.evidence ?? null;
+  const weekly = pickInsights(ev?.insights, 5);
+  const openGoals = (goals ?? report.goals ?? learning.profile?.goals ?? []).filter((g) => g && g.text && !g.done).slice(0, 4);
+  const step = describeNext(t, next ?? report.next ?? learning.next, learnSkills ?? learning.skills);
   const diff = prev ? Math.round(tot.minutes - prev.minutes) : null;
 
   return (
@@ -50,6 +60,15 @@ export default function ReportView({ report }) {
           <ul className={r.insights}>
             {insights.slice(0, 5).map((i) => <li key={i.key}><span aria-hidden="true">{ICON[i.kind] || "•"}</span> {t(`parent.insight.${i.key}`, { defaultValue: i.text, ...i.params, module: cap(i.params?.module), subject: cap(i.params?.subject) })}</li>)}
           </ul>
+        )}
+        {weekly.length > 0 && (
+          <>
+            <h3 className={r.subhead}>{t("evidence.week.insights", "What we noticed")}</h3>
+            <ul className={r.insights}>
+              {weekly.map((m, i) => <li key={`${m.key || "w"}-${i}`}><span aria-hidden="true">💡</span> {say(t, m, "learn.insight", i18n.language)}</li>)}
+            </ul>
+            <p className={r.note}>{t("evidence.insights.fine", { defaultValue: "Each sentence is built only from {{name}}'s recorded answers.", name: first })}</p>
+          </>
         )}
       </section>
 
@@ -123,8 +142,10 @@ export default function ReportView({ report }) {
           ) : <p style={{ color: "var(--d-muted)" }}>{T("noMoments", "No new milestones in this period.")}</p>}
         </section>
         <section className={r.section}>
-          <h2>{T("next", "Next steps")}</h2>
+          <h2>{openGoals.length || step ? t("evidence.week.goalsAndSteps", "Next goals and steps") : T("next", "Next steps")}</h2>
           <ul className={r.list}>
+            {openGoals.map((g) => <li key={g.id || g.text}><span>🏁 {g.text}{g.subject ? ` · ${subjectName(t, g.subject)}` : ""}</span></li>)}
+            {step && <li><span>🧭 {t("evidence.week.nextStep", { defaultValue: "Next in Learnigo: {{what}}", what: step.title })}{step.where && step.where !== step.title ? ` · ${step.where}` : ""}</span></li>}
             {nextSteps.map((n) => <li key={n.key}><span>🎯 {T("practise", "Practise {{m}} · {{s}} a little each day", { m: cap(n.params.module), s: cap(n.params.subject) })}</span></li>)}
             {aiTeacher?.topics?.[0] && <li><span>🧑‍🏫 {T("aiNext", "Talk about “{{topic}}”, explored with the AI Teacher", { topic: aiTeacher.topics[0].title })}</span></li>}
             <li><span>💬 {T("praise", "Praise the effort, not only the score")}</span></li>

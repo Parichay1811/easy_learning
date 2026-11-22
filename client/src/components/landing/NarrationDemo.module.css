@@ -1,0 +1,84 @@
+/* The screen beside the spoken script, with captions under the script. */
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(16px, 3vw, 32px);
+  align-items: start;
+}
+.col { margin: 0; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.colLabel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #9a4100;
+}
+.style {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #f3f0ff;
+  color: #3b2f8f;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(16px, 2.4vw, 24px);
+  border-radius: 20px;
+  background: #ffffff;
+  border: 2px solid #e6e1f5;
+  box-shadow: 0 4px 0 #e6e1f5;
+}
+.script {
+  margin: 0;
+  font-size: clamp(1.05rem, 1.9vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.65;
+  color: #2b2350;
+}
+.script span { border-radius: 4px; transition: background-color 0.2s; }
+/* The sentence being spoken: the same soft highlight as the question card. */
+.now { background-color: #ffe9a8; box-shadow: 0 0 0 2px #ffe9a8; }
+
+.captions {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-height: 64px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: #101830;
+  color: #ffffff;
+}
+.ccIcon { flex: none; margin-top: 4px; color: #a0e8ff; font-size: 1.15rem; }
+.captionText { margin: 0; font-size: 1rem; font-weight: 600; line-height: 1.5; }
+.source { margin: 0; min-height: 1.5em; font-size: 0.92rem; color: #4a4370; }
+.source:empty { display: none; }
+
+.points {
+  margin: clamp(18px, 3vw, 28px) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 20px;
+}
+.point { display: flex; gap: 10px; align-items: flex-start; font-size: 1rem; line-height: 1.5; color: #2b2350; }
+.pointIcon { flex: none; margin-top: 4px; color: #1f7a4d; }
+
+@media (max-width: 860px) {
+  .grid { grid-template-columns: minmax(0, 1fr); }
+  .points { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .script span { transition: none; }
+}
+:global(html[data-contrast="high"]) .now { background-color: #ffe066; outline: 2px solid #000000; }

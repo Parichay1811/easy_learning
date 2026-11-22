@@ -38,7 +38,26 @@ const schema = new mongoose.Schema({
   masteredAt: { type: Date, default: null },
   modules: { type: [String], default: [] },
   // q/module: the bank question (content id) of the most recent occurrence, for its parent note / teacher action.
-  misconceptions: { type: [new mongoose.Schema({ text: String, count: Number, at: Date, q: String, module: String }, { _id: false })], default: [] },
+  // explained: the count when it was last explained; resolvedAt: two right answers in a row after its last occurrence.
+  misconceptions: { type: [new mongoose.Schema({ text: String, count: Number, at: Date, q: String, module: String, explained: { type: Number, default: 0 }, resolvedAt: { type: Date, default: null } }, { _id: false })], default: [] },
+
+  // ── Evidence for "mastered" (config.masteryEvidence) ──
+  rightItems: { type: [String], default: undefined }, // distinct question ids answered right (the last few); absent on rows from before the rule
+  topStage: { type: Number, default: null }, // highest stage answered right
+  stageAvail: { type: Number, default: null }, // highest stage this skill has questions at (when last answered)
+  legacyEvidence: { type: Boolean, default: false }, // mastered under the earlier rule; kept until the next miss
+  // Per-stage counts: attempts, right, right first try without a hint.
+  byStage: { type: [new mongoose.Schema({ s: Number, n: Number, c: Number, i: Number }, { _id: false })], default: [] },
+  // Diagnostic probe on first contact (services/learning/probe.js)
+  probe: {
+    type: new mongoose.Schema({ state: { type: String, enum: ['pending', 'confident', 'steady', 'gentle'] }, n: Number, right: Number, top: Number, at: Date }, { _id: false }),
+    default: undefined,
+  },
+  // A repeated misconception to explain with the next item of this skill (its text is from the content).
+  explain: {
+    type: new mongoose.Schema({ text: String, q: String, module: String, at: Date }, { _id: false }),
+    default: null,
+  },
 }, { timestamps: true })
 
 schema.index({ email: 1, skill: 1 }, { unique: true })

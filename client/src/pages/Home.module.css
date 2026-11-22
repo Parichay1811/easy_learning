@@ -1,4 +1,4 @@
-/* Home owns exactly the viewport below the navbar: no page scroll. */
+/* Signed in: Home owns exactly the viewport below the navbar: no page scroll. */
 .stage {
   position: fixed;
   top: var(--nav-h, 64px);
@@ -7,4 +7,23 @@
   bottom: 0;
   z-index: 1;
   overflow: hidden;
+}
+.heroFrame { height: 100%; }
+
+/* A visitor: the same hero, a little shorter than the screen so the tagline
+   band peeks in at the bottom, then the page scrolls on to the landing
+   sections. App.jsx pads every page 80px under the navbar; the hero starts
+   right under the navbar instead (--nav-h is 64px, or 48px on a phone on its
+   side), as the fixed stage does. */
+.page {
+  --peek: clamp(26px, 6svh, 60px);
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin-top: calc(var(--nav-h, 64px) - 80px);
+}
+.page .heroFrame {
+  height: calc(100vh - var(--nav-h, 64px) - var(--peek));
+  height: calc(100svh - var(--nav-h, 64px) - var(--peek));
+  min-height: 300px;
 }

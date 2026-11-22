@@ -24,9 +24,10 @@ function mainCollections() {
     achievements: require('../models/StudentAchievement'),
     arSessions: require('../models/ARSession'),
     linkCodes: require('../models/LinkCode'),
-    // Adaptive learning (services/learning): levels, settings, goals, per-skill mastery.
+    // Adaptive learning (services/learning): levels, settings, goals, per-skill mastery, the decision log.
     learningProfile: require('../models/learning/LearnerProfile'),
     skillMastery: require('../models/learning/SkillMastery'),
+    learningDecisions: require('../models/learning/LearningDecision'),
   }
 }
 

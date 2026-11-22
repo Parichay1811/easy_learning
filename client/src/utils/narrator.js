@@ -53,6 +53,10 @@ const listeners = new Set();
 let job = null; // the narration now
 let lastRequest = null; // for replay
 let seq = 0;
+// Bumped by every stop: a narration still waiting in the queue (`queue: true`)
+// when the one before it was stopped never starts. Without this a page change,
+// a language change or Stop would let the queued words speak on afterwards.
+let epoch = 0;
 
 function player() {
   if (!audio && typeof Audio !== "undefined") audio = new Audio();
@@ -83,6 +87,25 @@ const norm = (tag) => String(tag || "").toLowerCase().replace("_", "-");
 // Novelty and robotic voices (macOS ships "Bells", "Zarvox"…) never read a lesson.
 const NOVELTY = /albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy|compact|espeak|robot/;
 
+// Chrome fills the list only after its first "voiceschanged": before deciding
+// that a language has no voice, wait a moment for the list (once).
+function voicesReady(ms = 800) {
+  if (!synth) return Promise.resolve();
+  if (!voices.length) loadVoices();
+  if (voices.length) return Promise.resolve();
+  return new Promise((resolve) => {
+    let t = 0;
+    const done = () => {
+      clearTimeout(t);
+      try { synth.removeEventListener?.("voiceschanged", done); } catch { /* old browser */ }
+      loadVoices();
+      resolve();
+    };
+    t = setTimeout(done, ms);
+    try { synth.addEventListener?.("voiceschanged", done); } catch { /* old browser */ }
+  });
+}
+
 // The most natural installed voice that speaks this language, or null. A voice
 // of another language is never used: a wrong voice reads the words in its own
 // accent, which sounds like another language altogether.
@@ -108,9 +131,11 @@ function browserVoice(lang) {
 
 /**
  * Calls fn(event) as narration happens; returns an unsubscribe function.
- * event.type: "start" | "sentence" | "pause" | "resume" | "end".
+ * event.type: "start" | "sentence" | "pause" | "resume" | "end" | "unavailable".
  * "sentence" carries { text (as written, for captions), index, total, source:
- * "server" | "browser" | "none" }; "end" carries { ok }.
+ * "server" | "browser" | "none" }; "end" carries { ok }; "unavailable" carries
+ * { lang, id }: this device has no voice for that language (and the server
+ * voice is not there), so nothing is said and the words are only shown.
  */
 export function onNarration(fn) {
   listeners.add(fn);
@@ -221,13 +246,12 @@ function playClip(j, blob) {
 function utter(j, text) {
   return new Promise((resolve) => {
     if (!synth || typeof SpeechSynthesisUtterance === "undefined") return resolve("none");
-    const u = new SpeechSynthesisUtterance(text);
+    // Only ever a voice of the text's language (saySegment checked there is one).
     const v = browserVoice(j.lang);
-    if (v) u.voice = v;
-    else if (!j.warnedNoVoice) { j.warnedNoVoice = true; j.onNoVoice?.(); }
-    // Always the text's language, even with no voice chosen: the browser then
-    // picks its own voice for that language, never the page's default.
-    u.lang = v?.lang || j.lang;
+    if (!v) return resolve("none");
+    const u = new SpeechSynthesisUtterance(text);
+    u.voice = v;
+    u.lang = v.lang || j.lang;
     u.rate = j.rate;
     u.pitch = j.pitch;
     if (j.volume != null) u.volume = j.volume;
@@ -280,7 +304,18 @@ async function saySegment(j, seg, i) {
       }
       if (j.source === "server") j.mixed = true;
     }
-    j.source = synth ? "browser" : "none";
+    // The browser's voice, but only one that speaks this language. Without one
+    // nothing is said (some browsers would read it in their default voice, in
+    // another language): the words go to the captions, and listeners hear
+    // "unavailable" once so they can say why.
+    if (synth) await voicesReady();
+    if (j.stopped) return "stopped";
+    j.source = synth && browserVoice(j.lang) ? "browser" : "none";
+    if (j.source === "none" && !j.warnedNoVoice) {
+      j.warnedNoVoice = true;
+      j.onNoVoice?.();
+      emit({ type: "unavailable", lang: j.lang, id: j.id });
+    }
     emitSentence(j, seg, i);
     if (j.source === "none") return "none";
     const r = await utter(j, seg.say);
@@ -322,6 +357,7 @@ async function run(j) {
 
 /** Stops whatever the narrator is saying. */
 export function stopNarration() {
+  epoch += 1;
   const j = job;
   if (!j || j.done) return;
   j.stopped = true;
@@ -426,9 +462,14 @@ export function narrate(text, opts = {}) {
 
   if (queue && job && !job.done) {
     const before = job;
+    const mine = epoch;
     return new Promise((resolve) => {
       const off = onNarration((e) => {
-        if (e.type === "end" && e.id === before.id) { off(); resolve(start()); }
+        if (e.type !== "end" || e.id !== before.id) return;
+        off();
+        // Stopped (or replaced) while waiting: say nothing.
+        if (epoch !== mine) { resolve(false); return; }
+        resolve(start());
       });
     });
   }

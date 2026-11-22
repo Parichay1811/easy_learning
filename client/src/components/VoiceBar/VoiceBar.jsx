@@ -21,7 +21,8 @@ export default function VoiceBar({ hidden = false }) {
   const n = useNarration();
   const hosted = useHasVoiceBarHost();
   const show = !hidden && !hosted && (n.speaking || n.recent);
-  const captions = prefs.captions && n.caption !== false && n.sentence;
+  // With no voice the words are the only way to get the message: shown whatever the Captions setting.
+  const captions = (prefs.captions || n.source === "none") && n.caption !== false && n.sentence;
 
   return (
     <div className={styles.dock} aria-hidden={show ? undefined : "true"}>
@@ -30,13 +31,17 @@ export default function VoiceBar({ hidden = false }) {
       {show && (
         <div className={`${styles.bar} ${captions ? "" : styles.compact}`} role="region" aria-label={t("voiceBar.label", "The teacher's voice")}>
           {captions ? (
-            <p className={styles.caption} aria-hidden="true">
+            <p className={`${styles.caption} ${n.source === "none" ? styles.allWords : ""}`} aria-hidden="true">
               <FaClosedCaptioning className={styles.ccIcon} aria-hidden="true" />
               <span>{n.sentence}</span>
             </p>
           ) : null}
           {n.source === "none" && (
-            <span className={styles.note}>{t("voiceBar.noVoice", "No voice on this device: here are the words.")}</span>
+            <span className={styles.note} data-no-voice={n.unavailable || ""}>
+              {n.unavailable
+                ? t("journey.voice.noVoiceLang", "No voice for this language on this device. Here are the words.")
+                : t("voiceBar.noVoice", "No voice on this device: here are the words.")}
+            </span>
           )}
           <div className={styles.controls}>
             {n.speaking ? (
@@ -67,13 +72,29 @@ export default function VoiceBar({ hidden = false }) {
   );
 }
 
-/** Stops the teacher mid-sentence when the page changes (mounted in App.jsx, inside the Router). */
+/**
+ * Stops the teacher mid-sentence when the page changes, and when the learner
+ * picks another language: words already on their way are in the old language,
+ * and the page fetches its text again in the new one (mounted in App.jsx,
+ * inside the Router).
+ */
 export function StopVoiceOnNavigate() {
   const { pathname } = useLocation();
+  const { i18n } = useTranslation();
   const first = useRef(true);
   useEffect(() => {
     if (first.current) { first.current = false; return; }
     stopNarration();
   }, [pathname]);
+  useEffect(() => {
+    let lang = i18n.language;
+    const onChange = (next) => {
+      if (next === lang) return;
+      lang = next;
+      stopNarration();
+    };
+    i18n.on("languageChanged", onChange);
+    return () => i18n.off("languageChanged", onChange);
+  }, [i18n]);
   return null;
 }

@@ -15,7 +15,8 @@ const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
 
 // The end of a round: the mascot celebrates, the stars land one by one, and
 // there are two clear ways on: play again, or go back.
-export default function RoundComplete({ module: mod, subject, mode, stars, bonusStars, total = 10, onPlayAgain, onBack }) {
+// `challenge`: a mini challenge (a few questions one step up) ended: said as such, praise for trying.
+export default function RoundComplete({ module: mod, subject, mode, stars, bonusStars, total = 10, onPlayAgain, onBack, challenge = false }) {
   const { t, i18n } = useTranslation();
   const reduce = useReducedMotion();
   const isPractice = mode !== "warrior";
@@ -41,7 +42,7 @@ export default function RoundComplete({ module: mod, subject, mode, stars, bonus
     return () => clearTimeout(id);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const subtitle = `${t(`subjectPage.modules.${mod}.label`, { defaultValue: mod })} · ${t(`subjectPage.${subject}.label`, { defaultValue: subject })}`;
+  const subtitle = `${challenge ? t("journey.challenge.title", "Mini challenge") : t(`subjectPage.modules.${mod}.label`, { defaultValue: mod })} · ${t(`subjectPage.${subject}.label`, { defaultValue: subject })}`;
 
   return (
     <FramerMotion.motion.div
@@ -74,7 +75,7 @@ export default function RoundComplete({ module: mod, subject, mode, stars, bonus
             {!isPractice && <GiCrossedSwords className={styles.swords} aria-hidden="true" />}
             <h1 id="round-complete-title" className={styles.title}>
               {isPractice
-                ? t("roundComplete.title")
+                ? (challenge ? t("journey.challenge.doneTitle", "Challenge finished!") : t("roundComplete.title"))
                 : passed
                   ? t("roundComplete.warriorPassed")
                   : t("roundComplete.warriorAlmost", { defaultValue: "So close, warrior!" })}

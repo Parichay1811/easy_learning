@@ -1,0 +1,96 @@
+/* Stages 0-5 as steps: a staircase that climbs to the right on wide screens,
+   a numbered list on phones. One green hue, light to dark, marks the climb. */
+.ladder {
+  --rise: clamp(0px, 1.5vw, 24px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 12px;
+}
+.rung {
+  --c: #b7e4c7;
+  --ink: #12391f;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  /* Every step ends on the same floor and starts a little higher than the
+     one before: a staircase that climbs to the right. */
+  margin-top: calc((5 - var(--i)) * var(--rise));
+  padding: 14px 14px 16px;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 2px solid #e6e1f5;
+  border-top: 8px solid var(--c);
+  box-shadow: 0 4px 0 #e6e1f5;
+}
+.rung:nth-child(2) { --c: #95d5b2; }
+.rung:nth-child(3) { --c: #74c69d; }
+.rung:nth-child(4) { --c: #2f7a57; --ink: #ffffff; }
+.rung:nth-child(5) { --c: #2d6a4f; --ink: #ffffff; }
+.rung:nth-child(6) { --c: #1b4332; --ink: #ffffff; }
+
+.rungHead { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.num {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--c);
+  color: var(--ink);
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.name { margin: 0; min-width: 0; max-width: 100%; font-size: 1.08rem; font-weight: 700; line-height: 1.2; color: #2b2350; overflow-wrap: break-word; }
+.what { margin: 0; font-size: 0.95rem; line-height: 1.45; color: #4a4370; }
+.example {
+  margin: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #16234a;
+  color: #fff7d6;
+  font-size: 0.93rem;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.exLabel { display: block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: #a0e8ff; }
+.tried {
+  align-self: flex-start;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #f3f0ff;
+  color: #3b2f8f;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.notes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: clamp(18px, 3vw, 28px); }
+.note {
+  margin: 0;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: #f3f0ff;
+  color: #2b2350;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.noteIcon { flex: none; margin-top: 4px; color: #5b4bd6; }
+
+@media (max-width: 1100px) {
+  .ladder { grid-template-columns: repeat(3, minmax(0, 1fr)); --rise: 0px; }
+  .rungHead { flex-direction: row; align-items: center; }
+}
+@media (max-width: 760px) {
+  .ladder { grid-template-columns: minmax(0, 1fr); }
+  .notes { grid-template-columns: minmax(0, 1fr); }
+  .rung { border-top-width: 2px; border-left: 8px solid var(--c); }
+}

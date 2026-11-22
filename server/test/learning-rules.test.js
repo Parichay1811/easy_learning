@@ -81,11 +81,11 @@ test('mastery: a right answer never lowers it; independent weighs most; a miss l
 test('skill state: new -> learning -> mastered (needs recall on two separate days) -> review_due', () => {
   let s = null
   assert.equal(skillState(s, T0), 'new')
-  for (let i = 0; i < 6; i++) s = updateSkill(s || {}, { outcome: 'independent', itemLevel: 1 }, at(0, i / 10)).skill
+  for (let i = 0; i < 6; i++) s = updateSkill(s || {}, { outcome: 'independent', itemLevel: 1, questionId: `Q${i % 2}` }, at(0, i / 10)).skill
   assert.ok(s.mastery >= cfg.masteredAt)
   assert.equal(s.box, 1, 'same day: one box only')
   assert.equal(skillState(s, at(0, 1)), 'learning')
-  const r = updateSkill(s, { outcome: 'independent', itemLevel: 1 }, at(1, 1))
+  const r = updateSkill(s, { outcome: 'independent', itemLevel: 1, questionId: 'Q0' }, at(1, 1))
   assert.equal(r.skill.box, 2)
   assert.equal(skillState(r.skill, at(1, 2)), 'mastered')
   assert.equal(r.events.newlyMastered, true)

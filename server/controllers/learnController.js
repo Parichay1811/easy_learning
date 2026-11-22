@@ -4,6 +4,7 @@ const cfg = require('../config/learning')
 const actions = require('../services/learning/actions')
 const store = require('../services/learning/store')
 const validate = require('../services/learning/validate')
+const { validTz } = require('../analytics/record')
 
 const STATUSES = ['correct', 'close', 'incorrect', 'uncertain', 'ungraded']
 const emailOf = (req) => String(req.user?.email || '').toLowerCase()
@@ -44,7 +45,29 @@ function roundQuery(q, { needModule = true } = {}) {
     skill = String(q.skill)
     if (!validate.SKILL_RE.test(skill)) errors.push('skill must be a skill id like "maths.subtraction-within-10"')
   }
-  return { value: { subject, module, lang, size, seed, skill }, errors }
+  // ?mode=challenge (3 items one stage up on a strong skill) | discovery (everyday items); ?resume=1
+  let mode = null
+  if (q.mode !== undefined && q.mode !== '') {
+    mode = String(q.mode).toLowerCase()
+    if (!cfg.ROUND_MODES.includes(mode)) errors.push(`mode must be one of ${cfg.ROUND_MODES.join(', ')}`)
+  }
+  const resume = TRUE.includes(String(q.resume || '').toLowerCase())
+  // ?source=next|welcome|journey|explore|challenge|discovery: the learner chose this round from there.
+  let source = null
+  if (q.source !== undefined && q.source !== '') {
+    source = String(q.source).toLowerCase()
+    if (!cfg.CHOICE_SOURCES.includes(source)) errors.push(`source must be one of ${cfg.CHOICE_SOURCES.join(', ')}`)
+  }
+  return { value: { subject, module, lang, size, seed, skill, mode, resume, source }, errors }
+}
+
+const TRUE = ['1', 'true', 'yes']
+const tzOf = (req) => validTz(req.get?.('x-timezone') || 'UTC')
+// ?lang= on the journey endpoints (the texts come back in English with keys; lang is checked, not required).
+function langQuery(q, errors) {
+  const lang = String(q.lang || '').toLowerCase()
+  if (lang && !LANG_RE.test(lang)) errors.push('lang must be a language code like "de"')
+  return lang
 }
 
 // GET /api/learn/profile
@@ -76,11 +99,59 @@ const answerSuggestion = handle(async (req, res) => {
   res.json({ success: true, ...result, ...(await actions.view(emailOf(req))) })
 })
 
-// GET /api/learn/round?subject=maths&module=write&lang=de&size=10[&seed=][&skill=<id>]
+// GET /api/learn/round?subject=maths&module=write&lang=de&size=10[&seed=][&skill=<id>][&mode=challenge|discovery][&resume=1][&source=next|...]
 const getRound = handle(async (req, res) => {
   const { value, errors } = roundQuery(req.query)
   if (errors.length) return bad(res, errors)
   res.json({ success: true, ...(await actions.round(emailOf(req), value)) })
+})
+
+// DELETE /api/learn/round/resume?subject=&module= — "Start fresh": forget the unfinished round.
+const deleteResume = handle(async (req, res) => {
+  const { value, errors } = roundQuery(req.query)
+  if (errors.length) return bad(res, errors)
+  res.json({ success: true, ...(await actions.dropResume(emailOf(req), value)) })
+})
+
+// GET /api/learn/welcome?lang=[&calm=1] — a welcome-back message built only from stored history.
+const getWelcome = handle(async (req, res) => {
+  const errors = []
+  langQuery(req.query, errors)
+  if (errors.length) return bad(res, errors)
+  const calm = TRUE.includes(String(req.query.calm || '').toLowerCase())
+  res.json({ success: true, ...(await actions.welcome(emailOf(req), { name: req.user?.name, calm })) })
+})
+
+// GET /api/learn/next?lang= — "What next?", ranked, at most 6.
+const getNext = handle(async (req, res) => {
+  const errors = []
+  langQuery(req.query, errors)
+  if (errors.length) return bad(res, errors)
+  res.json({ success: true, ...(await actions.next(emailOf(req), { tz: tzOf(req) })) })
+})
+
+// GET /api/learn/discovery?lang= — today's quick discovery (one everyday question).
+const getDiscovery = handle(async (req, res) => {
+  const errors = []
+  const lang = langQuery(req.query, errors)
+  if (errors.length) return bad(res, errors)
+  res.json({ success: true, ...(await actions.discovery(emailOf(req), { lang, tz: tzOf(req) })) })
+})
+
+// GET /api/learn/journey — stages per subject for the journey map.
+const getJourney = handle(async (req, res) => {
+  const subjects = await actions.journey(emailOf(req))
+  res.json({ success: true, subjects, ...subjects })
+})
+
+// GET /api/learn/decisions?limit= — the learner's recent engine decisions, in plain words.
+const getDecisions = handle(async (req, res) => {
+  let limit = 20
+  if (req.query.limit !== undefined) {
+    limit = Number(req.query.limit)
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) return bad(res, ['limit must be a whole number from 1 to 100'])
+  }
+  res.json({ success: true, decisions: await actions.decisions(emailOf(req), { limit }) })
 })
 
 // GET /api/learn/baseline?subject=maths&module=read&lang=
@@ -115,4 +186,7 @@ const getCompanion = handle(async (req, res) => {
   res.json({ success: true, ...(await actions.companion(emailOf(req), req.user?.name)) })
 })
 
-module.exports = { getProfile, putProfile, deleteProfile, answerSuggestion, getRound, getBaseline, postBaseline, getCompanion, handle, roundQuery }
+module.exports = {
+  getProfile, putProfile, deleteProfile, answerSuggestion, getRound, getBaseline, postBaseline, getCompanion, handle, roundQuery,
+  deleteResume, getWelcome, getNext, getDiscovery, getJourney, getDecisions,
+}

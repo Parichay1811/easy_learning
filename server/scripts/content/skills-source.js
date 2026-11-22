@@ -35,6 +35,7 @@ module.exports = [
   { id: 'english.written-answers', subject: 'english', name: 'Answering in writing', objective: 'Write a short answer that explains why.', level: 5, prerequisites: ['english.reading-comprehension'] },
   { id: 'english.composition', subject: 'english', name: 'Writing a few sentences', objective: 'Write two or three connected sentences about a topic.', level: 5, prerequisites: ['english.sentence-building'] },
   { id: 'english.speaking-opinions', subject: 'english', name: 'Sharing what you think', objective: 'Say what you think and give a reason.', level: 5, prerequisites: ['english.answering-aloud'] },
+  { id: 'english.signs-labels', subject: 'english', name: 'Reading signs and labels', objective: 'Read a short everyday sign or label and say what it tells you to do.', level: 1, prerequisites: ['english.word-picture-match'] },
 
   // ── Maths ──
   { id: 'maths.counting', subject: 'maths', name: 'Counting objects', objective: 'Count a group of objects and say or write how many.', level: 0, prerequisites: [] },
@@ -71,6 +72,7 @@ module.exports = [
   { id: 'maths.fractions-decimals-percentages', subject: 'maths', name: 'Using fractions, decimals and percentages', objective: 'Convert between simple fractions, decimals and percentages and find a percentage of an amount.', level: 6, prerequisites: ['maths.fractions'] },
   { id: 'maths.ratio', subject: 'maths', name: 'Sharing in a ratio', objective: 'Share in a ratio and scale a recipe or amount up or down.', level: 7, prerequisites: ['maths.fractions-decimals-percentages', 'maths.multiplication'] },
   { id: 'maths.linear-equations', subject: 'maths', name: 'Solving simple equations', objective: 'Solve one- and two-step equations such as 3x + 4 = 19.', level: 7, prerequisites: ['maths.missing-number', 'maths.negative-numbers'] },
+  { id: 'maths.sharing-equally', subject: 'maths', name: 'Sharing equally', objective: 'Share a small number of things equally between people and say how many each gets.', level: 1, prerequisites: ['maths.counting'] },
   { id: 'maths.powers', subject: 'maths', name: 'Working with powers and square roots', objective: 'Work out squares, cubes, powers of ten and square roots.', level: 8, prerequisites: ['maths.multiplication', 'maths.linear-equations'] },
 
   // ── Science ──
@@ -97,5 +99,9 @@ module.exports = [
   { id: 'science.data', subject: 'science', name: 'Reading science charts', objective: 'Read and compare results in a simple chart.', level: 4, prerequisites: ['science.comparing'] },
   { id: 'science.reading-passages', subject: 'science', name: 'Reading about science', objective: 'Read a short science passage and answer a question about it.', level: 4, prerequisites: ['science.facts'] },
   { id: 'science.explaining', subject: 'science', name: 'Explaining science ideas', objective: 'Explain a science idea in your own words.', level: 4, prerequisites: ['science.cause-effect'] },
+  { id: 'science.materials', subject: 'science', name: 'Knowing everyday materials', objective: 'Say what everyday materials are like (see-through, waterproof, floats or sinks) and pick the right one for a job.', level: 1, prerequisites: ['science.vocabulary'] },
+  { id: 'science.heating-cooling', subject: 'science', name: 'Heating and cooling', objective: 'Say what warming and cooling do to everyday things such as ice, water and food.', level: 1, prerequisites: ['science.facts'] },
+  { id: 'science.light-sound', subject: 'science', name: 'Light and sound around us', objective: 'Say what makes light or sound and how we use light to see.', level: 1, prerequisites: ['science.vocabulary'] },
+  { id: 'science.colour-mixing', subject: 'science', name: 'Mixing colours', objective: 'Say what colour two paints make when they are mixed.', level: 1, prerequisites: ['science.vocabulary'] },
   { id: 'science.inference', subject: 'science', name: 'Reasoning from facts', objective: 'Use given facts to reach the best conclusion.', level: 5, prerequisites: ['science.cause-effect', 'science.classifying'] },
 ]

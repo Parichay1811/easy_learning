@@ -3,7 +3,8 @@ import { onNarration, getNarrationState } from "../../utils/narrator";
 
 /**
  * What the narrator is saying, for captions and controls:
- * { speaking, paused, sentence, source, id, recent (just finished) }.
+ * { speaking, paused, sentence, source, id, recent (just finished), unavailable (a language
+ * this device has no voice for: the words are shown instead) }.
  */
 export function useNarration() {
   const [state, setState] = useState(() => ({ ...getNarrationState(), id: 0, lastEnded: 0, recent: false }));
@@ -16,11 +17,15 @@ export function useNarration() {
     }
     setState((s) => {
       switch (e.type) {
-        case "start": return { ...s, speaking: true, paused: false, sentence: "", id: e.id, source: null, caption: e.caption !== false };
+        case "start": return { ...s, speaking: true, paused: false, sentence: "", id: e.id, source: null, caption: e.caption !== false, unavailable: null };
+        case "unavailable": return e.id === s.id ? { ...s, unavailable: e.lang || true } : s;
         case "sentence": return { ...s, speaking: true, sentence: e.text, source: e.source, id: e.id, caption: e.caption !== false };
         case "pause": return { ...s, paused: true };
         case "resume": return { ...s, paused: false };
-        case "end": return e.id === s.id ? { ...s, speaking: false, paused: false, recent: true, source: e.source || s.source } : s;
+        // Nothing was said (no voice): all the words stay up, not just the last sentence.
+        case "end": return e.id === s.id
+          ? { ...s, speaking: false, paused: false, recent: true, source: e.source || s.source, ...(e.source === "none" && e.text ? { sentence: e.text } : {}) }
+          : s;
         default: return s;
       }
     });

@@ -4,6 +4,7 @@ const StudentAchievement = require('../models/StudentAchievement')
 const StudentAnswer      = require('../models/StudentAnswer')
 const StudentRound       = require('../models/StudentRound')
 const { processAnswer }  = require('../services/learning/engine')
+const growth = require('../services/learning/achievements')
 
 // ── Achievement definitions ────────────────────────────────────────────────────
 const ACHIEVEMENTS = [
@@ -17,8 +18,11 @@ const ACHIEVEMENTS = [
   { id: 'week_warrior',    name: 'Week Warrior',     icon: '⚔️', description: 'Active 7 days in a row', category: 'streak', xp: 100 },
   { id: 'century',         name: 'Century',          icon: '💯', description: 'Earn 100 XP', category: 'xp', xp: 0 },
   { id: 'champion',        name: 'Champion',         icon: '🏆', description: 'Earn 500 XP', category: 'xp', xp: 0 },
-  { id: 'early_bird',      name: 'Early Bird',       icon: '🐦', description: 'Study before 8 AM', category: 'special', xp: 20 },
-  { id: 'night_owl',       name: 'Night Owl',        icon: '🦉', description: 'Study after 9 PM', category: 'special', xp: 20 },
+  // Retired: no longer awarded (learning is not rewarded for the hour of the day); badges already earned stay visible.
+  { id: 'early_bird',      name: 'Early Bird',       icon: '🐦', description: 'Study before 8 AM', category: 'special', xp: 20, retired: true },
+  { id: 'night_owl',       name: 'Night Owl',        icon: '🦉', description: 'Study after 9 PM', category: 'special', xp: 20, retired: true },
+  // Growth badges (services/learning/achievements.js): awarded from log-answer with their evidence.
+  ...growth.listEntries(),
 ]
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
@@ -56,12 +60,10 @@ async function checkAndAwardAchievements(email) {
 
   const moduleCounts = {}
   const subjects = new Set()
-  const hours = []
   allActivity.forEach(day => {
     day.sessions.forEach(s => {
       moduleCounts[s.module] = (moduleCounts[s.module] || 0) + 1
       if (s.subject && s.subject !== 'general') subjects.add(s.subject)
-      if (s.startTime) hours.push(new Date(s.startTime).getUTCHours())
     })
   })
 
@@ -88,9 +90,7 @@ async function checkAndAwardAchievements(email) {
   if (streak >= 7) await award('week_warrior')
   if (totalXP >= 100) await award('century')
   if (totalXP >= 500) await award('champion')
-
-  if (hours.some(h => h < 8))  await award('early_bird')
-  if (hours.some(h => h >= 21)) await award('night_owl')
+  // early_bird / night_owl are no longer awarded (see ACHIEVEMENTS).
 
   return newAchievements
 }
@@ -214,15 +214,22 @@ const getActivity = async (req, res) => {
 const getAchievements = async (req, res) => {
   try {
     const { email } = req.user
-    const earned = await StudentAchievement.find({ email }).lean()
+    const earned = await StudentAchievement.collection.find({ email: String(email).toLowerCase() }).toArray()
     const earnedMap = {}
-    earned.forEach(a => { earnedMap[a.achievementId] = a.earnedAt })
+    earned.forEach(a => { earnedMap[a.achievementId] = a })
 
-    const result = ACHIEVEMENTS.map(def => ({
-      ...def,
-      earned: !!earnedMap[def.id],
-      earnedAt: earnedMap[def.id] || null,
-    }))
+    // Retired badges show only when earned; growth badges carry their evidence ({ key, params, text }).
+    const result = ACHIEVEMENTS.filter(def => !def.retired || earnedMap[def.id]).map(def => {
+      const got = earnedMap[def.id]
+      const out = { ...def, earned: !!got, earnedAt: got?.earnedAt || null }
+      if (def.category === 'growth') {
+        const view = growth.badgeView(def.id, got?.evidence || {})
+        out.key = view.key
+        out.desc = view.desc
+        if (got) out.evidence = view.evidence
+      }
+      return out
+    })
 
     res.json({ success: true, data: result })
   } catch (err) {
@@ -275,7 +282,7 @@ const logAnswer = async (req, res) => {
         xpEarned: xpEarned || 0,
         timeTaken: (typeof timeTaken === 'number' && timeTaken > 0) ? timeTaken : null,
         mode: mode || 'practice',
-        questionId: typeof req.body.questionId === 'string' ? req.body.questionId.slice(0, 60) : null,
+        questionId: typeof req.body.questionId === 'string' ? req.body.questionId.slice(0, 60) : Number.isInteger(req.body.questionId) ? String(req.body.questionId) : null,
         topic: typeof req.body.topic === 'string' ? req.body.topic.slice(0, 80) : null,
         hintsUsed: Math.max(0, Math.min(10, Number(req.body.hintsUsed) || 0)),
       })

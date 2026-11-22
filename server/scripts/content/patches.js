@@ -350,4 +350,53 @@ const patches = [
   { match: /^SCI-SPK-T09-/, category: 'wrong_key', severity: 'blocking', reason: 'Keywords ["bigger","elephant"] with "half must match" accepted "the mouse is bigger"; now the comparison itself is checked.', apply() {} },
 ]
 
-module.exports = { patches, LANGS, stripParen }
+// ═════════ Content v4 repairs (2026-11-21) ═════════
+const { RHYMES, ENGLISH_SPEAK_KEYWORDS } = require('./rules')
+const v4 = [
+  { match: /^(EN-LIS-T01|EN-LIS-T09|MA-LIS-T13)-/, category: 'mode_mismatch', severity: 'blocking', reason: 'The picture badge on these listening items showed the right answer (🧼 for "soap", ⛑️ for "helmet", 📏 for "ruler"), so the item could be answered without listening. Now a neutral 👂.',
+    apply(q) { q.image = { ...q.image, emoji: '👂' } } },
+  { match: /^EN-SPK-T06-/, category: 'checker_support', severity: 'warning', reason: 'speech_scoring.expected_keywords held the word to rhyme WITH. The checker never used it (validation lists the rhymes and has not_prompt), but any other reader of expected_keywords would accept the prompt word. Now it lists real rhymes.',
+    apply(q) { q.speech_scoring = { ...q.speech_scoring, expected_keywords: RHYMES[q.id].filter((w) => w !== String(q.prompt).toLowerCase()).slice(0, 6) } } },
+  { match: /^EN-SPK-T12-/, category: 'checker_support', severity: 'warning', reason: 'speech_scoring.expected_keywords held the category word ("animal", "safe"). The checker never used it (validation lists category members, min 2), but any other reader would accept the category word itself. Now it lists examples.',
+    apply(q) {
+      const d = ENGLISH_SPEAK_KEYWORDS[q.id]
+      const examples = d ? d.list.slice(0, 8) : String(q.speech_scoring.sample_answer || '').split(',').map((x) => x.trim()).filter(Boolean)
+      q.speech_scoring = { ...q.speech_scoring, expected_keywords: examples }
+    } },
+]
+patches.push(...v4)
+
+// ═════════ Stage overrides (content v4) ═════════
+// stages.js derives `stage` (0-5) from cognition.bloom + interaction. These reviewed overrides
+// win where the Bloom tag is clearly wrong for the kind of thinking the item asks for, and for
+// the generated starter / stretch items, whose builder gave every item the default "remember".
+// Each entry: { ids | match, stage, reason }.
+const F = (prefix, nums) => ids(`${prefix}-F00`, nums)
+const S = (prefix, nums) => ids(prefix, nums)
+const stageOverrides = [
+  // Original bank
+  { match: /^EN-(LIS-T0[4-7]|RD-T08|SPK-T07)-/, stage: 3, reason: 'Rhyme, first/last sound and syllable items apply sound knowledge to one word; Bloom "analyze" (splitting a word) overstates it as reasoning.' },
+  { match: /^(MA-LIS-T07|MA-SPK-T06|SCI-SPK-T09|SCI-RD-T10)-/, stage: 2, reason: 'Saying which of two named things is bigger, heavier or faster is understanding one comparison, not multi-step reasoning.' },
+  { match: /^(MA-RD-T05|MA-WR-T07)-/, stage: 3, reason: 'Choosing <, > or = applies the comparison symbols to two numbers or sums.' },
+  { match: /^EN-RD-T09-/, stage: 1, reason: 'Spotting a named word in a line is recognition (Bloom "apply" overstated).' },
+  { match: /^(EN-LIS-T12|SCI-RD-T11|SCI-LIS-T10)-/, stage: 3, reason: 'Selecting every item of a category named in the question applies a given rule; nothing has to be worked out.' },
+  { match: /^(MA-LIS-T11|MA-WR-T12|MA-SPK-T14)-/, stage: 4, reason: 'Two-step problems: planning and chaining two operations is reasoning, not one-step application.' },
+  { match: /^SCI-SPK-T12-/, stage: 4, reason: 'Explaining what would happen and why is reasoning about cause and effect.' },
+  { match: /^SCI-SPK-T14-/, stage: 5, reason: 'Designing a test for a new question transfers the fair-test idea to a new situation.' },
+  { match: /^EN-WR-T11-/, stage: 3, reason: 'A caption for a picture applies sentence writing; it is not transfer to a new situation.' },
+  // Generated starter items (level 0): reviewed per item type
+  { ids: F('EN-LIS', [1, 3, 4, 5, 6, 7, 8]), stage: 2, reason: 'Starter: understanding one short spoken sentence.' },
+  { ids: F('EN-RD', [1, 2, 3, 4, 5, 6, 7, 8]), stage: 2, reason: 'Starter: understanding one short written sentence or word (as EN-RD-T01/T11).' },
+  { ids: F('EN-SPK', [4, 8]), stage: 2, reason: 'Starter: answering a spoken question shows understanding.' },
+  { ids: [...F('EN-SPK', [3, 6]), ...F('SCI-SPK', [4])], stage: 3, reason: 'Starter: reading a word aloud applies decoding (as EN-SPK-T04, SCI-SPK-T04).' },
+  { ids: F('EN-WR', [1, 2, 3, 4, 5, 8]), stage: 3, reason: 'Starter: spelling a heard word, building a sentence or choosing "am/are" applies a rule (as EN-WR-T02/T03/T04/T05/T12).' },
+  { ids: [...F('MA-LIS', [1, 2, 3, 4, 6, 8]), ...F('MA-RD', [1, 2, 3, 4, 5, 8]), ...F('MA-SPK', [3, 5, 7]), ...F('MA-WR', [1, 3, 4, 5, 6, 8])], stage: 3, reason: 'Starter: working out a sum, a difference, the next number or a one-step story applies a procedure (as MA-RD-T02, MA-LIS-T06).' },
+  { ids: F('MA-LIS', [7]), stage: 2, reason: 'Starter: saying which of two numbers is more is understanding one comparison.' },
+  { ids: F('SCI-RD', [1, 2, 3, 4, 5, 6, 7, 8]), stage: 2, reason: 'Starter: read one fact, then answer from it: understanding a sentence.' },
+  { ids: F('SCI-WR', [1, 2, 3, 4, 5]), stage: 3, reason: 'Starter: spelling the word for a picture (as SCI-WR-T01, tagged apply).' },
+  // Generated maths stretch items (levels 6-8)
+  { ids: [...S('MA-LIS-S06', [1, 2, 3, 4]), ...S('MA-LIS-S07', [1, 2]), ...S('MA-LIS-S08', [1, 2]), ...S('MA-RD-S06', [1]), ...S('MA-RD-S07', [1, 2, 3]), ...S('MA-RD-S08', [1, 2]), ...S('MA-WR-S06', [1, 2, 3, 4]), ...S('MA-WR-S07', [1, 2, 3]), ...S('MA-WR-S08', [1, 2, 3])], stage: 3, reason: 'Stretch: calculating with negatives, percentages, ratio, equations or powers applies a procedure.' },
+  { ids: S('MA-RD-S06', [2, 3, 4]), stage: 2, reason: 'Stretch: ordering negative numbers and matching equal fractions, decimals and percentages is understanding.' },
+]
+
+module.exports = { patches, LANGS, stripParen, stageOverrides }

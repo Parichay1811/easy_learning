@@ -1,0 +1,69 @@
+/* "Let's look at this idea": a calm, light card on the round's board, before
+   the question. Big readable text, two big buttons, nothing moving. */
+.card {
+  width: 100%;
+  max-width: 640px;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(8px, 1.8cqh, 16px);
+  padding: clamp(14px, 3cqh, 30px) clamp(14px, 3cqw, 32px);
+  border-radius: 26px;
+  background: #fffdf5;
+  color: #1f2a44;
+  box-shadow: 0 0 0 4px rgba(255, 212, 92, 0.55), 0 18px 40px rgba(20, 10, 0, 0.45);
+  text-align: center;
+  font-family: "Fredoka", sans-serif;
+}
+.icon {
+  width: clamp(44px, 9cqh, 64px);
+  height: clamp(44px, 9cqh, 64px);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff3bf;
+  color: #8a5a00;
+  font-size: clamp(1.3rem, 4cqh, 1.8rem);
+  flex: none;
+}
+.title { margin: 0; font-size: calc(clamp(1.2rem, 4cqh, 1.6rem) * var(--lp-text-scale, 1)); font-weight: 700; line-height: 1.25; }
+.skill {
+  margin: 0;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: #e3f6e7;
+  color: #237032;
+  font-size: calc(0.9rem * var(--lp-text-scale, 1));
+  font-weight: 600;
+}
+.note { margin: 0; color: #5a6680; font-size: calc(0.9rem * var(--lp-text-scale, 1)); font-style: italic; }
+.text {
+  margin: 0;
+  max-width: 52ch;
+  font-size: calc(clamp(1.02rem, 3.2cqh, 1.3rem) * var(--lp-text-scale, 1));
+  line-height: 1.55;
+  text-align: start;
+}
+.reading { background-image: linear-gradient(transparent 62%, rgba(255, 214, 92, 0.45) 62%); }
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 4px; }
+.speak, .ready {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 999px;
+  font: 700 calc(1.02rem * var(--lp-text-scale, 1))/1.15 "Fredoka", sans-serif;
+  cursor: pointer;
+}
+.speak { background: #dbeefe; color: #1864ab; }
+.speak[aria-pressed="true"] { box-shadow: inset 0 0 0 2px #1864ab; }
+.ready { background: #26853c; color: #fff; box-shadow: 0 4px 0 #1b5e2b; }
+.ready:active { transform: translateY(3px); box-shadow: none; }
+.speak:focus-visible, .ready:focus-visible { outline: 3px solid #1971c2; outline-offset: 3px; }
+:global(html[data-contrast="high"]) .card { background: #fff; box-shadow: 0 0 0 4px #000; }
