@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const ARSession       = require('../models/ARSession')
 const StudentActivity = require('../models/StudentActivity')
 const StudentRound    = require('../models/StudentRound')
+const { findingsInput } = require('../services/arFindingRows')
 
 // ── Limits ─────────────────────────────────────────────────────────────────────
 const MAX_TRIALS      = 400 // a round is minutes long; more than this is a bug or an attack
@@ -831,10 +832,20 @@ const getInsights = async (req, res) => {
       perGame:            journeyPerGame,
     }
 
+    // ── findings input (opt-in: ?findings=<period days>) ──
+    // The rounds of the last N days and of the N days before, as the compact
+    // rows the client's findings engine reads (services/arFindingRows.js). Kept
+    // opt-in so the existing callers' payload does not grow.
+    const findingsDays = parseInt(req.query.findings)
+    const findings = Number.isFinite(findingsDays) && findingsDays > 0
+      ? await findingsInput(email, { days: Math.min(findingsDays, Math.floor(MAX_INSIGHT_DAYS / 2)) })
+      : undefined
+
     res.json({
       success: true,
       data: {
         days, since, overall, perGame, perDomain, byHand, byPromptLevel, progression, lifeSkills, journey,
+        ...(findings && { findings }),
       },
     })
   } catch (err) {

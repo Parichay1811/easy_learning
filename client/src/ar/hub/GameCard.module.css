@@ -1,0 +1,316 @@
+/* A game card (GameCard.jsx): a picture band in the game's colour, then a
+   light body where every word is dark on near-white (contrast well over
+   4.5:1 whatever the game's colour), the level path in pictures and words,
+   and one big Play button with the read-aloud button beside it.
+   Text sizes are rem so the learner's text size setting reaches them. */
+.card {
+  --deep: #1565c0;
+  --art: linear-gradient(150deg, #6cc0ff, #2b7de0);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-radius: 22px;
+  background: #fffdf8;
+  color: #161c3a;
+  overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 12px 28px rgba(4, 8, 24, 0.32), 0 2px 0 rgba(4, 8, 24, 0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  animation: cardIn 0.3s ease-out backwards;
+  animation-delay: calc(min(var(--i, 0), 10) * 35ms);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 36px rgba(4, 8, 24, 0.38), 0 2px 0 rgba(4, 8, 24, 0.12);
+}
+
+.card[data-color="teal"] { --deep: #00796b; --art: linear-gradient(150deg, #5fdccb, #0f9d8f); }
+.card[data-color="blue"] { --deep: #1565c0; --art: linear-gradient(150deg, #7cc8ff, #2b7de0); }
+.card[data-color="red"] { --deep: #c62828; --art: linear-gradient(150deg, #ff998f, #e0453c); }
+.card[data-color="purple"] { --deep: #5b3cc4; --art: linear-gradient(150deg, #bcb0ff, #7158e8); }
+.card[data-color="orange"] { --deep: #c25400; --art: linear-gradient(150deg, #ffc875, #f5821f); }
+.card[data-color="pink"] { --deep: #ad1457; --art: linear-gradient(150deg, #ffa8c9, #e85a90); }
+.card[data-color="green"] { --deep: #2e7d32; --art: linear-gradient(150deg, #98e594, #3fa950); }
+.card[data-color="yellow"] { --deep: #9a6200; --art: linear-gradient(150deg, #ffe98a, #f7bf1e); }
+
+/* The game picked as "next up" (the same one as the big Play at the top):
+   a warm ring that breathes slowly — the only moving thing on a card, and
+   still under the less-movement setting. */
+.next {
+  border-color: #ffc94d;
+  box-shadow: 0 0 0 4px rgba(255, 201, 77, 0.55), 0 14px 32px rgba(4, 8, 24, 0.36);
+  animation: cardIn 0.3s ease-out backwards, breathe 3.2s ease-in-out 0.6s infinite;
+}
+@keyframes breathe {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(255, 201, 77, 0.55), 0 14px 32px rgba(4, 8, 24, 0.36); }
+  50% { box-shadow: 0 0 0 9px rgba(255, 201, 77, 0.28), 0 14px 32px rgba(4, 8, 24, 0.36); }
+}
+
+/* ── the picture ── */
+.art {
+  position: relative;
+  flex: none;
+  height: 7.5rem;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.28) 1.6px, transparent 2.2px) 0 0 / 18px 18px,
+    var(--art);
+  cursor: pointer;
+  overflow: hidden;
+}
+.artBlob {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(60% 90% at 0% 100%, rgba(255, 255, 255, 0.38), transparent 60%),
+    radial-gradient(45% 70% at 100% 0%, rgba(255, 255, 255, 0.3), transparent 62%);
+  pointer-events: none;
+}
+.artIcon {
+  position: relative;
+  width: 5.25rem;
+  height: 5.25rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: var(--deep);
+  font-size: 2.6rem;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18), inset 0 -4px 0 rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease;
+}
+.card:hover .artIcon { transform: scale(1.06) rotate(-4deg); }
+
+.badge {
+  position: absolute;
+  top: 10px;
+  inset-inline-start: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.16);
+}
+.badgeNew { background: #fff; color: #1b5e20; }
+.badgeNew svg { color: #2e7d32; }
+.badgeDone { background: #ffe08a; color: #4a3000; }
+
+.nextTag {
+  position: absolute;
+  top: 10px;
+  inset-inline-end: 10px;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #2b1d74;
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.22);
+}
+.nextTag svg { color: #ffd25e; }
+
+/* ── the words ── */
+.body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 16px;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #161c3a;
+  overflow-wrap: anywhere;
+}
+
+.how {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  color: #3a4363;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chip {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.5;
+  background: #eef1fa;
+  color: #263056;
+  border: 1px solid #d3d9ee;
+}
+.chipLife {
+  background: #fff1d9;
+  color: #5a3600;
+  border-color: #f0d29c;
+}
+
+/* The level path: pips for the eye, words for everyone. Pushed to the
+   bottom so the paths and Play buttons of a row of cards line up. */
+.level {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  background: #f1f3fa;
+}
+.pips { display: inline-flex; flex: none; }
+.levelText {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #263056;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* The one action. The same warm button on every card and at the top, so it
+   is learned once. Dark letters on the warm yellow (about 8:1). */
+.play {
+  flex: 1;
+  min-width: 0;
+  min-height: 3.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 6px 16px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffd766, #ffa62b);
+  color: #3b1c00;
+  font-family: inherit;
+  font-size: 1.125rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #c46a00, 0 8px 18px rgba(196, 106, 0, 0.28);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+}
+.play:hover { filter: brightness(1.05) saturate(1.08); }
+.play:active { transform: translateY(3px); box-shadow: 0 1px 0 #c46a00, 0 3px 8px rgba(196, 106, 0, 0.25); }
+.playIcon { font-size: 0.95em; }
+.playLevel {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  padding: 1px 9px;
+  border-radius: 999px;
+  background: rgba(59, 28, 0, 0.12);
+}
+
+.speak {
+  flex: none;
+  width: 3.5rem;
+  min-height: 3.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid #cfd6ec;
+  background: #eef1fa;
+  color: #263056;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.speak:hover { background: #e1e6f6; }
+.speak:active { transform: scale(0.94); }
+
+.play:focus-visible,
+.speak:focus-visible {
+  outline: 3px solid #12163a;
+  outline-offset: 3px;
+}
+
+/* ── phones: a smaller picture beside the title, the rest full width ── */
+@media (max-width: 599px) {
+  .card {
+    display: grid;
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 10px;
+    padding: 12px;
+    align-items: start;
+  }
+  .art {
+    grid-column: 1;
+    grid-row: 1;
+    height: 5.5rem;
+    border-radius: 18px;
+  }
+  .artIcon { width: 3.75rem; height: 3.75rem; font-size: 1.9rem; }
+  .badge {
+    top: auto;
+    bottom: 4px;
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    padding: 1px 7px;
+    font-size: 0.75rem;
+    gap: 3px;
+  }
+  [dir="rtl"] .badge { transform: translateX(50%); }
+  .badgeDone { font-size: 0; padding: 4px 7px; }
+  .badgeDone svg { font-size: 0.85rem; }
+  .nextTag { top: 8px; inset-inline-end: 8px; }
+  .body { display: contents; }
+  .title { grid-column: 2; grid-row: 1; align-self: center; }
+  .next .title { padding-top: 1.75rem; }
+  .how { grid-column: 1 / -1; font-size: 0.875rem; }
+  .chips, .level, .actions { grid-column: 1 / -1; }
+}
+
+/* High contrast (learner setting). */
+:global(html[data-contrast="high"]) .card { background: #fff; color: #000; border: 3px solid #fff; }
+:global(html[data-contrast="high"]) .how,
+:global(html[data-contrast="high"]) .levelText,
+:global(html[data-contrast="high"]) .chip { color: #000; }
+:global(html[data-contrast="high"]) .chip,
+:global(html[data-contrast="high"]) .level { border: 2px solid #000; background: #fff; }
+
+/* Less movement: no entrance, no lift, no breathing ring. */
+@media (prefers-reduced-motion: reduce) {
+  .card, .next { animation: none; transition: none; }
+  .card:hover, .card:hover .artIcon, .play:active, .speak:active { transform: none; }
+}
+:global([data-calm]) .card,
+:global([data-calm]) .next { animation: none; transition: none; }
+:global([data-calm]) .card:hover,
+:global([data-calm]) .card:hover .artIcon,
+:global([data-calm]) .play:active,
+:global([data-calm]) .speak:active { transform: none; }

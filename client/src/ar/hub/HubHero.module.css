@@ -1,0 +1,241 @@
+/* The "play next" banner (HubHero.jsx): a deep violet card (white text at
+   well over 7:1) with the game's picture, its level path, and one big warm
+   Play button — the same button as on every card, only bigger. */
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+/* Wide screens: a place for the live dog beside the banner, looking at Play. */
+.withDog {
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  column-gap: 8px;
+}
+.dog {
+  align-self: end;
+  margin-bottom: -10px;
+  pointer-events: none;
+}
+
+.hero {
+  --deep: #1565c0;
+  --art: linear-gradient(150deg, #7cc8ff, #2b7de0);
+  position: relative;
+  /* The banner's layout follows its own width in rem, so a big text size
+     setting gets the stacked layouts instead of a squeezed column of words. */
+  container: hero / inline-size;
+  padding: 18px 22px;
+  border-radius: 26px;
+  color: #fff;
+  background:
+    radial-gradient(420px 220px at 100% 0%, rgba(255, 166, 43, 0.38), transparent 70%),
+    radial-gradient(360px 200px at 0% 100%, rgba(66, 165, 245, 0.28), transparent 70%),
+    linear-gradient(135deg, #24196a 0%, #3b2596 55%, #4f2db4 100%);
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 16px 40px rgba(10, 6, 40, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+}
+/* Narrow (a phone): picture and words in a row, the buttons full width under them. */
+.grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas: "art text" "actions actions";
+  align-items: center;
+  gap: 12px 14px;
+}
+/* Wide: picture, words, buttons side by side. */
+@container hero (min-width: 40rem) {
+  .grid {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas: "art text actions";
+    gap: 14px 24px;
+  }
+}
+/* Very narrow (a big text size on a phone): everything stacked. */
+@container hero (max-width: 19rem) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "art" "text" "actions";
+  }
+}
+.hero[data-color="teal"] { --deep: #00796b; --art: linear-gradient(150deg, #5fdccb, #0f9d8f); }
+.hero[data-color="blue"] { --deep: #1565c0; --art: linear-gradient(150deg, #7cc8ff, #2b7de0); }
+.hero[data-color="red"] { --deep: #c62828; --art: linear-gradient(150deg, #ff998f, #e0453c); }
+.hero[data-color="purple"] { --deep: #5b3cc4; --art: linear-gradient(150deg, #bcb0ff, #7158e8); }
+.hero[data-color="orange"] { --deep: #c25400; --art: linear-gradient(150deg, #ffc875, #f5821f); }
+.hero[data-color="pink"] { --deep: #ad1457; --art: linear-gradient(150deg, #ffa8c9, #e85a90); }
+.hero[data-color="green"] { --deep: #2e7d32; --art: linear-gradient(150deg, #98e594, #3fa950); }
+.hero[data-color="yellow"] { --deep: #9a6200; --art: linear-gradient(150deg, #ffe98a, #f7bf1e); }
+
+.art {
+  grid-area: art;
+  position: relative;
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 28px;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, 0.3) 1.6px, transparent 2.2px) 0 0 / 16px 16px,
+    var(--art);
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+}
+.artIcon {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #fff;
+  color: var(--deep);
+  font-size: 2.5rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2), inset 0 -4px 0 rgba(0, 0, 0, 0.06);
+}
+
+.text {
+  grid-area: text;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.eyebrow {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 12px;
+  border-radius: 999px;
+  background: #21165e;
+  border: 1px solid rgba(255, 210, 94, 0.6);
+  color: #ffd766;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.05rem + 1.3vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.12;
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #fff;
+}
+.pips { display: inline-flex; }
+
+.detail {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: #e6e1ff;
+}
+
+.actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.play {
+  min-height: 4rem;
+  min-width: 11rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 8px 28px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffd766, #ffa62b);
+  color: #3b1c00;
+  font-family: inherit;
+  font-size: 1.375rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #c46a00, 0 12px 26px rgba(255, 166, 43, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.15s ease;
+}
+.play:hover { filter: brightness(1.05) saturate(1.08); }
+.play:active { transform: translateY(3px); box-shadow: 0 2px 0 #c46a00, 0 6px 12px rgba(255, 166, 43, 0.3); }
+.playLevel {
+  font-size: 0.875rem;
+  font-weight: 700;
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: rgba(59, 28, 0, 0.12);
+}
+
+.speak {
+  flex: none;
+  width: 3.5rem;
+  height: 3.5rem;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.speak:hover { background: rgba(255, 255, 255, 0.26); }
+.speak:active { transform: scale(0.94); }
+
+.play:focus-visible,
+.speak:focus-visible {
+  outline: 3px solid #ffd45c;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #12163a;
+}
+
+/* Narrow: a smaller picture, the Play button as wide as the banner. */
+@container hero (max-width: 39.99rem) {
+  .art { width: 5rem; height: 5rem; border-radius: 20px; align-self: start; }
+  .artIcon { width: 3.4rem; height: 3.4rem; font-size: 1.7rem; }
+  .eyebrow { font-size: 0.875rem; padding: 1px 10px; }
+  .detail { font-size: 0.875rem; }
+  .play { flex: 1; min-width: 0; font-size: 1.25rem; }
+}
+@media (max-width: 639px) {
+  .hero { padding: 14px; border-radius: 22px; }
+}
+
+/* A phone on its side: lower banner. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero { padding: 10px 14px; gap: 8px 16px; }
+  .art { width: 4.5rem; height: 4.5rem; border-radius: 18px; }
+  .artIcon { width: 3rem; height: 3rem; font-size: 1.5rem; }
+  .title { font-size: 1.375rem; }
+  .detail { display: none; }
+  .play { min-height: 3.5rem; min-width: 9rem; font-size: 1.125rem; padding: 6px 18px; }
+}
+
+:global(html[data-contrast="high"]) .hero { background: #000; border: 3px solid #fff; }
+:global(html[data-contrast="high"]) .detail { color: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  .play, .speak { transition: none; }
+  .play:active, .speak:active { transform: none; }
+}
+:global([data-calm]) .play,
+:global([data-calm]) .speak { transition: none; }
+:global([data-calm]) .play:active,
+:global([data-calm]) .speak:active { transform: none; }

@@ -8,6 +8,9 @@ import {
 import { EvidencePanel } from "../../components/learning/evidence";
 import { useLoad, rangeQuery, matrixCells, masteryKey, frac } from "./parentApi";
 import QuestionReview from "./QuestionReview";
+import AdultFindings from "../../ar/insights/AdultFindings";
+import { useFindings } from "../../ar/insights/useFindings";
+import { periodLine } from "../../ar/insights/format.js";
 import ParentPlan from "./ParentPlan";
 import s from "./parent.module.css";
 
@@ -22,7 +25,7 @@ const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : "");
 const PANES = ["growth", "subjects", "skills", "progress", "questions", "extras", "plan"];
 const NO_RANGE = ["growth", "plan"];
 export default function ParentLearning({ api, child, go }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const T = (k, d, o) => t(`parent.learn.${k}`, { defaultValue: d, ...o });
   const tr = useTimeRange({ defaultRange: "month", defaultCmp: "prev" });
   const [pane, setPane] = usePane(PANES);
@@ -40,6 +43,10 @@ export default function ParentLearning({ api, child, go }) {
   // Evidence is the learner's whole history (baseline vs now), not the picked period.
   const lrn = useLoad(api.get, pane === "growth" ? `${base}/learning` : null);
   const first = child.name.split(" ")[0];
+  // Camera-game findings for the picked period vs the one before it (ar/insights/findings.js):
+  // the server sends this child's rounds of both periods with GET …/analytics/ar.
+  const cam = useFindings(ar.data?.findings);
+  const camPlayed = (cam.result?.totals.current.played || 0) + (cam.result?.totals.previous.played || 0);
 
   const cells = useMemo(() => matrixCells(mx.data?.matrix), [mx.data]);
   const skills = useMemo(() => (sk.data?.groups || []).flatMap((g) => g.skills.map((x) => ({
@@ -156,6 +163,19 @@ export default function ParentLearning({ api, child, go }) {
       </SubPanel>
 
       <SubPanel id="extras" value={pane}>
+        {cam.result && camPlayed > 0 && (
+          <section className={s.card} aria-labelledby="p-arf-h" style={{ marginBottom: 14 }}>
+            <div className={s.cardHead}>
+              <h2 id="p-arf-h">{T("arFindings.title", "Camera games: what we noticed")}</h2>
+              <span className={s.pill}>{T("arFindings.vs", "This period vs the one before")}</span>
+            </div>
+            <p className={`${s.muted} ${s.small}`} style={{ marginTop: 0 }}>{periodLine(cam.result, t, i18n.language)}</p>
+            <AdultFindings result={cam.result} names={cam.names} where="home" />
+            <p className={`${s.muted} ${s.small}`} style={{ marginBottom: 0 }}>
+              {T("arFindings.how", "Understanding and movement are always shown separately. A change only counts when it is bigger than the normal ups and downs of play, and nothing is said about a skill before {{name}} has played it a few times. These describe play, not a diagnosis.", { name: first })}
+            </p>
+          </section>
+        )}
         <div className={s.grid2}>
           <section className={s.card} aria-labelledby="p-ai-h">
             <div className={s.cardHead}>

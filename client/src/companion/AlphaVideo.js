@@ -40,7 +40,7 @@ void main() {
   gl_FragColor = mix(px(b), px(a), k);
 }`;
 
-const MAX_VIDEOS = 5;
+const MAX_VIDEOS = 9; // all likely performances stay ready to switch to instantly
 
 export class AlphaVideo {
   constructor(canvas, { base, manifest, onFirstFrame, onFail } = {}) {
@@ -58,6 +58,8 @@ export class AlphaVideo {
     this.disposed = false;
     this.paused = false;
     this.endHandler = null;
+    // Counters for tests and debugging: frames drawn, and frames drawn with nothing to show.
+    this.stats = { draws: 0, blank: 0, switches: 0, waitMsMax: 0 };
 
     const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: "low-power" });
     if (!gl) throw new Error("no webgl");
@@ -154,6 +156,14 @@ export class AlphaVideo {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, e.v);
     e.ready = true;
     e.frames += 1;
+    if (e.id === this.cur && !e.fresh) {
+      // The new clip has a frame of its own: only now does the hand-over from the clip
+      // on screen begin (a short cross-fade at a clip boundary, where both show the
+      // resting pose; a longer one when a reaction interrupts).
+      e.fresh = true;
+      if (this.prev) { this.fade = { start: performance.now(), ms: this.handover || 90 }; this.k = 0; }
+      this.stats.waitMsMax = Math.max(this.stats.waitMsMax, Math.round(performance.now() - (this.switchAt || 0)));
+    }
     return true;
   }
 
@@ -165,28 +175,42 @@ export class AlphaVideo {
     gl.clear(gl.COLOR_BUFFER_BIT);
     const cur = this.videos.get(this.cur);
     const prev = this.prev ? this.videos.get(this.prev) : null;
+    // Never a gap: until the new clip has drawn its own first frame, the clip that was
+    // on screen stays on screen (still playing, or holding its last frame).
+    const curOk = Boolean(cur?.ready && cur.fresh);
+    const hold = prev?.ready ? prev.tex : cur?.ready ? cur.tex : this.blank;
+    const texA = curOk ? cur.tex : hold;
+    const texB = prev?.ready ? prev.tex : texA;
     gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, cur?.ready ? cur.tex : prev?.tex || this.blank);
+    gl.bindTexture(gl.TEXTURE_2D, texA);
     gl.activeTexture(gl.TEXTURE1);
-    gl.bindTexture(gl.TEXTURE_2D, prev?.ready ? prev.tex : cur?.ready ? cur.tex : this.blank);
-    gl.uniform1f(this.u.k, cur?.ready ? this.k : 0);
+    gl.bindTexture(gl.TEXTURE_2D, texB);
+    gl.uniform1f(this.u.k, curOk ? (this.fade ? this.k : 1) : 0);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-    if (!this.painted && cur?.ready) {
+    this.stats.draws += 1;
+    if (this.painted && texA === this.blank) this.stats.blank += 1;
+    if (!this.painted && curOk) {
       this.painted = true;
       this.onFirstFrame?.();
     }
   }
 
+  /** True while a new clip is waiting for its first frame (the old one is held). */
+  get handingOver() {
+    const cur = this.videos.get(this.cur);
+    return Boolean(this.fade || (this.prev && !cur?.fresh));
+  }
+
   /**
    * Frame pump: upload new frames and draw. While one clip plays, wake only when the
    * video has a new frame (requestVideoFrameCallback, 24 times a second); during a
-   * cross-fade, every display frame (requestAnimationFrame).
+   * hand-over between clips, every display frame (requestAnimationFrame).
    */
   pump() {
     if (this.disposed || this.paused) return;
     const cur = this.videos.get(this.cur);
-    if (this.fade || !cur || typeof cur.v.requestVideoFrameCallback !== "function") { this.rafLoop(); return; }
-    if (this.raf) return; // the fade loop hands over when it ends
+    if (this.handingOver || !cur || typeof cur.v.requestVideoFrameCallback !== "function") { this.rafLoop(); return; }
+    if (this.raf) return; // the hand-over loop passes back when it ends
     if (this.waiting === cur) return;
     this.waiting = cur;
     cur.v.requestVideoFrameCallback(() => {
@@ -203,11 +227,11 @@ export class AlphaVideo {
       this.raf = 0;
       if (this.disposed || this.paused) return;
       const cur = this.videos.get(this.cur);
+      const prev = this.prev ? this.videos.get(this.prev) : null;
       let changed = false;
       if (cur && cur.v.currentTime !== cur.t) { cur.t = cur.v.currentTime; changed = this.upload(cur) || changed; }
+      if (prev && prev.v.currentTime !== prev.t) { prev.t = prev.v.currentTime; changed = this.upload(prev) || changed; }
       if (this.fade) {
-        const prev = this.videos.get(this.prev);
-        if (prev && prev.v.currentTime !== prev.t) { prev.t = prev.v.currentTime; this.upload(prev); }
         const k = Math.min(1, Math.max(0, (performance.now() - this.fade.start) / this.fade.ms));
         this.k = k * k * (3 - 2 * k);
         changed = true;
@@ -219,7 +243,7 @@ export class AlphaVideo {
         }
       }
       if (changed) this.draw();
-      if (!this.fade && cur && typeof cur.v.requestVideoFrameCallback === "function") { this.pump(); return; }
+      if (!this.handingOver && cur && typeof cur.v.requestVideoFrameCallback === "function") { this.pump(); return; }
       this.raf = requestAnimationFrame(tick);
     };
     this.raf = requestAnimationFrame(tick);
@@ -228,19 +252,26 @@ export class AlphaVideo {
   /**
    * Play a clip from its start. Resolves once it is playing (or rejects when the
    * browser refuses to play video, e.g. iOS Low Power Mode: show the still image).
+   * `fade`: the cross-fade length when this interrupts a clip (default: a short
+   * boundary blend). The clip on screen is never dropped before the new one can draw.
    */
   async play(id, { loop = false, fade = 0, onEnd } = {}) {
     if (this.disposed || this.failed) return;
     const e = this.entry(id);
     const was = this.cur;
-    if (was && was !== id && fade > 0 && this.videos.get(was)?.ready) {
-      this.prev = was;
-      this.fade = { start: performance.now(), ms: fade };
+    if (was !== id) {
+      const onScreen = was ? this.videos.get(was) : null;
+      if (onScreen?.ready && onScreen.fresh) {
+        if (this.prev && this.prev !== was) this.videos.get(this.prev)?.v.pause();
+        this.prev = was;
+      }
+      // else: `was` never showed a frame; whatever is held (this.prev) stays held.
+      this.handover = fade > 0 ? fade : 90;
+      this.fade = null;
       this.k = 0;
-    } else if (was && was !== id) {
-      // Clip boundary on the shared resting pose: switch on the new clip's first frame.
-      const old = this.videos.get(was);
-      if (old) { this.prev = was; this.k = 0; this.fade = { start: performance.now(), ms: 90 }; }
+      e.fresh = false;
+      this.switchAt = performance.now();
+      this.stats.switches += 1;
     }
     this.cur = id;
     if (this.endHandler) { this.endHandler.v.removeEventListener("ended", this.endHandler.fn); this.endHandler = null; }

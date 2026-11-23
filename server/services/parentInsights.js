@@ -11,6 +11,7 @@ const LearningEvent = require('../models/analytics/LearningEvent')
 const StudentAnswer = require('../models/StudentAnswer')
 const StudentAchievement = require('../models/StudentAchievement')
 const ARSession = require('../models/ARSession')
+const { findingsInput } = require('./arFindingRows')
 const { ACHIEVEMENTS } = require('../controllers/dashboardController')
 
 const round1 = (n) => Math.round(n * 10) / 10
@@ -228,11 +229,16 @@ async function screenTime(email, range) {
 
 // ── Movement and focus games (PAR-035) ───────────────────────────────────────
 // Plain words only. These are game results, not health measurements.
+// `findings` is the input of the shared findings engine (client/src/ar/insights/findings.js):
+// this period's rounds and the equal period's before it, as compact rows (services/arFindingRows.js).
 async function arSummary(email, range) {
-  const rows = await ARSession.find({ email, startedAt: { $gte: dayStart(range.from), $lte: dayEnd(range.to) } })
-    .select('gameId title startedAt activeMs summary.accuracyPct summary.medianLatencyMs summary.pathEfficiency summary.byHand summary.trials summary.independentPct')
-    .sort({ startedAt: 1 }).lean()
-  if (!rows.length) return { range, sessions: 0, minutes: 0, games: [], weeks: [], notes: [] }
+  const [rows, findings] = await Promise.all([
+    ARSession.find({ email, startedAt: { $gte: dayStart(range.from), $lte: dayEnd(range.to) } })
+      .select('gameId title startedAt activeMs summary.accuracyPct summary.medianLatencyMs summary.pathEfficiency summary.byHand summary.trials summary.independentPct')
+      .sort({ startedAt: 1 }).lean(),
+    findingsInput(email, { from: range.from, to: range.to }),
+  ])
+  if (!rows.length) return { range, sessions: 0, minutes: 0, games: [], weeks: [], notes: [], findings }
   const med = (arr) => { const a = arr.filter((x) => x != null).sort((x, y) => x - y); return a.length ? a[Math.floor(a.length / 2)] : null }
   const weeks = new Map(), games = new Map()
   for (const r of rows) {
@@ -262,7 +268,7 @@ async function arSummary(email, range) {
   return {
     range, sessions: rows.length, minutes: Math.round(rows.reduce((s, r) => s + (r.activeMs || 0), 0) / 60000),
     games: [...games.values()].map((g) => ({ ...g, minutes: Math.round(g.minutes) })).sort((a, b) => b.sessions - a.sessions),
-    weeks: wk, notes,
+    weeks: wk, notes, findings,
     disclaimer: 'These are results from play, to celebrate progress. They are not a medical or diagnostic measure.',
   }
 }
