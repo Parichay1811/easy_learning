@@ -14,14 +14,14 @@ const batchService = require('./batchService')
 const signTeacherToken = (tutor) => jwt.sign(
   { id: tutor._id, uid: tutor.uid, email: tutor.email, name: tutor.name, orgId: tutor.orgId, role: 'teacher' },
   process.env.TEACHER_JWT_SECRET,
-  { expiresIn: process.env.TEACHER_JWT_EXPIRES_IN || '7d' }
+  { expiresIn: process.env.TEACHER_JWT_EXPIRES_IN || '30d' }
 )
 
 // Same shape as adminAuthController's token.
 const signAdminToken = (admin) => jwt.sign(
   { id: admin._id, uid: admin.uid, email: admin.email, name: admin.name, orgId: admin.orgId, role: 'org_admin' },
   process.env.ADMIN_JWT_SECRET,
-  { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '7d' }
+  { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '30d' }
 )
 
 // Tutor.uid used to be unique across all organisations, which made a second workspace

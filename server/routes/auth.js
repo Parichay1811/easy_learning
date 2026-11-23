@@ -16,4 +16,10 @@ const { managedLogin, managedPictures } = require('../controllers/managedLoginCo
 router.post('/managed-login', managedLogin)
 router.get('/managed-pictures', managedPictures)
 
+// Stay signed in until sign-out: a still-valid token is swapped for a fresh one (any role
+// but Learnigo staff), after checking the account is still active.
+const { renewSession } = require('../controllers/sessionRenewController')
+const { rateLimit } = require('../middleware/rateLimit')
+router.post('/renew', rateLimit({ windowMs: 60_000, max: 30 }), renewSession)
+
 module.exports = router
