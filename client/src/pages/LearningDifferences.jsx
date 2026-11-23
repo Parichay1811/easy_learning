@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import SEO, { SITE_URL } from "../components/SEO/SEO";
 import { differenceBySlug, learningDifferences } from "../data/learningDifferences";
 import styles from "./LearningSupportByCountry.module.css";
+import { companyOrganization } from "../config/company";
 
 const pageUrl = "/learning-differences";
 
@@ -38,7 +39,7 @@ export default function LearningDifferences() {
             headline: `${item.name} in Children: A Family Guide`,
             description: item.issue,
             author: { "@type": "Organization", name: "Learnigo", url: SITE_URL },
-            publisher: { "@type": "Organization", name: "Learnigo", url: SITE_URL },
+            publisher: companyOrganization(),
             mainEntityOfPage: `${SITE_URL}${path}`,
           }}
         />

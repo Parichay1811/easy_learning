@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import SEO, { SITE_URL } from "../components/SEO/SEO";
 import { countryGuideBySlug, countryLearningGuides } from "../data/countryLearningGuides";
 import styles from "./LearningSupportByCountry.module.css";
+import { companyOrganization } from "../config/company";
 
 const pageUrl = "/learning-support-by-country";
 
@@ -38,7 +39,7 @@ export default function LearningSupportByCountry() {
             headline: `${guide.name}: Learning Support Ideas for Children`,
             description: guide.issue,
             author: { "@type": "Organization", name: "Learnigo", url: SITE_URL },
-            publisher: { "@type": "Organization", name: "Learnigo", url: SITE_URL },
+            publisher: companyOrganization(),
             mainEntityOfPage: `${SITE_URL}${path}`,
           }}
         />

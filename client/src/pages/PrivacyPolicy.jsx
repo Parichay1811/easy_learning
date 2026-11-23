@@ -1,8 +1,13 @@
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
+import { COMPANY } from "../config/company";
 import styles from "./PrivacyPolicy.module.css";
 
 const sections = [
+  {
+    title: "Who provides Learnigo",
+    text: <>Learnigo is a product of {COMPANY.name} (<a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.link}>{COMPANY.site}</a>), which provides and runs the service and looks after the personal information described here.</>,
+  },
   {
     title: "What information we collect",
     text: "To create an account and run Learnigo, we collect basic profile information (name, email, role), the learning activity needed to track progress (XP, levels, streaks, round results, achievement badges) and, for organizations, batch and student management data.",
@@ -31,7 +36,7 @@ const sections = [
   },
   {
     title: "Your rights",
-    text: "You can request access to, correction of, or deletion of your personal information at any time by contacting us. Parents and organization administrators can request the same on behalf of a child or student they are responsible for.",
+    text: <>You can request access to, correction of, or deletion of your personal information at any time by writing to <a href={`mailto:${COMPANY.emails.info}`} className={styles.link}>{COMPANY.emails.info}</a>. Parents and organization administrators can request the same on behalf of a child or student they are responsible for.</>,
   },
   {
     title: "Changes to this policy",
@@ -39,7 +44,7 @@ const sections = [
   },
   {
     title: "Contact us",
-    text: "Questions about this Privacy Policy? Reach out through our Contact Us page and we'll usually reply within 24 hours.",
+    text: <>Questions about this Privacy Policy, or a request about your data? Write to <a href={`mailto:${COMPANY.emails.info}`} className={styles.link}>{COMPANY.emails.info}</a> (schools and organisations: <a href={`mailto:${COMPANY.emails.solutions}`} className={styles.link}>{COMPANY.emails.solutions}</a>), or use our <a href="/contact-us" className={styles.link}>Contact Us</a> page. We usually reply within 24 hours.</>,
   },
 ];
 
@@ -66,7 +71,7 @@ const PrivacyPolicy = () => {
         <p className={styles.subtitle}>
           How Learnigo collects, uses and protects your information.
         </p>
-        <p className={styles.updated}>Last updated: October 2026</p>
+        <p className={styles.updated}>Last updated: November 2026</p>
       </div>
 
       <div className={styles.panel}>

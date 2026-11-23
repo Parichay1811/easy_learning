@@ -1,8 +1,13 @@
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
+import { COMPANY } from "../config/company";
 import styles from "./PrivacyPolicy.module.css";
 
 const sections = [
+  {
+    title: "Who provides Learnigo",
+    text: <>Learnigo is a product of {COMPANY.name} (<a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.link}>{COMPANY.site}</a>), which provides and runs the service. These terms are an agreement between you and {COMPANY.name}.</>,
+  },
   {
     title: "Acceptance of terms",
     text: "By creating an account or using Learnigo, you agree to these Terms & Conditions. If you are creating or managing an account on behalf of a child, you confirm you have the authority to do so and agree to these terms for that account.",
@@ -42,7 +47,7 @@ const sections = [
   },
   {
     title: "Contact us",
-    text: "Questions about these Terms & Conditions? Reach out through our Contact Us page and we'll usually reply within 24 hours.",
+    text: <>Questions about these Terms & Conditions? Write to <a href={`mailto:${COMPANY.emails.info}`} className={styles.link}>{COMPANY.emails.info}</a> (schools and organisations: <a href={`mailto:${COMPANY.emails.solutions}`} className={styles.link}>{COMPANY.emails.solutions}</a>), or use our <a href="/contact-us" className={styles.link}>Contact Us</a> page. We usually reply within 24 hours.</>,
   },
 ];
 
@@ -69,7 +74,7 @@ const TermsAndConditions = () => {
         <p className={styles.subtitle}>
           The rules for using Learnigo, for students, parents, teachers and organizations.
         </p>
-        <p className={styles.updated}>Last updated: October 2026</p>
+        <p className={styles.updated}>Last updated: November 2026</p>
       </div>
 
       <div className={styles.panel}>

@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import SEO, { SITE_URL } from "../components/SEO/SEO";
 import { audienceGuideBySlug, audienceGuides } from "../data/audienceGuides";
 import styles from "./LearningSupportByCountry.module.css";
+import { companyOrganization } from "../config/company";
 
 const pageUrl = "/who-we-help";
 const DEFAULT_NOTE = "Learnigo is an educational practice platform, not a diagnostic or medical service. A qualified local professional should guide any assessment, accommodation or individual support plan.";
@@ -39,7 +40,7 @@ export default function WhoWeHelp() {
             headline: `Learnigo for ${item.name}`,
             description: item.issue,
             author: { "@type": "Organization", name: "Learnigo", url: SITE_URL },
-            publisher: { "@type": "Organization", name: "Learnigo", url: SITE_URL },
+            publisher: companyOrganization(),
             mainEntityOfPage: `${SITE_URL}${path}`,
           }}
         />

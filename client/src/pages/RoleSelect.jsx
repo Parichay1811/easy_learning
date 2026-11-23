@@ -9,6 +9,7 @@ import EntryScene from "../components/Entry/EntryScene";
 import { StudentEmblem, ParentEmblem, TeacherEmblem, SchoolEmblem, TeamEmblem, TutorEmblem } from "../components/Entry/RoleEmblems";
 import { ROLE_THEME, roleVars } from "../components/Entry/roles";
 import { openDoor, closeDoor } from "../components/Entry/door";
+import { COMPANY } from "../config/company";
 import { afterSplash } from "../components/Entry/splashSignal";
 import { sfx, haptic } from "../utils/sounds";
 import styles from "./RoleSelect.module.css";
@@ -213,7 +214,10 @@ const RoleSelect = () => {
             </span>
           </button>
           <p className={styles.copyright}>
-            {t("roleSelect.copyright", { year: new Date().getFullYear(), defaultValue: "A product by © {{year}} Futuresight Analytics Limited" })}
+            {/* Learnigo is a Futuresight Analytics product: the credit opens the company's site. */}
+            <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.copyrightLink}>
+              {t("roleSelect.copyright", { year: new Date().getFullYear(), defaultValue: "A product by © {{year}} Futuresight Analytics Limited" })}
+            </a>
           </p>
         </footer>
       </div>

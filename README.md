@@ -1,5 +1,9 @@
 # Learnigo — User Manual
 
+Learnigo is a product of [Futuresight Analytics Limited](https://futuresightanalytics.eu/).
+Questions, help and feedback: [info@futuresightanalytics.eu](mailto:info@futuresightanalytics.eu) ·
+schools, organisations and partnerships: [solutions@futuresightanalytics.eu](mailto:solutions@futuresightanalytics.eu).
+
 A guide for the people who *use* Learnigo day to day: students, parents, organization
 admins, and the platform super admin. For how the app is built, see
 [design-guide.md](./docs/design-guide.md) — this document is about what you can click and what
@@ -409,6 +413,11 @@ the Learnigo team via **Contact Us** in the navigation bar. Fill in who you are,
 email, organization (optional), a subject, and your message (with an optional image/PDF
 attachment); it goes straight to the Super Admin's **Contact Messages** list. No account is
 required.
+
+You can also write to us by email: **info@futuresightanalytics.eu** for questions, help,
+feedback and data requests, or **solutions@futuresightanalytics.eu** for schools,
+organisations and partnerships. Both addresses are on the Contact Us page, the About page,
+the footer of every content page, the Privacy Policy and the Terms.
 
 If you're already an org **Admin** or a signed-in **Parent**, prefer the **Messages** /
 **Chat with Us** section on your dashboard instead — it's a direct, private conversation
