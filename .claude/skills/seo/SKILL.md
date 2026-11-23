@@ -34,7 +34,8 @@ every child", "AI teacher") and keeps inclusive design as the differentiator.
 - `components/SEO/SEO.jsx`: public pages pass only `path`; the component reads
   the words from seo.json and the languages from the registry.
   `components/SEO/ExploreLinks.jsx` renders the related links.
-- Nginx (see `DEPLOY.md`): `try_files $uri $uri/ /spa.html`, gzip for JS, CSS
+- Nginx (see `DEPLOY.md`): `try_files $uri $uri/index.html $uri/ /spa.html`
+  (`$uri/index.html` avoids a 301 from /es/faq to /es/faq/), gzip for JS, CSS
   and JSON, and a one-year cache for `/assets/`.
 
 ## Recipes

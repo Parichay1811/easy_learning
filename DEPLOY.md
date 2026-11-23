@@ -215,10 +215,12 @@ server {
     }
 
     # Public pages are built as static HTML per language (dist/faq/index.html,
-    # dist/es/faq/index.html …, see client/scripts/seo-prerender.mjs); $uri/
-    # serves them. Every other React Router path gets the plain app shell.
+    # dist/es/faq/index.html …, see client/scripts/seo-prerender.mjs).
+    # $uri/index.html serves them at their canonical URL (/es/faq) with a 200;
+    # without it, $uri/ alone answers /es/faq with a 301 to /es/faq/.
+    # Every other React Router path gets the plain app shell.
     location / {
-        try_files $uri $uri/ /spa.html;
+        try_files $uri $uri/index.html $uri/ /spa.html;
     }
 
     # Proxy /api/* to Express on port 5000
