@@ -36,11 +36,7 @@ const GamesPage = () => {
       exit={reduce ? { opacity: 0 } : { opacity: 0, x: -60 }}
       transition={{ duration: 0.35 }}
     >
-      <SEO
-        title="Game Zone | Camera-Powered Learning Games | Learnigo"
-        description="Play Learnigo's camera-powered Game Zone — motion and hand-tracking games that turn English, maths and science practice into movement-based fun."
-        path="/games"
-      />
+      <SEO path="/games" />
       <VideoBackground />
       <div className={styles.overlay} aria-hidden="true" />
 

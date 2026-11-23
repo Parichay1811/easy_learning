@@ -49,18 +49,7 @@ const sections = [
 const TermsAndConditions = () => {
   return (
     <div className={styles.page}>
-      <SEO
-        title="Terms & Conditions | Learnigo"
-        description="The terms and conditions governing use of Learnigo, the dyslexia-friendly learning platform for kids, by students, parents, teachers and organizations."
-        path="/terms-and-conditions"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Terms & Conditions",
-          url: "https://www.learnigo.eu/terms-and-conditions",
-          isPartOf: { "@type": "WebSite", name: "Learnigo", url: "https://www.learnigo.eu" },
-        }}
-      />
+      <SEO path="/terms-and-conditions" />
       <VideoBackground />
 
       <div className={styles.hero}>

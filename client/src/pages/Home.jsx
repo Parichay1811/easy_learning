@@ -37,11 +37,7 @@ const Home = () => {
 
   return (
     <>
-      <SEO
-        title="Learnigo Home | Continue Your Learning Adventure"
-        description="Jump back into gamified English, Maths and Science practice on Learnigo — pick up where you left off or start a new adventure."
-        path="/home"
-      />
+      <SEO path="/home" />
       {visitor && <VideoBackground />}
       <FramerMotion.motion.div
         className={visitor ? styles.page : styles.stage}

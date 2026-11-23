@@ -46,11 +46,7 @@ export default function Pricing() {
 
   return (
     <main className={styles.page}>
-      <SEO
-        title="Pricing | Learnigo for Families, Teachers and Schools"
-        description="Learnigo is free for families. Private teachers and schools can start free and add groups, tests, analytics and reports as they grow."
-        path="/pricing"
-      />
+      <SEO path="/pricing" />
       <section className={styles.hero}>
         <span className={styles.eyebrow}>{t("pricing.eyebrow", { defaultValue: "Plans" })}</span>
         <h1>{t("pricing.title", { defaultValue: "One platform. Use it your way." })}</h1>

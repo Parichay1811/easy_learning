@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
-import { FaGlobe, FaShieldAlt, FaFileContract, FaTags } from "react-icons/fa";
+import { FaGlobe, FaShieldAlt, FaFileContract, FaTags, FaBrain, FaGift, FaUsers, FaQuestionCircle } from "react-icons/fa";
+import { useSeo } from "../../seo/useSeo";
 import styles from "./Footer.module.css";
 
 // The game screens (Home, a subject, a question round, the games hubs, the
@@ -18,6 +19,7 @@ function isPlayPath(pathname) {
 
 const Footer = () => {
   const { t } = useTranslation();
+  const { seo } = useSeo();
   const { pathname } = useLocation();
 
   if (isPlayPath(pathname)) return null;
@@ -25,6 +27,25 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
+        {/* The guide hubs: every content page links into the guides (seo/registry.js). */}
+        <nav className={styles.links} aria-label={seo.ui?.footer?.more}>
+          <Link to="/learning-differences" className={styles.link}>
+            <FaBrain className={styles.icon} />
+            {seo.ui?.nav?.differences}
+          </Link>
+          <Link to="/learning-tools" className={styles.link}>
+            <FaGift className={styles.icon} />
+            {seo.ui?.nav?.tools}
+          </Link>
+          <Link to="/who-we-help" className={styles.link}>
+            <FaUsers className={styles.icon} />
+            {seo.ui?.nav?.audiences}
+          </Link>
+          <Link to="/faq" className={styles.link}>
+            <FaQuestionCircle className={styles.icon} />
+            {seo.ui?.nav?.faq}
+          </Link>
+        </nav>
         <nav className={styles.links}>
           <Link to="/learning-support-by-country" className={styles.link}>
             <FaGlobe className={styles.icon} />

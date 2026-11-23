@@ -59,15 +59,14 @@ import BreakReminder from "./components/settings/BreakReminder";
 import VoiceBar, { StopVoiceOnNavigate } from "./components/VoiceBar/VoiceBar";
 import TeacherTestsApp from "./pages/teacher/tests/TeacherTestsApp";
 import TestPlayer from "./pages/TestPlayer";
-import LearningSupportByCountry from "./pages/LearningSupportByCountry";
-import LearningDifferences from "./pages/LearningDifferences";
-import WhoWeHelp from "./pages/WhoWeHelp";
 import Pricing from "./pages/Pricing";
 import ArLearningGames from "./pages/ArLearningGames";
 import Faq from "./pages/Faq";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
+import GuidePages from "./pages/GuidePages";
+import { basenameFor, onRouteLangChange, routeLang } from "./seo/routeLocale";
 
 // Developer-only pages (component galleries). Not routed in production builds
 // unless VITE_ENABLE_DEV_PAGES=1.
@@ -148,13 +147,15 @@ function AnimatedRoutes() {
         <Route path="/login" element={<SignedInGate role="student"><Login /></SignedInGate>} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/learning-support-by-country" element={<LearningSupportByCountry />} />
-        <Route path="/learning-support-by-country/:country" element={<LearningSupportByCountry />} />
-        <Route path="/learning-differences" element={<LearningDifferences />} />
-        <Route path="/learning-differences/:difference" element={<LearningDifferences />} />
+        <Route path="/learning-support-by-country" element={<GuidePages guide="countries" />} />
+        <Route path="/learning-support-by-country/:slug" element={<GuidePages guide="countries" />} />
+        <Route path="/learning-differences" element={<GuidePages guide="differences" />} />
+        <Route path="/learning-differences/:slug" element={<GuidePages guide="differences" />} />
+        <Route path="/learning-tools" element={<GuidePages guide="tools" />} />
+        <Route path="/learning-tools/:slug" element={<GuidePages guide="tools" />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/who-we-help" element={<WhoWeHelp />} />
-        <Route path="/who-we-help/:audience" element={<WhoWeHelp />} />
+        <Route path="/who-we-help" element={<GuidePages guide="audiences" />} />
+        <Route path="/who-we-help/:slug" element={<GuidePages guide="audiences" />} />
         <Route path="/ar-learning-games" element={<ArLearningGames />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/policy" element={<PrivacyPolicy />} />
@@ -251,6 +252,11 @@ function AppLayout() {
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  // The URL's language prefix (/es/...) is the router's basename. Choosing a
+  // language can move the URL to another prefix (seo/routeLocale.js); the
+  // router then remounts under the new basename.
+  const [lang, setLang] = useState(routeLang);
+  useEffect(() => onRouteLangChange(setLang), []);
 
   return (
     <AuthProvider>
@@ -261,7 +267,7 @@ function App() {
               <SplashPage onFinish={() => setShowSplash(false)} />
             )}
           </AnimatePresence>
-          <Router>
+          <Router key={lang || "default"} basename={basenameFor(lang)}>
             <AppLayout />
           </Router>
         </PrefsProvider>

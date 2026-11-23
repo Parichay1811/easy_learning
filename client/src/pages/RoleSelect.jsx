@@ -98,11 +98,7 @@ const RoleSelect = () => {
 
   return (
     <main className={styles.page}>
-      <SEO
-        title="Learnigo | Dyslexia-Friendly Learning Games for Kids"
-        description="Sign in to Learnigo as a student, parent, teacher or school and start accessible, dyslexia-friendly game-based practice in reading, writing, maths and science."
-        path="/"
-      />
+      <SEO path="/" />
       <EntryScene />
 
       <div
