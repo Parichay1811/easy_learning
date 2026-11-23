@@ -145,6 +145,18 @@ export function nextStrategy({ canPicture, hintCount, hasWorked, used }) {
   return null;
 }
 
+/**
+ * Whether an answer counts as right first time for the learning engine
+ * (`firstTry` in the outcome): no earlier miss on the card, not answered after
+ * a miss, and no wrong tries inside the widget on the way (`pieceMisses`: a
+ * match-the-pairs board that only finishes once every pair is right).
+ * A right answer that is not a first try is still right, it just weighs less
+ * ("assisted" in the engine).
+ */
+export function isFirstTry({ cardMisses = 0, afterMiss = false, pieceMisses = 0 } = {}) {
+  return !(cardMisses > 0) && !afterMiss && !(pieceMisses > 0);
+}
+
 /** The support step to report to the server for what was actually shown. */
 export function supportStepShown(used) {
   if (used.has("guided")) return 2;

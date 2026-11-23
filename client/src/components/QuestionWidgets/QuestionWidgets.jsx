@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCheck, FaTimes, FaUndo } from "react-icons/fa";
 import { sfx } from "../../utils/sounds";
+import { sequenceMarks, targetSequence, binHomes, binMark, homeOf, partnerOf, expectedAnswer } from "./marks";
 import styles from "./QuestionWidgets.module.css";
 
 // One component per interaction "family" (several new-schema interaction
@@ -12,7 +13,11 @@ import styles from "./QuestionWidgets.module.css";
 // scoreAnswer.js, which compares VALUES (never positions), so shuffling the
 // options on screen can never change what counts as right.
 // `feedback` ({ result: null|"correct"|"wrong", revealed }) only changes how
-// the tiles look once the card has judged the answer.
+// the tiles look once the card has judged the answer: every widget marks its
+// right pieces (green, a tick) and wrong ones (soft orange, a cross), with the
+// same words for screen readers, and shows the right answer when `revealed`.
+// A widget that lets the learner try pieces before the answer is whole
+// (match_pairs) also reports those wrong tries: onSubmit(userAnswer, { misses }).
 
 function shuffledIndices(length) {
   const idx = Array.from({ length }, (_, i) => i);
@@ -39,6 +44,18 @@ const letterFor = (position) => String.fromCharCode(65 + position);
 
 // Options pop in one after another; the stagger comes from --i.
 const popStyle = (position) => ({ "--i": position });
+
+// The mark on a piece once the answer is judged: a tick or a cross (never
+// colour alone) and the same words for screen readers. `ok`: true | false | null.
+function PieceMark({ ok, rightText, wrongText }) {
+  if (ok == null) return null;
+  return (
+    <>
+      {ok ? <FaCheck className={styles.mark} aria-hidden="true" /> : <FaTimes className={styles.mark} aria-hidden="true" />}
+      <span className={styles.srOnly}>{`, ${ok ? rightText : wrongText}`}</span>
+    </>
+  );
+}
 
 // tap_mcq, true_false, drag_to_blank — tap one option, compare to correct_answer.
 export function SingleChoice({ question, onSubmit, disabled, feedback }) {
@@ -90,6 +107,13 @@ export function MultiSelect({ question, onSubmit, disabled, feedback }) {
     [question],
   );
   const toggle = (opt) => setSelected((s) => (s.includes(opt) ? s.filter((x) => x !== opt) : [...s, opt]));
+  // Another go after a miss: the wrong picks (already marked) are cleared and the
+  // right ones stay, so the learner fixes the answer instead of hunting for a stale tick.
+  const [wasDisabled, setWasDisabled] = useState(disabled);
+  if (wasDisabled !== disabled) {
+    setWasDisabled(disabled);
+    if (!disabled && selected.some((v) => !correct.has(norm(v)))) setSelected(selected.filter((v) => correct.has(norm(v))));
+  }
   const judged = feedback?.result;
   return (
     <>
@@ -130,7 +154,7 @@ export function MultiSelect({ question, onSubmit, disabled, feedback }) {
 // drag_order, tap_sequence, letter_bank — tap items into a built sequence.
 // scoreAnswer.js compares the array directly (drag_order/tap_sequence) or
 // joins it into a string (letter_bank), so this one component covers all three.
-export function SequenceBuilder({ question, onSubmit, disabled }) {
+export function SequenceBuilder({ question, onSubmit, disabled, feedback }) {
   const { t } = useTranslation();
   const options = question.options || [];
   const order = useMemo(() => shuffledIndices(options.length), [question.id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -154,12 +178,33 @@ export function SequenceBuilder({ question, onSubmit, disabled }) {
     if (next.length === targetLen) onSubmit(next.map((idx) => options[idx]));
   };
 
+  // After the answer is judged (or shown when the clock ran out): each placed
+  // tile is marked by whether it is in the right place; the right order is
+  // shown once the card reveals the answer.
+  const judged = feedback?.result;
+  const revealed = Boolean(feedback?.revealed) && judged !== "correct";
+  const marks = judged || revealed ? sequenceMarks(question, picked.map((i) => options[i]), judged) : null;
+  const rightOrder = revealed ? targetSequence(question) : null;
+  // No fair piece-by-piece comparison (an equation from tiles): the row as a whole is marked.
+  const rowMark = judged && marks && marks.every((m) => m == null) ? judged === "correct" : null;
+
   return (
     <div className={styles.sequence}>
-      <div className={styles.builtRow} aria-live="polite">
-        {picked.map((i, pos) => (
-          <span key={pos} className={`${styles.builtChip} ${styles.pop}`}>{options[i]}</span>
-        ))}
+      <div className={`${styles.builtRow} ${rowMark === true ? styles.builtRight : rowMark === false ? styles.builtWrong : ""}`} aria-live="polite">
+        {picked.map((i, pos) => {
+          const ok = marks ? marks[pos] : null;
+          return (
+            <span key={pos} className={`${styles.builtChip} ${styles.pop} ${ok === true ? styles.right : ok === false ? styles.wrongPick : ""}`}>
+              {options[i]}
+              <PieceMark ok={ok} rightText={t("questions.feedback.rightPlace", "in the right place")} wrongText={t("questions.feedback.wrongPlace", "not in the right place")} />
+            </span>
+          );
+        })}
+        {rowMark != null && (
+          <span className={`${styles.rowMark} ${rowMark ? styles.right : styles.wrongPick}`}>
+            <PieceMark ok={rowMark} rightText={t("questions.feedback.right", "right")} wrongText={t("questions.feedback.notRight", "not quite right")} />
+          </span>
+        )}
         {picked.length === 0 && <span className={styles.builtHint} aria-hidden="true">…</span>}
         {picked.length > 0 && !disabled && (
           <button type="button" className={styles.undoBtn} onClick={() => setPicked((p) => p.slice(0, -1))} data-sound="back">
@@ -174,12 +219,24 @@ export function SequenceBuilder({ question, onSubmit, disabled }) {
           </button>
         ))}
       </div>
+      {rightOrder && (
+        <div className={styles.revealRow}>
+          <span className={styles.revealLabel}>{t("questions.feedback.rightOrder", "The right order:")}</span>
+          {rightOrder.map((v, pos) => (
+            <span key={pos} className={`${styles.builtChip} ${styles.reveal}`}>{v}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-// match_pairs — tap a left item then a right item to attempt a pair.
-export function MatchPairs({ question, onSubmit, disabled }) {
+// match_pairs — tap a left item then a right item to attempt a pair. The
+// board finishes once every pair is right, so the wrong pairs tried on the
+// way are counted and sent with the answer (onSubmit(pairs, { misses })):
+// trial and error is still right, but not right first time.
+export function MatchPairs({ question, onSubmit, disabled, feedback }) {
+  const { t } = useTranslation();
   const pairs = question.correct_answer || [];
   // Shuffle order is intentionally randomized per mount (this remounts once
   // per question via the parent's key={question.id}) and re-randomizing on
@@ -195,6 +252,8 @@ export function MatchPairs({ question, onSubmit, disabled }) {
   const [selectedLeft, setSelectedLeft] = useState(null);
   const [solved, setSolved] = useState([]);
   const [wrongFlash, setWrongFlash] = useState(null);
+  // Wrong pairs tried on the way (kept out of render: only sent with the answer).
+  const missesRef = useRef(0);
 
   const solvedLefts = solved.map((p) => p[0]);
   const solvedRights = solved.map((p) => p[1]);
@@ -208,9 +267,10 @@ export function MatchPairs({ question, onSubmit, disabled }) {
       setSolved(next);
       setSelectedLeft(null);
       // The last pair finishes the question, which makes its own sound.
-      if (next.length === leftItems.length) onSubmit(next);
+      if (next.length === leftItems.length) onSubmit(next, { misses: missesRef.current });
       else sfx.select();
     } else {
+      missesRef.current += 1;
       sfx.wrong();
       setWrongFlash({ left: selectedLeft, right: r });
       setTimeout(() => setWrongFlash(null), 450);
@@ -218,23 +278,40 @@ export function MatchPairs({ question, onSubmit, disabled }) {
     }
   };
 
+  // Matched pairs are marked as they are made; when the answer is shown (the
+  // clock ran out) each unmatched item on the left shows its partner.
+  const revealed = Boolean(feedback?.revealed);
+  const matchedText = t("questions.feedback.matched", "matched");
+
   return (
     <div className={styles.matchGrid}>
       <div className={styles.matchCol}>
-        {leftItems.map((l, position) => (
-          <button
-            key={l}
-            type="button"
-            disabled={disabled || solvedLefts.includes(l)}
-            className={`${styles.matchItem} ${styles.pop} ${selectedLeft === l ? styles.matchSelected : ""} ${solvedLefts.includes(l) ? styles.matchSolved : ""} ${wrongFlash?.left === l ? styles.matchWrong : ""}`}
-            style={popStyle(position)}
-            aria-pressed={selectedLeft === l}
-            onClick={() => pickLeft(l)}
-            data-hover-sound=""
-          >
-            {l}
-          </button>
-        ))}
+        {leftItems.map((l, position) => {
+          const isSolved = solvedLefts.includes(l);
+          const partner = revealed && !isSolved ? partnerOf(pairs, l) : null;
+          return (
+            <button
+              key={l}
+              type="button"
+              disabled={disabled || isSolved}
+              className={`${styles.matchItem} ${styles.pop} ${selectedLeft === l ? styles.matchSelected : ""} ${isSolved ? styles.matchSolved : ""} ${partner != null ? styles.matchReveal : ""} ${wrongFlash?.left === l ? styles.matchWrong : ""}`}
+              style={popStyle(position)}
+              aria-pressed={selectedLeft === l}
+              onClick={() => pickLeft(l)}
+              data-hover-sound=""
+            >
+              {l}
+              {isSolved && <PieceMark ok rightText={matchedText} />}
+              {partner != null && (
+                <span className={styles.matchPartner}>
+                  <span aria-hidden="true">→ </span>
+                  <span className={styles.srOnly}>{`${t("questions.feedback.goesWith", "goes with")} `}</span>
+                  {partner}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
       <div className={styles.matchCol}>
         {rightItems.map((r, position) => (
@@ -249,6 +326,7 @@ export function MatchPairs({ question, onSubmit, disabled }) {
             data-hover-sound=""
           >
             {r}
+            {solvedRights.includes(r) && <PieceMark ok rightText={matchedText} />}
           </button>
         ))}
       </div>
@@ -257,7 +335,8 @@ export function MatchPairs({ question, onSubmit, disabled }) {
 }
 
 // sort_bins — tap an item, then tap the bin it belongs in.
-export function SortBins({ question, onSubmit, disabled }) {
+export function SortBins({ question, onSubmit, disabled, feedback }) {
+  const { t } = useTranslation();
   const bins = useMemo(() => Object.keys(question.correct_answer || {}), [question.id]); // eslint-disable-line react-hooks/exhaustive-deps
   // Shuffle order is intentionally randomized per mount (this remounts once
   // per question via the parent's key={question.id}); see MatchPairs above.
@@ -268,6 +347,21 @@ export function SortBins({ question, onSubmit, disabled }) {
 
   const pool = items.filter((it) => !(it in placed));
   const label = (s) => s.charAt(0).toUpperCase() + s.slice(1).replace(/_/g, " ");
+  // After the answer is judged: each sorted item is marked by whether it is in
+  // a right bin; when the answer is shown, a misplaced (or unsorted) item says where it belongs.
+  const homes = useMemo(() => binHomes(question), [question]);
+  const judged = feedback?.result;
+  const revealed = Boolean(feedback?.revealed) && judged !== "correct";
+  const belongsIn = (it) => {
+    const home = revealed ? homeOf(homes, it) : null;
+    return home == null ? null : (
+      <span className={styles.binHome}>
+        <span aria-hidden="true">→ </span>
+        <span className={styles.srOnly}>{`${t("questions.feedback.belongsIn", "belongs in")} `}</span>
+        {label(home)}
+      </span>
+    );
+  };
 
   const pickBin = (bin) => {
     if (disabled || !selectedItem) return;
@@ -306,6 +400,7 @@ export function SortBins({ question, onSubmit, disabled }) {
             data-hover-sound=""
           >
             <span className={styles.optText}>{it}</span>
+            {belongsIn(it)}
           </button>
         ))}
       </div>
@@ -323,9 +418,16 @@ export function SortBins({ question, onSubmit, disabled }) {
           >
             <div className={styles.binLabel}>{label(bin)}</div>
             <div className={styles.binItems}>
-              {Object.entries(placed).filter(([, b]) => b === bin).map(([it]) => (
-                <span key={it} className={styles.binChip} onClick={(e) => { e.stopPropagation(); unplace(it); }}>{it}</span>
-              ))}
+              {Object.entries(placed).filter(([, b]) => b === bin).map(([it]) => {
+                const ok = judged === "correct" ? true : judged || revealed ? binMark(homes, it, bin) : null;
+                return (
+                  <span key={it} className={`${styles.binChip} ${ok === true ? styles.right : ok === false ? styles.wrongPick : ""}`} onClick={(e) => { e.stopPropagation(); unplace(it); }}>
+                    {it}
+                    <PieceMark ok={ok} rightText={t("questions.feedback.rightBin", "in the right group")} wrongText={t("questions.feedback.wrongBin", "not in this group")} />
+                    {ok === false && belongsIn(it)}
+                  </span>
+                );
+              })}
             </div>
           </div>
         ))}
@@ -335,7 +437,7 @@ export function SortBins({ question, onSubmit, disabled }) {
 }
 
 // typed_short, typed_long — free text compared against accepted_answers.
-export function TypedAnswer({ question, onSubmit, disabled }) {
+export function TypedAnswer({ question, onSubmit, disabled, feedback }) {
   const { t } = useTranslation();
   const multiline = question.interaction === "typed_long";
   const [value, setValue] = useState("");
@@ -344,31 +446,35 @@ export function TypedAnswer({ question, onSubmit, disabled }) {
     if (e.key.length === 1 || e.key === "Backspace") sfx.type();
     if (!multiline && e.key === "Enter") submit();
   };
+  // After the answer is judged: the box shows right or not (open writing
+  // practice is never marked), and the expected answer once it is revealed.
+  const judged = question.graded === false ? null : feedback?.result;
+  const ok = judged === "correct" ? true : judged === "wrong" ? false : null;
+  const expected = feedback?.revealed && judged !== "correct" && question.graded !== false ? expectedAnswer(question) : "";
+  const field = {
+    className: `${styles.typedInput} ${ok === true ? styles.typedRight : ok === false ? styles.typedWrong : ""}`,
+    value,
+    disabled,
+    onChange: (e) => setValue(e.target.value),
+    onKeyDown: onKey,
+    "aria-label": question.instruction,
+    "aria-invalid": ok === false ? true : undefined,
+    spellCheck: false,
+  };
   return (
     <div className={styles.typedWrap}>
-      {multiline ? (
-        <textarea
-          className={styles.typedInput}
-          rows={3}
-          value={value}
-          disabled={disabled}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={onKey}
-          aria-label={question.instruction}
-          spellCheck={false}
-        />
-      ) : (
-        <input
-          type="text"
-          className={styles.typedInput}
-          value={value}
-          disabled={disabled}
-          onChange={(e) => setValue(e.target.value)}
-          onKeyDown={onKey}
-          aria-label={question.instruction}
-          autoComplete="off"
-          spellCheck={false}
-        />
+      <div className={styles.typedField}>
+        {multiline ? <textarea rows={3} {...field} /> : <input type="text" autoComplete="off" {...field} />}
+        {ok != null && (
+          <span className={`${styles.typedMark} ${ok ? styles.right : styles.wrongPick}`}>
+            <PieceMark ok={ok} rightText={t("questions.feedback.right", "right")} wrongText={t("questions.feedback.notRight", "not quite right")} />
+          </span>
+        )}
+      </div>
+      {expected && (
+        <p className={styles.typedReveal}>
+          {t("questions.feedback.answerIs", { defaultValue: "The answer: {{answer}}", answer: expected })}
+        </p>
       )}
       {!disabled && (
         <button type="button" className={styles.submitBtn} disabled={!value.trim()} onClick={submit}>{t("questionCard.check")}</button>

@@ -12,6 +12,9 @@ html {
   --lp-font: "Fredoka", sans-serif;
   --lp-letter: 0.05em;
   --lp-word: 0.1em;
+  /* Height of the site banners showing at the top (status notice, "view as"),
+     measured by components/StatusBanner/bannerOffset.js. 0px with no banner. */
+  --banner-h: 0px;
 }
 
 html {
@@ -21,7 +24,10 @@ html {
 body {
   margin: 0;
   font-family: var(--lp-font);
-  font-size: calc(18px * var(--lp-text-scale));
+  /* rem, so it follows the text size setting once (through html above). */
+  font-size: 1.125rem;
+  /* The fixed banners sit above everything; the page starts below them. */
+  padding-top: var(--banner-h, 0px);
   background: radial-gradient(ellipse at top, #16234a 0%, #060912 78%);
   width: 100vw;
   /* clip, not hidden: hidden would make body a scroll container and stop
@@ -31,7 +37,7 @@ body {
 }
 
 #root {
-  min-height: 100vh;
+  min-height: calc(100vh - var(--banner-h, 0px));
   width: 100vw;
   display: flex;
   flex-direction: column;
@@ -160,4 +166,9 @@ html[data-contrast="high"] body :focus-visible,
 html[data-big-targets] body :focus-visible {
   outline: 3px solid #ffdd00 !important;
   outline-offset: 2px !important;
+}
+
+/* Printed pages have no fixed banners above them. */
+@media print {
+  body { padding-top: 0; }
 }

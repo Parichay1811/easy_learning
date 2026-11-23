@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion as Motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { FaFire, FaStar, FaMedal, FaBolt, FaBookOpen, FaPlay, FaCheck, FaTrophy, FaChevronRight, FaGamepad, FaSeedling } from 'react-icons/fa'
+import { FaCalendarCheck, FaStar, FaMedal, FaBolt, FaBookOpen, FaPlay, FaCheck, FaTrophy, FaChevronRight, FaGamepad, FaSeedling } from 'react-icons/fa'
 import Mascot, { FloatingButterflies } from '../../components/Mascot/Mascot'
 import NextUpCard from '../../components/learning/NextUpCard'
 import { useJourney, langOf } from '../../components/journey/journeyApi'
@@ -137,12 +137,14 @@ function ClassicOverview({
     () => moduleStars == null ? null : Object.entries(moduleStars).filter(([k]) => /^(listen|read|write|speak)_(english|maths|science)$/.test(k)).reduce((sum, [, v]) => sum + (Number(v) || 0), 0),
     [moduleStars],
   )
-  const streak = stats?.streak ?? 0
+  // Days learned in the last 7 (nothing is lost by missing a day; docs/learning/GAME-ROADMAP.md G-006).
+  // An older server without daysThisWeek: the streak, capped at 7.
+  const daysLearned = stats?.daysThisWeek ?? Math.min(7, stats?.streak ?? 0)
 
-  // The puppy waves hello to a new learner and cheers a new badge or a streak,
+  // The puppy waves hello to a new learner and cheers a new badge or a good week,
   // for a few seconds, then settles into its calm idle (busy motion that never
   // stops is hard on attention).
-  const celebrate = !isNew && (Boolean(newBadge) || streak >= 2)
+  const celebrate = !isNew && (Boolean(newBadge) || daysLearned >= 3)
   const lively = isNew || celebrate
   const [settled, setSettled] = useState(false)
   useEffect(() => {
@@ -252,8 +254,8 @@ function ClassicOverview({
         </section>
       ) : (
         <section className={s.counters} aria-label={t('studentDash.myNumbers', 'My numbers')}>
-          <Counter kind="streak" icon={FaFire} value={streak} label={t('studentDash.counter.streak', 'Streak')}
-            sub={streak >= 3 ? t('dashboard.stats.onFire') : t('dashboard.stats.keepGoing')} delay={150} lang={lang} />
+          <Counter kind="streak" icon={FaCalendarCheck} value={daysLearned} of={7} label={t('studentDash.counter.weekDays', 'Days this week')}
+            sub={t('studentDash.counter.weekDaysSub', 'Learning days in the last 7')} delay={150} lang={lang} />
           <Counter kind="stars" icon={FaStar} value={starsTotal} of={36} label={t('studentDash.counter.stars', 'Stars')} delay={250} lang={lang} />
           <Counter kind="badges" icon={FaMedal} value={earned} of={achievements.length || null} label={t('studentDash.counter.badges', 'Badges')} delay={350} lang={lang} />
           <Counter kind="xp" icon={FaBolt} value={xp} label={t('dashboard.stats.totalXP')} delay={450} lang={lang} />

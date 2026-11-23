@@ -80,10 +80,12 @@ Every module is played in **rounds of exactly 10 questions**, and each module ha
 **Practice / Warrior** toggle:
 
 - **Practice** — untimed, no pass/fail — just play and earn 1 star per correct answer.
-- **Warrior** — timed per question, and the round is graded **Passed** (6 or more correct
-  out of 10) or **Failed**. Answering fast earns bonus stars on top of the normal star per
-  correct answer: within 10 seconds → +5 bonus stars, within 15 seconds → +4, within 20
-  seconds → +3.
+- **Warrior** — "beat your own best": the round is graded **Passed** (60% or more correct:
+  6 of 10) and compared with your own best for that module (kept on the device), never with
+  other people. There is no clock unless the learner turns one on (Comfort settings → Warrior
+  clock), and the clock never costs a star: when it runs out the question stays open and the
+  clock says "take your time". There are no speed bonuses, and mini challenges are never
+  Warrior rounds.
 
 When you finish the 10th question, a **Round Complete** screen shows your result and saves
 it to your dashboard automatically.

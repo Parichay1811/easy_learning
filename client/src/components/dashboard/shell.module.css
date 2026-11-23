@@ -5,8 +5,9 @@
   --d-topbar-h: 68px;
   display: flex;
   /* The frame scrolls itself (like an app), so the top bar, the rail and sticky
-     rows (sub-tabs) stay put whatever the page around it does with overflow. */
-  height: 100dvh;
+     rows (sub-tabs) stay put whatever the page around it does with overflow.
+     A site banner fixed at the top (--banner-h, index.css) takes its share. */
+  height: calc(100dvh - var(--banner-h, 0px));
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior-y: contain;
@@ -22,6 +23,7 @@
 .fill {
   position: fixed;
   inset: 0;
+  top: var(--banner-h, 0px);
   z-index: 1500;
   min-height: 0;
   overflow-y: auto;
@@ -50,7 +52,7 @@
   align-self: flex-start;
   flex: 0 0 auto;
   width: 256px;
-  height: 100dvh;
+  height: calc(100dvh - var(--banner-h, 0px));
   display: flex;
   flex-direction: column;
   gap: 14px;

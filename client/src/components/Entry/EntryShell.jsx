@@ -17,6 +17,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import * as FramerMotion from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FcGoogle } from "react-icons/fc";
@@ -39,7 +40,7 @@ export default function EntryShell({ role = "student", emblem: Emblem, title, ba
   const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
-  const reduce = FramerMotion.useReducedMotion();
+  const reduce = useCalmMotion();
   const viaDoor = Boolean(location.state?.door);
   const [leaving, setLeaving] = useState("in");
   const shakeRef = useRef(null);

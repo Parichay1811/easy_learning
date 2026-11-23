@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import * as FramerMotion from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useCalmMotion } from "../utils/useCalmMotion";
 import { useNavigate } from "react-router-dom";
 import Hero from "../components/Hero/Hero";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
@@ -20,7 +20,7 @@ const Landing = lazy(() => import("../components/landing/Landing"));
 const Home = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
   // undefined = still resolving. Without Firebase there is nothing left to
   // resolve, so undefined means nobody is signed in.
   const visitor = user === null || (user === undefined && !firebaseConfigured);

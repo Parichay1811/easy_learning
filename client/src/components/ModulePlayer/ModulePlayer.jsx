@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, useReducedMotion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import * as FramerMotion from "framer-motion";
-import { FaArrowLeft, FaStar, FaRedo, FaTimes } from "react-icons/fa";
+import { FaArrowLeft, FaStar, FaRedo, FaTimes, FaHome, FaCompass } from "react-icons/fa";
 import { useQuestionRound } from "../../hooks/useQuestionRound";
 import QuestionCard from "../QuestionCard/QuestionCard";
 import ExplainCard from "../QuestionCard/ExplainCard";
@@ -20,6 +21,8 @@ import PlacementSheet from "../Placement/PlacementSheet";
 import { needsPlacement } from "../Placement/placementApi";
 import { useVoiceBarHost } from "../VoiceBar/useNarration";
 import { sfx } from "../../utils/sounds";
+import { backTargetFor } from "../../utils/navMemory";
+import { signedIn } from "../journey/journeyApi";
 import styles from "./ModulePlayer.module.css";
 
 const COMPACT_QUERY = "(max-width: 359px), (orientation: landscape) and (max-height: 500px)";
@@ -50,8 +53,11 @@ function useCompactHud() {
 export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent = "#6c63ff", loadingKey = "modules.loadingQ", extra }) {
   const { subject } = useParams();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { t } = useTranslation();
-  const reduce = useReducedMotion();
+  // Where Back goes: the page the learner came from (the dashboard, a discovery…), else Home.
+  const [backTo] = useState(() => backTargetFor(pathname));
+  const reduce = useCalmMotion();
   const compactHud = useCompactHud();
   const [extraOpen, setExtraOpen] = useState(false);
   const [extraKey, setExtraKey] = useState(0);
@@ -65,8 +71,9 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
     warriorSeconds: clockSeconds, noClock, learn, choicePool, voiceBusy,
     resumeOffer, acceptResume, startFresh, starting, explainNow, doneExplaining, newBadges, challenge,
   } = round;
-  // Growth badges earned in the round are shown quietly when it ends (never mid-question).
-  const [badgesSeen, setBadgesSeen] = useState(false);
+  // Badges earned in the round are shown quietly when it ends (never mid-question):
+  // how many have been shown, so badges arriving a moment later still get theirs.
+  const [badgesSeen, setBadgesSeen] = useState(0);
   // The question card shows the teacher's words in place (and has its own
   // Read to me / pause), so the floating caption bar steps aside here.
   useVoiceBarHost(true);
@@ -106,7 +113,7 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
     return undefined;
   }, [totalScore]);
 
-  const leave = () => navigate("/home", { state: { openSubject: subject } });
+  const leave = () => (backTo ? navigate(backTo) : navigate("/home", { state: { openSubject: subject } }));
   const goBack = () => { sfx.back(); leave(); };
   const moduleLabel = challenge
     ? t("journey.challenge.title", "Mini challenge")
@@ -154,6 +161,17 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
         </p>
         <div className={styles.messageActions}>
           {(failed || empty) && backButton}
+          {/* Nothing here: somewhere else to go, not only Back. */}
+          {empty && signedIn() && (
+            <button type="button" className={styles.retryBtn} onClick={() => { sfx.tap(); navigate("/dashboard"); }} data-sound="none">
+              <FaHome aria-hidden="true" /> {t("journey.backToday", "Back to Today")}
+            </button>
+          )}
+          {empty && (
+            <button type="button" className={styles.retryBtn} onClick={() => { sfx.tap(); navigate("/home"); }} data-sound="none">
+              <FaCompass aria-hidden="true" /> {t("journey.exploreMore", "Explore something new")}
+            </button>
+          )}
           {failed && (
             <button type="button" className={styles.retryBtn} onClick={() => { sfx.tap(); retry(); }} data-sound="none">
               <FaRedo aria-hidden="true" /> {t("modules.retry")}
@@ -178,15 +196,18 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
             <span className={styles.subjectName}>{subjectLabel}</span>
           </span>
         </div>
-        <div className={styles.modeSlot}>
-          <ModeToggle mode={mode} onChange={setMode} compact={compactHud} />
-        </div>
+        {/* A mini challenge is never a Warrior round: no switch there. */}
+        {!challenge && !wantsChallenge && (
+          <div className={styles.modeSlot}>
+            <ModeToggle mode={mode} onChange={setMode} compact={compactHud} />
+          </div>
+        )}
         <div className={styles.progressSlot}>
           <ProgressBar current={resumeOffer ? resumeOffer.position + 1 : idx + 1} total={data.length} />
         </div>
         {mode === "warrior" && noClock && (
           <div className={styles.timerSlot}>
-            <span className={styles.noClock} title={t("modules.noClockHelp", "No clock: you chose to play without one (Comfort settings).")}>
+            <span className={styles.noClock} title={t("modules.noClockTip", "No clock. You can turn one on in Comfort settings.")}>
               {t("modules.noClock", "No clock")}
             </span>
           </div>
@@ -257,7 +278,6 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
                   onAnswered={recordAnswer}
                   onNext={advance}
                   isLast={isLast}
-                  locked={timedOut}
                   learn={learn}
                   choicePool={choicePool}
                 />
@@ -271,14 +291,15 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
         {roundDone && (
           <RoundComplete
             module={module} subject={subject || "general"} mode={mode}
-            stars={roundResult.stars} bonusStars={roundResult.bonusStars} total={data.length} challenge={challenge}
-            onPlayAgain={() => { handlePlayAgain(); setExtraKey((k) => k + 1); setBadgesSeen(false); }}
+            stars={roundResult.stars} total={data.length} challenge={challenge}
+            best={roundResult.best} newBest={roundResult.newBest}
+            onPlayAgain={() => { handlePlayAgain(); setExtraKey((k) => k + 1); setBadgesSeen(0); }}
             onBack={leave}
           />
         )}
       </AnimatePresence>
-      {roundDone && !badgesSeen && newBadges.length > 0 && (
-        <GrowthToast badges={newBadges} onDone={() => setBadgesSeen(true)} />
+      {roundDone && newBadges.length > badgesSeen && (
+        <GrowthToast key={badgesSeen} badges={newBadges.slice(badgesSeen)} onDone={() => setBadgesSeen(newBadges.length)} />
       )}
     </>
   );

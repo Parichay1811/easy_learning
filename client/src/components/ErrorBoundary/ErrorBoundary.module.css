@@ -1,0 +1,72 @@
+/* The friendly "something went wrong" screen: one calm card in the page area,
+   over whatever background the page had. */
+.screen {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px - var(--banner-h, 0px));
+  min-height: calc(100dvh - 80px - var(--banner-h, 0px));
+  padding: 24px 16px;
+  box-sizing: border-box;
+  font-family: var(--lp-font, "Fredoka", sans-serif);
+}
+
+.card {
+  width: min(100%, 460px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 28px 24px 24px;
+  border-radius: 28px;
+  background: #ffffff;
+  color: #1f2a44;
+  text-align: center;
+  box-shadow: 0 18px 48px rgba(4, 10, 24, 0.35);
+}
+
+.title {
+  margin: 4px 0 0;
+  font-size: clamp(1.3rem, 4vw, 1.6rem);
+  line-height: 1.25;
+}
+
+.text {
+  margin: 0;
+  max-width: 36ch;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #3b4660;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: max(48px, var(--lp-target, 44px));
+  padding: 8px 22px;
+  border-radius: 999px;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+.primary { border: 2px solid #1b5e2b; background: #26853c; color: #ffffff; box-shadow: 0 3px 0 #1b5e2b; }
+.secondary { border: 2px solid #7d8aa3; background: #ffffff; color: #1f2a44; }
+.primary:focus-visible,
+.secondary:focus-visible { outline: 3px solid #1f2a44; outline-offset: 3px; }
+
+:global(html[data-contrast="high"]) .card { background: #000000; color: #ffffff; border: 2px solid #ffffff; }
+:global(html[data-contrast="high"]) .text { color: #ffffff; }

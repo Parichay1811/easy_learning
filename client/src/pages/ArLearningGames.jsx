@@ -20,7 +20,7 @@ export default function ArLearningGames() {
     <main className={styles.page}>
       <SEO
         title="AR Learning Games for Kids | Camera-Powered Practice | Learnigo"
-        description="75 camera-powered AR learning games across 8 developmental groups — no equipment needed, just a webcam. Motor planning, memory, attention and more, worldwide."
+        description="More than 60 camera-powered AR learning games across 8 developmental groups — no equipment needed, just a webcam. Motor planning, memory, attention and more, worldwide."
         path={pageUrl}
         structuredData={{
           "@context": "https://schema.org",
@@ -34,7 +34,7 @@ export default function ArLearningGames() {
       <header className={styles.hero}>
         <span className={styles.eyebrow}>Learnigo | Game Zone</span>
         <h1>AR learning games for kids, anywhere in the world</h1>
-        <p>75 camera-powered games, organised into 8 developmental groups — no extra equipment, just a webcam and some open floor space.</p>
+        <p>More than 60 camera-powered games, organised into 8 developmental groups — no extra equipment, just a webcam and some open floor space.</p>
       </header>
       <section className={styles.intro}>
         <h2>How it works</h2>

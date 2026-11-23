@@ -7,6 +7,8 @@ import {
   useNavigationType,
 } from "react-router-dom";
 import { installUiSounds, navSoundWithin, sfx } from "./utils/sounds";
+import { notePath } from "./utils/navMemory";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 import { AnimatePresence } from "framer-motion";
 
@@ -91,6 +93,13 @@ function RouteSounds() {
     if (navType === "POP") sfx.back();
     else sfx.whoosh();
   }, [pathname, navType]);
+  return null;
+}
+
+// Remembers the page before this one, so a round's Back returns there (utils/navMemory.js).
+function RouteMemory() {
+  const { pathname, search } = useLocation();
+  useEffect(() => { notePath(`${pathname}${search}`); }, [pathname, search]);
   return null;
 }
 
@@ -189,12 +198,16 @@ function AppLayout() {
   return (
     <>
       <RouteSounds />
+      <RouteMemory />
       <ViewAsBanner />
       <StatusBanner />
       {!hideBackground3D && <Background3D />}
       {!hideNavbar && <Navbar />}
       <div style={{ paddingTop: hideNavbar ? "0" : "80px", flex: 1, display: "flex", flexDirection: "column" }}>
-        <AnimatedRoutes />
+        {/* A page that fails to draw shows a friendly screen, not a blank one (resets on a new page). */}
+        <ErrorBoundary resetKey={location.pathname}>
+          <AnimatedRoutes />
+        </ErrorBoundary>
       </div>
       {!hideNavbar && <Footer />}
       <FamilyLayer />

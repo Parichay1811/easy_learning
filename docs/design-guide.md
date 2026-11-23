@@ -59,7 +59,7 @@ client/src/
   context/            AuthContext (student), AdminAuthContext (org admin + super admin + teacher — tri-role)
   firebase/auth.js    Firebase app init
   i18n/i18n.js        i18next setup
-  utils/              warriorBonus, sounds, speechLang, questionLang, designations, authHeaders
+  utils/              warrior, navMemory, sounds, speechLang, questionLang, designations, authHeaders
   data/lessons.js     static lesson data used by Learn page
 
 server/
@@ -190,9 +190,10 @@ content).
   methods (see §6.4) hit the same endpoints.
 
 **Round system**: every module/game caps a round at exactly 10 questions (not infinite
-cycling). 1 star per correct answer. "Warrior mode" passes at 6+ correct, with a speed
-bonus per correct answer (`client/src/utils/warriorBonus.js`: ≤10s → +5, ≤15s → +4, ≤20s
-→ +3 bonus stars). On the 10th question a `RoundComplete` overlay
+cycling). 1 star per correct answer. "Warrior mode" is "beat your own best": it passes at
+60% of the round (`client/src/utils/warrior.js` `warriorPassMark`), shows the learner's own
+best, has no clock unless the learner turns one on, and the clock never costs a star (no
+speed bonus; docs/learning/GAME-ROADMAP.md G-005). On the last question a `RoundComplete` overlay
 (`client/src/components/RoundComplete/`) shows the result and calls `logRound`.
 
 **Session/round logging pattern used in every module component**: accumulate progress in

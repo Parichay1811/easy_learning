@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as FM from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import { fmtDuration, fmtDate, subjectLabel, moduleLabel } from "../../components/dashboard";
 import y from "./year.module.css";
 
@@ -11,7 +12,7 @@ const esc = (x) => String(x ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<
 export default function YearInReview({ data, onClose }) {
   const { t } = useTranslation();
   const T = (k, d, o) => t(`parent.year.${k}`, { defaultValue: d, ...o });
-  const reduce = FM.useReducedMotion();
+  const reduce = useCalmMotion();
   const first = (data.child?.name || "").split(" ")[0];
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);

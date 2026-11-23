@@ -77,7 +77,7 @@ function recordSession(e) {
     const { module: m, subject: s, minutes = 0, xp = 0, mode, source, ts = new Date(), orgId } = e
     const key = `${safeKey(m)}_${safeKey(s)}`
     await Promise.all([
-      bump({ email, ts, tz: e.tz, device: e.device, source: source || mode || 'practice', inc: { minutes, sessions: 1, xp }, ms: { key, minutes } }),
+      bump({ email, ts, tz: e.tz, device: e.device, source: source || mode || 'practice', inc: { minutes, sessions: e.countSession === false ? 0 : 1, xp }, ms: { key, minutes } }),
       LearningEvent.create({ email, ts, kind: 'session', module: m, subject: s, minutes, xp, mode, source: source || mode || 'practice', device: e.device, os: e.os, browser: e.browser, orgId }),
     ])
   })
@@ -89,7 +89,7 @@ function recordRound(e) {
     if (!email) return
     const { module: m, subject: s, mode = 'practice', stars = 0, totalStars = 0, ts = new Date(), orgId } = e
     await Promise.all([
-      bump({ email, ts, tz: e.tz, device: e.device, source: mode, inc: { stars: totalStars || stars } }),
+      bump({ email, ts, tz: e.tz, device: e.device, source: mode, inc: { stars: totalStars || stars, sessions: e.countSession ? 1 : 0 } }),
       LearningEvent.create({ email, ts, kind: 'round', module: m, subject: s, stars: totalStars || stars, mode, source: mode, device: e.device, os: e.os, browser: e.browser, orgId }),
     ])
   })

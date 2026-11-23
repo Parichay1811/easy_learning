@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { clearActive, getActive } from "./viewAsStore";
+import { useBannerSlot } from "../StatusBanner/bannerOffset";
 import s from "./ViewAsBanner.module.css";
 
 const API = (import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api").replace(/\/api\/?$/, "");
@@ -35,6 +36,8 @@ export default function ViewAsBanner() {
     document.documentElement.classList.toggle("viewAsActive", !!active && !expired);
     return () => document.documentElement.classList.remove("viewAsActive");
   }, [active, expired]);
+  // Fixed at the very top: the status notice, the navbar and the page move down by its height.
+  const slotRef = useBannerSlot("viewas");
 
   if (!active || location.pathname.startsWith("/superadmin")) return null;
 
@@ -49,7 +52,7 @@ export default function ViewAsBanner() {
 
   if (expired) {
     return (
-      <div className={s.banner} role="status">
+      <div ref={slotRef} className={s.banner} role="status">
         <strong>{t("viewAs.ended", "The read-only view has ended.")}</strong>
         <a className={s.btn} href="/superadmin-dashboard">{t("viewAs.back", "Back to the console")}</a>
       </div>
@@ -58,7 +61,7 @@ export default function ViewAsBanner() {
   const minutes = Math.max(1, Math.ceil(left / 60_000));
   const who = active.target?.name || active.target?.email || "";
   return (
-    <div className={s.banner} role="region" aria-label={t("viewAs.label", "Viewing as another person")}>
+    <div ref={slotRef} className={s.banner} role="region" aria-label={t("viewAs.label", "Viewing as another person")}>
       <span className={s.icon} aria-hidden="true">👁</span>
       <span>
         <strong>{t("viewAs.viewing", "Viewing as {{who}} ({{role}})", { who, role: active.target?.role })}</strong>

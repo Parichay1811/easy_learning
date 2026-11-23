@@ -50,7 +50,7 @@ Content is organized into three subjects, each covering four skills:
 
 That's 12 content modules in total. Each module is played in **rounds of exactly 10
 questions**, with a **Practice** mode (untimed, 1 star per correct answer) and a
-**Warrior** mode (timed, pass at 6+/10, with speed bonus stars for fast correct answers).
+**Warrior** mode ("beat your own best": pass at 60% of the round, compared only with the learner's own best; a clock only if the learner turns one on, and it never costs a star).
 
 There's also a subject-agnostic, story-based **Learn** mode that mixes topics rather than
 drilling one subject, and a standalone **Game Zone** with three English games — Spelling

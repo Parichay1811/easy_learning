@@ -33,7 +33,8 @@ export const PREF_FIELDS = [
   { key: "focusMode", group: "focus", type: "bool", def: false },
   { key: "bigTargets", group: "focus", type: "bool", def: false },
   // Time and answering
-  { key: "timer", group: "time", type: "choice", options: ["on", "relaxed", "off"], def: "on" },
+  // The Warrior clock: off unless the learner turns it on (docs/learning/GAME-ROADMAP.md G-005).
+  { key: "timer", group: "time", type: "choice", options: ["on", "relaxed", "off"], def: "off" },
   { key: "breakEvery", group: "time", type: "choice", options: [0, 10, 15, 20, 30], def: 0 },
   { key: "speakInstead", group: "time", type: "choice", options: ["ask", "type", "choose"], def: "ask" },
 ];
