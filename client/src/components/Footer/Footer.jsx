@@ -1,7 +1,9 @@
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
-import { FaGlobe, FaShieldAlt, FaFileContract, FaTags, FaBrain, FaGift, FaUsers, FaQuestionCircle } from "react-icons/fa";
+import { FaGlobe, FaShieldAlt, FaFileContract, FaTags, FaBrain, FaGift, FaUsers, FaQuestionCircle, FaEnvelope } from "react-icons/fa";
 import { useSeo } from "../../seo/useSeo";
+import { COMPANY } from "../../config/company";
+import EmailAddress from "../EmailAddress";
 import styles from "./Footer.module.css";
 
 // The game screens (Home, a subject, a question round, the games hubs, the
@@ -66,8 +68,28 @@ const Footer = () => {
         </nav>
 
         <p className={styles.copyright}>
-          © {new Date().getFullYear()} Learnigo. {t("footer.rights", { defaultValue: "All rights reserved." })}
+          © {new Date().getFullYear()} {COMPANY.name}. {t("footer.rights", { defaultValue: "All rights reserved." })}
         </p>
+
+        {/* Who makes Learnigo, and how to write to them (config/company.js). */}
+        <div className={styles.company}>
+          <span className={styles.madeBy}>
+            <Trans
+              i18nKey="footer.productOf"
+              defaults="Learnigo is a product of <co>{{company}}</co>"
+              values={{ company: COMPANY.name }}
+              components={{ co: <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.companyLink} /> }}
+            />
+          </span>
+          <span className={styles.mails}>
+            <a href={`mailto:${COMPANY.emails.info}`} className={styles.link}>
+              <FaEnvelope className={styles.icon} aria-hidden="true" /> <EmailAddress email={COMPANY.emails.info} />
+            </a>
+            <a href={`mailto:${COMPANY.emails.solutions}`} className={styles.link}>
+              <FaEnvelope className={styles.icon} aria-hidden="true" /> <EmailAddress email={COMPANY.emails.solutions} />
+            </a>
+          </span>
+        </div>
       </div>
     </footer>
   );

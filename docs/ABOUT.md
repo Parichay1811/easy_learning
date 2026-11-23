@@ -129,6 +129,9 @@ reflects the current architecture or stack.
 
 ## 5. Team
 
-Built by Futuresight Analytics Limited. Sutirtha Chakraborty (project owner), Parichay
+Learnigo is a product of [Futuresight Analytics Limited](https://futuresightanalytics.eu/)
+(contact: info@futuresightanalytics.eu; schools and organisations: solutions@futuresightanalytics.eu).
+The company details used on the site live in one place: `client/src/config/company.js`.
+Sutirtha Chakraborty (project owner), Parichay
 (developer), Raunak (company owner) — see PROJECT_PLAN.md §9 for the original
 responsibility breakdown.

@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import * as FramerMotion from "framer-motion";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import {
   FaBook, FaCalculator, FaMicroscope, FaHeart, FaStar,
   FaShieldAlt, FaGlobeAmericas, FaChartLine, FaArrowRight, FaEnvelope, FaLightbulb,
 } from "react-icons/fa";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
+import { COMPANY } from "../config/company";
+import EmailAddress from "../components/EmailAddress";
 import { playSlide } from "../utils/sounds";
 import styles from "./AboutUs.module.css";
 
@@ -83,6 +85,21 @@ const AboutUs = () => {
             </div>
           ))}
         </div>
+
+        {/* Who makes Learnigo (config/company.js). */}
+        <h2 className={styles.sectionTitle}>{t("aboutUs.madeBy.title", "Who makes Learnigo")}</h2>
+        <p className={styles.paragraph}>
+          <Trans
+            i18nKey="aboutUs.madeBy.text"
+            defaults="Learnigo is designed and built by <co>{{company}}</co>."
+            values={{ company: COMPANY.name }}
+            components={{ co: <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.companyLink} /> }}
+          />
+        </p>
+        <ul className={styles.mailList}>
+          <li>{t("contactUs.mail.info", "Questions, help and feedback")}: <a href={`mailto:${COMPANY.emails.info}`} className={styles.companyLink}><EmailAddress email={COMPANY.emails.info} /></a></li>
+          <li>{t("contactUs.mail.solutions", "Schools, organisations and partnerships")}: <a href={`mailto:${COMPANY.emails.solutions}`} className={styles.companyLink}><EmailAddress email={COMPANY.emails.solutions} /></a></li>
+        </ul>
 
         <div className={styles.ctaRow}>
           <button type="button" className={styles.ctaBtn} onClick={handleStart}>

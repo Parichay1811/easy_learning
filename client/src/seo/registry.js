@@ -15,6 +15,8 @@
  * and /es/ for the start page). English is also the x-default.
  */
 
+import { COMPANY, companyOrganization } from '../config/company.js'
+
 export const SITE_URL = 'https://www.learnigo.eu'
 export const SITE_NAME = 'Learnigo'
 export const DEFAULT_LANG = 'en'
@@ -322,8 +324,15 @@ export function siteGraph(seo, lang = DEFAULT_LANG) {
       description: s.orgDescription,
       areaServed: 'Worldwide',
       knowsLanguage: LANG_CODES,
-      contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: `${SITE_URL}/contact-us`, availableLanguage: LANG_CODES },
+      email: COMPANY.emails.info,
+      contactPoint: [
+        { '@type': 'ContactPoint', contactType: 'customer support', url: `${SITE_URL}/contact-us`, email: COMPANY.emails.info, availableLanguage: LANG_CODES },
+        { '@type': 'ContactPoint', contactType: 'sales', email: COMPANY.emails.solutions, availableLanguage: LANG_CODES },
+      ],
+      // Learnigo is a product of Futuresight Analytics (config/company.js).
+      parentOrganization: { '@id': companyOrganization()['@id'] },
     },
+    companyOrganization(),
     {
       '@type': 'WebSite',
       '@id': WEBSITE_ID,

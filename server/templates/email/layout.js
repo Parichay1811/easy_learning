@@ -2,6 +2,7 @@
 // Apple Mail) ignore <style> and flexbox, so everything is a table with inline
 // styles, 600 px wide, with system fonts and a plain-text twin.
 const { t } = require('../../i18n/emails')
+const COMPANY = { name: 'Futuresight Analytics Limited', url: 'https://futuresightanalytics.eu/', site: 'futuresightanalytics.eu', email: 'info@futuresightanalytics.eu' }
 
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]))
 const FONT = "'Fredoka','Segoe UI',Helvetica,Arial,sans-serif"
@@ -50,7 +51,9 @@ function layout({ locale = 'en', title, preheader = '', content, unsubscribeUrl 
     + `<tr><td style="padding:20px 8px;font-family:${FONT};font-size:12px;line-height:18px;color:${C.faint}">`
     + `${esc(why || t(locale, 'common.footer_why'))}<br>`
     + (unsubscribeUrl ? `<a href="${esc(unsubscribeUrl)}" style="color:${C.faint};text-decoration:underline">${esc(t(locale, 'common.unsubscribe'))}</a> &middot; ` : '')
-    + `<a href="${esc(settingsUrl)}" style="color:${C.faint};text-decoration:underline">${esc(t(locale, 'common.settings'))}</a>`
+    + `<a href="${esc(settingsUrl)}" style="color:${C.faint};text-decoration:underline">${esc(t(locale, 'common.settings'))}</a><br>`
+    // Who sends this (Learnigo is a Futuresight Analytics product) and where to write back.
+    + `Learnigo &middot; ${COMPANY.name} &middot; <a href="${COMPANY.url}" style="color:${C.faint};text-decoration:underline">${COMPANY.site}</a> &middot; <a href="mailto:${COMPANY.email}" style="color:${C.faint};text-decoration:underline">${COMPANY.email}</a>`
     + '</td></tr></table></td></tr></table></body></html>'
 }
 
