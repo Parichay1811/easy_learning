@@ -36,3 +36,15 @@
 .go:active, .fresh:active { transform: translateY(3px); box-shadow: none; }
 .go:focus-visible, .fresh:focus-visible { outline: 3px solid #1971c2; outline-offset: 3px; }
 .go:disabled, .fresh:disabled { opacity: 0.6; cursor: default; }
+
+/* A short arena (a phone on its side): the two choices side by side, so the
+   whole card fits without its own scroll hiding "Start fresh". */
+@container arena (max-height: 340px) and (min-width: 480px) {
+  .card { max-width: 640px; gap: 6px; padding: 12px 22px; }
+  .title { font-size: 1.25rem; line-height: 1.25; }
+  .text { line-height: 1.4; }
+  .actions { flex-direction: row; width: 100%; max-width: 560px; margin-top: 2px; }
+  /* Sized by their words first (no "question" / "4" split over two lines),
+     then sharing what is left. */
+  .go, .fresh { flex: 1 1 auto; min-height: 48px; padding: 6px 16px; }
+}

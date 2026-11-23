@@ -384,6 +384,19 @@
   .navIconWrap { width: 26px; height: 26px; }
 }
 
+/* Touch screens (phones, tablets): every control in the bar is a full 44px
+   target, the slim landscape bar included (it is 48px tall). After the rule
+   above so it wins there. Fit (Navbar.jsx) is measured, so the few extra
+   pixels of width are accounted for. */
+@media (pointer: coarse) {
+  .logo { min-height: 44px; }
+  .navPill, .login, .logout { min-height: 44px; }
+  .soundBtn { width: 44px; height: 44px; }
+  .hamburger { width: 44px; height: 44px; }
+  .bar[data-fit="1"] .logout, .bar[data-fit="2"] .logout { width: 44px; }
+  .bar[data-fit="2"] .navPill { padding: 6px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .navPill, .navPill:hover, .navPill:active { transform: none; }
   .navPill:hover .navIconWrap { animation: none; }

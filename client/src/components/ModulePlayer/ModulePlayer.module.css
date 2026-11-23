@@ -144,6 +144,23 @@
   padding: clamp(6px, 1.4vh, 16px) clamp(8px, 2vw, 24px) max(clamp(8px, 1.6vh, 18px), env(safe-area-inset-bottom));
 }
 
+/* The companion's seat beside the card (wide screens only; there is no room on smaller
+   ones, where it visits the answer sheet instead). Never covers the card: the card is
+   at most 760px wide and centred, so from 1180px there are 190px+ on each side. */
+.buddy { display: none; }
+@media (min-width: 1180px) and (min-height: 620px) {
+  .buddy {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    left: clamp(20px, 3vw, 64px);
+    bottom: max(clamp(14px, 3vh, 40px), env(safe-area-inset-bottom));
+    --buddy-size: clamp(116px, 10vw, 168px);
+    pointer-events: none;
+  }
+  .buddyRight { left: auto; right: clamp(20px, 3vw, 64px); }
+}
+
 /* The card's container: the card reads its size (container units/queries). */
 .slot {
   flex: 1;
@@ -235,6 +252,10 @@
   .stars { order: 7; }
   .modeSlot { order: 10; }
   .progressSlot { order: 11; flex: 1 1 0; }
+  /* The floating AI Teacher button (bottom-right from 430px wide) would sit on
+     the card's last answer, which fills the width here: the card stops above
+     it (--fab-b, Navbar.module.css; 0px below 430px, where it is in the bar). */
+  .arena { padding-bottom: max(clamp(8px, 1.6vh, 18px), env(safe-area-inset-bottom), var(--fab-b, 0px)); }
 }
 @media (max-width: 480px) {
   .backText { display: none; }
@@ -245,16 +266,24 @@
 
 /* ── a phone on its side: one slim HUD row ────────────────────────────── */
 @media (orientation: landscape) and (max-height: 500px) {
-  .hud { gap: 8px; padding: 4px 8px; margin-top: 6px; border-radius: 16px; }
+  .hud { gap: 8px; padding: 3px 8px; margin-top: 6px; border-radius: 16px; }
   .backText, .subjectName { display: none; }
-  .backBtn { min-height: 38px; min-width: 38px; padding: 4px; }
+  /* Still full 44px targets: the row is the only way out of the round. */
+  .backBtn { min-height: 44px; min-width: 44px; padding: 4px; }
   .titleIcon { width: 30px; height: 30px; font-size: 0.9375rem; border-radius: 10px; }
   .moduleName { font-size: 0.9375rem; }
   .stars { min-height: 34px; padding: 2px 10px 2px 8px; font-size: 1rem; }
-  .extraBtn { width: 38px; height: 38px; font-size: 1.0625rem; }
-  .settingsBtn { width: 38px; height: 38px; min-width: 38px; min-height: 38px; }
+  .extraBtn { width: 44px; height: 44px; font-size: 1.0625rem; }
+  .settingsBtn { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
   .timerSlot { --timer-size: 38px; }
-  .arena { padding-top: 6px; padding-bottom: max(6px, env(safe-area-inset-bottom)); }
+  /* The floating AI Teacher button sits bottom-right: on a phone on its side
+     the card keeps a lane clear on the right instead (--fab-r). */
+  .arena {
+    padding-top: 6px;
+    padding-bottom: max(6px, env(safe-area-inset-bottom));
+    padding-right: max(clamp(8px, 2vw, 24px), env(safe-area-inset-right), var(--fab-r, 0px));
+    padding-left: max(clamp(8px, 2vw, 24px), env(safe-area-inset-left));
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

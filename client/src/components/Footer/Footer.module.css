@@ -1,7 +1,7 @@
 .footer {
   width: 100%;
   margin-top: auto;
-  padding: 18px 24px;
+  padding: 18px 24px max(18px, env(safe-area-inset-bottom));
   background: rgba(25, 25, 28, 0.55);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -21,13 +21,16 @@
 .links {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 4px 12px;
   flex-wrap: wrap;
 }
 
+/* Each link is a full 44px-tall target (the words alone are 21px). */
 .link {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
+  padding: 0 4px;
   gap: 6px;
   color: #d8dadf;
   text-decoration: none;
@@ -56,4 +59,17 @@
     flex-direction: column;
     text-align: center;
   }
+  .links { justify-content: center; }
+}
+
+/* The floating AI Teacher button (fixed bottom-right from 430px wide: 64px,
+   20px from the edge, 24px up) sits over the footer's right end once the page
+   is scrolled to the bottom. Keep that corner clear: below the footer on a
+   narrow column layout, to its right on a single row. From 1320px the 1100px
+   footer row ends well left of it. */
+@media (min-width: 430px) and (max-width: 600px) {
+  .footer { padding-bottom: calc(18px + var(--fab-b, 0px) + env(safe-area-inset-bottom)); }
+}
+@media (min-width: 601px) and (max-width: 1319px) {
+  .footer { padding-right: 108px; }
 }

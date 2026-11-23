@@ -16,6 +16,7 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 import ModeToggle from "../ModeToggle/ModeToggle";
 import WarriorTimer from "../WarriorTimer/WarriorTimer";
 import Mascot from "../Mascot/Mascot";
+import { companion } from "../../companion/bus";
 import { ComfortSettingsButton } from "../settings/ComfortSettings";
 import PlacementSheet from "../Placement/PlacementSheet";
 import { needsPlacement } from "../Placement/placementApi";
@@ -112,6 +113,14 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
     lastScore.current = totalScore;
     return undefined;
   }, [totalScore]);
+
+  // A new question: the companion turns to look at it (when it sits beside the card).
+  const slotRef = useRef(null);
+  const questionKey = current?.id || idx;
+  useEffect(() => {
+    const id = setTimeout(() => { if (slotRef.current) companion.signal("lookAt", { el: slotRef.current }); }, 700);
+    return () => clearTimeout(id);
+  }, [questionKey]);
 
   const leave = () => (backTo ? navigate(backTo) : navigate("/home", { state: { openSubject: subject } }));
   const goBack = () => { sfx.back(); leave(); };
@@ -254,7 +263,11 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
             {extra.render(extraKey)}
           </aside>
         )}
-        <div className={styles.slot}>
+        {/* Wide screens: the companion sits beside the card, watches and reacts (companion/). */}
+        <div className={`${styles.buddy} ${extra ? styles.buddyRight : ""}`} aria-hidden="true">
+          <Mascot size="var(--buddy-size)" butterfly={false} priority={1} />
+        </div>
+        <div className={styles.slot} ref={slotRef}>
           <AnimatePresence mode="wait" initial={false}>
             <FramerMotion.motion.div
               key={resumeOffer ? "resume" : explainNow ? `explain-${current.id || idx}` : current.id || idx}

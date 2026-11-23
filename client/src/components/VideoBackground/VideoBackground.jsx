@@ -2,9 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import styles from "./VideoBackground.module.css";
 import { usePrefs } from "../settings/usePrefs";
 import { useCalmMotion } from "../../utils/useCalmMotion";
-import laptopVideo from "../../assets/videos/bg-laptop.mp4";
-import tabletVideo from "../../assets/videos/bg-tab.mp4";
-import mobileVideo from "../../assets/videos/bg-mobile.mp4";
+// The meadow without the puppy and butterflies that used to be painted into it: the
+// live companion and butterflies (companion/) play those parts now. Each loop is
+// ~0.5 MB (was 7-10 MB) and has a still poster that paints at once
+// (tools/companion/plates.mjs makes them).
+import laptopVideo from "../../assets/videos/meadow-laptop.mp4";
+import tabletVideo from "../../assets/videos/meadow-tab.mp4";
+import mobileVideo from "../../assets/videos/meadow-mobile.mp4";
+import laptopPoster from "../../assets/videos/meadow-laptop.webp";
+import tabletPoster from "../../assets/videos/meadow-tab.webp";
+import mobilePoster from "../../assets/videos/meadow-mobile.webp";
+
+const POSTERS = new Map([[laptopVideo, laptopPoster], [tabletVideo, tabletPoster], [mobileVideo, mobilePoster]]);
 
 // Same breakpoints used elsewhere in the app (Navbar mobile collapse / Hero large-desktop)
 const MOBILE_QUERY = "(max-width: 767px)";
@@ -42,36 +51,30 @@ const VideoBackground = () => {
     };
   }, []);
 
-  // Play, or pause on the frame it shows (the first one, when it never
-  // started), whenever "less movement" changes or the video is swapped.
+  // Play whenever the film is shown (it is not shown at all for less movement or
+  // fewer distractions: the still poster is the background then).
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return undefined;
-    if (!calm) {
-      try { v.play()?.catch?.(() => { /* autoplay refused: it stays on a still frame */ }); } catch { /* no media support */ }
-      return undefined;
-    }
-    v.pause();
-    // A paused video that never played can paint nothing (iOS Safari):
-    // seeking a hair in makes the browser decode and show the first frame.
-    const still = () => { try { if (v.currentTime < 0.01) v.currentTime = 0.01; } catch { /* not seekable yet */ } };
-    if (v.readyState >= 1) still();
-    else v.addEventListener("loadedmetadata", still, { once: true });
-    return () => v.removeEventListener("loadedmetadata", still);
+    if (!v) return;
+    try { v.play()?.catch?.(() => { /* autoplay refused: the poster stays */ }); } catch { /* no media support */ }
   }, [calm, src, focusMode]);
 
+  const poster = POSTERS.get(src);
+  // Still meadow (no download of the film at all) for less movement or fewer distractions.
+  const still = calm || focusMode;
   return (
-    <div className={styles.wrapper} aria-hidden="true">
-      {!focusMode && <video
+    <div className={styles.wrapper} aria-hidden="true" style={{ backgroundImage: `url(${poster})` }}>
+      {!still && <video
         key={src}
         ref={videoRef}
         className={styles.video}
         src={src}
-        autoPlay={!calm}
+        poster={poster}
+        autoPlay
         muted
         loop
         playsInline
-        preload={calm ? "metadata" : "auto"}
+        preload="auto"
       />}
       <div className={styles.overlay} />
     </div>

@@ -16,6 +16,7 @@ import { Component } from "react";
 import { Link, useInRouterContext } from "react-router-dom";
 import i18next from "i18next";
 import Mascot from "../Mascot/Mascot";
+import { companion } from "../../companion/bus";
 import s from "./ErrorBoundary.module.css";
 
 const t = (key, fallback) => {
@@ -48,6 +49,8 @@ export default class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     console.error("[ErrorBoundary] A page failed to draw:", error, info?.componentStack || "");
+    // The companion comes to this screen and gives a gentle, kind look (never a sad face).
+    companion.signal("support");
   }
 
   reset() {

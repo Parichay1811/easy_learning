@@ -238,6 +238,8 @@ const Hero = () => {
             className={styles.ctaBtn}
             onClick={handleCTA}
             data-sound="none"
+            data-companion-look
+            data-companion-guide
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.35 }}
