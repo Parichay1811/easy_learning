@@ -37,8 +37,9 @@ export default function SummaryView({ workspace }) {
             <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={d.accuracy == null ? null : fmtPercent(d.accuracy / 100)} delta={d.growth != null && d.accuracy != null ? { current: d.accuracy / 100, previous: (d.accuracy - d.growth) / 100, mode: "points" } : undefined} helpText={t("teacher.sum.growthHelp", { defaultValue: "Class growth: change in accuracy against the period before." })} />
             <KpiTile label={t("teacher.sum.engagement", { defaultValue: "Engagement" })} value={d.engagement == null ? null : `${d.engagement}`} unit="/ 100" helpText={t("teacher.sum.engagementHelp", { defaultValue: "A mix of active days, time and answers per student." })} />
             <KpiTile label={t("teacher.sum.questions", { defaultValue: "Questions contributed" })} value={d.questionsContributed} helpText={t("teacher.sum.questionsHelp", { defaultValue: "{{count}} approved.", count: d.questionsApproved })} />
-            <KpiTile label={t("teacher.sum.tests", { defaultValue: "Tests created" })} value={d.testsCreated} helpText={d.notes?.testsCreated} />
-            <KpiTile label={t("teacher.sum.reply", { defaultValue: "Reply time" })} value={d.replyTimeHours} helpText={d.notes?.replyTimeHours} />
+            <KpiTile label={t("teacher.sum.tests", { defaultValue: "Tests created" })} value={d.testsCreated} helpText={t("insights.teacher.testsHelp", { defaultValue: "Tests and practice sets you made in this workspace." })} />
+            {/* Reply time is not measured yet: no empty tile with a placeholder. */}
+            {d.replyTimeHours != null && <KpiTile label={t("teacher.sum.reply", { defaultValue: "Reply time" })} value={d.replyTimeHours} />}
           </div>
         </>
       )}

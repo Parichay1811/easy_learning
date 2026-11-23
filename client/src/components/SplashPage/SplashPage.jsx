@@ -12,17 +12,22 @@ import styles from "./SplashPage.module.css";
 // that page to hold its entrance until the splash hands over.
 splashShowing();
 
-const DURATION_MS = 1900;
-const REDUCED_MS = 900;
+// Short on purpose: the page underneath can be used about a second after it
+// appears, and a tap, a click or any key hands over at once.
+const DURATION_MS = 1250;
+const REDUCED_MS = 600;
+const EASE = [0.2, 0.8, 0.2, 1];
 
-// The first moment of the site: the puppy hops into the meadow, the Learnigo
-// letters bounce in beside it (together they make the logo), two butterflies
-// flutter over, and a sunny bar fills while the app wakes up. Short on
-// purpose: it hands over to the page underneath via onFinish.
+// The first moment of the site, like the opening shot of a film: the camera
+// settles on the meadow as the sun comes up behind the logo, the puppy hops
+// in, the Learnigo letters rise beside it (together they make the logo), and
+// a sunny bar fills. Then the logo lifts away towards the top of the page
+// and the light fades to show the page itself.
 const SplashPage = ({ onFinish }) => {
   const { t } = useTranslation();
   const reduce = useCalmMotion();
   const onFinishRef = useRef(onFinish);
+  const wrapRef = useRef(null);
   const total = reduce ? REDUCED_MS : DURATION_MS;
 
   useEffect(() => {
@@ -33,47 +38,72 @@ const SplashPage = ({ onFinish }) => {
     // Plays now if the browser allows sound; otherwise the welcome chime
     // plays on the first tap (sounds.js keeps that promise).
     sfx.loadStart();
-    const timer = setTimeout(() => {
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      // The page underneath takes taps while the splash fades.
+      if (wrapRef.current) wrapRef.current.style.pointerEvents = "none";
       splashDone();
       sfx.welcome();
       onFinishRef.current?.();
-    }, total);
-    return () => clearTimeout(timer);
+    };
+    const timer = setTimeout(finish, total);
+    // Skip: any tap, click or key.
+    const skip = () => finish();
+    window.addEventListener("pointerdown", skip, { once: true });
+    window.addEventListener("keydown", skip, { once: true });
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("pointerdown", skip);
+      window.removeEventListener("keydown", skip);
+    };
   }, [total]);
 
   const pop = reduce
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.3 } }
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.25 } }
     : {
-        initial: { opacity: 0, scale: 0.3, y: 40 },
+        initial: { opacity: 0, scale: 0.5, y: 34 },
         animate: { opacity: 1, scale: 1, y: 0 },
-        transition: { type: "spring", stiffness: 260, damping: 14, mass: 0.8 },
+        transition: { type: "spring", stiffness: 260, damping: 16, mass: 0.8 },
       };
   const letters = reduce
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.3, delay: 0.1 } }
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.25, delay: 0.05 } }
     : {
-        initial: { opacity: 0, scale: 0.55, rotate: -6 },
-        animate: { opacity: 1, scale: 1, rotate: 0 },
-        transition: { type: "spring", stiffness: 240, damping: 13, delay: 0.28 },
+        initial: { opacity: 0, y: 18, scale: 0.9 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        transition: { duration: 0.6, ease: EASE, delay: 0.18 },
       };
 
   return (
     <FramerMotion.motion.div
-      className={styles.wrapper}
-      style={{ "--splash-ms": `${total - 150}ms` }}
-      exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.04 }}
-      transition={{ duration: 0.45, ease: "easeOut" }}
+      ref={wrapRef}
+      className={`${styles.wrapper} ${reduce ? styles.calm : ""}`}
+      style={{ "--splash-ms": `${total - 100}ms` }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: reduce ? 0.2 : 0.42, ease: "easeOut" }}
       role="status"
       aria-label={t("entry.splash.loading", "Learnigo is getting ready…")}
     >
-      <EntryScene butterflies={2} />
+      <div className={styles.camera}>
+        <EntryScene butterflies={2} />
+      </div>
+      <div className={styles.dawn} aria-hidden="true" />
 
-      <div className={styles.stage}>
+      <FramerMotion.motion.div
+        className={styles.stage}
+        exit={reduce ? { opacity: 0 } : { opacity: 0, y: "-16vh", scale: 0.82 }}
+        transition={{ duration: 0.42, ease: [0.4, 0, 0.6, 1] }}
+      >
         <div className={styles.logo}>
+          <span className={styles.glow} aria-hidden="true" />
           <FramerMotion.motion.div className={styles.pup} {...pop}>
             <Mascot size="100%" mood="wave" />
           </FramerMotion.motion.div>
           <FramerMotion.motion.img
             src="/brand/logo-wordmark.webp"
+            width="1000"
+            height="443"
             alt="Learnigo"
             className={styles.word}
             draggable="false"
@@ -93,7 +123,7 @@ const SplashPage = ({ onFinish }) => {
           </span>
         </div>
         <p className={styles.caption}>{t("entry.splash.caption", "Getting your games ready…")}</p>
-      </div>
+      </FramerMotion.motion.div>
 
       <span className={`${styles.visitor} ${styles.v1}`} aria-hidden="true">
         <Butterfly hue="#7cc8ff" hue2="#b69cff" />

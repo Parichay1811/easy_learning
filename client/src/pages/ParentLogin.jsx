@@ -4,7 +4,6 @@ import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import EntryShell, { GoogleButton, EntryError } from "../components/Entry/EntryShell";
-import { ParentEmblem } from "../components/Entry/RoleEmblems";
 import { sfx, haptic } from "../utils/sounds";
 import e from "../components/Entry/Entry.module.css";
 
@@ -52,7 +51,7 @@ const ParentLogin = () => {
   return (
     <EntryShell
       role="parent"
-      emblem={ParentEmblem}
+      welcome={t("entry.parent.welcome", "Welcome, parents and carers")}
       title={t("entry.parent.title", "Parent sign in")}
       subtitle={t("entry.parent.subtitle", "Follow your child's learning, all in one place.")}
       tip={t("entry.parent.tip", "After signing in, add your child: make them a picture sign-in, or link the account they already use.")}

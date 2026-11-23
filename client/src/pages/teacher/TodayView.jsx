@@ -7,7 +7,7 @@ import { StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, S
 import { useLoad, useTeacherApi } from "./teacherApi";
 import { Avatar } from "./teacherUi";
 import { TeacherRequests } from "../../components/links";
-import { groupStyle, RISK_TEXT, useMedia } from "./teacherShared";
+import { groupStyle, RISK_TEXT, useMedia, enoughToCompare } from "./teacherShared";
 import s from "./teacher.module.css";
 
 function greeting(t) {
@@ -120,7 +120,7 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
   const attention = (
     <ChartCard title={t("teacher.today.attention", { defaultValue: "Who needs a nudge?" })}
       answer={d.attentionCount ? t("teacher.today.attentionAnswer", { defaultValue: "{{count}} students could use a check-in.", defaultValue_one: "{{count}} student could use a check-in.", count: d.attentionCount }) : t("teacher.today.attentionNone", { defaultValue: "Everyone is on track." })}
-      info={t("teacher.today.attentionInfo", { defaultValue: "No learning for 7 days, or accuracy down more than 15 points over two weeks." })}
+      info={t("insights.teacher.attentionInfo", { defaultValue: "No learning in the last 7 days, fewer right on the first try than the week before (only with enough answers to be sure), or a skill that stays tricky after several tries. The same rules as each group's check-ins." })}
       empty={!d.attentionCount && { title: t("teacher.today.allGood", { defaultValue: "All on track" }), text: d.counts.students ? t("teacher.today.allGoodText", { defaultValue: "Nobody needs a nudge right now." }) : t("teacher.today.noStudentsText", { defaultValue: "Add students to a group to see who needs help." }), actionLabel: d.counts.students ? undefined : t("teacher.add.btn", { defaultValue: "Add students" }), onAction: d.counts.students ? undefined : () => go("groups") }}>
       <ul className={`${s.personList} ${s.hudList}`} id="needs-attention" tabIndex={-1}>
         {d.attention.map((a) => (
@@ -129,7 +129,7 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
               <Avatar name={a.name} />
               <span className={s.personMain}>
                 <strong>{a.name}</strong>
-                <span>{t(`teacher.risk.${a.reason}`, { defaultValue: RISK_TEXT[a.reason] || "Needs a nudge" })}{a.lastActive ? ` · ${t("teacher.lastActive", { defaultValue: "last active {{date}}", date: fmtDate(a.lastActive, { style: "short" }) })}` : ""}</span>
+                <span>{t(`teacher.risk.${a.reason}`, { defaultValue: RISK_TEXT[a.reason] || "Needs a nudge", skill: a.skill })}{a.lastActive ? ` · ${t("teacher.lastActive", { defaultValue: "last active {{date}}", date: fmtDate(a.lastActive, { style: "short" }) })}` : ""}</span>
               </span>
             </button>
             <span className={`${s.badge} ${s.badgeAttention}`}>{a.groups[0]?.emoji} {a.groups[0]?.name}</span>
@@ -175,7 +175,7 @@ export default function TodayView({ teacher, workspace, go, onWorkspaceChange })
         <div className={s.kpiRow}>
           <KpiTile label={t("teacher.kpi.active", { defaultValue: "Active students" })} value={`${w.totals.learners} / ${d.counts.students}`} helpText={t("teacher.kpi.activeHelp", { defaultValue: "Students with any learning in the last 7 days." })} />
           <KpiTile label={t("teacher.kpi.time", { defaultValue: "Learning time" })} value={fmtDuration(w.totals.minutes)} sparkline={w.series} delta={w.previous ? { current: w.totals.minutes, previous: w.previous.minutes, mode: "duration", vs: t("teacher.vsPrevWeek", { defaultValue: "the week before" }) } : undefined} />
-          <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={w.totals.accuracy == null ? null : fmtPercent(w.totals.accuracy / 100)} delta={w.previous && w.previous.accuracy != null && w.totals.accuracy != null ? { current: w.totals.accuracy / 100, previous: w.previous.accuracy / 100, mode: "points", vs: t("teacher.vsPrevWeek", { defaultValue: "the week before" }) } : undefined} />
+          <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={w.totals.accuracy == null ? null : fmtPercent(w.totals.accuracy / 100)} delta={w.previous && w.previous.accuracy != null && w.totals.accuracy != null && enoughToCompare(w) ? { current: w.totals.accuracy / 100, previous: w.previous.accuracy / 100, mode: "points", vs: t("teacher.vsPrevWeek", { defaultValue: "the week before" }) } : undefined} />
           <KpiTile label={t("teacher.kpi.answered", { defaultValue: "Questions answered" })} value={w.totals.answered} delta={w.previous ? { current: w.totals.answered, previous: w.previous.answered, mode: "percent" } : undefined} />
         </div>
       )}

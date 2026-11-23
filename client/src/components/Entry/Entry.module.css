@@ -1,24 +1,28 @@
 /* The sign-in pages' frame (EntryShell) and the controls inside it.
    Layouts:
-   - portrait phones and tablets: top bar (back, logo), puppy + bubble, card, "new here?" panel;
-   - wide screens: puppy with its bubble on the left, the card on the right with its emblem
-     sitting on the card's top edge like a badge;
-   - short landscape phones: logo, puppy and "new here?" on the left, the card on the right.
-   The page itself never scrolls: the card's body scrolls on its own if a step is genuinely long. */
+   - portrait phones and tablets: top bar (back, logo), puppy + bubble, the
+     role's picture as a banner with the card sliding over its lower edge,
+     then the "new here?" panel;
+   - wide screens: the picture large on the left with the puppy under it, the
+     card on the right;
+   - short landscape phones: logo, puppy and "new here?" on the left, the card
+     on the right (no picture: no room).
+   The page fits one screen where it can and scrolls when it must (long forms,
+   large text): no box scrolls inside another. */
 
 .page {
-  --pup: clamp(48px, 7.6vh, 84px);
+  --pup: clamp(48px, 7.2vh, 84px);
   --medal: clamp(48px, 7.4vh, 72px);
   position: relative;
   isolation: isolate;
   /* A site banner above the page (the body is padded by --banner-h) takes
-     its share of the screen instead of making the page scroll. */
-  height: calc(100vh - var(--banner-h, 0px));
-  height: calc(100dvh - var(--banner-h, 0px));
+     its share of the screen. */
+  min-height: calc(100vh - var(--banner-h, 0px));
+  min-height: calc(100dvh - var(--banner-h, 0px));
   display: flex;
   flex-direction: column;
-  padding: max(8px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
-  overflow: hidden;
+  padding: max(8px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  overflow-x: clip;
   color: #1f2a44;
 }
 
@@ -39,31 +43,35 @@
   display: inline-flex;
   align-items: center;
   gap: 2px;
-  min-height: 44px;
-  padding: 0 16px 0 8px;
+  min-height: 48px;
+  padding-inline: 8px 16px;
   border: 2px solid #fff;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 3px 0 #c6d6ea, 0 10px 18px -12px rgba(31, 64, 120, 0.5);
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   line-height: 1;
   color: #1d3b66;
   cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .back:active {
   transform: translateY(2px);
-  box-shadow: 0 1px 0 #c6d6ea;
+}
+
+/* Right-to-left: "back" points the other way. */
+.back:dir(rtl) svg {
+  transform: scaleX(-1);
 }
 
 .word {
   justify-self: center;
   display: block;
-  height: clamp(40px, 7vh, 72px);
+  height: clamp(40px, 6.6vh, 72px);
   width: auto;
   max-width: 46vw;
   filter: drop-shadow(0 5px 10px rgba(24, 70, 130, 0.22));
@@ -75,12 +83,10 @@
 .stage {
   position: relative;
   z-index: 1;
-  flex: 1 1 auto;
-  min-height: 0;
+  flex: 1 0 auto;
   width: 100%;
   display: grid;
   grid-template-columns: minmax(0, 440px);
-  grid-template-rows: auto minmax(0, max-content);
   grid-template-areas:
     "side"
     "col";
@@ -90,13 +96,9 @@
   padding-top: clamp(4px, 1vh, 12px);
 }
 
-/* The card and the "new here?" panel, one under the other. If a step is too
-   long for the screen, this column shrinks and the card's body scrolls. */
 .col {
   grid-area: col;
   min-width: 0;
-  min-height: 0;
-  max-height: 100%;
   display: flex;
   flex-direction: column;
   gap: clamp(8px, 1.4vh, 16px);
@@ -130,20 +132,20 @@
   flex: 1;
   min-width: 0;
   margin: 0;
-  padding: 7px 12px;
+  padding: 8px 13px;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 3px 0 #d3e2f2, 0 10px 20px -14px rgba(31, 64, 120, 0.55);
-  font-size: clamp(0.8rem, 1.75vh, 1rem);
+  font-size: max(0.875rem, min(1.75vh, 1rem));
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.38;
   color: #2c3e5c;
 }
 
 .bubble::before {
   content: "";
   position: absolute;
-  left: -7px;
+  inset-inline-start: -7px;
   top: 50%;
   width: 16px;
   height: 16px;
@@ -153,25 +155,76 @@
   transform: rotate(45deg);
 }
 
+/* ── The role's picture ──────────────────────────────────────────────── */
+
+.withHero {
+  grid-template-areas:
+    "side"
+    "hero"
+    "col";
+}
+
+.hero {
+  grid-area: hero;
+  position: relative;
+  z-index: 0;
+  min-width: 0;
+  width: 100%;
+  justify-self: stretch;
+  /* wide enough to show a face and shoulders, short enough for the form */
+  aspect-ratio: 2.3 / 1;
+  max-height: 22vh;
+  /* the card slides over its lower edge */
+  margin-bottom: -30px;
+  border: 3px solid #fff;
+  border-bottom: none;
+  border-radius: 26px 26px 0 0;
+  overflow: hidden;
+  background: var(--role-soft);
+  box-shadow: 0 18px 30px -22px rgba(31, 64, 120, 0.7);
+}
+
+.heroPicture {
+  display: contents;
+}
+
+.heroPic {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--focus, 50% 32%);
+  transform: translate3d(calc(var(--dx, 0) * -6px), calc(var(--dy, 0) * -5px), 0) scale(1.05);
+  transition: transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Depth and the role's colour at the bottom edge, where the card meets it. */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 90% 90% at 50% 35%, rgba(0, 0, 0, 0) 62%, rgba(16, 32, 64, 0.14) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 55%, color-mix(in srgb, var(--role) 26%, transparent) 100%);
+}
+
 /* ── Card ────────────────────────────────────────────────────────────── */
 
 .cardWrap {
-  grid-area: card;
-  flex: 0 1 auto;
+  position: relative;
+  z-index: 1;
   min-width: 0;
-  min-height: 0;
   display: flex;
   flex-direction: column;
 }
 
 .card {
   position: relative;
-  flex: 0 1 auto;
-  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: clamp(10px, 1.6vh, 16px);
-  padding: clamp(12px, 1.9vh, 22px) clamp(14px, 2.2vw, 26px) clamp(14px, 2vh, 22px);
+  padding: clamp(14px, 2vh, 22px) clamp(14px, 2.2vw, 26px) clamp(16px, 2.2vh, 24px);
   border: 3px solid #fff;
   border-radius: 26px;
   background: #fff;
@@ -215,65 +268,65 @@
   min-width: 0;
 }
 
+.welcome {
+  margin: 0 0 2px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--role-ink);
+}
+
 .title {
   margin: 0;
-  font-size: clamp(1.25rem, 3.1vh, 1.85rem);
+  font-size: clamp(1.3rem, 3vh, 1.85rem);
   font-weight: 700;
   line-height: 1.15;
-  color: var(--role-ink);
+  color: #1d3b66;
 }
 
 .badge {
   display: inline-block;
-  margin-top: 3px;
+  margin-top: 4px;
   padding: 0 10px;
   border-radius: 999px;
   background: var(--role-soft);
   color: var(--role-ink);
-  font-size: 0.8rem;
-  font-weight: 600;
+  font-size: 0.875rem;
+  font-weight: 700;
   line-height: 1.6;
 }
 
 .subtitle {
-  margin: 3px 0 0;
-  font-size: clamp(0.85rem, 1.8vh, 1.02rem);
+  margin: 4px 0 0;
+  font-size: max(0.9rem, min(1.8vh, 1.04rem));
   font-weight: 500;
-  line-height: 1.35;
-  color: #44587a;
+  line-height: 1.38;
+  color: #3d5072;
 }
 
 .body {
   position: relative;
-  min-height: 0;
-  flex: 0 1 auto;
-  overflow-y: auto;
-  overscroll-behavior: contain;
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 1.3vh, 12px);
-  /* room for focus rings inside the scroll box */
-  margin: -4px;
-  padding: 4px;
+  gap: clamp(9px, 1.4vh, 13px);
 }
 
 /* ── "New here?" panel ───────────────────────────────────────────────── */
 
 .foot {
-  grid-area: foot;
   flex: none;
   min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 9px 14px;
+  padding: 10px 14px;
   border: 2px solid #fff;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 3px 0 rgba(31, 64, 120, 0.14);
-  font-size: clamp(0.85rem, 1.8vh, 0.98rem);
-  line-height: 1.35;
+  font-size: max(0.9rem, min(1.8vh, 1rem));
+  line-height: 1.4;
   color: #2c3e5c;
   text-align: center;
 }
@@ -283,7 +336,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 2px 6px;
+  gap: 0 6px;
 }
 
 .note {
@@ -296,7 +349,7 @@
   border-radius: 999px;
   background: #d3f9d8;
   color: #1b6b2e;
-  font-size: 0.78rem;
+  font-size: 0.875rem;
   font-weight: 700;
   line-height: 1.6;
   white-space: nowrap;
@@ -307,7 +360,21 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: clamp(8px, 1.3vh, 12px);
+  gap: clamp(9px, 1.4vh, 13px);
+}
+
+.fieldWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  padding-inline-start: 4px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #2c3e5c;
 }
 
 .field {
@@ -318,79 +385,111 @@
 
 .fieldIcon {
   position: absolute;
-  left: 15px;
-  color: #6b7a96;
+  inset-inline-start: 15px;
+  color: #5f6f8c;
   font-size: 15px;
   pointer-events: none;
 }
 
 .input {
   width: 100%;
-  min-height: 48px;
-  padding: 9px 14px 9px 42px;
-  border: 2px solid #c3d1e3;
+  min-height: 52px;
+  padding-block: 9px;
+  padding-inline: 42px 14px;
+  border: 2px solid #b9c8dc;
   border-radius: 14px;
   background: #f7faff;
   font: inherit;
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: #1f2a44;
   outline: none;
   transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
+.inputWithAfter {
+  padding-inline-end: 56px;
+}
+
 .input::placeholder {
-  color: #6b7a96;
+  color: #5f6f8c;
 }
 
 .input:focus {
-  border-color: var(--role);
+  border-color: var(--role-btn);
   background: #fff;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--role) 28%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--role) 30%, transparent);
+}
+
+/* The "show password" eye, inside the box at the end. */
+.reveal {
+  position: absolute;
+  inset-inline-end: 2px;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-top: -24px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #44587a;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.reveal[aria-pressed="true"] {
+  color: var(--role-ink);
+}
+
+.reveal:focus-visible {
+  outline: 3px solid #0b4ea2;
+  outline-offset: -3px;
 }
 
 .primary {
   width: 100%;
-  min-height: 50px;
+  min-height: 52px;
   padding: 8px 16px;
   border: none;
   border-radius: 16px;
   background: var(--role-btn);
   box-shadow: 0 4px 0 var(--role-btn-lip), 0 12px 20px -12px var(--role-btn);
   font: inherit;
-  font-size: 1.08rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #fff;
   cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
+  transition: transform 0.12s ease, filter 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .google {
   width: 100%;
-  min-height: 50px;
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
   padding: 6px 16px;
-  border: 2px solid #d3deec;
+  border: 2px solid #c9d6e8;
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 4px 0 #c3d1e3;
   font: inherit;
-  font-size: 1.02rem;
+  font-size: 1.04rem;
   font-weight: 600;
   color: #1f2a44;
   cursor: pointer;
-  transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
+  transition: transform 0.12s ease, border-color 0.12s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .googleMain {
-  min-height: 58px;
+  min-height: 60px;
   border-color: var(--role);
   box-shadow: 0 5px 0 var(--role-lip), 0 14px 24px -14px var(--role);
-  font-size: 1.1rem;
+  font-size: 1.12rem;
   font-weight: 700;
 }
 
@@ -415,7 +514,7 @@
     filter: brightness(1.08);
   }
   .google:hover:not(:disabled) {
-    border-color: var(--role);
+    border-color: var(--role-btn);
   }
   .back:hover,
   .soft:hover {
@@ -426,16 +525,11 @@
 .primary:active:not(:disabled),
 .google:active:not(:disabled) {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--role-btn-lip);
-}
-
-.google:active:not(:disabled) {
-  box-shadow: 0 1px 0 #c3d1e3;
 }
 
 .primary:disabled,
 .google:disabled {
-  opacity: 0.65;
+  opacity: 0.7;
   cursor: progress;
 }
 
@@ -443,9 +537,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  color: #5a6680;
+  color: #4a5872;
 }
 
 .divider::before,
@@ -462,13 +556,13 @@
   align-items: flex-start;
   gap: 8px;
   margin: 0;
-  padding: 8px 12px;
+  padding: 9px 12px;
   border: 2px solid #ffc078;
   border-radius: 14px;
   background: #fff4e6;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.38;
   color: #7a3500;
 }
 
@@ -480,8 +574,8 @@
   height: 22px;
   margin-top: 1px;
   border-radius: 50%;
-  background: #e8590c;
-  font-size: 0.85rem;
+  background: #c4410b;
+  font-size: 0.875rem;
   font-weight: 700;
   line-height: 1;
   color: #fff;
@@ -499,7 +593,7 @@
   background: #ebfbee;
   font-size: 0.95rem;
   font-weight: 500;
-  line-height: 1.35;
+  line-height: 1.38;
   color: #1b5e2b;
 }
 
@@ -513,7 +607,7 @@
 .link {
   display: inline-flex;
   align-items: center;
-  min-height: 36px;
+  min-height: 48px;
   padding: 0 4px;
   border: none;
   background: none;
@@ -531,14 +625,14 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 44px;
+  min-height: 48px;
   padding: 6px 18px;
   border: 2px solid #fff;
   border-radius: 999px;
   background: var(--role-soft);
   box-shadow: 0 3px 0 color-mix(in srgb, var(--role-lip) 55%, #fff);
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1.2;
   color: var(--role-ink);
@@ -553,13 +647,13 @@
 }
 
 .ghost {
-  min-height: 44px;
+  min-height: 48px;
   padding: 6px 14px;
-  border: 2px solid #c3d1e3;
+  border: 2px solid #b9c8dc;
   border-radius: 14px;
   background: #fff;
   font: inherit;
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #1d3b66;
   cursor: pointer;
@@ -571,28 +665,57 @@
 .link:focus-visible,
 .soft:focus-visible,
 .ghost:focus-visible {
-  outline: 3px solid #1971c2;
+  outline: 4px solid #0b4ea2;
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff;
 }
 
-/* ── Wide screens ────────────────────────────────────────────────────── */
+/* ── Wide screens: the picture on the left, the card on the right ──────── */
 
 @media (min-width: 900px) and (min-height: 600px) and (min-aspect-ratio: 1/1) {
   .page {
-    --pup: clamp(120px, 19vh, 180px);
+    --pup: clamp(84px, 13vh, 140px);
     --medal: clamp(78px, 11.5vh, 108px);
-    padding: 14px 28px 18px;
+    padding: 12px 28px 12px;
   }
   .word {
-    height: clamp(54px, 8.6vh, 88px);
+    height: clamp(54px, 8.4vh, 88px);
   }
   .stage {
-    grid-template-columns: minmax(220px, 320px) minmax(0, 480px);
-    grid-template-rows: minmax(0, max-content);
-    grid-template-areas: "side col";
+    grid-template-columns: minmax(0, 480px);
+    grid-template-areas:
+      "side"
+      "col";
     column-gap: clamp(28px, 4.5vw, 72px);
     align-items: center;
     padding-top: 0;
+  }
+  .withHero {
+    grid-template-columns: minmax(250px, 380px) minmax(0, 480px);
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "hero col"
+      "side col";
+    align-items: end;
+  }
+  .withHero .col {
+    align-self: center;
+  }
+  .withHero .side {
+    align-self: start;
+  }
+  .stage:not(.withHero) {
+    grid-template-columns: minmax(220px, 320px) minmax(0, 480px);
+    grid-template-areas: "side col";
+  }
+  .hero {
+    aspect-ratio: 1 / 1;
+    max-height: calc(100dvh - var(--banner-h, 0px) - 300px);
+    min-height: 220px;
+    margin-bottom: 0;
+    border-bottom: 3px solid #fff;
+    border-radius: 30px;
+    box-shadow: 0 6px 0 var(--role-lip), 0 30px 46px -24px rgba(31, 64, 120, 0.7);
   }
   .col {
     gap: clamp(12px, 2vh, 20px);
@@ -600,53 +723,91 @@
   .title {
     font-size: clamp(1.5rem, 3.6vh, 2.2rem);
   }
-  .side {
-    align-self: center;
+  .welcome {
+    font-size: 1.05rem;
   }
   .pupRow {
+    gap: 20px;
+  }
+  .stage:not(.withHero) .pupRow {
     flex-direction: column-reverse;
     gap: 16px;
   }
   .bubble {
-    padding: 12px 18px;
+    padding: 11px 16px;
     border-radius: 20px;
     font-size: clamp(0.95rem, 1.9vh, 1.1rem);
+  }
+  .stage:not(.withHero) .bubble {
     text-align: center;
   }
-  .bubble::before {
-    left: 50%;
+  .stage:not(.withHero) .bubble::before {
+    inset-inline-start: 50%;
     top: auto;
     bottom: -7px;
     margin: 0 0 0 -8px;
   }
-  .cardWrap {
+  .stage:not(.withHero) .cardWrap {
     padding-top: calc(var(--medal) / 2);
   }
   .card {
-    padding: 12px 30px 24px;
+    padding: 22px 30px 26px;
   }
   .card::before {
-    height: 120px;
+    height: 110px;
   }
-  .head {
+  .stage:not(.withHero) .head {
     flex-direction: column;
     gap: 2px;
     text-align: center;
   }
-  .medal {
-    margin-top: calc(var(--medal) / -2 - 12px);
-  }
-  .foot {
-    font-size: 0.98rem;
+  .stage:not(.withHero) .medal {
+    margin-top: calc(var(--medal) / -2 - 22px);
   }
 }
 
-/* Tablets in portrait and big desktop screens: everything a size larger, so
-   the card isn't lost in the meadow. */
-@media (min-width: 1560px) and (min-height: 940px), (min-width: 700px) and (min-height: 960px) and (orientation: portrait) {
+/* Tablets in portrait: a roomier card and more of the picture. */
+@media (min-width: 700px) and (orientation: portrait) {
+  .stage {
+    grid-template-columns: minmax(0, 520px);
+  }
+  .hero {
+    aspect-ratio: 1.8 / 1;
+    max-height: 26vh;
+  }
+  .bubble {
+    font-size: 1.05rem;
+  }
+}
+
+/* Big desktop screens: everything a size larger, so the card isn't lost in
+   the meadow. */
+@media (min-width: 1560px) and (min-height: 940px) {
   .top,
   .stage {
     zoom: 1.2;
+  }
+}
+
+/* ── Long forms (a sign-up): the page scrolls, the picture stays put ──── */
+
+.long .stage {
+  align-content: start;
+}
+
+@media (min-width: 900px) and (min-height: 600px) and (min-aspect-ratio: 1/1) {
+  .long .withHero {
+    align-items: start;
+    grid-template-rows: auto 1fr;
+  }
+  .long .withHero .col {
+    align-self: start;
+    grid-row: 1 / span 2;
+  }
+  .long .hero {
+    position: sticky;
+    top: 16px;
+    max-height: none;
   }
 }
 
@@ -655,9 +816,9 @@
 @media (orientation: landscape) and (max-height: 540px) {
   .page {
     --pup: clamp(44px, 14vh, 70px);
-    --medal: clamp(36px, 11vh, 46px);
+    --medal: clamp(40px, 11vh, 48px);
     padding-top: max(6px, env(safe-area-inset-top));
-    padding-bottom: max(6px, env(safe-area-inset-bottom));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
   }
   .top {
     position: absolute;
@@ -669,15 +830,15 @@
   .topEnd {
     display: none;
   }
-  .back {
-    min-height: 40px;
-    font-size: 0.88rem;
+  .hero {
+    display: none;
   }
-  .stage {
+  .stage,
+  .withHero {
     max-width: 960px;
     margin: 0 auto;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
-    grid-template-rows: minmax(0, max-content) auto;
+    grid-template-rows: auto auto;
     grid-template-areas:
       "side card"
       "foot card";
@@ -690,9 +851,19 @@
   .col {
     display: contents;
   }
+  .cardWrap {
+    grid-area: card;
+    align-self: center;
+  }
+  .foot {
+    grid-area: foot;
+    align-self: start;
+    gap: 2px;
+    padding: 6px 10px;
+  }
   .side {
     align-self: end;
-    padding-top: 46px;
+    padding-top: 56px;
   }
   .sideWord {
     display: block;
@@ -704,21 +875,9 @@
   }
   .bubble {
     padding: 6px 10px;
-    font-size: clamp(0.74rem, 3.4vh, 0.86rem);
     line-height: 1.3;
   }
-  .foot {
-    align-self: start;
-    gap: 4px;
-    padding: 6px 10px;
-    font-size: clamp(0.76rem, 3.4vh, 0.86rem);
-  }
-  .cardWrap {
-    align-self: center;
-    max-height: 100%;
-  }
   .card {
-    max-height: 100%;
     gap: 8px;
     padding: 10px 14px 12px;
     border-radius: 22px;
@@ -726,63 +885,48 @@
   .card::before {
     height: 56px;
   }
-  .head {
-    gap: 10px;
-  }
   .title {
-    font-size: clamp(1.02rem, 5vh, 1.25rem);
+    font-size: clamp(1.05rem, 5vh, 1.25rem);
   }
   .subtitle {
     margin-top: 1px;
-    font-size: clamp(0.74rem, 3.3vh, 0.84rem);
     line-height: 1.25;
-  }
-  .badge {
-    font-size: 0.7rem;
   }
   .body,
   .form {
     gap: 7px;
   }
+  .label {
+    font-size: 0.875rem;
+  }
   .input {
-    min-height: 42px;
+    min-height: 48px;
     padding-top: 5px;
     padding-bottom: 5px;
-    font-size: 0.95rem;
   }
   .primary,
   .google {
-    min-height: 44px;
-    font-size: 0.98rem;
+    min-height: 48px;
+    font-size: 1rem;
   }
   .googleMain {
-    min-height: 50px;
-  }
-  .divider {
-    font-size: 0.76rem;
-  }
-  .soft {
-    min-height: 38px;
-    padding: 4px 14px;
-    font-size: 0.85rem;
-  }
-  .link {
-    min-height: 30px;
-  }
-  .free {
-    font-size: 0.7rem;
+    min-height: 52px;
   }
   .error {
     padding: 6px 10px;
-    font-size: 0.84rem;
   }
 }
 
+/* Less movement: nothing drifts, nothing slides. */
 @media (prefers-reduced-motion: reduce) {
   .back,
   .primary,
   .google,
-  .soft {
+  .soft,
+  .heroPic {
     transition: none;
+  }
+  .heroPic {
+    transform: scale(1.05);
   }
 }

@@ -22,6 +22,15 @@ node generate.mjs --draft --only hello,cheer   # cheap previews ($0.005/s) to te
 node generate.mjs                              # all clips at 720p ($0.02/s; about $0.72 for the set)
 node generate.mjs --only cheer --seed 11 --tag cheer-11   # retakes with a seed
 
+# 2b. Moves that start or end on another pose (stand up, walk, sit down): the key pose first
+node poses.mjs --takes 3                         # .work/home.png -> standing, side-on walk pose (nano-banana)
+#    pick one in selection.json "poses", then: node poses.mjs --use   (-> .work/walk.png)
+node generate.mjs --only walk,sitDown,play --tag move-a   # clips.json "from"/"to" set first and last frames
+
+# 2c. YOLO instance segmentation (for clips whose spec has seg/hold/track)
+python3 -m venv .work/venv && .work/venv/bin/pip install ultralytics opencv-python-headless
+.work/venv/bin/python segment.py raw/move-a/walk.mp4 raw/move-a/sitDown.mp4 raw/move-b/play.mp4
+
 # 3. Review: contact sheets (ffmpeg tile), reject broken anatomy, pick takes in selection.json
 
 # 4. Build: key, heal, crop to one shared box, stack colour over alpha, H.264, poster, manifest
@@ -46,6 +55,20 @@ node plates.mjs stills    # the still meadows behind dashboard cards and entry p
 | Format | **Stacked alpha in H.264** (colour on top, alpha as grey below), joined by a WebGL shader | WebM VP9 alpha plus HEVC alpha; frame sequences or sprite sheets; Rive or Spine rig; Three.js | One file per clip that every browser decodes in hardware. WebM alpha does not work in Safari and HEVC alpha only works in Safari, so that route needs two files per clip. Sprite sheets of this size would be about 10x heavier. A Rive or Spine rig needs hand-rigged art, and a 3D model would not match the 2D look. The approach follows Jake Archibald's comparison of alpha video on the web. |
 | Real-time layer | **Web Animations API transforms**: hop, lean, travel, enter, exit | GSAP; framer-motion | The interruptible reactions (hops, leaning towards a target, travel between places) are not filmed. WAAPI adds no library, runs on the compositor, and composes (`composite: "add"`). |
 | Background | **Clean plate (nano-banana) with a P-Video breeze loop** | Keeping the old videos; a still image | The old 15 s videos had the dog and butterflies painted in (7 to 10 MB each). The new loops are 0.46 to 0.61 MB, have a 1 s cross-faded seam and no keyframe pulses, and come with a still poster. |
+
+## Walking and playing (Nov 2026)
+
+| Step | Chosen | Compared with | Why |
+|---|---|---|---|
+| Walk pose | **An edited still** (nano-banana, 3 takes, one picked) that clips can start or end on | Asking the video model to stand up from the seated home pose | The key pose keeps the character on-model; P-Video then only has to animate between two known poses. |
+| Stand up | **The sit-down's turn-and-sit, played backwards** (`range: [54, 30]`) | Four generated stand-ups | Two takes spun round to face left mid-clip, one melted into a green-tinted frame, one spun again. The reversed sit-down is clean: sits, stands facing the learner, turns right into the walk pose. |
+| Walk | **A trot filmed in place**, looped on frames 15 to 57 (1.8 s); the page moves the dog and mirrors it for left | Filming the dog crossing the frame; the full 3 s clip as the loop | In place means one clip works for any distance. Frames 1 to 5 smear and blink (the model leaving the still) and the last frames turn the head; frame 57 to 15 is no bigger a change than one normal step of the trot (diff 10.4 vs up to 9.8, measured). |
+| Which pixels are the dog | **YOLO11m-seg instance mask** (`segment.py`), followed frame to frame by overlap, holes filled, its biggest piece only; grown 31 px (7 px for `play`) as the garbage matte, then the largest-shape rule | The largest-shape rule alone | In `play` the video model painted its own butterfly next to the head and in walking clips specks sit near the legs. The instance mask drops them while the chroma key still draws the fur edge (YOLO's own edge rounds off tufts). Growing 7 px instead of 31 loses under 0.1% of the fur (measured). |
+| Walk drift | **`hold`: the straight-line drift of the YOLO box centre removed** | Re-centring every frame | Per-frame centring would shake with each step; a straight line keeps the bob. |
+| Soft edges, motion blur | **`unmix`: colour = C − (1−a)·screen, the screen colour measured per frame** | despill only | A fast tail or paw mixed with the green turned yellow-green or pale under despill. |
+| The butterfly | **The painted butterfly's path is recorded** (`track`: the dark-veined piece just outside the dog) and the live butterfly flies it in time with the clip | Removing it and letting the live butterfly wander | The dog's eyes follow that exact path in the film, so a live butterfly on the same path makes the gaze real. In a few frames it touches the ear and YOLO folds it into the dog; there the live butterfly is drawn on top of it. |
+
+Cost of this round: 3 pose stills about $0.12; 8 move takes about $0.56; 4 stand-up retakes about $0.24. Under $1.
 
 ## Settings that matter
 

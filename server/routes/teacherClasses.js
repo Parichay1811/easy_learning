@@ -37,6 +37,7 @@ router.get('/groups/:id/parents', g.groupParents)
 router.post('/groups/:id/parents/invite', g.inviteParents)
 router.get('/groups/:id/heatmap', i.heatmap)
 router.get('/groups/:id/suggestions', i.suggestions)
+router.get('/groups/:id/insights', i.groupInsights)
 
 // Connect by email: invite learners, answer learners and schools (services/linkRequests.js)
 const links = require('../controllers/linkRequestController').teacher
@@ -48,6 +49,7 @@ router.post('/links/:id/cancel', links.cancel)
 
 // Student profile and private notes
 router.get('/students/:id/profile', i.studentProfile)
+router.get('/students/:id/insights', i.studentInsights)
 router.get('/students/:id/notes', i.listNotes)
 router.post('/students/:id/notes', i.addNote)
 router.patch('/students/:id/notes/:noteId', i.updateNote)

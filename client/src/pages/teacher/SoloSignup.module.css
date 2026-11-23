@@ -1,73 +1,101 @@
-/* "I teach privately" signup, styled like the other login cards (dark glass, Fredoka). */
-.card {
-  max-width: 600px !important;
-  border-color: #22c55e !important;
-  align-items: stretch !important;
-  text-align: left;
-  gap: 16px;
-}
-.title { text-align: center; }
-.lead { color: #e5e7eb; text-align: center; margin: 0; font-size: 1.05rem; line-height: 1.5; }
-.perks { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; color: #d1fae5; }
-.perks li { display: flex; gap: 10px; align-items: flex-start; }
-.perks svg { color: #22c55e; margin-top: 4px; flex: none; }
-.form { display: flex; flex-direction: column; gap: 14px; }
-.field { display: flex; flex-direction: column; gap: 6px; color: #f3f4f6; font-weight: 600; }
-.field small { color: #cbd5e1; font-weight: 400; }
-.input {
-  font: inherit;
-  font-weight: 400;
-  padding: 12px 14px;
-  min-height: 48px;
+/* "I teach privately" (/teach): the pieces inside the entry card
+   (components/Entry/EntryShell). Light card, the tutor's teal (--role-*). */
+
+.perks {
+  list-style: none;
+  padding: 10px 12px;
+  margin: 0;
+  display: grid;
+  gap: 6px;
   border-radius: 14px;
-  border: 2px solid #4b5563;
-  background: #111827;
-  color: #fff;
-  box-sizing: border-box;
-  width: 100%;
+  background: var(--role-soft);
+  color: #1f3b33;
+  font-size: 0.95rem;
+  line-height: 1.38;
 }
-.input:focus { outline: 3px solid #86efac; outline-offset: 1px; border-color: #22c55e; }
+.perks li { display: flex; gap: 10px; align-items: flex-start; }
+.perks svg { color: var(--role-ink); margin-top: 4px; flex: none; }
+
+.form { display: flex; flex-direction: column; gap: 14px; }
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-inline-start: 4px;
+  color: #2c3e5c;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.field small { color: #4a5872; font-size: 0.875rem; font-weight: 500; }
+
+/* The entry text box, without the room for an icon. */
+.input {
+  margin-inline-start: -4px;
+  padding-inline: 14px;
+  font-weight: 400;
+}
+
+.row2 { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
+
+.fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.legend { padding: 0 0 0 4px; margin: 0 0 6px; color: #2c3e5c; font-size: 0.95rem; font-weight: 600; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
-  font: inherit;
-  font-weight: 500;
-  padding: 8px 14px;
-  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 48px;
+  padding: 8px 16px;
+  border: 2px solid #b9c8dc;
   border-radius: 999px;
-  border: 2px solid #4b5563;
-  background: #111827;
-  color: #e5e7eb;
+  background: #f7faff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e5c;
   cursor: pointer;
 }
-.chip:focus-visible { outline: 3px solid #86efac; }
-.chipOn { border-color: #22c55e; background: #14532d; color: #fff; }
-.row2 { display: grid; gap: 14px; grid-template-columns: 1fr 1fr; }
-.error { color: #fecaca; background: rgba(192, 57, 43, 0.25); border: 1px solid #f87171; padding: 10px 12px; border-radius: 12px; margin: 0; }
-.small { color: #cbd5e1; font-size: 0.9rem; text-align: center; margin: 0; }
-.small a, .link { color: #86efac; font-weight: 600; }
-.legend { padding: 0; margin: 0 0 6px; color: #f3f4f6; font-weight: 600; }
-.fieldset { border: 0; padding: 0; margin: 0; }
+.chipOn {
+  border-color: var(--role-btn);
+  background: var(--role-soft);
+  color: var(--role-ink);
+}
+.chipTick { font-size: 0.85rem; }
+.chip:focus-visible { outline: 4px solid #0b4ea2; outline-offset: 2px; }
+
+.small { font-size: 0.9rem; color: #3d5072; }
+.inline { color: var(--role-ink); font-weight: 700; text-underline-offset: 3px; padding: 16px 2px; }
+.inline:focus-visible { outline: 3px solid #0b4ea2; outline-offset: 2px; border-radius: 4px; }
+
+.inviteBanner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 14px;
+  border: 2px solid #f5c84c;
+  border-radius: 16px;
+  background: #fff8e1;
+  color: #5c4100;
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+}
+.inviteIcon { flex: none; font-size: 1.4rem; color: #a86b00; }
+.inviteBanner > span:nth-child(2) { flex: 1; display: grid; gap: 1px; min-width: 0; }
+.inviteBanner strong { font-weight: 700; color: #4a3400; }
+.inviteBanner small { color: #6b4d00; font-size: 0.9rem; }
+.chev { font-size: 1.6rem; color: #a86b00; }
+.inviteBanner:hover { background: #fff1c2; }
+.inviteBanner:focus-visible { outline: 4px solid #0b4ea2; outline-offset: 3px; }
+
+/* /teach?invite=1: invitations and "ask my school" (components/links/TeacherHub.jsx). */
+.hubPanel {
+  color: #1f2a44;
+}
 
 @media (max-width: 520px) {
   .row2 { grid-template-columns: 1fr; }
 }
-
-/* /teach?invite=1: invitations and "ask my school" (components/links/TeacherHub.jsx) on a light panel. */
-.hubCard { max-width: 680px !important; }
-.hubPanel {
-  background: #ffffff; color: #1f2a44; border-radius: 20px; padding: clamp(14px, 3vw, 20px);
-  box-shadow: 0 4px 0 #d9e3ef; max-height: min(62dvh, 640px); overflow: auto; overscroll-behavior: contain;
-}
-.inviteBanner {
-  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 64px; padding: 10px 16px; box-sizing: border-box;
-  border-radius: 18px; border: 2px solid #fcd34d; background: rgba(252, 211, 77, 0.14); color: #fef3c7;
-  font: inherit; text-align: left; cursor: pointer;
-}
-.inviteBanner > span:first-child { font-size: 1.8rem; }
-.inviteBanner > span:nth-child(2) { flex: 1; display: grid; gap: 2px; min-width: 0; }
-.inviteBanner strong { font-weight: 600; color: #fff; }
-.inviteBanner small { color: #fde68a; font-size: 0.9rem; }
-.inviteBanner > span:last-child { font-size: 1.6rem; color: #fcd34d; }
-.inviteBanner:hover { background: rgba(252, 211, 77, 0.22); }
-.inviteBanner:focus-visible, .textBtn:focus-visible { outline: 3px solid #86efac; outline-offset: 2px; }
-.textBtn { border: 0; background: none; color: #86efac; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; min-height: 44px; padding: 4px 8px; }

@@ -9,6 +9,7 @@
 //   const player = new AlphaVideo(canvas, { base: "/companion/", manifest });
 //   await player.play("hello", { onEnd: () => … });
 //   player.play("talk", { loop: true, fade: 180 });   // cross-fade when interrupting
+//   player.play("walk", { loop: true, rate: 1.3 });    // a quicker trot
 //
 // Throws from the constructor when WebGL is unavailable; the caller shows the still image.
 
@@ -40,7 +41,7 @@ void main() {
   gl_FragColor = mix(px(b), px(a), k);
 }`;
 
-const MAX_VIDEOS = 9; // all likely performances stay ready to switch to instantly
+const MAX_VIDEOS = 14; // every performance, the walk included, stays ready to switch to instantly
 
 export class AlphaVideo {
   constructor(canvas, { base, manifest, onFirstFrame, onFail } = {}) {
@@ -149,6 +150,14 @@ export class AlphaVideo {
     ids.forEach((id) => { if (this.manifest.clips[id]) this.entry(id); });
   }
 
+  /** True when every clip named is in the manifest and buffered enough to play now. */
+  canPlay(ids) {
+    return ids.every((id) => {
+      const e = this.manifest.clips[id] && this.videos.get(id);
+      return Boolean(e && e.v.readyState >= 3);
+    });
+  }
+
   upload(e) {
     const gl = this.gl;
     if (e.v.readyState < 2) return false;
@@ -255,7 +264,7 @@ export class AlphaVideo {
    * `fade`: the cross-fade length when this interrupts a clip (default: a short
    * boundary blend). The clip on screen is never dropped before the new one can draw.
    */
-  async play(id, { loop = false, fade = 0, onEnd } = {}) {
+  async play(id, { loop = false, fade = 0, onEnd, rate = 1 } = {}) {
     if (this.disposed || this.failed) return;
     const e = this.entry(id);
     const was = this.cur;
@@ -276,6 +285,9 @@ export class AlphaVideo {
     this.cur = id;
     if (this.endHandler) { this.endHandler.v.removeEventListener("ended", this.endHandler.fn); this.endHandler = null; }
     e.v.loop = loop;
+    // A walk's cadence follows the distance; every other clip plays at its own pace.
+    e.v.defaultPlaybackRate = rate;
+    e.v.playbackRate = rate;
     if (!loop && onEnd) {
       const fn = () => { if (this.cur === id) onEnd(); };
       e.v.addEventListener("ended", fn, { once: true });

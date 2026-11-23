@@ -130,3 +130,40 @@ test("a look that never got performed (it expired while a hello played) does not
   assert.equal(w.brain.dispatch({ type: "attend", dir: "right" }), true, "the next look is not on cooldown");
   assert.equal(w.brain.choose().clip, "lookRight");
 });
+
+test("a butterfly may come to play only in a calm moment, and rarely", () => {
+  const w = setup([0.9]);
+  w.advance(10_000);
+  assert.equal(w.brain.canPlay(), true, "calm: a butterfly may come over");
+  assert.equal(w.brain.dispatch({ type: "play" }), true, "the play interrupts the idle clip");
+  assert.equal(w.brain.choose().clip, "play");
+  w.advance(20_000);
+  assert.equal(w.brain.canPlay(), false, "not again soon after");
+  w.advance(90_000);
+  assert.equal(w.brain.canPlay(), true, "but again later");
+});
+
+test("no butterfly play while the voice speaks, while reading, or over a bigger moment", () => {
+  const w = setup([0.9]);
+  w.advance(10_000);
+  w.brain.dispatch({ type: "speakStart" });
+  assert.equal(w.brain.canPlay(), false, "the voice is speaking");
+  w.brain.dispatch({ type: "speakEnd" });
+  w.brain.choose();
+  w.brain.dispatch({ type: "quiet" }); // scrolling, typing, reading
+  assert.equal(w.brain.canPlay(), false, "the learner is reading");
+  w.advance(10_000);
+  w.brain.dispatch({ type: "success", size: "big" });
+  w.brain.choose();
+  assert.equal(w.brain.canPlay(), false, "a celebration is on screen");
+  assert.equal(w.brain.dispatch({ type: "play" }), false);
+});
+
+test("speaking interrupts a butterfly play", () => {
+  const w = setup([0.9]);
+  w.advance(10_000);
+  w.brain.dispatch({ type: "play" });
+  assert.equal(w.brain.choose().clip, "play");
+  assert.equal(w.brain.dispatch({ type: "speakStart" }), true);
+  assert.equal(w.brain.choose().clip, "talk");
+});

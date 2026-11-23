@@ -13,6 +13,8 @@ const batchService = require('../services/batchService')
 const { HttpError, isId, idStr, context, myGroup, myGroups, handle, safeTz } = require('../services/teacherContext')
 const { parentStatusFor } = require('../services/teacherParents')
 const { findingsInput } = require('../services/arFindingRows')
+const learnerInsights = require('../services/learnerInsights')
+const { loadCatalog } = require('../services/learning/catalog')
 
 const lower = (s) => String(s || '').toLowerCase()
 const tzOf = (req) => safeTz(req.get('x-timezone') || req.query.tz)
@@ -59,18 +61,26 @@ const today = handle(async (req, res) => {
 
   const { students, byEmail, emails } = await studentsIn(ctx, groups)
   const end = q.todayIn(tz)
-  const [cur, prev, ov, recent] = await Promise.all([
+  const [cur, prev, ov, recent, glance] = await Promise.all([
     q.perLearner(emails, { tz, to: end }),
     q.perLearner(emails, { tz, from: q.addDays(end, -13), to: q.addDays(end, -7) }),
     q.overview(emails, { tz, to: end }),
     emails.length ? LearnerDay.exists({ email: { $in: emails }, date: { $gte: q.addDays(end, -30) } }) : null,
+    // "Who needs a nudge" uses the same evidence rules as the group check-ins (services/learnerInsights.js).
+    learnerInsights.forGroup(students.map((x) => ({ id: String(x._id), name: x.name, email: x.email })), { days: 7, tz }),
   ])
   const prevBy = new Map(prev.rows.map((r) => [r.email, r]))
   const who = (email) => byEmail.get(email)
-  const attention = cur.rows.filter((r) => r.atRisk && who(r.email)).map((r) => ({
-    studentId: String(who(r.email)._id), name: who(r.email).name, reason: r.riskReason, lastActive: r.lastActive, accuracy: r.accuracy,
-    groups: groupsOf(groups, who(r.email)._id),
-  }))
+  const REASON = { quiet: 'inactive', notStarted: 'not_started', firstTryDown: 'first_try_down', firstTryDownLevel: 'first_try_down_level', stuck: 'stuck' }
+  const lastBy = new Map(cur.rows.map((r) => [r.email, r.lastActive]))
+  const attention = glance.checkIns.map((c) => {
+    const st = students.find((x) => String(x._id) === c.student.id)
+    const r = c.reasons[0]
+    return {
+      studentId: c.student.id, name: c.student.name, reason: REASON[r.key] || r.key, skill: r.params?.skill || null,
+      reasons: c.reasons, lastActive: lastBy.get(lower(st?.email)) || r.params?.last || null, groups: groupsOf(groups, c.student.id),
+    }
+  })
   const wins = []
   for (const r of cur.rows) {
     const s = who(r.email)
@@ -197,7 +207,9 @@ const createSuggestedGroup = handle(async (req, res) => {
   if (!ids.length) throw new HttpError(400, 'Choose students from the group')
   const m = MODULES.includes(req.body?.module) ? req.body.module : null
   const s = SUBJECTS.includes(req.body?.subject) ? req.body.subject : null
-  const title = m && s ? `${cap(m)} · ${cap(s)}` : 'Extra practice'
+  // An engine skill from the group insights ("Comparing numbers"): named from the skill catalogue only.
+  const skill = typeof req.body?.skill === 'string' ? loadCatalog().get(req.body.skill.slice(0, 80)) : null
+  const title = skill ? skill.name : m && s ? `${cap(m)} · ${cap(s)}` : 'Extra practice'
   const batch = await Batch.create({
     name: `Practice: ${title} (${from.name})`.slice(0, 80), orgId: ctx.orgId, directTutorIds: [ctx.tutorId], tutorIds: [ctx.tutorId],
     createdByTutorId: ctx.tutorId, groupKind: 'practice', emoji: '🎯', color: from.color || '', gradeBand: from.gradeBand || '',
@@ -209,7 +221,7 @@ const createSuggestedGroup = handle(async (req, res) => {
 })
 
 // GET /summary: "my teaching summary" (TCH-056), what the admin will see about me (ADM-041).
-// testsCreated is 0 until the tests module exists; replyTimeHours is null until messaging exists.
+// testsCreated counts the tests and practice sets I made in this workspace; replyTimeHours is not measured yet (null).
 const summary = handle(async (req, res) => {
   const ctx = await context(req)
   const tz = tzOf(req)
@@ -221,6 +233,8 @@ const summary = handle(async (req, res) => {
     { $group: { _id: '$status', rows: { $sum: '$rowCount' } } },
   ])
   const qBy = Object.fromEntries(uploads.map((u) => [u._id, u.rows]))
+  const Test = require('../models/tests/Test')
+  const testsCreated = await Test.countDocuments({ orgId: String(ctx.orgId), ownerTutorId: String(ctx.tutorId) })
   res.json({
     success: true,
     range: o.range,
@@ -233,11 +247,11 @@ const summary = handle(async (req, res) => {
     engagement: o.cur.engagement,
     questionsContributed: (qBy.approved || 0) + (qBy.pending || 0) + (qBy.rejected || 0),
     questionsApproved: qBy.approved || 0,
-    testsCreated: 0,
+    testsCreated,
     replyTimeHours: null,
     notes: {
-      testsCreated: 'Counts tests once the tests module (TCH-030) is built.',
-      replyTimeHours: 'Shown once messaging (TCH-070) is built.',
+      testsCreated: 'Tests and practice sets you made in this workspace.',
+      replyTimeHours: 'Not measured yet.',
     },
   })
 })
@@ -335,4 +349,24 @@ const deleteNote = handle(async (req, res) => {
   res.json({ success: true })
 })
 
-module.exports = { today, heatmap, compareGroups, suggestions, createSuggestedGroup, summary, studentProfile, addNote, listNotes, updateNote, deleteNote }
+// ── At a glance (services/learnerInsights.js) ───────────────────────────────
+// GET /students/:id/insights?days=7|28: one of MY students (same check as the profile).
+const studentInsights = handle(async (req, res) => {
+  const ctx = await context(req)
+  const { student } = await myStudent(ctx, req.params.id)
+  if (!student.email) return res.json({ success: true, insights: null })
+  const insights = await learnerInsights.forLearner(student.email, { name: student.name, audience: 'teacher', days: req.query.days, tz: tzOf(req) })
+  res.json({ success: true, insights })
+})
+
+// GET /groups/:id/insights?days=7|28: who might need a check-in, skills the group finds hard,
+// shared mix-ups, suggested small groups, wins. One of MY groups only; no ranking of children.
+const groupInsights = handle(async (req, res) => {
+  const ctx = await context(req)
+  const batch = await myGroup(ctx, req.params.id)
+  const students = await Student.find({ _id: { $in: batch.studentIds }, orgId: ctx.orgId, status: 'active' }).select('name email').lean()
+  const insights = await learnerInsights.forGroup(students.map((x) => ({ id: String(x._id), name: x.name, email: x.email })), { days: req.query.days, tz: tzOf(req) })
+  res.json({ success: true, group: { id: String(batch._id), name: batch.name }, insights })
+})
+
+module.exports = { today, heatmap, compareGroups, suggestions, createSuggestedGroup, summary, studentProfile, addNote, listNotes, updateNote, deleteNote, studentInsights, groupInsights }

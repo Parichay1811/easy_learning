@@ -4,7 +4,6 @@ import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../context/AdminAuthContext";
 import EntryShell, { GoogleButton, EntryError } from "../components/Entry/EntryShell";
-import { SchoolEmblem } from "../components/Entry/RoleEmblems";
 import { sfx, haptic } from "../utils/sounds";
 import e from "../components/Entry/Entry.module.css";
 
@@ -46,7 +45,7 @@ const AdminLogin = () => {
   return (
     <EntryShell
       role="school"
-      emblem={SchoolEmblem}
+      welcome={t("entry.school.welcome", "Welcome, school team")}
       title={t("entry.school.title", "School sign in")}
       badge={t("roleSelect.roles.schoolSub", "School admin")}
       subtitle={t("entry.school.subtitle", "Run your school on Learnigo: teachers, classes and progress.")}

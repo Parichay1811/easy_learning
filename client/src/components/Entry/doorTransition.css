@@ -1,0 +1,74 @@
+/* The door of light as a View Transition (door.js passDoor): plain CSS, not a
+   module, because it styles the browser's ::view-transition pseudo-elements.
+   html[data-door="in"]: a role was chosen; html[data-door="back"]: back to "/".
+   Variables on <html> while it plays: --door-x/--door-y (where the light opens
+   or closes), --door-r (a radius that covers the screen), --door-soft (the
+   role's pale light, seen between the two pages). */
+
+html[data-door]::view-transition {
+  background: var(--door-soft, #fffdf3);
+}
+
+html[data-door]::view-transition-old(root),
+html[data-door]::view-transition-new(root) {
+  mix-blend-mode: normal;
+}
+
+/* In: the old page leans towards the card and fades into the light while the
+   new page opens from the card in a widening circle. */
+html[data-door="in"]::view-transition-old(root) {
+  transform-origin: var(--door-x) var(--door-y);
+  animation: door-lean 460ms cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+html[data-door="in"]::view-transition-new(root) {
+  animation: door-open 700ms cubic-bezier(0.55, 0, 0.25, 1) 60ms both;
+}
+
+/* Back: the sign-in page closes onto its picture; "/" settles in behind. */
+html[data-door="back"]::view-transition-old(root) {
+  z-index: 1;
+  animation: door-close 520ms cubic-bezier(0.5, 0, 0.75, 0.2) both;
+}
+
+html[data-door="back"]::view-transition-new(root) {
+  animation: door-settle 560ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+/* The role's picture flies between the card and the sign-in page. */
+html[data-door]::view-transition-group(role-hero) {
+  z-index: 3;
+  animation-duration: 660ms;
+  animation-timing-function: cubic-bezier(0.3, 0, 0.12, 1);
+}
+
+html[data-door]::view-transition-image-pair(role-hero) {
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+html[data-door]::view-transition-old(role-hero),
+html[data-door]::view-transition-new(role-hero) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation-duration: 660ms;
+}
+
+@keyframes door-lean {
+  to { opacity: 0; transform: scale(1.06); }
+}
+
+@keyframes door-open {
+  from { clip-path: circle(0 at var(--door-x) var(--door-y)); }
+  to { clip-path: circle(var(--door-r) at var(--door-x) var(--door-y)); }
+}
+
+@keyframes door-close {
+  from { clip-path: circle(var(--door-r) at var(--door-x) var(--door-y)); }
+  to { clip-path: circle(0 at var(--door-x) var(--door-y)); }
+}
+
+@keyframes door-settle {
+  from { opacity: 0.3; transform: scale(1.04); }
+}

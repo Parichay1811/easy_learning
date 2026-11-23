@@ -3,8 +3,10 @@
 // Pages say where the dog may sit with <Mascot> (a "spot" in their own layout). The
 // stage picks the best spot, moves the dog's element INTO that spot (so it scrolls
 // with the page natively and sits under dialogs and cards like any element), and when
-// the best spot changes it lifts the dog into a fixed layer and hops it along an arc
-// to the new spot: it never teleports. It never takes clicks (pointer-events: none).
+// the best spot changes it lifts the dog into a fixed layer and WALKS it to the new
+// spot: it stands up, trots over (the filmed walk cycle, facing the way it goes) and
+// turns to sit (filmed). Until the walk clips are downloaded it hops along an arc
+// instead. It never teleports, and never takes clicks (pointer-events: none).
 //
 // The performance is chosen by brain.js; clips play through AlphaVideo.js; body
 // motion (hops, lean, entrances) comes from motion.js.
@@ -20,6 +22,8 @@ const LOOK_SELECTOR = "[data-companion-look]";
 const GUIDE_SELECTOR = "[data-companion-guide]";
 const GUIDE_AFTER_MS = 10_000;
 const FLOAT_WAIT_MS = 900; // between pages: wait this long for the next page's spot
+const WALK = ["standUp", "walk", "sitDown"];
+const WALK_PACE = 1.5; // body widths a second at which the filmed walk cycle's paws do not slide
 
 const shown = (el) => {
   if (!el?.isConnected) return false;
@@ -34,7 +38,9 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   let hostId = null; // spot the dog is in
   let floating = null; // viewport rect while between spots
   let moving = false;
+  let walking = false; // a filmed move (stand, walk, sit) owns the clips until it ends
   let again = false;
+  let dance = null; // { id } while a butterfly is coming over to play
   let parkedTimer = 0;
   let guideTimer = 0;
   let doorTimer = 0;
@@ -126,6 +132,59 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     state({ host: null });
   }
 
+  // Fixed-layer placement at a viewport rect (where a walk starts off screen).
+  function placeFixed(r) {
+    dog.getAnimations().forEach((a) => a.cancel());
+    Object.assign(dog.style, { position: "fixed", left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px`, transform: "" });
+    if (dog.parentElement !== layer) layer.appendChild(dog);
+    floating = { left: r.left, top: r.top, width: r.width, height: r.height };
+  }
+
+  // --- walking: stand up, trot over, sit down (docs/companion/INTERACTIONS.md) ---
+  const canWalk = () => Boolean(player && manifest?.clips?.walk && player.canPlay(WALK));
+  // The film faces right; going left, the whole picture is mirrored.
+  const face = (dir) => { canvas.style.transform = dir < 0 ? "scaleX(-1)" : ""; };
+
+  // Play one clip through, resolving when it ends (a stalled video never strands the dog).
+  function perform(id, { rate = 1, fade = 120 } = {}) {
+    return new Promise((resolve) => {
+      clearTimeout(clipTimer);
+      const ms = ((manifest.clips[id]?.duration || 1) / rate) * 1000;
+      let t = 0;
+      const done = () => { clearTimeout(t); resolve(true); };
+      t = setTimeout(done, ms + 700);
+      state({ clip: id, kind: "move" });
+      log("move", id, rate.toFixed(2));
+      player.play(id, { rate, fade, onEnd: done }).catch(() => { clearTimeout(t); resolve(false); });
+    });
+  }
+
+  // From viewport rect a to b. Up on its feet first unless it is already walking in.
+  async function walkBetween(a, b, { stand = true } = {}) {
+    walking = true;
+    const dx = b.left + b.width / 2 - (a.left + a.width / 2);
+    face(dx < 0 ? -1 : 1);
+    if (stand) await perform("standUp", { rate: 1.3 });
+    if (stopped) return;
+    const w = (a.width + b.width) / 2;
+    const dist = Math.hypot(dx, b.top + b.height - (a.top + a.height));
+    const ms = Math.max(650, Math.min(2000, 380 + dist * 0.8));
+    const pace = dist / w / (ms / 1000);
+    clearTimeout(clipTimer);
+    state({ clip: "walk", kind: "move" });
+    player.play("walk", { loop: true, fade: 110, rate: Math.max(0.8, Math.min(1.7, pace / WALK_PACE)) }).catch(() => {});
+    await motion.walk(dog, a, b, ms, { bounds: pace > WALK_PACE * 1.8 ? Math.max(1, Math.round(ms / 420)) : 0 });
+  }
+
+  // Arrived: turn to face the learner and sit (the film ends on the resting pose).
+  async function sitHere() {
+    // Quicker when the voice started speaking during the walk: the talk is waiting.
+    await perform("sitDown", { rate: brain.state.speaking ? 1.7 : 1.15 });
+    face(1);
+    if (dog.isConnected) motion.hop(body, shadow, "small"); // settles in
+    walking = false;
+  }
+
   // The target spot's frame must hold still for a few frames (page transitions animate).
   function settled(spot, ms = 700) {
     return new Promise((resolve) => {
@@ -148,6 +207,10 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   async function moveTo(spot) {
     moving = true;
     clearTimeout(parkedTimer);
+    // Its page went away (a new page, the door of light): it walks over. A move within
+    // the same page (into a lesson's answer sheet) stays a quick hop: a reaction must
+    // not take three seconds.
+    const newPage = !hostId;
     const from = hostId ? lift() : floating;
     const r = await settled(spot);
     if (stopped) return;
@@ -155,30 +218,54 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     const to = frameRectIn(r);
     const vw = innerWidth;
     const vh = innerHeight;
-    if (from && visibleShare(from, vw, vh) > 0.15 && visibleShare(to, vw, vh) > 0.15) {
+    const seenFrom = from && visibleShare(from, vw, vh) > 0.15;
+    const seenTo = visibleShare(to, vw, vh) > 0.15;
+    let walked = false;
+    if (seenFrom && seenTo) {
       if (!dog.isConnected) layer.appendChild(dog);
       sizeCanvas(Math.max(from.width, to.width));
       player?.resume();
-      await motion.travel(dog, from, to);
+      const far = Math.hypot(to.left - from.left, to.top - from.top) > Math.max(from.width, to.width) * 0.55;
+      // While the voice speaks the dog hurries (a hop) so it is there to talk with it.
+      if (newPage && far && canWalk() && !walking && !brain.state.speaking) {
+        await walkBetween(from, to);
+        walked = true;
+      } else {
+        await motion.travel(dog, from, to);
+      }
       if (stopped) return;
       host(spot);
+    } else if (seenTo && canWalk() && !walking && !brain.state.speaking) {
+      // Coming from off screen: it trots in from the nearer side of the window.
+      const side = to.left + to.width / 2 < vw / 2 ? -1 : 1;
+      const start = { ...to, left: side < 0 ? -to.width * 1.05 : vw + to.width * 0.05 };
+      placeFixed(start);
+      sizeCanvas(to.width);
+      player?.resume();
+      await walkBetween(start, to, { stand: false });
+      if (stopped) return;
+      host(spot);
+      walked = true;
     } else {
       host(spot);
       motion.enter(body, shadow);
     }
     player?.resume();
+    if (walked) await sitHere();
+    if (stopped) return;
     moving = false;
-    arrived(spot);
+    arrived(spot, walked);
     if (again) { again = false; reconcile(); }
   }
 
-  function arrived(spot) {
+  // `restart`: a filmed move held the clips, so the performance loop starts again here.
+  function arrived(spot, restart = false) {
     const mood = spot.mood;
     let interrupt;
     if (mood === "cheer") interrupt = brain.dispatch({ type: "success", size: "big" });
     else if (mood === "think") interrupt = brain.dispatch({ type: "curious" });
     else interrupt = brain.dispatch({ type: "arrive" });
-    if (interrupt) beat(true);
+    if (interrupt || restart) beat(Boolean(interrupt));
     armGuide();
   }
 
@@ -187,6 +274,21 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     const el = dog;
     const wasVisible = el.isConnected && visibleShare(el.getBoundingClientRect(), innerWidth, innerHeight) > 0.1;
     if (!wasVisible) return park();
+    if (canWalk() && !walking) {
+      // Nowhere to sit on this page: it gets up and trots off the nearer side.
+      const r = hostId ? lift() : el.getBoundingClientRect();
+      const side = r.left + r.width / 2 < innerWidth / 2 ? -1 : 1;
+      const end = { left: side < 0 ? -r.width * 1.1 : innerWidth + r.width * 0.1, top: r.top, width: r.width, height: r.height };
+      moving = true;
+      walkBetween({ left: r.left, top: r.top, width: r.width, height: r.height }, end).then(() => {
+        walking = false;
+        face(1);
+        moving = false;
+        if (!stopped && !hostId) park();
+        if (again) { again = false; reconcile(); }
+      });
+      return;
+    }
     if (hostId) lift();
     moving = true;
     motion.exit(el).then(() => {
@@ -231,7 +333,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   // --- the performance loop ---
   let clipTimer = 0;
   function beat(interrupt = false) {
-    if (stopped || !player) return;
+    if (stopped || !player || walking) return;
     const b = brain.choose();
     log("beat", b.clip, b.kind, interrupt ? "interrupt" : "", JSON.stringify(b.cues || {}), b.keep ? "keep" : "");
     const dur = (manifest.clips[b.clip]?.duration || 3) * 1000;
@@ -240,8 +342,13 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     if (b.keep) return;
     state({ clip: b.clip, kind: b.kind });
     clearTimeout(clipTimer);
+    if (dance && b.clip !== "play") { companion.signal("butterflyFree", { id: dance.id }); dance = null; }
     player
       .play(b.clip, { fade: interrupt ? 180 : 0, onEnd: () => beat(false) })
+      .then(() => {
+        // The butterfly that came to play follows the path the film's own butterfly took.
+        if (b.clip === "play" && dance) { companion.signal("butterflyGo", { id: dance.id, startAt: performance.now() }); }
+      })
       .catch(() => {
         // Video refused (iOS Low Power Mode, data saver...): keep the still image, retry
         // on the next tap. The dog still hops and moves with the body motion.
@@ -262,6 +369,24 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
       if (dog.isConnected) motion.hop(body, shadow, "small");
       return;
     }
+    if (evt.type === "butterflyVisit") {
+      // A butterfly wants to come over. If the dog is free to play, it gets a path:
+      // to where the filmed butterfly enters the picture, then along its flight.
+      const track = manifest?.clips?.play?.track;
+      log("butterflyVisit", JSON.stringify({ dance: !!dance, track: !!track?.length, hostId: !!hostId, moving, walking, connected: dog.isConnected, brain: brain.canPlay(), clip: !!player?.canPlay(["play"]) }));
+      if (!dance && track?.length && hostId && !moving && !walking && dog.isConnected && brain.canPlay() && player?.canPlay(["play"])) {
+        dance = { id: evt.id };
+        companion.signal("butterflyDance", { id: evt.id, at: danceAt, start: track[0][0], end: track[track.length - 1][0] });
+      }
+      return;
+    }
+    if (evt.type === "butterflyReady") {
+      if (dance?.id === evt.id && hostId && !walking && brain.dispatch({ type: "play" })) beat(true);
+      else { companion.signal("butterflyFree", { id: evt.id }); if (dance?.id === evt.id) dance = null; }
+      return;
+    }
+    if (evt.type === "butterflyDone") { if (dance?.id === evt.id) dance = null; return; }
+    if (evt.type === "butterflyDance" || evt.type === "butterflyGo" || evt.type === "butterflyFree") return;
     if (evt.type === "lookAt") { log("lookAt", hostId ? "hosted" : "not hosted"); if (evt.el && hostId) look(evt.el, "attend"); return; }
     const i = brain.dispatch(evt);
     log("signal", evt.type, evt.size || "", i ? "interrupt" : "waits");
@@ -313,6 +438,18 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     removeEventListener("focusin", onFocus);
     removeEventListener("pointerdown", onDown);
   });
+
+  // Where the film's butterfly is at time t (s) of the "play" clip, on screen now.
+  function danceAt(t) {
+    const tr = manifest.clips.play.track;
+    const r = dog.getBoundingClientRect();
+    let i = 1;
+    while (i < tr.length - 1 && tr[i][0] < t) i += 1;
+    const [t0, x0, y0] = tr[i - 1];
+    const [t1, x1, y1] = tr[i];
+    const k = t1 > t0 ? Math.max(0, Math.min(1, (t - t0) / (t1 - t0))) : 0;
+    return { x: r.left + (x0 + (x1 - x0) * k) * r.width, y: r.top + (y0 + (y1 - y0) * k) * r.height, scale: r.width / 160 };
+  }
 
   function nearest(x, y, within) {
     let best = null;
@@ -386,8 +523,9 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
             // Then the rest, so a reaction never waits for a download (2.2 MB in all).
             const later = () => {
               if (debug && localStorage.getItem("learnigo_companion_nopreload") === "1") return; // tests: cold switches
-              player?.preload(["hello", "talk", "cheer", "comfort"]);
-              setTimeout(() => player?.preload(["lookRight", "lookLeft", "tilt", "point"]), 6000);
+              // The walk first: the next page change should already be a walk, not a hop.
+              player?.preload(["hello", "standUp", "walk", "sitDown", "talk", "cheer", "comfort"]);
+              setTimeout(() => player?.preload(["lookRight", "lookLeft", "tilt", "point", "play"]), 6000);
             };
             if ("requestIdleCallback" in window) requestIdleCallback(later, { timeout: 4000 });
             else setTimeout(later, 1500);

@@ -12,10 +12,14 @@
    <Mascot/> stands in front instead). */
 .meadow {
   position: absolute;
-  inset: -2%;
+  inset: -3%;
   background: url("/brand/meadow-scene.webp") 46% 100% / cover no-repeat;
   transform-origin: 50% 80%;
   animation: breathe 36s ease-in-out var(--t0) infinite alternate;
+  /* Depth (useDepth.js): the far meadow drifts a little against the mouse or
+     the tilt of the device; the sun drifts less. */
+  translate: calc(var(--dx, 0) * -12px) calc(var(--dy, 0) * -8px);
+  transition: translate 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes breathe {
@@ -26,6 +30,8 @@
 .sun {
   position: absolute;
   inset: 0;
+  translate: calc(var(--dx, 0) * -5px) calc(var(--dy, 0) * -4px);
+  transition: translate 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
   background:
     radial-gradient(circle at 88% 6%, rgba(255, 249, 214, 0.95) 0, rgba(255, 244, 196, 0.55) 9%, rgba(255, 244, 196, 0) 28%);
 }
@@ -117,6 +123,11 @@
   .meadow,
   .cloud {
     animation: none;
+  }
+  .meadow,
+  .sun {
+    translate: none;
+    transition: none;
   }
   .flock {
     display: none;

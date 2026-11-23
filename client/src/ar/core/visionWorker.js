@@ -18,6 +18,7 @@
  * Errors come back as { id, error }.
  */
 import { FilesetResolver, HandLandmarker, PoseLandmarker } from '@mediapipe/tasks-vision'
+import { keptBytes, keptUrl } from './visionCache'
 
 let config = null
 let filesetPromise = null
@@ -37,6 +38,9 @@ function fileset() {
     // `importScripts`, and tasks-vision falls back to `import()` for it.
     filesetPromise = (async () => {
       const fs = await FilesetResolver.forVisionTasks(config.wasmPath, true)
+      // The runtime opening Games already downloaded (Cache Storage), if it did.
+      const kept = await keptUrl(new URL(fs.wasmBinaryPath, self.location.href).href, 'application/wasm')
+      if (kept) fs.wasmBinaryPath = kept
       // tasks-vision loads its WASM glue with `import()` and then *clears*
       // `self.ModuleFactory` after building each task. An ES module is only
       // evaluated once, so the second model (pose after hand) found no factory
@@ -53,7 +57,15 @@ function fileset() {
   return filesetPromise
 }
 
-function optionsFor(kind, delegate, opts) {
+// The model's bytes when opening Games already downloaded it (Cache Storage).
+const keptModels = new Map()
+async function modelBytes(url) {
+  if (!url) return null
+  if (!keptModels.has(url)) keptModels.set(url, await keptBytes(new URL(url, self.location.href).href))
+  return keptModels.get(url)
+}
+
+function optionsFor(kind, delegate, opts, bytes) {
   // Our own canvas: tasks-vision otherwise decides from the user agent whether
   // OffscreenCanvas is usable and, for iOS Chrome/Firefox, reaches for
   // `document` — which does not exist in a worker.
@@ -61,7 +73,7 @@ function optionsFor(kind, delegate, opts) {
   if (kind === 'hand') {
     return {
       canvas,
-      baseOptions: { modelAssetPath: opts.model || config.models.hand, delegate },
+      baseOptions: bytes ? { modelAssetBuffer: bytes, delegate } : { modelAssetPath: opts.model || config.models.hand, delegate },
       runningMode: 'VIDEO',
       numHands: opts.numHands ?? 2,
       // Slightly permissive: children's hands are small and often partly out
@@ -73,7 +85,7 @@ function optionsFor(kind, delegate, opts) {
   }
   return {
     canvas,
-    baseOptions: { modelAssetPath: opts.model || config.models.pose, delegate },
+    baseOptions: bytes ? { modelAssetBuffer: bytes, delegate } : { modelAssetPath: opts.model || config.models.pose, delegate },
     runningMode: 'VIDEO',
     numPoses: 1,
     minPoseDetectionConfidence: 0.5,
@@ -105,6 +117,7 @@ function nextTs(entry, t) {
 
 async function build(kind, opts, first) {
   const fs = await fileset()
+  const bytes = await modelBytes(opts.model || config.models[kind])
   const order = first === 'GPU' ? ['GPU', 'CPU'] : ['CPU']
   const entry = tasks[kind] || { lastTs: 0 }
   let lastErr = null
@@ -113,7 +126,8 @@ async function build(kind, opts, first) {
     let task = null
     try {
       if (moduleFactory && !self.ModuleFactory) self.ModuleFactory = moduleFactory
-      task = await FACTORY[kind].createFromOptions(fs, optionsFor(kind, delegate, opts))
+      // A fresh copy each try: the runtime may take the buffer over.
+      task = await FACTORY[kind].createFromOptions(fs, optionsFor(kind, delegate, opts, bytes && bytes.slice()))
       // Constructing is not enough on mobile GPUs — prove it can run a frame.
       task.detectForVideo(warmupImage(), nextTs(entry, performance.now()))
       Object.assign(entry, {

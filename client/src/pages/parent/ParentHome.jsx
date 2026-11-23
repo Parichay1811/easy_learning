@@ -1,20 +1,25 @@
-import { useMemo, useState } from "react";
+import { lazy, Suspense, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
-  TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, StackedBars, TrendLine, CalendarHeatmap,
-  SubjectModuleMatrix, HourWeekdayHeatmap, ProgressRing, Timeline, Button, toTable, fmtDuration, fmtPercent, fmtDate,
+  TimeRangeBar, useTimeRange, ChartCard, Skeleton, StackedBars, TrendLine, CalendarHeatmap,
+  SubjectModuleMatrix, HourWeekdayHeatmap, ProgressRing, Timeline, Button, toTable, fmtDuration, fmtDate,
   SubTabs, SubPanel, usePane,
 } from "../../components/dashboard";
-import { useLoad, rangeQuery, matrixCells, frac } from "./parentApi";
+import { useLoad, rangeQuery, matrixCells } from "./parentApi";
 import { eventsToTimeline } from "./timelineMap";
+import { useGlancePeriod } from "../../insights-dash/usePeriod";
 import s from "./parent.module.css";
 
-const cap = (x) => (x ? x.charAt(0).toUpperCase() + x.slice(1) : "");
+// "At a glance" (findings, numbers, weekly trend) is its own chunk: loaded with the Summary.
+const GlancePanel = lazy(() => import("../../insights-dash/GlancePanel"));
+
 const hourLabel = (h) => new Intl.DateTimeFormat(undefined, { hour: "numeric" }).format(new Date(2026, 0, 1, h));
 const DAY_LETTERS = (lang) => Array.from({ length: 7 }, (_, i) => new Intl.DateTimeFormat(lang, { weekday: "narrow" }).format(new Date(2026, 0, 5 + i)));
 
 // Home (PAR-010..013, PAR-020..022), in four sub-tabs that each fit a screen:
-// Summary (story, tiles, goal, next steps) · Learning time · Subjects · Habits.
+// Summary (at a glance: findings with evidence and a next step, the period in numbers and the
+// weekly trend, over ROLLING 7 / 28 days so a Monday is never set against a whole week; then the
+// goal) · Learning time · Subjects · Habits (these three follow the time-range bar).
 const HOME_PANES = ["summary", "time", "subjects", "habits"];
 export default function ParentHome({ api, child, go }) {
   const { t, i18n } = useTranslation();
@@ -29,6 +34,8 @@ export default function ParentHome({ api, child, go }) {
   const cal = useLoad(api.get, `${base}/analytics/calendar?year=${year}`);
   const day = useLoad(api.get, tr.range === "day" ? `${base}/analytics/timeline?from=${tr.from}&to=${tr.to}&limit=300` : null);
   const ms = useLoad(api.get, `${base}/analytics/milestones`);
+  const [glanceDays, setGlanceDays] = useGlancePeriod();
+  const glance = useLoad(api.get, pane === "summary" ? `${base}/insights?days=${glanceDays}` : null);
   const [celebrated, setCelebrated] = useState(false);
   const [now] = useState(() => Date.now());
 
@@ -40,24 +47,10 @@ export default function ParentHome({ api, child, go }) {
   const cells = useMemo(() => matrixCells(d?.matrix), [d]);
   const mastered = cells.filter((c) => c.level === "mastered").length;
 
-  const chips = (d?.insights || []).slice(0, 4).map((x) => {
-    const p = x.params || {};
-    const text = t(`parent.insight.${x.key}`, { defaultValue: x.text, ...p, module: cap(p.module), subject: cap(p.subject), hour: p.hour != null ? hourLabel(p.hour) : undefined });
-    const onClick = ["practise_next", "strongest"].includes(x.key) ? () => go("learning", { subject: p.subject, module: p.module })
-      : x.key === "best_time" ? () => setPane("habits")
-        : ["accuracy_up", "accuracy_down"].includes(x.key) ? () => go("learning")
-          : () => setPane("time");
-    return { kind: x.kind, text, onClick };
-  });
-
   // "What to do next" (PAR-013): concrete, kind, with links the child can open.
   const next = useMemo(() => {
+    // (Skill-level next steps, with their evidence, are in "At a glance" above.)
     const out = [];
-    const practise = (d?.insights || []).find((x) => x.key === "practise_next");
-    if (practise) {
-      const { module, subject } = practise.params;
-      out.push({ icon: "🎯", title: T("next.practise", "10 minutes of {{m}} · {{s}}", { m: cap(module), s: cap(subject) }), text: T("next.practiseWhy", "It's the area with the most room to grow right now."), to: `/module/${module}/${subject}` });
-    }
     const g = goal.data?.goal ? goal.data.progress : null;
     if (g && !g.reached) {
       const left = g.daysPerWeek - g.daysMet;
@@ -135,36 +128,19 @@ export default function ParentHome({ api, child, go }) {
           { id: "subjects", label: T("tab.subjects", "Subjects") },
           { id: "habits", label: T("tab.habits", "Habits") },
         ]}
-        actions={<TimeRangeBar value={tr} ranges={["day", "week", "month", "year", "custom"]} showCompare compact />} />
+        actions={pane === "summary" ? null : <TimeRangeBar value={tr} ranges={["day", "week", "month", "year", "custom"]} showCompare compact />} />
 
       <SubPanel id="summary" value={pane}>
-        <StoryCard
-          title={T("storyTitle", "{{name}}'s learning", { name: first })}
-          sentence={d?.story}
-          chips={chips}
-          loading={ov.loading && !d}
-        />
-
-        {ov.error && !d ? null : (
-          <div className={s.kpis}>
-            <KpiTile loading={ov.loading && !d} label={T("k.time", "Learning time")} value={d ? fmtDuration(d.totals.minutes) : null}
-              delta={d?.previous && { current: d.totals.minutes, previous: d.previous.minutes, mode: "duration", vs }}
-              sparkline={points.map((p) => p.minutes)} helpText={T("k.timeHelp", "Time spent learning. Idle gaps are not counted.")} onClick={() => setPane("time")} />
-            <KpiTile loading={ov.loading && !d} label={T("k.days", "Active days")} value={d ? `${d.totals.activeDays} / ${d.range.days}` : null}
-              delta={d?.previous && { current: d.totals.activeDays, previous: d.previous.activeDays, mode: "number", vs }}
-              helpText={T("k.daysHelp", "Days with at least one answered question or 3 minutes of learning.")} onClick={() => go("activity")} />
-            <KpiTile loading={ov.loading && !d} label={T("k.acc", "Accuracy")} value={d?.totals.accuracy != null ? fmtPercent(frac(d.totals.accuracy)) : null}
-              delta={d?.previous && { current: frac(d.totals.accuracy), previous: frac(d.previous.accuracy), mode: "points", vs }}
-              sparkline={points.filter((p) => p.accuracy != null).map((p) => p.accuracy)} helpText={T("k.accHelp", "Correct answers divided by answers given.")} onClick={() => go("learning")} />
-            <KpiTile loading={ov.loading && !d} label={T("k.mastered", "Areas mastered")} value={d ? `${mastered} / 12` : null}
-              helpText={T("k.masteredHelp", "Listen, Read, Write and Speak in English, Maths and Science. Mastered means 80 % or more right, over at least 5 answers.")} onClick={() => setPane("subjects")} />
-            <KpiTile loading={ov.loading && !d} label={T("k.streak", "Streak")} value={d?.streak ? T("k.streakVal", "{{n}} days", { n: d.streak.current, count: d.streak.current }) : null}
-              tone={d?.streak?.current >= 3 ? "good" : "neutral"}
-              helpText={T("k.streakHelp", "Days in a row with learning. Longest so far: {{n}} days.", { n: d?.streak?.longest ?? 0 })} />
-            <KpiTile loading={ov.loading && !d} label={T("k.stars", "Stars")} value={d ? d.totals.stars : null}
-              delta={d?.previous && { current: d.totals.stars, previous: d.previous.stars, mode: "number", vs }} helpText={T("k.starsHelp", "Stars earned in finished rounds.")} />
-          </div>
-        )}
+        <Suspense fallback={<Skeleton variant="rect" height={220} />}>
+          <GlancePanel data={glance.data?.insights} loading={glance.loading} error={glance.error} onRetry={glance.reload}
+            days={glanceDays} onDays={setGlanceDays} name={first} audience="parent"
+            actions={(
+              <>
+                <Button variant="soft" onClick={() => go("learning", { pane: "skills" })}>{t("insights.glance.openSkills", { defaultValue: "See all skills" })}</Button>
+                <Button variant="ghost" onClick={() => go("reports")}>{t("insights.glance.openReport", { defaultValue: "Open the report" })}</Button>
+              </>
+            )} />
+        </Suspense>
 
         <div className={s.grid2}>
           <section className={s.card} aria-labelledby="p-goal-h">

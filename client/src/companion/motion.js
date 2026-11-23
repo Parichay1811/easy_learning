@@ -74,6 +74,35 @@ export function travel(el, a, b) {
   return el.animate(frames, { duration: total, fill: "forwards" }).finished.catch(() => {});
 }
 
+/**
+ * Walk from rect a to rect b (viewport coordinates) in `ms`. The legs, the bob of each
+ * step and the wagging tail are the filmed walk cycle; this only carries the body:
+ * a straight trot that picks up speed over the first steps and slows into the last
+ * (a trapezoid speed profile, not a slide), growing or shrinking between the two
+ * places. `bounds` > 0 adds that many low bounds for a long, quick trip (a happy run).
+ * `el` is position:fixed with its box = a.
+ */
+export function walk(el, a, b, ms, { bounds = 0 } = {}) {
+  const up = 0.18; // share of the time spent getting up to speed
+  const down = 0.24; // and slowing down
+  const v = 1 / (1 - up / 2 - down / 2);
+  const along = (t) => (t < up ? (v * t * t) / (2 * up) : t > 1 - down ? 1 - (v * (1 - t) * (1 - t)) / (2 * down) : v * (up / 2 + (t - up)));
+  const frames = [];
+  const N = 32;
+  for (let i = 0; i <= N; i += 1) {
+    const t = i / N;
+    const s = along(t);
+    const w = a.width + (b.width - a.width) * s;
+    const h = a.height + (b.height - a.height) * s;
+    const x = a.left + (b.left - a.left) * s;
+    const lift = bounds ? Math.abs(Math.sin(Math.PI * bounds * s)) * h * 0.07 * Math.sin(Math.PI * Math.min(1, s * 1.15)) : 0;
+    const y = a.top + (b.top - a.top) * s - lift;
+    frames.push({ transform: `translate(${x - a.left}px, ${y - a.top}px) scale(${w / a.width}, ${h / a.height})`, offset: t });
+  }
+  el.style.transformOrigin = "0 0";
+  return el.animate(frames, { duration: ms, fill: "forwards", easing: "linear" }).finished.catch(() => {});
+}
+
 /** Arrive in a spot where the dog was not: it bounds up from just below, and settles. */
 export function enter(body, shadow) {
   body.animate(

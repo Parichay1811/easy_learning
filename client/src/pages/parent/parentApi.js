@@ -69,7 +69,15 @@ export function useLoad(get, path) {
 export const masteryKey = (m) => (m === "not_started" ? "notStarted" : m || "notStarted");
 export const frac = (pct) => (pct == null ? null : pct / 100);
 export const serverCmp = (cmp) => (cmp === "yoy" ? "lastyear" : cmp || "prev");
-export const rangeQuery = (tr) => `from=${tr.from}&to=${tr.to}&cmp=${serverCmp(tr.cmp)}`;
+// Days after today are cut off, so "this week" on a Monday is one day compared with the one day
+// before it (the server compares equal lengths), never with a whole week (as the teacher pages do).
+const todayIso = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`; };
+export const rangeQuery = (tr) => {
+  const now = todayIso();
+  const to = tr.to > now ? now : tr.to;
+  const from = tr.from > to ? to : tr.from;
+  return `from=${from}&to=${to}&cmp=${serverCmp(tr.cmp)}`;
+};
 
 // Matrix grid { english: { listen: {...} } } -> kit cells.
 export function matrixCells(grid) {

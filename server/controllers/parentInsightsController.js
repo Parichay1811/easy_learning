@@ -4,6 +4,7 @@
 const crypto = require('crypto')
 const q = require('../analytics/queries')
 const ins = require('../services/parentInsights')
+const learnerInsights = require('../services/learnerInsights')
 const rights = require('../services/dataRights')
 const ReportShare = require('../models/ReportShare')
 const DataRequest = require('../models/DataRequest')
@@ -33,6 +34,8 @@ const aiTeacher = handle(async (req, res) => ok(res, await ins.aiTeacher(req.chi
 const screenTime = handle(async (req, res) => ok(res, await ins.screenTime(req.child.email, rangeOf(req, 'none'))))
 const ar = handle(async (req, res) => ok(res, await ins.arSummary(req.child.email, rangeOf(req, 'none'))))
 const milestones = handle(async (req, res) => ok(res, { milestones: await ins.milestones(req.child.email) }))
+// "At a glance" (services/learnerInsights.js): the last 7 or 28 days vs the same span before.
+const insights = handle(async (req, res) => ok(res, { insights: await learnerInsights.forLearner(req.child.email, { name: req.child.name, audience: 'parent', days: req.query.days, tz: tzOf(req) }) }))
 
 const year = handle(async (req, res) => {
   const tz = tzOf(req)
@@ -214,6 +217,6 @@ const cancelDelete = handle(async (req, res) => {
 })
 
 module.exports = {
-  sources, trends, skills, aiTeacher, screenTime, ar, milestones, year, answers, activityCsv,
+  sources, trends, skills, aiTeacher, screenTime, ar, milestones, insights, year, answers, activityCsv,
   report, createShare, listShares, revokeShare, publicReport, privacy, exportData, requestDelete, cancelDelete,
 }

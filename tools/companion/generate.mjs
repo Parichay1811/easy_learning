@@ -2,7 +2,8 @@
 // Generate the companion's clips with an image-to-video model.
 //   REPLICATE_API_TOKEN=… node generate.mjs [--draft] [--only id,id] [--seed N] [--tag name]
 // Reads clips.json; uses .work/home.png as both the first and the last frame, so every
-// clip begins and ends on the same pose. Raw clips land in .work/raw/<tag>/<id>.mp4 with
+// clip begins and ends on the same pose. A clip with "from"/"to" starts or ends on
+// another key pose instead (.work/<pose>.png, made by poses.mjs): stand up, walk, sit down. Raw clips land in .work/raw/<tag>/<id>.mp4 with
 // a sidecar .json (prompt, seed, prediction id, cost estimate) for review.
 import { mkdir, writeFile, access } from "node:fs/promises";
 import { readFileSync } from "node:fs";
@@ -27,15 +28,17 @@ await mkdir(dir, { recursive: true });
 // Per second of output, from the model page (Nov 2026): $0.02 at 720p, $0.005 in draft.
 const rate = draft ? 0.005 : resolution === "1080p" ? 0.04 : 0.02;
 const homeUrl = await upload(home);
+const poseUrls = { home: homeUrl };
+for (const c of clips) for (const k of [c.from, c.to]) if (k && !poseUrls[k]) poseUrls[k] = await upload(`.work/${k}.png`);
 console.log(`${clips.length} clip(s), ${draft ? "draft" : resolution}, ~$${(clips.reduce((s, c) => s + c.seconds, 0) * rate).toFixed(2)}`);
 
 async function one(c) {
   const out = `${dir}/${c.id}.mp4`;
   if (!flag("--force")) { try { await access(out); console.log(`skip ${c.id} (exists)`); return; } catch { /* make it */ } }
   const input = {
-    prompt: `${spec.common} ${c.prompt}`,
-    image: homeUrl,
-    last_frame_image: homeUrl,
+    prompt: `${c.move ? spec.commonMove : spec.common} ${c.prompt}`,
+    image: poseUrls[c.from || "home"],
+    last_frame_image: poseUrls[c.to || "home"],
     duration: c.seconds,
     resolution,
     fps: 24,
@@ -46,7 +49,7 @@ async function one(c) {
   };
   const p = await run(spec.model, input, { log: console.log });
   await download(firstUrl(p.output), out);
-  await writeFile(`${dir}/${c.id}.json`, JSON.stringify({ id: c.id, prediction: p.id, model: spec.model, input: { ...input, image: "home.png", last_frame_image: "home.png" }, predict_time: p.metrics?.predict_time, cost_estimate: +(c.seconds * rate).toFixed(3) }, null, 1));
+  await writeFile(`${dir}/${c.id}.json`, JSON.stringify({ id: c.id, prediction: p.id, model: spec.model, input: { ...input, image: `${c.from || "home"}.png`, last_frame_image: `${c.to || "home"}.png` }, predict_time: p.metrics?.predict_time, cost_estimate: +(c.seconds * rate).toFixed(3) }, null, 1));
   console.log(`saved ${out}`);
 }
 
