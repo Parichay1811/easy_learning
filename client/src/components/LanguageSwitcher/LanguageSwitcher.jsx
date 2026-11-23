@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { MdLanguage, MdKeyboardArrowDown } from "react-icons/md";
+import { followLanguage } from "../../seo/routeLocale";
 import styles from "./LanguageSwitcher.module.css";
 
 // Central registry of all supported languages.
@@ -35,7 +36,9 @@ const LanguageSwitcher = ({ variant = "bar" }) => {
     LANGUAGES[0];
 
   const handleSelect = (code) => {
-    i18n.changeLanguage(code);
+    // Public pages have a URL per language (/es/faq); move to it once the
+    // language has loaded, so the address can be shared and indexed.
+    i18n.changeLanguage(code).then(() => followLanguage(code));
     setIsOpen(false);
   };
 

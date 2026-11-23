@@ -7,7 +7,7 @@ import {
 } from "react-icons/fa";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
-import { COMPANY, companyOrganization } from "../config/company";
+import { COMPANY } from "../config/company";
 import EmailAddress from "../components/EmailAddress";
 import { playSlide } from "../utils/sounds";
 import styles from "./AboutUs.module.css";
@@ -40,20 +40,7 @@ const AboutUs = () => {
 
   return (
     <div className={styles.page}>
-      <SEO
-        title="About Learnigo | Learning, Reimagined for Every Kind of Mind"
-        description="Learnigo is a play-first learning platform built for dyslexic and neurodivergent learners, turning reading, writing, speaking, maths and science into a short, encouraging adventure."
-        path="/about-us"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "AboutPage",
-          name: "About Learnigo",
-          description: "Learnigo is a play-first learning platform built for dyslexic and neurodivergent learners.",
-          url: "https://www.learnigo.eu/about-us",
-          isPartOf: { "@type": "WebSite", name: "Learnigo", url: "https://www.learnigo.eu" },
-          publisher: companyOrganization(),
-        }}
-      />
+      <SEO path="/about-us" />
       <VideoBackground />
 
       <motion.section

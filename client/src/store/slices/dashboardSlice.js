@@ -139,11 +139,14 @@ export const fetchRounds = createAsyncThunk(
 // card. Failures here must not blow up the rest of the dashboard — a child who
 // has never played a camera game is the common case, not an error — so this
 // never touches the shared status/error fields, matching moduleStars/answers/rounds.
+// `findings=28` adds the last 4 weeks' and the 4 weeks before's rounds (compact
+// rows) for the findings engine (ar/insights/findings.js) the card shows.
+export const AR_FINDINGS_DAYS = 28
 export const fetchArInsights = createAsyncThunk(
   'dashboard/fetchArInsights',
   async (days = 30, { rejectWithValue }) => {
     try {
-      const json = await apiFetch(`${BASE}/ar/insights?days=${days}`)
+      const json = await apiFetch(`${BASE}/ar/insights?days=${days}&findings=${AR_FINDINGS_DAYS}`)
       return json.data
     } catch (e) { return rejectWithValue(e.message) }
   }

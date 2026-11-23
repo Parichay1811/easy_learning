@@ -1,0 +1,229 @@
+/* "For me": big, friendly, calm. Sizes in rem so the learner's text-size
+   setting applies; the dyslexia-friendly font and "less movement" come from
+   the site-wide settings (index.css), and the entrance below is skipped when
+   motion should be calm. Text on these dark cards is ≥ 4.5:1. */
+
+.me {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 14px);
+  overflow-y: auto;
+  padding: 2px 2px 8px;
+  color: #f4f8ff;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(10px, 1.6vh, 16px) clamp(12px, 2vw, 20px);
+  border-radius: 22px;
+  background-color: #1f3270;
+  background-image: linear-gradient(135deg, #1d3a6e, #2a2a6e);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+}
+
+.heroIcon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #ffd93d;
+  color: #3b2a00;
+  font-size: 1.5rem;
+}
+
+.headline {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: clamp(1.15rem, 3.2vw, 1.6rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.read {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 2px solid #ffd93d;
+  background: #2b2400;
+  color: #ffe98a;
+  font: inherit;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.read:hover { background: #3d3300; }
+.read:focus-visible, .play:focus-visible { outline: 3px solid #7ee8ff; outline-offset: 3px; }
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* A dark chip of its own: the page behind it is a bright video, so the title
+   never relies on what happens to be behind it for contrast. */
+.sectionTitle {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: rgba(9, 14, 32, 0.92);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+}
+.challenge .sectionTitle, .effort .sectionTitle { padding: 0; background: none; }
+
+.wins {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 10px;
+}
+
+.win {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: #102a22;
+  border: 2px solid #38d477;
+  animation: rise 0.5s ease both;
+  animation-delay: calc(var(--i, 0) * 90ms);
+}
+.calm .win { animation: none; }
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+.winIcon {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background: #38d477;
+  color: #062414;
+  font-size: 1.3rem;
+}
+
+.winText {
+  margin: 0;
+  font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+}
+
+.meter { display: flex; flex-direction: column; gap: 5px; }
+.meterRow { display: flex; align-items: center; gap: 8px; }
+.meterLabel { min-width: 4.2em; flex-shrink: 0; white-space: nowrap; font-size: 0.85rem; font-weight: 700; color: #d6f5e3; }
+.meterTrack {
+  flex: 1;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+.meterFill { display: block; height: 100%; border-radius: 999px; background: #8bf0b4; }
+/* "Before" is the thinner, striped bar: told apart by pattern, not only colour. */
+.meterBefore {
+  background: repeating-linear-gradient(135deg, #b9c7da 0 4px, #8293ad 4px 8px);
+}
+
+.pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 10px;
+}
+
+.challenge, .effort {
+  padding: 14px 16px;
+  border-radius: 20px;
+}
+.challenge { background: #2a1d3f; border: 2px solid #b98cff; }
+.effort { background: #2d1a20; border: 2px solid #ff8fab; }
+
+.big {
+  margin: 0;
+  font-size: clamp(1.05rem, 2.6vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+}
+
+.small { margin: 0; font-size: 0.9rem; line-height: 1.4; color: #dfe6f3; }
+
+.play {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: #ffd93d;
+  color: #2a1f00;
+  font-weight: 800;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+.play:hover { background: #ffe57a; }
+
+.facts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.facts li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 0.95rem;
+  color: #fff;
+}
+.facts strong { font-size: 1.15rem; }
+
+.empty { margin: 0; font-size: 1rem; color: #dfe6f3; }
+
+@media (max-width: 520px) {
+  .hero { flex-wrap: wrap; }
+  .read { width: 100%; justify-content: center; }
+}

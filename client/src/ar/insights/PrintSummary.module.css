@@ -1,0 +1,44 @@
+/* Hidden on screen. In print, everything else on the page is hidden and this
+   one page is shown (visibility, so fixed overlays from elsewhere on the site
+   are hidden too). */
+.print { display: none; }
+
+@media print {
+  @page { size: A4 portrait; margin: 8mm 10mm; }
+  :global(body) { background: #fff !important; overflow: visible !important; }
+  :global(body *) { visibility: hidden !important; }
+  .print, .print * { visibility: visible !important; }
+  .print {
+    display: block !important;
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 9.5pt !important;
+    line-height: 1.35;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  /* Paper is for a grown-up and must stay one page: the learner's wide letter
+     spacing (index.css, !important) is reset here; their font choice stays. */
+  :global(html) :global(body) .print.print,
+  :global(html) :global(body) .print.print * {
+    letter-spacing: normal !important;
+    word-spacing: normal !important;
+  }
+  :global(html) :global(body) .print.print :is(p, li, h1, h2, h3) { line-height: 1.25 !important; }
+  .print h1 { margin: 0; font-size: 13pt; }
+  .print h2 { margin: 4pt 0 2pt; font-size: 9.5pt; }
+  .print p { margin: 1pt 0; }
+  .head { border-bottom: 1.25pt solid #000; padding-bottom: 3pt; margin-bottom: 2pt; }
+  .meta { color: #333 !important; font-size: 8.5pt; }
+  .table { width: 100%; border-collapse: collapse; font-size: 7.5pt; line-height: 1.25; table-layout: fixed; }
+  .table th, .table td { border: 0.75pt solid #777; padding: 1.5pt 3pt; text-align: left; vertical-align: top; }
+  .table col.cMeasure { width: 15%; }
+  .table col.cNum { width: 8%; }
+  .table col.cChange { width: 15%; }
+  .table td:last-child { font-size: 7pt; }
+  .table thead th { background: #eee !important; }
+  .small { font-size: 7.5pt; color: #222 !important; margin-top: 3pt !important; }
+}

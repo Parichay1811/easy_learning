@@ -19,6 +19,8 @@ import Background3D from "./components/Background3D/Background3D";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
 import CompanionStage from "./companion/CompanionStage";
+import SignedInGate from "./components/SignedInGate";
+import { renewSessions, noteRoleForPath } from "./utils/session";
 import RoleSelect from "./pages/RoleSelect";
 import Home from "./pages/Home";
 import SubjectPage from "./pages/SubjectPage";
@@ -57,15 +59,14 @@ import BreakReminder from "./components/settings/BreakReminder";
 import VoiceBar, { StopVoiceOnNavigate } from "./components/VoiceBar/VoiceBar";
 import TeacherTestsApp from "./pages/teacher/tests/TeacherTestsApp";
 import TestPlayer from "./pages/TestPlayer";
-import LearningSupportByCountry from "./pages/LearningSupportByCountry";
-import LearningDifferences from "./pages/LearningDifferences";
-import WhoWeHelp from "./pages/WhoWeHelp";
 import Pricing from "./pages/Pricing";
 import ArLearningGames from "./pages/ArLearningGames";
 import Faq from "./pages/Faq";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFound from "./pages/NotFound";
+import GuidePages from "./pages/GuidePages";
+import { basenameFor, onRouteLangChange, routeLang } from "./seo/routeLocale";
 
 // Developer-only pages (component galleries). Not routed in production builds
 // unless VITE_ENABLE_DEV_PAGES=1.
@@ -97,6 +98,25 @@ function RouteSounds() {
   return null;
 }
 
+// Stay signed in until sign-out (utils/session.js): renew still-valid tokens on start,
+// every few hours and when the tab comes back after a while; remember the role last used.
+function SessionKeeper() {
+  const { pathname } = useLocation();
+  useEffect(() => { noteRoleForPath(pathname); }, [pathname]);
+  useEffect(() => {
+    renewSessions();
+    const id = setInterval(() => renewSessions(), 3 * 60 * 60 * 1000);
+    let hiddenAt = Date.now();
+    const onVis = () => {
+      if (document.hidden) hiddenAt = Date.now();
+      else if (Date.now() - hiddenAt > 60 * 60 * 1000) renewSessions();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => { clearInterval(id); document.removeEventListener("visibilitychange", onVis); };
+  }, []);
+  return null;
+}
+
 // Remembers the page before this one, so a round's Back returns there (utils/navMemory.js).
 function RouteMemory() {
   const { pathname, search } = useLocation();
@@ -110,7 +130,7 @@ function AnimatedRoutes() {
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname.startsWith("/admin-school") ? "/admin-school" : location.pathname}>
-        <Route path="/" element={<RoleSelect />} />
+        <Route path="/" element={<SignedInGate><RoleSelect /></SignedInGate>} />
         <Route path="/home" element={<Home />} />
         <Route path="/subject/:subject" element={<SubjectPage />} />
         <Route path="/module/listen/:subject" element={<ListenModule />} />
@@ -124,24 +144,26 @@ function AnimatedRoutes() {
         <Route path="/games/ar" element={<ARHub />} />
         <Route path="/games/ar/insights" element={<ARInsights />} />
         <Route path="/games/ar/:gameId" element={<ARGame />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<SignedInGate role="student"><Login /></SignedInGate>} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/learning-support-by-country" element={<LearningSupportByCountry />} />
-        <Route path="/learning-support-by-country/:country" element={<LearningSupportByCountry />} />
-        <Route path="/learning-differences" element={<LearningDifferences />} />
-        <Route path="/learning-differences/:difference" element={<LearningDifferences />} />
+        <Route path="/learning-support-by-country" element={<GuidePages guide="countries" />} />
+        <Route path="/learning-support-by-country/:slug" element={<GuidePages guide="countries" />} />
+        <Route path="/learning-differences" element={<GuidePages guide="differences" />} />
+        <Route path="/learning-differences/:slug" element={<GuidePages guide="differences" />} />
+        <Route path="/learning-tools" element={<GuidePages guide="tools" />} />
+        <Route path="/learning-tools/:slug" element={<GuidePages guide="tools" />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/who-we-help" element={<WhoWeHelp />} />
-        <Route path="/who-we-help/:audience" element={<WhoWeHelp />} />
+        <Route path="/who-we-help" element={<GuidePages guide="audiences" />} />
+        <Route path="/who-we-help/:slug" element={<GuidePages guide="audiences" />} />
         <Route path="/ar-learning-games" element={<ArLearningGames />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/policy" element={<PrivacyPolicy />} />
         <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/admin-login" element={<SignedInGate role="admin"><AdminLogin /></SignedInGate>} />
         <Route path="/superadmin-login" element={<SuperAdminLogin />} />
-        <Route path="/teacher-login" element={<TeacherLogin />} />
-        <Route path="/parent-login" element={<ParentLogin />} />
+        <Route path="/teacher-login" element={<SignedInGate role="teacher"><TeacherLogin /></SignedInGate>} />
+        <Route path="/parent-login" element={<SignedInGate role="parent"><ParentLogin /></SignedInGate>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/discovery" element={<Discovery />} />
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
@@ -205,6 +227,7 @@ function AppLayout() {
     <>
       <RouteSounds />
       <RouteMemory />
+      <SessionKeeper />
       {!companionOff && <CompanionStage />}
       <ViewAsBanner />
       <StatusBanner />
@@ -229,6 +252,11 @@ function AppLayout() {
 
 function App() {
   const [showSplash, setShowSplash] = useState(true);
+  // The URL's language prefix (/es/...) is the router's basename. Choosing a
+  // language can move the URL to another prefix (seo/routeLocale.js); the
+  // router then remounts under the new basename.
+  const [lang, setLang] = useState(routeLang);
+  useEffect(() => onRouteLangChange(setLang), []);
 
   return (
     <AuthProvider>
@@ -239,7 +267,7 @@ function App() {
               <SplashPage onFinish={() => setShowSplash(false)} />
             )}
           </AnimatePresence>
-          <Router>
+          <Router key={lang || "default"} basename={basenameFor(lang)}>
             <AppLayout />
           </Router>
         </PrefsProvider>

@@ -1,0 +1,256 @@
+/* The group tab list (GroupTabs.jsx).
+   Phones: four across, two rows, a picture and a short name.
+   Tablets: four across, the full name and what the group practises.
+   Desktops: all eight in one row.
+   The layouts follow the list's own width in rem (container queries), so a
+   bigger text size setting moves to the roomier layout (or to two across on
+   a phone) instead of squeezing words. */
+.box {
+  container: grouptabs / inline-size;
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+  padding: 8px;
+  border-radius: 22px;
+  background: rgba(12, 18, 42, 0.74);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.tab {
+  --c: #1e88e5;
+  --cDeep: #1565c0;
+  position: relative;
+  min-width: 0;
+  min-height: 4.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px 10px;
+  border-radius: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-family: inherit;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.12s ease;
+}
+.tab:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.34); }
+.tab:active { transform: scale(0.97); }
+.tab:focus-visible {
+  outline: 3px solid #ffd45c;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #0d1230;
+}
+
+.tab[data-color="teal"] { --c: #26a69a; --cDeep: #00796b; }
+.tab[data-color="blue"] { --c: #42a5f5; --cDeep: #1565c0; }
+.tab[data-color="red"] { --c: #ef5350; --cDeep: #c62828; }
+.tab[data-color="purple"] { --c: #8c7cf7; --cDeep: #5b3cc4; }
+.tab[data-color="orange"] { --c: #ffa040; --cDeep: #c25400; }
+.tab[data-color="pink"] { --c: #f06292; --cDeep: #ad1457; }
+.tab[data-color="green"] { --c: #5cbf60; --cDeep: #2e7d32; }
+.tab[data-color="yellow"] { --c: #fdd835; --cDeep: #a86b00; }
+
+/* The ring is how much of the group's path is walked (cleared levels). */
+.ring {
+  position: relative;
+  flex: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--c) calc(var(--p, 0) * 1%), rgba(255, 255, 255, 0.2) 0);
+  transition: transform 0.15s ease;
+}
+.tab:hover .ring { transform: scale(1.06); }
+
+.ringIn {
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.16), rgba(10, 14, 32, 0.9) 72%);
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.ringDone {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #2e9d4f;
+  color: #fff;
+  font-size: 0.6rem;
+  border: 2px solid #0d1230;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.nameShort,
+.nameFull {
+  max-width: 100%;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.2;
+  /* A long word at a big text size breaks at a syllable, with a hyphen. */
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  overflow-wrap: anywhere;
+}
+.nameFull { display: none; }
+
+.line {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Narrow phones: four names a row only fit with a little less padding. */
+@container grouptabs (max-width: 24rem) {
+  .tabs { padding: 5px; gap: 6px; }
+  .tab { padding-inline: 2px; }
+  .nameShort { font-size: 0.875rem; }
+}
+
+/* Phones: the line is read out, not shown (the chosen group's is in the panel head). */
+.line {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ── the chosen group: a solid card, a bar and a notch — never colour alone ── */
+.on,
+.on:hover {
+  background: #fff;
+  border-color: #fff;
+  color: #141a38;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+.on .line { color: #3a4266; }
+.on .ring { background: conic-gradient(var(--cDeep) calc(var(--p, 0) * 1%), rgba(20, 26, 56, 0.14) 0); }
+.on .ringIn { background: var(--cDeep); }
+.on::after {
+  content: "";
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  bottom: 3px;
+  height: 5px;
+  border-radius: 5px;
+  background: var(--cDeep);
+}
+.on::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -11px;
+  width: 0;
+  height: 0;
+  margin-left: -9px;
+  border: 9px solid transparent;
+  border-bottom: 0;
+  border-top-color: #fff;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, 0.18));
+}
+
+/* Big text on a phone: two across, picture beside the name. */
+@container grouptabs (max-width: 20rem) {
+  .tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ── tablets: the full name and, under it, what the group practises ── */
+@container grouptabs (min-width: 37rem) {
+  .tab {
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 10px 8px 14px;
+  }
+  .ring { width: 2.75rem; height: 2.75rem; }
+  .ringIn { font-size: 1.15rem; }
+  .nameShort { display: none; }
+  .nameFull { display: block; font-size: 1rem; }
+  .line {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+}
+
+/* ── desktops: all eight in one row, picture on top ── */
+@container grouptabs (min-width: 70rem) {
+  .tabs { grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 8px; padding: 10px; }
+  .tab {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+    padding: 10px 6px 14px;
+    text-align: center;
+  }
+  .text { align-items: center; }
+  .ring { width: 3rem; height: 3rem; }
+  .ringIn { font-size: 1.25rem; }
+}
+
+/* ── a phone on its side: one row of eight, picture and short name ── */
+@media (orientation: landscape) and (max-height: 500px) {
+  @container grouptabs (min-width: 34rem) {
+    .tabs { grid-template-columns: repeat(8, minmax(0, 1fr)); padding: 6px; gap: 6px; }
+    .tab { flex-direction: column; justify-content: center; min-height: 3.75rem; padding: 6px 2px 9px; gap: 2px; text-align: center; }
+    .text { align-items: center; }
+    .ring { width: 2.25rem; height: 2.25rem; }
+    .nameShort { display: block; font-size: 0.875rem; }
+    .nameFull { display: none; }
+    .line {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+}
+
+/* High contrast (learner setting): solid black ground, white outlines. */
+:global(html[data-contrast="high"]) .tabs { background: #000; border-color: #fff; }
+:global(html[data-contrast="high"]) .tab { border-color: #fff; background: #000; }
+:global(html[data-contrast="high"]) .on { background: #fff; color: #000; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tab, .ring { transition: none; }
+  .tab:hover .ring, .tab:active { transform: none; }
+}
+:global([data-calm]) .tab,
+:global([data-calm]) .ring { transition: none; }
+:global([data-calm]) .tab:hover .ring,
+:global([data-calm]) .tab:active { transform: none; }

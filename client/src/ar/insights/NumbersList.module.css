@@ -1,0 +1,28 @@
+.list { margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas: 'label spark' 'value spark' 'meaning meaning';
+  column-gap: 0.75rem;
+  row-gap: 0.15rem;
+  padding: 0.65rem 0.8rem;
+  border-radius: var(--d-radius-sm, 16px);
+  border: 2px solid var(--d-line, #e3eaf3);
+  background: var(--d-card, #fff);
+  color: var(--d-ink, #1f2a44);
+  --spark-bg: var(--d-card, #fff);
+}
+
+.label { grid-area: label; margin: 0; font-size: 0.86rem; font-weight: 700; color: var(--d-muted, #5a6680); }
+.value { grid-area: value; margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem; }
+.value strong { font-size: 1.35rem; font-weight: 800; color: var(--d-ink, #1f2a44); font-variant-numeric: tabular-nums; }
+.before { font-size: 0.82rem; color: var(--d-muted, #5a6680); }
+.spark { grid-area: spark; margin: 0; align-self: center; color: var(--d-accent-ink, #237032); }
+.meaning { grid-area: meaning; margin: 0.2rem 0 0; font-size: 0.8rem; line-height: 1.4; color: var(--d-muted, #5a6680); }
+
+@media print {
+  .row { border: 1px solid #999; background: #fff; color: #000; padding: 0.3rem 0.5rem; break-inside: avoid; }
+  .label, .before, .meaning, .value strong { color: #000; }
+  .spark { color: #000; }
+}

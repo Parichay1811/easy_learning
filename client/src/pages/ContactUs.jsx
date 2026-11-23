@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import ContactForm from "../components/ContactForm/ContactForm";
 import SEO from "../components/SEO/SEO";
-import { COMPANY, companyOrganization } from "../config/company";
+import { COMPANY } from "../config/company";
 import EmailAddress from "../components/EmailAddress";
 import styles from "./ContactUs.module.css";
 
@@ -25,19 +25,7 @@ const ContactUs = () => {
 
   return (
     <div className={styles.page}>
-      <SEO
-        title="Contact Learnigo | We're Here to Help"
-        description="Questions, feedback or a bug to report? Get in touch with the Learnigo team and we'll usually reply within 24 hours."
-        path="/contact-us"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "ContactPage",
-          name: "Contact Learnigo",
-          url: "https://www.learnigo.eu/contact-us",
-          isPartOf: { "@type": "WebSite", name: "Learnigo", url: "https://www.learnigo.eu" },
-          mainEntity: companyOrganization(),
-        }}
-      />
+      <SEO path="/contact-us" />
       <VideoBackground />
 
       <motion.section

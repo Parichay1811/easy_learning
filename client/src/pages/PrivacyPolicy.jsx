@@ -51,18 +51,7 @@ const sections = [
 const PrivacyPolicy = () => {
   return (
     <div className={styles.page}>
-      <SEO
-        title="Privacy Policy | Learnigo"
-        description="How Learnigo collects, uses and protects the personal information of students, parents, teachers and organizations using the platform."
-        path="/policy"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "WebPage",
-          name: "Privacy Policy",
-          url: "https://www.learnigo.eu/policy",
-          isPartOf: { "@type": "WebSite", name: "Learnigo", url: "https://www.learnigo.eu" },
-        }}
-      />
+      <SEO path="/policy" />
       <VideoBackground />
 
       <div className={styles.hero}>

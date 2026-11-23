@@ -1,77 +1,28 @@
 import VideoBackground from "../components/VideoBackground/VideoBackground";
+import { Link } from "react-router-dom";
 import SEO from "../components/SEO/SEO";
+import ExploreLinks from "../components/SEO/ExploreLinks";
+import { useSeo } from "../seo/useSeo";
 import styles from "./Faq.module.css";
 
-const faqs = [
-  {
-    q: "What is Learnigo?",
-    a: "Learnigo is a gamified learning platform built for children with dyslexia and other neurodivergent learners. It turns English, Maths and Science practice into short, encouraging rounds with audio support, playful visuals and instant positive feedback.",
-  },
-  {
-    q: "Is Learnigo designed for children with dyslexia?",
-    a: "Yes. Learnigo is built specifically with dyslexic and neurodivergent learners in mind — every round is short, uses audio support alongside text, and gives instant, encouraging feedback instead of red marks.",
-  },
-  {
-    q: "What age is Learnigo suitable for?",
-    a: "Learnigo is designed for children roughly aged 5 to 14, though families and educators are best placed to judge whether the pace and content suit an individual child.",
-  },
-  {
-    q: "What subjects can my child practice on Learnigo?",
-    a: "Three subjects, each with Listen, Read, Write and Speak practice: English (\"English Kingdom\"), Maths (\"Maths Galaxy\") and Science (\"Science Lab\"). There's also a story-based Learn mode and a camera-powered Game Zone.",
-  },
-  {
-    q: "Does Learnigo use text-to-speech?",
-    a: "Yes. Learnigo uses browser-based text-to-speech so a child can complete reading content without needing to decode every word unaided.",
-  },
-  {
-    q: "What languages does Learnigo support?",
-    a: "Learnigo is available in 14 languages, switchable at any time from the navbar: English, Spanish, Portuguese, French, Italian, German, Dutch, Russian, Turkish, Chinese, Japanese, Korean, Indonesian and Vietnamese.",
-  },
-  {
-    q: "Is Learnigo a diagnostic tool for dyslexia?",
-    a: "No. Learnigo is an educational practice platform, not a diagnostic or medical service. A qualified local professional should guide any assessment, accommodation or individual support plan.",
-  },
-  {
-    q: "Can schools and tutors use Learnigo?",
-    a: "Yes. Schools and coaching centres can sign up as an organization, with Admin and Teacher roles for managing batches, students and question content, alongside the regular Student and Parent accounts.",
-  },
-  {
-    q: "How does my child's progress get tracked?",
-    a: "Automatically. Finishing a round updates XP, levels, streaks and unlockable achievement badges, all visible on a personal dashboard with an activity heatmap and progress history — nothing needs to be logged manually.",
-  },
-];
-
-const faqSchema = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((item) => ({
-    "@type": "Question",
-    name: item.q,
-    acceptedAnswer: { "@type": "Answer", text: item.a },
-  })),
-};
-
+// The questions live in public/locales/<lang>/seo.json (faq), in 14 languages;
+// the FAQPage JSON-LD is built from the same list (seo/registry.js).
 const Faq = () => {
+  const { seo } = useSeo();
+  const faq = seo.faq || {};
   return (
     <div className={styles.page}>
-      <SEO
-        title="FAQ | Dyslexia Learning App Questions Answered | Learnigo"
-        description="Common questions about Learnigo — the dyslexia-friendly, gamified learning platform for kids: age range, languages, subjects, text-to-speech and more."
-        path="/faq"
-        structuredData={faqSchema}
-      />
+      <SEO path="/faq" />
       <VideoBackground />
 
       <div className={styles.hero}>
-        <span className={styles.badge}>Questions & Answers</span>
-        <h1 className={styles.title}>Frequently Asked Questions</h1>
-        <p className={styles.subtitle}>
-          Everything families and educators usually ask before trying Learnigo.
-        </p>
+        <span className={styles.badge}>{faq.badge}</span>
+        <h1 className={styles.title}>{faq.h1}</h1>
+        <p className={styles.subtitle}>{faq.lead}</p>
       </div>
 
       <div className={styles.panel}>
-        {faqs.map((item) => (
+        {(faq.items || []).map((item) => (
           <details key={item.q} className={styles.item}>
             <summary className={styles.question}>{item.q}</summary>
             <p className={styles.answer}>{item.a}</p>
@@ -80,8 +31,9 @@ const Faq = () => {
       </div>
 
       <p className={styles.footerNote}>
-        Still have a question? <a href="/contact-us" className={styles.link}>Get in touch</a> — we usually reply within 24 hours.
+        {faq.more} <Link to="/contact-us" className={styles.link}>{faq.contact}</Link> — {faq.reply}
       </p>
+      <ExploreLinks path="/faq" />
     </div>
   );
 };

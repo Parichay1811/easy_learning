@@ -26,7 +26,7 @@ const googleSignIn = async (req, res) => {
       const token = jwt.sign(
         { id: admin._id, uid: admin.uid, email: admin.email, name: admin.name, orgId: staff.orgId, staffId: staff._id, staffRole: staff.role, role: 'org_staff' },
         process.env.ADMIN_JWT_SECRET,
-        { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '7d' }
+        { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '30d' }
       )
       return res.json({
         success: true,
@@ -38,7 +38,7 @@ const googleSignIn = async (req, res) => {
     const token = jwt.sign(
       { id: admin._id, uid: admin.uid, email: admin.email, name: admin.name, orgId: admin.orgId, role: 'org_admin' },
       process.env.ADMIN_JWT_SECRET,
-      { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '7d' }
+      { expiresIn: process.env.ADMIN_JWT_EXPIRES_IN || '30d' }
     )
 
     res.json({

@@ -13,15 +13,24 @@
  *
  * Works entirely offline from the on-device history, and enriches from the
  * server when the child is signed in.
+ *
+ * Two readers, switched at the top ("For me" / "For grown-ups"):
+ *  - the learner: three things I got better at, my next challenge, my effort,
+ *    in short words with a "Read to me" button (../insights/LearnerView);
+ *  - a grown-up: "At a glance" first (3–6 findings in plain words with trend
+ *    lines, what each number means, what to try at home or in class, and a
+ *    one-page printout), then the analytic tabs below.
+ * Both read the same findings (../insights/findings.js), the engine the student
+ * dashboard, the parent's Learning tab and the teacher's student view also use.
  */
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import * as Recharts from 'recharts'
 import {
   FaArrowLeft, FaChartLine, FaHandPaper, FaBrain, FaHome, FaDownload,
   FaInfoCircle, FaTrash, FaSync, FaRoute, FaExclamationTriangle, FaGamepad,
-  FaChartBar,
+  FaChartBar, FaClipboardList, FaSmile, FaUserFriends,
 } from 'react-icons/fa'
 import { aggregateLocal, localSessions, clearLocalSessions, flushPendingSessions } from '../core/telemetry'
 import { loadProfile, CAPABILITIES, REACH_SPACE } from '../core/profile'
@@ -34,6 +43,15 @@ import { authHeaders } from '../../utils/authHeaders'
 import LevelPips from '../core/LevelPips'
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher'
 import VideoBackground from '../../components/VideoBackground/VideoBackground'
+import { buildFindings, inputFromSessions } from '../insights/findings.js'
+import { namesFor, rowsOf } from '../insights/names'
+import { slimCatalog } from '../insights/catalog'
+import Tabs from '../insights/Tabs'
+import ChartText from '../insights/ChartText'
+import LearnerView from '../insights/LearnerView'
+import GlanceView from '../insights/GlanceView'
+import PrintSummary from '../insights/PrintSummary'
+import { PERIOD_CHOICES } from '../insights/format.js'
 import styles from './ARInsights.module.css'
 
 const {
@@ -47,6 +65,7 @@ const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
    they can be. "Journey" leads because it answers the question an adult asks
    first — where is this child up to — and the analytical tabs answer why. */
 const TAB_IDS = [
+  { id: 'glance', icon: <FaClipboardList /> },
   { id: 'journey', icon: <FaRoute /> },
   { id: 'overview', icon: <FaChartLine /> },
   { id: 'domains', icon: <FaBrain /> },
@@ -55,6 +74,7 @@ const TAB_IDS = [
 ]
 
 const TAB_FALLBACKS = {
+  glance: 'At a glance',
   journey: 'Journey',
   overview: 'Overview',
   domains: 'Skills',
@@ -62,10 +82,30 @@ const TAB_FALLBACKS = {
   life: 'Life',
 }
 
+const CATALOG = slimCatalog(GAMES)
+
+const studentToken = () => {
+  try { return localStorage.getItem('jwt_token') || localStorage.getItem('firebase_jwt') } catch { return null }
+}
+
+/**
+ * Who the page is for. `?for=me|adult` wins; otherwise the learner when a
+ * learner is signed in on this device, and a grown-up otherwise (a parent,
+ * teacher or therapist on their own device, or a shared clinic tablet).
+ */
+function defaultAudience(param) {
+  if (param === 'me' || param === 'adult') return param
+  return studentToken() ? 'me' : 'adult'
+}
+
 export default function ARInsights() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-  const [tab, setTab] = useState('journey')
+  const [params, setParams] = useSearchParams()
+  const audience = defaultAudience(params.get('for'))
+  const setAudience = (who) => setParams((p) => { const n = new URLSearchParams(p); n.set('for', who); return n }, { replace: true })
+  const [tab, setTab] = useState('glance')
+  const [periodDays, setPeriodDays] = useState(28)
   const [server, setServer] = useState(null)
   const [loading, setLoading] = useState(false)
   const [confirmWipe, setConfirmWipe] = useState(false)
@@ -94,7 +134,7 @@ export default function ARInsights() {
   // school iPad with no signal.
   useEffect(() => {
     let cancelled = false
-    const token = localStorage.getItem('jwt_token') || localStorage.getItem('firebase_jwt')
+    const token = studentToken()
     if (!token) return
     const run = async () => {
       setLoading(true)
@@ -102,7 +142,9 @@ export default function ARInsights() {
       // rounds this device played offline.
       await flushPendingSessions().catch(() => {})
       try {
-        const res = await fetch(`${API}/ar/insights?days=90`, {
+        // `findings` adds this period's and the previous period's rounds (as
+        // compact rows) for the findings engine, from every device.
+        const res = await fetch(`${API}/ar/insights?days=90&findings=${periodDays}`, {
           headers: authHeaders(),
           credentials: 'include',
         })
@@ -119,7 +161,7 @@ export default function ARInsights() {
     return () => {
       cancelled = true
     }
-  }, [refreshKey])
+  }, [refreshKey, periodDays])
 
   // Trial data and journey progress are erased separately: the footer's Erase
   // clears the recorded rounds, while levels and points live in the profile and
@@ -127,7 +169,25 @@ export default function ARInsights() {
   // and no trials, and treating "no trials" as "nothing to show" would hide
   // their whole progress behind an empty state.
   const hasTrials = Boolean(local?.totalTrials)
-  const empty = !hasTrials && !journey.gamesPlayed
+
+  // The findings: from the server's rows when it has at least as many rounds
+  // as this device (every device, every upload), else from this device.
+  const findingsInput = useMemo(() => {
+    const device = inputFromSessions(sessions, { days: periodDays })
+    const remote = server?.findings
+    const count = (x) => (x?.rows?.current?.length || 0) + (x?.rows?.previous?.length || 0)
+    if (remote?.rows && remote.period?.days === periodDays && count(remote) >= count(device)) return { ...remote, source: 'server' }
+    return device
+  }, [sessions, server, periodDays])
+  const findings = useMemo(() => buildFindings(findingsInput, { catalog: CATALOG }), [findingsInput])
+  const names = useMemo(() => namesFor({ rows: rowsOf(findingsInput), catalog: CATALOG }), [findingsInput])
+  // Rounds this learner played on another device count too: the findings are
+  // built from the server's rows when signed in, so a new tablet is not "empty".
+  const empty = !hasTrials && !journey.gamesPlayed && !(findings.totals.current.played || findings.totals.previous.played)
+  const forMe = audience === 'me'
+  const adultTabs = TAB_IDS.map((d) => ({ id: d.id, icon: d.icon, label: t(`ar.insights.tabs.${d.id}`, TAB_FALLBACKS[d.id]) }))
+  // Print the grown-ups' one-page summary, whichever view is open.
+  const printSummary = () => window.print()
 
   return (
     <div className={styles.page}>
@@ -136,7 +196,9 @@ export default function ARInsights() {
         <button className={styles.iconBtn} onClick={() => navigate('/games/ar')} aria-label={t('ar.insights.backAriaLabel', 'Back')}>
           <FaArrowLeft />
         </button>
-        <h1 className={styles.title}>{t('ar.insights.title', 'Progress & analysis')}</h1>
+        <h1 className={styles.title}>
+          {forMe ? t('ar.insights.titleMe', 'My progress') : t('ar.insights.title', 'Progress & analysis')}
+        </h1>
         <div className={styles.headRight}>
           <LanguageSwitcher />
           <Link
@@ -155,17 +217,35 @@ export default function ARInsights() {
           >
             <FaSync className={loading ? styles.spin : ''} />
           </button>
-          <button
-            className={styles.iconBtn}
-            onClick={() => exportCsv(sessions)}
-            aria-label={t('ar.insights.exportAriaLabel', 'Export')}
-            title={t('ar.insights.exportTitle', 'Download the trial-level data as CSV')}
-            disabled={!hasTrials}
-          >
-            <FaDownload />
-          </button>
+          {!forMe && (
+            <button
+              className={styles.iconBtn}
+              onClick={() => exportCsv(sessions)}
+              aria-label={t('ar.insights.exportAriaLabel', 'Export')}
+              title={t('ar.insights.exportTitle', 'Download the trial-level data as CSV')}
+              disabled={!hasTrials}
+            >
+              <FaDownload />
+            </button>
+          )}
         </div>
       </header>
+
+      {!empty && (
+        <Tabs
+          idBase="ins-who"
+          label={t('ar.insights.audience.label', 'Who is this page for?')}
+          value={audience}
+          onChange={setAudience}
+          className={styles.audience}
+          tabClass={styles.audienceTab}
+          activeClass={styles.audienceOn}
+          tabs={[
+            { id: 'me', icon: <FaSmile aria-hidden="true" />, label: t('ar.insights.audience.me', 'For me') },
+            { id: 'adult', icon: <FaUserFriends aria-hidden="true" />, label: t('ar.insights.audience.adult', 'For grown-ups') },
+          ]}
+        />
+      )}
 
       {empty ? (
         <div className={styles.emptyState}>
@@ -181,9 +261,13 @@ export default function ARInsights() {
             {t('ar.insights.empty.cta', 'Go to the games')}
           </button>
         </div>
+      ) : forMe ? (
+        <main id="ins-who-panel" role="tabpanel" aria-labelledby="ins-who-tab-me" className={styles.body}>
+          <LearnerView result={findings} names={names} />
+        </main>
       ) : (
-        <>
-          {hasTrials && (
+        <main id="ins-who-panel" role="tabpanel" aria-labelledby="ins-who-tab-adult" className={styles.adult}>
+          {hasTrials && tab !== 'glance' && (
           <div className={styles.kpis}>
             <Kpi
               label={t('ar.insights.kpis.gotIdea.label', 'Got the idea')}
@@ -230,22 +314,31 @@ export default function ARInsights() {
           </div>
           )}
 
-          <nav className={styles.tabs}>
-            {TAB_IDS.map((tabDef) => (
-              <button
-                key={tabDef.id}
-                className={`${styles.tab} ${tab === tabDef.id ? styles.tabOn : ''}`}
-                onClick={() => setTab(tabDef.id)}
-              >
-                {tabDef.icon}
-                <span>{t(`ar.insights.tabs.${tabDef.id}`, TAB_FALLBACKS[tabDef.id])}</span>
-              </button>
-            ))}
-          </nav>
+          <Tabs
+            idBase="ins-tab"
+            label={t('ar.insights.tabs.label', 'Report sections')}
+            value={tab}
+            onChange={setTab}
+            tabs={adultTabs}
+            className={styles.tabs}
+            tabClass={styles.tab}
+            activeClass={styles.tabOn}
+            iconOnlyLabel
+          />
 
-          <div className={styles.body}>
+          <div className={styles.body} id="ins-tab-panel" role="tabpanel" aria-labelledby={`ins-tab-tab-${tab}`}>
+            {tab === 'glance' && (
+              <GlanceView
+                result={findings}
+                names={names}
+                periodDays={periodDays}
+                onPeriod={(d) => setPeriodDays(PERIOD_CHOICES.includes(d) ? d : 28)}
+                onPrint={printSummary}
+                source={findingsInput.source}
+              />
+            )}
             {tab === 'journey' && <Journey journey={journey} server={server} />}
-            {tab !== 'journey' && !hasTrials ? (
+            {tab !== 'journey' && tab !== 'glance' && !hasTrials ? (
               // The rounds were erased but the journey survived. Say which, so
               // an adult is not left wondering whether the app lost the data.
               <div className={styles.panes}>
@@ -267,10 +360,10 @@ export default function ARInsights() {
               </>
             )}
           </div>
-        </>
+        </main>
       )}
 
-      <footer className={styles.foot}>
+      {!forMe && <footer className={styles.foot}>
         <span className={styles.disclaimer}>
           <FaInfoCircle />{' '}
           {t(
@@ -309,7 +402,9 @@ export default function ARInsights() {
             </button>
           </span>
         )}
-      </footer>
+      </footer>}
+
+      {!empty && <div className={styles.printSlot}><PrintSummary result={findings} names={names} /></div>}
     </div>
   )
 }
@@ -430,8 +525,10 @@ function Journey({ journey, server }) {
           </span>
         </div>
         {possible > 0 ? (
+          <>
+          <div className={styles.chartBox} aria-hidden="true">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={byGroup} margin={{ top: 4, right: 10, bottom: 0, left: -8 }}>
+            <BarChart accessibilityLayer={false} data={byGroup} margin={{ top: 4, right: 10, bottom: 0, left: -8 }}>
               <CartesianGrid stroke="rgba(255,255,255,0.07)" vertical={false} />
               <XAxis dataKey="name" tick={{ ...AXIS, fontSize: 9 }} stroke="rgba(255,255,255,0.2)" />
               {/* Fixed ticks: with a short card the auto-ticks collapse to a
@@ -459,6 +556,19 @@ function Journey({ journey, server }) {
               <Bar dataKey="Complete" fill="#38d477" radius={[5, 5, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+          </div>
+          <ChartText
+            summary={(() => {
+              const top = [...byGroup].sort((a, b) => b.pct - a.pct)[0]
+              return top && top.pct > 0
+                ? t('ar.insights.chartText.journeySummary', 'Most progress in {{group}}: {{pct}}% of its levels cleared.', { group: top.title, pct: top.pct })
+                : t('ar.insights.chartText.journeyNone', 'No levels cleared yet in any group.')
+            })()}
+            caption={t('ar.insights.chartText.journeyCaption', 'Levels cleared per group')}
+            columns={[t('ar.insights.chartText.group', 'Group'), t('ar.insights.chartText.cleared', 'Cleared'), t('ar.insights.chartText.levels', 'Levels'), t('ar.insights.chartText.gamesTried', 'Games tried')]}
+            rows={byGroup.map((g) => [g.title, `${g.pct}%`, `${g.levels}/${g.possible}`, `${g.played}/${g.games}`])}
+          />
+          </>
         ) : (
           <Placeholder>{t('ar.insights.journeyTab.noJourneys', 'No journeys started yet.')}</Placeholder>
         )}
@@ -676,17 +786,32 @@ function Overview({ local, server, sessions }) {
         )}
       >
         {progression.length > 1 ? (
+          <>
+          <div className={styles.chartBox} aria-hidden="true">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={progression} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
+            <LineChart accessibilityLayer={false} data={progression} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
               <CartesianGrid stroke="rgba(255,255,255,0.07)" vertical={false} />
               <XAxis dataKey="day" tick={AXIS} stroke="rgba(255,255,255,0.2)" />
               <YAxis domain={[0, 100]} tick={AXIS} stroke="rgba(255,255,255,0.2)" width={38} />
               <Tooltip contentStyle={TOOLTIP} />
               <Legend wrapperStyle={LEGEND} />
               <Line type="monotone" dataKey="Understood" name={t('ar.insights.overviewTab.understood', 'Understood')} stroke="#7ee8ff" strokeWidth={2.5} dot={{ r: 3 }} />
-              <Line type="monotone" dataKey="Independent" name={t('ar.insights.overviewTab.independent', 'Independent')} stroke="#38d477" strokeWidth={2.5} dot={{ r: 3 }} />
+              {/* Dashed as well as green: the two lines are told apart by pattern, not colour alone. */}
+              <Line type="monotone" dataKey="Independent" name={t('ar.insights.overviewTab.independent', 'Independent')} stroke="#38d477" strokeWidth={2.5} strokeDasharray="6 4" dot={{ r: 3 }} />
             </LineChart>
           </ResponsiveContainer>
+          </div>
+          <ChartText
+            summary={t('ar.insights.chartText.trendSummary', 'Understood: {{u1}} on {{d1}}, {{u2}} on {{d2}}. Independent: {{i1}}, then {{i2}}.', {
+              d1: progression[0].day, d2: progression[progression.length - 1].day,
+              u1: pct(progression[0].Understood), u2: pct(progression[progression.length - 1].Understood),
+              i1: pct(progression[0].Independent), i2: pct(progression[progression.length - 1].Independent),
+            })}
+            caption={t('ar.insights.overviewTab.trend.title', 'Understanding and independence over time')}
+            columns={[t('ar.insights.chartText.day', 'Day'), t('ar.insights.overviewTab.understood', 'Understood'), t('ar.insights.overviewTab.independent', 'Independent'), t('ar.insights.chartText.rounds', 'Rounds')]}
+            rows={progression.map((r) => [r.day, pct(r.Understood), pct(r.Independent), String(r.rounds)])}
+          />
+          </>
         ) : (
           <Placeholder>{t('ar.insights.overviewTab.trendPlaceholder', 'Play on a second day to see a trend here.')}</Placeholder>
         )}
@@ -700,8 +825,10 @@ function Overview({ local, server, sessions }) {
         )}
       >
         {promptMix.length ? (
+          <>
+          <div className={styles.chartBox} aria-hidden="true">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={promptMix} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
+            <BarChart accessibilityLayer={false} data={promptMix} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
               <CartesianGrid stroke="rgba(255,255,255,0.07)" vertical={false} />
               <XAxis dataKey="stage" tick={AXIS} stroke="rgba(255,255,255,0.2)" />
               <YAxis tick={AXIS} stroke="rgba(255,255,255,0.2)" width={38} unit="%" />
@@ -712,6 +839,17 @@ function Overview({ local, server, sessions }) {
               <Bar dataKey="Turns" name={t('ar.insights.overviewTab.turns', 'Turns')} fill="#b98cff" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+          </div>
+          <ChartText
+            summary={(() => {
+              const top = [...promptMix].sort((a, b) => b.Turns - a.Turns)[0]
+              return t('ar.insights.chartText.promptSummary', 'Most turns were at help stage {{stage}} ({{name}}): {{pct}}%.', { stage: top.stage, name: top.name, pct: top.Turns })
+            })()}
+            caption={t('ar.insights.overviewTab.promptMix.title', 'How much help was needed')}
+            columns={[t('ar.insights.chartText.stage', 'Help stage'), t('ar.insights.chartText.meaning', 'Meaning'), t('ar.insights.chartText.share', 'Share of turns')]}
+            rows={promptMix.map((r) => [r.stage, r.name, `${r.Turns}%`])}
+          />
+          </>
         ) : (
           <Placeholder>{t('ar.insights.overviewTab.promptPlaceholder', 'No prompt data yet.')}</Placeholder>
         )}
@@ -783,8 +921,10 @@ function Domains({ local, profile }) {
         )}
       >
         {radar.length >= 3 ? (
+          <>
+          <div className={styles.chartBox} aria-hidden="true">
           <ResponsiveContainer width="100%" height="100%">
-            <RadarChart data={radar} outerRadius="72%">
+            <RadarChart accessibilityLayer={false} data={radar} outerRadius="72%">
               <PolarGrid stroke="rgba(255,255,255,0.12)" />
               <PolarAngleAxis dataKey="domain" tick={{ ...AXIS, fontSize: 9 }} />
               <Radar dataKey="Estimate" name={t('ar.insights.domainsTab.estimate', 'Estimate')} stroke="#7ee8ff" fill="#7ee8ff" fillOpacity={0.3} />
@@ -794,6 +934,17 @@ function Domains({ local, profile }) {
               />
             </RadarChart>
           </ResponsiveContainer>
+          </div>
+          <ChartText
+            summary={(() => {
+              const sorted = [...radar].sort((a, b) => b.Estimate - a.Estimate)
+              return t('ar.insights.chartText.radarSummary', 'Highest estimate: {{hi}} ({{hiV}}%). Lowest: {{lo}} ({{loV}}%).', { hi: sorted[0].domain, hiV: sorted[0].Estimate, lo: sorted[sorted.length - 1].domain, loV: sorted[sorted.length - 1].Estimate })
+            })()}
+            caption={t('ar.insights.domainsTab.profile.title', 'Capability profile')}
+            columns={[t('ar.insights.chartText.skill', 'Skill'), t('ar.insights.domainsTab.estimate', 'Estimate'), t('ar.insights.chartText.turns', 'Turns')]}
+            rows={radar.map((r) => [r.domain, `${r.Estimate}%`, String(r.n)])}
+          />
+          </>
         ) : (
           <Placeholder>
             {t(
@@ -812,8 +963,10 @@ function Domains({ local, profile }) {
         )}
       >
         {byDomain.length ? (
+          <>
+          <div className={styles.chartBox} aria-hidden="true">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={byDomain} layout="vertical" margin={{ top: 4, right: 14, bottom: 0, left: 4 }}>
+            <BarChart accessibilityLayer={false} data={byDomain} layout="vertical" margin={{ top: 4, right: 14, bottom: 0, left: 4 }}>
               <CartesianGrid stroke="rgba(255,255,255,0.07)" horizontal={false} />
               <XAxis type="number" domain={[0, 100]} tick={AXIS} stroke="rgba(255,255,255,0.2)" unit="%" />
               <YAxis type="category" dataKey="name" tick={{ ...AXIS, fontSize: 9 }} width={92} stroke="rgba(255,255,255,0.2)" />
@@ -827,6 +980,14 @@ function Domains({ local, profile }) {
               <Bar dataKey="Accuracy" name={t('ar.insights.domainsTab.accuracy', 'Accuracy')} fill="#38d477" radius={[0, 6, 6, 0]} />
             </BarChart>
           </ResponsiveContainer>
+          </div>
+          <ChartText
+            summary={t('ar.insights.chartText.weakestSummary', 'Lowest accuracy: {{skill}}, {{pct}}% of {{trials}} turns.', { skill: byDomain[0].name, pct: byDomain[0].Accuracy, trials: byDomain[0].trials })}
+            caption={t('ar.insights.domainsTab.weakest.title', 'Weakest first')}
+            columns={[t('ar.insights.chartText.skill', 'Skill'), t('ar.insights.domainsTab.accuracy', 'Accuracy'), t('ar.insights.chartText.turns', 'Turns')]}
+            rows={byDomain.map((r) => [r.name, `${r.Accuracy}%`, String(r.trials)])}
+          />
+          </>
         ) : (
           <Placeholder>{t('ar.insights.domainsTab.weakestPlaceholder', 'No domain data yet.')}</Placeholder>
         )}
@@ -936,8 +1097,10 @@ function Motor({ local, profile, sessions }) {
         )}
       >
         {timing.length > 1 ? (
+          <>
+          <div className={styles.chartBox} aria-hidden="true">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={timing} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
+            <LineChart accessibilityLayer={false} data={timing} margin={{ top: 6, right: 8, bottom: 0, left: -18 }}>
               <CartesianGrid stroke="rgba(255,255,255,0.07)" vertical={false} />
               <XAxis dataKey="day" tick={AXIS} stroke="rgba(255,255,255,0.2)" />
               <YAxis tick={AXIS} stroke="rgba(255,255,255,0.2)" width={40} unit="ms" />
@@ -947,6 +1110,14 @@ function Motor({ local, profile, sessions }) {
               <Line type="monotone" dataKey="Offset" name={t('ar.insights.motorTab.offset', 'Offset')} stroke="#ff7ac0" strokeWidth={2} dot={{ r: 2 }} strokeDasharray="4 4" />
             </LineChart>
           </ResponsiveContainer>
+          </div>
+          <ChartText
+            summary={t('ar.insights.chartText.timingSummary', 'Steadiness went from {{a}} ms to {{b}} ms (lower is steadier).', { a: timing[0].Steadiness, b: timing[timing.length - 1].Steadiness })}
+            caption={t('ar.insights.motorTab.rhythm.title', 'Rhythm timing')}
+            columns={[t('ar.insights.chartText.day', 'Day'), t('ar.insights.motorTab.steadiness', 'Steadiness'), t('ar.insights.motorTab.offset', 'Offset')]}
+            rows={timing.map((r) => [r.day, `${r.Steadiness} ms`, `${r.Offset} ms`])}
+          />
+          </>
         ) : (
           <Placeholder>{t('ar.insights.motorTab.rhythmPlaceholder', 'Play Rhythm Reach a couple of times to see timing here.')}</Placeholder>
         )}

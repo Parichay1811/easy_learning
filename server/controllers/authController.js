@@ -6,7 +6,7 @@ const { identityFromRequest } = require('../utils/firebaseToken')
 // ── Session cookie helpers (used by Firebase / Google OAuth flow) ─────────────
 
 const COOKIE_NAME = 'user_session'
-const COOKIE_MAX_AGE = 7 * 24 * 60 * 60 * 1000 // 7 days
+const COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000 // 30 days, renewed on every visit (stay signed in until sign-out)
 
 const setSession = async (req, res) => {
   // Identity comes from the verified Firebase token, never from the request body.
@@ -28,7 +28,7 @@ const setSession = async (req, res) => {
   const token = jwt.sign(
     { id: uid, email, name },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    { expiresIn: process.env.JWT_EXPIRES_IN || '30d' }
   )
 
   res.json({ success: true, message: 'Session set', token })
@@ -76,7 +76,7 @@ const register = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email, name: user.name },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      { expiresIn: process.env.JWT_EXPIRES_IN || '30d' }
     )
 
     res.status(201).json({
@@ -111,7 +111,7 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { id: user._id, email: user.email, name: user.name },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+      { expiresIn: process.env.JWT_EXPIRES_IN || '30d' }
     )
 
     res.json({

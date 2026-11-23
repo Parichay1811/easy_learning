@@ -35,13 +35,20 @@
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
+  /* The site's video background sits over the page's own dark gradient, so the
+     header carries its own backing: the title stays readable on a bright sky. */
+  padding: 5px 6px;
+  border-radius: 22px;
+  background: rgba(10, 16, 36, 0.8);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
 }
 
 .title {
   flex: 1;
   margin: 0;
   text-align: center;
-  font-size: clamp(13px, 2.8vw, 20px);
+  font-size: clamp(1rem, 2.8vw, 1.25rem);
   font-weight: 800;
   color: #fff;
 }
@@ -119,7 +126,7 @@
 /* ── tabs ────────────────────────────────────────────────────────────────── */
 .tabs {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: 4px;
   flex-shrink: 0;
 }
@@ -142,6 +149,7 @@
   transition: background 0.15s, color 0.15s;
 }
 .tab:hover { background: #383838; }
+.tab:focus-visible, .audienceTab:focus-visible, .iconBtn:focus-visible { outline: 3px solid #7ee8ff; outline-offset: 2px; }
 .tab span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .tabOn {
@@ -157,6 +165,62 @@
 @media (max-width: 460px) {
   .tab span { display: none; }
   .tab { padding: clamp(6px, 1.2vh, 10px) 4px; font-size: 14px; }
+}
+
+/* ── who the page is for ──────────────────────────────────────────────────── */
+/* "For me" / "For grown-ups": two big, clearly labelled tabs (an icon and a
+   word each; the chosen one also gets a thick outline, not just a colour). */
+.audience {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  flex-shrink: 0;
+  max-width: 560px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.audienceTab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  background: #1b1f2e;
+  color: #dbe6f7;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+.audienceTab:hover { background: #262b3f; }
+.audienceTab svg { font-size: 1.15em; }
+
+.audienceOn {
+  background: #ffd93d;
+  border-color: #fff;
+  box-shadow: 0 0 0 2px #ffd93d;
+  color: #241a00;
+}
+.audienceOn:hover { background: #ffe57a; }
+
+/* The grown-ups' view: KPI strip, tabs, then the tab's body. */
+.adult {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(4px, 0.9vh, 9px);
+}
+
+/* A chart's drawing box; its text alternative sits next to it (ChartText). */
+.chartBox {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
 }
 
 /* ── panes ───────────────────────────────────────────────────────────────── */
@@ -381,15 +445,22 @@
 
 /* ── empty state ─────────────────────────────────────────────────────────── */
 .emptyState {
-  flex: 1;
+  flex: 0 1 auto;
   min-height: 0;
+  margin: auto;
+  max-width: min(560px, 100%);
+  border-radius: 22px;
+  /* Its own dark card, for the same reason as the header. */
+  background: rgba(10, 16, 36, 0.86);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
   text-align: center;
-  padding: 14px;
+  padding: 24px 20px;
 }
 
 .emptyIcon { font-size: clamp(30px, 7vh, 50px); }
@@ -402,9 +473,9 @@
 .emptyState p {
   margin: 0;
   max-width: 46ch;
-  font-size: clamp(10px, 2vw, 14px);
-  line-height: 1.45;
-  color: rgba(190, 210, 238, 0.85);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.5;
+  color: #d6e4f7;
 }
 
 .primary {
@@ -428,6 +499,10 @@
   gap: 10px;
   flex-shrink: 0;
   min-height: 20px;
+  /* A backdrop for the disclaimer, which otherwise sat on the bright video. */
+  padding: 4px 8px;
+  border-radius: 12px;
+  background: rgba(9, 14, 32, 0.9);
 }
 
 .disclaimer {
@@ -436,10 +511,12 @@
   gap: 6px;
   flex: 1;
   min-width: 0;
-  font-size: clamp(7.5px, 1.5vw, 10.5px);
+  font-size: clamp(9px, 1.5vw, 11px);
   font-weight: 600;
   line-height: 1.3;
-  color: rgba(15, 15, 15, 0.984);
+  /* Light text: the footer sits on the dark page, so near-black text here was
+     unreadable. */
+  color: #dbe6f7;
 }
 .disclaimer svg { flex-shrink: 0; }
 
@@ -660,4 +737,22 @@
   .howN { font-size: 13px; min-width: 20px; }
   .howText strong { font-size: 9.5px; }
   .jStat:nth-child(n + 4) { display: none; }
+}
+
+/* ── print ───────────────────────────────────────────────────────────────── */
+/* Only the one-page summary prints (insights/PrintSummary). The page stops
+   being a fixed, clipped viewport so the summary can lay out on paper. */
+@media print {
+  .page {
+    position: static;
+    height: auto;
+    overflow: visible;
+    background: #fff;
+    color: #000;
+    padding: 0;
+    display: block;
+  }
+  /* Hidden content would still take up room (and print blank pages): take it
+     out of the layout altogether, whichever view is open. */
+  .page > :not(.printSlot) { display: none !important; }
 }

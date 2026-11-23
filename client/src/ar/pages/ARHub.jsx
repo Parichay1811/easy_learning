@@ -1,84 +1,57 @@
 /**
- * The AR games hub — a journey map.
+ * The Camera Games hub.
  *
- * Two constraints shape everything here.
+ * Built for children (many with learning differences, motor or attention
+ * difficulties), teenagers and adults, often with a parent or therapist
+ * beside them. In order of importance on the page:
  *
- * 1. **Nothing scrolls, on any device.** Games are grouped by developmental
- *    domain, one group is shown at a time, and a group with more games than fit
- *    is *paged*. Page arrows and dots are also easier for a child to operate
- *    than a scroll gesture, so the constraint improves the design.
+ * 1. **What to play next** — one banner, one big Play button (HubHero).
+ * 2. **The groups** — a real tab list (GroupTabs): one Tab stop, arrow keys,
+ *    the chosen group unmistakable without colour.
+ * 3. **The games** of the chosen group — ALL of them, in a calm vertical list
+ *    of cards (GameCard), each with one obvious Play button and a read-aloud
+ *    button.
  *
- * 2. **A child with a learning disability has to be able to navigate it alone.**
- *    That means: one tap to play (the tile body starts the level they are on, no
- *    intermediate menu), large targets, a picture before a word, the same five
- *    pips everywhere so the shape is learned once, and a way to hear any label
- *    read aloud rather than having to read it.
+ * The hub used to fit one screen by paging the games behind dots. For this
+ * audience that hid games (a child who does not understand the dots never sees
+ * page two) and made the cards tiny; one scrolling column is a gesture
+ * everyone knows, reaches every game with Tab in reading order, and lets the
+ * cards be big enough to read and hit. The header (Back, points, progress,
+ * settings) stays put above the scrolling part.
  *
- * The journey is the organising idea rather than decoration. Every game shows
- * where the child is on its five-level path; every group shows how much of its
- * path is walked; the header shows the points and rank that accumulate across
- * all of it. A child who cannot see the end of an activity often will not start
- * it, which is exactly why the pips are always visible — including the locked
- * ones.
+ * Motion is small and purposeful (cards rise in, a lift on hover, a slow
+ * glow on the "next up" card) and all of it stops under the learner's "less
+ * movement" setting or the device's reduced-motion setting.
  */
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { AnimatePresence } from 'framer-motion'
-import * as FramerMotion from 'framer-motion'
-import {
-  FaArrowLeft, FaChevronLeft, FaChevronRight, FaCog, FaChartLine,
-  FaCamera, FaGamepad, FaPlay, FaVolumeUp, FaCheck, FaTrophy,
-} from 'react-icons/fa'
-import { GROUPS, GROUP_BY_ID, DOMAIN_LABELS, LIFE_SKILL_LABELS } from '../catalog/groups'
+import { FaArrowLeft, FaCog, FaChartLine, FaCamera, FaGamepad, FaVolumeUp } from 'react-icons/fa'
+import { GROUPS, GROUP_BY_ID, DOMAIN_LABELS } from '../catalog/groups'
 import { GAMES, gamesInGroup } from '../catalog/games'
 import { prewarmVision } from '../core/vision'
 import { flushPendingSessions, fetchRemoteJourney } from '../core/telemetry'
 import { isCalibrated, loadProfile } from '../core/profile'
-import {
-  journeySnapshot, mergeRemoteJourney, tileProgress, hasJourney,
-  levelChange, LEVEL_META, LEVELS,
-} from '../core/journey'
-import { speak } from '../core/tts'
+import { journeySnapshot, mergeRemoteJourney, hasJourney, LEVELS } from '../core/journey'
 import { haptic } from '../core/feedback'
+import { speak } from '../core/tts'
 import { sfx } from '../../utils/sounds'
-import { tGame, tGroup, tDomain, tLifeSkill, tRecommend } from '../core/arText'
-import LevelPips from '../core/LevelPips'
+import { useCalmMotion } from '../../utils/useCalmMotion'
+import { tGroup, tDomain, tRecommend } from '../core/arText'
 import SettingsSheet from '../core/SettingsSheet'
 import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher'
 import VideoBackground from '../../components/VideoBackground/VideoBackground'
+import HubHero from '../hub/HubHero'
+import GroupTabs from '../hub/GroupTabs'
+import GameCard from '../hub/GameCard'
+import { groupLine, PANEL_ID, tabId } from '../hub/hubText'
+import { useBalancedColumns, useMedia } from '../hub/layout'
 import styles from './ARHub.module.css'
-
-/** How many tiles a page holds is measured, not guessed from the window: the
- *  board is whatever height is left under the header, callout, group trail and
- *  footer (a status banner, a landscape phone and a 4K monitor all leave very
- *  different boards), and a page is as many tiles as fit it whole.
- *
- *  TILE_MIN_W: the narrowest a tile can be with its bottom row intact — five
- *  44px-pitch level pips, the 44px speaker, padding (ARHub.module.css .tile*).
- *  TILE_TALL_H: the shortest tile that still has room for the big "card"
- *  layout (icon on top). Multi-column boards use it whenever two rows of those
- *  fit, so a laptop shows big cards rather than a dense list.
- *  TILE_ROW_H: the shortest "row" tile (icon beside the title), used on
- *  phones (one column) and on boards too short for two rows of cards.
- *  The same numbers are the container-query breakpoints in the CSS. */
-const TILE_MIN_W = 276
-const TILE_TALL_H = 228
-const TILE_ROW_H = 128
-
-function fitBoard(width, height) {
-  const gap = width < 600 ? 8 : 12
-  const cols = Math.max(1, Math.floor((width + gap) / (TILE_MIN_W + gap)))
-  const tallRows = Math.floor((height + gap) / (TILE_TALL_H + gap))
-  const rows = cols > 1 && tallRows >= 2
-    ? tallRows
-    : Math.max(1, Math.floor((height + gap) / (TILE_ROW_H + gap)))
-  return { cols, rows, gap }
-}
 
 export default function ARHub() {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+  const calm = useCalmMotion()
   const [groupId, setGroupId] = useState(() => {
     try {
       return localStorage.getItem('ar_last_group') || 'body'
@@ -86,66 +59,26 @@ export default function ARHub() {
       return 'body'
     }
   })
-  const [page, setPage] = useState(0)
   const [showSettings, setShowSettings] = useState(false)
-  // Columns and rows that fit the board (see fitBoard); measured below.
-  const [fit, setFit] = useState(() => fitBoard(window.innerWidth - 20, window.innerHeight * 0.5))
-  const gridWrapRef = useRef(null)
   // Bumped when stored progress changes under us (a server merge), so the
   // journey figures below are recomputed rather than left stale.
   const [revision, setRevision] = useState(0)
-  const wrapRef = useRef(null)
-
-  // The board's free area decides the grid. Measured before paint (no flash of
-  // the wrong grid) and again whenever it changes size: rotation, a status
-  // banner arriving, the text-size setting, the window being resized.
-  useLayoutEffect(() => {
-    const el = gridWrapRef.current
-    if (!el) return undefined
-    const measure = () => {
-      const r = el.getBoundingClientRect()
-      if (!r.width || !r.height) return
-      const next = fitBoard(r.width, r.height)
-      setFit((f) => (f.cols === next.cols && f.rows === next.rows && f.gap === next.gap ? f : next))
-    }
-    measure()
-    if (typeof ResizeObserver === 'undefined') {
-      window.addEventListener('resize', measure)
-      return () => window.removeEventListener('resize', measure)
-    }
-    const ro = new ResizeObserver(measure)
-    ro.observe(el)
-    return () => ro.disconnect()
-  }, [])
+  const settingsBtnRef = useRef(null)
+  const gridWrapRef = useRef(null)
+  // The live dog gets a place beside the banner only where there is room for
+  // it without covering anything.
+  const roomForDog = useMedia('(min-width: 1280px) and (min-height: 700px)')
 
   const group = GROUP_BY_ID[groupId] || GROUPS[0]
   const games = useMemo(() => gamesInGroup(group.id), [group.id])
-  const pageSize = fit.cols * fit.rows
-  const pages = Math.max(1, Math.ceil(games.length / pageSize))
-  const pageGames = games.slice(page * pageSize, page * pageSize + pageSize)
-  // A group smaller than a page uses only the rows it needs (each capped at a
-  // comfortable card height in the CSS) instead of stretching a few tiles over
-  // the whole board; every page of a group keeps the same tile size.
-  const usedRows = Math.max(1, Math.min(fit.rows, Math.ceil(Math.min(games.length, pageSize) / fit.cols)))
-
-  // A resize (or switching group) can leave `page` past the end of the new
-  // page count — clamp it during render rather than in an effect, so the
-  // board is never stranded empty even for a frame. See
-  // https://react.dev/learn/you-might-not-need-an-effect#adjusting-some-state-when-a-prop-changes
-  const [prevPages, setPrevPages] = useState(pages)
-  if (pages !== prevPages) {
-    setPrevPages(pages)
-    if (page > pages - 1) setPage(pages - 1)
-  }
-
+  const cols = useBalancedColumns(gridWrapRef, games.length)
   const calibrated = isCalibrated()
 
   // These read localStorage, which the linter cannot see, so `revision` is a
   // deliberate cache-buster rather than a real dependency: it is bumped when
   // stored progress changes and is the only thing that should invalidate them.
   // `i18n.language` IS a real dependency: both snapshots carry translated
-  // labels (badges, rank, recommendation reason), which must recompute on
-  // a language switch rather than stay stale from the last render.
+  // labels (rank, recommendation reason), which must follow a language switch.
   /* eslint-disable react-hooks/exhaustive-deps */
   const journey = useMemo(() => journeySnapshot(GAMES), [revision, i18n.language])
   const recommended = useMemo(() => pickRecommended(), [revision, i18n.language])
@@ -159,7 +92,7 @@ export default function ARHub() {
     [navigate]
   )
 
-  // Warm the models while the child is choosing, so pressing Start goes
+  // Warm the models while the child is choosing, so pressing Play goes
   // straight to the camera instead of a two-second model download.
   useEffect(() => {
     const kinds = new Set(['hand'])
@@ -167,8 +100,8 @@ export default function ARHub() {
       if (['pose', 'cue', 'bilateral', 'mission'].includes(g.engine)) kinds.add('pose')
       if (g.config?.wholeBody) kinds.add('pose')
     }
-    const t = window.setTimeout(() => void prewarmVision([...kinds]), 350)
-    return () => window.clearTimeout(t)
+    const timer = window.setTimeout(() => void prewarmVision([...kinds]), 350)
+    return () => window.clearTimeout(timer)
   }, [games])
 
   // Anything the network ate last session gets another go now — and the journey
@@ -188,8 +121,6 @@ export default function ARHub() {
     }
   }, [])
 
-  // Remembering the last group is a side effect; resetting the page is part of
-  // choosing a group, so it happens in the handler below instead of here.
   useEffect(() => {
     try {
       localStorage.setItem('ar_last_group', group.id)
@@ -198,13 +129,8 @@ export default function ARHub() {
     }
   }, [group.id])
 
-  const chooseGroup = useCallback((id) => {
-    setGroupId(id)
-    setPage(0)
-    haptic('tap')
-  }, [])
-
-  // The hub is a fixed-viewport surface like the games themselves.
+  // The hub scrolls inside itself (under a header that stays put), so the
+  // page behind it must not.
   useEffect(() => {
     const prev = document.body.style.overflow
     document.body.style.overflow = 'hidden'
@@ -213,336 +139,216 @@ export default function ARHub() {
     }
   }, [])
 
-  // Left/right page through the current group, up/down move between groups.
-  // A child using a switch or a keyboard can reach every game with four keys.
+  // Escape closes the settings sheet, or else goes back to the Game Zone.
   useEffect(() => {
     const onKey = (e) => {
-      if (e.key === 'ArrowRight') setPage((p) => Math.min(p + 1, pages - 1))
-      else if (e.key === 'ArrowLeft') setPage((p) => Math.max(p - 1, 0))
-      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-        e.preventDefault()
-        const i = GROUPS.findIndex((g) => g.id === groupId)
-        const next = (i + (e.key === 'ArrowDown' ? 1 : GROUPS.length - 1)) % GROUPS.length
-        chooseGroup(GROUPS[next].id)
-      } else if (e.key === 'Escape') navigate('/games')
+      if (e.key !== 'Escape' || e.defaultPrevented) return
+      if (/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName || '')) return
+      if (showSettings) setShowSettings(false)
+      else navigate('/games')
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [pages, navigate, groupId, chooseGroup])
+  }, [navigate, showSettings])
+
+  // Keyboard and switch users land inside the settings sheet when it opens and
+  // back on the Settings button when it closes.
+  const sheetWasOpen = useRef(false)
+  useEffect(() => {
+    if (showSettings) {
+      sheetWasOpen.current = true
+      const id = requestAnimationFrame(() => {
+        document.querySelector('[role="dialog"] button')?.focus()
+      })
+      return () => cancelAnimationFrame(id)
+    }
+    if (sheetWasOpen.current) {
+      sheetWasOpen.current = false
+      settingsBtnRef.current?.focus()
+    }
+    return undefined
+  }, [showSettings])
+
+  const grTitle = tGroup(group.id, 'title', group.title)
+  const grBlurb = tGroup(group.id, 'blurb', group.blurb)
+  const grLine = groupLine(group.id)
+  const st = journey.byGroup[group.id] || { games: games.length, played: 0, levels: 0, possible: 0 }
+  // The card that matches the big banner: the set-up until it is done.
+  const nextId = calibrated ? recommended?.game.id : 'setup-space'
+  const pointsName = journey.rank.next
+    ? t('ar.hub.pointsTitleWithNext', '{{points}} points · {{rank}} · {{toNext}} to {{next}}', {
+        points: journey.points,
+        rank: journey.rank.name,
+        toNext: journey.rank.toNext,
+        next: journey.rank.next.name,
+      })
+    : t('ar.hub.pointsTitle', '{{points}} points · {{rank}}', { points: journey.points, rank: journey.rank.name })
 
   return (
-    <div className={styles.hub} ref={wrapRef} data-group={group.id}>
+    <div className={styles.hub} data-group={group.id} data-calm={calm ? '' : undefined}>
       <VideoBackground />
       <div className={styles.overlay} aria-hidden />
       <div className={styles.glow} aria-hidden />
 
       <header className={styles.head}>
-        <button
-          className={styles.backBtn}
-          onClick={() => { sfx.back(); navigate('/games') }}
-          aria-label={t('ar.hub.back', 'Back')}
-          data-sound="none"
-        >
-          <FaArrowLeft aria-hidden />
-          <span className={styles.backText}>{t('ar.hub.back', 'Back')}</span>
-        </button>
-        <div className={styles.headTitle}>
-          <FaGamepad className={styles.headIcon} />
-          <span>{t('ar.hub.title', 'Camera Games')}</span>
-        </div>
-        <div className={styles.headRight}>
-          {/* Only when the hub stands alone: under the site navbar, which
-              has its own language switch, this one is hidden (see .hubLang). */}
-          <span className={styles.hubLang}>
-            <LanguageSwitcher />
-          </span>
-          {/* Points and rank: the one number that is the child's alone, and a
-              door into their own progress screen. */}
+        <div className={styles.headIn}>
           <button
-            className={styles.pointsChip}
-            onClick={() => navigate('/games/ar/insights')}
-            title={
-              journey.rank.next
-                ? t('ar.hub.pointsTitleWithNext', '{{points}} points · {{rank}} · {{toNext}} to {{next}}', {
-                    points: journey.points,
-                    rank: journey.rank.name,
-                    toNext: journey.rank.toNext,
-                    next: journey.rank.next.name,
-                  })
-                : t('ar.hub.pointsTitle', '{{points}} points · {{rank}}', {
-                    points: journey.points,
-                    rank: journey.rank.name,
-                  })
-            }
+            type="button"
+            className={styles.backBtn}
+            onClick={() => {
+              sfx.back()
+              navigate('/games')
+            }}
+            aria-label={t('ar.hub.back', 'Back')}
+            data-sound="none"
           >
-            <span className={styles.rankIcon} aria-hidden>
-              <journey.rank.icon />
+            <FaArrowLeft aria-hidden />
+            <span className={styles.wideLabel}>{t('ar.hub.back', 'Back')}</span>
+          </button>
+          <div className={styles.titleBlock}>
+            <span className={styles.titleIcon} aria-hidden>
+              <FaGamepad />
             </span>
-            <span className={styles.pointsNum}>{journey.points}</span>
-            <span
-              className={styles.rankBar}
-              style={{ '--p': `${Math.round(journey.rank.progress * 100)}%` }}
-              aria-hidden
-            />
-          </button>
-          <button
-            className={styles.iconBtn}
-            onClick={() => navigate('/games/ar/insights')}
-            aria-label={t('ar.hub.progress', 'Progress')}
-            title={t('ar.hub.progressTitle', 'Progress and analysis')}
-          >
-            <FaChartLine />
-          </button>
-          <button
-            className={styles.iconBtn}
-            onClick={() => setShowSettings(true)}
-            aria-label={t('ar.hub.settingsLabel', 'Settings')}
-          >
-            <FaCog />
-          </button>
+            <span className={styles.titleText}>
+              <h1 className={styles.title}>{t('ar.hub.title', 'Camera Games')}</h1>
+              <span className={styles.subtitle}>
+                {t('ar.hub.subtitle', 'Move in front of the camera to play')}
+              </span>
+            </span>
+          </div>
+          <div className={styles.headRight}>
+            {/* Only when the hub stands alone: under the site navbar, which
+                has its own language switch, this one is hidden. */}
+            <span className={styles.hubLang}>
+              <LanguageSwitcher />
+            </span>
+            {/* Points and rank: the one number that is the child's alone, and a
+                door into their own progress screen. */}
+            <button
+              type="button"
+              className={styles.pointsChip}
+              onClick={() => navigate('/games/ar/insights')}
+              aria-label={t('ar.hub.pointsAria', '{{points}} points, {{rank}}. See your progress', {
+                points: journey.points,
+                rank: journey.rank.name,
+                count: journey.points,
+              })}
+              title={pointsName}
+            >
+              <span className={styles.rankIcon} aria-hidden>
+                <journey.rank.icon />
+              </span>
+              <span className={styles.pointsNum}>{journey.points}</span>
+              <span className={styles.pointsWord}>{t('ar.hub.pointsWord', 'points', { count: journey.points })}</span>
+              <span
+                className={styles.rankBar}
+                style={{ '--p': `${Math.round(journey.rank.progress * 100)}%` }}
+                aria-hidden
+              />
+            </button>
+            <button
+              type="button"
+              className={`${styles.headBtn} ${styles.progressBtn}`}
+              onClick={() => navigate('/games/ar/insights')}
+              aria-label={t('ar.hub.progress', 'Progress')}
+              title={t('ar.hub.progressTitle', 'Progress and analysis')}
+            >
+              <FaChartLine aria-hidden />
+              <span className={styles.wideLabel}>{t('ar.hub.progress', 'Progress')}</span>
+            </button>
+            <button
+              type="button"
+              ref={settingsBtnRef}
+              className={styles.headBtn}
+              onClick={() => setShowSettings(true)}
+              aria-label={t('ar.hub.settingsLabel', 'Settings')}
+              aria-haspopup="dialog"
+            >
+              <FaCog aria-hidden />
+              <span className={styles.wideLabel}>{t('ar.hub.settingsLabel', 'Settings')}</span>
+            </button>
+          </div>
         </div>
       </header>
 
-      {/* ── the one thing worth doing next: one tap, no decision to make ── */}
-      <div className={styles.callout}>
-        {!calibrated ? (
-          <button className={styles.calloutBtn} onClick={() => open('setup-space')} data-companion-look data-companion-guide>
-            <span className={styles.calloutIcon}>🎯</span>
-            <span className={styles.calloutText}>
-              <strong>{t('ar.hub.setupTitle', 'Start here — Set Up My Space')}</strong>
-              <em>{t('ar.hub.setupSubtitle', 'Five stretches so every game lands where this child can reach')}</em>
-            </span>
-            <FaChevronRight />
-          </button>
-        ) : recommended ? (
-          <button
-            className={styles.calloutBtn}
-            data-companion-look
-            data-companion-guide
-            onClick={() => open(recommended.game.id, recommended.level)}
-          >
-            <span className={styles.calloutIcon}><recommended.game.icon /></span>
-            <span className={styles.calloutText}>
-              <strong>{recommended.reason}</strong>
-              <em>
-                {tGame(recommended.game.id, 'title', recommended.game.title)}
-                {recommended.level ? ` · ${t('ar.hub.levelOf', 'Level {{n}} of {{total}}', { n: recommended.level, total: LEVELS })}` : ''}
-              </em>
-            </span>
-            <span className={styles.calloutGo}>
-              <FaPlay /> {t('ar.hub.calloutPlay', 'Play')}
-            </span>
-          </button>
-        ) : null}
-      </div>
+      <div className={styles.scroller}>
+        <main className={styles.inner}>
+          <HubHero calibrated={calibrated} recommended={recommended} onOpen={open} showDog={roomForDog} />
 
-      {/* ── the trail of groups, each a ring of how far along it is ── */}
-      <nav className={styles.groups} aria-label={t('ar.hub.groupsAriaLabel', 'Game groups')}>
-        {GROUPS.map((gr) => {
-          const st = journey.byGroup[gr.id]
-          const pct = st?.possible ? Math.round((st.levels / st.possible) * 100) : 0
-          const done = Boolean(st?.possible && st.levels >= st.possible)
-          const grTitle = tGroup(gr.id, 'title', gr.title)
-          const grBlurb = tGroup(gr.id, 'blurb', gr.blurb)
-          return (
-            <button
-              key={gr.id}
-              className={`${styles.groupPill} ${styles[gr.color]} ${gr.id === group.id ? styles.groupOn : ''}`}
-              onClick={() => chooseGroup(gr.id)}
-              title={
-                st
-                  ? t('ar.hub.groupTooltipWithStats', '{{title}} — {{blurb}} · {{levels}} of {{possible}} levels', {
-                      title: grTitle,
-                      blurb: grBlurb,
-                      levels: st.levels,
-                      possible: st.possible,
-                    })
-                  : t('ar.hub.groupTooltip', '{{title}} — {{blurb}}', { title: grTitle, blurb: grBlurb })
-              }
-              aria-current={gr.id === group.id ? 'true' : undefined}
-            >
-              <span className={styles.ring} style={{ '--p': pct }}>
-                <span className={styles.ringIn}>
-                  <span className={styles.groupIcon}><gr.icon /></span>
-                </span>
-                {done && (
-                  <span className={styles.ringDone} aria-hidden>
-                    <FaCheck />
-                  </span>
-                )}
-              </span>
-              <span className={styles.groupName}>{tGroup(gr.id, 'short', gr.short)}</span>
-            </button>
-          )
-        })}
-      </nav>
-
-      {/* ── tiles ── */}
-      <div className={styles.board} ref={gridWrapRef}>
-        <AnimatePresence mode="wait">
-          <FramerMotion.motion.div
-            key={`${group.id}-${page}-${revision}`}
-            className={styles.grid}
-            style={{ '--cols': fit.cols, '--rows': usedRows, '--gap': `${fit.gap}px` }}
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -24 }}
-            transition={{ duration: 0.22 }}
-          >
-            {pageGames.map((g, i) => (
-              <GameTile key={g.id} game={g} index={i} onOpen={open} />
-            ))}
-          </FramerMotion.motion.div>
-        </AnimatePresence>
-      </div>
-
-      <footer className={styles.foot}>
-        {pages > 1 ? (
-          // The page arrows sit with the dots under the board, so the tiles get
-          // the full width on every screen; each arrow is a full 44px target.
-          <div className={styles.pager}>
-            <button
-              className={styles.pageBtn}
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              disabled={page === 0}
-              aria-label={t('ar.hub.previousPage', 'Previous page')}
-            >
-              <FaChevronLeft />
-            </button>
-            <div className={styles.dots}>
-              {Array.from({ length: pages }, (_, i) => (
-                <button
-                  key={i}
-                  className={`${styles.dot} ${i === page ? styles.dotOn : ''}`}
-                  onClick={() => setPage(i)}
-                  aria-label={t('ar.hub.pageLabel', 'Page {{n}}', { n: i + 1 })}
-                  aria-current={i === page ? 'page' : undefined}
-                />
-              ))}
+          <section className={styles.groups} aria-label={t('ar.hub.groupsAriaLabel', 'Game groups')}>
+            <div className={styles.tabsWrap}>
+              <GroupTabs
+                groups={GROUPS}
+                selected={group.id}
+                onSelect={setGroupId}
+                byGroup={journey.byGroup}
+              />
             </div>
-            <button
-              className={styles.pageBtn}
-              onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
-              disabled={page >= pages - 1}
-              aria-label={t('ar.hub.nextPage', 'Next page')}
-            >
-              <FaChevronRight />
-            </button>
-          </div>
-        ) : (
-          <span className={styles.footCount}>
-            {games.length === 1
-              ? t('ar.hub.footCountSingular', '{{count}} game', { count: games.length })
-              : t('ar.hub.footCountPlural', '{{count}} games', { count: games.length })}
-          </span>
-        )}
-        <span className={styles.footNote}>
-          <FaCamera /> {t('ar.hub.footRunsOnDevice', 'Runs on this device · no video is recorded')}
-        </span>
-        <span className={styles.footTotal}>
-          {journey.levelsCleared > 0
-            ? t('ar.hub.footLevelsCleared', '{{count}} levels cleared', { count: journey.levelsCleared })
-            : t('ar.hub.footGamesInAll', '{{count}} games in all', { count: GAMES.length })}
-        </span>
-      </footer>
+
+            <div className={styles.panel} role="tabpanel" id={PANEL_ID} aria-labelledby={tabId(group.id)}>
+              <div className={styles.panelHead} data-color={group.color}>
+                <span className={styles.panelIcon} aria-hidden>
+                  <group.icon />
+                </span>
+                <div className={styles.panelText}>
+                  <h2 className={styles.panelTitle}>{grTitle}</h2>
+                  <p className={styles.panelLine}>
+                    <strong>{grLine}</strong>
+                    <span aria-hidden className={styles.sep}> · </span>
+                    <span className={styles.blurb}>{grBlurb}</span>
+                  </p>
+                  <ul className={styles.stats} aria-label={t('ar.hub.groupStatsLabel', 'This group')}>
+                    <li>
+                      {games.length === 1
+                        ? t('ar.hub.footCountSingular', '{{count}} game', { count: games.length })
+                        : t('ar.hub.footCountPlural', '{{count}} games', { count: games.length })}
+                    </li>
+                    {st.possible > 0 && (
+                      <li>
+                        {t('ar.hub.groupLevels', '{{levels}} of {{possible}} levels cleared', {
+                          levels: st.levels,
+                          possible: st.possible,
+                        })}
+                      </li>
+                    )}
+                  </ul>
+                </div>
+                <button
+                  type="button"
+                  className={styles.panelSpeak}
+                  onClick={() => speak(`${grTitle}. ${grLine}. ${grBlurb}.`, { user: true })}
+                  aria-label={t('ar.hub.readAloudAria', 'Read {{title}} aloud', { title: grTitle })}
+                  title={t('ar.hub.readThisOut', 'Read this out')}
+                >
+                  <FaVolumeUp aria-hidden />
+                </button>
+              </div>
+
+              <div className={styles.gridWrap} ref={gridWrapRef}>
+                <ul key={group.id} className={styles.grid} style={{ '--cols': cols }} role="list">
+                  {games.map((g, i) => (
+                    <GameCard key={g.id} game={g} index={i} onOpen={open} isNext={g.id === nextId} />
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </section>
+
+          <footer className={styles.foot}>
+            <span className={styles.footNote}>
+              <FaCamera aria-hidden /> {t('ar.hub.footRunsOnDevice', 'Runs on this device · no video is recorded')}
+            </span>
+            <span className={styles.footNote}>
+              {journey.levelsCleared > 0
+                ? t('ar.hub.footLevelsCleared', '{{count}} levels cleared', { count: journey.levelsCleared })
+                : t('ar.hub.footGamesInAll', '{{count}} games in all', { count: GAMES.length })}
+            </span>
+          </footer>
+        </main>
+      </div>
 
       {showSettings && <SettingsSheet onClose={() => setShowSettings(false)} />}
     </div>
-  )
-}
-
-/**
- * One game as a stop on a journey.
- *
- * The tile body is the play button and starts the level the child is on, so the
- * common case is a single tap with no menu in between. The pips underneath are
- * the level picker for replaying a cleared level or for an adult jumping ahead,
- * and the speaker reads the game out for a child who cannot read the title.
- *
- * The tile body and the pips are siblings rather than nested buttons: a button
- * inside a button is invalid, and browsers resolve the click unpredictably.
- */
-function GameTile({ game, index, onOpen }) {
-  const { t } = useTranslation()
-  const journeyOn = hasJourney(game)
-  const p = journeyOn ? tileProgress(game) : null
-  const domains = (game.domains || []).slice(0, 2).map((d) => tDomain(d, DOMAIN_LABELS[d] || d))
-  const meta = p ? LEVEL_META[p.level - 1] : null
-  const MetaIcon = meta?.icon
-  const title = tGame(game.id, 'title', game.title)
-  const how = tGame(game.id, 'how', game.how)
-  const lifeSkillLabel = game.lifeSkill ? tLifeSkill(game.lifeSkill, LIFE_SKILL_LABELS[game.lifeSkill]) : null
-
-  return (
-    <FramerMotion.motion.div
-      className={`${styles.tile} ${styles[game.color] || styles.blue} ${game.big ? styles.tileBig : ''} ${
-        p?.complete ? styles.tileDone : ''
-      }`}
-      initial={{ opacity: 0, y: 18, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ delay: index * 0.035, duration: 0.24 }}
-      whileHover={{ scale: 1.025, y: -3 }}
-    >
-      <button
-        className={styles.tilePlay}
-        onClick={() => onOpen(game.id, p?.level)}
-        title={
-          journeyOn
-            ? t('ar.hub.readOutTitle', '{{title}} — level {{level}} of {{total}}: {{change}}', {
-                title,
-                level: p.level,
-                total: LEVELS,
-                change: levelChange(game, p.level),
-              })
-            : how
-        }
-      >
-        <span className={styles.tileTop}>
-          <span className={styles.tileIcon} aria-hidden>
-            <game.icon />
-          </span>
-          {p?.complete ? (
-            <span className={styles.doneFlag} title={t('ar.hub.allFiveCleared', 'All five levels cleared')}>
-              <FaTrophy />
-            </span>
-          ) : p?.plays ? (
-            <span className={styles.levelFlag} title={t('ar.hub.levelOf', 'Level {{n}} of {{total}}', { n: p.level, total: LEVELS })}>
-              <MetaIcon /> L{p.level}
-            </span>
-          ) : (
-            <span className={styles.newBadge} data-butterfly-perch>{t('ar.hub.newBadge', 'New')}</span>
-          )}
-        </span>
-
-        <span className={styles.tileTitle}>{title}</span>
-        <span className={styles.tileHow}>{how}</span>
-
-        <span className={styles.tileMeta}>
-          {domains.map((d) => (
-            <span key={d} className={styles.chip}>
-              {d}
-            </span>
-          ))}
-          {lifeSkillLabel && <span className={styles.life}>{lifeSkillLabel}</span>}
-        </span>
-      </button>
-
-      <div className={styles.tileBottom}>
-        {journeyOn ? (
-          <LevelPips pips={p.pips} size="tile" onPick={(n) => onOpen(game.id, n)} />
-        ) : (
-          <span className={styles.setupNote}>{t('ar.hub.setupNote', 'Set-up · no levels')}</span>
-        )}
-        <button
-          className={styles.speakBtn}
-          onClick={() => speak(`${title}. ${how}`, { user: true })}
-          aria-label={t('ar.hub.readOutAriaLabel', 'Read out {{title}}', { title })}
-          title={t('ar.hub.readThisOut', 'Read this out')}
-        >
-          <FaVolumeUp />
-        </button>
-      </div>
-    </FramerMotion.motion.div>
   )
 }
 
@@ -590,7 +396,7 @@ function pickRecommended() {
   }
 
   // 3. Nothing played yet — start with something that always works.
-  const unplayed = GAMES.filter((g) => g.featured && !played(g.id))
+  const unplayed = GAMES.filter((g) => g.featured && !played(g.id) && hasJourney(g))
   if (unplayed.length) return { game: unplayed[0], level: 1, reason: tRecommend('tryNew', 'Try something new') }
 
   // 4. Every journey finished. Offer the hardest level of a favourite rather
@@ -600,3 +406,4 @@ function pickRecommended() {
   )[0]
   return most ? { game: most, level: LEVELS, reason: tRecommend('champion', 'Play a champion level') } : null
 }
+
