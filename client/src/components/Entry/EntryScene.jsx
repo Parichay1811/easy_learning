@@ -4,6 +4,7 @@
 // the next never makes the clouds or butterflies jump back to the start.
 import { useLayoutEffect, useRef } from "react";
 import { Butterfly } from "../Mascot/Mascot";
+import { useCompanionLive } from "../../companion/useCompanionLive";
 import s from "./EntryScene.module.css";
 
 const FLYERS = [
@@ -25,6 +26,8 @@ function Cloud({ className }) {
 
 export default function EntryScene({ butterflies = 3, tint }) {
   const ref = useRef(null);
+  // While the live companion runs, its butterflies (companion/butterflies.js) fly here instead.
+  const live = useCompanionLive();
   useLayoutEffect(() => {
     // Negative delay = "this has been running since the page loaded".
     ref.current?.style.setProperty("--t0", `${-(performance.now() / 1000).toFixed(2)}s`);
@@ -38,7 +41,7 @@ export default function EntryScene({ butterflies = 3, tint }) {
       {tint && <div className={s.tint} />}
       <div className={s.wash} />
       <div className={s.flock}>
-        {FLYERS.slice(0, Math.max(0, Math.min(3, butterflies))).map((b) => (
+        {!live && FLYERS.slice(0, Math.max(0, Math.min(3, butterflies))).map((b) => (
           <span key={b.cls} className={`${s.flyer} ${s[b.cls]}`}>
             <Butterfly hue={b.hue} hue2={b.hue2} className={s.wings} />
           </span>

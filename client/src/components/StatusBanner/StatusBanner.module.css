@@ -22,10 +22,18 @@
 .maintenance { background: #e8f1ff; color: #0b2e5c; border-bottom-color: #3d7bd9; }
 .major, .critical { background: #fde8e6; color: #5c120b; border-bottom-color: #c0392b; }
 .text { max-width: 900px; }
-.link { color: inherit; font-weight: 600; text-decoration: underline; min-height: 32px; display: inline-flex; align-items: center; }
+.link { color: inherit; font-weight: 600; text-decoration: underline; min-height: 44px; display: inline-flex; align-items: center; }
 .close {
   position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
   background: none; border: 0; font-size: 1.5rem; color: inherit; cursor: pointer; min-width: 44px; min-height: 44px; border-radius: 10px;
 }
 .close:focus-visible, .link:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+/* A phone: every line of the banner is a line less for the page (it is one
+   screen, under the banner), so the notice is set smaller and tighter, with
+   "Details" beside the text rather than on a line of its own. */
+@media (max-width: 600px) {
+  .banner { flex-wrap: nowrap; justify-content: flex-start; gap: 8px; padding: 2px 44px 2px 12px; font-size: 0.84rem; }
+  .text { flex: 1 1 auto; min-width: 0; line-height: 1.35; padding: 6px 0; }
+  .link { flex: none; }
+}
 @media print { .banner { position: static; } }

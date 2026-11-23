@@ -1,0 +1,407 @@
+// The companion's stage: one dog for the whole app.
+//
+// Pages say where the dog may sit with <Mascot> (a "spot" in their own layout). The
+// stage picks the best spot, moves the dog's element INTO that spot (so it scrolls
+// with the page natively and sits under dialogs and cards like any element), and when
+// the best spot changes it lifts the dog into a fixed layer and hops it along an arc
+// to the new spot: it never teleports. It never takes clicks (pointer-events: none).
+//
+// The performance is chosen by brain.js; clips play through AlphaVideo.js; body
+// motion (hops, lean, entrances) comes from motion.js.
+import { AlphaVideo } from "./AlphaVideo";
+import { createBrain } from "./brain";
+import { companion, getSpots, getSpot, onSpots, setLive } from "./bus";
+import { fitFrame, pickSpot, gazeTowards, visibleShare } from "./geometry";
+import * as motion from "./motion";
+import { onNarration } from "../utils/narrator";
+import css from "./companion.module.css";
+
+const LOOK_SELECTOR = "[data-companion-look]";
+const GUIDE_SELECTOR = "[data-companion-guide]";
+const GUIDE_AFTER_MS = 10_000;
+const FLOAT_WAIT_MS = 900; // between pages: wait this long for the next page's spot
+
+const shown = (el) => {
+  if (!el?.isConnected) return false;
+  const cs = getComputedStyle(el);
+  return cs.display !== "none" && cs.visibility !== "hidden";
+};
+
+export function startCompanion({ base = "/companion/", onState } = {}) {
+  let stopped = false;
+  let manifest = null;
+  let player = null;
+  let hostId = null; // spot the dog is in
+  let floating = null; // viewport rect while between spots
+  let moving = false;
+  let again = false;
+  let parkedTimer = 0;
+  let guideTimer = 0;
+  let io = null;
+  let visible = true;
+  const brain = createBrain();
+  const offs = [];
+  // localStorage.learnigo_companion_debug = "1" logs what the brain hears and decides.
+  const debug = (() => { try { return localStorage.getItem("learnigo_companion_debug") === "1"; } catch { return false; } })();
+  const log = (...a) => { if (debug) console.warn("[companion]", ...a); };
+  const state = (s) => onState?.(s);
+
+  // --- the dog's element (built once, moved between spots) ---
+  const layer = document.createElement("div");
+  layer.className = css.layer;
+  layer.setAttribute("aria-hidden", "true");
+  const dog = document.createElement("div");
+  dog.className = css.dog;
+  dog.dataset.companion = "dog";
+  const shadow = document.createElement("div");
+  shadow.className = css.shadow;
+  const body = document.createElement("div");
+  body.className = css.body;
+  const canvas = document.createElement("canvas");
+  canvas.className = css.canvas;
+  const poster = new Image();
+  poster.className = css.poster;
+  poster.alt = "";
+  poster.decoding = "async";
+  poster.draggable = false;
+  body.append(poster, canvas);
+  dog.append(shadow, body);
+  document.body.appendChild(layer);
+
+  const frameRectIn = (spotRect) => fitFrame(spotRect, manifest.body, manifest);
+
+  // Size the dog inside a spot (spot-relative coordinates) and size the canvas buffer.
+  function fitInto(spotEl) {
+    const r = spotEl.getBoundingClientRect();
+    const f = frameRectIn({ left: 0, top: 0, width: r.width, height: r.height });
+    Object.assign(dog.style, { position: "absolute", left: `${f.left}px`, top: `${f.top}px`, width: `${f.width}px`, height: `${f.height}px`, transform: "" });
+    sizeCanvas(f.width);
+  }
+  function sizeCanvas(w) {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const cw = Math.min(manifest.width, Math.round(w * dpr));
+    player?.resize(cw, Math.round((cw * manifest.height) / manifest.width));
+  }
+
+  function host(spot) {
+    dog.getAnimations().forEach((a) => a.cancel());
+    spot.el.appendChild(dog);
+    fitInto(spot.el);
+    hostId = spot.id;
+    floating = null;
+    spot.el.dataset.companionHost = "true";
+    // Fallback places (the answer sheet on a phone) fold away while the dog is in a main place.
+    document.documentElement.dataset.companionMain = spot.fallback ? "false" : "true";
+    observe(spot.el);
+    state({ host: spot.id });
+  }
+
+  function unhostMarker() {
+    const s = hostId && getSpot(hostId);
+    if (s?.el) delete s.el.dataset.companionHost;
+    delete document.documentElement.dataset.companionMain;
+  }
+
+  // Lift the dog out of its spot into the fixed layer at the same place on screen.
+  function lift() {
+    const r = dog.getBoundingClientRect();
+    unhostMarker();
+    hostId = null;
+    dog.getAnimations().forEach((a) => a.cancel());
+    Object.assign(dog.style, { position: "fixed", left: `${r.left}px`, top: `${r.top}px`, width: `${r.width}px`, height: `${r.height}px`, transform: "" });
+    layer.appendChild(dog);
+    floating = r.width ? { left: r.left, top: r.top, width: r.width, height: r.height } : null;
+    return floating;
+  }
+
+  function park() {
+    unhostMarker();
+    hostId = null;
+    floating = null;
+    dog.getAnimations().forEach((a) => a.cancel());
+    dog.remove();
+    player?.pause();
+    state({ host: null });
+  }
+
+  // The target spot's frame must hold still for a few frames (page transitions animate).
+  function settled(spot, ms = 700) {
+    return new Promise((resolve) => {
+      const t0 = performance.now();
+      let last = null;
+      let same = 0;
+      const tick = () => {
+        if (stopped || !spot.el.isConnected) return resolve(null);
+        const r = spot.el.getBoundingClientRect();
+        if (last && Math.abs(r.left - last.left) < 0.5 && Math.abs(r.top - last.top) < 0.5 && Math.abs(r.width - last.width) < 0.5) same += 1;
+        else same = 0;
+        last = r;
+        if (same >= 3 || performance.now() - t0 > ms) return resolve(r);
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+
+  async function moveTo(spot) {
+    moving = true;
+    clearTimeout(parkedTimer);
+    const from = hostId ? lift() : floating;
+    const r = await settled(spot);
+    if (stopped) return;
+    if (!r) { moving = false; return reconcile(); }
+    const to = frameRectIn(r);
+    const vw = innerWidth;
+    const vh = innerHeight;
+    if (from && visibleShare(from, vw, vh) > 0.15 && visibleShare(to, vw, vh) > 0.15) {
+      if (!dog.isConnected) layer.appendChild(dog);
+      sizeCanvas(Math.max(from.width, to.width));
+      player?.resume();
+      await motion.travel(dog, from, to);
+      if (stopped) return;
+      host(spot);
+    } else {
+      host(spot);
+      motion.enter(body, shadow);
+    }
+    player?.resume();
+    moving = false;
+    arrived(spot);
+    if (again) { again = false; reconcile(); }
+  }
+
+  function arrived(spot) {
+    const mood = spot.mood;
+    let interrupt;
+    if (mood === "cheer") interrupt = brain.dispatch({ type: "success", size: "big" });
+    else if (mood === "think") interrupt = brain.dispatch({ type: "curious" });
+    else interrupt = brain.dispatch({ type: "arrive" });
+    if (interrupt) beat(true);
+    armGuide();
+  }
+
+  function leave() {
+    if (!hostId && !floating) return;
+    const el = dog;
+    const wasVisible = el.isConnected && visibleShare(el.getBoundingClientRect(), innerWidth, innerHeight) > 0.1;
+    if (!wasVisible) return park();
+    if (hostId) lift();
+    moving = true;
+    motion.exit(el).then(() => {
+      moving = false;
+      if (!stopped && !hostId) park();
+      if (again) { again = false; reconcile(); }
+    });
+  }
+
+  function reconcile() {
+    if (stopped || !manifest) return;
+    if (moving) { again = true; return; }
+    const spots = getSpots().map((s) => ({ ...s, rect: s.el?.isConnected ? s.el.getBoundingClientRect() : null, hidden: !shown(s.el) }));
+    const id = pickSpot(spots, hostId, innerWidth, innerHeight);
+    if (id && id === hostId) {
+      const s = getSpot(id);
+      if (s?.el) fitInto(s.el);
+      return;
+    }
+    if (id) return moveTo(getSpot(id));
+    if (hostId || floating) {
+      clearTimeout(parkedTimer);
+      parkedTimer = setTimeout(() => { if (!stopped && !moving) { const again2 = getSpots().some((s) => shown(s.el)); if (!again2) leave(); else reconcile(); } }, hostId ? 250 : FLOAT_WAIT_MS);
+    }
+  }
+
+  // --- pause when nobody can see it ---
+  function observe(el) {
+    io?.disconnect();
+    if (!("IntersectionObserver" in window)) return;
+    io = new IntersectionObserver(([e]) => {
+      visible = e.isIntersecting;
+      if (!visible) player?.pause();
+      else if (!document.hidden) player?.resume();
+    });
+    io.observe(el);
+  }
+  const onVisibility = () => { if (document.hidden) player?.pause(); else if (visible && (hostId || floating)) player?.resume(); };
+  document.addEventListener("visibilitychange", onVisibility);
+  offs.push(() => document.removeEventListener("visibilitychange", onVisibility));
+
+  // --- the performance loop ---
+  let clipTimer = 0;
+  function beat(interrupt = false) {
+    if (stopped || !player) return;
+    const b = brain.choose();
+    log("beat", b.clip, b.kind, interrupt ? "interrupt" : "", JSON.stringify(b.cues || {}), b.keep ? "keep" : "");
+    const dur = (manifest.clips[b.clip]?.duration || 3) * 1000;
+    if (b.cues?.hop && dog.isConnected) motion.hop(body, shadow, b.cues.hop);
+    if (b.cues?.lean && dog.isConnected) motion.lean(body, b.cues.lean, dur * 0.85);
+    if (b.keep) return;
+    state({ clip: b.clip, kind: b.kind });
+    clearTimeout(clipTimer);
+    player
+      .play(b.clip, { fade: interrupt ? 180 : 0, onEnd: () => beat(false) })
+      .catch(() => {
+        // Video refused (iOS Low Power Mode, data saver...): keep the still image, retry
+        // on the next tap. The dog still hops and moves with the body motion.
+        clipTimer = setTimeout(() => beat(false), dur);
+      });
+  }
+
+  // --- signals from the app, the voice, and the learner ---
+  offs.push(companion.on((evt) => {
+    // "Look at this element" (a new question, new content): the stage knows where both are.
+    if (evt.type === "lookAt") { log("lookAt", hostId ? "hosted" : "not hosted"); if (evt.el && hostId) look(evt.el, "attend"); return; }
+    const i = brain.dispatch(evt);
+    log("signal", evt.type, evt.size || "", i ? "interrupt" : "waits");
+    if (i) beat(true);
+  }));
+  offs.push(onNarration((e) => {
+    if (e.type === "start") { if (brain.dispatch({ type: "speakStart" })) beat(true); }
+    else if (e.type === "end" || e.type === "blocked" || e.type === "unavailable") { if (brain.dispatch({ type: "speakEnd" })) beat(true); }
+  }));
+
+  let lastLook = { el: null, at: 0 };
+  let lastMove = 0;
+  let pointerRaf = 0;
+  const onPointer = (e) => {
+    if (e.pointerType === "touch") return;
+    if (pointerRaf) return;
+    pointerRaf = requestAnimationFrame(() => {
+      pointerRaf = 0;
+      const now = performance.now();
+      if (now - lastMove > 1000) { lastMove = now; brain.dispatch({ type: "activity" }); }
+      if (!hostId || !dog.isConnected) return;
+      const near = nearest(e.clientX, e.clientY, 90);
+      if (near && (near !== lastLook.el || now - lastLook.at > 15_000)) {
+        lastLook = { el: near, at: now };
+        look(near, "attend");
+      }
+    });
+  };
+  const onQuiet = () => brain.dispatch({ type: "quiet" });
+  const onFocus = (e) => {
+    const el = e.target?.closest?.(LOOK_SELECTOR);
+    if (el && hostId) look(el, "attend");
+    brain.dispatch({ type: "activity" });
+  };
+  const onDown = () => { clearTimeout(guideTimer); brain.dispatch({ type: "activity" }); player?.resume(); };
+  addEventListener("pointermove", onPointer, { passive: true });
+  addEventListener("scroll", onQuiet, { passive: true, capture: true });
+  addEventListener("wheel", onQuiet, { passive: true });
+  addEventListener("touchmove", onQuiet, { passive: true });
+  addEventListener("keydown", onQuiet, { passive: true });
+  addEventListener("focusin", onFocus);
+  addEventListener("pointerdown", onDown, { passive: true });
+  offs.push(() => {
+    removeEventListener("pointermove", onPointer);
+    removeEventListener("scroll", onQuiet, { capture: true });
+    removeEventListener("wheel", onQuiet);
+    removeEventListener("touchmove", onQuiet);
+    removeEventListener("keydown", onQuiet);
+    removeEventListener("focusin", onFocus);
+    removeEventListener("pointerdown", onDown);
+  });
+
+  function nearest(x, y, within) {
+    let best = null;
+    let bestD = within;
+    document.querySelectorAll(LOOK_SELECTOR).forEach((el) => {
+      const r = el.getBoundingClientRect();
+      if (!r.width) return;
+      const dx = Math.max(r.left - x, 0, x - r.right);
+      const dy = Math.max(r.top - y, 0, y - r.bottom);
+      const d = Math.hypot(dx, dy);
+      if (d < bestD) { bestD = d; best = el; }
+    });
+    return best;
+  }
+
+  function look(el, type) {
+    const g = gazeTowards(dog.getBoundingClientRect(), el.getBoundingClientRect());
+    if (g.dir === "center") return;
+    const i = brain.dispatch({ type, dir: g.dir });
+    log(type, g.dir, i ? "interrupt" : "declined", JSON.stringify(brain.state));
+    if (i) beat(true);
+  }
+
+  // A gentle "over there" towards the page's main action, once, if the learner seems unsure.
+  function armGuide() {
+    clearTimeout(guideTimer);
+    guideTimer = setTimeout(() => {
+      if (stopped || !hostId) return;
+      const el = [...document.querySelectorAll(GUIDE_SELECTOR)].find((x) => visibleShare(x.getBoundingClientRect(), innerWidth, innerHeight) > 0.8);
+      if (el) look(el, "guide");
+    }, GUIDE_AFTER_MS);
+  }
+
+  // --- spots coming and going ---
+  offs.push(onSpots((change) => {
+    if (change?.removed && change.removed === hostId) {
+      // The page that held the dog is going away (cleanup runs before the DOM goes):
+      // keep the dog where it is on screen, and look for the next page's spot.
+      lift();
+    }
+    if (change?.mood && change.updated === hostId) {
+      const m = change.mood;
+      const interrupt = m === "cheer" ? brain.dispatch({ type: "success", size: "big" }) : m === "think" ? brain.dispatch({ type: "curious" }) : m === "wave" ? brain.dispatch({ type: "greet" }) : false;
+      if (interrupt) beat(true);
+    }
+    requestAnimationFrame(reconcile);
+  }));
+  let scrollT = 0;
+  const onLayout = () => { clearTimeout(scrollT); scrollT = setTimeout(reconcile, 160); };
+  addEventListener("resize", onLayout, { passive: true });
+  addEventListener("scroll", onLayout, { passive: true, capture: true });
+  offs.push(() => { removeEventListener("resize", onLayout); removeEventListener("scroll", onLayout, { capture: true }); });
+
+  // --- start ---
+  fetch(`${base}manifest.json`)
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`manifest ${r.status}`))))
+    .then((m) => {
+      if (stopped) return;
+      manifest = m;
+      poster.src = base + m.poster;
+      try {
+        player = new AlphaVideo(canvas, {
+          base,
+          manifest: m,
+          onFirstFrame: () => {
+            if (stopped) return;
+            dog.dataset.live = "true";
+            setLive(true);
+            state({ live: true });
+            // Likely next performances, fetched quietly once the first one shows.
+            const later = () => player?.preload(["hello", "talk", "cheer"]);
+            if ("requestIdleCallback" in window) requestIdleCallback(later, { timeout: 4000 });
+            else setTimeout(later, 1500);
+          },
+          onFail: () => stop(),
+        });
+      } catch {
+        return stop();
+      }
+      sizeCanvas(160);
+      beat(false);
+      reconcile();
+    })
+    .catch(() => stop());
+
+  function stop() {
+    if (stopped) return;
+    stopped = true;
+    clearTimeout(parkedTimer);
+    clearTimeout(guideTimer);
+    clearTimeout(clipTimer);
+    clearTimeout(scrollT);
+    io?.disconnect();
+    offs.forEach((f) => f());
+    unhostMarker();
+    player?.dispose();
+    dog.remove();
+    layer.remove();
+    setLive(false);
+    state({ live: false, stopped: true });
+  }
+
+  return { stop, get brain() { return brain; } };
+}

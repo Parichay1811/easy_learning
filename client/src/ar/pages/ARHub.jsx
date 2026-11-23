@@ -21,7 +21,7 @@
  * it, which is exactly why the pips are always visible — including the locked
  * ones.
  */
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AnimatePresence } from 'framer-motion'
@@ -49,13 +49,32 @@ import LanguageSwitcher from '../../components/LanguageSwitcher/LanguageSwitcher
 import VideoBackground from '../../components/VideoBackground/VideoBackground'
 import styles from './ARHub.module.css'
 
-/** Tiles per page. The grid is 4×2 in landscape and 2×4 in portrait — 8 tiles
- *  either way. Below 425px wide there isn't enough board height left for four
- *  stacked rows to read as portrait cards, so that width shows 4 at a time
- *  (2×2) instead, matching the CSS breakpoint in ARHub.module.css. */
-const PAGE_SIZE = 8
-const NARROW_PAGE_SIZE = 4
-const NARROW_BREAKPOINT = 425
+/** How many tiles a page holds is measured, not guessed from the window: the
+ *  board is whatever height is left under the header, callout, group trail and
+ *  footer (a status banner, a landscape phone and a 4K monitor all leave very
+ *  different boards), and a page is as many tiles as fit it whole.
+ *
+ *  TILE_MIN_W: the narrowest a tile can be with its bottom row intact — five
+ *  44px-pitch level pips, the 44px speaker, padding (ARHub.module.css .tile*).
+ *  TILE_TALL_H: the shortest tile that still has room for the big "card"
+ *  layout (icon on top). Multi-column boards use it whenever two rows of those
+ *  fit, so a laptop shows big cards rather than a dense list.
+ *  TILE_ROW_H: the shortest "row" tile (icon beside the title), used on
+ *  phones (one column) and on boards too short for two rows of cards.
+ *  The same numbers are the container-query breakpoints in the CSS. */
+const TILE_MIN_W = 276
+const TILE_TALL_H = 228
+const TILE_ROW_H = 128
+
+function fitBoard(width, height) {
+  const gap = width < 600 ? 8 : 12
+  const cols = Math.max(1, Math.floor((width + gap) / (TILE_MIN_W + gap)))
+  const tallRows = Math.floor((height + gap) / (TILE_TALL_H + gap))
+  const rows = cols > 1 && tallRows >= 2
+    ? tallRows
+    : Math.max(1, Math.floor((height + gap) / (TILE_ROW_H + gap)))
+  return { cols, rows, gap }
+}
 
 export default function ARHub() {
   const { t, i18n } = useTranslation()
@@ -69,29 +88,45 @@ export default function ARHub() {
   })
   const [page, setPage] = useState(0)
   const [showSettings, setShowSettings] = useState(false)
-  const [narrowPhone, setNarrowPhone] = useState(
-    () => window.innerWidth <= NARROW_BREAKPOINT
-  )
+  // Columns and rows that fit the board (see fitBoard); measured below.
+  const [fit, setFit] = useState(() => fitBoard(window.innerWidth - 20, window.innerHeight * 0.5))
+  const gridWrapRef = useRef(null)
   // Bumped when stored progress changes under us (a server merge), so the
   // journey figures below are recomputed rather than left stale.
   const [revision, setRevision] = useState(0)
   const wrapRef = useRef(null)
 
-  useEffect(() => {
-    const check = () => setNarrowPhone(window.innerWidth <= NARROW_BREAKPOINT)
-    window.addEventListener('resize', check)
-    window.addEventListener('orientationchange', check)
-    return () => {
-      window.removeEventListener('resize', check)
-      window.removeEventListener('orientationchange', check)
+  // The board's free area decides the grid. Measured before paint (no flash of
+  // the wrong grid) and again whenever it changes size: rotation, a status
+  // banner arriving, the text-size setting, the window being resized.
+  useLayoutEffect(() => {
+    const el = gridWrapRef.current
+    if (!el) return undefined
+    const measure = () => {
+      const r = el.getBoundingClientRect()
+      if (!r.width || !r.height) return
+      const next = fitBoard(r.width, r.height)
+      setFit((f) => (f.cols === next.cols && f.rows === next.rows && f.gap === next.gap ? f : next))
     }
+    measure()
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure)
+      return () => window.removeEventListener('resize', measure)
+    }
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    return () => ro.disconnect()
   }, [])
 
   const group = GROUP_BY_ID[groupId] || GROUPS[0]
   const games = useMemo(() => gamesInGroup(group.id), [group.id])
-  const pageSize = narrowPhone ? NARROW_PAGE_SIZE : PAGE_SIZE
+  const pageSize = fit.cols * fit.rows
   const pages = Math.max(1, Math.ceil(games.length / pageSize))
   const pageGames = games.slice(page * pageSize, page * pageSize + pageSize)
+  // A group smaller than a page uses only the rows it needs (each capped at a
+  // comfortable card height in the CSS) instead of stretching a few tiles over
+  // the whole board; every page of a group keeps the same tile size.
+  const usedRows = Math.max(1, Math.min(fit.rows, Math.ceil(Math.min(games.length, pageSize) / fit.cols)))
 
   // A resize (or switching group) can leave `page` past the end of the new
   // page count — clamp it during render rather than in an effect, so the
@@ -271,7 +306,7 @@ export default function ARHub() {
       {/* ── the one thing worth doing next: one tap, no decision to make ── */}
       <div className={styles.callout}>
         {!calibrated ? (
-          <button className={styles.calloutBtn} onClick={() => open('setup-space')}>
+          <button className={styles.calloutBtn} onClick={() => open('setup-space')} data-companion-look data-companion-guide>
             <span className={styles.calloutIcon}>🎯</span>
             <span className={styles.calloutText}>
               <strong>{t('ar.hub.setupTitle', 'Start here — Set Up My Space')}</strong>
@@ -282,6 +317,8 @@ export default function ARHub() {
         ) : recommended ? (
           <button
             className={styles.calloutBtn}
+            data-companion-look
+            data-companion-guide
             onClick={() => open(recommended.game.id, recommended.level)}
           >
             <span className={styles.calloutIcon}><recommended.game.icon /></span>
@@ -341,22 +378,12 @@ export default function ARHub() {
       </nav>
 
       {/* ── tiles ── */}
-      <div className={styles.board}>
-        {pages > 1 && (
-          <button
-            className={`${styles.pageBtn} ${styles.pagePrev}`}
-            onClick={() => setPage((p) => Math.max(0, p - 1))}
-            disabled={page === 0}
-            aria-label={t('ar.hub.previousPage', 'Previous page')}
-          >
-            <FaChevronLeft />
-          </button>
-        )}
-
+      <div className={styles.board} ref={gridWrapRef}>
         <AnimatePresence mode="wait">
           <FramerMotion.motion.div
             key={`${group.id}-${page}-${revision}`}
             className={styles.grid}
+            style={{ '--cols': fit.cols, '--rows': usedRows, '--gap': `${fit.gap}px` }}
             initial={{ opacity: 0, x: 24 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -24 }}
@@ -367,30 +394,40 @@ export default function ARHub() {
             ))}
           </FramerMotion.motion.div>
         </AnimatePresence>
-
-        {pages > 1 && (
-          <button
-            className={`${styles.pageBtn} ${styles.pageNext}`}
-            onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
-            disabled={page >= pages - 1}
-            aria-label={t('ar.hub.nextPage', 'Next page')}
-          >
-            <FaChevronRight />
-          </button>
-        )}
       </div>
 
       <footer className={styles.foot}>
         {pages > 1 ? (
-          <div className={styles.dots}>
-            {Array.from({ length: pages }, (_, i) => (
-              <button
-                key={i}
-                className={`${styles.dot} ${i === page ? styles.dotOn : ''}`}
-                onClick={() => setPage(i)}
-                aria-label={t('ar.hub.pageLabel', 'Page {{n}}', { n: i + 1 })}
-              />
-            ))}
+          // The page arrows sit with the dots under the board, so the tiles get
+          // the full width on every screen; each arrow is a full 44px target.
+          <div className={styles.pager}>
+            <button
+              className={styles.pageBtn}
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+              aria-label={t('ar.hub.previousPage', 'Previous page')}
+            >
+              <FaChevronLeft />
+            </button>
+            <div className={styles.dots}>
+              {Array.from({ length: pages }, (_, i) => (
+                <button
+                  key={i}
+                  className={`${styles.dot} ${i === page ? styles.dotOn : ''}`}
+                  onClick={() => setPage(i)}
+                  aria-label={t('ar.hub.pageLabel', 'Page {{n}}', { n: i + 1 })}
+                  aria-current={i === page ? 'page' : undefined}
+                />
+              ))}
+            </div>
+            <button
+              className={styles.pageBtn}
+              onClick={() => setPage((p) => Math.min(pages - 1, p + 1))}
+              disabled={page >= pages - 1}
+              aria-label={t('ar.hub.nextPage', 'Next page')}
+            >
+              <FaChevronRight />
+            </button>
           </div>
         ) : (
           <span className={styles.footCount}>
@@ -473,7 +510,7 @@ function GameTile({ game, index, onOpen }) {
               <MetaIcon /> L{p.level}
             </span>
           ) : (
-            <span className={styles.newBadge}>{t('ar.hub.newBadge', 'New')}</span>
+            <span className={styles.newBadge} data-butterfly-perch>{t('ar.hub.newBadge', 'New')}</span>
           )}
         </span>
 
@@ -492,7 +529,7 @@ function GameTile({ game, index, onOpen }) {
 
       <div className={styles.tileBottom}>
         {journeyOn ? (
-          <LevelPips pips={p.pips} size="sm" onPick={(n) => onOpen(game.id, n)} />
+          <LevelPips pips={p.pips} size="tile" onPick={(n) => onOpen(game.id, n)} />
         ) : (
           <span className={styles.setupNote}>{t('ar.hub.setupNote', 'Set-up · no levels')}</span>
         )}

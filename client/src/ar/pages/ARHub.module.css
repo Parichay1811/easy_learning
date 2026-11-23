@@ -34,7 +34,9 @@
   overflow: hidden;
   color: #fff;
   font-family: "Fredoka", system-ui, sans-serif;
-  padding: 8px 10px max(6px, env(safe-area-inset-bottom));
+  /* Safe-area insets: a landscape iPhone's notch and home bar sit over the
+     sides and bottom of a fixed full-width surface. */
+  padding: 8px max(10px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
   gap: clamp(4px, 0.9vh, 10px);
   user-select: none;
   -webkit-user-select: none;
@@ -44,12 +46,6 @@
    if the hub is ever shown without it. */
 :global(body:has([data-site-navbar])) .hubLang { display: none; }
 .hubLang { display: contents; }
-
-/* The floating AI Teacher button sits bottom-right (from 430px wide): the
-   board and footer keep that corner clear rather than slide under it. */
-@media (min-width: 430px) and (max-width: 1759px) {
-  .board, .foot { margin-right: 76px; }
-}
 
 .overlay {
   position: fixed;
@@ -67,7 +63,9 @@
    rgb triple) since custom properties inherit and the two would otherwise
    collide on any element that sees both. */
 .glow {
-  position: absolute;
+  /* Fixed, like .overlay: drawn over the whole window, not just the hub's
+     1600px column, so a wide monitor shows no seam at the hub's edges. */
+  position: fixed;
   inset: 0;
   pointer-events: none;
   background:
@@ -111,7 +109,9 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: clamp(14px, 3vw, 22px);
+  min-width: 0;
+  white-space: nowrap;
+  font-size: clamp(15px, 3vw, 22px);
   font-weight: 800;
   letter-spacing: 0.2px;
   background: linear-gradient(to right, #ff6b6b, #a29bfe);
@@ -128,6 +128,11 @@
 }
 
 .headRight { display: flex; align-items: center; gap: 6px; }
+/* A narrow phone keeps the title on one line: the gamepad glyph goes. */
+@media (max-width: 400px) {
+  .headIcon { display: none; }
+  .head { gap: 6px; }
+}
 
 /* Back: the same frosted pill with an arrow and a word as the other game
    screens' top bars (the word drops on narrow screens). */
@@ -137,8 +142,8 @@
   justify-content: center;
   gap: 6px;
   flex-shrink: 0;
-  min-width: clamp(36px, 6.5vw, 44px);
-  height: clamp(36px, 6.5vw, 44px);
+  min-width: 44px;
+  height: 44px;
   padding: 0 14px;
   border-radius: 999px;
   border: 2px solid rgba(255, 255, 255, 0.4);
@@ -162,8 +167,8 @@
    with a bit more glass depth and a soft glow on hover instead of a flat
    colour swap. */
 .iconBtn {
-  width: clamp(32px, 6.5vw, 40px);
-  height: clamp(32px, 6.5vw, 40px);
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -189,7 +194,10 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  padding: clamp(3px, 0.7vh, 6px) clamp(8px, 1.6vw, 12px);
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
+  padding: 0 clamp(8px, 1.6vw, 12px);
   border-radius: 999px;
   border: 1px solid rgba(255, 217, 61, 0.45);
   background: linear-gradient(100deg, rgba(255, 217, 61, 0.22), rgba(255, 217, 61, 0.05));
@@ -296,7 +304,7 @@
 }
 
 .calloutText strong {
-  font-size: clamp(11px, 2.2vw, 15px);
+  font-size: clamp(13px, 2.2vw, 16px);
   color: #fff;
   white-space: nowrap;
   overflow: hidden;
@@ -305,8 +313,8 @@
 
 .calloutText em {
   font-style: normal;
-  font-size: clamp(9px, 1.8vw, 12px);
-  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(11.5px, 1.8vw, 13px);
+  color: rgba(255, 255, 255, 0.92);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -336,6 +344,13 @@
   flex-shrink: 0;
   z-index: 1;
   position: relative;
+}
+
+/* Eight 44px columns need 352px: on the narrowest phones the trail borrows
+   the hub's side padding (the pills are transparent until chosen, so they
+   still look inset) rather than shrink below a comfortable tap target. */
+@media (max-width: 400px) {
+  .groups { gap: 0; margin-inline: -6px; }
 }
 
 /* A soft gradient line behind the icons, so eight buttons read as one path
@@ -368,16 +383,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   gap: 2px;
   padding: clamp(3px, 0.7vh, 6px) 2px;
   min-width: 0;
+  min-height: 44px;
   border-radius: 13px;
   border: 1px solid transparent;
   background: transparent;
   color: rgba(255, 255, 255, 0.85);
   font-family: inherit;
-  font-size: clamp(7.5px, 1.5vw, 11px);
+  font-size: clamp(9.5px, 2.4vw, 12px);
   font-weight: 700;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s, transform 0.1s;
@@ -514,48 +530,49 @@
 }
 
 /* ── board ───────────────────────────────────────────────────────────────── */
+/* The board is the only flexible row. ARHub.jsx measures it (fitBoard) and
+   sets --cols / --rows on the grid: as many whole tiles as fit, never a
+   clipped one. Rows are capped at a comfortable card height (--tileMaxH) and
+   the grid is centred in the board, so a group with a few games on a large
+   screen gets well-proportioned cards with even space around them rather than
+   a few giant tiles with a void inside each. */
 .board {
   position: relative;
   flex: 1;
   min-height: 0;
+  min-width: 0;
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
+  justify-content: center;
   z-index: 1;
+  /* About a big card's own content height: a taller tile would only add a
+     band of empty colour inside it. Leftover board height goes around the
+     grid instead (justify-content: center). */
+  --tileMaxH: clamp(236px, 26vh, 272px);
 }
 
 .grid {
-  flex: 1;
+  flex: 0 1 auto;
+  max-height: 100%;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: clamp(5px, 1vw, 10px);
+  grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows, 2), minmax(0, var(--tileMaxH)));
+  align-content: center;
+  gap: var(--gap, 10px);
 }
 
-/* Portrait: two columns, four rows — the same eight tiles, taller than wide. */
-@media (max-aspect-ratio: 9 / 10) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* Below 425px wide the board itself isn't tall enough for four stacked rows
-   to come out taller than wide (measured: 2×4 gave ~200×120px tiles — still
-   landscape). ARHub.jsx halves PAGE_SIZE to 4 at this width so the grid only
-   ever needs two rows here, which is what actually makes the cards portrait:
-   width per tile stays ~200px but each now gets roughly double the height. */
-@media (max-width: 425px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
-  }
+/* Page arrows live in the footer with the dots (ARHub.jsx), as full targets. */
+.pager {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
 }
 
 .pageBtn {
-  align-self: center;
-  width: clamp(26px, 4.5vw, 38px);
-  height: clamp(42px, 9vh, 68px);
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -564,7 +581,7 @@
   color: #fff;
   border-radius: 14px;
   cursor: pointer;
-  font-size: clamp(12px, 2.4vw, 17px);
+  font-size: 17px;
   flex-shrink: 0;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
   transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
@@ -574,9 +591,8 @@
   box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
 }
 .pageBtn:active:not(:disabled) { transform: scale(0.94); }
-.pageBtn:disabled { opacity: 0.25; cursor: default; }
-.pagePrev { margin-right: clamp(4px, 1vw, 8px); }
-.pageNext { margin-left: clamp(4px, 1vw, 8px); }
+.pageBtn:disabled { opacity: 0.3; cursor: default; }
+.pageBtn:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
 
 /* ── tiles ───────────────────────────────────────────────────────────────── */
 /* The tile is a container, not a button: the play area and the level pips are
@@ -584,13 +600,18 @@
    browsers resolve the click on it unpredictably. */
 /* Same saturated gradient-card language as the subject/module cards
    elsewhere on the site: a full colour fill with a light border, rather than
-   a dark glass panel with an accent edge. */
+   a dark glass panel with an accent edge.
+   It is also a size container: the grid gives every tile its size, and the
+   tile's own layout follows from that size (see the container queries below)
+   rather than from the window — the same tile is a big card on a laptop and a
+   one-line row on a phone, and its content never spills out of it. */
 .tile {
   position: relative;
   min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
+  container: tile / size;
   border-radius: clamp(14px, 2.4vw, 24px);
   border: 1px solid rgba(255, 255, 255, 0.28);
   background: var(--accent, linear-gradient(160deg, #1565c0, #1e88e5));
@@ -652,7 +673,11 @@
 }
 
 /* The whole upper area is the play button, so the common case — "play the level
-   I am on" — is one large tap with no menu in between. */
+   I am on" — is one large tap with no menu in between.
+   Default layout = the big card: icon and badge on top, then the title, the
+   description and the skill tags, top-aligned with even padding (a centred
+   column used to leave a band of empty colour above the icon on a tall tile).
+   The tile's height is capped by the grid, so there is never a void below. */
 .tilePlay {
   flex: 1;
   min-height: 0;
@@ -660,13 +685,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  /* Centred, not top-aligned. A tile is much taller than its content on a big
-     screen, and pushing the text to the top left a dead void in the middle of
-     every tile — which reads as "something failed to load" rather than as
-     space. */
-  justify-content: center;
-  gap: clamp(2px, 0.6vh, 6px);
-  padding: clamp(6px, 1.3vh, 12px) clamp(8px, 1.4vw, 14px) clamp(2px, 0.5vh, 5px);
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 14px 14px 8px;
   border: 0;
   background: transparent;
   color: inherit;
@@ -684,7 +705,7 @@
 
 .tileTop {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 6px;
   width: 100%;
@@ -692,15 +713,15 @@
 }
 
 /* The picture leads, because a good proportion of these children cannot read
-   the title. On a tall tile it grows into the space rather than leaving a void.
-   Sat in its own glass roundel rather than floating loose on the gradient —
-   the same badge treatment as the header/nav icons — with the icon itself
-   tinted to the tile's colour family (react-icons fill with `currentColor`,
-   so `color` here is what tints the SVG) so it still reads as "belonging" to
-   the tile rather than as a generic white glyph. */
+   the title. Sat in its own glass roundel rather than floating loose on the
+   gradient — the same badge treatment as the header/nav icons — with the icon
+   itself tinted to the tile's colour family (react-icons fill with
+   `currentColor`, so `color` here is what tints the SVG). It grows with the
+   tile (cqh = the tile's height) between a phone row and a desktop card. */
 .tileIcon {
-  width: clamp(28px, 6vh, 58px);
-  height: clamp(28px, 6vh, 58px);
+  --icon: clamp(44px, 20cqh, 68px);
+  width: var(--icon);
+  height: var(--icon);
   flex-shrink: 0;
   display: grid;
   place-items: center;
@@ -719,40 +740,27 @@
 /* Which level this child is on — the first thing to read on a played tile.
    A plain frosted-white chip, like the level/XP badges on every other card
    in the app, so it reads clearly against any of the eight tile colours. */
-.levelFlag {
+.levelFlag,
+.doneFlag,
+.newBadge {
   flex-shrink: 0;
-  padding: 1px 8px;
+  padding: 2px 9px;
   border-radius: 999px;
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.16));
   border: 1px solid rgba(255, 255, 255, 0.5);
   color: #fff;
-  font-size: clamp(8px, 1.4vh, 11px);
+  font-size: 12px;
   font-weight: 800;
+  line-height: 1.4;
   white-space: nowrap;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
 }
-
-.doneFlag {
-  flex-shrink: 0;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: linear-gradient(160deg, rgba(255, 217, 61, 0.5), rgba(255, 217, 61, 0.22));
-  border: 1px solid rgba(255, 217, 61, 0.6);
-  color: #fff;
-  font-size: clamp(8px, 1.4vh, 11px);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
-}
-
+.levelFlag,
 .newBadge {
-  flex-shrink: 0;
-  padding: 1px 7px;
-  border-radius: 999px;
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.16));
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #fff;
-  font-size: clamp(7px, 1.3vh, 10px);
-  font-weight: 800;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}
+.doneFlag {
+  background: linear-gradient(160deg, rgba(255, 217, 61, 0.5), rgba(255, 217, 61, 0.22));
+  border-color: rgba(255, 217, 61, 0.6);
 }
 
 /* flex-shrink: 0 — the game's name, unlike its description below, must never
@@ -762,39 +770,55 @@
    clipping its second line. */
 .tileTitle {
   flex-shrink: 0;
-  font-size: clamp(10.5px, 2vh, 16px);
+  max-width: 100%;
+  font-size: clamp(15px, 6cqi, 19px);
   font-weight: 800;
-  line-height: 1.15;
+  line-height: 1.2;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  overflow-wrap: anywhere;
 }
 
 .tileHow {
-  font-size: clamp(8px, 1.5vh, 11.5px);
-  line-height: 1.3;
-  color: rgba(255, 255, 255, 0.85);
+  flex-shrink: 0;
+  max-width: 100%;
+  font-size: 13px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.92);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+/* At most one line of tags (two on a tall card): a tag that does not fit
+   wraps onto the hidden line and disappears whole, rather than being cut in
+   half at the tile's edge. */
 .tileMeta {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
-  margin-top: 2px;
+  gap: 4px;
+  max-width: 100%;
+  max-height: 22px;
+  overflow: hidden;
+  /* On a card, the tags sit on the journey row's edge: icons line up along the
+     top of a row of cards and tags along the bottom, whatever the length of
+     each title and description in between. */
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .life,
 .chip {
-  padding: 1px 7px;
+  padding: 0 8px;
   border-radius: 999px;
-  font-size: clamp(7px, 1.3vh, 10px);
+  font-size: 11px;
+  line-height: 20px;
+  height: 22px;
   font-weight: 700;
   white-space: nowrap;
   border: 1px solid rgba(255, 255, 255, 0.4);
@@ -807,13 +831,16 @@
 }
 
 /* The journey row. Never hidden: it is the only part of the tile that says
-   where this child is, and a locked pip is how they see there is more. */
+   where this child is, and a locked pip is how they see there is more. Every
+   control in it is a 44px target (LevelPips' "tile" size: 44px pitch). */
 .tileBottom {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 4px;
-  padding: clamp(4px, 0.8vh, 8px) clamp(6px, 1vw, 10px) clamp(5px, 1vh, 9px) clamp(8px, 1.4vw, 14px);
+  gap: 6px;
+  min-height: 54px;
+  padding: 5px 6px 5px 8px;
   position: relative;
   z-index: 1;
   /* A hairline and a slightly darker ground separate the path from the game's
@@ -824,8 +851,8 @@
 }
 
 .speakBtn {
-  width: clamp(22px, 3.4vh, 28px);
-  height: clamp(22px, 3.4vh, 28px);
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -833,40 +860,71 @@
   border: 1px solid rgba(255, 255, 255, 0.4);
   background: rgba(255, 255, 255, 0.18);
   color: #fff;
-  font-size: clamp(9px, 1.5vh, 13px);
+  font-size: 16px;
   cursor: pointer;
   transition: background 0.15s, transform 0.1s;
 }
 .speakBtn:hover { background: rgba(255, 255, 255, 0.32); color: #fff; }
 .speakBtn:active { transform: scale(0.9); }
+.speakBtn:focus-visible { outline: 3px solid #7dd3fc; outline-offset: 2px; }
 
 .setupNote {
-  font-size: clamp(7px, 1.3vh, 10px);
+  font-size: 12px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.85);
 }
 
-/* Order of sacrifice as space runs out. */
-@media (max-height: 700px) {
-  .tileHow { -webkit-line-clamp: 1; }
+/* Big card with room to spare: a second line of tags. */
+@container tile (min-height: 280px) {
+  .tileMeta { max-height: 48px; }
 }
-@media (max-height: 620px) {
-  .tileHow { display: none; }
+
+/* ── The row layout ──
+   A tile shorter than a card (ARHub.jsx TILE_TALL_H = 228px) — every phone,
+   and boards too short for two rows of cards — puts the icon beside the
+   text: title and badge on the first line, a one-line description, one line
+   of tags. Only the play area changes; the journey row stays as it is. */
+@container tile (max-height: 227px) {
+  .tilePlay {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      "icon title badge"
+      "icon how how"
+      "icon meta meta";
+    grid-template-rows: auto auto auto;
+    align-content: center;
+    align-items: center;
+    column-gap: 12px;
+    row-gap: 3px;
+    padding: 8px 10px 6px 12px;
+  }
+  .tileTop { display: contents; }
+  .tileIcon {
+    --icon: clamp(44px, 30cqh, 60px);
+    grid-area: icon;
+    align-self: center;
+  }
+  .levelFlag, .doneFlag, .newBadge { grid-area: badge; align-self: start; }
+  .tileTitle { grid-area: title; font-size: clamp(15px, 4.6cqi, 18px); -webkit-line-clamp: 2; }
+  .tileHow { grid-area: how; -webkit-line-clamp: 1; font-size: 12.5px; }
+  .tileMeta { grid-area: meta; margin-top: 1px; }
 }
-@media (max-height: 540px) {
+/* Too short for all three lines beside the icon: the tags go first, then the
+   description (the order of sacrifice — the title and the journey row stay). */
+@container tile (max-height: 139px) {
   .tileMeta { display: none; }
 }
+@container tile (max-height: 112px) {
+  .tileHow { display: none; }
+  .tileIcon { --icon: 40px; }
+}
+
+/* Short screens (a landscape phone): the callout and the group names go, so
+   the board keeps a full row of tiles. */
 @media (max-height: 480px) {
   .callout { display: none; }
-  .groupBlurb { display: none; }
   .groupName { display: none; }
-}
-/* Two columns on a narrow portrait phone, or four columns on a landscape phone
-   or small tablet (which never flips to portrait's two columns, however
-   short it gets), both leave ~150px per tile: the speaker goes so the five
-   pips — see LevelPips.module.css's matching breakpoints — keep their size. */
-@media (max-width: 380px), (max-width: 720px) and (min-aspect-ratio: 9/10) {
-  .speakBtn { display: none; }
 }
 
 /* ── footer ──────────────────────────────────────────────────────────────── */
@@ -876,32 +934,44 @@
   justify-content: space-between;
   gap: 10px;
   flex-shrink: 0;
-  font-size: clamp(8px, 1.6vw, 11px);
-  color: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.82);
   z-index: 1;
-  min-height: 20px;
+  min-height: 24px;
 }
 
-.dots { display: flex; gap: 6px; }
+.dots { display: flex; align-items: center; gap: 0; }
 
-/* Bigger than a decorative dot: this is a control a child uses. */
+/* A 12px dot drawn inside a 26×44px button: the dots are a second way to
+   page (the arrows beside them are the full-size targets), but still easy to
+   hit. */
 .dot {
+  width: 26px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border: none;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.dot::before {
+  content: "";
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  border: none;
-  padding: 0;
-  background: rgba(255, 255, 255, 0.24);
-  cursor: pointer;
+  background: rgba(255, 255, 255, 0.3);
   transition: background 0.15s, transform 0.15s, box-shadow 0.15s;
 }
-.dot:hover { background: rgba(255, 255, 255, 0.45); }
-.dotOn { background: #ffd93d; box-shadow: 0 0 8px rgba(255, 217, 61, 0.6); transform: scale(1.3); }
+.dot:hover::before { background: rgba(255, 255, 255, 0.5); }
+.dot:focus-visible { outline: 3px solid #ffd45c; outline-offset: -4px; border-radius: 12px; }
+.dotOn::before { background: #ffd93d; box-shadow: 0 0 8px rgba(255, 217, 61, 0.6); transform: scale(1.3); }
 
 .footNote {
   display: flex;
   align-items: center;
   gap: 5px;
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -910,11 +980,34 @@
 .footCount,
 .footTotal { white-space: nowrap; }
 
-@media (max-width: 520px) {
+@media (max-width: 640px) {
   .footNote { display: none; }
+}
+/* A phone footer is the pager and nothing else: centred under the board. */
+@media (max-width: 480px) {
+  .foot { justify-content: center; }
+  .foot:has(.pager) .footTotal { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dotOn { transform: none; }
+  .dotOn::before { transform: none; }
   .calloutBtn::before { animation: none; }
+}
+
+/* Kept at the end of the file so it wins over the .foot rules above.
+   The floating AI Teacher button (64px, 20px from the right, 24px from the
+   bottom; from 430px wide — below that it lives in the navbar) must never sit
+   on a tile. Landscape has width to spare, so the board and footer keep a
+   right-hand lane clear; portrait has height to spare, so the footer grows to
+   the button's height and keeps its right end clear, and the board — which
+   ends above the footer — never reaches the button. From 1760px the hub is
+   capped at 1600px and centred, so the button is outside it. */
+@media (min-width: 430px) and (max-width: 1759px) and (min-aspect-ratio: 1/1) {
+  .board, .foot { margin-right: 76px; }
+}
+@media (min-width: 430px) and (max-width: 1759px) and (max-aspect-ratio: 999/1000) {
+  .foot {
+    min-height: calc(82px - max(6px, env(safe-area-inset-bottom)));
+    padding-right: 80px;
+  }
 }

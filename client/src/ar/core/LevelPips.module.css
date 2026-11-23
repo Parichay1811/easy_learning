@@ -10,6 +10,21 @@
 .sm { --pipSize: 20px; --trailW: 10px; }
 .md { --pipSize: 30px; --trailW: 16px; }
 .lg { --pipSize: 46px; --trailW: 26px; }
+/* `tile`: the hub tile's journey row. The hub sizes its tiles so this row
+   always fits whole (ARHub.jsx TILE_MIN_W), so it never shrinks with the
+   window: 32px pips on a 44px pitch, each with a 44×44 touch area (the
+   ::after below) that meets its neighbours' without overlapping. */
+.tile { --pipSize: 32px; --trailW: 12px; }
+.tile button.pip { position: relative; z-index: 1; }
+/* The trail between two pips is drawn over the gap their touch areas share:
+   taps there must reach the pips, not the decoration. */
+.tile .trail { pointer-events: none; }
+.tile button.pip::after {
+  content: "";
+  position: absolute;
+  inset: calc((var(--pipSize) - 4px - 44px) / 2);
+  border-radius: 50%;
+}
 
 /* `sm` is the size used on hub tiles, and a tile's width varies enormously
    between a two-column phone and a four-column laptop. It scales with the

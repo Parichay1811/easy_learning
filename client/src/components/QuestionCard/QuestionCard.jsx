@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { WIDGETS } from "../QuestionWidgets/widgetRegistry";
 import Mascot from "../Mascot/Mascot";
+import { companion } from "../../companion/bus";
 import { checkAnswer } from "../../utils/scoreAnswer";
 import { useSpeech } from "../../hooks/useSpeech";
 import { sfx, haptic } from "../../utils/sounds";
@@ -62,7 +63,8 @@ function ResultSheet({ tone, mood, children, action }) {
       transition={{ type: "spring", stiffness: 380, damping: 32 }}
     >
       <span className={styles.sheetMascot}>
-        <Mascot size={56} mood={mood} butterfly={false} />
+        {/* On a phone (no room beside the card) the live companion comes here to react. */}
+        <Mascot size={56} mood={mood} butterfly={false} live fallback />
         {tone === "good" && <StarBurst />}
       </span>
       <div className={styles.sheetText}>{children}</div>
@@ -235,6 +237,12 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   const uiLang = String(i18n.language || "en").split("-")[0];
   const script = useMemo(() => scriptOf(question), [question]);
   const [phase, setPhase] = useState("open"); // open | correct | close | incorrect | revealed | uncertain | ungraded
+  // The companion reacts to what just happened: a small happy hop for a right answer,
+  // a gentle, kind look for a miss (rate-limited and never mocking: companion/brain.js).
+  useEffect(() => {
+    if (phase === "correct" || phase === "ungraded") companion.signal("success");
+    else if (phase === "incorrect" || phase === "close" || phase === "revealed") companion.signal("support");
+  }, [phase]);
   const [misses, setMisses] = useState(0);
   const [closes, setCloses] = useState(0);
   const [used, setUsed] = useState(() => new Set(question.support?.strategy === "guided" && question.hints?.length ? ["guided"] : []));

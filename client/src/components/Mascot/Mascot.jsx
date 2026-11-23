@@ -1,24 +1,62 @@
+import { useEffect, useLayoutEffect, useRef } from "react";
 import mascotImg from "../../assets/dash/mascot.webp";
+import { addSpot } from "../../companion/bus";
+import { useCompanionLive } from "../../companion/useCompanionLive";
 import styles from "./Mascot.module.css";
 
-// Learnigo's puppy, alive: it breathes, bobs and now and then tilts its head,
-// with a butterfly that flutters around it. Moods change the motion:
+// Learnigo's puppy.
+//
+// A big <Mascot> (96px and up, or any CSS size such as "var(--pup)") is a place in
+// the layout where the live companion may sit: while the companion is on, the one
+// live dog moves into the best such place on screen (and hops between places), and
+// the others keep their space but stay empty. A small one (toasts, chips) is a still
+// picture. With the companion off (less movement, fewer distractions, no WebGL,
+// data saver) every <Mascot> shows the still picture with its gentle CSS motion:
 //   idle  – gentle breathing bob (the default)
 //   wave  – a happy side-to-side wiggle (greeting someone)
 //   cheer – a little hop (a right answer, a finished round)
 //   think – a slow, curious head tilt (while something loads)
-// Decorative: hidden from screen readers unless `alt` is given. Motion stops
-// for people who ask their device for less motion.
-export default function Mascot({ size = 160, mood = "idle", butterfly = true, alt = "", className = "", style }) {
+// For the live dog the mood is a cue: cheer = celebrate, think = curious, wave = hello.
+// Decorative: hidden from screen readers unless `alt` is given.
+// `fallback`: a place used only when no main place is on screen (e.g. the answer sheet
+// on a phone); it folds away while the dog sits in a main place, so no empty hole shows.
+export default function Mascot({ size = 160, mood = "idle", butterfly = true, alt = "", className = "", style, live, priority = 0, fallback = false }) {
+  const isSpot = live ?? (typeof size !== "number" || size >= 96);
+  const companionLive = useCompanionLive();
+  const ref = useRef(null);
+  const spotRef = useRef(null);
+  const moodRef = useRef(mood);
+
+  // Register as a place for the live companion. Layout effect: the cleanup runs before
+  // the element leaves the page, so the dog can be lifted out of it in time.
+  useLayoutEffect(() => {
+    if (!isSpot || !ref.current) return undefined;
+    const el = ref.current;
+    const modal = Boolean(el.closest('[role="dialog"], [aria-modal="true"], dialog'));
+    const h = addSpot({ el, priority: fallback ? -1 : priority, modal, fallback, mood: moodRef.current });
+    spotRef.current = h;
+    return () => { h.remove(); spotRef.current = null; };
+  }, [isSpot, priority, fallback]);
+
+  useEffect(() => {
+    moodRef.current = mood;
+    spotRef.current?.update({ mood });
+  }, [mood]);
+
+  const empty = isSpot && companionLive;
   return (
     <div
-      className={`${styles.wrap} ${styles[mood] || ""} ${className}`}
+      ref={ref}
+      className={`${styles.wrap} ${styles[mood] || ""} ${empty ? styles.liveSpot : ""} ${empty && fallback ? styles.fallbackSpot : ""} ${className}`}
       style={{ "--mascot-size": typeof size === "number" ? `${size}px` : size, ...style }}
       aria-hidden={alt ? undefined : true}
+      role={alt ? "img" : undefined}
+      aria-label={alt || undefined}
+      data-mascot-spot={isSpot ? "true" : undefined}
     >
       <div className={styles.shadow} />
-      <img className={styles.dog} src={mascotImg} alt={alt} draggable="false" />
-      {butterfly && <Butterfly className={styles.orbit} />}
+      <img className={styles.dog} src={mascotImg} alt="" draggable="false" />
+      {butterfly && !empty && <Butterfly className={styles.orbit} />}
     </div>
   );
 }
@@ -53,12 +91,14 @@ export function Butterfly({ className = "", hue = "#ff8fc8", hue2 = "#ffd45c", s
  * Put it inside a positioned container; `count` is 1–4.
  */
 export function FloatingButterflies({ count = 3 }) {
+  const live = useCompanionLive();
   const all = [
     { hue: "#ff8fc8", hue2: "#ffd45c" },
     { hue: "#7cc8ff", hue2: "#b69cff" },
     { hue: "#ffb35c", hue2: "#ff7a7a" },
     { hue: "#8be28b", hue2: "#ffe270" },
   ];
+  if (live) return null; // the live butterflies (companion/butterflies.js) are flying
   return (
     <div className={styles.flock} aria-hidden="true" data-decorative>
       {all.slice(0, Math.max(1, Math.min(4, count))).map((b, i) => (

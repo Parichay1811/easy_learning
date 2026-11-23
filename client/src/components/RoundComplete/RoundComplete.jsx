@@ -138,6 +138,7 @@ export default function RoundComplete({ module: mod, subject, mode, stars, total
               type="button"
               className={`${styles.againBtn} ${mode === "warrior" ? styles.againWarrior : ""}`}
               onClick={() => { sfx.select(); onPlayAgain(); }}
+              data-companion-look
               data-sound="none"
               autoFocus
             >

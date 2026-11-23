@@ -6,8 +6,10 @@
 .page {
   position: relative;
   isolation: isolate;
-  min-height: 100vh;
-  min-height: 100dvh;
+  /* One screen: a site banner fixed above the page (the body is padded by
+     --banner-h) takes its share rather than adding a scroll. */
+  min-height: calc(100vh - var(--banner-h, 0px));
+  min-height: calc(100dvh - var(--banner-h, 0px));
   display: grid;
   place-items: center;
   padding: max(10px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
@@ -520,7 +522,7 @@
     align-self: center;
   }
   .team {
-    min-height: 36px;
+    min-height: 44px;
     font-size: 0.8rem;
     white-space: nowrap;
   }

@@ -1,0 +1,57 @@
+/* The companion never takes a click, a tap or focus. */
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1500; /* above the navbar while it travels between spots */
+  pointer-events: none;
+  overflow: visible;
+}
+
+.dog {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  contain: layout style;
+  will-change: transform;
+}
+
+.body {
+  position: absolute;
+  inset: 0;
+  transform-origin: 50% 96%;
+}
+
+.canvas,
+.poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* The still picture shows until the first video frame is drawn, then the film takes over. */
+.dog[data-live="true"] .poster { visibility: hidden; }
+.dog:not([data-live="true"]) .canvas { visibility: hidden; }
+
+/* Contact shadow under the paws: grounds the dog in whatever it sits on. */
+.shadow {
+  position: absolute;
+  left: 30%;
+  right: 30%;
+  bottom: 1.5%;
+  height: 5%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(30, 20, 8, 0.32), rgba(30, 20, 8, 0));
+  transform-origin: 50% 50%;
+}
+
+/* The butterflies' sky: above page cards, under the navbar and dialogs. */
+.sky {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  pointer-events: none;
+}

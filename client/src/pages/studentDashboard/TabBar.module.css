@@ -84,7 +84,9 @@
   border: 2px solid #fff;
 }
 
-@media (max-width: 389px) {
+/* Narrow phones, and 430–479px phones whose bar is shortened to clear the
+   floating AI Teacher button: a smaller label so "My people" is not cut. */
+@media (max-width: 389px), (min-width: 430px) and (max-width: 479px) and (orientation: portrait) {
   .bar { gap: 2px; padding: 5px 4px; }
   .tab { font-size: 0.68rem; letter-spacing: 0; padding: 5px 0 4px; }
 }
@@ -135,7 +137,7 @@
 .segBtn {
   flex: 1 1 auto;
   min-width: 0;
-  min-height: 42px;
+  min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,7 +171,7 @@
   .segBtn { flex: 1 1 0; }
 }
 
-@media (max-width: 420px) {
+@media (max-width: 479px) {
   .segBtn { padding: 6px 8px; font-size: 0.86rem; gap: 5px; }
   /* Four or more choices on a phone: words only, so none is cut short. */
   .seg:has(> :nth-child(4)) .segIcon { display: none; }
@@ -177,9 +179,13 @@
   /* Bigger text (the learner's text size): two short lines rather than a cut word. */
   .seg:has(> :nth-child(4)) .segText { white-space: normal; text-align: center; overflow-wrap: anywhere; }
 }
+/* Under 390px three choices cannot carry an icon and a word each ("My jour…"): words only. */
+@media (max-width: 389px) {
+  .seg:has(> :nth-child(3)) .segIcon { display: none; }
+}
 
 @media (max-height: 520px) and (orientation: landscape) {
-  .segBtn { min-height: 36px; padding: 4px 12px; font-size: 0.84rem; }
+  .segBtn { min-height: 44px; padding: 4px 12px; font-size: 0.84rem; }
 }
 
 .srOnly {

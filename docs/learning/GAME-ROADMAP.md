@@ -197,6 +197,9 @@ change:
   - A special last question (a stage-up item), and a progress bar that
     celebrates when full.
 - [ ] **G-104 (M) One companion character.**
+  - *Partly done (Nov 2026): one live puppy across the app that sits in the layout, travels between
+    pages, reacts to answers, talks with the voice and looks at what the learner reaches for
+    (docs/companion/). Still to do: a name, and the robot in the AI Teacher page.*
   - The puppy gets a name and more moods than today's four (idle, wave,
     cheer, think): proud, surprised, thinking with you, and a gentle "oops".
   - It stays on screen while a question is open, and its mouth moves while
@@ -304,7 +307,9 @@ change:
   - Promote `client/src/components/dashboard/tokens.css` to the whole site.
   - Shared Button and Card components replace hundreds of hard-coded colours
     and repeated button styles.
-- [ ] **G-602 (M) One background system.**
+- [x] **G-602 (M) One background system.**
+  - *Done (Nov 2026): clean meadow loops of 0.5 MB, down from 7-10 MB, without the painted dog or
+    butterflies, with posters; a still poster under reduced motion and focus mode (docs/companion/PIPELINE.md).*
   - Compress the 7-10 MB background videos, add poster images, and pause them
     under reduced motion.
   - Retire the 3D bricks (`client/src/components/Background3D/`) behind pages

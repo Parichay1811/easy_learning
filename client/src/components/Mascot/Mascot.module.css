@@ -30,6 +30,12 @@
   animation: shadow 3.2s ease-in-out infinite;
 }
 
+/* The live companion is on: this place keeps its size; the dog itself (or nothing) is drawn by the companion. */
+.liveSpot > .dog,
+.liveSpot > .shadow { visibility: hidden; animation: none; }
+/* A fallback place folds away while the dog sits in a main place elsewhere on screen. */
+:global(html[data-companion-main="true"]) .fallbackSpot { display: none; }
+
 /* Idle: breathing, and every few seconds a curious head tilt. */
 .idle .dog { animation: breathe 3.2s ease-in-out infinite, tilt 7s ease-in-out 1.5s infinite; }
 .wave .dog { animation: wiggle 1.1s ease-in-out infinite; }

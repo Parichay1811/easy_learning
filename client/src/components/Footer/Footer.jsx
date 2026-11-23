@@ -4,11 +4,12 @@ import { FaGlobe, FaShieldAlt, FaFileContract, FaTags } from "react-icons/fa";
 import styles from "./Footer.module.css";
 
 // The game screens (Home, a subject, a question round, the games hubs, the
-// student's dashboard, the AI teacher) are one screen each, with nothing below
-// the fold, so the footer steps aside there.
+// student's dashboard, today's discovery, the AI teacher) are one screen each,
+// with nothing below the fold, so the footer steps aside there (it would only
+// sit hidden behind the fixed screen, its links still reachable by Tab).
 // Its links stay one tap away in the navbar's menu and on every content page
 // (About, Contact, FAQ, Policy…), which keep the full footer.
-const PLAY_PATHS = ["/home", "/games", "/games/ar", "/dashboard", "/ai-teacher"];
+const PLAY_PATHS = ["/home", "/games", "/games/ar", "/dashboard", "/discovery", "/ai-teacher"];
 const PLAY_PREFIXES = ["/subject/", "/module/"];
 
 function isPlayPath(pathname) {

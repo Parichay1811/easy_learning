@@ -18,6 +18,7 @@ import SplashPage from "./components/SplashPage/SplashPage";
 import Background3D from "./components/Background3D/Background3D";
 import Navbar from "./components/Navbar/Navbar";
 import Footer from "./components/Footer/Footer";
+import CompanionStage from "./companion/CompanionStage";
 import RoleSelect from "./pages/RoleSelect";
 import Home from "./pages/Home";
 import SubjectPage from "./pages/SubjectPage";
@@ -195,10 +196,16 @@ function AppLayout() {
     || location.pathname.startsWith("/subject/")
     || location.pathname === "/teach" || location.pathname.startsWith("/join/") || location.pathname.startsWith("/tutor/");
 
+  // The live companion and butterflies (companion/): on learner and public pages; off on
+  // staff tools and while a camera game runs (the camera and its tracking need the device).
+  const companionOff = isAR || isSchool || location.pathname.startsWith("/teacher") || location.pathname.startsWith("/superadmin")
+    || ["/admin-dashboard", "/admin-login", "/view-as", "/status"].includes(location.pathname) || location.pathname.startsWith("/dev/");
+
   return (
     <>
       <RouteSounds />
       <RouteMemory />
+      {!companionOff && <CompanionStage />}
       <ViewAsBanner />
       <StatusBanner />
       {!hideBackground3D && <Background3D />}

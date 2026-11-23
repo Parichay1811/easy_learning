@@ -1,14 +1,18 @@
-/* The teacher is one screen: below the 80px navbar it takes the rest of the
-   viewport, framed like the site's white cards. */
+/* The teacher is one screen: below the navbar it takes the rest of the
+   viewport, framed like the site's white cards.
+   App.jsx pads every page 80px under the navbar, but the bar is --nav-bar-h
+   tall (64px, 48px on a phone on its side) and a site banner pushes it down
+   (--banner-h; the body is already padded by it). So the page pulls itself up
+   to the bar's bottom edge and is exactly the rest of the screen: no page
+   scroll by the banner's height, no empty band under a landscape phone's
+   slimmer bar. */
 .page {
   position: relative;
-  height: calc(100dvh - 80px);
+  margin-top: calc(var(--nav-bar-h, 64px) - 80px);
+  height: calc(100vh - var(--nav-h, 64px));
+  height: calc(100dvh - var(--nav-h, 64px));
   padding: clamp(6px, 1.4vh, 14px) clamp(8px, 2vw, 24px) clamp(10px, 2vh, 20px);
   display: flex;
-}
-
-@supports not (height: 100dvh) {
-  .page { height: calc(100vh - 80px); }
 }
 
 .frameWrap {
