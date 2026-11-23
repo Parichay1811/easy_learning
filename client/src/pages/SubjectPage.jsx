@@ -13,20 +13,6 @@ import styles from "./SubjectPage.module.css";
 import { sfx } from "../utils/sounds";
 import { FaArrowLeft } from "react-icons/fa";
 
-const subjectSEO = {
-  english: {
-    title: "English Kingdom | Reading, Listening & Speaking Practice | Learnigo",
-    description: "Practice English listening, reading, writing and speaking through short, gamified rounds — stories and dyslexia-friendly reading activities for kids.",
-  },
-  maths: {
-    title: "Maths Galaxy | Gamified Number Practice | Learnigo",
-    description: "Build number confidence with short, gamified maths rounds that turn tricky problems into fun, pressure-free wins for children who learn differently.",
-  },
-  science: {
-    title: "Science Lab | Curiosity-Driven Learning | Learnigo",
-    description: "Explore science through short, encouraging, gamified rounds — listening, reading, writing and speaking practice that makes discovery exciting.",
-  },
-};
 
 // A subject as a game level-select: back, the subject, its four modules.
 const SubjectPage = () => {
@@ -51,11 +37,7 @@ const SubjectPage = () => {
       transition={{ duration: 0.35 }}
     >
       {subjectKey && (
-        <SEO
-          title={subjectSEO[subjectKey].title}
-          description={subjectSEO[subjectKey].description}
-          path={`/subject/${subjectKey}`}
-        />
+        <SEO path={`/subject/${subjectKey}`} />
       )}
       <VideoBackground />
       <div className={styles.overlay} aria-hidden="true" />

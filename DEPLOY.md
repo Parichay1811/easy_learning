@@ -199,9 +199,26 @@ server {
     root /var/www/easy_learning/client/dist;
     index index.html;
 
-    # React Router — all unknown paths fall back to index.html
+    # Compress text: the JS bundle, CSS, translations and the sitemap
+    # (nginx compresses only text/html by default).
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_min_length 1024;
+    gzip_types text/plain text/css text/xml application/javascript text/javascript application/json application/xml image/svg+xml application/wasm;
+
+    # Vite's hashed bundles never change: browsers may keep them for a year.
+    location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable";
+        try_files $uri =404;
+    }
+
+    # Public pages are built as static HTML per language (dist/faq/index.html,
+    # dist/es/faq/index.html …, see client/scripts/seo-prerender.mjs); $uri/
+    # serves them. Every other React Router path gets the plain app shell.
     location / {
-        try_files $uri $uri/ /index.html;
+        try_files $uri $uri/ /spa.html;
     }
 
     # Proxy /api/* to Express on port 5000

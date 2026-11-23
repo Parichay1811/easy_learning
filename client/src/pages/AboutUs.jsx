@@ -38,19 +38,7 @@ const AboutUs = () => {
 
   return (
     <div className={styles.page}>
-      <SEO
-        title="About Learnigo | Learning, Reimagined for Every Kind of Mind"
-        description="Learnigo is a play-first learning platform built for dyslexic and neurodivergent learners, turning reading, writing, speaking, maths and science into a short, encouraging adventure."
-        path="/about-us"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "AboutPage",
-          name: "About Learnigo",
-          description: "Learnigo is a play-first learning platform built for dyslexic and neurodivergent learners.",
-          url: "https://www.learnigo.eu/about-us",
-          isPartOf: { "@type": "WebSite", name: "Learnigo", url: "https://www.learnigo.eu" },
-        }}
-      />
+      <SEO path="/about-us" />
       <VideoBackground />
 
       <motion.section

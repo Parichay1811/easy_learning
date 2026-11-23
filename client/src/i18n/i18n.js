@@ -25,14 +25,23 @@ i18n
       escapeValue: false, // React already protects against XSS
     },
 
+    // "translation": the app's interface. "seo": the public pages' copy
+    // (guides, FAQ, page titles; see src/seo/registry.js), loaded up front with
+    // it so those pages never wait on a second request.
+    ns: ['translation', 'seo'],
+    defaultNS: 'translation',
+
     backend: {
-      // Translation files live in /public/locales/<lang>/translation.json
-      loadPath: '/locales/{{lng}}/translation.json',
+      // /public/locales/<lang>/<namespace>.json
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
 
     detection: {
-      // Priority order: persisted choice → browser language → html lang attr
-      order: ['localStorage', 'navigator', 'htmlTag'],
+      // Priority order: the URL's language prefix (/es/...) → persisted choice
+      // → browser language → html lang attr. A first path segment that is not
+      // a language (/games) is skipped.
+      order: ['path', 'localStorage', 'navigator', 'htmlTag'],
+      lookupFromPathIndex: 0,
       caches: ['localStorage'],
       lookupLocalStorage: 'i18nextLng',
     },

@@ -76,11 +76,7 @@ const AITeacher = () => {
       exit={{ opacity: 0, y: -24 }}
       transition={{ duration: 0.35 }}
     >
-      <SEO
-        title="AI Teacher | Ask Out Loud, Learn with Pictures | Learnigo"
-        description="Learnigo's AI teacher answers questions out loud with a drawn, narrated mini-lesson, then tests you — dyslexia-friendly, voice-first help with maths, science, English and more."
-        path="/ai-teacher"
-      />
+      <SEO path="/ai-teacher" />
       <VideoBackground />
       <div className={styles.frameWrap}>
         <iframe

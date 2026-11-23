@@ -23,18 +23,7 @@ const ContactUs = () => {
 
   return (
     <div className={styles.page}>
-      <SEO
-        title="Contact Learnigo | We're Here to Help"
-        description="Questions, feedback or a bug to report? Get in touch with the Learnigo team and we'll usually reply within 24 hours."
-        path="/contact-us"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "ContactPage",
-          name: "Contact Learnigo",
-          url: "https://www.learnigo.eu/contact-us",
-          isPartOf: { "@type": "WebSite", name: "Learnigo", url: "https://www.learnigo.eu" },
-        }}
-      />
+      <SEO path="/contact-us" />
       <VideoBackground />
 
       <motion.section
