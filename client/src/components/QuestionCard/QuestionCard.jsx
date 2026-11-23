@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import * as FramerMotion from "framer-motion";
-import { AnimatePresence, useAnimate, useReducedMotion } from "framer-motion";
+import { AnimatePresence, useAnimate } from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import { useTranslation } from "react-i18next";
 import {
   FaVolumeUp, FaLightbulb, FaArrowRight, FaRedo, FaStar, FaFlagCheckered, FaBookReader, FaPause, FaPlay,
@@ -18,7 +19,7 @@ import { afterSplash } from "../Entry/splashSignal";
 import { langOfKey } from "../journey/words";
 import PictureMaths from "./PictureMaths";
 import {
-  findSmallSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown, messageArgs, isHiddenAudio, seedOf, scriptOf,
+  findSmallSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown, messageArgs, isHiddenAudio, seedOf, scriptOf, isFirstTry,
 } from "./support";
 import styles from "./QuestionCard.module.css";
 
@@ -50,7 +51,7 @@ function StarBurst() {
 // The answer sheet: slides up at the bottom of the card (where a thumb is on
 // a phone) with the mascot, what happened, and what comes next.
 function ResultSheet({ tone, mood, children, action }) {
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
   return (
     <FramerMotion.motion.div
       className={`${styles.sheet} ${styles[tone]}`}
@@ -213,7 +214,10 @@ const OFFER_TEXT = {
  *  - ungraded (open speaking or writing practice): a warm thank-you, no right or wrong.
  * Calls onAnswered(outcome) once per question:
  *   { status, correct, timeTaken, userAnswer, firstTry, hintsUsed (help the learner asked for),
- *     supportStep (the item's support.step), supportShown, misconception, uncertain, reason }
+ *     supportStep (the item's support.step), supportShown, misconception, uncertain, reason,
+ *     pieceMisses (wrong tries inside the widget, e.g. wrong pairs on a match-the-pairs board) }
+ * A widget reports those tries as onSubmit(answer, { misses }); a right answer
+ * with misses on the way is still right, but not a first try.
  * then the Next button calls onNext. `locked` (the Warrior clock ran out)
  * freezes the card. `learn` is the server's reply for this answer (message,
  * levelChange). `choicePool` holds other answers in the round (for "choose instead").
@@ -222,7 +226,7 @@ const OFFER_TEXT = {
 export default function QuestionCard({ question, subject, module, onAnswered, onNext, isLast = false, locked = false, learn = null, choicePool = [], oneTry = false }) {
   const { t, i18n } = useTranslation();
   const speech = useSpeech(subject);
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
   const prefs = usePrefs();
   // Each thing is said in its own language: the card's words in the card's
   // language (question.lang), the site's own phrases (t()) in the site's
@@ -347,7 +351,8 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
       correct: Boolean(extra.correct),
       timeTaken: (performance.now() - startRef.current) / 1000,
       userAnswer: extra.userAnswer,
-      firstTry: misses === 0 && !extra.afterMiss,
+      firstTry: isFirstTry({ cardMisses: misses, afterMiss: extra.afterMiss, pieceMisses: extra.pieceMisses }),
+      pieceMisses: extra.pieceMisses || 0,
       hintsUsed,
       // The support the engine chose for this item (round items carry it).
       supportStep: Number.isInteger(question.support?.step) ? question.support.step : undefined,
@@ -411,7 +416,8 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     return j;
   };
 
-  const handleSubmit = (userAnswer, { alt = false } = {}) => {
+  // `misses`: wrong tries the widget saw before the answer was whole (match_pairs).
+  const handleSubmit = (userAnswer, { alt = false, misses: pieceMisses = 0 } = {}) => {
     if (locked || reported) return;
     const j = judge(userAnswer, alt);
     judgedRef.current = j;
@@ -440,7 +446,7 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
         sfx.correct();
         haptic("success");
         setPhase("correct");
-        report(notAssessed ? "uncertain" : "correct", { correct: true, userAnswer });
+        report(notAssessed ? "uncertain" : "correct", { correct: true, userAnswer, pieceMisses });
         return;
       case "close": {
         sfx.notify();

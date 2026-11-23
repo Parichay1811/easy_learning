@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { AnimatePresence, useReducedMotion } from "framer-motion";
+import { AnimatePresence } from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import * as FramerMotion from "framer-motion";
 import Cards from "../Cards/Cards";
 import SubjectOverlay from "../SubjectOverlay/SubjectOverlay";
@@ -49,7 +50,7 @@ const Hero = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
 
   const rounds = useSelector((state) => state.dashboard.rounds);
   const [roundsLoaded, setRoundsLoaded] = useState(false);

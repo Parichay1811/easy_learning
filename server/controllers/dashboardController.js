@@ -14,11 +14,12 @@ const ACHIEVEMENTS = [
   { id: 'penpal',          name: 'Penpal',           icon: '✍️', description: 'Complete 5 writing lessons', category: 'learning', xp: 25 },
   { id: 'public_speaker',  name: 'Public Speaker',   icon: '🎤', description: 'Complete 5 speaking lessons', category: 'learning', xp: 25 },
   { id: 'all_rounder',     name: 'All-Rounder',      icon: '🌈', description: 'Try all 3 subjects', category: 'learning', xp: 40 },
-  { id: 'three_day_streak', name: 'On Fire',         icon: '🔥', description: 'Active 3 days in a row', category: 'streak', xp: 50 },
-  { id: 'week_warrior',    name: 'Week Warrior',     icon: '⚔️', description: 'Active 7 days in a row', category: 'streak', xp: 100 },
-  { id: 'century',         name: 'Century',          icon: '💯', description: 'Earn 100 XP', category: 'xp', xp: 0 },
-  { id: 'champion',        name: 'Champion',         icon: '🏆', description: 'Earn 500 XP', category: 'xp', xp: 0 },
-  // Retired: no longer awarded (learning is not rewarded for the hour of the day); badges already earned stay visible.
+  // Retired: no longer awarded; badges already earned stay visible. Streak badges punish a missed day and
+  // XP badges reward time spent, and learning is not rewarded for the hour of the day (docs/learning/GAME-ROADMAP.md G-006).
+  { id: 'three_day_streak', name: 'On Fire',         icon: '🔥', description: 'Active 3 days in a row', category: 'streak', xp: 50, retired: true },
+  { id: 'week_warrior',    name: 'Week Warrior',     icon: '⚔️', description: 'Active 7 days in a row', category: 'streak', xp: 100, retired: true },
+  { id: 'century',         name: 'Century',          icon: '💯', description: 'Earn 100 XP', category: 'xp', xp: 0, retired: true },
+  { id: 'champion',        name: 'Champion',         icon: '🏆', description: 'Earn 500 XP', category: 'xp', xp: 0, retired: true },
   { id: 'early_bird',      name: 'Early Bird',       icon: '🐦', description: 'Study before 8 AM', category: 'special', xp: 20, retired: true },
   { id: 'night_owl',       name: 'Night Owl',        icon: '🦉', description: 'Study after 9 PM', category: 'special', xp: 20, retired: true },
   // Growth badges (services/learning/achievements.js): awarded from log-answer with their evidence.
@@ -31,6 +32,13 @@ function midnight(d = new Date()) {
   dt.setUTCHours(0, 0, 0, 0)
   return dt
 }
+
+const clampNum = (v, lo, hi) => { const n = Number(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : lo }
+const round1 = (n) => Math.round((Number(n) || 0) * 10) / 10
+// Most minutes one answered question can add (a learner who walks away does not keep counting).
+const ANSWER_MAX_MINUTES = 3
+// Most minutes one round can show as its length.
+const ROUND_MAX_MINUTES = 60
 
 function calcStreak(activityDocs) {
   if (!activityDocs.length) return 0
@@ -48,6 +56,19 @@ function calcStreak(activityDocs) {
   return streak
 }
 
+// Days with any learning in the last 7 days, today included (UTC days, like calcStreak).
+// Shown instead of a streak: nothing is lost by missing a day.
+function daysThisWeek(activityDocs, now = new Date()) {
+  const todayMs = midnight(now).getTime()
+  const since = todayMs - 6 * 86400000
+  const days = new Set()
+  for (const a of activityDocs) {
+    const d = midnight(a.date).getTime()
+    if (d >= since && d <= todayMs && ((a.totalSessions || 0) > 0 || (a.totalMinutes || 0) > 0 || (a.totalXP || 0) > 0)) days.add(d)
+  }
+  return days.size
+}
+
 async function checkAndAwardAchievements(email) {
   const [allActivity, earned] = await Promise.all([
     StudentActivity.find({ email }),
@@ -56,7 +77,6 @@ async function checkAndAwardAchievements(email) {
   const earnedSet = new Set(earned.map(a => a.achievementId))
 
   const totalSessions = allActivity.reduce((s, a) => s + a.totalSessions, 0)
-  const totalXP       = allActivity.reduce((s, a) => s + a.totalXP, 0)
 
   const moduleCounts = {}
   const subjects = new Set()
@@ -66,8 +86,6 @@ async function checkAndAwardAchievements(email) {
       if (s.subject && s.subject !== 'general') subjects.add(s.subject)
     })
   })
-
-  const streak = calcStreak(allActivity)
 
   const newAchievements = []
   const award = async (id) => {
@@ -86,14 +104,16 @@ async function checkAndAwardAchievements(email) {
   if ((moduleCounts['speak'] || 0) >= 5) await award('public_speaker')
   if (subjects.size >= 3)  await award('all_rounder')
 
-  if (streak >= 3) await award('three_day_streak')
-  if (streak >= 7) await award('week_warrior')
-  if (totalXP >= 100) await award('century')
-  if (totalXP >= 500) await award('champion')
-  // early_bird / night_owl are no longer awarded (see ACHIEVEMENTS).
+  // three_day_streak / week_warrior / century / champion / early_bird / night_owl are no longer awarded (see ACHIEVEMENTS).
 
   return newAchievements
 }
+
+// New badge ids -> what the page needs to show them ({ id, name, icon, description, category }).
+const badgeCards = (ids) => (ids || [])
+  .map((id) => ACHIEVEMENTS.find((d) => d.id === id))
+  .filter(Boolean)
+  .map(({ id, name, icon, description, category }) => ({ id, name, icon, description, category }))
 
 // ── Controllers ────────────────────────────────────────────────────────────────
 
@@ -107,6 +127,21 @@ const logSession = async (req, res) => {
     const now     = new Date()
     const start   = startTime ? new Date(startTime) : new Date(now - (durationMinutes || 1) * 60000)
     const dayKey  = midnight(now)
+
+    // One answered question (kind 'answer'): its XP and its real minutes (capped, so an idle tab does not
+    // count) go on the day, but it is not a session: the round it belongs to is (logRound). Older clients
+    // send neither kind nor real minutes and keep the old behaviour.
+    if (req.body.kind === 'answer') {
+      const minutes = clampNum(durationMinutes, 0, ANSWER_MAX_MINUTES)
+      const xp = clampNum(xpEarned, 0, 100)
+      await StudentActivity.findOneAndUpdate(
+        { email, date: dayKey },
+        { $inc: { totalMinutes: minutes, totalXP: xp } },
+        { upsert: true, new: true }
+      )
+      await recordSession({ email, module: mod, subject, minutes, xp, ts: now, countSession: false, ...contextFrom(req) })
+      return res.json({ success: true, newAchievements: [] })
+    }
 
     const sessionEntry = {
       startTime: start,
@@ -134,7 +169,7 @@ const logSession = async (req, res) => {
     await recordSession({ email, module: mod, subject, minutes: durationMinutes || 0, xp: xpEarned || 0, ts: now, ...contextFrom(req) })
 
     const newAchievements = await checkAndAwardAchievements(email)
-    res.json({ success: true, newAchievements })
+    res.json({ success: true, newAchievements, badges: badgeCards(newAchievements) })
   } catch (err) {
     console.error('logSession error:', err)
     res.status(500).json({ success: false, message: 'Internal server error' })
@@ -150,12 +185,13 @@ const getStats = async (req, res) => {
     ])
 
     const totalXP       = allActivity.reduce((s, a) => s + a.totalXP, 0)
-    const totalMinutes  = allActivity.reduce((s, a) => s + a.totalMinutes, 0)
+    const totalMinutes  = Math.round(allActivity.reduce((s, a) => s + a.totalMinutes, 0))
     const totalSessions = allActivity.reduce((s, a) => s + a.totalSessions, 0)
     const streak        = calcStreak(allActivity)
+    const daysLearnedThisWeek = daysThisWeek(allActivity)
 
     const todayDoc = allActivity.find(a => midnight(a.date).getTime() === midnight().getTime())
-    const todayMinutes = todayDoc?.totalMinutes || 0
+    const todayMinutes = Math.round(todayDoc?.totalMinutes || 0)
     const todayXP      = todayDoc?.totalXP || 0
 
     const hourBuckets = new Array(24).fill(0)
@@ -172,7 +208,7 @@ const getStats = async (req, res) => {
     res.json({
       success: true,
       data: {
-        totalXP, totalMinutes, totalSessions, streak,
+        totalXP, totalMinutes, totalSessions, streak, daysThisWeek: daysLearnedThisWeek,
         todayMinutes, todayXP,
         peakTimeLabel: hourBuckets.every(b => b === 0) ? null : peakLabel,
         level,
@@ -204,7 +240,7 @@ const getActivity = async (req, res) => {
       .select('date totalMinutes totalXP totalSessions')
       .lean()
 
-    res.json({ success: true, data: activity })
+    res.json({ success: true, data: activity.map((a) => ({ ...a, totalMinutes: Math.round(a.totalMinutes || 0) })) })
   } catch (err) {
     console.error('getActivity error:', err)
     res.status(500).json({ success: false, message: 'Internal server error' })
@@ -250,7 +286,7 @@ const getPerformance = async (req, res) => {
       .sort({ date: 1 })
       .lean()
 
-    res.json({ success: true, data: activity })
+    res.json({ success: true, data: activity.map((a) => ({ ...a, totalMinutes: Math.round(a.totalMinutes || 0) })) })
   } catch (err) {
     console.error('getPerformance error:', err)
     res.status(500).json({ success: false, message: 'Internal server error' })
@@ -356,6 +392,9 @@ const logRound = async (req, res) => {
   try {
     const { email } = req.user
     const { module: mod, subject, mode, stars, bonusStars, totalStars, passed } = req.body
+    // Newer clients send the round's length in questions and minutes: the round is then one session with
+    // its real length, and its XP and minutes are not added again (each answer already added its own).
+    const questions = Number.isInteger(req.body.questions) && req.body.questions > 0 ? Math.min(req.body.questions, 50) : null
 
     await StudentRound.create({
       email,
@@ -368,23 +407,39 @@ const logRound = async (req, res) => {
       passed: passed ?? null,
     })
 
-    // Award XP: 10 per correct answer + 2 per bonus star
-    const xpEarned = (stars || 0) * 10 + (bonusStars || 0) * 2
     const dayKey = midnight()
-    await StudentActivity.findOneAndUpdate(
-      { email, date: dayKey },
-      {
-        $push: { sessions: { startTime: new Date(), endTime: new Date(), durationMinutes: 5, module: mod || 'unknown', subject: subject || 'general', xpEarned, score: Math.round(((stars || 0) / 10) * 100) } },
-        $inc: { totalMinutes: 5, totalXP: xpEarned, totalSessions: 1 },
-      },
-      { upsert: true, new: true }
-    )
+    if (questions) {
+      const now = new Date()
+      const minutes = round1(clampNum(req.body.durationMinutes, 0, ROUND_MAX_MINUTES))
+      const right = Math.min(Math.max(0, Number(stars) || 0), questions)
+      const xpEarned = Math.max(0, Math.min(Number(req.body.xpEarned) || 0, questions * 100))
+      await StudentActivity.findOneAndUpdate(
+        { email, date: dayKey },
+        {
+          $push: { sessions: { startTime: new Date(now - minutes * 60000), endTime: now, durationMinutes: minutes, module: mod || 'unknown', subject: subject || 'general', xpEarned, score: Math.round((right / questions) * 100) } },
+          $inc: { totalSessions: 1 },
+        },
+        { upsert: true, new: true }
+      )
+      await recordRound({ email, module: mod, subject, mode: mode || 'practice', stars: stars || 0, totalStars: totalStars || 0, countSession: true, ...contextFrom(req) })
+    } else {
+      // Older clients: 10 XP per correct answer + 2 per bonus star, a fixed 5 minutes.
+      const xpEarned = (stars || 0) * 10 + (bonusStars || 0) * 2
+      await StudentActivity.findOneAndUpdate(
+        { email, date: dayKey },
+        {
+          $push: { sessions: { startTime: new Date(), endTime: new Date(), durationMinutes: 5, module: mod || 'unknown', subject: subject || 'general', xpEarned, score: Math.round(((stars || 0) / 10) * 100) } },
+          $inc: { totalMinutes: 5, totalXP: xpEarned, totalSessions: 1 },
+        },
+        { upsert: true, new: true }
+      )
+      // Stars only: minutes come from real session durations (logSession), not the fixed 5 above.
+      await recordRound({ email, module: mod, subject, mode: mode || 'practice', stars: stars || 0, totalStars: totalStars || 0, ...contextFrom(req) })
+    }
 
-    // Stars only: minutes come from real session durations (logSession), not the fixed 5 above.
-    await recordRound({ email, module: mod, subject, mode: mode || 'practice', stars: stars || 0, totalStars: totalStars || 0, ...contextFrom(req) })
-
+    // The page shows new badges when the round ends (badges: what it needs to show them).
     const newAchievements = await checkAndAwardAchievements(email)
-    res.json({ success: true, newAchievements })
+    res.json({ success: true, newAchievements, badges: badgeCards(newAchievements) })
   } catch (err) {
     console.error('logRound error:', err)
     res.status(500).json({ success: false, message: 'Internal server error' })

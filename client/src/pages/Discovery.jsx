@@ -13,7 +13,7 @@ import GrowthToast from "../components/journey/GrowthToast";
 import { journeyFetch, signedIn, markDiscoveryDone } from "../components/journey/journeyApi";
 import { SUBJECTS, MODULES, SOURCES, subjectLabel } from "../components/journey/words";
 import { useVoiceBarHost } from "../components/VoiceBar/useNarration";
-import { logDashboardAnswer, logDashboardSession } from "../store/slices/dashboardSlice";
+import { logDashboardAnswer, logDashboardSession, logRoundResult } from "../store/slices/dashboardSlice";
 import { getQuestionLang } from "../utils/questionLang";
 import { sfx } from "../utils/sounds";
 import mp from "../components/ModulePlayer/ModulePlayer.module.css";
@@ -42,6 +42,10 @@ function moduleOf(x) {
  * Calm on purpose: one question (or three), no clock, no stars to chase; the
  * same question card, voice and comfort settings as every round.
  */
+
+// Minutes since `start` (ms; 0 = none), at most `max`, to 2 decimals.
+const nowMs = () => Date.now();
+const minutesSince = (start, max) => (start ? Math.round(Math.min(max, Math.max(0, (nowMs() - start) / 60000)) * 100) / 100 : 0);
 export default function Discovery() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -67,6 +71,10 @@ export default function Discovery() {
   // changes the words around it, not the question they just answered).
   const startedRef = useRef(false);
   const fetchedRef = useRef(null);
+  // The activity's own clock and score: each answer adds its XP and real minutes;
+  // the finished discovery or challenge is one session (docs/learning/GAME-ROADMAP.md G-001).
+  const tallyRef = useRef({ start: 0, questionStart: 0, stars: 0, xp: 0 });
+  useEffect(() => { tallyRef.current.questionStart = nowMs(); }, [idx]);
 
   useEffect(() => {
     if (!signedIn()) return undefined;
@@ -96,6 +104,7 @@ export default function Discovery() {
       setFinished(false);
       setLearnById({});
       startedRef.current = false;
+      tallyRef.current = { start: nowMs(), questionStart: nowMs(), stars: 0, xp: 0 };
     })();
     return () => ctrl.abort();
   }, [challenge, askSubject, askModule, askSkill, askSource, lang, nonce]);
@@ -115,7 +124,10 @@ export default function Discovery() {
     const correct = Boolean(o.correct);
     const xp = correct ? (q.points || 10) : 0;
     const at = idx;
-    dispatch(logDashboardSession({ module, subject, durationMinutes: 1, xpEarned: xp, score: correct ? 100 : 0, startTime: new Date().toISOString() }));
+    const tally = tallyRef.current;
+    dispatch(logDashboardSession({ kind: "answer", module, subject, durationMinutes: minutesSince(tally.questionStart, 3), xpEarned: xp, score: correct ? 100 : 0, startTime: new Date(tally.questionStart || nowMs()).toISOString() }));
+    tally.xp += xp;
+    if (correct) tally.stars += 1;
     dispatch(logDashboardAnswer({
       module, subject,
       question: q.instruction || q.prompt || "",
@@ -141,8 +153,22 @@ export default function Discovery() {
   };
 
   const next = () => {
-    if (isLast) { setFinished(true); sfx.levelUp?.(); }
-    else setIdx((i) => i + 1);
+    if (isLast) {
+      setFinished(true);
+      sfx.levelUp?.();
+      // The whole discovery or challenge is one session; new badges come back with it.
+      const tally = tallyRef.current;
+      dispatch(logRoundResult({
+        module, subject, mode: challenge ? "challenge" : "discovery",
+        stars: tally.stars, bonusStars: 0, totalStars: tally.stars,
+        questions: items.length,
+        durationMinutes: Math.round(minutesSince(tally.start, 60) * 10) / 10,
+        xpEarned: tally.xp,
+      })).then((action) => {
+        const got = Array.isArray(action?.payload?.badges) ? action.payload.badges.filter((b) => b && b.id) : [];
+        if (got.length) setBadges((list) => [...list, ...got.filter((b) => !list.some((x) => x.id === b.id))]);
+      });
+    } else setIdx((i) => i + 1);
   };
   const toToday = () => { sfx.back(); navigate("/dashboard"); };
 

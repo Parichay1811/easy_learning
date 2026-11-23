@@ -1,5 +1,11 @@
+/* Fixed above the navbar (z-index 1000), under a "view as" bar if one shows.
+   bannerOffset.js measures it into --banner-h, which moves the navbar, the
+   page and the full-screen game screens down by its height. */
 .banner {
-  position: relative;
+  position: fixed;
+  top: var(--banner-top-status, 0px);
+  left: 0;
+  right: 0;
   z-index: 9000;
   display: flex;
   align-items: center;
@@ -22,3 +28,4 @@
   background: none; border: 0; font-size: 1.5rem; color: inherit; cursor: pointer; min-width: 44px; min-height: 44px; border-radius: 10px;
 }
 .close:focus-visible, .link:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+@media print { .banner { position: static; } }

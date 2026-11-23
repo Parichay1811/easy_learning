@@ -418,7 +418,10 @@ test('read receipts and read-rate report; scheduled and expired announcements', 
 
 test('weekly parent digest: Sunday evening, verified children only, once per week, unsubscribe honoured', async () => {
   const run = (now) => app.call('POST', '/api/jobs/parent_weekly/run', { token: T.sa, body: { now } })
-  const sunday = nextDow(0, 19)
+  // Counted from the start of today: on a Sunday evening after 19:00 UTC "the next Sunday" would be a
+  // week away, past the learning seeded for the last 14 days (the digest covers the 7 days before it).
+  const startOfToday = new Date(); startOfToday.setUTCHours(0, 0, 0, 0)
+  const sunday = nextDow(0, 19, startOfToday)
   const saturday = new Date(new Date(sunday).getTime() - 86400000).toISOString()
   assert.equal((await run(saturday)).body.result.sent, 0, 'not on Saturday')
   const r = await run(sunday)

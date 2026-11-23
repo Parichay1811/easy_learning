@@ -3,7 +3,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   findSmallSum, describeSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown,
-  messageArgs, isHiddenAudio, seedOf, scriptOf,
+  messageArgs, isHiddenAudio, seedOf, scriptOf, isFirstTry,
 } from "./support.js";
 
 test("finds small sums to draw", () => {
@@ -92,4 +92,14 @@ test("a narration script is used only in the language of the card", () => {
   assert.equal(scriptOf({ lang: "en", narration: { text: "   " } }), null);
   assert.equal(scriptOf({ lang: "en" }), null);
   assert.equal(scriptOf(null), null);
+});
+
+test("only a clean first try counts as right first time", () => {
+  assert.equal(isFirstTry(), true);
+  assert.equal(isFirstTry({ cardMisses: 0, pieceMisses: 0 }), true);
+  assert.equal(isFirstTry({ cardMisses: 1 }), false, "after a miss on the card");
+  assert.equal(isFirstTry({ afterMiss: true }), false);
+  // Match the pairs: the board finishes only when every pair is right, so wrong pairs tried on the way count.
+  assert.equal(isFirstTry({ pieceMisses: 2 }), false);
+  assert.equal(isFirstTry({ pieceMisses: undefined }), true);
 });

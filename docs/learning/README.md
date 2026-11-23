@@ -10,6 +10,7 @@ describes the system that makes that true, and how to keep it working.
 | [ADAPTIVE.md](ADAPTIVE.md) | The adaptive engine: levels 0-8, stages 0-5, mastery, the level policy, the target band, probes, spaced repetition, teaching escalation, misconception explanations, rounds, continuity, "what next", growth badges, the decision log, guardians and educators, privacy, tuning |
 | [RESEARCH.md](RESEARCH.md) | The evidence behind each design decision, what Learnigo does with it, how to measure it, its limits, and which numbers are product hypotheses |
 | [JOURNEY-PROMPT.md](JOURNEY-PROMPT.md) | The "adaptive journey" brief adjusted to this codebase: what already existed, what was built, the project's rules |
+| [GAME-ROADMAP.md](GAME-ROADMAP.md) | The todo list for making the whole learning experience one game for every age: bugs to fix first, one progression model, the world and quests, three looks by age, co-op, visuals and performance |
 | this file | The architecture, the voice, sound and accessibility logic, privacy, testing, and what is not done yet |
 
 ## Architecture
@@ -169,7 +170,7 @@ English speaking items instead; that is not wired up yet.
 |---|---|
 | Server (unit + integration, in-memory MongoDB) | `cd server && npm test` |
 | AI Teacher | `npm --prefix server/ai-assistant test` |
-| Client pure helpers (speakMath, support strategies, narrator, evidence model) | `node --test client/src/utils/speakMath.test.mjs client/src/components/QuestionCard/support.test.mjs client/src/utils/narrator.test.mjs client/src/components/learning/evidence/model.test.mjs` |
+| Client pure helpers (speakMath, support strategies, narrator, evidence model) | `node --test client/src/utils/speakMath.test.mjs client/src/components/QuestionCard/support.test.mjs client/src/utils/narrator.test.mjs client/src/utils/narrator-voice.test.mjs client/src/components/learning/evidence/model.test.mjs` |
 | Question bank QA gate | `node server/scripts/content/audit.js --check` |
 | Lint / build | `cd client && npx eslint . && npm run build` |
 

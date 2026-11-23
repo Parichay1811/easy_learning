@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import * as FramerMotion from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import { useTranslation } from "react-i18next";
 import Mascot, { Butterfly } from "../Mascot/Mascot";
 import EntryScene from "../Entry/EntryScene";
@@ -20,7 +21,7 @@ const REDUCED_MS = 900;
 // purpose: it hands over to the page underneath via onFinish.
 const SplashPage = ({ onFinish }) => {
   const { t } = useTranslation();
-  const reduce = FramerMotion.useReducedMotion();
+  const reduce = useCalmMotion();
   const onFinishRef = useRef(onFinish);
   const total = reduce ? REDUCED_MS : DURATION_MS;
 

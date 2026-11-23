@@ -689,10 +689,14 @@ export async function createAIAssistant() {
       const t0 = performance.now();
       // lang: two letters (en, es, fr…); the whole site's narrator uses this.
       const lang = (url.searchParams.get("lang") || "en").slice(0, 2).toLowerCase();
+      // priority=warm: the page is fetching ahead (the next sentences); it is made
+      // after the sentences someone is waiting for, and moves up if they ask for it.
+      const priority = url.searchParams.get("priority") === "warm" ? "warm" : "live";
       const audio = await speech.speak(text, {
         voice: url.searchParams.get("voice") || undefined,
         speed,
         lang,
+        priority,
         cancelled: () => gone,
       });
       if (!gone)

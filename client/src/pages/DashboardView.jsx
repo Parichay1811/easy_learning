@@ -15,6 +15,7 @@ import { ReadOnlyContext } from './studentDashboard/context'
 import { isRecent, readSeenBadges } from './studentDashboard/helpers'
 import c from './studentDashboard/common.module.css'
 import styles from './Dashboard.module.css'
+import { useCalmMotion } from '../utils/useCalmMotion'
 
 // Tab colours (fill, soft background, icon ink, icon colour when selected, 3D lip).
 const HUE = {
@@ -46,6 +47,7 @@ export default function DashboardView({
   tab, onTabChange, people, readOnly = false,
 }) {
   const { t } = useTranslation()
+  const calm = useCalmMotion()
   const rail = useMedia('(orientation: landscape) and (min-width: 600px)')
   const [now] = useState(() => Date.now())
   const firstName = displayName || t('studentDash.friend', 'friend')
@@ -150,7 +152,7 @@ export default function DashboardView({
   }
 
   return (
-    <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion={calm ? 'always' : 'never'}>
       <ReadOnlyContext.Provider value={readOnly}>
       <div className={`dash ${styles.root}`} data-theme="light" data-dash-root data-readonly={readOnly || undefined}>
         <h1 className={c.srOnly}>{t('studentDash.title', 'My dashboard')}</h1>

@@ -5,10 +5,13 @@
 //
 //  1. the server's neural voice (Supertonic, GET /api/ai-assistant/tts), for
 //     every language it speaks, one sentence at a time (the server caches each
-//     sentence, and the next one is fetched while this one plays);
-//  2. if that is not there (no server, a language it lacks such as Chinese, a
-//     slow or failed request), the browser's most natural voice for the
-//     language: "Natural"/"Neural"/"Online"/"Premium" voices first;
+//     sentence, and the next ones are fetched while this one plays). A slow
+//     sentence is waited for, and a failed one is asked for again: the site
+//     never switches to a robotic voice just because the server was busy;
+//  2. only when that voice cannot be had (no voice server, the server is
+//     unreachable, or a language it lacks such as Chinese), the browser's most
+//     natural voice for the language: "Natural"/"Neural"/"Online"/"Premium"
+//     voices first;
 //  3. no voice at all: nothing is said, but the words still go to the
 //     captions (components/VoiceBar) and nothing waits for them.
 //
@@ -39,9 +42,13 @@ const SERVER_LANGS = new Set([
   "en", "ko", "ja", "ar", "bg", "cs", "da", "de", "el", "es", "et", "fi", "fr", "hi", "hr", "hu",
   "id", "it", "lt", "lv", "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sv", "tr", "uk", "vi",
 ]);
-const FIRST_WAIT_MS = 4000; // the first sentence: longer than this, and the browser's voice takes over
-const NEXT_WAIT_MS = 7000; // later sentences were fetched while the one before played
-const RETRY_SERVER_MS = 60000; // a failed voice server is tried again after a minute
+// How long a sentence of the natural voice is waited for. A small server makes a
+// sentence in 1-3 s, but a queue of other learners' sentences or a slow phone
+// connection can take longer: waiting is better than a robotic voice.
+const FIRST_WAIT_MS = 15000;
+const NEXT_WAIT_MS = 15000;
+const RETRY_SERVER_MS = 20000; // an unreachable voice server is tried again after this
+const SERVER_TRIES = 2; // a sentence that fails (busy, timed out) is asked for once more
 const SENTENCE_GAP_MS = 260; // a breath between sentences
 const PART_GAP_MS = 520; // a longer pause between parts (instruction, then question)
 
@@ -154,32 +161,46 @@ export function getNarrationState() {
 
 /* ── The server voice ───────────────────────────────────────────────────── */
 
-const clips = new Map(); // `${lang}|${speed}|${text}` -> Promise<Blob>
-function fetchClip(text, lang, speed, signal, waitMs) {
-  const key = `${lang}|${speed}|${text}`;
-  if (!clips.has(key)) {
-    const p = (async () => {
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), waitMs);
-      try {
-        const r = await fetch(`${TTS_URL}?${new URLSearchParams({ text: text.slice(0, 600), lang, speed })}`, { signal: ctrl.signal });
-        if (!r.ok) {
-          const err = new Error(`voice ${r.status}`);
-          err.status = r.status;
-          throw err;
-        }
-        const blob = await r.blob();
-        if (!blob.size) throw new Error("empty voice");
-        return blob;
-      } finally {
-        clearTimeout(timer);
+// `${lang}|${speed}|${text}` -> { p: Promise<Blob>, warm, settled }
+// priority "warm": fetched ahead of time (the server makes it after the
+// sentences someone is waiting for); "live": a learner is waiting for it now.
+const clips = new Map();
+function requestClip(text, lang, speed, waitMs, priority) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), waitMs);
+  const q = { text: text.slice(0, 600), lang, speed };
+  if (priority === "warm") q.priority = "warm";
+  return (async () => {
+    try {
+      const r = await fetch(`${TTS_URL}?${new URLSearchParams(q)}`, { signal: ctrl.signal });
+      if (!r.ok) {
+        const err = new Error(`voice ${r.status}`);
+        err.status = r.status;
+        throw err;
       }
-    })();
-    clips.set(key, p);
-    p.catch(() => clips.delete(key));
+      const blob = await r.blob();
+      if (!blob.size) throw new Error("empty voice");
+      return blob;
+    } catch (err) {
+      if (err?.name === "AbortError") err.timedOut = true;
+      throw err;
+    } finally {
+      clearTimeout(timer);
+    }
+  })();
+}
+function fetchClip(text, lang, speed, signal, waitMs, priority = "live") {
+  const key = `${lang}|${speed}|${text}`;
+  const had = clips.get(key);
+  // A sentence fetched ahead of time and not here yet, now needed: ask for it
+  // live too (the server then makes it next instead of after the warm-up queue).
+  if (!had || (had.warm && !had.settled && priority === "live")) {
+    const entry = { p: requestClip(text, lang, speed, waitMs, priority), warm: priority === "warm", settled: false };
+    entry.p.then(() => { entry.settled = true; }, () => { if (clips.get(key) === entry) clips.delete(key); });
+    clips.set(key, entry);
     if (clips.size > 60) clips.delete(clips.keys().next().value);
   }
-  const p = clips.get(key);
+  const p = clips.get(key).p;
   if (!signal) return p;
   return new Promise((resolve, reject) => {
     const onAbort = () => reject(Object.assign(new Error("stopped"), { stopped: true }));
@@ -193,11 +214,18 @@ function serverUsable(lang) {
   return Date.now() >= serverDownUntil && SERVER_LANGS.has(lang) && !noServerLang.has(lang) && Boolean(player());
 }
 
+// A failure the next try will not fix: the language has no server voice (422),
+// there is no voice server here (404: a static build; 503: the server makes no
+// voice), or the server cannot be reached at all.
+function lastingFailure(err) {
+  return err?.status === 422 || err?.status === 404 || err?.status === 503 || (!err?.status && !err?.timedOut);
+}
+
 function noteServerFailure(err, lang) {
   if (err?.stopped) return;
   if (err?.status === 422) noServerLang.add(lang);
   else if (err?.status === 404) serverDownUntil = Infinity; // no voice server here (a static build)
-  else serverDownUntil = Date.now() + RETRY_SERVER_MS; // down, busy or slow
+  else serverDownUntil = Date.now() + RETRY_SERVER_MS; // down or unreachable
 }
 
 /* ── One narration ──────────────────────────────────────────────────────── */
@@ -239,7 +267,9 @@ function playClip(j, blob) {
     if (j.volume != null) a.volume = Math.min(1, Math.max(0, j.volume));
     else a.volume = 1;
     a.playbackRate = 1;
-    a.play().catch(() => end("error"));
+    // The browser may refuse sound before the learner has tapped anything on
+    // the page (autoplay rules): that is "blocked", not a reason for another voice.
+    a.play().catch((err) => end(err?.name === "NotAllowedError" ? "blocked" : "error"));
   });
 }
 
@@ -286,24 +316,39 @@ async function saySegment(j, seg, i) {
     if (j.stopped) return "stopped";
     await waitWhilePaused(j);
     if (j.stopped) return "stopped";
-    if (j.source !== "browser" && j.source !== "none" && serverUsable(j.short)) {
+    // The natural voice for every sentence it can say (one sentence that had to
+    // fall back does not make the rest robotic).
+    let lastErr = null;
+    for (let attempt = 0; attempt < SERVER_TRIES && serverUsable(j.short); attempt += 1) {
       try {
         const blob = await fetchClip(seg.say, j.short, j.speed, j.ctrl.signal, i === 0 ? FIRST_WAIT_MS : NEXT_WAIT_MS);
         if (j.stopped) return "stopped";
-        // While this sentence plays, the next one is fetched.
+        // While this sentence plays, the next one is fetched (the one after it at low priority).
         const next = j.segments[i + 1];
         if (next) fetchClip(next.say, j.short, j.speed, null, NEXT_WAIT_MS).catch(() => {});
+        const after = j.segments[i + 2];
+        if (after) fetchClip(after.say, j.short, j.speed, null, NEXT_WAIT_MS, "warm").catch(() => {});
+        if (j.source && j.source !== "server") j.mixed = true;
         j.source = "server";
         emitSentence(j, seg, i);
         const r = await playClip(j, blob);
         if (r === "ok" || r === "stopped") return r;
-        // The clip would not play (autoplay rules, a broken file): the browser voice says it.
+        // Sound not allowed yet (nothing tapped on this page): say nothing rather
+        // than switch to a robotic voice; the learner can press Listen / Replay.
+        if (r === "blocked") {
+          j.blocked = true;
+          emit({ type: "blocked", id: j.id });
+          return "blocked";
+        }
+        lastErr = { status: 0, timedOut: true }; // a broken clip: ask once more
       } catch (err) {
         if (err?.stopped || j.stopped) return "stopped";
-        noteServerFailure(err, j.short);
+        lastErr = err;
+        if (lastingFailure(err)) break;
       }
-      if (j.source === "server") j.mixed = true;
     }
+    if (lastErr) noteServerFailure(lastErr, j.short);
+    if (j.source === "server") j.mixed = true;
     // The browser's voice, but only one that speaks this language. Without one
     // nothing is said (some browsers would read it in their default voice, in
     // another language): the words go to the captions, and listeners hear
@@ -343,6 +388,7 @@ async function run(j) {
     j.index = i;
     const r = await saySegment(j, j.segments[i], i);
     if (r === "stopped" || j.stopped) { ok = false; break; }
+    if (r === "blocked") { ok = false; break; } // no sound allowed yet: the rest would be blocked too
     if (r === "ok") anySpoken = true;
     if (r === "error") ok = false;
     if (r === "none") { ok = false; continue; }
@@ -454,7 +500,7 @@ export function narrate(text, opts = {}) {
       if (job === j) job = null;
       emit({ type: "end", ok, id: j.id, source: j.source, text: j.caption ? j.text : "", caption: j.caption });
       if (ok) opts.onEnd?.();
-      else if (j.stopped) opts.onEnd?.();
+      else if (j.stopped || j.blocked) opts.onEnd?.();
       else opts.onError?.(new Error(j.source === "none" ? "no voice" : "speech failed"));
       return ok;
     });
@@ -483,7 +529,7 @@ export function preloadNarration(text, { lang = "en-US", rate, math = true } = {
   const short = String(lang).slice(0, 2).toLowerCase();
   if (!serverUsable(short)) return;
   const speed = Math.min(1.3, Math.max(0.7, rate ?? prefs.voiceRate ?? 0.9)).toFixed(2);
-  buildSegments(text, short, math).slice(0, 3).forEach((s) => fetchClip(s.say, short, speed, null, NEXT_WAIT_MS).catch(() => {}));
+  buildSegments(text, short, math).slice(0, 3).forEach((s) => fetchClip(s.say, short, speed, null, NEXT_WAIT_MS, "warm").catch(() => {}));
 }
 
 /** True while the narrator is talking (or paused mid-way). */

@@ -47,6 +47,9 @@ function who() {
   }
 }
 
+/** A short tag for the signed-in learner on this device (never their email): for notes kept on the device. */
+export const learnerTag = () => who();
+
 /** The base language code for the server's words ("pt-BR" -> "pt"). */
 export const langOf = (lng) => String(lng || "en").split("-")[0].toLowerCase();
 

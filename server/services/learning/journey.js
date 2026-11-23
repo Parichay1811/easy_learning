@@ -32,7 +32,7 @@ const WELCOME = {
   },
   unfinished: {
     a: 'Welcome back, {{name}}. Your {{subjectName}} round is saved, just where you stopped.',
-    b: 'Hi {{name}}. You were part of the way through a {{subjectName}} round. You can carry on from there.',
+    b: 'Hi {{name}}. You were partway through your {{subjectName}} round. You can carry on from there.',
     calm: 'Hi {{name}}. Your round is saved.',
     anon: 'Welcome back. Your {{subjectName}} round is saved, just where you stopped.',
   },

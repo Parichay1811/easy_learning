@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import styles from "./SubjectOverlay.module.css";
 import { sfx } from "../../utils/sounds";
 import { fetchModuleStars } from "../../store/slices/dashboardSlice";
@@ -24,7 +24,6 @@ const moduleIcons = {
   speak: FaMicrophone,
 };
 const moduleColors = { listen: "blue", read: "green", write: "orange", speak: "purple" };
-const moduleXP = { listen: "30 XP", read: "20 XP", write: "15 XP", speak: "10 XP" };
 
 const StarRow = ({ count }) => (
   <>
@@ -64,7 +63,7 @@ export function SubjectHeader({ subject, className = "" }) {
  */
 export function ModuleGrid({ subject, onPick }) {
   const { t } = useTranslation();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
   const moduleStarsData = useSelector((state) => state.dashboard.moduleStars);
   return (
     <div className={styles.grid}>
@@ -86,7 +85,6 @@ export function ModuleGrid({ subject, onPick }) {
             data-sound="none"
             data-hover-sound=""
           >
-            <span className={styles.levelBadge}>{t(`subjectPage.modules.${type}.level`)}</span>
             <span className={styles.cardIconWrap} aria-hidden="true"><Icon /></span>
             <span className={styles.cardTitle}>{label}</span>
             <span className={styles.cardDesc}>{t(`subjectPage.modules.${type}.desc`)}</span>
@@ -94,7 +92,6 @@ export function ModuleGrid({ subject, onPick }) {
               <StarRow count={moduleStarsData[`${type}_${subject}`] ?? 0} />
             </span>
             <span className={styles.cardFoot}>
-              <span className={styles.xpBadge}>{moduleXP[type]}</span>
               <span className={styles.playBtn}>
                 <FaPlay aria-hidden="true" />
                 <span>{t("subjectPage.play")}</span>
@@ -113,7 +110,7 @@ const SubjectOverlay = ({ subject, onClose }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
 
   useEffect(() => {
     if (localStorage.getItem("jwt_token")) dispatch(fetchModuleStars());

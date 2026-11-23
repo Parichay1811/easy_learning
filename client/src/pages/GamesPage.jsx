@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useCalmMotion } from "../utils/useCalmMotion";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
 import Mascot from "../components/Mascot/Mascot";
@@ -18,7 +18,7 @@ import { FaGamepad, FaArrowLeft, FaCamera, FaHandPaper, FaChevronRight } from "r
 const GamesPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
 
   const openHub = (groupId) => {
     if (groupId) {

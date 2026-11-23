@@ -27,6 +27,8 @@ function ticksAt(left) {
  * (it shows a small "listening" ear instead of ticking).
  * The learner's "Warrior clock" setting (more time / no clock) is applied by
  * useQuestionRound, which passes the longer `total` or shows no clock at all.
+ * `timedOut`: the clock reached zero. It never costs a star: the question stays
+ * open and the clock just says "take your time".
  */
 export default function WarriorTimer({ total, left, running, paused, timedOut, onTogglePause, waiting = false, className = "" }) {
   const { t } = useTranslation();
@@ -42,12 +44,8 @@ export default function WarriorTimer({ total, left, running, paused, timedOut, o
     if (left <= 5) haptic("tick");
   }, [left, running]);
 
-  // Time's up: a soft music-box fall, once.
-  useEffect(() => {
-    if (!timedOut) return;
-    sfx.timeUp();
-    haptic("warn");
-  }, [timedOut]);
+  // The clock ran out: it stops at zero and says "take your time" (no alarm:
+  // the question stays open and nothing is lost).
 
   const frac = total > 0 ? Math.max(0, Math.min(1, left / total)) : 0;
   const phase = timedOut ? "out" : left <= 5 ? "last" : left <= 10 ? "warm" : "calm";
@@ -89,12 +87,12 @@ export default function WarriorTimer({ total, left, running, paused, timedOut, o
       {ticking && left <= 5 && <span key={`glow-${left}`} className={styles.glow} aria-hidden="true" />}
       <span className={styles.state} aria-hidden="true">
         {timedOut
-          ? t("warriorTimer.timeUp", { defaultValue: "Time's up!" })
+          ? t("warriorTimer.takeYourTime", { defaultValue: "Take your time" })
           : paused ? <><FaPlay /> {t("warriorTimer.paused", { defaultValue: "Paused" })}</>
             : waiting ? <><FaAssistiveListeningSystems /> {t("warriorTimer.listening", { defaultValue: "Listen first" })}</> : null}
       </span>
       <span className={styles.srOnly} aria-live="polite">
-        {timedOut ? t("warriorTimer.timeUp", { defaultValue: "Time's up!" }) : left === 10 || left === 5 ? t("warriorTimer.secondsLeft", { defaultValue: "{{n}} seconds left", n: left }) : ""}
+        {timedOut ? t("warriorTimer.takeYourTimeLong", { defaultValue: "The clock has stopped. Take your time." }) : left === 10 || left === 5 ? t("warriorTimer.secondsLeft", { defaultValue: "{{n}} seconds left", n: left }) : ""}
       </span>
     </button>
   );

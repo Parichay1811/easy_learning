@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as FramerMotion from "framer-motion";
+import { useCalmMotion } from "../utils/useCalmMotion";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import SEO from "../components/SEO/SEO";
@@ -41,7 +42,7 @@ const cardMotion = {
 const RoleSelect = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const reduce = FramerMotion.useReducedMotion();
+  const reduce = useCalmMotion();
   const [first] = useState(() => !shownBefore);
   const [ready, setReady] = useState(() => shownBefore);
   const [chosen, setChosen] = useState(null);

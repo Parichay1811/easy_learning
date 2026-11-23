@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import styles from "./Cards.module.css";
 import { sfx } from "../../utils/sounds";
 import { FaStar, FaPlay } from "react-icons/fa";
@@ -21,7 +21,7 @@ const cardData = [
 // tiles when it is wide, a stack of wide tiles when it is tall.
 const Cards = ({ onSelect }) => {
   const { t } = useTranslation();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
   const moduleStars = useSelector((state) => state.dashboard.moduleStars);
 
   return (

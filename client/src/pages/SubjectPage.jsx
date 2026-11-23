@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useCalmMotion } from "../utils/useCalmMotion";
 import { fetchModuleStars } from "../store/slices/dashboardSlice";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
@@ -34,7 +34,7 @@ const SubjectPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
 
   useEffect(() => {
     if (localStorage.getItem("jwt_token")) dispatch(fetchModuleStars());

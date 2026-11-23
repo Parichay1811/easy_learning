@@ -1,9 +1,15 @@
 /* The site's top bar: a glass HUD strip, one line at every width.
-   --nav-h is its height; the game pages (Home, subjects, modules, games) sit
-   in the space below it, so they read it to fill exactly one screen. */
-:global(:root) { --nav-h: 64px; }
+   --nav-bar-h is the bar's own height. --nav-h is where the page area starts:
+   the bar's bottom edge, which is the bar plus any site banner fixed above it
+   (--banner-h, StatusBanner/bannerOffset.js; 0px with no banner). The game
+   pages (Home, subjects, modules, games) sit in the space below it, so they
+   read --nav-h to fill exactly one screen and move down with a banner. */
+:global(:root) {
+  --nav-bar-h: 64px;
+  --nav-h: calc(var(--nav-bar-h) + var(--banner-h, 0px));
+}
 @media (orientation: landscape) and (max-height: 500px) {
-  :global(:root) { --nav-h: 48px; }
+  :global(:root) { --nav-bar-h: 48px; }
 }
 /* The floating AI Teacher button (rendered here, fixed bottom-right from 430px
    wide) needs a clear corner: game pages keep --fab-b free at the bottom (or
@@ -18,7 +24,7 @@
 
 .navbar {
   position: fixed;
-  top: 0;
+  top: var(--banner-h, 0px);
   left: 0;
   right: 0;
   width: 100%;
@@ -33,7 +39,7 @@
   justify-content: space-between;
   gap: 12px;
   width: 100%;
-  height: var(--nav-h);
+  height: var(--nav-bar-h);
   padding: 0 clamp(10px, 1.6vw, 24px);
   /* Opaque enough that nothing scrolling or animating underneath can ever
      read as part of the bar (the old see-through bar let page headers show
@@ -48,7 +54,7 @@
 }
 
 .logo { display: flex; align-items: center; flex-shrink: 0; border-radius: 12px; }
-.logo img { height: calc(var(--nav-h) - 16px); max-height: 50px; width: auto; max-width: 124px; object-fit: contain; display: block; }
+.logo img { height: calc(var(--nav-bar-h) - 16px); max-height: 50px; width: auto; max-width: 124px; object-fit: contain; display: block; }
 .logo:focus-visible { outline: 3px solid #ffd45c; outline-offset: 3px; }
 
 /* The middle: links, then the right-hand group. Fit is measured from these

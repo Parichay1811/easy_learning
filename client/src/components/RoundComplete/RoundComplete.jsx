@@ -1,27 +1,29 @@
 import { useEffect, useRef } from "react";
 import * as FramerMotion from "framer-motion";
-import { useReducedMotion } from "framer-motion";
+import { useCalmMotion } from "../../utils/useCalmMotion";
 import { useTranslation } from "react-i18next";
-import { FaStar, FaRegStar, FaTrophy, FaRedo, FaArrowLeft, FaBolt } from "react-icons/fa";
+import { FaStar, FaRegStar, FaTrophy, FaRedo, FaArrowLeft } from "react-icons/fa";
 import { GiCrossedSwords } from "react-icons/gi";
 import Mascot, { FloatingButterflies } from "../Mascot/Mascot";
 import { sfx, haptic } from "../../utils/sounds";
 import { narrate } from "../../utils/narrator";
 import { getSpeechLang } from "../../utils/speechLang";
+import { warriorPassMark } from "../../utils/warrior";
 import styles from "./RoundComplete.module.css";
 
-const WARRIOR_PASS = 6;
 const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
 
 // The end of a round: the mascot celebrates, the stars land one by one, and
 // there are two clear ways on: play again, or go back.
 // `challenge`: a mini challenge (a few questions one step up) ended: said as such, praise for trying.
-export default function RoundComplete({ module: mod, subject, mode, stars, bonusStars, total = 10, onPlayAgain, onBack, challenge = false }) {
+// Warrior rounds: the pass mark is 60% of the round (utils/warrior.js), and
+// `best` / `newBest` compare the round with the learner's own best (never with others).
+export default function RoundComplete({ module: mod, subject, mode, stars, total = 10, best = null, newBest = false, onPlayAgain, onBack, challenge = false }) {
   const { t, i18n } = useTranslation();
-  const reduce = useReducedMotion();
+  const reduce = useCalmMotion();
   const isPractice = mode !== "warrior";
-  const passed = !isPractice ? stars >= WARRIOR_PASS : null;
-  const totalStars = stars + bonusStars;
+  const passMark = warriorPassMark(total);
+  const passed = !isPractice ? stars >= passMark : null;
   const slots = Math.max(total, stars);
 
   // One fanfare when the round ends (guarded: StrictMode runs effects twice in development).
@@ -85,7 +87,7 @@ export default function RoundComplete({ module: mod, subject, mode, stars, bonus
                 ? subtitle
                 : passed
                   ? t("roundComplete.conquered")
-                  : t("roundComplete.neededToPass", { count: WARRIOR_PASS })}
+                  : t("roundComplete.neededToPass", { count: passMark })}
             </p>
           </div>
         </div>
@@ -107,18 +109,24 @@ export default function RoundComplete({ module: mod, subject, mode, stars, bonus
               ))}
             </div>
             <p className={styles.score}>{stars} / {total}</p>
-            {!isPractice && <p className={styles.passing}>{t("roundComplete.passingMark", { count: WARRIOR_PASS })}</p>}
+            {!isPractice && <p className={styles.passing}>{t("roundComplete.passingMark", { count: passMark })}</p>}
           </div>
 
-          {!isPractice && bonusStars > 0 && (
+          {/* Beat your own best: only ever compared with the learner's own rounds. */}
+          {!isPractice && (newBest || best) && (
             <FramerMotion.motion.div
               className={styles.bonus}
-              initial={{ opacity: 0, y: 10 }}
+              initial={reduce ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9 }}
+              data-personal-best={newBest ? "new" : "kept"}
             >
-              <span className={styles.bonusLine}><FaBolt aria-hidden="true" /> {t("roundComplete.speedBonusStars", { count: bonusStars })}</span>
-              <span className={styles.bonusLine}><FaTrophy aria-hidden="true" /> {t("roundComplete.totalStars", { count: totalStars })}</span>
+              <span className={styles.bonusLine}>
+                <FaTrophy aria-hidden="true" />{" "}
+                {newBest
+                  ? t("roundComplete.newBest", "New personal best!")
+                  : t("roundComplete.yourBest", { defaultValue: "Your best so far: {{stars}} of {{total}}", stars: best.stars, total: best.total })}
+              </span>
             </FramerMotion.motion.div>
           )}
 
