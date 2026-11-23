@@ -1,6 +1,6 @@
 // TCH-013 / TCH-054: one student, through the teacher's eyes. Shared analytics endpoints for
 // the numbers, plus the teacher's private notes and the parent link status.
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling, FaChartLine, FaCamera } from "react-icons/fa";
 import {
@@ -11,11 +11,41 @@ import { useLoad, useTeacherApi } from "./teacherApi";
 import { ParentStatus } from "./ParentsPanel";
 import TeacherPlan from "./TeacherPlan";
 import { EvidencePanel } from "../../components/learning/evidence";
-import { groupStyle, rangeQuery, matrixCells } from "./teacherShared";
+import { groupStyle, rangeQuery, matrixCells, enoughToCompare, solidInsights } from "./teacherShared";
 import AdultFindings from "../../ar/insights/AdultFindings";
 import { useFindings } from "../../ar/insights/useFindings";
 import { periodLine } from "../../ar/insights/format.js";
+import { useGlancePeriod } from "../../insights-dash/usePeriod";
 import s from "./teacher.module.css";
+
+// "At a glance" and the skill map (GET /teacher/students/:id/insights): their own chunks.
+const GlancePanel = lazy(() => import("../../insights-dash/GlancePanel"));
+const SkillMapPanel = lazy(() => import("../../insights-dash/SkillMapPanel"));
+
+// The findings (going well / worth more practice / what changed / effort, each with an
+// in-class next step), the period in numbers and the weekly trend, over rolling 7 / 28 days.
+function Glance({ id, name, onSkills }) {
+  const { t } = useTranslation();
+  const { get } = useTeacherApi();
+  const [days, setDays] = useGlancePeriod();
+  const q = useLoad(() => get(`/students/${id}/insights?days=${days}`), [id, days]);
+  return (
+    <Suspense fallback={<Skeleton variant="rect" height={220} />}>
+      <GlancePanel data={q.data?.insights} loading={q.loading} error={q.error} onRetry={q.reload} days={days} onDays={setDays} name={name} audience="teacher"
+        actions={<Button variant="soft" onClick={onSkills}>{t("insights.glance.openSkills", { defaultValue: "See all skills" })}</Button>} />
+    </Suspense>
+  );
+}
+
+function Skills({ id, name }) {
+  const { get } = useTeacherApi();
+  const q = useLoad(() => get(`/students/${id}/insights?days=28`), [id]);
+  return (
+    <Suspense fallback={<Skeleton variant="chart" />}>
+      <SkillMapPanel data={q.data?.insights} loading={q.loading} error={q.error} name={name} audience="teacher" headingLevel={2} />
+    </Suspense>
+  );
+}
 
 const KIND = { session: "session", round: "game", test: "test", answer: "session" };
 
@@ -134,7 +164,7 @@ function Notes({ studentId, initial, onChanged }) {
   );
 }
 
-function Analytics({ id, name, part }) {
+function Analytics({ id, name, part, email, onSkills }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const tr = useTimeRange({ defaultRange: "month", defaultCmp: "prev" });
@@ -162,6 +192,7 @@ function Analytics({ id, name, part }) {
   if (part === "subjects") {
     return (
       <>
+        {email && <Skills id={id} name={name} />}
         {range}
         {error}
         <ChartCard title={t("teacher.stu.matrixTitle", { defaultValue: "How is {{name}} doing in each subject and skill?", name })} answer={t("teacher.subj.matrixAnswer", { defaultValue: "Colour shows mastery, the number is accuracy." })} loading={ov.loading} table={toTable.matrix(cells, t)}>
@@ -188,15 +219,17 @@ function Analytics({ id, name, part }) {
   }
   return (
     <>
+      {email && <Glance id={id} name={name} onSkills={onSkills} />}
+      <h2 className={s.h2} style={{ margin: "8px 0 0" }}>{t("insights.teacher.timeTitle", { defaultValue: "Time and activity" })}</h2>
       {range}
       {ov.loading ? <Skeleton variant="tile" /> : o && (
-        <StoryCard className={s.storyCompact} sentence={o.story} chips={(o.insights || []).slice(0, 4).map((i) => ({ kind: ["alert", "celebrate", "nudge"].includes(i.kind) ? i.kind : "info", text: t(`dash.insight.${i.key}`, { defaultValue: i.text, ...i.params }) }))} />
+        <StoryCard className={s.storyCompact} sentence={o.story} chips={solidInsights(o).slice(0, 4).map((i) => ({ kind: ["alert", "celebrate", "nudge"].includes(i.kind) ? i.kind : "info", text: t(`dash.insight.${i.key}`, { defaultValue: i.text, ...i.params }) }))} />
       )}
       {error}
       {o && (
         <div className={s.kpiRow}>
           <KpiTile label={t("teacher.kpi.time", { defaultValue: "Learning time" })} value={fmtDuration(o.totals.minutes)} sparkline={(o.series?.points || []).map((p) => p.minutes)} delta={o.previous ? { current: o.totals.minutes, previous: o.previous.minutes, mode: "duration" } : undefined} />
-          <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={o.totals.accuracy == null ? null : fmtPercent(o.totals.accuracy / 100)} delta={o.previous?.accuracy != null && o.totals.accuracy != null ? { current: o.totals.accuracy / 100, previous: o.previous.accuracy / 100, mode: "points" } : undefined} />
+          <KpiTile label={t("teacher.kpi.accuracy", { defaultValue: "Accuracy" })} value={o.totals.accuracy == null ? null : fmtPercent(o.totals.accuracy / 100)} delta={o.previous?.accuracy != null && o.totals.accuracy != null && enoughToCompare(o) ? { current: o.totals.accuracy / 100, previous: o.previous.accuracy / 100, mode: "points" } : undefined} />
           <KpiTile label={t("teacher.kpi.days", { defaultValue: "Active days" })} value={o.totals.activeDays} delta={o.previous ? { current: o.totals.activeDays, previous: o.previous.activeDays, mode: "number" } : undefined} />
           <KpiTile label={t("teacher.kpi.streak", { defaultValue: "Streak" })} value={o.streak ? t("teacher.kpi.streakDays", { defaultValue: "{{count}} days", defaultValue_one: "{{count}} day", count: o.streak.current }) : null} helpText={o.streak ? t("teacher.kpi.longest", { defaultValue: "Longest: {{count}} days", count: o.streak.longest }) : undefined} />
         </div>
@@ -251,7 +284,7 @@ export default function StudentView({ id, go }) {
           : current === "plan" ? <TeacherPlan student={id} name={firstName} />
           : current === "growth" ? <Growth id={id} name={firstName} />
           : current === "camera" ? <CameraGames id={id} name={firstName} initial={d.cameraGames} />
-          : d.hasAnalytics ? <Analytics id={id} name={firstName} part={current} />
+          : d.hasAnalytics ? <Analytics id={id} name={firstName} part={current} email={st.email} onSkills={() => setPane("subjects")} />
             : <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} actionLabel={t("teacher.stu.writeNote", { defaultValue: "Write a private note" })} onAction={() => setPane("notes")} />}
       </SubPanel>
     </>

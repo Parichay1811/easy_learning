@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { FaEnvelopeOpenText } from "react-icons/fa";
 import { WorkspaceChooser } from "./teacher/WorkspaceSwitcher";
 import EntryShell, { GoogleButton, EntryError } from "../components/Entry/EntryShell";
-import { TeacherEmblem } from "../components/Entry/RoleEmblems";
 import { sfx, haptic } from "../utils/sounds";
 import e from "../components/Entry/Entry.module.css";
 import "../components/dashboard/tokens.css";
@@ -81,7 +80,7 @@ const TeacherLogin = () => {
   return (
     <EntryShell
       role="teacher"
-      emblem={TeacherEmblem}
+      welcome={t("entry.teacher.welcome", "Welcome back, teacher")}
       title={workspaces ? t("teacher.ws.choose", { defaultValue: "Where are you teaching now?" }) : t("entry.teacher.title", "Teacher sign in")}
       subtitle={workspaces
         ? t("teacher.ws.chooseLong", { defaultValue: "Where are you teaching now? You can switch any time from the top of your dashboard." })

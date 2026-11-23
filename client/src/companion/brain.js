@@ -22,6 +22,7 @@ const COOLDOWN_MS = {
   support: 6_000,
   celebrateBig: 3_500,
   ambient: 14_000, // a tilt or glance when the scene is quiet
+  play: 90_000, // playing with a butterfly: a rare, delightful moment
 };
 const QUIET_AFTER_ACTIVITY_MS = 6_000; // reading, scrolling, typing: stay calm this long after
 const SLEEPY_AFTER_MS = 75_000; // nobody around: a slow yawn, then calm idle
@@ -104,6 +105,13 @@ export function createBrain({ random = Math.random, now: clock = () => Date.now(
       s.last.support = at;
       return want("support", "comfort", PRIORITY.support, at) && s.current.priority < PRIORITY.support;
     }
+    if (type === "play") {
+      // A butterfly came to play. Only in a calm moment: never while the voice speaks,
+      // while the learner reads or scrolls, or over something more important.
+      if (!canPlay(at)) return false;
+      s.last.play = at;
+      return want("play", "play", PRIORITY.attend, at) && s.current.priority < PRIORITY.guide;
+    }
     if (type === "curious") {
       return want("attend", "tilt", PRIORITY.attend, at) && s.current.priority < PRIORITY.attend;
     }
@@ -118,6 +126,15 @@ export function createBrain({ random = Math.random, now: clock = () => Date.now(
       return want(kind, clip, guide ? PRIORITY.guide : PRIORITY.attend, at, { lean: dir === "left" ? -1 : 1 }) && s.current.priority < (guide ? PRIORITY.guide : PRIORITY.attend);
     }
     return false;
+  }
+
+  /** Could a butterfly come and play now? (No side effects: the butterfly asks first.) */
+  function canPlay(at = clock()) {
+    if (s.speaking || !ready("play", at)) return false;
+    if (at - s.lastQuiet < QUIET_AFTER_ACTIVITY_MS) return false;
+    if (s.current.priority > PRIORITY.attend) return false;
+    if (s.pending && s.pending.priority > PRIORITY.ambient && at - s.pending.at < PENDING_TTL_MS) return false;
+    return true;
   }
 
   /** Called when the playing clip ends, or after dispatch() asked to interrupt. Returns the next beat. */
@@ -164,6 +181,7 @@ export function createBrain({ random = Math.random, now: clock = () => Date.now(
   return {
     dispatch,
     choose,
+    canPlay,
     get state() {
       return { speaking: s.speaking, current: { ...s.current }, pending: s.pending ? { ...s.pending } : null, arrivals: s.arrivals };
     },

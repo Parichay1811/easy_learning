@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
@@ -19,6 +20,23 @@ const GamesPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const reduce = useCalmMotion();
+
+  // Opening Games starts the hand model's download in the background, so the
+  // first camera game finds it already here instead of waiting on 12-19 MB.
+  // It waits for the page to paint and the browser to be idle; download only.
+  useEffect(() => {
+    // The camera games' code too (it loads on demand), so the hub opens at once.
+    const go = () => {
+      import("../ar/core/vision").then((m) => m.prefetchVisionFiles()).catch(() => {});
+      import("../ar/pages/ARHub").catch(() => {});
+    };
+    if (typeof window.requestIdleCallback === "function") {
+      const id = window.requestIdleCallback(go, { timeout: 1500 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const timer = window.setTimeout(go, 400);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   const openHub = (groupId) => {
     if (groupId) {

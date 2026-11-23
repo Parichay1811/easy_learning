@@ -5,8 +5,11 @@
 // what the butterfly is doing, and depth (nearer ones are bigger and faster).
 // Behaviour: they keep to open sky (each new destination is a point where nothing of
 // the page is underneath), rest now and then on things marked data-butterfly-perch
-// (new things) or on the companion's head, slow-flap while resting, take off when a
-// pointer comes close, and come to the companion when there is something to celebrate.
+// (new things), slow-flap while resting, take off when a pointer comes close, and come
+// to the companion when there is something to celebrate. A butterfly that visits the
+// dog asks first (the stage decides whether the dog is free to play): if so, it flies
+// the path the filmed butterfly takes in the dog's "play" performance, in time with it,
+// so the dog's eyes follow a real butterfly; if not, it rests somewhere else.
 // One or two at most; a canvas under the navbar and dialogs; never takes a click.
 import { companion } from "./bus";
 import css from "./companion.module.css";
@@ -78,6 +81,8 @@ export function startButterflies({ count } = {}) {
   const flock = Array.from({ length: n }, (_, i) => {
     const fromLeft = i % 2 === 0;
     return {
+      id: i,
+      dance: null,
       x: fromLeft ? -30 : W + 30,
       y: rand(H * 0.18, H * 0.45),
       heading: fromLeft ? rand(-0.4, 0.2) : Math.PI + rand(-0.2, 0.4),
@@ -122,7 +127,7 @@ export function startButterflies({ count } = {}) {
     return { x: rand(16, W - 16), y: rand(top, top + 80) };
   }
 
-  function perchSpot() {
+  function perchSpot(b) {
     const dog = document.querySelector('[data-companion="dog"]');
     const marked = [...document.querySelectorAll("[data-butterfly-perch]")];
     const options = [...marked, ...(dog ? [dog] : [])]
@@ -130,9 +135,17 @@ export function startButterflies({ count } = {}) {
       .filter(({ r }) => r.width > 0 && r.top > navBottom() && r.bottom < H && r.left >= 0 && r.right <= W);
     if (!options.length) return null;
     const o = options[Math.floor(Math.random() * options.length)];
-    const isDog = o.el.dataset.companion === "dog";
-    // On the dog: on top of the head; on a marked thing: its top edge, near a corner.
-    return { el: o.el, fx: isDog ? rand(0.4, 0.6) : rand(0.15, 0.85), fy: isDog ? 0.2 : 0, isDog };
+    if (o.el.dataset.companion === "dog") {
+      // Going to the dog means playing with it: ask (the answer comes back at once).
+      companion.signal("butterflyVisit", { id: b.id });
+      if (b.dance) return null;
+      const others = options.filter((x) => x.el !== o.el);
+      if (!others.length) return null;
+      const m = others[Math.floor(Math.random() * others.length)];
+      return { el: m.el, fx: rand(0.15, 0.85), fy: 0 };
+    }
+    // On a marked thing: its top edge, near a corner.
+    return { el: o.el, fx: rand(0.15, 0.85), fy: 0 };
   }
 
   const perchPoint = (p) => {
@@ -140,8 +153,71 @@ export function startButterflies({ count } = {}) {
     return { x: r.left + r.width * p.fx, y: r.top + r.height * p.fy, r };
   };
 
+  function endDance(b, now) {
+    if (!b.dance) return;
+    companion.signal("butterflyDone", { id: b.id });
+    b.dance = null;
+    b.state = "fly";
+    b.speed = 90;
+    b.target = openTarget();
+    b.retarget = now + rand(3_000, 6_000);
+    b.nextPerch = now + rand(30_000, 50_000);
+  }
+
+  // Coming over to play, waiting for the dog to start, then flying the film's path.
+  function stepDance(b, dt, now, flee) {
+    const d = b.dance;
+    if (flee) return endDance(b, now);
+    let p;
+    if (d.phase === "dance") {
+      const t = (now - d.startAt) / 1000;
+      if (t > d.end) return endDance(b, now);
+      p = d.at(Math.max(d.start, t));
+      // Glued to the path (it is the film's butterfly), with a little give.
+      const k = Math.min(1, dt * 14);
+      const nx = b.x + (p.x - b.x) * k;
+      const ny = b.y + (p.y - b.y) * k;
+      if (Math.hypot(nx - b.x, ny - b.y) > 0.3) b.heading = Math.atan2(ny - b.y, nx - b.x);
+      b.x = nx;
+      b.y = ny;
+      b.glide = 0;
+      b.hz = 8.5;
+      b.phase += dt * Math.PI * 2 * b.hz;
+      b.bob = Math.sin(b.phase) * 2;
+      return;
+    }
+    p = d.at(d.start);
+    if (d.phase === "wait") {
+      // Hover at the entry point until the dog's performance starts (or give up).
+      if (now - d.waitFrom > 1500) return endDance(b, now);
+      p = { x: p.x + Math.cos(now / 260) * 6, y: p.y + Math.sin(now / 330) * 5 };
+    } else if (now - d.since > 7000) {
+      return endDance(b, now);
+    }
+    b.target = p;
+    const want = Math.atan2(p.y - b.y, p.x - b.x);
+    let a = want - b.heading;
+    a = Math.atan2(Math.sin(a), Math.cos(a));
+    b.heading += Math.max(-3.2 * dt, Math.min(3.2 * dt, a)) + b.wander(now / 900) * 0.8 * dt;
+    const dist = Math.hypot(p.x - b.x, p.y - b.y);
+    const cruise = Math.max(20, Math.min(85, dist * 1.6));
+    b.speed += (cruise - b.speed) * Math.min(1, dt * 3);
+    b.hz = 8;
+    b.glide = 0;
+    b.phase += dt * Math.PI * 2 * b.hz;
+    b.bob = Math.sin(b.phase) * 3;
+    b.x += Math.cos(b.heading) * b.speed * dt;
+    b.y += Math.sin(b.heading) * b.speed * dt;
+    if (d.phase === "approach" && dist < 18) {
+      d.phase = "wait";
+      d.waitFrom = now;
+      companion.signal("butterflyReady", { id: b.id });
+    }
+  }
+
   function step(b, dt, now) {
     const flee = Math.hypot(pointer.x - b.x, pointer.y - b.y) < 90 && now - pointer.at < 600;
+    if (b.dance) return stepDance(b, dt, now, flee);
     if (b.state === "perch") {
       const p = b.perch?.el?.isConnected ? perchPoint(b.perch) : null;
       const moved = p && Math.hypot(p.x - b.x, p.y - b.y) > 6;
@@ -169,7 +245,8 @@ export function startButterflies({ count } = {}) {
         b.target = { x: r.left + r.width / 2 + Math.cos(a) * r.width * 0.45, y: r.top + r.height * 0.25 + Math.sin(a) * r.height * 0.18 };
       }
     } else if (!b.perch && now > b.nextPerch && !flee) {
-      const p = perchSpot();
+      const p = perchSpot(b);
+      if (b.dance) return;
       if (p) b.perch = p;
       else b.nextPerch = now + 15_000;
     }
@@ -275,6 +352,19 @@ export function startButterflies({ count } = {}) {
   document.addEventListener("visibilitychange", onVis);
   const off = companion.on((e) => {
     if (e.type === "success" && e.size === "big") celebrateUntil = performance.now() + 2600;
+    const b = e.id !== undefined ? flock.find((x) => x.id === e.id) : null;
+    if (!b) return;
+    const now = performance.now();
+    if (e.type === "butterflyDance") {
+      b.dance = { at: e.at, start: e.start, end: e.end, phase: "approach", since: now };
+      b.perch = null;
+      b.state = "fly";
+    } else if (e.type === "butterflyGo" && b.dance) {
+      b.dance.phase = "dance";
+      b.dance.startAt = e.startAt;
+    } else if (e.type === "butterflyFree" && b.dance) {
+      endDance(b, now);
+    }
   });
   kick();
 

@@ -12,11 +12,17 @@ function token() {
   return t;
 }
 
-async function call(path, init = {}) {
+async function call(path, init = {}, tries = 6) {
   const res = await fetch(path.startsWith("http") ? path : `${API}${path}`, {
     ...init,
     headers: { Authorization: `Bearer ${token()}`, ...(init.headers || {}) },
   });
+  // Throttled (low-credit accounts get a small burst): wait as told, then try again.
+  if (res.status === 429 && tries > 0) {
+    const wait = Number(res.headers.get("retry-after")) || 6;
+    await new Promise((r) => setTimeout(r, (wait + Math.random() * 2) * 1000));
+    return call(path, init, tries - 1);
+  }
   const text = await res.text();
   let body;
   try { body = JSON.parse(text); } catch { body = text; }

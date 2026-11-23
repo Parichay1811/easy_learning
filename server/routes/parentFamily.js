@@ -43,6 +43,7 @@ module.exports = function mountParentFamily(router) {
   router.get('/children/:id/analytics/screen-time', own, ins.screenTime)
   router.get('/children/:id/analytics/ar', own, ins.ar)
   router.get('/children/:id/analytics/milestones', own, ins.milestones)
+  router.get('/children/:id/insights', own, ins.insights)
   router.get('/children/:id/analytics/year', own, deep, ins.year)
   router.get('/children/:id/answers', own, ins.answers)
   router.get('/children/:id/activity.csv', own, ins.activityCsv)

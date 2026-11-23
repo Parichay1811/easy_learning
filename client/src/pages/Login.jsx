@@ -5,8 +5,7 @@ import { signInWithGoogle } from "../firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock, FaUser, FaKey } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
-import EntryShell, { GoogleButton, EntryError, EntryDivider } from "../components/Entry/EntryShell";
-import { StudentEmblem } from "../components/Entry/RoleEmblems";
+import EntryShell, { GoogleButton, EntryError, EntryDivider, EntryField, PasswordField } from "../components/Entry/EntryShell";
 import { sfx, haptic } from "../utils/sounds";
 import e from "../components/Entry/Entry.module.css";
 
@@ -102,7 +101,7 @@ const Login = () => {
     <>
       <EntryShell
         role="student"
-        emblem={StudentEmblem}
+        welcome={isSignup ? t("entry.student.welcomeNew", "Hello, new explorer!") : t("entry.student.welcome", "Hello again, explorer!")}
         title={isSignup ? t("entry.student.signupTitle", "Create your student account") : t("entry.student.title", "Student sign in")}
         subtitle={isSignup ? t("login.createAccountSubtitle") : t("login.continueJourneySubtitle")}
         tip={isSignup
@@ -119,48 +118,36 @@ const Login = () => {
 
         <form onSubmit={handleSubmit} className={e.form}>
           {isSignup && (
-            <div className={e.field}>
-              <FaUser className={e.fieldIcon} aria-hidden="true" />
-              <input
-                type="text"
-                placeholder={t("login.namePlaceholder")}
-                aria-label={t("login.namePlaceholder")}
-                autoComplete="name"
-                value={name}
-                onChange={(ev) => setName(ev.target.value)}
-                className={e.input}
-                required
-              />
-            </div>
+            <EntryField
+              icon={FaUser}
+              label={t("login.namePlaceholder", "Your name")}
+              type="text"
+              autoComplete="name"
+              value={name}
+              onChange={(ev) => setName(ev.target.value)}
+              required
+            />
           )}
 
-          <div className={e.field}>
-            <FaEnvelope className={e.fieldIcon} aria-hidden="true" />
-            <input
-              type="email"
-              placeholder={t("login.emailPlaceholder")}
-              aria-label={t("login.emailPlaceholder")}
-              autoComplete="email"
-              value={email}
-              onChange={(ev) => setEmail(ev.target.value)}
-              className={e.input}
-              required
-            />
-          </div>
+          <EntryField
+            icon={FaEnvelope}
+            label={t("login.emailPlaceholder", "Email address")}
+            type="email"
+            autoComplete="email"
+            inputMode="email"
+            value={email}
+            onChange={(ev) => setEmail(ev.target.value)}
+            required
+          />
 
-          <div className={e.field}>
-            <FaLock className={e.fieldIcon} aria-hidden="true" />
-            <input
-              type="password"
-              placeholder={t("login.passwordPlaceholder")}
-              aria-label={t("login.passwordPlaceholder")}
-              autoComplete={isSignup ? "new-password" : "current-password"}
-              value={password}
-              onChange={(ev) => setPassword(ev.target.value)}
-              className={e.input}
-              required
-            />
-          </div>
+          <PasswordField
+            icon={FaLock}
+            label={t("login.passwordPlaceholder", "Password")}
+            autoComplete={isSignup ? "new-password" : "current-password"}
+            value={password}
+            onChange={(ev) => setPassword(ev.target.value)}
+            required
+          />
 
           {error && <EntryError>{error}</EntryError>}
 

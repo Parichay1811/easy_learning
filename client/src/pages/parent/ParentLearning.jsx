@@ -1,9 +1,9 @@
-import { useMemo } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   TimeRangeBar, useTimeRange, ChartCard, SubjectModuleMatrix, SkillMap, TrendLine, Button, toTable,
-  fmtDuration, fmtPercent, fmtDate, subjectLabel, moduleLabel, SubTabs, SubPanel, usePane, EmptyState,
+  fmtDuration, fmtPercent, fmtDate, subjectLabel, moduleLabel, SubTabs, SubPanel, usePane, EmptyState, Skeleton,
 } from "../../components/dashboard";
 import { EvidencePanel } from "../../components/learning/evidence";
 import { useLoad, rangeQuery, matrixCells, masteryKey, frac } from "./parentApi";
@@ -13,6 +13,9 @@ import { useFindings } from "../../ar/insights/useFindings";
 import { periodLine } from "../../ar/insights/format.js";
 import ParentPlan from "./ParentPlan";
 import s from "./parent.module.css";
+
+// The engine's skill map (mastered / review due / practising / worth more practice): its own chunk.
+const SkillMapPanel = lazy(() => import("../../insights-dash/SkillMapPanel"));
 
 const LEVEL = { notStarted: 0, learning: 1, practising: 2, mastered: 3 };
 // Trend values are whole percentages (0-100), as the server sends them.
@@ -42,6 +45,8 @@ export default function ParentLearning({ api, child, go }) {
   const ar = useLoad(api.get, `${base}/analytics/ar?${q}`);
   // Evidence is the learner's whole history (baseline vs now), not the picked period.
   const lrn = useLoad(api.get, pane === "growth" ? `${base}/learning` : null);
+  // Skills: the learner's current state, whatever the period (…/insights carries the skill map).
+  const ins = useLoad(api.get, pane === "skills" ? `${base}/insights?days=28` : null);
   const first = child.name.split(" ")[0];
   // Camera-game findings for the picked period vs the one before it (ar/insights/findings.js):
   // the server sends this child's rounds of both periods with GET …/analytics/ar.
@@ -111,14 +116,21 @@ export default function ParentLearning({ api, child, go }) {
       </SubPanel>
 
       <SubPanel id="skills" value={pane}>
-        <ChartCard title={T("skills", "What can {{name}} do now?", { name: first })}
+        <Suspense fallback={<Skeleton variant="chart" />}>
+          <SkillMapPanel data={ins.data?.insights} loading={ins.loading} error={ins.error} name={first} audience="parent" />
+        </Suspense>
+        {/* The older view by area uses a simpler rule (80 % over 5 answers), so it stays folded away under the skill map. */}
+        <details className={s.card}>
+          <summary style={{ minHeight: 44, display: "flex", alignItems: "center", fontWeight: 700, cursor: "pointer" }}>{T("skillsAreasOpen", "By area (Listen, Read, Write, Speak): then and now")}</summary>
+        <ChartCard title={T("skillsAreas", "By area: then and now")}
           answer={sk.data ? (sk.data.level === "topic"
             ? T("skillsTopic", "Grouped by topic. Switch on “then vs now” to compare with the start of the period.")
-            : T("skillsModule", "Shown per area (module and subject) until our question bank carries individual skills.")) : undefined}
+            : T("skillsAreas2", "Share of right answers in each area, with a simpler rule than the skill map above: mastered here means 80 % or more right over at least 5 answers. Switch on “then vs now” to compare with the start of the period.")) : undefined}
           info={T("skillsInfo", "Now: the last 30 days. Then: the 30 days before the period started.")}
           loading={sk.loading} error={sk.error} onRetry={sk.reload} table={toTable.skills(skills, t)}>
           <SkillMap skills={skills} onSelect={(x) => go("learning", { subject: x.subject, module: x.module, pane: "questions" })} />
         </ChartCard>
+        </details>
       </SubPanel>
 
       <SubPanel id="progress" value={pane}>

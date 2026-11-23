@@ -12,6 +12,11 @@ export const groupStyle = (g) => ({ "--group": g?.color || "var(--d-accent)" });
 export const RISK_TEXT = {
   inactive: "No learning for a week",
   accuracy_drop: "Accuracy fell this week",
+  // The check-in reasons of services/learnerInsights.js (Today and the group view share them).
+  not_started: "Has not started yet",
+  first_try_down: "Fewer right on the first try than the week before",
+  first_try_down_level: "Fewer right on the first try after moving up a level",
+  stuck: "Finding {{skill}} tricky",
 };
 
 // Friendly text for a 402 limit or locked module answer.
@@ -29,6 +34,20 @@ export const rangeQuery = (tr) => {
   const from = tr.from > to ? to : tr.from;
   return `from=${from}&to=${to}&cmp=${tr.cmp === "yoy" ? "lastyear" : tr.cmp || "prev"}`;
 };
+
+// An accuracy change is only shown with enough answers on both sides (the same minimum as
+// "At a glance", services/learnerInsights.js RULES.minAnswers): a handful of answers is noise.
+// It must also be bigger than the usual ups and downs: at least 8 points and more than twice the
+// standard error of the difference of the two shares (the same rule, RULES.minChangePoints / noise).
+export const MIN_ANSWERS_FOR_CHANGE = 20;
+export function enoughToCompare(o) {
+  const c = o?.totals, p = o?.previous;
+  if (!c || !p || (c.answered ?? 0) < MIN_ANSWERS_FOR_CHANGE || (p.answered ?? 0) < MIN_ANSWERS_FOR_CHANGE) return false;
+  const a = c.correct / c.answered, b = p.correct / p.answered;
+  const se = Math.sqrt((a * (1 - a)) / c.answered + (b * (1 - b)) / p.answered);
+  return Math.abs(a - b) >= 0.08 && Math.abs(a - b) > 2 * se;
+}
+export const solidInsights = (o) => (o?.insights || []).filter((i) => !["accuracy_up", "accuracy_down"].includes(i.key) || enoughToCompare(o));
 
 const LEVEL = { not_started: "notStarted", learning: "learning", practising: "practising", mastered: "mastered" };
 

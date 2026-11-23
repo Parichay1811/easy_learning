@@ -95,13 +95,24 @@ def heal_bites(a, rgb, kernel=17, max_area=900, head_share=0.45):
     return a, rgb
 
 
-def matte(bgr8, use_garbage=True, heal=True):
+def instance_matte(mask, grow=31):
+    """A YOLO instance mask (segment.py), grown so the chroma key keeps the fur edge:
+    YOLO decides WHICH pixels are the dog, the key decides the exact edge."""
+    m = cv2.dilate(mask.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (grow, grow)))
+    return cv2.GaussianBlur(m.astype(np.float32), (9, 9), 0)
+
+
+def matte(bgr8, use_garbage=True, heal=True, garbage=None):
+    """`garbage`: an instance matte from instance_matte() to use instead of the
+    largest-shape rule (clips run through segment.py)."""
     rgb = cv2.cvtColor(bgr8, cv2.COLOR_BGR2RGB).astype(np.float32) / 255.0
     a = key_alpha(rgb)
     # a whisker of blur on the alpha hides compression blocks on the edge
     a = cv2.GaussianBlur(a, (3, 3), 0)
+    if garbage is not None:
+        a = a * garbage  # only the dog instance...
     if use_garbage:
-        a = a * garbage_matte(a)
+        a = a * garbage_matte(a)  # ...and only its one solid shape: no floating specks
     rgb = despill(rgb)
     if heal:
         a, rgb = heal_bites(a, rgb)

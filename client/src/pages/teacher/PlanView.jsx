@@ -40,7 +40,7 @@ function Details({ w, onSaved }) {
   const [msg, setMsg] = useState(null);
   const save = async (e) => {
     e.preventDefault();
-    const split = (v) => v.split(",").map((x) => x.trim()).filter(Boolean);
+    const split = (v) => v.split(/[,、，;；]/).map((x) => x.trim()).filter(Boolean);
     const r = await send("PATCH", "/workspace", { name: f.name, country: f.country, subjects: split(f.subjects), grades: split(f.grades) });
     setMsg(r.ok ? { ok: true, text: t("teacher.saved", { defaultValue: "Saved." }) } : { ok: false, text: limitText(t, r) });
     if (r.ok) onSaved();

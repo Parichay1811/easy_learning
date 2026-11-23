@@ -30,9 +30,6 @@ import WriteModule from "./pages/modules/WriteModule";
 import SpeakModule from "./pages/modules/SpeakModule";
 import GamesPage from "./pages/GamesPage";
 import AITeacher from "./pages/AITeacher";
-import ARHub from "./ar/pages/ARHub";
-import ARGame from "./ar/pages/ARGame";
-import ARInsights from "./ar/pages/ARInsights";
 import Login from "./pages/Login";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
@@ -77,6 +74,11 @@ const SchoolApp = lazy(() => import("./pages/admin/school/SchoolApp"));
 const SuperAdminConsole = lazy(() => import("./pages/superadmin/console/SuperAdminConsole"));
 const ViewAsLanding = lazy(() => import("./pages/ViewAsLanding"));
 const StatusPage = lazy(() => import("./pages/StatusPage"));
+// The camera games, and the MediaPipe runtime they bring, load on demand: every
+// other page starts without them. Opening Games warms them (GamesPage.jsx).
+const ARHub = lazy(() => import("./ar/pages/ARHub"));
+const ARGame = lazy(() => import("./ar/pages/ARGame"));
+const ARInsights = lazy(() => import("./ar/pages/ARInsights"));
 
 // Every button and link makes a sound that fits what it does (utils/sounds.js).
 installUiSounds();
@@ -141,9 +143,9 @@ function AnimatedRoutes() {
         <Route path="/ai-teacher" element={<AITeacher />} />
         {/* Camera (MediaPipe) games. `/games/ar/insights` is matched before the
             :gameId route so it cannot be swallowed as a game id. */}
-        <Route path="/games/ar" element={<ARHub />} />
-        <Route path="/games/ar/insights" element={<ARInsights />} />
-        <Route path="/games/ar/:gameId" element={<ARGame />} />
+        <Route path="/games/ar" element={<Suspense fallback={null}><ARHub /></Suspense>} />
+        <Route path="/games/ar/insights" element={<Suspense fallback={null}><ARInsights /></Suspense>} />
+        <Route path="/games/ar/:gameId" element={<Suspense fallback={null}><ARGame /></Suspense>} />
         <Route path="/login" element={<SignedInGate role="student"><Login /></SignedInGate>} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />

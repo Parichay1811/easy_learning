@@ -1,18 +1,19 @@
-/* "/" — choose your player. One screen on every device: a game menu, not a
+/* "/" — who is signing in? One screen on most devices: a game menu, not a
    document. Phones and tablets in portrait: logo, puppy + speech bubble, a
-   2x2 grid of cards. Wide screens: the four cards in a row. Short landscape
-   phones: logo and puppy on the left, cards on the right. */
+   2x2 grid of picture cards. Wide screens: the four cards in a row. Short
+   landscape phones: logo and puppy on the left, cards on the right.
+   Motion is transform/opacity only; "less movement" keeps everything still. */
 
 .page {
   position: relative;
   isolation: isolate;
-  /* One screen: a site banner fixed above the page (the body is padded by
-     --banner-h) takes its share rather than adding a scroll. */
+  /* A site banner fixed above the page (the body is padded by --banner-h)
+     takes its share rather than adding a scroll. */
   min-height: calc(100vh - var(--banner-h, 0px));
   min-height: calc(100dvh - var(--banner-h, 0px));
   display: grid;
   place-items: center;
-  padding: max(10px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(10px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  padding: max(10px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
   overflow: hidden;
   color: #1d3b66;
 }
@@ -21,7 +22,7 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 560px;
+  max-width: 540px;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
@@ -32,18 +33,28 @@
     "foot";
   justify-items: center;
   align-content: center;
-  row-gap: clamp(8px, 1.5vh, 20px);
-  transition: transform 0.6s cubic-bezier(0.5, 0, 0.75, 0);
+  row-gap: clamp(8px, 1.4vh, 18px);
 }
 
-/* A role was chosen: the whole menu leans in towards that card. */
-.choosing {
-  transform: scale(1.12);
+/* A soft beam of sunlight crosses the page once as it opens. */
+.sweep {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
   pointer-events: none;
+  background: linear-gradient(105deg, rgba(255, 252, 235, 0) 34%, rgba(255, 250, 225, 0.5) 49%, rgba(255, 252, 235, 0) 64%);
+  opacity: 0;
+  transform: translateX(-100%);
 }
 
-.still.choosing {
-  transform: none;
+.sweeping {
+  animation: sweep 1.6s cubic-bezier(0.45, 0, 0.25, 1) 0.3s both;
+}
+
+@keyframes sweep {
+  0% { opacity: 0; transform: translateX(-100%); }
+  25% { opacity: 1; }
+  100% { opacity: 0; transform: translateX(100%); }
 }
 
 /* ── Logo + greeting ─────────────────────────────────────────────────── */
@@ -51,16 +62,16 @@
 .word {
   grid-area: word;
   display: block;
-  height: clamp(52px, 10vh, 128px);
+  height: clamp(48px, 8.6vh, 120px);
   width: auto;
-  max-width: 82vw;
+  max-width: 80vw;
   filter: drop-shadow(0 6px 12px rgba(24, 70, 130, 0.22));
   user-select: none;
 }
 
 .greet {
   grid-area: greet;
-  --pup: clamp(52px, 8.4vh, 118px);
+  --pup: clamp(54px, 8vh, 112px);
   display: flex;
   align-items: center;
   gap: clamp(8px, 1.4vw, 16px);
@@ -72,7 +83,7 @@
   min-width: 0;
   background: #fff;
   border-radius: 20px;
-  padding: clamp(6px, 1vh, 12px) clamp(12px, 1.6vw, 20px);
+  padding: clamp(7px, 1vh, 12px) clamp(13px, 1.6vw, 20px);
   box-shadow: 0 4px 0 #d3e2f2, 0 14px 26px -16px rgba(31, 64, 120, 0.55);
   transform-origin: 0 50%;
 }
@@ -80,7 +91,7 @@
 .bubble::before {
   content: "";
   position: absolute;
-  left: -8px;
+  inset-inline-start: -8px;
   top: 50%;
   width: 18px;
   height: 18px;
@@ -93,7 +104,7 @@
 .title {
   position: relative;
   margin: 0;
-  font-size: clamp(1.05rem, 2.7vh, 2rem);
+  font-size: clamp(1.1rem, 2.6vh, 2rem);
   font-weight: 700;
   line-height: 1.2;
   color: #1d3b66;
@@ -102,10 +113,10 @@
 .subtitle {
   position: relative;
   margin: 2px 0 0;
-  font-size: clamp(0.84rem, 1.85vh, 1.15rem);
+  font-size: clamp(0.9rem, 1.85vh, 1.15rem);
   font-weight: 500;
   line-height: 1.3;
-  color: #44587a;
+  color: #3d5072;
 }
 
 /* ── Role cards ──────────────────────────────────────────────────────── */
@@ -118,101 +129,162 @@
   list-style: none;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(8px, 1.5vh, 18px);
+  gap: clamp(10px, 1.4vh, 18px);
+  perspective: 1100px;
 }
 
 .slot {
   display: flex;
   min-width: 0;
+  transform-origin: 50% 100%;
 }
 
 .card {
-  --em: clamp(56px, 9.4vh, 124px);
+  --lift: 0px;
+  --press: 1;
   position: relative;
   flex: 1;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 2px;
-  padding: clamp(9px, 1.5vh, 20px) 8px clamp(10px, 1.6vh, 18px);
-  border: 3px solid #fff;
+  align-items: stretch;
+  padding: 5px;
+  border: none;
   border-radius: 24px;
-  background: linear-gradient(180deg, #ffffff 0%, #ffffff 52%, var(--role-soft) 100%);
-  box-shadow: 0 5px 0 var(--role-lip), 0 16px 26px -14px rgba(31, 64, 120, 0.5);
+  background: #fff;
+  box-shadow: 0 4px 0 var(--role-lip), 0 16px 26px -16px rgba(31, 64, 120, 0.55);
   font: inherit;
   color: #1d3b66;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.3s ease;
+  transform: perspective(900px) rotateX(calc(var(--ry, 0) * -5deg)) rotateY(calc(var(--rx, 0) * 6deg)) translateY(var(--lift)) scale(var(--press));
+  transition: transform 0.22s ease-out, opacity 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
-.emblem {
-  display: block;
-  flex: none;
-  width: var(--em);
-  height: var(--em);
-  filter: drop-shadow(0 4px 6px rgba(31, 64, 120, 0.2));
-  transition: transform 0.25s ease;
+/* A deeper shadow for a lifted card, faded in (opacity only). */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: 0 8px 0 var(--role-lip), 0 30px 40px -18px rgba(31, 64, 120, 0.6);
+  opacity: 0;
+  transition: opacity 0.22s ease-out;
+  pointer-events: none;
 }
 
-.emblem svg,
-.tutorEmblem svg,
-.teamEmblem svg {
+.media {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  border-radius: 19px;
+  background: var(--role-soft);
+  /* keeps Safari's rounded clip while the picture moves */
+  isolation: isolate;
+}
+
+.frame {
+  display: block;
+  aspect-ratio: 3 / 2;
+  border-radius: 19px;
+  overflow: hidden;
+  background: var(--role-soft);
+}
+
+.picture {
+  display: contents;
+}
+
+/* The picture sits a little larger than its window so it can drift with the
+   mouse / tilt (depth) without showing an edge. */
+.pic {
   display: block;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  object-position: 50% 34%;
+  transform: translate3d(calc(var(--dx, 0) * -5px + var(--rx, 0) * -7px), calc(var(--dy, 0) * -4px + var(--ry, 0) * -6px), 0) scale(1.1);
+  transition: transform 0.35s ease-out;
 }
 
-.text {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 0;
+.intro .pic {
+  animation: focus 1.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.name {
-  margin-top: 3px;
-  font-size: clamp(1.02rem, 2.4vh, 1.6rem);
-  font-weight: 700;
-  line-height: 1.2;
-  color: var(--role-ink);
+/* Like a camera settling: the picture eases back from a little closer. */
+@keyframes focus {
+  from { scale: 1.16; }
+  to { scale: 1; }
 }
 
-.sub {
-  display: inline-block;
-  margin-top: 3px;
-  padding: 0 9px;
+/* A glint of light that follows the mouse across the picture. */
+.sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.42) 48%, rgba(255, 255, 255, 0) 66%);
+  opacity: 0;
+  transform: translateX(calc(-55% + var(--rx, 0) * 30%));
+  transition: opacity 0.3s ease, transform 0.3s ease-out;
+}
+
+/* A soft vignette and the role's colour rising from the bottom: depth. */
+.media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 90% 80% at 50% 40%, rgba(0, 0, 0, 0) 60%, rgba(16, 32, 64, 0.16) 100%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 70%, color-mix(in srgb, var(--role) 22%, transparent) 100%);
+}
+
+.chip {
+  position: absolute;
+  z-index: 1;
+  inset-inline-start: 8px;
+  bottom: 8px;
+  max-width: calc(100% - 16px);
+  padding: 1px 10px;
   border-radius: 999px;
-  background: var(--role-soft);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 6px rgba(16, 32, 64, 0.18);
   color: var(--role-ink);
-  font-size: clamp(0.72rem, 1.5vh, 0.92rem);
-  font-weight: 600;
-  line-height: 1.5;
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.45;
+  text-align: left;
 }
 
-.desc {
-  margin-top: 3px;
-  font-size: clamp(0.8rem, 1.7vh, 1.02rem);
-  font-weight: 500;
-  line-height: 1.3;
-  color: #44587a;
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* The little "go" button in the corner: it says "press me". */
 .go {
   position: absolute;
+  z-index: 1;
   top: 8px;
-  right: 8px;
-  width: clamp(22px, 3.2vh, 32px);
-  height: clamp(22px, 3.2vh, 32px);
-  padding: 4px;
+  inset-inline-end: 8px;
+  width: clamp(28px, 3.6vh, 36px);
+  height: clamp(28px, 3.6vh, 36px);
+  padding: 5px;
+  border: 2px solid #fff;
   border-radius: 50%;
-  background: var(--role);
+  background: var(--role-btn);
   color: #fff;
-  box-shadow: 0 2px 0 var(--role-lip);
+  box-shadow: 0 3px 8px rgba(16, 32, 64, 0.28);
   transition: transform 0.2s ease;
 }
 
@@ -220,13 +292,46 @@
   display: block;
 }
 
-@media (hover: hover) {
+/* Right-to-left: "go" points the other way. */
+.go:dir(rtl) svg {
+  transform: scaleX(-1);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex: 1;
+  min-width: 0;
+  padding: 6px 4px 5px;
+}
+
+.name {
+  font-size: clamp(1.08rem, 2.3vh, 1.6rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--role-ink);
+}
+
+.desc {
+  margin-top: 2px;
+  font-size: max(0.875rem, min(1.7vh, 1.05rem));
+  font-weight: 500;
+  line-height: 1.3;
+  color: #3d5072;
+}
+
+@media (hover: hover) and (pointer: fine) {
   .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 9px 0 var(--role-lip), 0 22px 30px -14px rgba(31, 64, 120, 0.55);
+    --lift: -6px;
   }
-  .card:hover .emblem {
-    transform: scale(1.06) rotate(-3deg);
+  .card:hover::after {
+    opacity: 1;
+  }
+  .card:hover .sheen {
+    opacity: 1;
+    transform: translateX(calc(var(--rx, 0) * 40%));
   }
   .card:hover .go,
   .tutor:hover .go {
@@ -239,30 +344,41 @@
 }
 
 .card:active {
-  transform: translateY(3px);
-  box-shadow: 0 2px 0 var(--role-lip), 0 8px 16px -10px rgba(31, 64, 120, 0.4);
+  --lift: 2px;
+  --press: 0.97;
 }
 
+.card:active::after {
+  opacity: 0;
+}
+
+/* A clear focus ring: white halo and a dark blue ring, visible on the
+   picture, the meadow and the white card alike. */
 .card:focus-visible,
 .tutor:focus-visible,
 .team:focus-visible {
-  outline: 4px solid #1971c2;
+  outline: 4px solid #0b4ea2;
   outline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff, 0 4px 0 var(--role-lip), 0 16px 26px -16px rgba(31, 64, 120, 0.55);
 }
 
-/* The chosen card glows; the others step back. */
+/* A role was chosen: the others step back, the chosen card glows. */
+.choosing {
+  pointer-events: none;
+}
+
 .choosing .card:not(.chosen),
 .choosing .tutor:not(.chosen),
 .choosing .team:not(.chosen) {
-  opacity: 0.35;
-  transform: scale(0.96);
+  opacity: 0.4;
+  transform: scale(0.95);
 }
 
 .card.chosen,
 .tutor.chosen,
 .team.chosen {
-  transform: scale(1.06);
-  box-shadow: 0 0 0 5px var(--role), 0 0 44px 12px color-mix(in srgb, var(--role) 50%, transparent);
+  --lift: -4px;
+  box-shadow: 0 0 0 5px var(--role), 0 0 46px 12px color-mix(in srgb, var(--role) 45%, transparent);
 }
 
 /* ── "I teach privately" ─────────────────────────────────────────────── */
@@ -281,35 +397,49 @@
   gap: 12px;
   width: 100%;
   max-width: 520px;
-  min-height: 52px;
-  padding: 6px 48px 6px 8px;
-  border: 3px solid #fff;
+  min-height: 56px;
+  padding-block: 5px;
+  padding-inline: 5px 52px;
+  border: none;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.94);
   box-shadow: 0 4px 0 var(--role-lip), 0 12px 22px -14px rgba(31, 64, 120, 0.5);
   font: inherit;
   color: #1d3b66;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
-  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.3s ease;
+  transition: transform 0.18s ease, opacity 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .tutor:active {
   transform: translateY(3px);
-  box-shadow: 0 1px 0 var(--role-lip);
 }
 
 .tutor .go {
   top: 50%;
-  margin-top: calc(clamp(22px, 3.2vh, 32px) / -2);
-  right: 12px;
+  margin-top: calc(clamp(28px, 3.6vh, 36px) / -2);
+  inset-inline-end: 12px;
 }
 
-.tutorEmblem {
+.tutorFrame {
   flex: none;
-  width: clamp(38px, 5.6vh, 56px);
-  height: clamp(38px, 5.6vh, 56px);
+  display: block;
+  width: clamp(48px, 6.4vh, 64px);
+  height: clamp(48px, 6.4vh, 64px);
+  border-radius: 15px;
+  overflow: hidden;
+  background: var(--role-soft);
+}
+
+.tutorPic {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 45% 30%;
+  transform: scale(1.25);
+  transform-origin: 45% 30%;
 }
 
 .tutorText {
@@ -320,14 +450,14 @@
 }
 
 .tutorText strong {
-  font-size: clamp(0.95rem, 2vh, 1.15rem);
+  font-size: clamp(1rem, 2vh, 1.15rem);
   color: var(--role-ink);
 }
 
 .tutorText span {
-  font-size: clamp(0.8rem, 1.7vh, 0.98rem);
+  font-size: max(0.875rem, min(1.7vh, 1rem));
   font-weight: 500;
-  color: #44587a;
+  color: #3d5072;
 }
 
 /* ── Footer: the Learnigo team's door, small, and the small print ───── */
@@ -337,7 +467,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
+  gap: 2px;
   min-width: 0;
 }
 
@@ -345,19 +475,20 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 44px;
-  padding: 4px 16px 4px 6px;
+  min-height: 48px;
+  padding-block: 4px;
+  padding-inline: 8px 16px;
   border: 2px solid rgba(255, 255, 255, 0.95);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
+  background: rgba(255, 255, 255, 0.85);
   box-shadow: 0 2px 0 rgba(103, 65, 217, 0.35);
   font: inherit;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.2;
   color: #4b2d9a;
   cursor: pointer;
-  transition: transform 0.18s ease, opacity 0.3s ease, box-shadow 0.18s ease;
+  transition: transform 0.18s ease, opacity 0.3s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -367,41 +498,70 @@
   height: 30px;
 }
 
+.teamEmblem svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 .teamSub {
   font-weight: 500;
-  color: #55607a;
+  color: #4a5570;
 }
 
 .copyright {
   margin: 0;
-  padding: 0 10px;
+  padding: 0 12px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.6);
-  font-size: 0.72rem;
-  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.72);
+  font-size: 0.875rem;
+  line-height: 1.35;
   color: #1f3a5e;
   text-align: center;
 }
+
 .copyrightLink {
-  display: inline-block;
-  padding: 6px 2px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 2px;
   color: inherit;
   text-decoration: underline;
-  text-decoration-color: rgba(31, 58, 94, 0.35);
+  text-decoration-color: rgba(31, 58, 94, 0.45);
   text-underline-offset: 3px;
 }
-.copyrightLink:hover { text-decoration-color: currentColor; }
-.copyrightLink:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; border-radius: 8px; }
+
+.copyrightLink:hover {
+  text-decoration-color: currentColor;
+}
+
+.copyrightLink:focus-visible {
+  outline: 3px solid #0b4ea2;
+  outline-offset: 2px;
+  border-radius: 8px;
+}
+
+/* ── Taller phones: a bit more picture ───────────────────────────────── */
+
+@media (min-height: 800px) and (max-width: 699px) {
+  .frame {
+    aspect-ratio: 4 / 3;
+  }
+}
 
 /* ── Wider tablets in portrait ───────────────────────────────────────── */
 
 @media (min-width: 700px) {
   .stage {
-    max-width: 660px;
+    max-width: min(640px, 62vh);
   }
   .card {
-    --em: clamp(80px, 11vh, 140px);
+    padding: 6px;
     border-radius: 28px;
+  }
+  .media,
+  .frame {
+    border-radius: 22px;
   }
 }
 
@@ -409,32 +569,43 @@
 
 @media (min-width: 900px) and (min-height: 560px) and (min-aspect-ratio: 1/1) {
   .stage {
-    max-width: 1120px;
-    row-gap: clamp(10px, 2vh, 26px);
+    max-width: min(1200px, 150vh);
+    row-gap: clamp(10px, 1.8vh, 26px);
   }
   .word {
-    height: clamp(68px, 11.5vh, 140px);
+    height: clamp(60px, 10vh, 140px);
   }
   .greet {
-    --pup: clamp(76px, 12.5vh, 150px);
+    --pup: clamp(72px, 11.5vh, 150px);
   }
   .cards {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: clamp(14px, 1.8vw, 26px);
+    gap: clamp(14px, 1.8vw, 28px);
   }
-  .card {
-    --em: clamp(84px, 16vh, 160px);
-    padding: clamp(14px, 2.2vh, 26px) 14px clamp(14px, 2.2vh, 24px);
+  .frame {
+    aspect-ratio: 5 / 4;
+  }
+  .text {
+    padding: 8px 8px 8px;
   }
   .name {
-    font-size: clamp(1.1rem, 2.8vh, 1.7rem);
+    font-size: clamp(1.15rem, 2.7vh, 1.75rem);
   }
   .desc {
-    font-size: clamp(0.85rem, 1.9vh, 1.08rem);
+    font-size: clamp(0.9rem, 1.8vh, 1.1rem);
   }
   .foot {
     flex-direction: row;
     gap: 14px;
+  }
+}
+
+@media (min-width: 900px) and (min-height: 860px) and (min-aspect-ratio: 1/1) {
+  .stage {
+    max-width: min(1320px, 128vh);
+  }
+  .frame {
+    aspect-ratio: 1 / 1;
   }
 }
 
@@ -458,7 +629,7 @@
     align-items: center;
   }
   .word {
-    height: clamp(42px, 16vh, 84px);
+    height: clamp(42px, 15vh, 84px);
     max-width: 100%;
     align-self: end;
   }
@@ -467,73 +638,85 @@
     align-self: start;
   }
   .title {
-    font-size: clamp(0.98rem, 4.6vh, 1.3rem);
+    font-size: clamp(1rem, 4.6vh, 1.3rem);
   }
   .subtitle {
-    font-size: clamp(0.78rem, 3.4vh, 0.95rem);
+    font-size: 0.875rem;
   }
   .cards {
     gap: 8px;
     align-self: center;
   }
   .card {
-    --em: clamp(40px, 12.5vh, 66px);
     flex-direction: row;
     align-items: center;
     gap: 8px;
-    padding: 7px 30px 7px 7px;
+    padding-block: 4px;
+    padding-inline: 4px 34px;
     border-radius: 20px;
-    text-align: left;
+    text-align: start;
+  }
+  .media,
+  .frame {
+    border-radius: 15px;
+  }
+  .media {
+    flex: none;
+    width: clamp(48px, 17vh, 76px);
+  }
+  .frame {
+    aspect-ratio: 1 / 1;
+  }
+  .chip,
+  .sheen {
+    display: none;
   }
   .text {
     align-items: flex-start;
+    padding: 0;
   }
   .name {
-    margin-top: 0;
-    font-size: clamp(0.95rem, 4.4vh, 1.2rem);
-  }
-  .sub {
-    margin-top: 1px;
-    font-size: 0.7rem;
+    font-size: clamp(1rem, 4.4vh, 1.2rem);
   }
   .desc {
     margin-top: 1px;
-    font-size: clamp(0.72rem, 3.3vh, 0.86rem);
+    font-size: 0.875rem;
     line-height: 1.25;
   }
   .go {
     top: 50%;
-    right: 6px;
-    width: 20px;
-    height: 20px;
-    margin-top: -10px;
+    inset-inline-end: 6px;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
     padding: 3px;
+    border-width: 0;
   }
   .tutor {
-    min-height: 44px;
-    padding: 4px 40px 4px 6px;
+    min-height: 48px;
+    padding-block: 4px;
+    padding-inline: 4px 40px;
     border-radius: 16px;
   }
   .tutor .go {
-    margin-top: -10px;
-    right: 10px;
+    margin-top: -12px;
+    inset-inline-end: 10px;
   }
-  .tutorEmblem {
-    width: clamp(32px, 10vh, 46px);
-    height: clamp(32px, 10vh, 46px);
+  .tutorFrame {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
   }
   .tutorText strong {
-    font-size: 0.92rem;
+    font-size: 0.95rem;
   }
   .tutorText span {
-    font-size: 0.78rem;
+    font-size: 0.875rem;
   }
   .foot {
     align-self: center;
   }
   .team {
-    min-height: 44px;
-    font-size: 0.8rem;
     white-space: nowrap;
   }
   .teamSub {
@@ -544,20 +727,40 @@
     height: 26px;
   }
   .copyright {
-    font-size: 0.62rem;
-    line-height: 1.35;
-    padding: 1px 10px;
-    border-radius: 10px;
+    line-height: 1.3;
+    border-radius: 12px;
   }
 }
 
+/* Less movement: no lean, no drift, no glint. */
 @media (prefers-reduced-motion: reduce) {
-  .stage,
   .card,
-  .emblem,
+  .card::after,
+  .pic,
+  .sheen,
   .go,
   .tutor,
   .team {
     transition: none;
   }
+  .pic {
+    transform: scale(1.1);
+  }
+  .sweep {
+    display: none;
+  }
+}
+
+.still .card {
+  transform: none;
+  transition: none;
+}
+
+.still .pic {
+  transform: scale(1.1);
+  transition: none;
+}
+
+.still .card:active {
+  transform: translateY(2px);
 }

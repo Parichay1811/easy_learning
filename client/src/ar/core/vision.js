@@ -33,6 +33,7 @@
  */
 import { FilesetResolver, HandLandmarker, PoseLandmarker } from '@mediapipe/tasks-vision'
 import { resolveVisionAssets } from './assets'
+import { keepFiles, keptBytes, keptUrl } from './visionCache'
 import { getSettings, onSettingsChange } from './settings'
 
 const GPU_FAILED_KEY = 'ar_vision_gpu_failed_v1'
@@ -228,16 +229,19 @@ class MainThreadTask {
   async build(first) {
     const plan = await modelPlan()
     const fileset = await FilesetResolver.forVisionTasks(plan.wasmPath)
+    const keptWasm = await keptUrl(absolute(fileset.wasmBinaryPath), 'application/wasm')
+    if (keptWasm) fileset.wasmBinaryPath = keptWasm
+    const modelUrl = this.kind === 'hand' ? plan.hand[this.extra.variant || 'full'] : plan.pose
+    const bytes = modelUrl ? await keptBytes(absolute(modelUrl)) : null
     const order = first === 'GPU' ? ['GPU', 'CPU'] : ['CPU']
     let lastErr = null
     let gpuErr = null
     for (const delegate of order) {
       let task = null
       try {
-        task = await FACTORY[this.kind].createFromOptions(
-          fileset,
-          optionsFor(this.kind, delegate, plan, this.extra)
-        )
+        const options = optionsFor(this.kind, delegate, plan, this.extra)
+        if (bytes) options.baseOptions = { modelAssetBuffer: bytes.slice(), delegate }
+        task = await FACTORY[this.kind].createFromOptions(fileset, options)
         task.detectForVideo(warmupImage(), this._nextTs())
         this.task = task
         this.delegate = delegate
@@ -678,11 +682,51 @@ onSettingsChange((s) => {
  */
 export function prewarmVision(kinds = ['hand']) {
   const wanted = isConstrainedDevice() ? kinds.filter((k) => k === 'hand') : kinds
-  // Warm the hand model a hands-only game would use; a body game swaps it.
-  return getVisionEngine()
-    .ensure({ hand: wanted.includes('hand'), pose: false, prewarm: true })
+  // Keep the files first (Cache Storage: this visit and later ones load from there;
+  // already done if Games was opened), then warm the hand model a hands-only game
+  // would use; a body game swaps it.
+  return prefetchVisionFiles()
+    .catch(() => null)
+    .then(() => getVisionEngine().ensure({ hand: wanted.includes('hand'), pose: false, prewarm: true }))
     .then(() => (wanted.includes('pose') ? getVisionEngine().ensure({ pose: true, prewarm: true }) : null))
     .catch(() => null)
+}
+
+/**
+ * Downloads, and only downloads, the files a camera game will need: the runtime
+ * (the worker build when workers work, else the main-thread one), the hand model
+ * this device would use and, off phones, the pose model. They are kept in Cache
+ * Storage (visionCache.js) at low priority, so opening Games starts the download
+ * and the first camera game, this visit or a later one, finds them there. Nothing is compiled or started: no worker, no
+ * GPU, no camera. Skipped under Save-Data and on 2G. Safe to call repeatedly.
+ */
+let prefetching = null
+export function prefetchVisionFiles() {
+  if (prefetching) return prefetching
+  const c = typeof navigator !== 'undefined' ? navigator.connection : null
+  if (c?.saveData || /(^|-)2g$/.test(c?.effectiveType || '')) return Promise.resolve(false)
+  prefetching = (async () => {
+    const plan = await modelPlan()
+    const runtime = workerSupported() ? 'vision_wasm_module_internal' : 'vision_wasm_internal'
+    const urls = [plan.hand[handVariantFor()], `${plan.wasmPath}/${runtime}.js`, `${plan.wasmPath}/${runtime}.wasm`]
+    // Body games: the pose model too, where the hub would warm it (not on phones).
+    if (!isConstrainedDevice() && plan.pose) urls.push(plan.pose)
+    // Cache Storage (shared with the tracker's worker, kept across visits); the HTTP
+    // cache alone did not reliably serve the worker a second time.
+    if (await keepFiles(urls.map(absolute))) return true
+    const got = await Promise.all(
+      urls.map((u) =>
+        fetch(absolute(u), { priority: 'low' })
+          .then((r) => (r.ok ? r.arrayBuffer().then(() => true) : false))
+          .catch(() => false)
+      )
+    )
+    return got.every(Boolean)
+  })().catch(() => {
+    prefetching = null
+    return false
+  })
+  return prefetching
 }
 
 export async function visionAssetInfo() {

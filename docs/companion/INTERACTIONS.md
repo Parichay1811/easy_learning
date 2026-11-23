@@ -15,6 +15,10 @@ The rule is that a reaction has to be earned. Motion has a reason, reactions are
 | point | 4 s | looks right and lifts a paw: "over there" |
 | comfort | 3 s | soft eyes, a slow nod, a warm smile |
 | sleepy | 5 s | a slow yawn, eyes close, wakes and smiles |
+| standUp | 1 s | gets up from sitting and turns to the right (the sit-down played backwards) |
+| walk | 1.8 s, loops | a happy trot in place, facing right; the page moves the dog, mirrored when it goes left |
+| sitDown | 1.8 s | stops, turns to face the learner and sits (ends on the resting pose) |
+| play | 5 s | looks up at a butterfly, follows it with its eyes, lifts a paw to it, wiggles, settles |
 
 Body motion runs on top of whatever clip is playing:
 - hop, small or big, with anticipation, stretch and landing squash;
@@ -42,7 +46,10 @@ Priority, highest first: speak 7, celebrate 6, support 5, greet 4, guide 3, atte
 | Nobody around for 75 s | brain | one **sleepy** yawn, then still | once until there is activity again |
 | Scrolling, typing, wheel, touch-move | stage | nothing (stays calm) | blocks ambient moves for 6 s and looks for 1.5 s |
 | A "door of light" transition opens (choosing a role on the entry page) | `Entry/door.js` → `signal("door")` | lifted above the light with a small hop, stays visible, lands in the next page's place | layer back to normal when it lands (or after 3 s) |
-| The page with the dog goes away | spot removed | stays where it is on screen for up to 0.9 s; hops to the next page's place, or hops away if there is none | — |
+| The page with the dog goes away | spot removed | stays where it is on screen for up to 0.9 s, then **walks** to the next page's place: stands up, trots over facing the way it goes (cadence follows the distance; small bounds on a long, quick trip), turns and sits. With no place on the next page it trots off the nearer side | the walk clips must be downloaded (until then it hops); while the voice speaks it hops instead, so it is there to talk; a sit after a walk is quicker if the voice started meanwhile |
+| The dog's place appears while it was off screen | stage | trots in from the nearer side of the window and sits | walk clips downloaded; otherwise it bounds up from below |
+| A move within the same page (into a lesson's answer sheet) | stage | a quick **hop** along an arc, never a walk | a reaction must not take three seconds |
+| A butterfly heads for the dog | `butterflies.js` → `butterflyVisit` | if the dog is free: the butterfly flies to where the film's butterfly enters the picture, the dog performs **play**, and the butterfly flies the film's own path in time with it (the dog's eyes follow a real butterfly), then flutters off. If not, the butterfly rests somewhere else | at most every 90 s; only when calm (no reading or scrolling in the last 6 s), never while the voice speaks, never over a celebration, support or guide; a pointer coming close scares the butterfly off |
 | A dialog opens with a place in it | spot in `[role=dialog]` | hops into the dialog | dialogs win over the page |
 | The dog's place scrolls mostly out of view | stage | hops to the best visible place, or stays if none | keeps its place while 30% or more is visible |
 | Tab hidden, or the dog's place off screen | stage | video paused (no decoding) | — |
