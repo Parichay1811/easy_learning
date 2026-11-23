@@ -4,12 +4,15 @@ import { motion as Motion } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import {
   FaStar, FaRegStar, FaGlobeEurope, FaMap, FaCamera, FaArrowRight, FaChartLine, FaClock, FaGamepad,
-  FaThumbsUp, FaHandsHelping, FaInfoCircle, FaSeedling,
+  FaThumbsUp, FaHandsHelping, FaInfoCircle, FaSeedling, FaFlag, FaHeart, FaHourglassHalf,
 } from 'react-icons/fa'
 import Mascot from '../../components/Mascot/Mascot'
 import ProgressMap from '../ProgressMap'
 import { SUBJECT_ICON_IMAGES } from '../../data/subjectIcons'
 import { gameStrengthsAndGrowth, suggestNextGames } from '../../ar/core/recommend'
+import { useFindings } from '../../ar/insights/useFindings'
+import { findingSentence, nextSentence } from '../../ar/insights/text.js'
+import { KIND_ICON } from '../../ar/insights/icons.js'
 import { usePane } from '../../components/dashboard/usePane'
 import TabBar from './TabBar'
 import LearningView from './LearningView'
@@ -97,6 +100,58 @@ function GameRow({ g }) {
   )
 }
 
+// The learner's own findings (ar/insights/findings.js, the same engine as the
+// full report): up to three things that got better, the next challenge, and
+// their effort. Good news and one challenge, in the learner's words.
+function CameraFindings({ result, names, readOnly }) {
+  const { t } = useTranslation()
+  const ctx = { t, ...names }
+  const L = result.learner
+  const wins = L.wins.slice(0, 3)
+  const challenge = L.challenge
+  const effort = L.effort
+  return (
+    <div className={p.findings}>
+      {L.notEnough && (
+        <p className={p.findLine}><FaHourglassHalf aria-hidden="true" className={p.findIcon} /> <span>{findingSentence(L.notEnough, 'child', ctx)}</span></p>
+      )}
+      {wins.length > 0 && (
+        <div>
+          <h4 className={p.good}><FaThumbsUp aria-hidden="true" /> {t('studentDash.camera.gotBetter', 'I got better at')}</h4>
+          <ul className={p.winList}>
+            {wins.map((f) => {
+              const Icon = KIND_ICON[f.kind] || FaStar
+              return (
+                <li key={f.id} className={p.findLine}>
+                  <Icon aria-hidden="true" className={p.findIcon} />
+                  <span>{findingSentence(f, 'child', ctx)}</span>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+      {challenge && (
+        <div>
+          <h4 className={p.next}><FaFlag aria-hidden="true" /> {t('studentDash.camera.challenge', 'My next challenge')}</h4>
+          {readOnly ? (
+            <p className={p.findLine}>{nextSentence(challenge, 'child', ctx)}</p>
+          ) : (
+            <div className={p.chips}>
+              <Link to={`/games/ar/${challenge.gameId}`} className={p.chip}>
+                <FaGamepad aria-hidden="true" /> {nextSentence(challenge, 'child', ctx)}
+              </Link>
+            </div>
+          )}
+        </div>
+      )}
+      {effort && (
+        <p className={p.findLine}><FaHeart aria-hidden="true" className={p.findIcon} /> <span>{findingSentence(effort, 'child', ctx)}</span></p>
+      )}
+    </div>
+  )
+}
+
 function CameraGames({ arInsights }) {
   const { t } = useTranslation()
   const readOnly = useContext(ReadOnlyContext)
@@ -104,6 +159,8 @@ function CameraGames({ arInsights }) {
   const hasData = Boolean(overall?.trials)
   const { strengths, growth } = useMemo(() => gameStrengthsAndGrowth(arInsights), [arInsights])
   const suggestions = useMemo(() => suggestNextGames(arInsights, 4), [arInsights])
+  // Older servers do not send `findings`; the card then keeps its old lists.
+  const { result, names } = useFindings(arInsights?.findings)
 
   if (!hasData) {
     return (
@@ -120,7 +177,9 @@ function CameraGames({ arInsights }) {
     <div className={`${c.card} ${p.camera}`}>
       <div className={p.cameraHead}>
         <h3 className={c.cardTitle}><FaCamera aria-hidden="true" /> {t('studentDash.camera.title', 'Camera Games Report')}</h3>
-        <Link to="/games/ar/insights" className={p.more}>{t('studentDash.camera.full', 'Full report')} <FaArrowRight aria-hidden="true" /></Link>
+        {readOnly
+          ? null
+          : <Link to="/games/ar/insights?for=me" className={p.more}>{t('studentDash.camera.fullMine', 'My full report')} <FaArrowRight aria-hidden="true" /></Link>}
       </div>
       <div className={`${c.scroll} ${p.cameraBody}`}>
         <div className={p.cameraStats}>
@@ -128,31 +187,39 @@ function CameraGames({ arInsights }) {
           <div><FaClock aria-hidden="true" /><b>{fmtMs(overall.medianLatencyMs)}</b><span>{t('studentDash.camera.thinking', 'Thinking time')}</span><small>{t('studentDash.camera.median', 'Median, per turn')}</small></div>
           <div><FaGamepad aria-hidden="true" /><b>{arInsights.perGame?.length ?? 0}</b><span>{t('studentDash.camera.played', 'Games played')}</span><small>{t('studentDash.camera.minutes', '{{n}} min', { n: overall.minutesPlayed })}</small></div>
         </div>
-        <div className={p.cameraLists}>
-          <div>
-            <h4 className={p.good}><FaThumbsUp aria-hidden="true" /> {t('studentDash.camera.well', 'Doing well')}</h4>
-            {strengths.length ? <ul>{strengths.map((g) => <GameRow key={g.gameId} g={g} />)}</ul> : <p className={c.muted}>{t('studentDash.camera.more', 'Play a task a few more times to see this.')}</p>}
-          </div>
-          <div>
-            <h4 className={p.grow}><FaHandsHelping aria-hidden="true" /> {t('studentDash.camera.practice', 'Needs more practice')}</h4>
-            {growth.length ? <ul>{growth.map((g) => <GameRow key={g.gameId} g={g} />)}</ul> : <p className={c.muted}>{t('studentDash.camera.more', 'Play a task a few more times to see this.')}</p>}
-          </div>
-        </div>
-        {suggestions.length > 0 && (
-          <div>
-            <h4 className={p.next}>{t('studentDash.camera.next', 'Try next')}</h4>
-            <div className={p.chips}>
-              {suggestions.map((sg) => (
-                <Link key={sg.gameId} to={`/games/ar/${sg.gameId}`} title={sg.reason} className={p.chip}>
-                  {sg.icon && <sg.icon aria-hidden="true" />} {sg.title}
-                </Link>
-              ))}
+        {result ? (
+          <CameraFindings result={result} names={names} readOnly={readOnly} />
+        ) : (
+          <>
+            <div className={p.cameraLists}>
+              <div>
+                <h4 className={p.good}><FaThumbsUp aria-hidden="true" /> {t('studentDash.camera.well', 'Doing well')}</h4>
+                {strengths.length ? <ul>{strengths.map((g) => <GameRow key={g.gameId} g={g} />)}</ul> : <p className={c.muted}>{t('studentDash.camera.more', 'Play a task a few more times to see this.')}</p>}
+              </div>
+              <div>
+                <h4 className={p.grow}><FaHandsHelping aria-hidden="true" /> {t('studentDash.camera.practice', 'Needs more practice')}</h4>
+                {growth.length ? <ul>{growth.map((g) => <GameRow key={g.gameId} g={g} />)}</ul> : <p className={c.muted}>{t('studentDash.camera.more', 'Play a task a few more times to see this.')}</p>}
+              </div>
             </div>
-          </div>
+            {suggestions.length > 0 && (
+              <div>
+                <h4 className={p.next}>{t('studentDash.camera.next', 'Try next')}</h4>
+                <div className={p.chips}>
+                  {suggestions.map((sg) => (
+                    <Link key={sg.gameId} to={`/games/ar/${sg.gameId}`} title={sg.reason} className={p.chip}>
+                      {sg.icon && <sg.icon aria-hidden="true" />} {sg.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
         )}
         <p className={p.note}>
           <FaInfoCircle aria-hidden="true" />
-          {t('studentDash.camera.note', 'Descriptions of in-game behaviour over the last 30 days, not a diagnosis. "Needs more practice" is where the next session is worth spending, kept separate from how fast a turn was taken.')}
+          {result
+            ? t('studentDash.camera.noteFindings', 'About your play in the last {{days}} days, compared with the {{days}} days before. It shows how your practice is going, not a test score.', { days: result.period.days })
+            : t('studentDash.camera.note', 'Descriptions of in-game behaviour over the last 30 days, not a diagnosis. "Needs more practice" is where the next session is worth spending, kept separate from how fast a turn was taken.')}
         </p>
       </div>
     </div>

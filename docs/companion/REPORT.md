@@ -27,6 +27,7 @@ All of these ran in muted headless Chrome against the local demo stack. The scri
 | Unit tests: brain (10) and geometry (5), plus all other client tests | 62/62 pass |
 | `eslint .` (client), `vite build` | clean, built |
 | AI Teacher at 360x740: no dog over the card (the old video's painted dog is gone) | pass |
+| **No gap between clips** (fixed after launch): reactions fired on a slow connection (each clip request held 1.5 s, cache off, no preloading) | before: the dog vanished (only its shadow left) until the next clip arrived; after: 0 blank frames in 12 switches (waits up to 1.5 s), the previous clip holds until the new one has its own first frame, then a cross-fade |
 
 The responsive pass (Camera Games grid, banner, orb lane, 44 px targets) was measured separately at 8 to 11 sizes from 320 to 2560 px. On the Camera Games hub that found 0 clipped tiles, no horizontal overflow, and 0 covered or orb-covered controls. Details are in the PR description.
 
@@ -54,6 +55,10 @@ Question round at 1440x900, measured over 8 s after load, in the dev build (Reac
 - **Pausing.** Decoding stops when the tab is hidden or the dog's place is off screen.
 
 Not measured: real devices (iOS Safari, Android Chrome on mid-range hardware). Headless Chrome on a laptop GPU is not a phone.
+
+## Clip hand-over (why there is never a blank)
+
+`AlphaVideo.play()` never drops the clip on screen. The new clip's first decoded frame starts the hand-over: a 90 ms blend at a clip boundary (both show the resting pose) or a 180 ms one when a reaction interrupts. If several reactions arrive before a clip has drawn, the last clip that was actually seen stays. After the first frame, all likely clips are fetched quietly (2.2 MB), so most reactions start at once. `player.stats` (`draws`, `blank`, `switches`, `waitMsMax`) is visible in debug mode (`localStorage.learnigo_companion_debug = "1"`, `window.__companion`).
 
 ## Known limits and next steps
 

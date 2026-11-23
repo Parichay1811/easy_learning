@@ -2,7 +2,7 @@
 // the numbers, plus the teacher's private notes and the parent link status.
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling, FaChartLine } from "react-icons/fa";
+import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling, FaChartLine, FaCamera } from "react-icons/fa";
 import {
   TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel, PanelHead, Sheet, usePane,
   SubjectModuleMatrix, CalendarHeatmap, Timeline, toTable, fmtDuration, fmtPercent, fmtDate, moduleLabel, subjectLabel,
@@ -12,6 +12,9 @@ import { ParentStatus } from "./ParentsPanel";
 import TeacherPlan from "./TeacherPlan";
 import { EvidencePanel } from "../../components/learning/evidence";
 import { groupStyle, rangeQuery, matrixCells } from "./teacherShared";
+import AdultFindings from "../../ar/insights/AdultFindings";
+import { useFindings } from "../../ar/insights/useFindings";
+import { periodLine } from "../../ar/insights/format.js";
 import s from "./teacher.module.css";
 
 const KIND = { session: "session", round: "game", test: "test", answer: "session" };
@@ -23,6 +26,51 @@ function Growth({ id, name }) {
   const path = `/students/${encodeURIComponent(id)}/learning`;
   const q = useLoad(() => get(path), [path]);
   return <EvidencePanel key={id} evidence={q.data?.evidence} name={name} audience="teacher" loading={q.loading} error={q.error} onRetry={q.reload} />;
+}
+
+// Camera games (AR): the findings for this student, this period vs the one before, with an
+// in-class activity for each. Served by the profile route (same "is this student in my
+// groups" check); `?arDays=` picks the period, 28 days arrive with the profile itself.
+const CAMERA_PERIODS = [14, 28, 90];
+function CameraGames({ id, name, initial }) {
+  const { t, i18n } = useTranslation();
+  const { get } = useTeacherApi();
+  const [days, setDays] = useState(28);
+  const idle = () => Promise.resolve({ ok: true });
+  const q = useLoad(() => (days === 28 ? idle() : get(`/students/${id}/profile?arDays=${days}`)), [id, days]);
+  const input = days === 28 ? initial : q.data?.cameraGames;
+  const { result, names } = useFindings(input);
+  const played = (result?.totals.current.played || 0) + (result?.totals.previous.played || 0);
+  return (
+    <section className={s.card} aria-labelledby="stu-cam-h">
+      <PanelHead
+        title={<span id="stu-cam-h"><FaCamera aria-hidden="true" /> {t("teacher.stu.camera.title", { defaultValue: "Camera games" })}</span>}
+        text={result ? periodLine(result, t, i18n.language) : ""}
+        actions={(
+          <label className={s.small} style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            {t("teacher.stu.camera.period", { defaultValue: "Period" })}
+            <select value={days} onChange={(e) => setDays(Number(e.target.value))} style={{ minHeight: 40, borderRadius: 10, padding: "0 8px", font: "inherit" }}>
+              {CAMERA_PERIODS.map((d) => <option key={d} value={d}>{t("ar.insights.glance.lastDays", { defaultValue: "Last {{n}} days", n: d })}</option>)}
+            </select>
+          </label>
+        )} />
+      <div style={{ marginTop: 12 }}>
+        {days !== 28 && q.loading ? <Skeleton variant="text" lines={3} />
+          : q.error ? <EmptyState tone="error" title={t("teacher.loadError", { defaultValue: "We couldn't load this page" })} text={q.error} actionLabel={t("teacher.retry", { defaultValue: "Try again" })} onAction={q.reload} />
+          : !result || !played ? (
+            <EmptyState title={t("teacher.stu.camera.none", { defaultValue: "No camera games yet" })}
+              text={t("teacher.stu.camera.noneText", { defaultValue: "When {{name}} plays the camera games, what is going well, what is getting better and what is worth practising in class shows up here.", name })} />
+          ) : (
+            <>
+              <AdultFindings result={result} names={names} where="class" />
+              <p className={s.small} style={{ marginBottom: 0 }}>
+                {t("teacher.stu.camera.how", { defaultValue: "Only {{name}}'s own play is compared, with the period before. Understanding and movement are kept apart, a change only counts when it is bigger than the normal ups and downs, and these describe play in the games, not a diagnosis.", name })}
+              </p>
+            </>
+          )}
+      </div>
+    </section>
+  );
 }
 
 function Notes({ studentId, initial, onChanged }) {
@@ -161,7 +209,7 @@ export default function StudentView({ id, go }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const q = useLoad(() => get(`/students/${id}/profile`), [id]);
-  const [pane, setPane] = usePane(["overview", "growth", "subjects", "activity", "plan", "notes"]);
+  const [pane, setPane] = usePane(["overview", "growth", "subjects", "activity", "camera", "plan", "notes"]);
   if (q.loading && !q.data) return <><Skeleton variant="text" lines={2} /><Skeleton variant="chart" /></>;
   if (q.error) return <EmptyState tone="error" title={t("teacher.stu.notFound", { defaultValue: "Student not found" })} text={q.error} actionLabel={t("teacher.groups.back", { defaultValue: "Back to my groups" })} onAction={() => go("groups")} />;
   const d = q.data;
@@ -173,6 +221,7 @@ export default function StudentView({ id, go }) {
     ...(st.email ? [{ id: "growth", label: t("evidence.tab", "Growth"), icon: FaChartLine }] : []),
     { id: "subjects", label: t("teacher.stu.tabSubjects", { defaultValue: "Subjects" }), icon: FaThLarge },
     { id: "activity", label: t("teacher.stu.tabActivity", { defaultValue: "Activity" }), icon: FaCalendarAlt },
+    ...(st.email ? [{ id: "camera", label: t("teacher.stu.tabCamera", { defaultValue: "Camera games" }), short: t("teacher.stu.tabCameraShort", { defaultValue: "Camera" }), icon: FaCamera }] : []),
     ...(st.email ? [{ id: "plan", label: t("teacher.stu.tabPlan", { defaultValue: "Learning plan" }), short: t("teacher.stu.tabPlanShort", { defaultValue: "Plan" }), icon: FaSeedling }] : []),
     { id: "notes", label: t("teacher.stu.tabNotes", { defaultValue: "My notes" }), icon: FaStickyNote, badge: d.notes.length || undefined },
   ] : [
@@ -201,6 +250,7 @@ export default function StudentView({ id, go }) {
         {current === "notes" ? <Notes studentId={id} initial={d.notes} onChanged={q.reload} />
           : current === "plan" ? <TeacherPlan student={id} name={firstName} />
           : current === "growth" ? <Growth id={id} name={firstName} />
+          : current === "camera" ? <CameraGames id={id} name={firstName} initial={d.cameraGames} />
           : d.hasAnalytics ? <Analytics id={id} name={firstName} part={current} />
             : <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} actionLabel={t("teacher.stu.writeNote", { defaultValue: "Write a private note" })} onAction={() => setPane("notes")} />}
       </SubPanel>

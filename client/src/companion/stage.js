@@ -37,6 +37,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   let again = false;
   let parkedTimer = 0;
   let guideTimer = 0;
+  let doorTimer = 0;
   let io = null;
   let visible = true;
   const brain = createBrain();
@@ -90,6 +91,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     hostId = spot.id;
     floating = null;
     spot.el.dataset.companionHost = "true";
+    layer.style.zIndex = ""; // back under dialogs once it has landed (it was above a door)
     // Fallback places (the answer sheet on a phone) fold away while the dog is in a main place.
     document.documentElement.dataset.companionMain = spot.fallback ? "false" : "true";
     observe(spot.el);
@@ -250,6 +252,16 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   // --- signals from the app, the voice, and the learner ---
   offs.push(companion.on((evt) => {
     // "Look at this element" (a new question, new content): the stage knows where both are.
+    if (evt.type === "door") {
+      // A full-screen transition (the entry "door of light") is about to cover the page:
+      // lift the dog above it so it never blinks out, with a little hop into the light.
+      if (hostId) lift();
+      layer.style.zIndex = "9001";
+      clearTimeout(doorTimer);
+      doorTimer = setTimeout(() => { layer.style.zIndex = ""; }, 3000);
+      if (dog.isConnected) motion.hop(body, shadow, "small");
+      return;
+    }
     if (evt.type === "lookAt") { log("lookAt", hostId ? "hosted" : "not hosted"); if (evt.el && hostId) look(evt.el, "attend"); return; }
     const i = brain.dispatch(evt);
     log("signal", evt.type, evt.size || "", i ? "interrupt" : "waits");
@@ -371,7 +383,12 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
             setLive(true);
             state({ live: true });
             // Likely next performances, fetched quietly once the first one shows.
-            const later = () => player?.preload(["hello", "talk", "cheer"]);
+            // Then the rest, so a reaction never waits for a download (2.2 MB in all).
+            const later = () => {
+              if (debug && localStorage.getItem("learnigo_companion_nopreload") === "1") return; // tests: cold switches
+              player?.preload(["hello", "talk", "cheer", "comfort"]);
+              setTimeout(() => player?.preload(["lookRight", "lookLeft", "tilt", "point"]), 6000);
+            };
             if ("requestIdleCallback" in window) requestIdleCallback(later, { timeout: 4000 });
             else setTimeout(later, 1500);
           },
@@ -381,6 +398,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
         return stop();
       }
       sizeCanvas(160);
+      if (debug) window.__companion = { player, brain, signal: (t, d) => companion.signal(t, d) };
       beat(false);
       reconcile();
     })
@@ -391,6 +409,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     stopped = true;
     clearTimeout(parkedTimer);
     clearTimeout(guideTimer);
+    clearTimeout(doorTimer);
     clearTimeout(clipTimer);
     clearTimeout(scrollT);
     io?.disconnect();

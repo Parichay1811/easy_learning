@@ -9,6 +9,8 @@
 //   navigate(route);
 //   closeDoor();                              // light fades away
 
+import { companion } from "../../companion/bus";
+
 let current = null;
 let safety = 0;
 
@@ -36,6 +38,8 @@ export function openDoor({ x, y, color = "#339af0", soft = "#dbeefe" }) {
   });
   document.body.appendChild(el);
   current = el;
+  // The live companion goes through the door with the player (it stays above the light).
+  companion.signal("door");
   clearTimeout(safety);
   // Never leave the light up by mistake (a page that fails to load, a lost tab).
   safety = setTimeout(() => closeDoor(), 2600);

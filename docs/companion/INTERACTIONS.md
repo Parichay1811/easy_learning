@@ -41,6 +41,7 @@ Priority, highest first: speak 7, celebrate 6, support 5, greet 4, guide 3, atte
 | Quiet for a while (no scroll, typing or reading in the last 6 s) | brain | a **tilt** or a glance | at most every 14 s, half the time, never the same one twice running |
 | Nobody around for 75 s | brain | one **sleepy** yawn, then still | once until there is activity again |
 | Scrolling, typing, wheel, touch-move | stage | nothing (stays calm) | blocks ambient moves for 6 s and looks for 1.5 s |
+| A "door of light" transition opens (choosing a role on the entry page) | `Entry/door.js` → `signal("door")` | lifted above the light with a small hop, stays visible, lands in the next page's place | layer back to normal when it lands (or after 3 s) |
 | The page with the dog goes away | spot removed | stays where it is on screen for up to 0.9 s; hops to the next page's place, or hops away if there is none | — |
 | A dialog opens with a place in it | spot in `[role=dialog]` | hops into the dialog | dialogs win over the page |
 | The dog's place scrolls mostly out of view | stage | hops to the best visible place, or stays if none | keeps its place while 30% or more is visible |

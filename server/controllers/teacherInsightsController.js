@@ -12,6 +12,7 @@ const { MODULES, SUBJECTS } = require('../utils/metrics')
 const batchService = require('../services/batchService')
 const { HttpError, isId, idStr, context, myGroup, myGroups, handle, safeTz } = require('../services/teacherContext')
 const { parentStatusFor } = require('../services/teacherParents')
+const { findingsInput } = require('../services/arFindingRows')
 
 const lower = (s) => String(s || '').toLowerCase()
 const tzOf = (req) => safeTz(req.get('x-timezone') || req.query.tz)
@@ -255,12 +256,27 @@ async function myStudent(ctx, id) {
 
 const noteView = (n) => ({ _id: n._id, body: n.body, pinned: n.pinned, createdAt: n.createdAt, updatedAt: n.updatedAt })
 
-// GET /students/:id/profile
+// Camera games (AR) for the profile: this period's rounds and the equal period's before
+// them, for the shared findings engine (client/src/ar/insights/findings.js). `?arDays=`
+// picks the period (7..120, default 28). Only ever read AFTER myStudent() has said this
+// student is in one of my groups: the same check as every other part of the profile.
+const AR_DAYS = { min: 7, max: 120, def: 28 }
+function cameraGamesFor(student, req) {
+  if (!student.email) return null
+  const asked = parseInt(req.query.arDays)
+  const days = Number.isFinite(asked) ? Math.min(Math.max(asked, AR_DAYS.min), AR_DAYS.max) : AR_DAYS.def
+  return findingsInput(lower(student.email), { to: q.todayIn(tzOf(req)), days })
+}
+
+// GET /students/:id/profile[?arDays=28]
 const studentProfile = handle(async (req, res) => {
   const ctx = await context(req)
   const { student, groups } = await myStudent(ctx, req.params.id)
-  const [parents] = await parentStatusFor(ctx.orgId, [student])
-  const notes = await TeacherNote.find({ orgId: ctx.orgId, tutorId: ctx.tutorId, studentId: student._id }).sort({ pinned: -1, createdAt: -1 }).limit(100).lean()
+  const [[parents], notes, cameraGames] = await Promise.all([
+    parentStatusFor(ctx.orgId, [student]),
+    TeacherNote.find({ orgId: ctx.orgId, tutorId: ctx.tutorId, studentId: student._id }).sort({ pinned: -1, createdAt: -1 }).limit(100).lean(),
+    cameraGamesFor(student, req),
+  ])
   res.json({
     success: true,
     student: { id: String(student._id), name: student.name, email: student.email || '', grade: student.grade, age: student.age, status: student.status },
@@ -268,6 +284,7 @@ const studentProfile = handle(async (req, res) => {
     parents,
     notes: notes.map(noteView),
     hasAnalytics: !!student.email,
+    cameraGames,
   })
 })
 
