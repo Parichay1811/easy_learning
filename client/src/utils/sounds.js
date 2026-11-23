@@ -230,6 +230,56 @@ export const sfx = {
   enter: () => play((c) => { lastNav = performance.now(); whoosh(c, { dur: 0.5, from: 250, to: 3000, gain: 0.14, q: 0.9 }); [N.C5, N.E5, N.G5].forEach((f) => note(c, f, { at: 0.18, dur: 0.7, gain: 0.1, attack: 0.08 })); mallet(c, N.C6, { at: 0.32, gain: 0.22 }); }),
 };
 
+/**
+ * The puppy's own small sounds, kept very quiet (about a quarter of a button
+ * press) so they feel like a light touch that says "I'm here and watching",
+ * synced to what it does: footfalls with the trot, a "hup" as it stands, a soft
+ * thump as it sits, a boing and a landing for a hop, a tiny yip for hello.
+ * They follow the same settings as every other sound (the interface-sounds
+ * switch and the volume) and dip under the teacher's voice with everything else.
+ */
+const DOG = 0.05;
+const pat = (c, freq, gain = DOG) => { note(c, freq, { dur: 0.06, gain, type: "triangle", attack: 0.002, glide: freq * 0.6 }); note(c, freq * 2.4, { dur: 0.02, gain: gain * 0.25, attack: 0.001 }); };
+const thump = (c, gain = DOG * 1.5) => note(c, 190, { dur: 0.13, gain, type: "triangle", attack: 0.003, glide: 105 });
+const quiet = (fn) => play(fn, false);
+export const dogSfx = {
+  /** One footfall; `i` alternates the pitch so a trot sounds like two feet. */
+  step: (i = 0) => quiet((c) => pat(c, i % 2 ? 250 : 305, DOG * (0.8 + Math.random() * 0.4))),
+  /**
+   * Footfalls in time with the walk cycle (about four a second at normal speed;
+   * `rate` is the clip's playback rate). Returns the function that stops them.
+   */
+  stepper(rate = 1) {
+    let i = 0;
+    const every = Math.max(130, 250 / Math.max(0.5, rate));
+    dogSfx.step(i++);
+    const id = setInterval(() => dogSfx.step(i++), every);
+    return () => clearInterval(id);
+  },
+  /** Getting up: a small rising "hup". */
+  stand: () => quiet((c) => { note(c, 420, { dur: 0.1, gain: DOG * 0.9, glide: 640 }); whoosh(c, { dur: 0.16, from: 300, to: 900, gain: 0.025 }); }),
+  /** Sitting down: a soft settle. */
+  sit: () => quiet((c) => { thump(c); note(c, 330, { at: 0.07, dur: 0.1, gain: DOG * 0.5, glide: 250 }); }),
+  /** A hop takes off: a little boing (bigger for a big hop). */
+  hop: (size = "small") => quiet((c) => note(c, size === "big" ? 360 : 300, { dur: size === "big" ? 0.2 : 0.14, gain: DOG * 1.2, glide: size === "big" ? 700 : 520 })),
+  /** ...and lands. */
+  land: (size = "small") => quiet((c) => thump(c, DOG * (size === "big" ? 2 : 1.4))),
+  /** Hello: two tiny happy yips. */
+  yip: () => quiet((c) => { note(c, 640, { dur: 0.08, gain: DOG, glide: 900 }); note(c, 760, { at: 0.1, dur: 0.1, gain: DOG, glide: 1100 }); }),
+  /** A curious "hm?" as the head tilts. */
+  hm: () => quiet((c) => note(c, 520, { dur: 0.16, gain: DOG * 0.8, glide: 680 })),
+  /** A kind, low "mm" for comfort. */
+  soft: () => quiet((c) => { note(c, 392, { dur: 0.22, gain: DOG * 0.7, attack: 0.03 }); note(c, 440, { at: 0.16, dur: 0.26, gain: DOG * 0.6, attack: 0.03 }); }),
+  /** A paw tap (pointing, pawing at a butterfly). */
+  tap: () => quiet((c) => pat(c, 640, DOG * 0.9)),
+  /** A little sparkle for joy. */
+  sparkle: () => quiet((c) => [N.E6, N.G6, 2093].forEach((f, i) => note(c, f, { at: i * 0.06, dur: 0.2, gain: DOG * 0.7, pan: (i - 1) * 0.3 }))),
+  /** A sleepy yawn: a slow falling breath. */
+  yawn: () => quiet((c) => { note(c, 460, { dur: 0.9, gain: DOG * 0.7, attack: 0.18, glide: 230 }); whoosh(c, { dur: 0.8, from: 900, to: 300, gain: 0.02, q: 0.6 }); }),
+  /** A bounce in, or a hop out, of a place: a tiny pop. */
+  pop: () => quiet((c) => note(c, 700, { dur: 0.07, gain: DOG, glide: 330 })),
+};
+
 // Old names, kept so nothing breaks.
 export const playBtn = () => sfx.tap();
 export const playSlide = () => sfx.forward();

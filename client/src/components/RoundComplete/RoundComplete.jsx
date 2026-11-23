@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as FramerMotion from "framer-motion";
 import { useCalmMotion } from "../../utils/useCalmMotion";
 import { useTranslation } from "react-i18next";
@@ -9,6 +9,8 @@ import { sfx, haptic } from "../../utils/sounds";
 import { narrate } from "../../utils/narrator";
 import { getSpeechLang } from "../../utils/speechLang";
 import { warriorPassMark } from "../../utils/warrior";
+import { loadFeedback, pickSummary } from "../../utils/feedbackLines";
+import { useAuth } from "../../context/AuthContext";
 import styles from "./RoundComplete.module.css";
 
 const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
@@ -20,6 +22,7 @@ const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
 // `best` / `newBest` compare the round with the learner's own best (never with others).
 export default function RoundComplete({ module: mod, subject, mode, stars, total = 10, best = null, newBest = false, onPlayAgain, onBack, challenge = false }) {
   const { t, i18n } = useTranslation();
+  const { user } = useAuth() || {};
   const reduce = useCalmMotion();
   const isPractice = mode !== "warrior";
   const passMark = warriorPassMark(total);
@@ -34,14 +37,28 @@ export default function RoundComplete({ module: mod, subject, mode, stars, total
     sfx.levelUp();
     haptic("success");
   }, []);
-  // A few warm words in the teacher's voice, after the fanfare (praise for
-  // the effort, never a label).
+  // The teacher sums the round up in her own voice, after the fanfare: how it went
+  // (one of fifty lines for how well it went) and what to try next (one of fifty,
+  // matched to the score: something new, another go, or a gentle retry). The same
+  // words show on screen for anyone listening without sound. If the lines cannot
+  // be loaded, the short built-in sentence is said instead.
+  const [coach, setCoach] = useState(null);
   useEffect(() => {
-    const line = isPractice || passed
-      ? t("roundComplete.say", { defaultValue: "You finished the round! You got {{count}} stars. Keep it up!", count: stars })
-      : t("roundComplete.sayAlmost", { defaultValue: "Good effort, warrior! {{count}} stars this time. Shall we try again?", count: stars });
-    const id = setTimeout(() => narrate(line, { lang: getSpeechLang(i18n.language || "en") }), 900);
-    return () => clearTimeout(id);
+    let on = true;
+    let id = 0;
+    const correct = Math.min(stars, total);
+    const speak = (text, lang) => { id = setTimeout(() => { if (on) narrate(text, { lang }); }, 900); };
+    const lang = getSpeechLang(i18n.language || "en");
+    loadFeedback(i18n.language || "en").then(() => {
+      if (!on) return;
+      const s = pickSummary({ lang: i18n.language || "en", name: user?.name, correct, total });
+      if (s) { setCoach(s); speak([s.result, s.next], lang); return; }
+      const line = isPractice || passed
+        ? t("roundComplete.say", { defaultValue: "You finished the round! You got {{count}} stars. Keep it up!", count: stars })
+        : t("roundComplete.sayAlmost", { defaultValue: "Good effort, warrior! {{count}} stars this time. Shall we try again?", count: stars });
+      speak(line, lang);
+    });
+    return () => { on = false; clearTimeout(id); };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const subtitle = `${challenge ? t("journey.challenge.title", "Mini challenge") : t(`subjectPage.modules.${mod}.label`, { defaultValue: mod })} · ${t(`subjectPage.${subject}.label`, { defaultValue: subject })}`;
@@ -111,6 +128,19 @@ export default function RoundComplete({ module: mod, subject, mode, stars, total
             <p className={styles.score}>{stars} / {total}</p>
             {!isPractice && <p className={styles.passing}>{t("roundComplete.passingMark", { count: passMark })}</p>}
           </div>
+
+          {coach && (
+            <FramerMotion.motion.div
+              className={styles.coach}
+              data-coach={coach.tier}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <p className={styles.coachResult}>{coach.result}</p>
+              <p className={styles.coachNext}>{coach.next}</p>
+            </FramerMotion.motion.div>
+          )}
 
           {/* Beat your own best: only ever compared with the learner's own rounds. */}
           {!isPractice && (newBest || best) && (
