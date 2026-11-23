@@ -26,7 +26,7 @@ const googleSignIn = async (req, res) => {
     const token = jwt.sign(
       { id: parent._id, uid: parent.uid, email: parent.email, name: parent.name, role: 'parent' },
       process.env.PARENT_JWT_SECRET,
-      { expiresIn: process.env.PARENT_JWT_EXPIRES_IN || '7d' }
+      { expiresIn: process.env.PARENT_JWT_EXPIRES_IN || '30d' }
     )
 
     res.json({

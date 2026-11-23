@@ -24,7 +24,7 @@ async function managedLogin(req, res) {
     const token = jwt.sign(
       { id: String(learner._id), email: learner.email, name: learner.name, managed: true },
       process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' },
+      { expiresIn: process.env.JWT_EXPIRES_IN || '30d' },
     )
     req.actor = { role: 'student', id: String(learner._id), email: learner.email, name: learner.name }
     await audit(req, 'learner.managed_login', { targetType: 'learner', targetId: String(learner._id), orgId: learner.orgId || '' })
