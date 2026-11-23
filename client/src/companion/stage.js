@@ -16,6 +16,7 @@ import { companion, getSpots, getSpot, onSpots, setLive } from "./bus";
 import { fitFrame, pickSpot, gazeTowards, visibleShare } from "./geometry";
 import * as motion from "./motion";
 import { onNarration } from "../utils/narrator";
+import { dogSfx } from "../utils/sounds";
 import css from "./companion.module.css";
 
 const LOOK_SELECTOR = "[data-companion-look]";
@@ -24,6 +25,18 @@ const GUIDE_AFTER_MS = 10_000;
 const FLOAT_WAIT_MS = 900; // between pages: wait this long for the next page's spot
 const WALK = ["standUp", "walk", "sitDown"];
 const WALK_PACE = 1.5; // body widths a second at which the filmed walk cycle's paws do not slide
+// Quiet sounds that go with what the dog does (utils/sounds.js dogSfx): each at the moment it
+// belongs to, so the sound and the picture feel like one thing.
+const HOP_MS = { small: 460, big: 760 }; // motion.hop's durations
+const CLIP_SOUNDS = {
+  hello: [[0.5, "yip"]],
+  tilt: [[0.35, "hm"]],
+  comfort: [[0.3, "soft"]],
+  cheer: [[0.25, "sparkle"]],
+  sleepy: [[0.9, "yawn"]],
+  point: [[1.3, "tap"]],
+  play: [[1.6, "tap"], [2.4, "sparkle"]], // the paw goes up to the butterfly, then the wiggle
+};
 
 const shown = (el) => {
   if (!el?.isConnected) return false;
@@ -38,6 +51,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   let hostId = null; // spot the dog is in
   let floating = null; // viewport rect while between spots
   let moving = false;
+  let everHosted = false; // has the dog been in a place yet this visit? (the first arrival bounds in; later ones may trot in)
   let walking = false; // a filmed move (stand, walk, sit) owns the clips until it ends
   let again = false;
   let dance = null; // { id } while a butterfly is coming over to play
@@ -95,6 +109,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     spot.el.appendChild(dog);
     fitInto(spot.el);
     hostId = spot.id;
+    everHosted = true;
     floating = null;
     spot.el.dataset.companionHost = "true";
     layer.style.zIndex = ""; // back under dialogs once it has landed (it was above a door)
@@ -141,6 +156,15 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   }
 
   // --- walking: stand up, trot over, sit down (docs/companion/INTERACTIONS.md) ---
+  let soundTimers = [];
+  const clearSounds = () => { soundTimers.forEach(clearTimeout); soundTimers = []; };
+  const later = (ms, fn) => soundTimers.push(setTimeout(fn, ms));
+  function hop(size = "small") {
+    if (!dog.isConnected) return;
+    motion.hop(body, shadow, size);
+    dogSfx.hop(size);
+    setTimeout(() => dogSfx.land(size), HOP_MS[size] * 0.78); // the landing squash (not cleared with the clip's sounds)
+  }
   const canWalk = () => Boolean(player && manifest?.clips?.walk && player.canPlay(WALK));
   // The film faces right; going left, the whole picture is mirrored.
   const face = (dir) => { canvas.style.transform = dir < 0 ? "scaleX(-1)" : ""; };
@@ -155,6 +179,8 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
       t = setTimeout(done, ms + 700);
       state({ clip: id, kind: "move" });
       log("move", id, rate.toFixed(2));
+      if (id === "standUp") dogSfx.stand();
+      if (id === "sitDown") later(ms * 0.7, () => dogSfx.sit()); // the turn is over: it settles
       player.play(id, { rate, fade, onEnd: done }).catch(() => { clearTimeout(t); resolve(false); });
     });
   }
@@ -172,8 +198,11 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     const pace = dist / w / (ms / 1000);
     clearTimeout(clipTimer);
     state({ clip: "walk", kind: "move" });
-    player.play("walk", { loop: true, fade: 110, rate: Math.max(0.8, Math.min(1.7, pace / WALK_PACE)) }).catch(() => {});
+    const rate = Math.max(0.8, Math.min(1.7, pace / WALK_PACE));
+    player.play("walk", { loop: true, fade: 110, rate }).catch(() => {});
+    const stopSteps = dogSfx.stepper(rate); // a soft footfall with each step of the filmed trot
     await motion.walk(dog, a, b, ms, { bounds: pace > WALK_PACE * 1.8 ? Math.max(1, Math.round(ms / 420)) : 0 });
+    stopSteps();
   }
 
   // Arrived: turn to face the learner and sit (the film ends on the resting pose).
@@ -181,7 +210,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     // Quicker when the voice started speaking during the walk: the talk is waiting.
     await perform("sitDown", { rate: brain.state.speaking ? 1.7 : 1.15 });
     face(1);
-    if (dog.isConnected) motion.hop(body, shadow, "small"); // settles in
+    hop("small"); // settles in
     walking = false;
   }
 
@@ -231,12 +260,15 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
         await walkBetween(from, to);
         walked = true;
       } else {
+        later(150, () => dogSfx.hop("small")); // after the crouch
         await motion.travel(dog, from, to);
+        dogSfx.land("small");
       }
       if (stopped) return;
       host(spot);
-    } else if (seenTo && canWalk() && !walking && !brain.state.speaking) {
-      // Coming from off screen: it trots in from the nearer side of the window.
+    } else if (seenTo && everHosted && canWalk() && !walking && !brain.state.speaking) {
+      // Coming back from off screen (its page was away): it trots in from the nearer side of the window.
+      // A first arrival, such as a page opened straight into a lesson, bounds in instead: no trotting across the card.
       const side = to.left + to.width / 2 < vw / 2 ? -1 : 1;
       const start = { ...to, left: side < 0 ? -to.width * 1.05 : vw + to.width * 0.05 };
       placeFixed(start);
@@ -249,6 +281,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     } else {
       host(spot);
       motion.enter(body, shadow);
+      dogSfx.pop();
     }
     player?.resume();
     if (walked) await sitHere();
@@ -291,6 +324,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     }
     if (hostId) lift();
     moving = true;
+    dogSfx.pop();
     motion.exit(el).then(() => {
       moving = false;
       if (!stopped && !hostId) park();
@@ -337,11 +371,13 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     const b = brain.choose();
     log("beat", b.clip, b.kind, interrupt ? "interrupt" : "", JSON.stringify(b.cues || {}), b.keep ? "keep" : "");
     const dur = (manifest.clips[b.clip]?.duration || 3) * 1000;
-    if (b.cues?.hop && dog.isConnected) motion.hop(body, shadow, b.cues.hop);
+    if (b.cues?.hop) hop(b.cues.hop);
     if (b.cues?.lean && dog.isConnected) motion.lean(body, b.cues.lean, dur * 0.85);
     if (b.keep) return;
     state({ clip: b.clip, kind: b.kind });
     clearTimeout(clipTimer);
+    clearSounds();
+    for (const [at, name] of CLIP_SOUNDS[b.clip] || []) later(at * 1000, () => dogSfx[name]());
     if (dance && b.clip !== "play") { companion.signal("butterflyFree", { id: dance.id }); dance = null; }
     player
       .play(b.clip, { fade: interrupt ? 180 : 0, onEnd: () => beat(false) })
@@ -366,7 +402,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
       layer.style.zIndex = "9001";
       clearTimeout(doorTimer);
       doorTimer = setTimeout(() => { layer.style.zIndex = ""; }, 3000);
-      if (dog.isConnected) motion.hop(body, shadow, "small");
+      hop("small");
       return;
     }
     if (evt.type === "butterflyVisit") {
@@ -549,6 +585,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     clearTimeout(guideTimer);
     clearTimeout(doorTimer);
     clearTimeout(clipTimer);
+    clearSounds();
     clearTimeout(scrollT);
     io?.disconnect();
     offs.forEach((f) => f());

@@ -37,6 +37,9 @@ Priority, highest first: speak 7, celebrate 6, support 5, greet 4, guide 3, atte
 | The dog arrives in a place with mood `cheer` / `think` | `<Mascot mood>` (e.g. Round Complete) | **cheer** with a big hop / **tilt** | — |
 | The AI teacher's voice starts / stops | `narrator.js` events | **talk** in a loop / back to idle at once | a cheer on screen finishes first |
 | A right answer | `QuestionCard` phase `correct` | a **small hop** on the current clip (no clip change) | — |
+| A right answer, what the teacher says | `QuestionCard` + `utils/feedbackLines.js` | one of **50 praise lines** (per language, `public/locales/<lang>/feedback.json`), then the server's personal message or the question's own words if there is one | shuffled bag: every line once before any repeats, never twice running; `{name}` lines only when the first name is known |
+| A miss, what the teacher says | same | one of **50 kind, motivating lines** that invite another try, then the question's own words and the offered help | same; never "wrong", no comparisons |
+| The round ends | `RoundComplete` + `feedbackLines.pickSummary` | a spoken and on-screen **summary** (one of 50 by score: perfect, 80%+, 50%+, under half) and a **next step** (50 by score: try something new / another go / a gentle retry), with the score in it | falls back to the short built-in sentence until the language file loads |
 | A round finished, a badge | `<Mascot mood="cheer">` in the results, or `signal("success", {size: "big"})` | **cheer** with a big hop; the butterflies come and circle it | big cheer at most every 3.5 s |
 | A miss, a near miss, a revealed answer, an error screen | `QuestionCard`, `ErrorBoundary` | **comfort** (never sad, never "wrong!") | at most every 6 s |
 | A new question appears | `ModulePlayer` → `lookAt` | **lookLeft / lookRight** towards the card, with a lean | at most every 7 s; never while talking |
@@ -47,12 +50,28 @@ Priority, highest first: speak 7, celebrate 6, support 5, greet 4, guide 3, atte
 | Scrolling, typing, wheel, touch-move | stage | nothing (stays calm) | blocks ambient moves for 6 s and looks for 1.5 s |
 | A "door of light" transition opens (choosing a role on the entry page) | `Entry/door.js` → `signal("door")` | lifted above the light with a small hop, stays visible, lands in the next page's place | layer back to normal when it lands (or after 3 s) |
 | The page with the dog goes away | spot removed | stays where it is on screen for up to 0.9 s, then **walks** to the next page's place: stands up, trots over facing the way it goes (cadence follows the distance; small bounds on a long, quick trip), turns and sits. With no place on the next page it trots off the nearer side | the walk clips must be downloaded (until then it hops); while the voice speaks it hops instead, so it is there to talk; a sit after a walk is quicker if the voice started meanwhile |
-| The dog's place appears while it was off screen | stage | trots in from the nearer side of the window and sits | walk clips downloaded; otherwise it bounds up from below |
+| The dog's place appears while it was off screen | stage | trots in from the nearer side of the window and sits | only once the dog has been in a place this visit (a page opened straight into a lesson bounds up from below instead, so it never trots across the question card); walk clips downloaded |
 | A move within the same page (into a lesson's answer sheet) | stage | a quick **hop** along an arc, never a walk | a reaction must not take three seconds |
 | A butterfly heads for the dog | `butterflies.js` → `butterflyVisit` | if the dog is free: the butterfly flies to where the film's butterfly enters the picture, the dog performs **play**, and the butterfly flies the film's own path in time with it (the dog's eyes follow a real butterfly), then flutters off. If not, the butterfly rests somewhere else | at most every 90 s; only when calm (no reading or scrolling in the last 6 s), never while the voice speaks, never over a celebration, support or guide; a pointer coming close scares the butterfly off |
 | A dialog opens with a place in it | spot in `[role=dialog]` | hops into the dialog | dialogs win over the page |
 | The dog's place scrolls mostly out of view | stage | hops to the best visible place, or stays if none | keeps its place while 30% or more is visible |
 | Tab hidden, or the dog's place off screen | stage | video paused (no decoding) | — |
+
+## Sounds that go with the dog
+
+Very quiet (about a quarter of a button press), made in the browser (`dogSfx` in `utils/sounds.js`), switched by the same interface-sounds setting and volume as every other sound, and dipped under the teacher's voice.
+
+| What the dog does | Sound | When |
+|---|---|---|
+| stands up (`standUp`) | a small rising "hup" | clip start |
+| trots (`walk`) | a footfall per step, two alternating pitches | every `250 ms / playback rate`, so it follows the filmed trot's rhythm (measured head bob 248 ms) |
+| sits (`sitDown`) | a soft thump and settle | 70% into the clip, when the turn is over |
+| any hop (reaction, door, settling in) | a boing, then a landing thump | take-off, and 78% into the hop |
+| arc hop within a page | boing after the crouch, thump on landing | 150 ms in, and at the end |
+| bounds in / hops out of a place | a tiny pop | with the move |
+| `hello` | two tiny yips | 0.5 s in |
+| `tilt` / `comfort` / `cheer` / `sleepy` / `point` | a curious "hm?" / a kind low "mm" / a sparkle / a slow yawn / a paw tap | in the clip |
+| `play` (butterfly) | a paw tap as the paw goes up, a sparkle at the wiggle | 1.6 s and 2.4 s in |
 
 ## Places by page
 

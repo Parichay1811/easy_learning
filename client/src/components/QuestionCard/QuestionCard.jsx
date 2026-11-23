@@ -15,6 +15,8 @@ import { useSpeech } from "../../hooks/useSpeech";
 import { sfx, haptic } from "../../utils/sounds";
 import { onNarration, pauseNarration, resumeNarration, preloadNarration } from "../../utils/narrator";
 import { getPrefs } from "../../utils/learnerPrefs";
+import { pickCorrect, pickWrong, preloadFeedback } from "../../utils/feedbackLines";
+import { useAuth } from "../../context/AuthContext";
 import { usePrefs } from "../settings/usePrefs";
 import { afterSplash } from "../Entry/splashSignal";
 import { langOfKey } from "../journey/words";
@@ -235,6 +237,10 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   // language, and a listening item's sound in its own (audio_lang).
   const cardLang = question.lang || undefined;
   const uiLang = String(i18n.language || "en").split("-")[0];
+  const { user } = useAuth() || {};
+  // The teacher's varied praise and encouragement (utils/feedbackLines.js): fetched
+  // when a card opens, a few KB, so the first answer already has its lines.
+  useEffect(() => { preloadFeedback(uiLang); }, [uiLang]);
   const script = useMemo(() => scriptOf(question), [question]);
   const [phase, setPhase] = useState("open"); // open | correct | close | incorrect | revealed | uncertain | ungraded
   // The companion reacts to what just happened: a small happy hop for a right answer,
@@ -570,16 +576,31 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     ? nextStrategy({ canPicture: Boolean(sum), hintCount: hints.length, hasWorked: Boolean(question.worked_example), used: new Set([...used, ...(hintsShown >= hints.length && hints.length ? ["hints"] : [])]) })
     : null;
 
+  // One praise line per right answer and one kind line per miss, chosen once per
+  // sheet so what is shown and what is said match. "" until the lines have loaded
+  // (the built-in short phrase is used then).
+  const praise = useMemo(
+    () => (phase === "correct" ? pickCorrect({ lang: uiLang, name: user?.name }) : ""),
+    [phase, question.id, uiLang] // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const motive = useMemo(
+    () => (phase === "incorrect" ? pickWrong({ lang: uiLang, name: user?.name }) : ""),
+    [phase, misses, question.id, uiLang] // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
   // What the teacher says on the answer sheet: [[text, "card" | "ui"], ...]
   // (the question's own feedback is in the card's language, the rest in the site's).
   function sheetSpeech() {
     switch (phase) {
       case "correct":
-        if (serverMessage) return [[serverMessage, "server"]];
+        // A praise line first, then the personal message (a first, a milestone) or the question's own words.
+        if (serverMessage) return praise ? [[praise, "ui"], [serverMessage, "server"]] : [[serverMessage, "server"]];
+        if (praise) return [[praise, "ui"], [question.feedback?.correct || "", "card"]];
         return question.feedback?.correct ? [[question.feedback.correct, "card"]] : [[t("questionCard.wellDone", { defaultValue: "Well done!" }), "ui"]];
       case "close": return [[closeText(t, closeReason), "ui"]];
       case "incorrect": return [
-        question.feedback?.incorrect ? [question.feedback.incorrect, "card"] : [t("questionCard.nearly", { defaultValue: "Nearly! Have another go." }), "ui"],
+        ...(motive ? [[motive, "ui"], [question.feedback?.incorrect || "", "card"]]
+          : [question.feedback?.incorrect ? [question.feedback.incorrect, "card"] : [t("questionCard.nearly", { defaultValue: "Nearly! Have another go." }), "ui"]]),
         [offer ? t(...OFFER_TEXT[offer]) : "", "ui"],
       ];
       case "revealed": return [
@@ -656,9 +677,12 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
             <FaStar aria-hidden="true" /> {t("questionCard.levelUp", { defaultValue: "Level up! You're now on level {{to}}.", to: levelChange.to })}
           </p>
         )}
-        <p className={`${styles.correctText} ${isSpeaking(serverMessage || question.feedback?.correct) ? styles.speaking : ""}`}>
-          {serverMessage || question.feedback?.correct || t("questionCard.wellDone", { defaultValue: "Well done!" })}
+        <p className={`${styles.correctText} ${isSpeaking(praise || serverMessage || question.feedback?.correct) ? styles.speaking : ""}`}>
+          {praise || serverMessage || question.feedback?.correct || t("questionCard.wellDone", { defaultValue: "Well done!" })}
         </p>
+        {praise && (serverMessage || question.feedback?.correct) && (
+          <p className={`${styles.note} ${isSpeaking(serverMessage || question.feedback.correct) ? styles.speaking : ""}`}>{serverMessage || question.feedback.correct}</p>
+        )}
         {(altMode || readInstead) && !serverMessage && <p className={styles.note}>{t("questionCard.notCounted", "Thanks for answering another way. This one is just for practice.")}</p>}
       </ResultSheet>
     );
@@ -698,7 +722,10 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
           </div>
         )}
       >
-        <p className={styles.wrongText}>{question.feedback?.incorrect || t("questionCard.nearly", { defaultValue: "Nearly! Have another go." })}</p>
+        <p className={`${styles.wrongText} ${motive && isSpeaking(motive) ? styles.speaking : ""}`}>{motive || question.feedback?.incorrect || t("questionCard.nearly", { defaultValue: "Nearly! Have another go." })}</p>
+        {motive && question.feedback?.incorrect && (
+          <p className={`${styles.note} ${isSpeaking(question.feedback.incorrect) ? styles.speaking : ""}`}>{question.feedback.incorrect}</p>
+        )}
         {offer && <p className={styles.offerText}>{t(offerKey, offerDef)}</p>}
       </ResultSheet>
     );
