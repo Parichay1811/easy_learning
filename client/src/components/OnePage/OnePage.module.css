@@ -1,0 +1,407 @@
+/* A content page as one screen (OnePage.jsx): exactly the viewport below the
+   navbar, like the Game Zone. The page never scrolls; a card scrolls on its own
+   only if its words cannot fit (very large text). Sizes are rem so the
+   learner's text-size setting reaches every word. */
+.page {
+  /* One type scale for every device: it grows smoothly from a 360px phone to a
+     1920px screen (rem + vw), is held back on short screens (vh), and stays in rem
+     at both ends so the learner's text-size setting still applies. */
+  --fs-xs: clamp(0.875rem, 0.83rem + 0.16vw, 0.95rem);
+  --fs-sm: clamp(0.9rem, 0.85rem + 0.22vw, 1rem);
+  --fs-body: clamp(0.96rem, 0.9rem + 0.28vw, 1.08rem);
+  --fs-lead: clamp(1rem, 0.92rem + 0.36vw, 1.14rem);
+  --fs-h3: clamp(1rem, 0.94rem + 0.3vw, 1.14rem);
+  --fs-h2: clamp(1.08rem, min(0.96rem + 0.55vw, 2.6vh), 1.4rem);
+  --fs-h1: clamp(1.12rem, min(0.9rem + 1.15vw, 3.4vh), 1.95rem);
+  --fs-hud: clamp(1.2rem, min(1rem + 0.9vw, 3.4vh), 1.85rem);
+  --pup: clamp(96px, 13vh, 136px);
+  position: fixed;
+  top: var(--nav-h, 64px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  overflow: hidden;
+  font-family: "Fredoka", sans-serif;
+  color: #fff;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 90% at 50% 35%, rgba(10, 12, 40, 0.28), rgba(6, 8, 24, 0.66));
+  pointer-events: none;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(8px, 1.6vh, 16px);
+  /* Wide screens: the floating AI Teacher button sits in the bottom-right corner,
+     beside the cards, so only phones keep a band free for it below. */
+  padding:
+    clamp(8px, 1.6vh, 16px)
+    clamp(10px, 2.4vw, 28px)
+    max(clamp(10px, 2vh, 20px), env(safe-area-inset-bottom))
+    clamp(10px, 2.4vw, 28px);
+}
+
+/* ── wide arrangements ── */
+.page[data-layout="about"] .content {
+  max-width: 1440px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.08fr) minmax(0, 0.96fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    "hud hud hud hud"
+    "greet greet greet greet"
+    "story worlds values team";
+}
+.page[data-layout="contact"] .content {
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  grid-template-rows: auto auto minmax(0, 1fr);
+  grid-template-areas:
+    "hud hud"
+    "greet greet"
+    "message email";
+}
+.hud { grid-area: hud; }
+.greet { grid-area: greet; }
+.area_story { grid-area: story; }
+.area_worlds { grid-area: worlds; }
+.area_values { grid-area: values; }
+.area_team { grid-area: team; }
+.area_message { grid-area: message; }
+.area_email { grid-area: email; }
+
+/* ── header (as in the Game Zone) ── */
+.hud {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 8px 14px 8px 8px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex: none;
+  min-height: 48px;
+  min-width: 48px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: inherit;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  cursor: pointer;
+}
+.backBtn:hover { background: rgba(255, 255, 255, 0.24); }
+.backBtn:focus-visible, .tab:focus-visible, .card:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+.titleIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  font-size: 1.3rem;
+  color: #fff;
+  background: linear-gradient(135deg, #ff9d3b, #ef6c00);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
+}
+.titleIcon.pink { background: linear-gradient(135deg, #ff7eb0, #c2185b); }
+.titleIcon.blue { background: linear-gradient(135deg, #49a8ff, #1565c0); }
+.titleText { display: flex; flex-direction: column; min-width: 0; }
+.title {
+  font-size: var(--fs-hud);
+  font-weight: 800;
+  line-height: 1.1;
+  background: linear-gradient(90deg, #ffd166, #ff9d6b, #c7a6ff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.subtitle { font-size: var(--fs-xs); font-weight: 600; color: rgba(255, 255, 255, 0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── the puppy and its bubble ── */
+.greet {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.6vw, 18px);
+  min-width: 0;
+}
+.pup { flex: none; }
+.bubble {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding: clamp(10px, 1.6vh, 16px) clamp(14px, 2vw, 22px);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.97);
+  color: #1f2937;
+  box-shadow: 0 10px 26px rgba(10, 20, 50, 0.3);
+}
+.bubble::before {
+  /* the tail, pointing at the puppy */
+  content: "";
+  position: absolute;
+  inset-inline-start: -10px;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  background: inherit;
+  border-radius: 4px;
+  transform: translateY(-50%) rotate(45deg);
+}
+.bubbleTitle {
+  position: relative;
+  margin: 0;
+  font-size: var(--fs-h1);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #1e1b4b;
+}
+.bubbleText {
+  position: relative;
+  margin: 6px 0 0;
+  font-size: var(--fs-lead);
+  font-weight: 600;
+  line-height: 1.45;
+  color: #374151;
+}
+.bubbleLink { color: #1d4ed8; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
+.bubbleLink:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; border-radius: 4px; }
+
+/* ── cards ── */
+.card {
+  min-width: 0;
+  min-height: 0;
+  /* Only if the words cannot fit (a small phone, very large text): the card scrolls, never the page. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  container-type: inline-size; /* the form inside picks its columns from the card's width */
+  scrollbar-width: thin;
+  scrollbar-color: #b9c3e6 transparent;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(8px, 1.4vh, 12px);
+  padding: clamp(12px, 2vh, 20px) clamp(14px, 1.8vw, 22px);
+  border-radius: 26px;
+  border: 3px solid rgba(255, 255, 255, 0.85);
+  background: linear-gradient(170deg, #ffffff, #f1f5ff);
+  color: #1f2937;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.14), 0 16px 36px rgba(10, 20, 50, 0.35);
+}
+.card[hidden] { display: none; }
+.cardTitle {
+  margin: 0;
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #1e1b4b;
+}
+.p { margin: 0; font-size: var(--fs-body); line-height: 1.55; font-weight: 500; color: #374151; }
+.page:not([data-narrow="true"]) .onlyNarrow { display: none !important; }
+
+/* coloured tiles (worlds), rows (values, reassurances), chips (links, emails) */
+.tiles { display: grid; gap: 10px; align-content: start; }
+.tile {
+  --c1: #9b8cff;
+  --c2: #4527a0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 0;
+  padding: 8px 12px;
+  border-radius: 20px;
+  color: #fff;
+  background: linear-gradient(165deg, var(--c1), var(--c2));
+  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18), inset 0 2px 0 rgba(255, 255, 255, 0.3);
+}
+.tile.purple { --c1: #9b8cff; --c2: #4527a0; }
+.tile.blue { --c1: #49a8ff; --c2: #1565c0; }
+.tile.green { --c1: #4fbf5b; --c2: #1b5e20; }
+.tileIcon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, 0.24); font-size: 1.35rem; }
+.tileTitle { margin: 0; font-size: var(--fs-h3); font-weight: 800; line-height: 1.2; }
+.tileText { margin: 2px 0 0; font-size: var(--fs-xs); font-weight: 600; line-height: 1.35; color: rgba(255, 255, 255, 0.96); }
+
+.rows { display: flex; flex-direction: column; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.row { display: flex; align-items: flex-start; gap: 12px; }
+.rowIcon { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; font-size: 1.05rem; color: #fff; background: linear-gradient(135deg, #ff9d3b, #ef6c00); }
+.rowIcon.pink { background: linear-gradient(135deg, #ff7eb0, #c2185b); }
+.rowIcon.blue { background: linear-gradient(135deg, #49a8ff, #1565c0); }
+.rowIcon.green { background: linear-gradient(135deg, #4fbf5b, #1b5e20); }
+.rowIcon.purple { background: linear-gradient(135deg, #9b8cff, #4527a0); }
+.rowTitle { margin: 0; font-size: var(--fs-h3); font-weight: 800; line-height: 1.25; color: #1f2937; }
+.rowText { margin: 1px 0 0; font-size: var(--fs-xs); font-weight: 500; line-height: 1.4; color: #4b5563; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid #dbe4ff;
+  background: #fff;
+  color: #1e3a8a;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+.chip:hover { background: #eef2ff; }
+.chip:focus-visible, .cta:focus-visible, .mail:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+
+.cta {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ffb347, #ef6c00);
+  color: #fff;
+  font: inherit;
+  font-size: var(--fs-lead);
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #b45309;
+}
+.cta:active { transform: translateY(3px); box-shadow: 0 2px 0 #b45309; }
+
+/* the two addresses as big buttons */
+.mails { display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+@container (min-width: 520px) { .mails { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+.mail {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 60px;
+  padding: 10px 14px;
+  border-radius: 18px;
+  border: 2px solid #dbe4ff;
+  background: #fff;
+  color: #1f2937;
+  text-decoration: none;
+}
+.mail:hover { background: #f5f8ff; }
+.mailIcon { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: #e3f2fd; color: #1565c0; font-size: 1.15rem; }
+.mailText { display: flex; flex-direction: column; min-width: 0; }
+.mailFor { font-size: var(--fs-sm); font-weight: 700; color: #374151; }
+.mailAddr { font-size: var(--fs-body); font-weight: 700; color: #1d4ed8; overflow-wrap: break-word; }
+
+.small { margin: 0; font-size: var(--fs-sm); line-height: 1.45; color: #4b5563; }
+.link { color: #1d4ed8; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+
+/* Who makes Learnigo: the address chips may wrap after the @ (EmailAddress) */
+.teamText { min-width: 0; }
+.area_team .chip { width: 100%; }
+.inlineLinks { margin: 0; font-size: var(--fs-sm); line-height: 1.9; color: #4b5563; }
+.inlineLinks a { color: #1d4ed8; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.inlineLinks a:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; border-radius: 4px; }
+.dot { margin: 0 2px; color: #9ca3af; }
+
+/* ── a phone, a narrow tablet: the cards become tabs under the puppy ──
+   (data-narrow is set by OnePage.jsx, below each layout's own width: 900px for
+   Contact, 1100px for About's four cards) */
+.tabs { display: none; }
+.page[data-narrow="true"] { --pup: 96px; }
+.page[data-narrow="true"][data-layout="about"] .content,
+.page[data-narrow="true"][data-layout="contact"] .content {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    grid-template-areas: "hud" "greet" "tabs" "panel";
+  }
+.page[data-narrow="true"] .content {
+    padding-right: max(clamp(10px, 2.4vw, 28px), var(--fab-r, 0px));
+    padding-bottom: max(clamp(10px, 2vh, 20px), var(--fab-b, 0px), env(safe-area-inset-bottom));
+  }
+.page[data-narrow="true"] .card { grid-area: panel !important; padding: 12px 14px; border-radius: 22px; }
+.page[data-narrow="true"] .subtitle { display: none; }
+.page[data-narrow="true"] .bubble { padding: 10px 14px; border-radius: 18px; }
+.page[data-narrow="true"] .bubbleTitle { line-height: 1.2; }
+.page[data-narrow="true"] .hud { padding: 6px 12px 6px 6px; }
+.page[data-narrow="true"] .p { line-height: 1.5; }
+.page[data-narrow="true"] .tile { padding: 8px 12px; }
+.page[data-narrow="true"] .tileIcon { width: 42px; height: 42px; font-size: 1.15rem; }
+.page[data-narrow="true"] .mails { grid-template-columns: minmax(0, 1fr); }
+.page[data-narrow="true"] .area_team { flex-direction: column; align-items: stretch; }
+.page[data-narrow="true"] .tabs {
+    grid-area: tabs;
+    display: flex;
+    gap: 6px;
+    padding: 5px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+.page[data-narrow="true"] .tab {
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 4px;
+    border: 0;
+    border-radius: 15px;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    font-size: var(--fs-sm);
+    font-weight: 700;
+    cursor: pointer;
+  }
+.page[data-narrow="true"] .tabOn { background: #fff; color: #1e1b4b; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18); }
+.page[data-narrow="true"] .tabIcon { font-size: 1rem; }
+.page[data-narrow="true"] .tabLabel { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page[data-narrow="true"] .onlyWide { display: none !important; }
+.page[data-narrow="true"] .tiles { grid-auto-rows: auto; flex: none; }
+@media (max-width: 420px) {
+  .backText { display: none; }
+  .backBtn { padding: 6px; }
+  .hud { padding: 6px 10px 6px 6px; gap: 10px; }
+  .titleIcon { width: 40px; height: 40px; }
+  .tabIcon { display: none; }
+}
+/* Very short screens (a phone on its side): no bubble text, slimmer header. */
+@media (max-height: 560px) {
+  .page { --pup: 64px; }
+  .bubbleText { display: none; }
+  .subtitle { display: none; }
+}
+/* A short laptop screen: a smaller puppy and tighter cards, so the cards keep their room. */
+@media (min-width: 900px) and (max-height: 800px) {
+  .page { --pup: 96px; }
+  .content { gap: 10px; padding-top: 8px; }
+  .card { padding: 12px 16px; gap: 8px; }
+  .hud { padding-block: 4px; }
+  .bubble { padding-block: 8px; }
+  .rows { gap: 6px; }
+  .rowText { line-height: 1.32; }
+  .mail { min-height: 54px; padding-block: 6px; }
+}
+
+@media (prefers-contrast: more) {
+  .overlay { background: rgba(0, 0, 0, 0.6); }
+  .card, .bubble { border-color: #111; }
+}

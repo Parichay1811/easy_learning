@@ -9,7 +9,8 @@ const ROLE_OPTIONS = ["student", "parent", "admin", "teacher", "other"];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function ContactForm({ fixedRole, defaultName = "", defaultEmail = "", defaultOrgName = "", onSuccess, compact = false }) {
+// `dense`: the one-screen Contact page (tighter spacing, a shorter message box).
+function ContactForm({ fixedRole, defaultName = "", defaultEmail = "", defaultOrgName = "", onSuccess, compact = false, dense = false }) {
   const { t } = useTranslation();
   const [name, setName] = useState(defaultName);
   const [email, setEmail] = useState(defaultEmail);
@@ -79,54 +80,57 @@ function ContactForm({ fixedRole, defaultName = "", defaultEmail = "", defaultOr
   }
 
   return (
-    <form className={`${styles.form} ${compact ? styles.compact : ""}`} onSubmit={handleSubmit}>
+    <form className={`${styles.form} ${compact ? styles.compact : ""} ${dense ? styles.dense : ""}`} onSubmit={handleSubmit} noValidate>
       {!fixedRole && (
-        <div className={styles.field}>
-          <label>{t("contactForm.iAmA")}</label>
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
+        <div className={`${styles.field} ${styles.fRole}`}>
+          <label htmlFor="cf-role">{t("contactForm.iAmA")}</label>
+          <select id="cf-role" value={role} onChange={(e) => setRole(e.target.value)}>
             {ROLE_OPTIONS.map((o) => <option key={o} value={o}>{t(`contactForm.roles.${o}`)}</option>)}
           </select>
         </div>
       )}
       <div className={styles.row}>
-        <div className={styles.field}>
-          <label>{t("contactForm.yourName")}</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} placeholder={t("contactForm.namePlaceholder")} />
-          {errors.name && <span className={styles.error}>{errors.name}</span>}
+        <div className={`${styles.field} ${styles.fName}`}>
+          <label htmlFor="cf-name">{t("contactForm.yourName")}</label>
+          <input id="cf-name" autoComplete="name" aria-invalid={Boolean(errors.name)} value={name} onChange={(e) => setName(e.target.value)} placeholder={t("contactForm.namePlaceholder")} />
+          {errors.name && <span className={styles.error} role="alert">{errors.name}</span>}
         </div>
-        <div className={styles.field}>
-          <label>{t("contactForm.yourEmail")}</label>
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("contactForm.emailPlaceholder")} />
-          {errors.email && <span className={styles.error}>{errors.email}</span>}
+        <div className={`${styles.field} ${styles.fEmail}`}>
+          <label htmlFor="cf-email">{t("contactForm.yourEmail")}</label>
+          <input id="cf-email" type="email" autoComplete="email" inputMode="email" aria-invalid={Boolean(errors.email)} value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("contactForm.emailPlaceholder")} />
+          {errors.email && <span className={styles.error} role="alert">{errors.email}</span>}
         </div>
       </div>
-      <div className={styles.field}>
-        <label>{t("contactForm.organization")}</label>
-        <input value={orgName} onChange={(e) => setOrgName(e.target.value)} placeholder={t("contactForm.orgPlaceholder")} />
+      {/* The organisation matters for a school, a teacher or a group, not for a learner or a parent. */}
+      {(fixedRole || !["student", "parent"].includes(role)) && (
+        <div className={`${styles.field} ${styles.fOrg}`}>
+          <label htmlFor="cf-org">{t("contactForm.organization")}</label>
+          <input id="cf-org" value={orgName} onChange={(e) => setOrgName(e.target.value)} placeholder={t("contactForm.orgPlaceholder")} autoComplete="organization" />
+        </div>
+      )}
+      <div className={`${styles.field} ${styles.fSubject}`}>
+        <label htmlFor="cf-subject">{t("contactForm.subject")}</label>
+        <input id="cf-subject" aria-invalid={Boolean(errors.subject)} value={subject} onChange={(e) => setSubject(e.target.value)} placeholder={t("contactForm.subjectPlaceholder")} />
+        {errors.subject && <span className={styles.error} role="alert">{errors.subject}</span>}
       </div>
-      <div className={styles.field}>
-        <label>{t("contactForm.subject")}</label>
-        <input value={subject} onChange={(e) => setSubject(e.target.value)} placeholder={t("contactForm.subjectPlaceholder")} />
-        {errors.subject && <span className={styles.error}>{errors.subject}</span>}
+      <div className={`${styles.field} ${styles.fMessage}`}>
+        <label htmlFor="cf-message">{t("contactForm.message")}</label>
+        <textarea id="cf-message" rows={compact || dense ? 3 : 5} aria-invalid={Boolean(errors.message)} value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("contactForm.messagePlaceholder")} />
+        {errors.message && <span className={styles.error} role="alert">{errors.message}</span>}
       </div>
-      <div className={styles.field}>
-        <label>{t("contactForm.message")}</label>
-        <textarea rows={compact ? 3 : 5} value={message} onChange={(e) => setMessage(e.target.value)} placeholder={t("contactForm.messagePlaceholder")} />
-        {errors.message && <span className={styles.error}>{errors.message}</span>}
-      </div>
-      <div className={styles.field}>
+      <div className={`${styles.field} ${styles.fFile}`}>
         <label className={styles.fileLabel}>
           <MdAttachFile /> {attachment ? attachment.name : t("contactForm.attachFile")}
           <input
             type="file"
             accept="image/jpeg,image/png,image/webp,image/gif,application/pdf"
             onChange={(e) => setAttachment(e.target.files?.[0] || null)}
-            hidden
+            className={styles.fileInput}
           />
         </label>
       </div>
-      {serverError && <p className={styles.serverError}>{serverError}</p>}
-      <button type="submit" className={styles.submitBtn} disabled={submitting}>
+      {serverError && <p className={`${styles.serverError} ${styles.fError}`} role="alert">{serverError}</p>}
+      <button type="submit" className={`${styles.submitBtn} ${styles.fSend}`} disabled={submitting}>
         <MdSend /> {submitting ? t("contactForm.sending") : t("contactForm.sendMessage")}
       </button>
     </form>

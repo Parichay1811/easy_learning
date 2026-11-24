@@ -22,7 +22,7 @@
 }
 
 .field label {
-  font-size: 0.85rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #4b5563;
 }
@@ -32,11 +32,13 @@
 .field textarea {
   background: #f9fafb;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px 14px;
+  min-height: 48px;
   color: #1f2937;
   font-family: "Fredoka", sans-serif;
-  font-size: 0.95rem;
+  /* 16px at least: a phone zooms the whole page into a smaller field on focus. */
+  font-size: max(1rem, 16px);
   outline: none;
   resize: vertical;
 }
@@ -49,6 +51,7 @@
 }
 
 .fileLabel {
+  min-height: 48px;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -60,6 +63,10 @@
   color: #6b7280;
   font-size: 0.9rem;
 }
+
+.fileLabel { position: relative; }
+/* Still reachable with Tab (the label shows the focus ring), invisible otherwise. */
+.fileInput { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
 
 .fileLabel:hover {
   border-color: #ef6c00;
@@ -82,6 +89,7 @@
 }
 
 .submitBtn {
+  min-height: 52px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -105,8 +113,41 @@
 
 .compact .row { flex-direction: column; }
 
+/* The one-screen Contact page: tighter, so the whole form fits. Where the card is
+   wide enough (a phone's card is), two columns: who you are and the subject, name and
+   e-mail, then the message, then the attachment beside the send button. */
+.dense { gap: 10px; } /* measured by the card around it (OnePage .card is a size container) */
+@container (min-width: 290px) {
+  .dense {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px 12px;
+    align-items: end;
+  }
+  .dense .row { display: contents; }
+  .dense .fRole { order: 1; }
+  .dense .fSubject { order: 2; }
+  .dense .fName { order: 3; }
+  .dense .fEmail { order: 4; }
+  .dense .fOrg { order: 5; grid-column: 1 / -1; }
+  .dense .fMessage { order: 6; grid-column: 1 / -1; }
+  .dense .fError { order: 7; grid-column: 1 / -1; }
+  .dense .fFile { order: 8; }
+  .dense .fSend { order: 9; }
+}
+/* A phone-sized card: the send button stays in view at the bottom of the card
+   if the card has to scroll (a small phone, large text). */
+@container (max-width: 499px) {
+  .dense .fSend { position: sticky; bottom: 0; z-index: 1; box-shadow: 0 6px #c25400, 0 -14px 14px 6px #f3f6ff; }
+}
+.dense .field { gap: 4px; }
+.dense .row { gap: 10px; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 1px; }
+.fileLabel:focus-within { outline: 3px solid #1d4ed8; outline-offset: 1px; }
+
 @media (max-width: 480px) {
   .row { flex-direction: column; gap: 16px; }
+  .dense .row { gap: 10px; }
 }
 
 .success {

@@ -11,12 +11,15 @@ import styles from "./Footer.module.css";
 // with nothing below the fold, so the footer steps aside there (it would only
 // sit hidden behind the fixed screen, its links still reachable by Tab).
 // Its links stay one tap away in the navbar's menu and on every content page
-// (About, Contact, FAQ, Policy…), which keep the full footer.
+// (FAQ, Policy, the guides…), which keep the full footer. About and Contact are
+// one screen too (components/OnePage), with their own policy, terms and contact
+// links, in every language (/es/about-us…).
 const PLAY_PATHS = ["/home", "/games", "/games/ar", "/dashboard", "/discovery", "/ai-teacher"];
 const PLAY_PREFIXES = ["/subject/", "/module/"];
+const ONE_SCREEN = /^(\/[a-z]{2})?\/(about-us|contact-us)\/?$/;
 
 function isPlayPath(pathname) {
-  return PLAY_PATHS.includes(pathname) || PLAY_PREFIXES.some((p) => pathname.startsWith(p));
+  return PLAY_PATHS.includes(pathname) || PLAY_PREFIXES.some((p) => pathname.startsWith(p)) || ONE_SCREEN.test(pathname);
 }
 
 const Footer = () => {

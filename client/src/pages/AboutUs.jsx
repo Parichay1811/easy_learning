@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import * as FramerMotion from "framer-motion";
 import { useTranslation, Trans } from "react-i18next";
 import {
-  FaBook, FaCalculator, FaMicroscope, FaHeart, FaStar,
-  FaShieldAlt, FaGlobeAmericas, FaChartLine, FaArrowRight, FaEnvelope, FaLightbulb,
+  FaBook, FaCalculator, FaMicroscope, FaHeart, FaStar, FaShieldAlt, FaGlobeAmericas, FaChartLine,
+  FaArrowRight, FaEnvelope, FaUsers, FaSchool, FaBookOpen,
 } from "react-icons/fa";
-import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
+import OnePage from "../components/OnePage/OnePage";
+import s from "../components/OnePage/OnePage.module.css";
 import { COMPANY } from "../config/company";
 import EmailAddress from "../components/EmailAddress";
+import { useSeo } from "../seo/useSeo";
 import { playSlide } from "../utils/sounds";
-import styles from "./AboutUs.module.css";
 
-// eslint-disable-next-line no-unused-vars -- used via <motion.section>/<motion.div> JSX tags, which no-unused-vars doesn't track
-const { motion } = FramerMotion;
+// About Learnigo, as one screen in the site's game style (components/OnePage):
+// the puppy says what Learnigo is; three cards (our story, the worlds, what we
+// care about) and a strip about who makes it. On a phone the four are tabs.
 
 const worlds = [
   { key: "english", color: "purple", icon: FaBook },
@@ -22,104 +23,114 @@ const worlds = [
 ];
 
 const values = [
-  { key: "care", icon: FaHeart },
-  { key: "playful", icon: FaStar },
-  { key: "safe", icon: FaShieldAlt },
-  { key: "language", icon: FaGlobeAmericas },
-  { key: "progress", icon: FaChartLine },
+  { key: "care", icon: FaHeart, tone: "pink" },
+  { key: "playful", icon: FaStar, tone: "" },
+  { key: "safe", icon: FaShieldAlt, tone: "green" },
+  { key: "language", icon: FaGlobeAmericas, tone: "blue" },
+  { key: "progress", icon: FaChartLine, tone: "purple" },
 ];
 
 const AboutUs = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { seo } = useSeo();
+  const nav = seo?.ui?.nav || {};
 
-  const handleStart = () => {
+  const start = () => {
     playSlide();
-    setTimeout(() => navigate("/home"), 350);
+    setTimeout(() => navigate("/home"), 300);
   };
 
-  return (
-    <div className={styles.page}>
-      <SEO path="/about-us" />
-      <VideoBackground />
+  const story = (
+    <>
+      <p className={`${s.p} ${s.onlyNarrow}`}>{t("aboutUs.heroSubtitle")}</p>
+      <p className={s.p}>{t("aboutUs.paragraph")}</p>
+      <button type="button" className={s.cta} onClick={start} data-companion-guide data-companion-look data-sound="none">
+        {t("aboutUs.startAdventure")} <FaArrowRight aria-hidden="true" />
+      </button>
+    </>
+  );
 
-      <motion.section
-        className={styles.hero}
-        initial={{ opacity: 0, y: -16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-      >
-        <span className={styles.badge}><FaHeart /> {t("aboutUs.badge")}</span>
-        <h1 className={styles.heroTitle}>{t("aboutUs.heroTitle")}</h1>
-        <p className={styles.heroSubtitle}>{t("aboutUs.heroSubtitle")}</p>
-      </motion.section>
-
-      <motion.div
-        className={styles.panel}
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.1 }}
-      >
-        <p className={styles.paragraph}>{t("aboutUs.paragraph")}</p>
-
-        <h2 className={styles.sectionTitle}>{t("aboutUs.worldsTitle")}</h2>
-        <div className={styles.worlds}>
-          {worlds.map((w) => (
-            <div key={w.key} className={`${styles.world} ${styles[w.color]}`}>
-              <span className={styles.worldIconWrap}><w.icon className={styles.worldIcon} /></span>
-              <div>
-                <h3>{t(`aboutUs.worlds.${w.key}.title`)}</h3>
-                <p>{t(`aboutUs.worlds.${w.key}.text`)}</p>
-              </div>
-            </div>
-          ))}
+  const worldTiles = (
+    <div className={s.tiles}>
+      {worlds.map((w) => (
+        <div key={w.key} className={`${s.tile} ${s[w.color]}`}>
+          <span className={s.tileIcon} aria-hidden="true"><w.icon /></span>
+          <div>
+            <h3 className={s.tileTitle}>{t(`aboutUs.worlds.${w.key}.title`)}</h3>
+            <p className={s.tileText}>{t(`aboutUs.worlds.${w.key}.text`)}</p>
+          </div>
         </div>
-
-        <h2 className={styles.sectionTitle}>{t("aboutUs.valuesTitle")}</h2>
-        <div className={styles.values}>
-          {values.map((v) => (
-            <div key={v.key} className={styles.valueCard}>
-              <span className={styles.valueIconWrap}><v.icon className={styles.valueIcon} /></span>
-              <h3>{t(`aboutUs.values.${v.key}.title`)}</h3>
-              <p>{t(`aboutUs.values.${v.key}.text`)}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Who makes Learnigo (config/company.js). */}
-        <h2 className={styles.sectionTitle}>{t("aboutUs.madeBy.title", "Who makes Learnigo")}</h2>
-        <p className={styles.paragraph}>
-          <Trans
-            i18nKey="aboutUs.madeBy.text"
-            defaults="Learnigo is designed and built by <co>{{company}}</co>."
-            values={{ company: COMPANY.name }}
-            components={{ co: <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.companyLink} /> }}
-          />
-        </p>
-        <ul className={styles.mailList}>
-          <li>{t("contactUs.mail.info", "Questions, help and feedback")}: <a href={`mailto:${COMPANY.emails.info}`} className={styles.companyLink}><EmailAddress email={COMPANY.emails.info} /></a></li>
-          <li>{t("contactUs.mail.solutions", "Schools, organisations and partnerships")}: <a href={`mailto:${COMPANY.emails.solutions}`} className={styles.companyLink}><EmailAddress email={COMPANY.emails.solutions} /></a></li>
-        </ul>
-
-        <div className={styles.ctaRow}>
-          <button type="button" className={styles.ctaBtn} onClick={handleStart}>
-            {t("aboutUs.startAdventure")} <FaArrowRight className={styles.ctaIcon} />
-          </button>
-          <a href="/learning-differences" className={styles.contactLink}>
-            <FaLightbulb /> Learn about dyslexia, ADHD and other learning differences
-          </a>
-          <a href="/who-we-help" className={styles.contactLink}>
-            <FaGlobeAmericas /> See who Learnigo helps — parents, schools, NGOs & therapists
-          </a>
-          <a href="/faq" className={styles.contactLink}>
-            <FaEnvelope /> Have a question? Check our FAQ
-          </a>
-          <a href="/contact-us" className={styles.contactLink}>
-            <FaEnvelope /> {t("aboutUs.getInTouch")}
-          </a>
-        </div>
-      </motion.div>
+      ))}
     </div>
+  );
+
+  const valueRows = (
+    <ul className={s.rows}>
+      {values.map((v) => (
+        <li key={v.key} className={s.row}>
+          <span className={`${s.rowIcon} ${v.tone ? s[v.tone] : ""}`} aria-hidden="true"><v.icon /></span>
+          <div>
+            <h3 className={s.rowTitle}>{t(`aboutUs.values.${v.key}.title`)}</h3>
+            <p className={s.rowText}>{t(`aboutUs.values.${v.key}.text`)}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+
+  // Who makes Learnigo (config/company.js), how to write to us, and the small print.
+  const team = (
+    <>
+      <p className={`${s.p} ${s.teamText}`}>
+        <Trans
+          i18nKey="aboutUs.madeBy.text"
+          defaults="Learnigo is designed and built by <co>{{company}}</co>."
+          values={{ company: COMPANY.name }}
+          components={{ co: <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={s.link} /> }}
+        />
+      </p>
+      <div className={s.chips}>
+        <a href={`mailto:${COMPANY.emails.info}`} className={s.chip} title={t("contactUs.mail.info", "Questions, help and feedback")}>
+          <FaEnvelope aria-hidden="true" /> <EmailAddress email={COMPANY.emails.info} />
+        </a>
+        <a href={`mailto:${COMPANY.emails.solutions}`} className={s.chip} title={t("contactUs.mail.solutions", "Schools, organisations and partnerships")}>
+          <FaSchool aria-hidden="true" /> <EmailAddress email={COMPANY.emails.solutions} />
+        </a>
+      </div>
+      {/* The guides, the FAQ and the small print, as a line of links (as the footer would). */}
+      <p className={s.inlineLinks}>
+        <a href="/learning-differences">{nav.differences || "Learning differences"}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}
+        <a href="/who-we-help">{nav.audiences || "Who we help"}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}
+        <a href="/faq">{nav.faq || "FAQ"}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}
+        <a href="/policy">{t("navbar.policy", "Policy")}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}
+        <a href="/terms-and-conditions">{t("navbar.terms", "T & C")}</a>
+      </p>
+    </>
+  );
+
+  return (
+    <>
+      <SEO path="/about-us" />
+      <OnePage
+        layout="about"
+        narrowBelow={1100}
+        icon={<FaHeart />}
+        tone="pink"
+        title={t("navbar.about", "About Us")}
+        subtitle={t("aboutUs.badge")}
+        greetTitle={t("aboutUs.heroTitle")}
+        greetText={t("aboutUs.heroSubtitle")}
+        mood="wave"
+        tabsLabel={t("aboutUs.tabs.label", "About Learnigo")}
+        sections={[
+          { id: "story", label: t("aboutUs.tabs.story", "Story"), icon: <FaBookOpen />, heading: t("aboutUs.badge"), content: story },
+          { id: "worlds", label: t("aboutUs.tabs.worlds", "Worlds"), icon: <FaGlobeAmericas />, heading: t("aboutUs.worldsTitle"), content: worldTiles },
+          { id: "values", label: t("aboutUs.tabs.values", "Values"), icon: <FaHeart />, heading: t("aboutUs.valuesTitle"), content: valueRows },
+          { id: "team", label: t("aboutUs.tabs.team", "Team"), icon: <FaUsers />, heading: t("aboutUs.madeBy.title", "Who makes Learnigo"), content: team },
+        ]}
+      />
+    </>
   );
 };
 
