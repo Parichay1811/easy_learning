@@ -38,10 +38,15 @@ const CLIP_SOUNDS = {
   play: [[1.6, "tap"], [2.4, "sparkle"]], // the paw goes up to the butterfly, then the wiggle
 };
 
+// A place counts only if it can be seen and has a size: a place a layout folds to
+// 0 x 0 on a phone (the lesson card's buddy corner) must not keep the dog waiting
+// for it, floating where it was lifted, over the page.
 const shown = (el) => {
   if (!el?.isConnected) return false;
   const cs = getComputedStyle(el);
-  return cs.display !== "none" && cs.visibility !== "hidden";
+  if (cs.display === "none" || cs.visibility === "hidden") return false;
+  const r = el.getBoundingClientRect();
+  return r.width > 1 && r.height > 1;
 };
 
 export function startCompanion({ base = "/companion/", onState } = {}) {
@@ -165,7 +170,10 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     dogSfx.hop(size);
     setTimeout(() => dogSfx.land(size), HOP_MS[size] * 0.78); // the landing squash (not cleared with the clip's sounds)
   }
-  const canWalk = () => Boolean(player && manifest?.clips?.walk && player.canPlay(WALK));
+  // Walking needs room: on a phone-sized screen the dog hops between places (and pops out
+  // when a page has none), so it never trots across a narrow screen's header or content.
+  const roomy = () => innerWidth >= 700;
+  const canWalk = () => Boolean(roomy() && player && manifest?.clips?.walk && player.canPlay(WALK));
   // The film faces right; going left, the whole picture is mirrored.
   const face = (dir) => { canvas.style.transform = dir < 0 ? "scaleX(-1)" : ""; };
 
