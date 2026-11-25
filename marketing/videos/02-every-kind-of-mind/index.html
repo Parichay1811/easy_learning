@@ -1,0 +1,218 @@
+<!doctype html>
+<!--
+  02 · Every kind of mind — for parents (LinkedIn feed)
+  1080×1350 (4:5) · 30 fps · 25.5 s
+  Scene times follow timing.json (tools/voice.mjs). Words on screen carry the story with
+  the sound off; captions only where the picture does not already say it.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1080, height=1350" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+  <link rel="stylesheet" href="assets/brand/video.css" />
+  <style>
+    html, body { width: 1080px; height: 1350px; }
+    @font-face { font-family: "KoreanUI"; src: local("Apple SD Gothic Neo"), local("AppleSDGothicNeo-Regular"); }
+
+    .window.w4 { left: 60px; top: 250px; width: 960px; }
+    .window.w4 .view { width: 960px; height: 600px; }
+
+    /* hook on notebook paper */
+    #s-hook .paper {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, transparent 104px, rgba(255, 92, 92, 0.55) 104px, rgba(255, 92, 92, 0.55) 108px, transparent 108px),
+        repeating-linear-gradient(180deg, #fffdf6 0px, #fffdf6 58px, #cfe2f7 58px, #cfe2f7 60px);
+    }
+    #s-hook .lines { position: absolute; left: 150px; top: 300px; width: 880px; }
+    #s-hook .l { display: block; font-size: 96px; margin-bottom: 18px; }
+    #s-hook .l.small { font-size: 72px; color: var(--muted); }
+    #s-hook #h4 { font-size: 128px; transform-origin: 0% 50%; }
+
+    #s-how .logo { position: absolute; left: 340px; top: 50px; width: 400px; }
+    #s-how .stack { position: absolute; left: 60px; right: 60px; top: 920px; display: flex; flex-direction: column; align-items: center; gap: 22px; }
+    #s-how .chip { font-size: 46px; padding: 14px 36px 14px 16px; }
+    #s-how .chip .ico { width: 62px; height: 62px; }
+
+    #s-best1 h2 { position: absolute; left: 0; right: 0; top: 230px; text-align: center; font-size: 110px; }
+    #s-best1 .stars { position: absolute; left: 0; right: 0; top: 140px; display: flex; justify-content: center; gap: 24px; }
+    #s-best1 .stars svg { width: 76px; height: 76px; }
+    #s-best2 .note { position: absolute; left: 60px; right: 60px; top: 920px; text-align: center; font-size: 56px; }
+
+    #s-who .txt { position: absolute; left: 60px; right: 60px; top: 250px; text-align: center; }
+    #s-who .txt .sub { font-size: 60px; }
+    #s-who .txt .display { font-size: 124px; margin: 14px 0; }
+    #s-who .hello { position: absolute; font-family: "Fredoka", "Noto Sans JP", "KoreanUI", sans-serif; font-weight: 600; color: var(--ink);
+      background: #fff; border-radius: 999px; padding: 10px 26px; font-size: 40px; box-shadow: 0 10px 26px rgba(20, 40, 80, 0.14); }
+    #s-who .langs { position: absolute; left: 0; right: 0; top: 760px; text-align: center; font-size: 84px; }
+
+    #s-cta .logo { position: absolute; left: 190px; top: 130px; width: 700px; }
+    #s-cta h2 { position: absolute; left: 0; right: 0; top: 500px; text-align: center; font-size: 100px; }
+    #s-cta .btnwrap { position: absolute; left: 0; right: 0; top: 650px; display: flex; justify-content: center; }
+    #s-cta .cta { font-size: 64px; padding: 24px 64px; }
+  </style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="25.5" data-width="1080" data-height="1350">
+
+  <!-- 1 · HOOK (0–5.5) -->
+  <div id="s-hook" class="scene clip" data-start="0" data-duration="5.5" data-track-index="0" style="z-index: 30">
+    <div class="in layer">
+      <div class="paper"></div>
+      <div class="lines">
+        <span id="h1" class="l display">If homework ends in tears,</span>
+        <span id="h2" class="l display small">the problem might be</span>
+        <span id="h4" class="l display orange">the format,</span>
+        <span id="h5" class="l display">not your child.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · HOW (5.1–10.8) -->
+  <div id="s-how" class="scene clip" data-start="5.1" data-duration="5.7" data-track-index="0" style="z-index: 10">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <img class="logo" src="assets/brand/logo-wordmark.webp" alt="Learnigo" />
+      <div class="window w4">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu/subject/english</span></div>
+        <div class="view"><div class="zoom">
+          <img src="assets/screens/english.webp" alt="English: Listen, Read, Write, Speak" />
+          <div id="how-ring" class="ring" style="left: 156px; top: 244px; width: 160px; height: 182px; opacity: 0"></div>
+        </div></div>
+      </div>
+      <div class="stack">
+        <span id="c1" class="chip"><span class="ico" style="background: var(--blue)"><svg viewBox="0 0 48 48" width="36" height="36"><path d="M8 18h8l10-8v28l-10-8H8z" fill="#fff" /><path d="M32 16c4 5 4 11 0 16" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" /></svg></span>Every question read aloud</span>
+        <span id="c2" class="chip"><span class="ico" style="background: var(--purple); font-size: 30px; color: #fff">10</span>Short, 10-question rounds</span>
+        <span id="c3" class="chip"><span class="ico" style="background: var(--green)"><svg viewBox="0 0 48 48" width="36" height="36"><circle cx="24" cy="26" r="15" fill="none" stroke="#fff" stroke-width="4" /><path d="M24 18v8l5 4" stroke="#fff" stroke-width="4" stroke-linecap="round" fill="none" /><path d="M8 8l32 32" stroke="#fff" stroke-width="4" stroke-linecap="round" /></svg></span>No time pressure</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3a · BEAT YOUR OWN BEST (10.6–12.9) -->
+  <div id="s-best1" class="scene clip" data-start="10.6" data-duration="2.3" data-track-index="0" style="z-index: 11">
+    <div class="in layer">
+      <div class="bg bg-meadow"></div>
+      <div class="veil"></div>
+      <div class="stars">
+        <svg id="st1" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.1l-5.9 3.2 1.3-6.5L2.5 9.3l6.6-.8z" fill="#ffd24d" stroke="#e0a100" stroke-width="1" /></svg>
+        <svg id="st2" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.1l-5.9 3.2 1.3-6.5L2.5 9.3l6.6-.8z" fill="#ffd24d" stroke="#e0a100" stroke-width="1" /></svg>
+        <svg id="st3" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.1l-5.9 3.2 1.3-6.5L2.5 9.3l6.6-.8z" fill="#ffd24d" stroke="#e0a100" stroke-width="1" /></svg>
+      </div>
+      <h2 class="display">Beat your<br /><span class="orange">own best</span></h2>
+    </div>
+  </div>
+
+  <!-- 3b · YOU SEE HOW THEY'RE DOING (12.7–14.9) -->
+  <div id="s-best2" class="scene clip" data-start="12.7" data-duration="2.2" data-track-index="0" style="z-index: 12">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="window w4" style="top: 250px">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu/pricing</span></div>
+        <div class="view"><div class="zoom"><img src="assets/screens/pricing.webp" alt="For families: learn for free, link your child and see how they are doing" /></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · WHO (14.7–20.2) -->
+  <div id="s-who" class="scene clip" data-start="14.7" data-duration="5.5" data-track-index="0" style="z-index: 13">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="txt">
+        <div class="sub">Designed with</div>
+        <div class="display"><span class="orange">dyslexia</span> &amp;<br /><span class="orange">ADHD</span></div>
+        <div class="sub">in mind</div>
+      </div>
+      <div class="langs display"><span class="orange">14</span> languages</div>
+      <span class="hello" style="left: 70px; top: 920px">Hello</span>
+      <span class="hello" style="left: 300px; top: 1000px">Hola</span>
+      <span class="hello" style="left: 520px; top: 930px">Bonjour</span>
+      <span class="hello" style="left: 820px; top: 1010px">Ciao</span>
+      <span class="hello" style="left: 100px; top: 1090px">Привет</span>
+      <span class="hello" style="left: 380px; top: 1110px">こんにちは</span>
+      <span class="hello" style="left: 700px; top: 1120px">Olá</span>
+      <span class="hello" style="left: 860px; top: 900px">Hallo</span>
+    </div>
+  </div>
+
+  <!-- 5 · END CARD (19.9–25.5) -->
+  <div id="s-cta" class="scene clip" data-start="19.9" data-duration="5.6" data-track-index="0" style="z-index: 14">
+    <div class="in layer">
+      <div class="bg bg-meadow"></div>
+      <div class="veil"></div>
+      <img class="logo" src="assets/brand/logo-wordmark.webp" alt="Learnigo" />
+      <h2 class="display">Free for families</h2>
+      <div class="btnwrap"><span id="cta-btn" class="cta">learnigo.eu</span></div>
+    </div>
+  </div>
+
+  <!-- the puppy -->
+  <div id="pup-best" class="pup" style="z-index: 25; left: 240px; top: 470px; width: 600px; height: 555px; opacity: 0">
+    <video id="pup-cheer" class="clip" data-start="10.6" data-duration="2.3" data-track-index="2" src="assets/companion/cheer.webm" muted playsinline></video>
+  </div>
+  <div id="pup-cta" class="pup" style="z-index: 25; left: 300px; top: 830px; width: 480px; height: 444px; opacity: 0">
+    <video id="pup-hello" class="clip" data-start="20.2" data-duration="4.04" data-track-index="2" src="assets/companion/hello.webm" muted playsinline></video>
+    <video id="pup-idle" class="clip" data-start="24.24" data-duration="1.26" data-track-index="2" src="assets/companion/idle.webm" muted playsinline></video>
+  </div>
+
+  <div id="captions" data-composition-id="captions" data-composition-src="compositions/captions.html"
+       data-start="0" data-duration="25.5" data-track-index="5" data-track-kind="captions"
+       data-width="1080" data-height="1350" style="z-index: 50"></div>
+
+  <audio id="vo" class="clip" data-start="0" data-duration="22.9" data-track-index="6" data-volume="1" src="assets/voice/02-every-kind-of-mind/vo.wav"></audio>
+  <audio id="music" class="clip" data-start="0" data-duration="25.5" data-track-index="7" data-volume="0.16" data-fade-in="0.5" data-fade-out="2.5" src="assets/audio/bed.mp3"></audio>
+</div>
+
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const E = "power3.out";
+  const enter = (id, t, d = 0.4) => tl.fromTo(`#${id} .in`, { opacity: 0 }, { opacity: 1, duration: d, ease: "power1.out" }, t);
+  const pop = (sel, t, from = 0.6) => tl.fromTo(sel, { opacity: 0, scale: from, y: 16 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(1.8)" }, t);
+  const push = (sel, t, scale, ox, oy, d = 1.1) =>
+    tl.fromTo(sel, { scale: 1, transformOrigin: `${ox}px ${oy}px` }, { scale, transformOrigin: `${ox}px ${oy}px`, duration: d, ease: "power2.inOut" }, t);
+
+  // 1 · HOOK — line 1 already on screen at frame 0
+  tl.fromTo("#h1", { opacity: 1, y: 0 }, { opacity: 1, y: -4, duration: 1.8, ease: "none" }, 0);
+  tl.fromTo("#h2", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 1.95);
+  tl.fromTo("#h4", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(2)" }, 3.0);
+  tl.fromTo("#h5", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: E }, 3.7);
+  tl.fromTo("#s-hook .in", { yPercent: 0 }, { yPercent: -105, duration: 0.7, ease: "power3.in" }, 4.95);
+
+  // 2 · HOW
+  tl.fromTo("#s-how .logo", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(1.7)" }, 5.3);
+  tl.fromTo("#s-how .window", { y: 60, scale: 0.96 }, { y: 0, scale: 1, duration: 0.6, ease: E }, 5.1);
+  push("#s-how .zoom", 5.8, 1.35, 300, 330, 1.2);
+  tl.fromTo("#how-ring", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 6.3);
+  pop("#c1", 5.7); pop("#c2", 7.4); pop("#c3", 8.8);
+
+  // 3 · BEST
+  enter("s-best1", 10.6, 0.35);
+  pop("#st1", 10.8); pop("#st2", 11.0); pop("#st3", 11.2);
+  tl.fromTo("#s-best1 h2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 10.75);
+  tl.fromTo("#pup-best", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 10.6);
+  tl.to("#pup-best", { opacity: 0, duration: 0.25 }, 12.65);
+  enter("s-best2", 12.7, 0.35);
+  tl.fromTo("#s-best2 .window", { y: 50 }, { y: 0, duration: 0.5, ease: E }, 12.7);
+  push("#s-best2 .zoom", 12.9, 1.3, 480, 420, 1.2);
+
+  // 4 · WHO
+  enter("s-who", 14.7, 0.4);
+  tl.fromTo("#s-who .txt", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: E }, 14.8);
+  tl.fromTo("#s-who .langs", { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.45, ease: "back.out(1.6)" }, 17.3);
+  document.querySelectorAll("#s-who .hello").forEach((el, i) => {
+    tl.fromTo(el, { opacity: 0, scale: 0.6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.35, ease: "back.out(2)" }, 17.5 + i * 0.12);
+  });
+
+  // 5 · END CARD
+  enter("s-cta", 19.9, 0.45);
+  tl.fromTo("#s-cta .logo", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.7)" }, 20.0);
+  tl.fromTo("#s-cta h2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 20.4);
+  pop("#cta-btn", 21.2, 0.7);
+  tl.to("#cta-btn", { scale: 1.05, duration: 0.5, ease: "sine.inOut", repeat: 3, yoyo: true }, 22.2);
+  tl.fromTo("#pup-cta", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.5, ease: E }, 20.2);
+
+  window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
