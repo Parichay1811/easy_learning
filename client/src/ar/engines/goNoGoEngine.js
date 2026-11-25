@@ -13,10 +13,15 @@
  *
  * Withholding correctly is celebrated, quietly. If stopping produced no
  * feedback at all, a child would have no way to learn that stopping was right.
+ *
+ * What a round contains is planned in goNoGoPlan.js: which rule pair it plays,
+ * that each rule is met by at least two "leave it alone" turns, and that
+ * pictures do not repeat until all have been shown.
  */
 import { OUTCOME } from '../core/telemetry'
 import { DwellSelector } from '../core/interactions'
-import { layoutSlots, clamp, pick } from '../core/geometry'
+import { ArrivalGate, layoutClearOf } from '../core/arrival'
+import { layoutSlots, clamp } from '../core/geometry'
 import { getSettings, accommodate } from '../core/settings'
 import {
   drawTarget, drawHandCursor, drawSkeleton, PALETTE, hexA, edgeFlash, roundRect,
@@ -27,6 +32,10 @@ import {
 } from './base'
 import { resolveDifficulty } from '../core/adaptive'
 import { getSets } from '../content'
+import { pickVariant, segmentOf, minNoGoFor, chooseGo, drawFresh } from './goNoGoPlan'
+
+/** The rule pair each game played last, so the next round plays a different one. */
+const LAST_VARIANT = new Map()
 
 /**
  * @param {object} game `game.config`:
@@ -38,6 +47,10 @@ import { getSets } from '../content'
  *   noGoLabel    what to call the no-go category
  *   ruleSwitch   true to swap the categories half way (Rule Switch)
  *   holdMs       how long a no-go stimulus must be *left alone* to count
+ *   only         (item) => boolean — keeps a picture in or out of both pools
+ *   variants     [{ goSets, noGoSets, goCats|goTest, goLabel, noGoLabel, only }]
+ *                alternative rule pairs. A round plays one of them, never the
+ *                one it played last, so the rule is not always the same pair.
  */
 export function goNoGoEngine(game) {
   const cfg = {
@@ -61,12 +74,22 @@ export function goNoGoEngine(game) {
   let flashColor = null
   let flashUntil = 0
   let inhibitGlow = 0
+  /** The rule pair this round plays: `cfg`, or `cfg` overlaid with a variant. */
+  let rule = cfg
+  /** Pictures already shown under the current rule, so none repeats early. */
+  const shown = new Set()
+  let lastItemId = null
+  // A picture must be reached for: see core/arrival.js.
+  const gate = new ArrivalGate()
+  let gatePending = false
+  let lastPointers = []
+  let lastStage = null
 
   /** Current category labels, which the Rule Switch variant swaps. */
   function labels() {
     return switched
-      ? { go: cfg.noGoLabel, noGo: cfg.goLabel }
-      : { go: cfg.goLabel, noGo: cfg.noGoLabel }
+      ? { go: rule.noGoLabel, noGo: rule.goLabel }
+      : { go: rule.goLabel, noGo: rule.noGoLabel }
   }
 
   /**
@@ -76,10 +99,15 @@ export function goNoGoEngine(game) {
    * the child has to update the rule, not learn new pictures.
    */
   function classify(item) {
-    const base = cfg.goTest
-      ? Boolean(cfg.goTest(item))
-      : (cfg.goCats || []).some((c) => (item.cats || []).includes(c))
+    const base = rule.goTest
+      ? Boolean(rule.goTest(item))
+      : (rule.goCats || []).some((c) => (item.cats || []).includes(c))
     return switched ? !base : base
+  }
+
+  /** "Leave it alone" turns already played under the rule now in force. */
+  function noGoSince(start) {
+    return machine ? machine.results.slice(start).filter((r) => r.rule === 'noGo').length : 0
   }
 
   function buildTrial(index, level) {
@@ -93,6 +121,8 @@ export function goNoGoEngine(game) {
     }
     if (cfg.ruleSwitch && index === ruleFlipAt && !switched) {
       switched = true
+      // The same pictures now mean the opposite, so all of them are new again.
+      shown.clear()
       const l = labels()
       api.banner('NEW RULE!', 1400, PALETTE.yellow)
       api.sfx.levelUp()
@@ -103,24 +133,42 @@ export function goNoGoEngine(game) {
       })
     }
 
-    const goPool = getSets(cfg.goSets).filter((i) => classify(i))
-    const noGoPool = getSets(cfg.noGoSets).filter((i) => !classify(i))
+    const keep = rule.only || (() => true)
+    const goPool = getSets(rule.goSets).filter(keep).filter((i) => classify(i))
+    const noGoPool = getSets(rule.noGoSets).filter(keep).filter((i) => !classify(i))
     if (!goPool.length || !noGoPool.length) return null
 
-    const noGoRate = level.noGoRate ?? 0.3
-    // Deterministic-ish mix: never three no-go trials in a row, which would
-    // stop being an inhibition task and start being a waiting task.
-    const forceGo = machine && machine.results.slice(-2).every((r) => r.rule === 'noGo')
-    isGo = forceGo ? true : api.rng() > noGoRate
+    // The mix is random at the level's rate, inside two guarantees: never three
+    // "leave it alone" turns running, and at least two of them under each rule —
+    // at 15 % a rule could otherwise go by having been met once, or not at all.
+    const seg = segmentOf(index, cfg.trials, cfg.ruleSwitch ? ruleFlipAt : null)
+    isGo = chooseGo({
+      noGoRate: level.noGoRate ?? 0.3,
+      roll: api.rng(),
+      recent: machine ? machine.results.map((r) => r.rule) : [],
+      remaining: seg.remaining,
+      noGoSoFar: noGoSince(seg.start),
+      minNoGo: minNoGoFor(seg.length),
+    })
 
-    const item = pick(isGo ? goPool : noGoPool, api.rng)
+    const item = drawFresh(isGo ? goPool : noGoPool, shown, api.rng, lastItemId)
+    lastItemId = item.id
     const box = api.reachBox(level.eccentricity ?? 1)
-    const slot = layoutSlots(1, box, spec.radius, api.rng)[0]
+    // Not under a hand that is already there: a picture that appears beneath a
+    // resting finger is touched before the child has seen what it is, which on
+    // a "leave it alone" turn is a mistake they never made.
+    const slot = layoutClearOf(() => layoutSlots(1, box, spec.radius, api.rng), lastPointers, {
+      stageW: lastStage?.stageW,
+      stageH: lastStage?.stageH,
+      clear: spec.radius * 1.5,
+    })[0]
     ;[target] = makeTargets([item], [slot], { radius: spec.radius, spriteKind: 'emoji', captions: true })
     target.color = isGo ? 'green' : 'red'
 
     selector = new DwellSelector({ dwellMs: Math.min(spec.dwellMs, 200) })
     inhibitGlow = 0
+    gate.reset()
+    gatePending = true
 
     return {
       targetId: item.id,
@@ -158,6 +206,15 @@ export function goNoGoEngine(game) {
       api = a
       switched = false
       ruleFlipAt = null
+      shown.clear()
+      lastItemId = null
+      rule = cfg
+      if (cfg.variants?.length) {
+        const vi = pickVariant(cfg.variants.length, LAST_VARIANT.get(game.id) ?? null, api.rng)
+        LAST_VARIANT.set(game.id, vi)
+        rule = { ...cfg, ...cfg.variants[vi] }
+        api.recorder.event?.('ruleVariant', { index: vi, go: rule.goLabel, noGo: rule.noGoLabel })
+      }
       machine = new TrialMachine({
         api,
         totalTrials: cfg.trials,
@@ -175,13 +232,25 @@ export function goNoGoEngine(game) {
     },
 
     update(f) {
-      if (!machine || machine.ended || !machine.trial) return
+      if (!machine || machine.ended) return
       const { frame, dt, now, stageW, stageH } = f
       const s = getSettings()
       const pointers = pointersFor(frame, s)
       const hands = handsFor(frame, s)
+      // Remembered even before the first picture, so that one too can be laid
+      // out clear of where the hands already are.
+      lastPointers = pointers
+      lastStage = { stageW, stageH }
+      if (!machine.trial) return
       trail.push(pointers[0])
       machine.reach.step(hands[0] || null, now)
+
+      if (gatePending) {
+        gate.watch([target], pointers, { stageW, stageH, now })
+        gatePending = false
+      } else {
+        gate.step([target], pointers, { stageW, stageH, now })
+      }
 
       if (machine.phase !== 'respond') return
 
@@ -191,7 +260,9 @@ export function goNoGoEngine(game) {
         inhibitGlow = clamp(inhibitGlow + dt * 1.4, 0, 1)
       }
 
-      const res = selector.step([target], pointers, { dt, now, stageW, stageH })
+      const res = selector.step([target], pointers, {
+        dt, now, stageW, stageH, isHeld: (id) => gate.isHeld(id),
+      })
 
       if (machine.window?.expired()) {
         if (machine.trial.isGo) {
@@ -210,7 +281,9 @@ export function goNoGoEngine(game) {
             accuracy: OUTCOME.CORRECT_INHIBIT,
             target,
             chosenId: null,
-            note: 'withheld',
+            // Honest about the one odd case: the picture appeared under a hand
+            // that then never moved. Not a touch, but not a reach held back.
+            note: gate.isHeld(target.id) ? 'withheld-hand-resting' : 'withheld',
           })
           api.setPrompt({ main: 'Great stopping!', sub: `You left the ${target.item.label.toLowerCase()} alone` })
         }
@@ -327,6 +400,7 @@ export function goNoGoEngine(game) {
 
     unmount() {
       selector?.reset()
+      gate.reset()
       machine = null
       target = null
     },

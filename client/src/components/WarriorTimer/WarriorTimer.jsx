@@ -16,10 +16,13 @@ function ticksAt(left) {
 /**
  * The Warrior clock: a ring that empties as time runs down, warming from calm
  * blue to amber to a soft orange (never a flashing red), and pulsing with each
- * tick. Tap it to pause.
+ * tick. Tap it to pause; or, in a question round, to open the clock's menu
+ * (`onOpenMenu`: No clock / Normal / More time, and Pause; the clock waits
+ * while the menu is open, ModulePlayer/ClockMenu.jsx).
  *
  *   <WarriorTimer total={30} left={timeLeft} running={clockRunning}
  *     paused={paused} timedOut={timedOut} onTogglePause={togglePause} />
+ *   <WarriorTimer … onOpenMenu={toggleMenu} menuOpen={open} />
  *
  * `running` is false whenever the question is answered, the clock is paused,
  * the page is hidden or the round is over — the clock is silent then.
@@ -30,7 +33,7 @@ function ticksAt(left) {
  * `timedOut`: the clock reached zero. It never costs a star: the question stays
  * open and the clock just says "take your time".
  */
-export default function WarriorTimer({ total, left, running, paused, timedOut, onTogglePause, waiting = false, className = "" }) {
+export default function WarriorTimer({ total, left, running, paused, timedOut, onTogglePause, onOpenMenu, menuOpen = false, waiting = false, className = "" }) {
   const { t } = useTranslation();
   const last = useRef(left);
 
@@ -53,21 +56,31 @@ export default function WarriorTimer({ total, left, running, paused, timedOut, o
   const R = 20;
   const C = 2 * Math.PI * R;
 
-  const label = paused
-    ? t("warriorTimer.resume", { defaultValue: "Resume the clock ({{n}} seconds left)", n: left })
-    : waiting
-      ? t("warriorTimer.waiting", { defaultValue: "The clock waits while the teacher reads ({{n}} seconds)", n: left })
-      : t("warriorTimer.pause", { defaultValue: "Pause the clock ({{n}} seconds left)", n: left });
+  // With a menu the button names the clock and how it stands (a tap opens the
+  // choices); without one a tap pauses or resumes, and the label says so.
+  const secondsLeft = t("warriorTimer.secondsLeft", { defaultValue: "{{n}} seconds left", n: left });
+  const label = onOpenMenu
+    ? `${t("prefs.fields.timer.label", { defaultValue: "Warrior clock" })}: ${timedOut
+      ? t("warriorTimer.takeYourTimeLong", { defaultValue: "The clock has stopped. Take your time." })
+      : waiting && !paused
+        ? t("warriorTimer.waiting", { defaultValue: "The clock waits while the teacher reads ({{n}} seconds)", n: left })
+        : paused ? `${t("warriorTimer.paused", { defaultValue: "Paused" })}, ${secondsLeft}` : secondsLeft}`
+    : paused
+      ? t("warriorTimer.resume", { defaultValue: "Resume the clock ({{n}} seconds left)", n: left })
+      : waiting
+        ? t("warriorTimer.waiting", { defaultValue: "The clock waits while the teacher reads ({{n}} seconds)", n: left })
+        : t("warriorTimer.pause", { defaultValue: "Pause the clock ({{n}} seconds left)", n: left });
 
   return (
     <button
       type="button"
       className={`${styles.timer} ${styles[phase]} ${paused ? styles.paused : ""} ${waiting && !paused ? styles.waiting : ""} ${className}`}
-      onClick={onTogglePause}
-      disabled={timedOut || !onTogglePause}
+      onClick={onOpenMenu || onTogglePause}
+      disabled={onOpenMenu ? false : timedOut || !onTogglePause}
       aria-label={label}
       title={label}
-      data-sound="toggle"
+      {...(onOpenMenu ? { "aria-haspopup": "dialog", "aria-expanded": menuOpen } : {})}
+      data-sound={onOpenMenu ? (menuOpen ? "close" : "open") : "toggle"}
     >
       {/* Remounted on every tick so its pulse animation restarts in step with the sound. */}
       <span key={ticking ? left : "still"} className={`${styles.ring} ${ticking ? styles.pulse : ""}`} aria-hidden="true">

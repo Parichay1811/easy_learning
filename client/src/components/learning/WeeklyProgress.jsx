@@ -2,22 +2,20 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import TrendLine from "../dashboard/charts/TrendLine";
 import { asFraction, weekLabel } from "./levels";
+import { weekMonday, weekDays } from "./weeks";
 import s from "./learning.module.css";
 
-// "2026-W47" -> the Monday's ISO date, so the chart can name the week.
+// A week key -> its Monday's ISO date: one stable id per week.
 function weekISO(week) {
-  const w = String(week ?? "");
-  if (/^\d{4}-\d{2}-\d{2}/.test(w)) return w.slice(0, 10);
-  const m = /^(\d{4})-W(\d{1,2})$/.exec(w);
-  if (!m) return w;
-  const jan4 = Date.UTC(Number(m[1]), 0, 4);
-  const monday = new Date(jan4 - ((new Date(jan4).getUTCDay() + 6) % 7) * 86400000 + (Number(m[2]) - 1) * 7 * 86400000);
-  return monday.toISOString().slice(0, 10);
+  const monday = weekMonday(week);
+  return monday ? monday.toISOString().slice(0, 10) : String(week ?? "");
 }
 
 /**
  * Week by week: the share of right answers as a calm line, and how many
- * answers there were. Never compared with anyone else.
+ * answers there were. Never compared with anyone else. Each week is named by
+ * its seven days ("23–29 Nov"), on the chart and under it: a week named by its
+ * Monday alone reads as a date that is a day out.
  *
  *   <WeeklyProgress history={[{ week: "2026-11-16", accuracy: 0.8, attempts: 30 }]} who="me" />
  *
@@ -27,7 +25,7 @@ export default function WeeklyProgress({ history = [], who = "me", name, height 
   const { t, i18n } = useTranslation();
   const rows = useMemo(() => (history || [])
     .filter((h) => h && h.week != null)
-    .map((h) => ({ x: weekISO(h.week), value: asFraction(h.accuracy), attempts: Number(h.attempts) || 0, label: weekLabel(h.week, i18n.language) })),
+    .map((h) => ({ x: weekISO(h.week), value: asFraction(h.accuracy), attempts: Number(h.attempts) || 0, label: weekLabel(h.week, i18n.language), days: weekDays(h.week, i18n.language) })),
   [history, i18n.language]);
   const answered = rows.filter((r) => r.attempts > 0);
   const me = who === "me";
@@ -47,7 +45,10 @@ export default function WeeklyProgress({ history = [], who = "me", name, height 
   return (
     <div className={`${s.weekly} ${className}`}>
       <TrendLine
-        data={rows.map((r) => ({ x: r.x, value: r.value }))}
+        // Each point is named by its week ("23–29 Nov", in the tooltip and the
+        // spoken summary); under the axis there is room for the day numbers only.
+        data={rows.map((r) => ({ x: r.label, value: r.value }))}
+        xFormat={(x) => rows.find((r) => r.label === x)?.days || x}
         unit="%"
         height={height}
         seriesLabel={t("learning.weekly.series", "Right answers")}

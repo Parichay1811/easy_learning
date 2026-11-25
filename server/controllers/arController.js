@@ -37,8 +37,11 @@ const LEVELS = 5
 const OUTCOMES = ['correct', 'near', 'incorrect', 'omission', 'falseAlarm', 'correctInhibit', 'aborted']
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
-// Same day-bucketing as dashboardController.js so AR rounds land in the very
-// same StudentActivity documents as the rest of the child's learning.
+// The learner's timezone (X-Timezone, checked), so a round lands on their own calendar day.
+const tzOf = (req) => require('../analytics/record').validTz(req.get?.('x-timezone') || 'UTC')
+// UTC-day bucketing, kept for the camera games' own journey views. A round's row in
+// StudentActivity uses the learner's own day instead (StudentActivity.dayKey), the same as
+// dashboardController.js, so it lands in the same document as the rest of that day's learning.
 function midnight(d = new Date()) {
   const dt = new Date(d)
   dt.setUTCHours(0, 0, 0, 0)
@@ -190,7 +193,7 @@ function buildSessionDoc(email, raw) {
  */
 const AR_XP_DIVISOR = 4 // ~300 journey points → ~75 XP, the old xpFor() ceiling
 
-async function mirrorToDashboard(email, doc) {
+async function mirrorToDashboard(email, doc, tz = 'UTC') {
   await StudentRound.create({
     email,
     module:  `ar:${doc.gameId}`,
@@ -211,7 +214,8 @@ async function mirrorToDashboard(email, doc) {
   const xpEarned = doc.xp ? Math.max(1, Math.round(doc.xp / AR_XP_DIVISOR)) : 0
 
   await StudentActivity.findOneAndUpdate(
-    { email, date: midnight(end) },
+    // The learner's own calendar day (their timezone), like every other round (StudentActivity.dayKey).
+    { email, date: StudentActivity.dayKey(end, tz) },
     {
       $push: {
         sessions: {
@@ -235,7 +239,7 @@ async function mirrorToDashboard(email, doc) {
 }
 
 /** Upserts one session and mirrors it if it is new. @returns the stored doc. */
-async function saveSession(email, raw) {
+async function saveSession(email, raw, tz = 'UTC') {
   const doc = buildSessionDoc(email, raw)
 
   // "Was this an insert?" is answered by the upsert itself rather than by a
@@ -262,7 +266,7 @@ async function saveSession(email, raw) {
   if (inserted) {
     // Telemetry is the source of truth; a failed mirror must not lose the round.
     try {
-      await mirrorToDashboard(email, doc)
+      await mirrorToDashboard(email, doc, tz)
     } catch (err) {
       console.error('AR mirrorToDashboard error:', err)
     }
@@ -281,7 +285,7 @@ const logSession = async (req, res) => {
     const problem = validateSession(raw)
     if (problem) return res.status(400).json({ success: false, message: problem })
 
-    const saved = await saveSession(email, raw)
+    const saved = await saveSession(email, raw, tzOf(req))
     res.json({
       success: true,
       data: { id: saved._id, clientSessionId: saved.clientSessionId, trials: saved.trials.length },
@@ -320,7 +324,7 @@ const logSessions = async (req, res) => {
         continue
       }
       try {
-        await saveSession(email, raw)
+        await saveSession(email, raw, tzOf(req))
         saved++
       } catch (err) {
         skipped++

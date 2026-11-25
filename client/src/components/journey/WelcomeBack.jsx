@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useGuide } from "../guide/useGuide";
 import { FaPlay, FaRedo, FaCompass, FaSeedling, FaVolumeUp, FaStop } from "react-icons/fa";
 import Mascot from "../Mascot/Mascot";
 import { narrate, stopNarration, onNarration } from "../../utils/narrator";
@@ -34,6 +35,7 @@ function actionLabel(t, a) {
  */
 export default function WelcomeBack({ welcome, name, calm = false, headingId = "jr-welcome", compact = false }) {
   const { t, i18n } = useTranslation();
+  const guide = useGuide();
   const [speakingId, setSpeakingId] = useState(null);
   const message = welcome
     ? msgText(t, welcome.message)
@@ -85,7 +87,7 @@ export default function WelcomeBack({ welcome, name, calm = false, headingId = "
               const Icon = ACTION_ICON[a.type] || FaPlay;
               const where = [a.module && moduleLabel(t, a.module), a.subject && subjectLabel(t, a.subject)].filter(Boolean).join(" · ");
               return (
-                <Link key={`${a.type}-${i}`} to={a.href} className={i === 0 ? s.primary : s.secondary} data-action={a.type}>
+                <Link key={`${a.type}-${i}`} to={a.href} className={i === 0 ? s.primary : s.secondary} data-action={a.type} {...(i === 0 ? guide("today.go", "Tap the orange button to carry on learning.", { order: 1 }) : {})}>
                   <span className={s.btnIcon} aria-hidden="true"><Icon /></span>
                   <span className={s.btnText}>
                     <span>{actionLabel(t, a)}</span>

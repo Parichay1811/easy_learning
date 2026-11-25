@@ -62,6 +62,8 @@ pages) gives you:
 - **Home** — back to the main screen
 - **About Us** — the Learnigo story and mission
 - **Games** — the Game Zone, home to the Camera Games (see §2.4)
+- **Together** — friends, rounds with a friend, your team and your prizes (see §2.6). Signed-in learners only.
+- **Shorts** — small lessons to swipe (see §2.7). Signed-in learners only.
 - **Dashboard** — your personal progress page (see §2.5)
 - **Contact Us** — reach the Learnigo team with a question or issue
 - A **language switcher** — change the app's language at any time (see §7)
@@ -171,6 +173,58 @@ your dashboard.
 
 ---
 
+### 2.6 Together: friends, rounds together and your team
+
+**Together** (in the top bar, and one tap from Home) is where you learn with other
+people. Everybody wins here: nobody is ever shown as last.
+
+- **Your player card.** A nickname made of two friendly words ("Brave Fox"), a picture you
+  choose from a set, and your **friend code**. Friends see your first name, your nickname
+  and your picture. Never your email, surname, school or a photo.
+- **Friends.** Tell a friend your 6-character code, or type theirs, or pick someone from
+  your own class. You both have to say yes. If you are under 13 and a grown-up is linked
+  to your account, they say yes too. There is no search for other children.
+- **Cheers.** You talk with a sticker and a ready-made line ("Great comeback!"), a few a
+  day. There is no chat, no free text, no voice notes and no photos.
+- **Play with a friend.** Pick a friend, a world and a kind of round. You both get the
+  same questions and play whenever it suits you. There is no clock.
+  - A **buddy round** adds your stars together: "Together you earned 7 stars!"
+  - A **friendly match** shows you side by side. The higher score gets a ribbon, the other
+    gets "Brave challenger", a draw gives you both the ribbon, and you both keep every star.
+- **Meet a mystery explorer.** A round with someone new at your level. You only ever see
+  each other's nickname and picture, and you cannot contact each other. It is off until
+  you switch it on, and for a young child a grown-up has to switch it on.
+- **My team.** When your teacher starts a class quest or a team match, your team's bar
+  shows here. Every right answer you give in any round adds a star (up to 20 a day count,
+  so a little each day helps most). Every team that reaches its goal wins a trophy, and
+  when it ends everyone gets one award that is true for them: Best comeback, Most improved,
+  Sharp thinker, Kindest cheerer, Curious explorer, Team spark, Steady helper or Team-mate.
+- **The friends' star jar.** Every star you and your friends earn in a week goes into one
+  jar. It shows the total and the next sticker, not who added what.
+- **Prizes.** Ribbons, trophies and awards stay on your prize shelf. Nothing is taken away.
+
+Whatever is waiting for you (a round a friend has played, a new award) is the first thing
+on the page, and on Home there is a shortcut straight to it.
+
+### 2.7 Shorts
+
+**Shorts** is a feed of small lessons from the AI Teacher. Each one is drawn on the
+teacher's board and spoken in about a minute, then asks one "Now you try" question.
+
+- Swipe up (or press the arrow) for the next one. The next short never starts by itself.
+- Tap the board to pause. Tap the heart on the ones you like.
+- **My topics** lets you pick what you like (Animals, Space, Numbers…). You see more of
+  those, and always something new too.
+- After a few in a row, a break card suggests a stretch, a round, or stopping for today.
+- Your grown-ups and your teacher can see which topics you like. The page tells you so.
+
+### 2.8 "Show me where to tap"
+
+On the learner pages a pointing hand and a soft glow show the one thing to tap next, and
+the teacher says it out loud ("Tap the big orange button to start learning"). The hand
+hides as soon as you touch anything and comes back if you wait. You can switch it off in
+Comfort settings → Movement and focus → **Show me where to tap**.
+
 ## 3. For Parents
 
 The **Parent** role is for a parent or guardian who just wants to add their own kids and
@@ -198,7 +252,27 @@ The **My Kids** section is where you manage your children:
     Score, Achievements), which reads as empty/zero until they've started learning under
     that email.
 
-### 3.3 Chatting with the Super Admin
+### 3.3 Together: who your child learns with, and what they love
+
+The **Together** tab of the parent dashboard answers three questions for each child.
+
+- **Who are they friends with?** Their friends (first name, nickname and picture), any
+  request **waiting for your yes**, and a Remove button. Friends can play the same round
+  and send ready-made cheers; they cannot write to each other.
+- **How is their team doing?** The class quest or team match they are in, as bars for each
+  team, how many stars your child has added, and their award when it ends. There is no
+  table of children.
+- **What do they love to watch?** From Shorts: the topics they picked, the shorts they
+  gave a heart and the ones they watched to the end, with a sentence on top ("Aanya keeps
+  coming back to Space, Animals and Nature"). Nothing else is tracked.
+
+**You hold the switches** at the bottom of the page: Friends, "Ask me before each new
+friend" (while your child is under 13), Rounds together and team matches, A round with
+someone new (off unless you switch it on), and Shorts. When two grown-ups choose
+differently, the more careful choice applies. Quiet hours and the daily limit from the
+Activity tab apply to Together and Shorts as well.
+
+### 3.4 Chatting with the Super Admin
 
 The **Chat with Us** section is a private, threaded chat with the Super Admin for account
 questions or issues — the same pattern Admins use (see §4.6). Unread messages show a badge
@@ -350,6 +424,26 @@ students in the batch(es) you selected) or **rejects** it with a reason. You can
 approve your own questions.
 
 ---
+
+### 5.4 Team play: class quests and team matches
+
+Open a group and choose **Team play**.
+
+- **Start a quest or match.** A **class quest** is one team with one shared bar. A **team
+  match** splits the group into 2 to 4 balanced teams (made for you from recent learning).
+  Choose how many days, which subject counts (or any), and the goal in stars a learner a day.
+- **While it runs** you see each team's bar, how many learners have joined in, and under
+  "Who has joined in so far" the names in each team in name order with "joined in" or "not
+  yet". It is a list for inviting, never a ranking.
+- **End now** (or let the time run out) starts the ceremony: a trophy for every team that
+  reached its goal, a "first to the flag" ribbon when there are several teams, and one
+  award for every learner, worked out from their own answers.
+- **What does this group love to watch?** The topics most learners in the group have among
+  their favourites in Shorts. A learner's own favourites are on their page under
+  **What they love**.
+
+A school admin can switch team play off for the whole school in Settings → Policies →
+**Team matches and class quests**.
 
 ## 6. For the Super Admin
 

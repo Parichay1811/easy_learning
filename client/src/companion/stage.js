@@ -17,6 +17,7 @@ import { fitFrame, pickSpot, gazeTowards, visibleShare } from "./geometry";
 import * as motion from "./motion";
 import { onNarration } from "../utils/narrator";
 import { dogSfx } from "../utils/sounds";
+import { phoneScreen } from "../utils/useLiteMode";
 import css from "./companion.module.css";
 
 const LOOK_SELECTOR = "[data-companion-look]";
@@ -41,13 +42,30 @@ const CLIP_SOUNDS = {
 // A place counts only if it can be seen and has a size: a place a layout folds to
 // 0 x 0 on a phone (the lesson card's buddy corner) must not keep the dog waiting
 // for it, floating where it was lifted, over the page.
-const shown = (el) => {
-  if (!el?.isConnected) return false;
-  const cs = getComputedStyle(el);
-  if (cs.display === "none" || cs.visibility === "hidden") return false;
+// Returns the place's rectangle on screen, or null when it cannot be seen (one read of
+// the layout per place).
+const shownRect = (el) => {
+  if (!el?.isConnected) return null;
+  if (typeof el.checkVisibility === "function") {
+    if (!el.checkVisibility({ visibilityProperty: true })) return null;
+  } else {
+    const cs = getComputedStyle(el);
+    if (cs.display === "none" || cs.visibility === "hidden") return null;
+  }
   const r = el.getBoundingClientRect();
-  return r.width > 1 && r.height > 1;
+  return r.width > 1 && r.height > 1 ? r : null;
 };
+const shown = (el) => shownRect(el) !== null;
+
+// On a phone-sized screen the dog never walks (it hops), and memory and data are
+// scarcer: fewer clips are kept ready, and only the reactions that must not wait
+// are fetched ahead. Everything else loads the first time it is needed.
+const PRELOAD = {
+  // The walk first: the next page change should already be a walk, not a hop.
+  roomy: [["hello", "standUp", "walk", "sitDown", "talk", "cheer", "comfort"], ["lookRight", "lookLeft", "tilt", "point", "play"]],
+  phone: [["talk", "cheer", "comfort"], ["play"]],
+};
+const PHONE_MAX_VIDEOS = 6;
 
 export function startCompanion({ base = "/companion/", onState } = {}) {
   let stopped = false;
@@ -67,6 +85,7 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
   let visible = true;
   const brain = createBrain();
   const offs = [];
+  const phone = phoneScreen(); // decided at the start: a turned phone is still a phone
   // localStorage.learnigo_companion_debug = "1" logs what the brain hears and decides.
   const debug = (() => { try { return localStorage.getItem("learnigo_companion_debug") === "1"; } catch { return false; } })();
   const log = (...a) => { if (debug) console.warn("[companion]", ...a); };
@@ -340,10 +359,21 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
     });
   }
 
+  // Many things ask for a fresh look at the same moment (a page mounts several places,
+  // a scroll ends): one look per frame is enough.
+  let reconcileRaf = 0;
+  function schedule() {
+    if (reconcileRaf || stopped) return;
+    reconcileRaf = requestAnimationFrame(() => { reconcileRaf = 0; reconcile(); });
+  }
+
   function reconcile() {
     if (stopped || !manifest) return;
     if (moving) { again = true; return; }
-    const spots = getSpots().map((s) => ({ ...s, rect: s.el?.isConnected ? s.el.getBoundingClientRect() : null, hidden: !shown(s.el) }));
+    const spots = getSpots().map((s) => {
+      const rect = shownRect(s.el);
+      return { ...s, rect, hidden: !rect };
+    });
     const id = pickSpot(spots, hostId, innerWidth, innerHeight);
     if (id && id === hostId) {
       const s = getSpot(id);
@@ -539,13 +569,27 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
       const interrupt = m === "cheer" ? brain.dispatch({ type: "success", size: "big" }) : m === "think" ? brain.dispatch({ type: "curious" }) : m === "wave" ? brain.dispatch({ type: "greet" }) : false;
       if (interrupt) beat(true);
     }
-    requestAnimationFrame(reconcile);
+    schedule();
   }));
+  // Scrolling and resizing: look again once things have stopped moving, and never
+  // more than once in a frame (see schedule above). Passive: scrolling never waits.
   let scrollT = 0;
-  const onLayout = () => { clearTimeout(scrollT); scrollT = setTimeout(reconcile, 160); };
-  addEventListener("resize", onLayout, { passive: true });
-  addEventListener("scroll", onLayout, { passive: true, capture: true });
-  offs.push(() => { removeEventListener("resize", onLayout); removeEventListener("scroll", onLayout, { capture: true }); });
+  let layoutW = innerWidth;
+  let layoutH = innerHeight;
+  const onScroll = () => { clearTimeout(scrollT); scrollT = setTimeout(schedule, 160); };
+  const onResize = () => {
+    // A phone's address bar sliding in or out changes only the height, and by a
+    // little: the places move with the page, so there is nothing to look at again.
+    const w = innerWidth;
+    const h = innerHeight;
+    const barOnly = w === layoutW && Math.abs(h - layoutH) < Math.max(140, layoutH * 0.2);
+    layoutW = w;
+    layoutH = h;
+    if (!barOnly) onScroll();
+  };
+  addEventListener("resize", onResize, { passive: true });
+  addEventListener("scroll", onScroll, { passive: true, capture: true });
+  offs.push(() => { removeEventListener("resize", onResize); removeEventListener("scroll", onScroll, { capture: true }); cancelAnimationFrame(reconcileRaf); });
 
   // --- start ---
   fetch(`${base}manifest.json`)
@@ -558,18 +602,20 @@ export function startCompanion({ base = "/companion/", onState } = {}) {
         player = new AlphaVideo(canvas, {
           base,
           manifest: m,
+          maxVideos: phone ? PHONE_MAX_VIDEOS : undefined,
           onFirstFrame: () => {
             if (stopped) return;
             dog.dataset.live = "true";
             setLive(true);
             state({ live: true });
-            // Likely next performances, fetched quietly once the first one shows.
-            // Then the rest, so a reaction never waits for a download (2.2 MB in all).
+            // Likely next performances, fetched quietly once the first one shows. On a
+            // roomy screen the rest follow, so a reaction never waits for a download
+            // (3.6 MB in all); a phone fetches 0.7 MB and the rest on first use.
             const later = () => {
               if (debug && localStorage.getItem("learnigo_companion_nopreload") === "1") return; // tests: cold switches
-              // The walk first: the next page change should already be a walk, not a hop.
-              player?.preload(["hello", "standUp", "walk", "sitDown", "talk", "cheer", "comfort"]);
-              setTimeout(() => player?.preload(["lookRight", "lookLeft", "tilt", "point", "play"]), 6000);
+              const [first, second] = phone ? PRELOAD.phone : PRELOAD.roomy;
+              player?.preload(first);
+              if (second.length) setTimeout(() => player?.preload(second), 6000);
             };
             if ("requestIdleCallback" in window) requestIdleCallback(later, { timeout: 4000 });
             else setTimeout(later, 1500);

@@ -19,7 +19,9 @@
  * This file is where a therapist's "new activity" usually lives: a new asker is
  * ~20 lines and needs no game code at all.
  */
-import { getSet, getSets, buildChoiceSet, spokenName } from '../content'
+import {
+  getSet, getSets, buildChoiceSet, buildSameKindChoiceSet, spokenName, isSwatch, asSwatch,
+} from '../content'
 import { SCENARIOS, BINS } from '../content/packs'
 import { shuffle, sample, pick, clamp } from '../core/geometry'
 import { speakPhoneme } from '../core/tts'
@@ -72,20 +74,31 @@ export function askByAttribute({ sets, attribute = 'color', spriteKind = 'shape'
 }
 
 // ── 2. Read & Find (written word → picture/shape) ────────────────────────────
-/** The instruction is the *written* name; nothing is spoken unless asked for. */
+/**
+ * The instruction is the *written* name; nothing is spoken unless asked for.
+ *
+ * One kind of word per turn. With `shapes` and `colors` both in play, a colour
+ * swatch (a plain disc called "Red") used to sit next to the shapes, and the
+ * circle shape is itself red — so the same red circle was the answer to CIRCLE
+ * on one turn and to RED on the next, and a child was told a circle "is Red".
+ * Now a shape word is answered among shapes only, a colour word among colours
+ * only, and a colour is drawn as a drop of paint rather than as a circle.
+ */
+const READ_SUB = { shapes: 'Touch this shape', colors: 'Touch this colour' }
+
 export function askByReading({ sets, spriteKind = 'shape' }) {
   return ({ rng, choices, distractorKind }) => {
     const pool = getSets(sets)
-    const { target, options } = buildChoiceSet({ pool, choices, distractorKind, rng })
+    const { target, options } = buildSameKindChoiceSet({ pool, choices, distractorKind, rng })
     return {
       targetId: target.id,
-      options,
+      options: options.map(asSwatch),
       spriteKind,
       // Upper case, spaced: the word is the stimulus, so it gets prominence.
       promptText: String(target.label).toUpperCase(),
-      promptSub: 'Touch this one',
+      promptSub: READ_SUB[target.set] || 'Touch this one',
       speakText: null, // reading task — do NOT read it out
-      answerLabel: target.label,
+      answerLabel: isSwatch(target) ? `the colour ${String(target.label).toLowerCase()}` : target.label,
     }
   }
 }

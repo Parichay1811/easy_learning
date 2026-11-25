@@ -8,7 +8,7 @@ const q = require('../analytics/queries')
 const { childAccess } = require('../utils/guardianLink')
 
 const CONSENT_VERSION = '2026-11'
-const LEARNER_FIELDS = ['grade', 'language', 'weeklyGoal', 'healthyUse']
+const LEARNER_FIELDS = ['grade', 'language', 'weeklyGoal', 'healthyUse', 'together']
 
 // The caller's own verified link, or { error }.
 async function ownChild(parent, childId, { allowUnverified = false } = {}) {
@@ -111,6 +111,7 @@ async function healthyState(email, rows, tz = 'UTC', now = new Date()) {
 
 // Validation of the settings a parent may send.
 const HHMM = /^([01]\d|2[0-3]):[0-5]\d$/
+const TOGETHER_KEYS = ['friends', 'friendApproval', 'matches', 'mystery', 'shorts']
 function cleanSettings(body = {}) {
   const out = {}
   const errors = []
@@ -147,6 +148,13 @@ function cleanSettings(body = {}) {
     else if ((quietStart || quietEnd) && !(HHMM.test(quietStart) && HHMM.test(quietEnd))) errors.push('Quiet hours need a start and an end time')
     else out.healthyUse = { dailyLimitMin, breakEveryMin, quietStart, quietEnd }
   }
+  // Learning together (G-518): each switch is a plain yes or no; switches not sent keep their value.
+  if (body.together !== undefined) {
+    const g = body.together || {}
+    const bad = TOGETHER_KEYS.find((k) => g[k] !== undefined && typeof g[k] !== 'boolean')
+    if (bad) errors.push(`together.${bad} must be true or false`)
+    else out.together = Object.fromEntries(TOGETHER_KEYS.filter((k) => g[k] !== undefined).map((k) => [k, g[k]]))
+  }
   if (body.notifyPrefs !== undefined) {
     const p = body.notifyPrefs || {}
     out.notifyPrefs = {}
@@ -158,5 +166,5 @@ function cleanSettings(body = {}) {
 
 module.exports = {
   CONSENT_VERSION, LEARNER_FIELDS, ownChild, requireOwnChild, verifiedRows, syncLearnerSettings, learnerSettingsFrom,
-  weekOf, goalProgress, strictestHealthy, healthyState, cleanSettings, inWindow, toMin,
+  weekOf, goalProgress, strictestHealthy, healthyState, cleanSettings, inWindow, toMin, TOGETHER_KEYS,
 }

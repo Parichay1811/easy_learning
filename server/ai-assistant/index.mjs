@@ -21,6 +21,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadPacks } from "./lib/packs.mjs";
+import { catalogOf } from "./lib/catalog.mjs";
 import { respond, setTerms } from "./lib/router.mjs";
 import { createLLM } from "./lib/llm.mjs";
 import { createFast } from "./lib/fast.mjs";
@@ -572,6 +573,20 @@ export async function createAIAssistant() {
 
     async "GET /topics"(req, res, url) {
       return { topics: suggestTopics(url.searchParams.get("q") || "", 8) };
+    },
+
+    // Every topic, to browse instead of typing (the page's "Pick a topic"):
+    // GET /catalog -> { total, areas: [{ name, count, levels }] }, the areas
+    // for young children first; GET /catalog?area=For Kids -> { area, groups:
+    // [{ name, topics: [{ id, title, levels }] }] }. Titles only, built once
+    // per set of packs (lib/catalog.mjs); a browser keeps it for five minutes.
+    async "GET /catalog"(req, res, url) {
+      const catalog = catalogOf(packs, topicRows);
+      const area = url.searchParams.get("area");
+      const body = area == null ? { total: catalog.total, areas: catalog.areas } : catalog.byArea.get(area);
+      if (!body) throw Object.assign(new Error("no such area"), { code: 404 });
+      send(res, 200, body, { "Cache-Control": "public, max-age=300" });
+      return undefined;
     },
 
     // Videos to watch next on a topic: GET /api/videos?q=Newton's laws

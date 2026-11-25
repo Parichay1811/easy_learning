@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { fetchQuestions, resetQuestions, selectQuestionState, discardUnfinishedRound } from "../store/slices/questionsSlice";
 import { logDashboardSession, logDashboardAnswer, logRoundResult } from "../store/slices/dashboardSlice";
 import { getQuestionLang } from "../utils/questionLang";
-import { warriorPassMark, noteWarriorBest } from "../utils/warrior";
+import { noteWarriorBest, rescaleTimeLeft, warriorResult } from "../utils/warrior";
 import { learnerTag } from "../components/journey/journeyApi";
 import { onNarration, isNarrating } from "../utils/narrator";
 import { usePrefs } from "../components/settings/usePrefs";
@@ -123,7 +123,8 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
   const [holds, setHolds] = useState(() => new Set());
   const [timedOut, setTimedOut] = useState(false);
   const [roundDone, setRoundDone] = useState(false);
-  const [roundResult, setRoundResult] = useState({ stars: 0, bonusStars: 0 });
+  // total: the questions the result is out of; mode: how the round is shown when it ends.
+  const [roundResult, setRoundResult] = useState({ stars: 0, bonusStars: 0, total: 0, mode: "practice" });
   const [totalScore, setTotalScore] = useState(0);
   // The server's reply per question (personal message, level change).
   const [learnById, setLearnById] = useState({});
@@ -153,6 +154,9 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
   }
 
   const roundStarsRef = useRef(0);
+  // Warrior: open questions answered (speaking or writing with no right answer).
+  // They are not scored there: no star, and left out of the pass mark.
+  const roundUnscoredRef = useRef(0);
   const roundXpRef = useRef(0);
   const roundStartRef = useRef(0);
   const questionStartRef = useRef(new Date().toISOString());
@@ -178,16 +182,33 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
     setUserPaused(false);
   }
 
+  // The clock's length changed in the middle of a question (Normal to More
+  // time in the clock menu or Comfort settings): the time left keeps its share
+  // of the new length, so the ring does not jump. A clock that had run out
+  // starts again: the learner asked for a different clock.
+  const [prevSeconds, setPrevSeconds] = useState(warriorSeconds);
+  if (warriorSeconds !== prevSeconds) {
+    setPrevSeconds(warriorSeconds);
+    if (timedOut) {
+      setTimedOut(false);
+      setTimeLeft(warriorSeconds);
+    } else {
+      setTimeLeft(rescaleTimeLeft(timeLeft, prevSeconds, warriorSeconds));
+    }
+  }
+
   useEffect(() => {
     const onVis = () => setPageHidden(document.hidden);
     document.addEventListener("visibilitychange", onVis);
     return () => document.removeEventListener("visibilitychange", onVis);
   }, []);
 
-  // The clock never runs while the teacher is speaking.
+  // The clock never runs while the teacher is speaking. A read-aloud the
+  // learner paused is not speaking (as in utils/sounds.js): the clock carries
+  // on, instead of waiting for ever for a voice that may never be resumed.
   useEffect(() => onNarration((e) => {
     if (e.type === "start" || e.type === "sentence" || e.type === "resume") setVoiceBusy(true);
-    else if (e.type === "end") setVoiceBusy(false);
+    else if (e.type === "end" || e.type === "pause") setVoiceBusy(false);
   }), []);
 
   // ...nor while the Comfort settings sheet or a break reminder is open.
@@ -232,13 +253,20 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
   // The round is one session with its real length (each answer already added
   // its own XP and minutes); new badges in the reply are shown with the round's.
   const finishRound = () => {
-    const s = roundStarsRef.current;
-    const total = data.length;
-    const warrior = mode === "warrior";
+    const warriorRound = mode === "warrior";
+    const unscored = warriorRound ? roundUnscoredRef.current : 0;
+    // Warrior: the result is out of the questions that were scored. A round
+    // with nothing to score (every question was open) has no Warrior result:
+    // it is kept and shown as the practice round it was, a star for each answer.
+    const result = warriorResult({ total: data.length, unscored, stars: roundStarsRef.current });
+    const warrior = warriorRound && result.scored > 0;
+    const s = warriorRound && !warrior ? unscored : roundStarsRef.current;
+    const total = warrior ? result.scored : data.length;
+    const shownMode = warrior ? "warrior" : warriorRound ? "practice" : mode;
     dispatch(logRoundResult({
-      module, subject: subject || "general", mode,
+      module, subject: subject || "general", mode: shownMode,
       stars: s, bonusStars: 0, totalStars: s,
-      passed: warrior ? s >= warriorPassMark(total) : undefined,
+      passed: warrior ? result.passed : undefined,
       questions: total,
       durationMinutes: Math.round(minutesSince(roundStartRef.current, 60) * 10) / 10,
       xpEarned: roundXpRef.current,
@@ -248,7 +276,7 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
     });
     // Warrior: beat your own best (kept on this device, per learner, module and subject).
     const pb = warrior ? noteWarriorBest(`${learnerTag()}|${module}|${subject || "general"}`, s, total) : null;
-    setRoundResult({ stars: s, bonusStars: 0, best: pb?.best || null, newBest: Boolean(pb?.newBest) });
+    setRoundResult({ stars: s, bonusStars: 0, total, mode: shownMode, best: pb?.best || null, newBest: Boolean(pb?.newBest) });
     setRoundDone(true);
   };
 
@@ -259,7 +287,7 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
 
   /**
    * One answered question (QuestionCard's outcome):
-   * { status, correct, timeTaken, userAnswer, firstTry, hintsUsed, supportStep, misconception, uncertain, reason }
+   * { status, correct, timeTaken, userAnswer, firstTry, hintsUsed, supportStep, misconception, uncertain, reason, open }
    * Older callers pass (correct, timeTaken, userAnswer).
    */
   const recordAnswer = (outcomeOrCorrect, timeTakenArg, userAnswerArg) => {
@@ -306,7 +334,12 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
       if (learn && q?.id) setLearnById((m) => ({ ...m, [q.id]: learn }));
       noteReply(learn, at);
     });
-    if (correct) {
+    // Warrior: an open question (nothing to mark: status "ungraded") is not
+    // scored. It is no star and it is left out of the pass mark (finishRound).
+    // In Practice it stays a star, as it always was.
+    if (mode === "warrior" && (o.status === "ungraded" || o.open)) {
+      roundUnscoredRef.current += 1;
+    } else if (correct) {
       setTotalScore((s) => s + 1);
       roundStarsRef.current += 1;
     }
@@ -342,8 +375,9 @@ export function useQuestionRound({ module, subject, warriorSeconds: baseSeconds 
 
   const handlePlayAgain = () => {
     setRoundDone(false);
-    setRoundResult({ stars: 0, bonusStars: 0 });
+    setRoundResult({ stars: 0, bonusStars: 0, total: 0, mode: "practice" });
     roundStarsRef.current = 0;
+    roundUnscoredRef.current = 0;
     roundXpRef.current = 0;
     roundStartRef.current = nowMs();
     setIdx(0);

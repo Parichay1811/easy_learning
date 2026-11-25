@@ -23,9 +23,16 @@
  *     correct answer                          → NEAR (they knew it; too slow)
  *   - window expired elsewhere                → OMISSION
  * A slow but correct answer is never an error.
+ *
+ * A touch has to be a reach. A target that appears under a hand that is
+ * already resting there is held until the hand comes away (core/arrival.js) —
+ * otherwise a hand parked in the middle of the picture plays the round by
+ * itself, most of all at level 1 where the one large target always lands in
+ * the same central spot. Held is not wrong and not timed: the target waits.
  */
 import { OUTCOME } from '../core/telemetry'
 import { DwellSelector } from '../core/interactions'
+import { ArrivalGate, layoutClearOf } from '../core/arrival'
 import { layoutSlots, layoutRow, clamp, fitRadius, ROW_LIMIT } from '../core/geometry'
 import { getSettings, accommodate } from '../core/settings'
 import {
@@ -70,6 +77,15 @@ export function tapEngine(game) {
   let feedbackTarget = null
   let feedbackKind = null
   let hoverProgressOnAnswer = 0
+  // Where the hands were on the last frame, so a new layout can keep clear of
+  // them, and the gate that holds whatever still lands underneath one.
+  const gate = new ArrivalGate()
+  let gatePending = false
+  let gateWaitMs = 0
+  let gateHintAt = HELD_HINT_MS
+  let gateHinted = false
+  let lastPointers = []
+  let lastStage = null
 
   function buildTrial(index, level, prompt) {
     const s = getSettings()
@@ -100,9 +116,16 @@ export function tapEngine(game) {
     // choice count rather than the other way round.
     const isRow = (trial.layout || cfg.layout) === 'row'
     const radius = fitRadius(options.length, spec.radius, isRow ? ROW_LIMIT : undefined)
+    // A scatter is random anyway, so of the arrangements this level allows,
+    // prefer one that does not put a target under the child's hand. A row is
+    // fixed by design; the gate below covers that, and level 1's single spot.
     const slots = isRow
       ? layoutRow(options.length, box, trial.rowY ?? 0.5, { radius })
-      : layoutSlots(options.length, box, radius, api.rng)
+      : layoutClearOf(() => layoutSlots(options.length, box, radius, api.rng), lastPointers, {
+          stageW: lastStage?.stageW,
+          stageH: lastStage?.stageH,
+          clear: radius * 1.5,
+        })
 
     targets = makeTargets(options, slots, {
       radius,
@@ -136,6 +159,13 @@ export function tapEngine(game) {
     feedbackTarget = null
     feedbackKind = null
     hoverProgressOnAnswer = 0
+    // The options are not on screen until any memory reveal has finished, so
+    // the gate is armed by the first frame that can actually see them.
+    gate.reset()
+    gatePending = true
+    gateWaitMs = 0
+    gateHintAt = HELD_HINT_MS
+    gateHinted = false
 
     return {
       ...trial,
@@ -220,6 +250,23 @@ export function tapEngine(game) {
 
       demoPhase = (demoPhase + dt / 1.6) % 1
 
+      // Hold any option that appeared under a resting hand; let go of it once
+      // the hand has come away. Runs in every phase: reaching for the answer
+      // while the instruction is still being given is a real reach and counts.
+      lastPointers = pointers
+      lastStage = { stageW, stageH }
+      const where = { stageW, stageH, now }
+      if (gatePending && !revealItems) {
+        gate.watch(targets, pointers, where)
+        gatePending = false
+      } else if (!gatePending) {
+        const freed = gate.step(targets, pointers, where)
+        if (freed.length && gateHinted && !gate.any && machine.phase === 'respond') {
+          // They came away: put the question back in place of the hint.
+          api.setPrompt({ main: machine.trial.promptText, sub: machine.trial.promptSub || '' })
+        }
+      }
+
       if (machine.phase !== 'respond') {
         machine.reach.step(hands[0] || null, now)
         return
@@ -227,7 +274,22 @@ export function tapEngine(game) {
 
       machine.reach.step(hands[0] || null, now)
 
-      const res = selector.step(targets, pointers, { dt, now, stageW, stageH })
+      // A hand that stays put on a held target would otherwise be looking at a
+      // bubble that does nothing. Say what to do — once, and not at once.
+      if (gate.any) {
+        gateWaitMs += dt * 1000
+        if (gateWaitMs > gateHintAt) {
+          gateHinted = true
+          // Said again every so often for as long as the hand stays: a child
+          // who missed it the first time would otherwise be left with nothing.
+          gateHintAt = gateWaitMs + HELD_HINT_AGAIN_MS
+          void api.say(HELD_HINT, { main: HELD_HINT, sub: machine.trial.promptText })
+        }
+      }
+
+      const res = selector.step(targets, pointers, {
+        dt, now, stageW, stageH, isHeld: (id) => gate.isHeld(id),
+      })
 
       // Remember how close they came on the right answer — this is what turns a
       // timeout into "knew it, too slow" instead of "no response".
@@ -428,6 +490,7 @@ export function tapEngine(game) {
 
     unmount() {
       selector?.reset()
+      gate.reset()
       targets = []
       machine = null
     },
@@ -435,6 +498,11 @@ export function tapEngine(game) {
 
   return module
 }
+
+/** How long a hand may rest on a held target before the game says what to do. */
+const HELD_HINT_MS = 1500
+const HELD_HINT_AGAIN_MS = 8000
+const HELD_HINT = 'Take your hand away, then touch it.'
 
 const PALETTE_ORDER = ['blue', 'green', 'orange', 'purple', 'teal', 'pink']
 const PALETTE_FOR = (i) => PALETTE_ORDER[i % PALETTE_ORDER.length]

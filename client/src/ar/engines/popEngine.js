@@ -11,6 +11,12 @@
  * child who moves fast but takes a second to notice, produce completely
  * different rows here — and would produce an identical "reaction time" in a
  * naive implementation.
+ *
+ * And it has to *be* a reach. A target that appears where a hand already is
+ * used to pop on the spot, so a hand left in the middle of the picture popped
+ * a whole level-1 round without moving (the level-1 envelope is one central
+ * spot). Such a target is now held until the hand has come away — see
+ * core/arrival.js — and its time only starts once it has.
  */
 import { OUTCOME } from '../core/telemetry'
 import { layoutSlots, clamp, aspectDist, pathEfficiency, pick } from '../core/geometry'
@@ -24,6 +30,7 @@ import {
 } from './base'
 import { resolveDifficulty, recordTrialOutcome, describeStep } from '../core/adaptive'
 import { getSets } from '../content'
+import { ArrivalGate, layoutClearOf } from '../core/arrival'
 
 export function popEngine(game) {
   const cfg = {
@@ -59,6 +66,8 @@ export function popEngine(game) {
   let ended = false
   const trail = new Trail(18)
   const lastPointer = new Map() // side -> {x,y} for velocity when using wrists
+  let introLine = { main: '', sub: '' }
+  let heldHintQuietUntil = 0
 
   function refreshDifficulty() {
     const d = resolveDifficulty(game)
@@ -73,16 +82,21 @@ export function popEngine(game) {
     return spec
   }
 
-  function spawn(now) {
+  function spawn(now, pointers, stageW, stageH) {
     const spec = refreshDifficulty()
     const box = api.reachBox(level.eccentricity ?? 1)
     const pool = cfg.filter ? getSets(cfg.sets).filter(cfg.filter) : getSets(cfg.sets)
     if (!pool.length) return
 
     const existing = live.map((l) => l.target)
-    const slot = layoutSlots(1 + existing.length, box, radius, api.rng).find(
-      (s) => existing.every((t) => Math.hypot(t.x - s.x, t.y - s.y) > radius * 2.2)
-    ) || layoutSlots(1, box, radius, api.rng)[0]
+    const oneSlot = () => [
+      layoutSlots(1 + existing.length, box, radius, api.rng).find(
+        (s) => existing.every((t) => Math.hypot(t.x - s.x, t.y - s.y) > radius * 2.2)
+      ) || layoutSlots(1, box, radius, api.rng)[0],
+    ]
+    // Somewhere the hand is not, when this level's reach envelope has such a
+    // place. It is never widened to make one.
+    const [slot] = layoutClearOf(oneSlot, pointers, { stageW, stageH, clear: radius * 1.6 })
 
     const item = pick(pool, api.rng)
     const [t] = makeTargets([item], [slot], {
@@ -96,8 +110,15 @@ export function popEngine(game) {
     // Response window: the lifetime, stretched by the extra-time accommodation.
     const lifetime = spec.windowMs || cfg.lifetimeMs
 
+    // Held if it has landed under a hand anyway (level 1's single spot).
+    const gate = new ArrivalGate({ zoneScale: 1.35 })
+    gate.watch([t], pointers, { stageW, stageH, now })
+
     live.push({
       target: t,
+      gate,
+      heldMs: 0,
+      hinted: false,
       item,
       bornAt: now,
       expiresAt: now + lifetime,
@@ -203,7 +224,9 @@ export function popEngine(game) {
       const line = cfg.wholeBody
         ? 'Reach and touch every one — high, low, left and right!'
         : 'Touch each one as fast as you can!'
-      api.setPrompt({ main: line, sub: cfg.wholeBody ? 'Use your whole body' : 'Use either hand' })
+      introLine = { main: line, sub: cfg.wholeBody ? 'Use your whole body' : 'Use either hand' }
+      heldHintQuietUntil = 0
+      api.setPrompt(introLine)
       void api.say(line, { main: line })
       nextSpawnAt = api.clock.now() + 900
     },
@@ -218,7 +241,7 @@ export function popEngine(game) {
 
       // ── spawn ──
       if (spawned < cfg.spawns && live.length < cfg.concurrent && now >= nextSpawnAt) {
-        spawn(now)
+        spawn(now, pointers, stageW, stageH)
       }
 
       // ── per-target kinematics and hit test ──
@@ -242,11 +265,41 @@ export function popEngine(game) {
           }
         }
 
+        // A target that appeared under a resting hand waits for that hand to
+        // come away. Its clock, and the reach that gets measured, both start
+        // from the moment it does — appearing beneath a finger is not a fair
+        // "go", and the child must not lose time to it.
+        if (entry.gate.any) {
+          const freed = entry.gate.step([entry.target], pointers, { stageW, stageH, now })
+          if (freed.length) {
+            entry.bornAt = now
+            entry.expiresAt = now + entry.lifetime
+            entry.movementStartAt = null
+            entry.samples = []
+            entry.peakSpeed = 0
+            if (entry.hinted) api.setPrompt(introLine)
+          } else {
+            entry.heldMs += dt * 1000
+            if (entry.heldMs > HELD_HINT_MS && !entry.hinted) {
+              entry.hinted = true
+              api.setPrompt({ main: HELD_HINT, sub: '' })
+              // Spoken, but not for every balloon: a hand that stays put would
+              // hear nothing else all round.
+              if (now >= heldHintQuietUntil) {
+                heldHintQuietUntil = now + HELD_HINT_AGAIN_MS
+                void api.say(HELD_HINT, { main: HELD_HINT })
+              }
+            }
+          }
+        }
+
         let hitPointer = null
-        for (const p of pointers) {
-          if (aspectDist(p, entry.target, stageW, stageH) <= entry.target.radius * 1.2) {
-            hitPointer = p
-            break
+        if (!entry.gate.any) {
+          for (const p of pointers) {
+            if (aspectDist(p, entry.target, stageW, stageH) <= entry.target.radius * 1.2) {
+              hitPointer = p
+              break
+            }
           }
         }
         if (hitPointer) {
@@ -333,6 +386,12 @@ export function popEngine(game) {
 }
 
 const POP_COLORS = ['blue', 'green', 'orange', 'pink', 'teal', 'purple', 'yellow']
+
+/** How long a hand may rest on a held target before the game says what to do. */
+const HELD_HINT_MS = 1200
+const HELD_HINT_AGAIN_MS = 8000
+const HELD_HINT = 'Move your hand away, then pop it!'
+
 
 function drawLifeRing(view, target, remaining) {
   const ctx = view.ctx

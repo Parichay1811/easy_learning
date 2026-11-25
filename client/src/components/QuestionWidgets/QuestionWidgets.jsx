@@ -2,7 +2,7 @@ import { useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCheck, FaTimes, FaUndo } from "react-icons/fa";
 import { sfx } from "../../utils/sounds";
-import { sequenceMarks, targetSequence, binHomes, binMark, homeOf, partnerOf, expectedAnswer } from "./marks";
+import { sequenceMarks, targetSequence, binHomes, binMark, homeOf, partnerOf, expectedAnswer, keyboardHelp } from "./marks";
 import styles from "./QuestionWidgets.module.css";
 
 // One component per interaction "family" (several new-schema interaction
@@ -460,11 +460,14 @@ export function TypedAnswer({ question, onSubmit, disabled, feedback }) {
     "aria-label": question.instruction,
     "aria-invalid": ok === false ? true : undefined,
     spellCheck: false,
+    // A phone must not rewrite a checked answer (autocorrect: Ana to Anna) or
+    // add the capital letter the learner was asked to add (marks.js keyboardHelp).
+    ...keyboardHelp(question),
   };
   return (
     <div className={styles.typedWrap}>
       <div className={styles.typedField}>
-        {multiline ? <textarea rows={3} {...field} /> : <input type="text" autoComplete="off" {...field} />}
+        {multiline ? <textarea rows={3} {...field} /> : <input type="text" {...field} autoComplete="off" />}
         {ok != null && (
           <span className={`${styles.typedMark} ${ok ? styles.right : styles.wrongPick}`}>
             <PieceMark ok={ok} rightText={t("questions.feedback.right", "right")} wrongText={t("questions.feedback.notRight", "not quite right")} />

@@ -1,4 +1,4 @@
-const { recordAnswer, recordSession, recordRound, contextFrom } = require('../analytics/record')
+const { recordAnswer, recordSession, recordRound, contextFrom, localParts } = require('../analytics/record')
 const StudentActivity   = require('../models/StudentActivity')
 const StudentAchievement = require('../models/StudentAchievement')
 const StudentAnswer      = require('../models/StudentAnswer')
@@ -27,11 +27,15 @@ const ACHIEVEMENTS = [
 ]
 
 // ── Helpers ────────────────────────────────────────────────────────────────────
-function midnight(d = new Date()) {
-  const dt = new Date(d)
-  dt.setUTCHours(0, 0, 0, 0)
-  return dt
-}
+// A day is the LEARNER's calendar day (the X-Timezone header, validated by contextFrom), stored
+// as UTC midnight of that date (StudentActivity.dayKey). West of UTC a UTC day starts in the
+// afternoon and east of it early-morning play belongs to "yesterday" in UTC: keyed by the UTC
+// day, the calendar showed play one day off, and "today" and the week turned over at the wrong hour.
+const DAY_MS = 86400000
+const dayKey = (now, tz) => StudentActivity.dayKey(now, tz)
+const tzOf = (req) => contextFrom(req).tz
+// A stored day as its time value (always a UTC midnight; older rows too).
+const dayMs = (date) => { const d = new Date(date); d.setUTCHours(0, 0, 0, 0); return d.getTime() }
 
 const clampNum = (v, lo, hi) => { const n = Number(v); return Number.isFinite(n) ? Math.min(hi, Math.max(lo, n)) : lo }
 const round1 = (n) => Math.round((Number(n) || 0) * 10) / 10
@@ -40,30 +44,31 @@ const ANSWER_MAX_MINUTES = 3
 // Most minutes one round can show as its length.
 const ROUND_MAX_MINUTES = 60
 
-function calcStreak(activityDocs) {
+// todayMs: the learner's today (dayKey(now, tz).getTime()).
+function calcStreak(activityDocs, todayMs = dayKey().getTime()) {
   if (!activityDocs.length) return 0
-  const dates = activityDocs
-    .map(a => midnight(a.date).getTime())
+  // Days up to today, newest first (a day keyed ahead of the learner's today, from before days
+  // were the learner's own, never breaks the run).
+  const dates = [...new Set(activityDocs.map(a => dayMs(a.date)))]
+    .filter(d => d <= todayMs)
     .sort((a, b) => b - a)
 
-  const todayMs = midnight().getTime()
   let streak = 0
   for (let i = 0; i < dates.length; i++) {
-    const expected = todayMs - i * 86400000
+    const expected = todayMs - i * DAY_MS
     if (dates[i] === expected) streak++
     else break
   }
   return streak
 }
 
-// Days with any learning in the last 7 days, today included (UTC days, like calcStreak).
+// Days with any learning in the last 7 days, today included (the learner's own days, like calcStreak).
 // Shown instead of a streak: nothing is lost by missing a day.
-function daysThisWeek(activityDocs, now = new Date()) {
-  const todayMs = midnight(now).getTime()
-  const since = todayMs - 6 * 86400000
+function daysThisWeek(activityDocs, todayMs = dayKey().getTime()) {
+  const since = todayMs - 6 * DAY_MS
   const days = new Set()
   for (const a of activityDocs) {
-    const d = midnight(a.date).getTime()
+    const d = dayMs(a.date)
     if (d >= since && d <= todayMs && ((a.totalSessions || 0) > 0 || (a.totalMinutes || 0) > 0 || (a.totalXP || 0) > 0)) days.add(d)
   }
   return days.size
@@ -126,7 +131,7 @@ const logSession = async (req, res) => {
 
     const now     = new Date()
     const start   = startTime ? new Date(startTime) : new Date(now - (durationMinutes || 1) * 60000)
-    const dayKey  = midnight(now)
+    const day     = dayKey(now, tzOf(req))
 
     // One answered question (kind 'answer'): its XP and its real minutes (capped, so an idle tab does not
     // count) go on the day, but it is not a session: the round it belongs to is (logRound). Older clients
@@ -135,7 +140,7 @@ const logSession = async (req, res) => {
       const minutes = clampNum(durationMinutes, 0, ANSWER_MAX_MINUTES)
       const xp = clampNum(xpEarned, 0, 100)
       await StudentActivity.findOneAndUpdate(
-        { email, date: dayKey },
+        { email, date: day },
         { $inc: { totalMinutes: minutes, totalXP: xp } },
         { upsert: true, new: true }
       )
@@ -154,7 +159,7 @@ const logSession = async (req, res) => {
     }
 
     await StudentActivity.findOneAndUpdate(
-      { email, date: dayKey },
+      { email, date: day },
       {
         $push: { sessions: sessionEntry },
         $inc: {
@@ -187,17 +192,20 @@ const getStats = async (req, res) => {
     const totalXP       = allActivity.reduce((s, a) => s + a.totalXP, 0)
     const totalMinutes  = Math.round(allActivity.reduce((s, a) => s + a.totalMinutes, 0))
     const totalSessions = allActivity.reduce((s, a) => s + a.totalSessions, 0)
-    const streak        = calcStreak(allActivity)
-    const daysLearnedThisWeek = daysThisWeek(allActivity)
+    // "Today", the week and the hour of the day are the learner's own (X-Timezone).
+    const tz            = tzOf(req)
+    const todayMs       = dayKey(new Date(), tz).getTime()
+    const streak        = calcStreak(allActivity, todayMs)
+    const daysLearnedThisWeek = daysThisWeek(allActivity, todayMs)
 
-    const todayDoc = allActivity.find(a => midnight(a.date).getTime() === midnight().getTime())
+    const todayDoc = allActivity.find(a => dayMs(a.date) === todayMs)
     const todayMinutes = Math.round(todayDoc?.totalMinutes || 0)
     const todayXP      = todayDoc?.totalXP || 0
 
     const hourBuckets = new Array(24).fill(0)
     allActivity.forEach(day => {
       day.sessions.forEach(s => {
-        if (s.startTime) hourBuckets[new Date(s.startTime).getHours()]++
+        if (s.startTime) hourBuckets[Number(localParts(new Date(s.startTime), tz).hour) % 24]++
       })
     })
     const maxHour = hourBuckets.indexOf(Math.max(...hourBuckets))
@@ -226,14 +234,13 @@ const getActivity = async (req, res) => {
     const { email } = req.user
     let dateFilter
 
+    // Days are calendar dates stored as UTC midnights: a year is 1 January to 31 December of those.
     if (req.query.year) {
       const y = parseInt(req.query.year)
-      dateFilter = { $gte: new Date(y, 0, 1), $lt: new Date(y + 1, 0, 1) }
+      dateFilter = { $gte: new Date(Date.UTC(y, 0, 1)), $lt: new Date(Date.UTC(y + 1, 0, 1)) }
     } else {
-      const days = parseInt(req.query.days) || 365
-      const since = new Date()
-      since.setDate(since.getDate() - days)
-      dateFilter = { $gte: since }
+      const days = Math.max(1, parseInt(req.query.days) || 365)
+      dateFilter = { $gte: new Date(dayKey(new Date(), tzOf(req)).getTime() - (days - 1) * DAY_MS) }
     }
 
     const activity = await StudentActivity.find({ email, date: dateFilter })
@@ -277,9 +284,9 @@ const getAchievements = async (req, res) => {
 const getPerformance = async (req, res) => {
   try {
     const { email } = req.user
-    const days = parseInt(req.query.days) || 30
-    const since = new Date()
-    since.setDate(since.getDate() - days)
+    // The last `days` days, the learner's today included.
+    const days = Math.max(1, parseInt(req.query.days) || 30)
+    const since = new Date(dayKey(new Date(), tzOf(req)).getTime() - (days - 1) * DAY_MS)
 
     const activity = await StudentActivity.find({ email, date: { $gte: since } })
       .select('date totalXP totalSessions totalMinutes')
@@ -407,14 +414,14 @@ const logRound = async (req, res) => {
       passed: passed ?? null,
     })
 
-    const dayKey = midnight()
+    const day = dayKey(new Date(), tzOf(req))
     if (questions) {
       const now = new Date()
       const minutes = round1(clampNum(req.body.durationMinutes, 0, ROUND_MAX_MINUTES))
       const right = Math.min(Math.max(0, Number(stars) || 0), questions)
       const xpEarned = Math.max(0, Math.min(Number(req.body.xpEarned) || 0, questions * 100))
       await StudentActivity.findOneAndUpdate(
-        { email, date: dayKey },
+        { email, date: day },
         {
           $push: { sessions: { startTime: new Date(now - minutes * 60000), endTime: now, durationMinutes: minutes, module: mod || 'unknown', subject: subject || 'general', xpEarned, score: Math.round((right / questions) * 100) } },
           $inc: { totalSessions: 1 },
@@ -426,7 +433,7 @@ const logRound = async (req, res) => {
       // Older clients: 10 XP per correct answer + 2 per bonus star, a fixed 5 minutes.
       const xpEarned = (stars || 0) * 10 + (bonusStars || 0) * 2
       await StudentActivity.findOneAndUpdate(
-        { email, date: dayKey },
+        { email, date: day },
         {
           $push: { sessions: { startTime: new Date(), endTime: new Date(), durationMinutes: 5, module: mod || 'unknown', subject: subject || 'general', xpEarned, score: Math.round(((stars || 0) / 10) * 100) } },
           $inc: { totalMinutes: 5, totalXP: xpEarned, totalSessions: 1 },

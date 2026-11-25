@@ -35,6 +35,13 @@ module.exports = function mountParentFamily(router) {
   router.post('/children/:id/cheers', own, fam.sendCheer)
   router.get('/children/:id/cheers', own, fam.listCheers)
 
+  // Learning together and "what they love" (controllers/parentTogetherController.js; G-530, G-531)
+  const tg = require('../controllers/parentTogetherController')
+  router.get('/children/:id/together', own, tg.together)
+  router.post('/children/:id/together/friends/:fid/approve', own, tg.approveFriend)
+  router.delete('/children/:id/together/friends/:fid', own, tg.removeFriend)
+  router.get('/children/:id/interests', own, tg.childInterests)
+
   // Deeper views (PAR-031..036, PAR-040/041, PAR-080..082)
   router.get('/children/:id/analytics/sources', own, ins.sources)
   router.get('/children/:id/analytics/trends', own, ins.trends)

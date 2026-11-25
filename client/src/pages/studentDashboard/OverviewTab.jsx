@@ -10,7 +10,7 @@ import { badgeName } from '../../components/journey/words'
 import { useLearnProfile } from './learnApi'
 import { useCountUp } from './hooks'
 import { ReadOnlyContext } from './context'
-import { DEFAULT_DAILY_GOAL, fmtMinutes, fmtNumber, moduleName, subjectName, playTarget } from './helpers'
+import { DEFAULT_DAILY_GOAL, fmtMinutes, fmtNumber, moduleName, subjectName, playTarget, dayKeyOf, localDateStr } from './helpers'
 import TodayHub from './TodayHub'
 import { usePrefs } from '../../components/settings/usePrefs'
 import { reducedMotion } from '../../utils/learnerPrefs'
@@ -67,20 +67,23 @@ function Ring({ value, goal }) {
   )
 }
 
-/** The days of this week (Mon..Sun) with minutes played, in the server's day keys (UTC). */
+/**
+ * The days of this week (Mon..Sun) with minutes played. The server keeps each day as the
+ * learner's own calendar date (helpers.js dayKeyOf), so "today" and Monday are taken from
+ * the date on this device, never from the UTC date.
+ */
 function weekDays(performance, now) {
-  const today = new Date(now)
-  const todayKey = today.toISOString().slice(0, 10)
+  const todayKey = localDateStr(now)
+  const today = new Date(`${todayKey}T00:00:00.000Z`)
   const dow = (today.getUTCDay() + 6) % 7 // Mon = 0
-  const monday = Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate() - dow)
+  const monday = today.getTime() - dow * 86400000
   const byDay = {}
   for (const p of performance || []) {
-    const k = new Date(p.date).toISOString().slice(0, 10)
+    const k = dayKeyOf(p.date)
     byDay[k] = (byDay[k] || 0) + (p.totalMinutes || 0)
   }
   return Array.from({ length: 7 }, (_, i) => {
-    const d = new Date(monday + i * 86400000)
-    const key = d.toISOString().slice(0, 10)
+    const key = new Date(monday + i * 86400000).toISOString().slice(0, 10)
     return { date: key, minutes: byDay[key] || 0, today: key === todayKey, future: key > todayKey }
   })
 }

@@ -663,6 +663,32 @@ the hello and the chip wording and rides along with every question as
 `context.style`. The router does not use `context.style` yet; what it would
 need is written at the top of `public/companion.js` (pure functions, tested).
 
+## Around the board: topics, the lesson menu, notes
+
+**Pick a topic** (the subject card, `public/topic-picker.js`) lets a child
+browse instead of typing: the subjects as big rows, those for young children
+first, then the topics of the one picked under their group names, with a row
+back. `GET /catalog` lists the subjects (`{ name, count, levels }`, about 4 KB)
+and `GET /catalog?area=For Kids` one subject's topics (`{ id, title, levels }`
+by group); `lib/catalog.mjs` builds both once per set of packs. A subject's
+place is the average of how young its topics start (levels EY, P1, P2). With a
+lesson open the list shows the topics like it, and a row to browse them all.
+
+**The lesson menu.** "Key Concepts" and "Experiments / Activities" borrow the
+board; "Lesson Board" gives it back: the lesson's board is redrawn as it
+stood (`public/lesson-memory.js` keeps the ops since its last clear) and the
+lesson carries on from the sentence it had reached, or the welcome board
+shows if nothing was asked yet. The lit row says what the board shows. Where
+the board is always in view (tablets, upright screens) the "Lesson Board" row
+appears only while something else has the board.
+
+**Notes** (`public/notes-store.js`, `public/notes-panel.js`): several notes per
+topic, each with a name, and "All my notes" by topic with a button back to
+each lesson. A deleted note can be put back for a few seconds. They are kept
+in this browser only (localStorage, one entry, `learnigo-notebook`) and never
+sent anywhere; the single note per topic of earlier versions
+(`learnigo-notes:<id>`) becomes the first note of its topic.
+
 ## Tools and MCP
 
 `lib/tools.mjs` is one registry of tools with JSON schemas: `ask_teacher`,
@@ -677,7 +703,7 @@ from other web origins are refused.
 | File | What it does |
 |---|---|
 | `worker.mjs` | the assistant's process: lowers its CPU priority, loads `index.mjs`, serves it on a private port and tells the API which one |
-| `index.mjs` | `createAIAssistant()`: loads packs and models, returns the request handler behind `/api/ai-assistant`: `/ask` (streams ack, plan, sentences), `/asr` (with the lesson as context), `/heard` (corrections), `/tts`, `/videos`, `/mcp`, `/admin`; reloads packs when they change |
+| `index.mjs` | `createAIAssistant()`: loads packs and models, returns the request handler behind `/api/ai-assistant`: `/ask` (streams ack, plan, sentences), `/asr` (with the lesson as context), `/heard` (corrections), `/tts`, `/topics`, `/lesson`, `/catalog` (every topic by subject), `/videos`, `/mcp`, `/admin`; reloads packs when they change |
 | `package.json` | marks this folder as ES modules and holds its scripts (`test`, `bench`, `eval`, `packs`); its dependencies are in `server/package.json` |
 | `lib/test.mjs`, `shared/test.js` | tests: scope (topic, subject, exam level), how many, questions, score |
 | `lib/schema.mjs`, `lib/packs.mjs` | the pack check; loading packs from subject folders |
@@ -685,6 +711,7 @@ from other web origins are refused.
 | `lib/router.mjs` | the steps above |
 | `lib/converse.mjs` | small talk, yes/no, "I don't know", half sentences, mumbles |
 | `lib/knowledge.mjs`, `lib/embed.mjs` | cards, BM25, embeddings, hybrid search |
+| `lib/catalog.mjs` | every topic by subject and group, for the page's "Pick a topic" |
 | `lib/opendata.mjs` | exact answers from Wikidata, World Bank, PubChem, Wiktionary, NASA, Art Institute, USGS, MET Norway |
 | `lib/llm.mjs`, `lib/fast.mjs` | the small LLM: streamed grounded answers; the topic for the first line (checked to be the student's own words) |
 | `lib/speech.mjs`, `lib/speech-worker.mjs`, `lib/models.mjs` | Moonshine and Supertonic in their own processes, queue, cache; the model cache path |
@@ -693,7 +720,7 @@ from other web origins are refused.
 | `lib/files.mjs`, `lib/store.mjs` | whole-file writes, safe JSON loads and cache pruning; the TODO list and question log |
 | `lib/vendor/supertonic.js` | Supertonic's Node inference code (MIT, unchanged) |
 | `shared/` | templates, plain arithmetic (`arith.js`), numbers, unit conversion, voice detection, echo check (server and browser) |
-| `public/` | the page, served at `/ai-assistant/` (`app.js`, `board.js`, `voice.js` the voice and the board's pops, `orb.js` the WebGL orb, `scene.js` the scene, `haptics.js`, `style.css` the site's look) and the admin panel; GSAP, the world map and the Fredoka font come from `client/node_modules` |
+| `public/` | the page, served at `/ai-assistant/` (`app.js`, `board.js`, `voice.js` the voice and the board's pops, `orb.js` the WebGL orb, `scene.js` the scene, `haptics.js`, `topic-picker.js`, `lesson-memory.js`, `notes-store.js` and `notes-panel.js` (above), `style.css` the site's look) and the admin panel; GSAP, the world map and the Fredoka font come from `client/node_modules` |
 | `factory/blender/`, `public/renders/`, `shared/renders.js` | the Blender kit and scenes, the 3D pictures and loops they make, and their manifest (parts projected through the camera) |
 | `bench.mjs`, `eval-kb.mjs`, `test/asr-eval.mjs` | speed (against the running API: `npm run bench`), how well search finds answers, how well hard lesson words are heard |
 

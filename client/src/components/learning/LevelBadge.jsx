@@ -12,8 +12,9 @@ import s from "./learning.module.css";
  *   <LevelBadge level={2} subject="maths" showSubject /> // "Maths" above it
  *   <LevelBadge level={2} subject="maths" showSubject note="Practising" /> // "Maths · Practising" above it
  *   <LevelBadge level={2} size="sm" locked />            // smaller, with a lock
+ *   <LevelBadge level={2} subject="maths" how="You moved up by practising" /> // a small line under it: how the level came about
  */
-export default function LevelBadge({ level, subject, showSubject = false, note = "", locked = false, size = "md", className = "" }) {
+export default function LevelBadge({ level, subject, showSubject = false, note = "", how = "", locked = false, size = "md", className = "" }) {
   const { t } = useTranslation();
   const known = level != null && Number.isFinite(Number(level));
   const n = known ? clampLevel(level) : null;
@@ -39,6 +40,7 @@ export default function LevelBadge({ level, subject, showSubject = false, note =
             </span>
           )}
         </span>
+        {how && <span className={s.levelHow}>{how}</span>}
       </span>
     </span>
   );

@@ -35,6 +35,9 @@ const MESSAGES = {
   nicelyDone: 'Nicely done.',
   // Close
   closeSpelling: 'So close. Check the spelling once more.',
+  closeCapitals: 'So close. Check the capital letters once more.',
+  closePunctuation: 'So close. Check the full stop and the other marks once more.',
+  closeCapitalsPunctuation: 'So close. Check the capital letters and the full stop once more.',
   closeNumber: 'The number is right, just written a different way.',
   closeGeneric: 'Very close. Have another look.',
   // A different approach next time (the escalation)
@@ -54,6 +57,9 @@ const MESSAGES = {
   notChecked: "I couldn't check that one, so it doesn't count either way.",
   practiceOnly: "Thanks for answering. This one is just for practice, so there's no wrong answer.",
   sharedIdea: 'Thanks for sharing your idea.',
+  // The same in a Warrior round: said as it is (not scored), never "there is no wrong answer"
+  warriorNotScored: "Thanks for sharing your idea. This one isn't scored, so it doesn't change your Warrior result.",
+  warriorOpen: "Thank you for that. Open questions like this one aren't scored in Warrior.",
 }
 
 const SUGGESTIONS = {
@@ -88,10 +94,15 @@ function pickKey(groups, lastKey, counter = 0) {
   return groups.flat().find(Boolean) || 'rightAnswer'
 }
 
+// "So close": what to look at again, by the checker's reason (utils/scoreAnswer.js).
+const CLOSE_KEY = { spelling: 'closeSpelling', number_form: 'closeNumber', capitals: 'closeCapitals', punctuation: 'closePunctuation', capitals_punctuation: 'closeCapitalsPunctuation' }
+const closeGroups = (reason) => [...(CLOSE_KEY[reason] ? [[CLOSE_KEY[reason]]] : []), ['closeGeneric']]
+
 // ctx: {
 //   status, reason, outcome, firstTry, hintsUsed, interaction,
 //   skill: { id, name }, next: { id, name } | null, levelChange: { to } | null,
-//   events (from mastery.updateSkill) | null, graded, now
+//   events (from mastery.updateSkill) | null, graded, now,
+//   mode ('practice' | 'warrior' | 'challenge' | …): a Warrior round says an open answer is not scored
 // }
 function chooseMessage(ctx, { lastKey = '', counter = 0 } = {}) {
   const { status, reason, events: ev, skill, now = new Date() } = ctx
@@ -102,16 +113,15 @@ function chooseMessage(ctx, { lastKey = '', counter = 0 } = {}) {
     else if (reason === 'mic_blocked' || reason === 'not-allowed') groups.push(['micBlocked'])
     groups.push(['notChecked'])
   } else if (status === 'ungraded' || ctx.graded === false) {
-    groups.push(['practiceOnly', 'sharedIdea'])
+    // Warrior has a result (a pass mark, a best to beat): an open answer is left out of it, and says so.
+    groups.push(ctx.mode === 'warrior' ? ['warriorNotScored', 'warriorOpen'] : ['practiceOnly', 'sharedIdea'])
   } else if (!ev) {
     // Not counted by the engine (e.g. a timed game): a plain, honest reply.
     if (status === 'correct') groups.push(['rightAnswer', 'thatsIt', 'nicelyDone'])
-    else if (status === 'close') groups.push(['closeGeneric'])
+    else if (status === 'close') groups.push(...closeGroups(reason))
     else groups.push(['notYet', 'lookAgain', 'keepGoing'])
   } else if (ev.outcome === 'close') {
-    if (reason === 'spelling') groups.push(['closeSpelling'])
-    if (reason === 'number_form') groups.push(['closeNumber'])
-    groups.push(['closeGeneric'])
+    groups.push(...closeGroups(reason))
   } else if (ev.outcome === 'incorrect') {
     if (ev.parked) groups.push(['parkIt'])
     else if (ev.stepUp && ev.strategy === 'simpler') groups.push(['easierFirst'])

@@ -123,10 +123,18 @@ export const SETS = {
   ],
 
   // ── Safe or not safe ──────────────────────────────────────────────────────
-  // Eight genuine household hazards, eight genuinely safe comforts, so the
-  // sorting game can always deal an even hand. `room` and `size` are populated
-  // so that "similar" distractors are same-room objects rather than random
-  // ones — telling bleach from a cup in the kitchen is the real skill.
+  // Sixteen genuine household hazards and eight genuinely safe comforts.
+  // `room` and `size` are populated so that "similar" distractors are same-room
+  // objects rather than random ones — telling bleach from a cup in the kitchen
+  // is the real skill.
+  //
+  // The hazards outnumber the comforts on purpose. In Safe Hands a hazard is a
+  // "leave it alone" turn, and those are the rarer turns (15 % at level 1), so
+  // a child meets only two or three per round: with eight to draw from, the
+  // same few kept coming back. Every hazard here has to be one a young child
+  // reads as "not for me" at a glance — fire, sharp, hot, poison — with a
+  // picture that says so without the caption. The outdoor and tool-shed ones
+  // carry no `room`: every room value needs a bin in BINS.room (home.js).
   safety: [
     {
       id: 'hazard-matches',
@@ -200,6 +208,80 @@ export const SETS = {
       attrs: { safety: 'unsafe', size: 'small', color: 'grey', initial: 's', sound: 's', room: 'livingroom' },
       confusable: ['hazard-knife'],
       speak: 'scissors',
+    },
+    {
+      id: 'hazard-candle',
+      label: 'Lit candle',
+      emoji: '🕯️',
+      cats: ['hazard', 'fire', 'hot', 'livingroom', 'home'],
+      attrs: { safety: 'unsafe', temp: 'hot', size: 'small', color: 'white', initial: 'c', sound: 'k', room: 'livingroom' },
+      confusable: ['hazard-matches'],
+      speak: 'lit candle',
+    },
+    {
+      id: 'hazard-firework',
+      // The glyph is a firecracker, so that is what it is called.
+      label: 'Firecracker',
+      emoji: '🧨',
+      cats: ['hazard', 'fire', 'outdoor', 'home'],
+      attrs: { safety: 'unsafe', temp: 'hot', size: 'small', color: 'red', initial: 'f', sound: 'f' },
+      confusable: ['hazard-matches', 'hazard-candle'],
+      speak: 'firecracker',
+    },
+    {
+      id: 'hazard-saw',
+      label: 'Saw',
+      emoji: '🪚',
+      cats: ['hazard', 'sharp', 'tool', 'home'],
+      attrs: { safety: 'unsafe', size: 'big', color: 'grey', initial: 's', sound: 's' },
+      confusable: ['hazard-axe', 'hazard-knife'],
+      speak: 'saw',
+    },
+    {
+      id: 'hazard-axe',
+      label: 'Axe',
+      emoji: '🪓',
+      cats: ['hazard', 'sharp', 'tool', 'home'],
+      attrs: { safety: 'unsafe', size: 'big', color: 'brown', initial: 'a', sound: 'a' },
+      confusable: ['hazard-saw'],
+      speak: 'axe',
+    },
+    {
+      id: 'hazard-razor',
+      label: 'Razor',
+      emoji: '🪒',
+      cats: ['hazard', 'sharp', 'bathroom', 'home'],
+      attrs: { safety: 'unsafe', size: 'small', color: 'grey', initial: 'r', sound: 'r', room: 'bathroom' },
+      confusable: ['hazard-knife', 'hazard-scissors'],
+      speak: 'razor',
+    },
+    {
+      id: 'hazard-needle',
+      label: 'Needle',
+      // The syringe glyph is far easier to read at bubble size than the thin
+      // sewing needle, and it is the needle a young child already knows.
+      emoji: '💉',
+      cats: ['hazard', 'sharp', 'health', 'bathroom', 'home'],
+      attrs: { safety: 'unsafe', size: 'small', color: 'white', initial: 'n', sound: 'n', room: 'bathroom' },
+      confusable: ['hazard-medicine', 'hazard-pin'],
+      speak: 'needle',
+    },
+    {
+      id: 'hazard-pin',
+      label: 'Drawing pin',
+      emoji: '📌',
+      cats: ['hazard', 'sharp', 'school', 'home'],
+      attrs: { safety: 'unsafe', size: 'small', color: 'red', initial: 'd', sound: 'd', room: 'livingroom' },
+      confusable: ['hazard-needle'],
+      speak: 'drawing pin',
+    },
+    {
+      id: 'hazard-cactus',
+      label: 'Prickly cactus',
+      emoji: '🌵',
+      cats: ['hazard', 'sharp', 'plant', 'livingroom', 'home'],
+      attrs: { safety: 'unsafe', size: 'big', color: 'green', initial: 'c', sound: 'k', room: 'livingroom' },
+      speak: 'prickly cactus',
     },
     {
       id: 'safe-teddy',

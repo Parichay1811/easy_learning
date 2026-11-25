@@ -14,8 +14,8 @@ import styles from "./Footer.module.css";
 // (FAQ, Policy, the guides…), which keep the full footer. About and Contact are
 // one screen too (components/OnePage), with their own policy, terms and contact
 // links, in every language (/es/about-us…).
-const PLAY_PATHS = ["/home", "/games", "/games/ar", "/dashboard", "/discovery", "/ai-teacher"];
-const PLAY_PREFIXES = ["/subject/", "/module/"];
+const PLAY_PATHS = ["/home", "/games", "/games/ar", "/dashboard", "/discovery", "/ai-teacher", "/together", "/shorts"];
+const PLAY_PREFIXES = ["/subject/", "/module/", "/together/"];
 const ONE_SCREEN = /^(\/[a-z]{2})?\/(about-us|contact-us)\/?$/;
 
 function isPlayPath(pathname) {

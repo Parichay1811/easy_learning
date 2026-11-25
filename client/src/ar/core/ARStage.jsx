@@ -100,6 +100,9 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
   const wrapRef = useRef(null)
   const videoRef = useRef(null)
   const canvasRef = useRef(null)
+  const topBarRef = useRef(null)
+  const promptBarRef = useRef(null)
+  const safeTopRef = useRef(0)
 
   const [phase, setPhase] = useState('intro') // intro|starting|countdown|playing|paused|results|error
   const [trackerStatus, setTrackerStatus] = useState('idle')
@@ -185,6 +188,31 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
   // becomes the camera frame, every game's 0..1 layout lands where the child can
   // actually be seen, and `aspectDist` gets the true camera aspect. The bars
   // above and below are ordinary page background with the HUD over them.
+  // ── how far the HUD reaches down over the picture ──────────────────────────
+  //
+  // The top bar and the instruction bar are HTML laid over the canvas. Where the
+  // picture is letterboxed (a phone held upright) they sit in the bar above it;
+  // where it fills the screen height (a laptop, a phone on its side) they sit on
+  // top of it — and anything a game draws near the top of the canvas is then
+  // underneath them. That is how the red lamp of the traffic light came to be
+  // hidden behind the instruction.
+  //
+  // `view.safeTop` is that reach, in canvas pixels, for a game to draw below. It
+  // only ever grows between layouts: an instruction that wraps to a second line
+  // must not make the thing below it jump up and down with every prompt.
+  const measureSafeTop = useCallback(() => {
+    const view = viewRef.current
+    const canvas = canvasRef.current
+    if (!view || !canvas) return
+    const top = canvas.getBoundingClientRect().top
+    let bottom = top
+    for (const el of [topBarRef.current, promptBarRef.current]) {
+      if (el) bottom = Math.max(bottom, el.getBoundingClientRect().bottom)
+    }
+    safeTopRef.current = Math.max(safeTopRef.current, Math.round(bottom - top))
+    view.safeTop = safeTopRef.current
+  }, [])
+
   const layoutCanvas = useCallback(() => {
     const canvas = canvasRef.current
     const wrap = wrapRef.current
@@ -212,8 +240,10 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
     const ctx = canvas.getContext('2d')
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
     viewRef.current = makeView(ctx, w, h, dpr)
+    safeTopRef.current = 0
+    measureSafeTop()
     trackerRef.current?.setStageSize(w, h)
-  }, [])
+  }, [measureSafeTop])
 
   useLayoutEffect(() => {
     const wrap = wrapRef.current
@@ -401,6 +431,9 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
         promptBufferRef.current = null
         setPrompt(p)
       }
+      // Reads the bar as it was laid out for the previous prompt, which is the
+      // one on screen; the new one is measured on the next flush.
+      measureSafeTop()
       if (getSettings().showMetrics) {
         setLiveMetrics({
           fps: frame.fps,
@@ -411,7 +444,7 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
         })
       }
     }
-  }, [])
+  }, [measureSafeTop])
 
   const beginPlay = useCallback(() => {
     const clock = clockRef.current
@@ -482,9 +515,14 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
     // Short countdown so the child can get their hands into frame.
     setPhase('countdown')
     let n = 3
+    // A game that judges the whole body cannot see a child who has stepped up
+    // close to show a hand, so those engines say so (`needsBody`).
+    const wholeBody = Boolean(module.needsBody)
     setPrompt({
       main: t('ar.stage.getReady', 'Get ready!'),
-      sub: t('ar.stage.showMeYourHand', 'Show me your hand'),
+      sub: wholeBody
+        ? t('ar.stage.showMeAllOfYou', 'Stand back so I can see all of you')
+        : t('ar.stage.showMeYourHand', 'Show me your hand'),
       chip: null,
     })
     const tick = () => {
@@ -666,7 +704,7 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
 
       {/* ── top bar ── */}
       {phase !== 'intro' && phase !== 'error' && (
-        <div className={styles.topBar}>
+        <div className={styles.topBar} ref={topBarRef}>
           <button className={styles.iconBtn} onClick={exit} aria-label={t('ar.stage.backAriaLabel', 'Back to games')}>
             <FaArrowLeft />
           </button>
@@ -714,7 +752,7 @@ export default function ARStage({ game, onExit, onNext, level: requestedLevel = 
 
       {/* ── instruction banner ── */}
       {(phase === 'playing' || phase === 'countdown') && prompt.main && settings.captions && (
-        <div className={styles.promptBar}>
+        <div className={styles.promptBar} ref={promptBarRef}>
           <span className={styles.promptMain}>{prompt.main}</span>
           {prompt.sub && <span className={styles.promptSub}>{prompt.sub}</span>}
         </div>

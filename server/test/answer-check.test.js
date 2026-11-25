@@ -130,6 +130,33 @@ test('capitals and full stops are checked strictly where that is the point', () 
   assert.equal(status(q, 'The duck sat on Dad\'s hat'), 'close')
 })
 
+test('strict capitals and full stops: the hint names what is really wrong', () => {
+  const q = typed('Ana saves her coins.', { method: 'text', case_sensitive: true, punctuation_strict: true })
+  const got = (a) => { const r = checkAnswer(q, a); return [r.status, r.reason] }
+  assert.deepEqual(got('Ana saves her coins.'), ['correct', undefined])
+  assert.deepEqual(got('ana saves her coins.'), ['close', 'capitals'])
+  assert.deepEqual(got('Ana Saves her coins.'), ['close', 'capitals'], 'a capital too many')
+  assert.deepEqual(got('Ana saves her coins'), ['close', 'punctuation'], 'a missing full stop is not a capitals problem')
+  assert.deepEqual(got('Ana saves her coins!'), ['close', 'punctuation'])
+  assert.deepEqual(got('ana saves her coins'), ['close', 'capitals_punctuation'], 'both')
+  assert.equal(checkAnswer(q, 'ana saves her coins').correct, false, 'close is never counted as right')
+  // A phone "correcting" the name: one slip is close (spelling), never plain wrong.
+  assert.deepEqual(got('Anna saves her coins.'), ['close', 'spelling'])
+  assert.deepEqual(got('anna saves her coins'), ['close', 'spelling'], 'the slip is named first')
+  assert.deepEqual(got('Ana save her coins.'), ['close', 'spelling'])
+  assert.deepEqual(got('Ana saves his coins.'), ['incorrect', undefined], 'another word is still wrong')
+  assert.deepEqual(got('Bob saves her coins.'), ['incorrect', undefined])
+  assert.deepEqual(got('Ann saves her coins.'), ['incorrect', undefined], 'no slack when both spellings are under four letters')
+  // A known wrong answer is never rescued by the slip rule.
+  const known = typed('Tia told the truth.', { method: 'text', case_sensitive: true, punctuation_strict: true }, { distractor_insight: { 'Tina told the truth.': 'changed the name' } })
+  assert.deepEqual([checkAnswer(known, 'Tina told the truth.').status, checkAnswer(known, 'Tina told the truth.').misconception], ['incorrect', 'changed the name'])
+  // One flag on its own is as strict as before, and still says what differs.
+  const caseOnly = typed('Paris', { method: 'text', case_sensitive: true })
+  assert.deepEqual([checkAnswer(caseOnly, 'paris').status, checkAnswer(caseOnly, 'paris').reason], ['close', 'capitals'])
+  const dotOnly = typed('It is hot.', { method: 'text', punctuation_strict: true })
+  assert.deepEqual([checkAnswer(dotOnly, 'It is hot').status, checkAnswer(dotOnly, 'It is hot').reason], ['close', 'punctuation'])
+})
+
 test('letter_bank: letters, word tiles and equation tiles', () => {
   const word = { interaction: 'letter_bank', options: ['c', 'a', 't'], correct_answer: 'cat', accepted_answers: ['cat'], validation: { method: 'text', tiles: true, spelling_strict: true } }
   assert.equal(status(word, ['c', 'a', 't']), 'correct')

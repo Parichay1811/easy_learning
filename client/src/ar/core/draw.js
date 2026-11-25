@@ -99,6 +99,12 @@ export function makeView(ctx, cssW, cssH, dpr) {
     py: (v) => v * cssH,
     /** stage-space radius (short-side fraction) → pixels */
     pr: (r) => r * short,
+    /**
+     * How far the HTML HUD (top bar, instruction bar) reaches down over the
+     * canvas, in pixels. Kept up to date by ARStage; anything a game draws near
+     * the top of the picture belongs below this line.
+     */
+    safeTop: 0,
   }
 }
 
@@ -212,6 +218,23 @@ export function shapePath(ctx, name, cx, cy, r) {
       ctx.lineTo(cx - r * 0.9, cy + r * 0.3)
       ctx.closePath()
       break
+    case 'drop': {
+      // A drop of paint: what a colour swatch is drawn as on a screen where
+      // the *word* is the question. A swatch drawn as a disc is a circle, so a
+      // child asked for RED was being shown "the circle".
+      //
+      // A drop rather than a blot: every blot tried here came out reading as
+      // one of the named shapes (even lobes make a star, rounded ones a
+      // pentagon). A drop is none of the twelve, and it says "colour".
+      const br = r * 0.74 // the round belly
+      const by = cy + r * 0.26
+      ctx.moveTo(cx, cy - r)
+      ctx.bezierCurveTo(cx + r * 0.16, cy - r * 0.56, cx + br, cy - r * 0.16, cx + br, by)
+      ctx.arc(cx, by, br, 0, Math.PI, false)
+      ctx.bezierCurveTo(cx - br, cy - r * 0.16, cx - r * 0.16, cy - r * 0.56, cx, cy - r)
+      ctx.closePath()
+      break
+    }
     default:
       ctx.arc(cx, cy, r, 0, Math.PI * 2)
   }

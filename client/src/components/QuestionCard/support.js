@@ -165,17 +165,28 @@ export function supportStepShown(used) {
   return null;
 }
 
+// Server messages added after the locale files were written (services/learning/feedback.js).
+// Until a language has its own words for one, it says the nearest older message it does
+// have, in its own words: never an English sentence in the middle of a French page.
+const OLDER_MESSAGE = {
+  warriorNotScored: "sharedIdea", warriorOpen: "sharedIdea",
+  closeCapitals: "closeGeneric", closePunctuation: "closeGeneric", closeCapitalsPunctuation: "closeGeneric",
+};
+
 /**
  * The server's personalised message ({ key, params, text }) as the arguments
  * for t(): ["learn.feedback.<key>", options]. Skill params ({ id, name }) are
  * turned into the skill's translated name by `skillName(id, name)`.
  */
-export function messageArgs(message, skillName = (id, name) => name) {
+export function messageArgs(message, skillName = (id, name) => name, own = null) {
   if (!message || typeof message !== "object" || !message.key) return null;
   const params = {};
   for (const [k, v] of Object.entries(message.params || {})) {
     params[k] = v && typeof v === "object" && "id" in v ? skillName(v.id, v.name || v.id) : v;
   }
+  // A message newer than this language's words: the nearest older one it does have.
+  const older = OLDER_MESSAGE[message.key];
+  if (own && older && !own(`learn.feedback.${message.key}`) && own(`learn.feedback.${older}`)) return [`learn.feedback.${older}`, params];
   return [`learn.feedback.${message.key}`, { ...params, defaultValue: message.text || "" }];
 }
 

@@ -21,7 +21,7 @@ function PoliciesForm({ initial }) {
   const [p, setP] = useState(initial);
   const [result, setResult] = useState(null);
   const save = async () => {
-    const keys = ["messaging", "officeHours", "teachersCreateGroups", "parentsSeeClassAverage", "leaderboards", "aiTeacherInSchoolHours", "activityVisibility", "retentionYears", "holidaysKeepStreak", "reviewSlaDays"];
+    const keys = ["messaging", "officeHours", "teachersCreateGroups", "parentsSeeClassAverage", "leaderboards", "competitions", "aiTeacherInSchoolHours", "activityVisibility", "retentionYears", "holidaysKeepStreak", "reviewSlaDays"];
     try { const r = await api.put("/policies", Object.fromEntries(keys.map((k) => [k, p[k]]))); setP(r.policy); setResult({ ok: true, text: t("school.saved", { defaultValue: "Saved." }) }); }
     catch (e) { setResult({ ok: false, text: e.message }); }
   };
@@ -51,6 +51,12 @@ function PoliciesForm({ initial }) {
           <select id="pol-lb" className={s.select} value={p.leaderboards} onChange={(e) => setP({ ...p, leaderboards: e.target.value })}>
             <option value="off">{t("school.pol.lbOff", { defaultValue: "Off" })}</option>
             <option value="group">{t("school.pol.lbGroup", { defaultValue: "Within a group (first name and initial only)" })}</option>
+          </select>
+        </Field>
+        <Field id="pol-comp" label={t("school.pol.competitions", { defaultValue: "Team matches and class quests" })}>
+          <select id="pol-comp" className={s.select} value={p.competitions || "teams"} onChange={(e) => setP({ ...p, competitions: e.target.value })}>
+            <option value="teams">{t("school.pol.compTeams", { defaultValue: "On: teams and shared goals (never a ranking of children)" })}</option>
+            <option value="off">{t("school.pol.compOff", { defaultValue: "Off" })}</option>
           </select>
         </Field>
         <Field id="pol-vis" label={t("school.pol.vis", { defaultValue: "Activity the school sees" })}>

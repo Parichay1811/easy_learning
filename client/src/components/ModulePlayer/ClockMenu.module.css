@@ -1,0 +1,117 @@
+/* The Warrior clock's menu: a small panel under the top bar, on the clock's side.
+   It lives in the arena (below the bar), so it is never wider than the screen. */
+.menu {
+  position: absolute;
+  z-index: 6;
+  top: 6px;
+  right: clamp(8px, 2vw, 24px);
+  width: min(320px, calc(100% - 16px));
+  max-height: calc(100% - 12px);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 14px 14px;
+  border-radius: 20px;
+  background: rgba(14, 18, 40, 0.97);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-family: "Fredoka", sans-serif;
+  animation: pop 0.2s ease-out;
+}
+@keyframes pop { from { opacity: 0; transform: translateY(-6px) scale(0.97); } }
+
+.head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.title { margin: 0; font-size: 1.0625rem; font-weight: 800; line-height: 1.2; }
+.close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -6px -8px -6px 0;
+  flex: none;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.close:hover { background: rgba(255, 255, 255, 0.22); }
+
+.note {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.choices { display: flex; flex-direction: column; gap: 6px; }
+.choice {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--lp-target, 44px);
+  padding: 6px 12px;
+  border-radius: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.07);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.choice:hover { background: rgba(255, 255, 255, 0.14); }
+.choice[data-on] { border-color: #ffd45c; background: rgba(255, 212, 92, 0.16); }
+/* The real radio is there for the keyboard and screen readers; the dot is what is seen. */
+.choice input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.choice:has(input:focus-visible) { outline: 3px solid #ffd45c; outline-offset: 2px; }
+.dot {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+}
+.choice[data-on] .dot { border-color: #ffd45c; background: radial-gradient(circle, #ffd45c 0 45%, transparent 50%); }
+.label { flex: 1 1 auto; min-width: 0; }
+.secs { flex: none; font-size: 0.875rem; font-weight: 600; color: rgba(255, 255, 255, 0.75); font-variant-numeric: tabular-nums; }
+
+.pause {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: var(--lp-target, 44px);
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.pause:hover { background: rgba(255, 255, 255, 0.22); }
+.close:focus-visible, .pause:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+
+/* A phone on its side: little height, so the three choices sit in one row. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .menu { width: min(520px, calc(100% - 16px)); gap: 6px; padding: 8px 12px 10px; }
+  .note { font-size: 0.875rem; }
+  .choices { flex-direction: row; }
+  .choice { flex: 1 1 0; padding: 4px 8px; gap: 6px; font-size: 0.9375rem; }
+  .secs { font-size: 0.8125rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu { animation: none; }
+}
+
+:global(html[data-contrast="high"]) .menu { background: #000; border-color: #fff; }
+:global(html[data-contrast="high"]) .choice { border-color: #fff; background: #000; }
+:global(html[data-contrast="high"]) .choice[data-on] { border-color: #ffd45c; }

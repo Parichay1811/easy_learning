@@ -73,6 +73,21 @@ test("the server's message becomes t() arguments with skill names", () => {
   assert.equal(messageArgs({ text: "no key" }), null);
 });
 
+test("a message newer than a language's words falls back to that language's nearest older one", () => {
+  const msg = { key: "warriorNotScored", params: { skill: { id: "en.speak", name: "Speaking" } }, text: "Thanks for sharing your idea. This one isn't scored, so it doesn't change your Warrior result." };
+  // English (or a language that has the new words): the message itself.
+  assert.deepEqual(messageArgs(msg, undefined, () => true), ["learn.feedback.warriorNotScored", { skill: "Speaking", defaultValue: msg.text }]);
+  assert.equal(messageArgs(msg)[0], "learn.feedback.warriorNotScored", "no language check: unchanged");
+  // French has "sharedIdea" but not the new key: its own "Thanks for sharing your idea", no English default.
+  const french = (key) => key !== "learn.feedback.warriorNotScored";
+  assert.deepEqual(messageArgs(msg, undefined, french), ["learn.feedback.sharedIdea", { skill: "Speaking" }]);
+  // A language with neither: the server's English words, as for any untranslated message.
+  assert.equal(messageArgs(msg, undefined, () => false)[0], "learn.feedback.warriorNotScored");
+  assert.equal(messageArgs({ key: "closePunctuation", text: "x" }, undefined, (k) => k.endsWith("closeGeneric"))[0], "learn.feedback.closeGeneric");
+  // A message every language has is never swapped.
+  assert.equal(messageArgs({ key: "practiceOnly", text: "x" }, undefined, () => false)[0], "learn.feedback.practiceOnly");
+});
+
 test("hidden audio: hearing it is the task", () => {
   assert.equal(isHiddenAudio({ instruction: "Listen. Tap the number.", audio_text: "two" }), true);
   assert.equal(isHiddenAudio({ instruction: "Read it.", prompt: "The sun is hot.", audio_text: "The sun is hot." }), false);

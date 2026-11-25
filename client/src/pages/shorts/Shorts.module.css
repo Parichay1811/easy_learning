@@ -1,0 +1,293 @@
+/* Shorts: one small lesson a screen, swiped upwards. Dark like a cinema so the teacher's
+   board (a dark slate in a wooden frame, as in the AI Teacher) is the brightest thing.
+   Scrolling is the browser's own snap scrolling; nothing here animates layout.
+   `.dash` (the dashboard kit's root) also sets a background and a colour, and in the built
+   site its stylesheet can load after this one: the selector below wins either way. */
+:global(.dash).page {
+  position: fixed;
+  top: var(--nav-h, 64px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(120% 80% at 50% 0%, #1d2b5e 0%, #121a3a 45%, #0a1024 100%);
+  color: #fff;
+  font-family: var(--d-font, "Fredoka", system-ui, sans-serif);
+}
+
+.top {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px max(12px, env(safe-area-inset-right)) 6px max(12px, env(safe-area-inset-left));
+}
+.title { margin: 0; flex: 1; font: 700 clamp(1.2rem, 3vw, 1.5rem)/1 var(--d-font); letter-spacing: 0.01em; }
+.back, .topBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 6px 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font: 600 0.95rem/1 var(--d-font);
+  cursor: pointer;
+}
+.back { padding: 6px; }
+.back:focus-visible, .topBtn:focus-visible, .railBtn:focus-visible, .option:focus-visible, .next:focus-visible, .lesson:focus-visible,
+.cta:focus-visible, .ghost:focus-visible, .pick:focus-visible, .board:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+
+.feed {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.feed::-webkit-scrollbar { display: none; }
+.slide {
+  height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  justify-content: center;
+  /* Off-screen shorts cost nothing to lay out or paint. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}
+
+/* ── One short ── */
+.short {
+  position: relative;
+  width: min(100%, 920px);
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(6px, 1.2vh, 12px);
+  padding: 4px max(64px, calc(env(safe-area-inset-right) + 64px)) max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+}
+.head { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.themeChip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: hsl(var(--hue) 80% 88%);
+  color: hsl(var(--hue) 70% 20%);
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+.shortTitle { margin: 0; font: 700 clamp(1.05rem, 2.8vw, 1.45rem)/1.2 var(--d-font); text-wrap: balance; }
+
+.frame { position: relative; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+.board {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  border: clamp(6px, 1vw, 11px) solid transparent;
+  background:
+    radial-gradient(120% 90% at 50% 0%, #22346b 0%, #16234a 45%, #0d1530 100%) padding-box,
+    linear-gradient(145deg, #e09245, #b5612a 35%, #d07a35 65%, #9a4c1d) border-box;
+  box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.35), 0 14px 30px -14px rgba(0, 0, 0, 0.7);
+  cursor: pointer;
+}
+.board canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.poster { position: absolute; inset: 0; display: grid; place-items: center; background: radial-gradient(60% 60% at 50% 45%, hsl(var(--hue) 60% 40% / 0.55), transparent 75%); }
+.poster img { max-width: 78%; max-height: 82%; object-fit: contain; border-radius: 14px; }
+.posterEmoji { font-size: clamp(4rem, 22vh, 9rem); line-height: 1; filter: drop-shadow(0 8px 0 rgba(0, 0, 0, 0.25)); }
+.pausedBadge {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(10, 16, 36, 0.7);
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  font-size: 1.6rem;
+  pointer-events: none;
+}
+.dots { display: flex; justify-content: center; gap: 6px; }
+.dots span {
+  min-width: 26px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 0;
+  transition: background 0.2s ease;
+}
+.dots span:last-child { min-width: 18px; height: 18px; margin-top: -6px; display: grid; place-items: center; font: 700 0.72rem/1 var(--d-font); color: #0a1024; }
+.dots .dotDone { background: rgba(255, 255, 255, 0.75); }
+.dots .dotOn { background: #ffd43b; }
+
+.below { min-height: clamp(96px, 20vh, 190px); display: flex; align-items: flex-start; }
+.caption {
+  margin: 0;
+  width: 100%;
+  font: 600 clamp(1.05rem, 2.6vw, 1.4rem)/1.5 var(--d-font);
+  letter-spacing: 0.01em;
+  text-wrap: pretty;
+}
+.quiz { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+.quizAsk { margin: 0; font: 600 clamp(1.02rem, 2.4vw, 1.25rem)/1.4 var(--d-font); }
+.quizTag { display: inline-block; margin-right: 6px; padding: 2px 10px; border-radius: 999px; background: #ffd43b; color: #3b2f00; font-weight: 700; font-size: 0.8rem; vertical-align: middle; }
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 8px; }
+.option {
+  min-height: 52px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 4px 0 #b8c4dc;
+  color: #1f2a44;
+  font: 600 1.02rem/1.25 var(--d-font);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  touch-action: manipulation;
+}
+.option:active { transform: translateY(3px); box-shadow: 0 1px 0 #b8c4dc; }
+.option:disabled { cursor: default; }
+.optRight { background: #d3f9d8; box-shadow: 0 4px 0 #2f9e44; color: #14501f; }
+.optWrong { background: #ffe3e3; box-shadow: 0 4px 0 #e8a3a3; color: #7d1a1a; }
+.optRest { opacity: 0.6; box-shadow: none; }
+.after { display: flex; flex-direction: column; gap: 10px; }
+.why { margin: 0; font-size: 1rem; line-height: 1.45; color: #e3ebff; }
+.afterActions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.next, .cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 22px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f76707, #c2410c);
+  box-shadow: 0 4px 0 #8a2d06;
+  color: #fff;
+  font: 700 1.05rem/1 var(--d-font);
+  cursor: pointer;
+}
+.next:active, .cta:active { transform: translateY(3px); box-shadow: 0 1px 0 #8a2d06; }
+.lesson { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #cfe0ff; font-weight: 600; text-underline-offset: 3px; }
+.ghost {
+  min-height: 48px;
+  padding: 8px 20px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: 600 1rem/1 var(--d-font);
+  cursor: pointer;
+}
+
+/* The buttons down the side: heart, pause, again, before, next. */
+.rail {
+  position: absolute;
+  right: max(8px, env(safe-area-inset-right));
+  top: 50%;
+  translate: 0 -50%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.railBtn {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.15rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.railBtn:active { transform: scale(0.92); }
+.liked { color: #ff6b9d; border-color: #ff6b9d; background: rgba(255, 107, 157, 0.16); }
+.railNav { background: rgba(255, 255, 255, 0.2); }
+
+/* ── Break card, and the states before a feed ── */
+.breakCard, .center {
+  margin: auto;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 24px 20px;
+  text-align: center;
+}
+.center { flex: 1; justify-content: center; }
+.breakCard h2 { margin: 0; font: 700 clamp(1.4rem, 4vw, 1.9rem)/1.2 var(--d-font); }
+.breakCard p, .center p { margin: 0; max-width: 40ch; color: #d6e0fa; font-size: 1.05rem; line-height: 1.5; }
+.breakActions { display: flex; flex-direction: column; gap: 10px; align-self: stretch; }
+
+/* ── "What do you like?" (inside the light sheet) ── */
+.pickGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.pick {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 16px;
+  background: hsl(var(--hue) 70% 95%);
+  box-shadow: inset 0 0 0 2px hsl(var(--hue) 60% 85%);
+  color: #1f2a44;
+  font: 600 0.98rem/1.2 var(--d-font);
+  text-align: left;
+  cursor: pointer;
+}
+.pick > span[aria-hidden] { font-size: 1.5rem; }
+.pickOn { background: hsl(var(--hue) 80% 88%); box-shadow: inset 0 0 0 3px hsl(var(--hue) 65% 45%); }
+.pickTick { margin-left: auto; color: hsl(var(--hue) 65% 30%); }
+.seen { margin: 14px 0 0; color: #4a5878; font-size: 0.88rem; line-height: 1.45; }
+.page :global(.dash) .ghost, .pickGrid ~ .seen { color: #4a5878; }
+
+/* Wide screens: the board takes the height (a real 16:9 page), and the title, the words
+   and the question sit beside it. */
+@media (min-width: 1000px) and (min-aspect-ratio: 5/4) {
+  .short {
+    width: min(100%, 1500px);
+    grid-template-columns: minmax(0, 1fr) clamp(280px, 26vw, 400px);
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: clamp(16px, 2vw, 28px);
+    padding: 8px 92px 18px 24px;
+  }
+  .frame { grid-column: 1; grid-row: 1 / span 2; justify-content: center; }
+  .board { flex: 0 1 auto; width: 100%; max-height: calc(100% - 20px); aspect-ratio: 16 / 9; margin: 0 auto; }
+  .head { grid-column: 2; grid-row: 1; padding-top: 6px; }
+  .below { grid-column: 2; grid-row: 2; min-height: 0; overflow-y: auto; }
+  .options { grid-template-columns: 1fr; }
+  .railBtn { width: 54px; height: 54px; }
+  .shortTitle { font-size: clamp(1.3rem, 1.9vw, 1.8rem); }
+  .caption { font-size: clamp(1.15rem, 1.5vw, 1.5rem); }
+}
+/* Short screens (a phone on its side): the title steps aside for the board. */
+@media (max-height: 480px) {
+  .head { display: none; }
+  .below { min-height: 64px; }
+  .caption { font-size: 1rem; line-height: 1.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .option, .dots span { transition: none; }
+}

@@ -1,0 +1,69 @@
+/* The result of a round played together: one big friendly card over the round's stage. */
+.resultWrap {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  overflow-y: auto;
+  font-family: var(--d-font, "Fredoka", system-ui, sans-serif);
+}
+.result {
+  width: min(100%, 620px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(18px, 4vw, 34px);
+  border: 3px solid #fff;
+  border-radius: 30px;
+  background: linear-gradient(180deg, #fffef6, #fff);
+  box-shadow: 0 8px 0 rgba(20, 30, 70, 0.35), 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  color: #1f2a44;
+  text-align: center;
+}
+.badge { font-size: clamp(3rem, 12vw, 4.6rem); line-height: 1; filter: drop-shadow(0 4px 0 rgba(138, 90, 0, 0.22)); }
+.big { margin: 0; font: 700 clamp(1.4rem, 4.6vw, 2.1rem)/1.15 var(--d-font); }
+.sub { margin: 0; max-width: 44ch; color: #4a5878; line-height: 1.45; }
+.sides { display: flex; gap: 12px; align-self: stretch; justify-content: center; flex-wrap: wrap; }
+.side {
+  flex: 1 1 200px;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 14px 12px;
+  border-radius: 22px;
+  background: #f4f8ff;
+  box-shadow: inset 0 0 0 2px #dbe7f7;
+}
+.starRow { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px; font-size: 1.7rem; line-height: 1; }
+.starOn { color: #f5b301; text-shadow: 0 2px 0 rgba(138, 90, 0, 0.3); display: inline-block; }
+.starOff { color: #cdd7e6; display: inline-block; }
+.prizeTag, .waitTag { padding: 4px 12px; border-radius: 999px; font-weight: 600; font-size: 0.86rem; }
+.prizeTag { background: #fff3bf; color: #6b4a00; }
+.waitTag { background: #e7ecf5; color: #3d4d6b; }
+.cheerRow, .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.cheerBtn, .again, .backBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 999px;
+  font: 600 1rem/1.1 var(--d-font);
+  cursor: pointer;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+.cheerBtn { background: #ffe3ec; color: #a61e4d; box-shadow: 0 3px 0 #f5b5ca; }
+.again { background: linear-gradient(180deg, #f76707, #c2410c); color: #fff; box-shadow: 0 4px 0 #8a2d06; font-weight: 700; }
+.backBtn { background: #eef2f8; color: #1f2a44; box-shadow: 0 3px 0 #d5deeb; }
+.cheerBtn:active, .again:active, .backBtn:active { transform: translateY(3px); box-shadow: none; }
+.cheerBtn:focus-visible, .again:focus-visible, .backBtn:focus-visible { outline: 3px solid #1c7ed6; outline-offset: 2px; }
+.sent { margin: 0; font-weight: 600; color: #a61e4d; }
+@media (prefers-reduced-motion: reduce) { .cheerBtn, .again, .backBtn { transition: none; } }

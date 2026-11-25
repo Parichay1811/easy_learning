@@ -314,7 +314,7 @@ async function processAnswer(email, body, { tz = 'UTC', now = new Date() } = {})
     const next = events?.newlyMastered ? await nextSkillAfter(e, catalog, meta.skill) : null
     const message = chooseMessage({
       status, reason, events, skill: { id: meta.skill, name: skillName }, next, levelChange, firstTry, hintsUsed,
-      interaction: q.interaction, graded, now,
+      interaction: q.interaction, graded, now, mode,
     }, { lastKey: profile.lastMessageKey, counter: profile.messageCount || 0 })
     profile.lastMessageKey = message.key
     profile.messageCount = (profile.messageCount || 0) + 1

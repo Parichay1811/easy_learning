@@ -172,3 +172,48 @@ html[data-big-targets] body :focus-visible {
 @media print {
   body { padding-top: 0; }
 }
+
+/* ── A page that is still downloading (App.jsx RouteFallback) ───────────────
+   Nothing for the first third of a second, so a quick download never flashes a
+   spinner; then a small ring in the middle of the screen. */
+.route-wait {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0;
+  animation: route-wait-in 0.2s ease-out 0.35s forwards;
+}
+.route-wait::before {
+  content: "";
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  box-shadow: 0 0 0 1px rgba(10, 16, 36, 0.25);
+  animation: route-wait-spin 0.8s linear infinite;
+}
+@keyframes route-wait-in { to { opacity: 1; } }
+@keyframes route-wait-spin { to { transform: rotate(360deg); } }
+
+/* ── Lite mode, and glass on touch screens ──────────────────────────────────
+   <html data-lite> (utils/useLiteMode.js, set by PrefsProvider): less movement,
+   fewer distractions, Save-Data or a weak device. The decoration stands still (the
+   components do that themselves) and nothing blurs what is behind it: a backdrop
+   blur over the meadow is redone for every frame, and is the most expensive thing
+   a phone's graphics chip is asked to do here.
+   --glass-blur: a component may write `backdrop-filter: var(--glass-blur, blur(10px))`
+   to get its blur on a desktop and none on a touch screen or in lite mode. */
+@media (pointer: coarse) {
+  :root { --glass-blur: none; }
+}
+html[data-lite] { --glass-blur: none; }
+html[data-lite] *,
+html[data-lite] *::before,
+html[data-lite] *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}

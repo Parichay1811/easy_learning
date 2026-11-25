@@ -157,6 +157,9 @@ async function demoHistory(app, demo) {
       bank += (await Model.insertMany(questions.filter((q) => !have.has(String(q.id))))).length
     }
   }
+  // Learning together and Shorts: friends, rounds, a team match, a finished quest, interests.
+  // (Before demoHistory: that one closes this process's database connections when it is done.)
+  const together = await require('../../scripts/seed-together-demo').seedTogetherDemo(app, demo)
   const history = await demoHistory(app, demo)
   const t = app.tokens
   const out = {
@@ -172,12 +175,16 @@ async function demoHistory(app, demo) {
       superadmin: t.superadmin(),
       coordinator: t.staff('demo-coord-admin', demo.org.id, school.staffId, 'coordinator', 'coordinator@demo.test'),
       student: t.student(demo.family.childEmails[0], 'Aanya'),
+      // Aanya's friend and class-mate (for looking at friends, rounds together and teams from the other side).
+      student_friend: t.student('kabir@demo.test', 'Kabir'),
       // A learner with no school: sees the whole built-in bank.
       student_solo: t.student('sam.solo@demo.test', 'Sam'),
     },
   }
   fs.mkdirSync(path.join(__dirname, '..', '..', 'tmp'), { recursive: true })
-  fs.writeFileSync(path.join(__dirname, '..', '..', 'tmp', 'demo.json'), JSON.stringify(out, null, 2))
-  console.log(`Demo ready: ${app.url}  (tokens + ids in server/tmp/demo.json)  ${JSON.stringify(demo.counts)}  bank questions: ${bank}  learning history: ${JSON.stringify(history)}`)
+  // DEMO_FILE: where the tokens go (several demo servers at once would overwrite one file).
+  const file = process.env.DEMO_FILE || path.join(__dirname, '..', '..', 'tmp', 'demo.json')
+  fs.writeFileSync(file, JSON.stringify(out, null, 2))
+  console.log(`Demo ready: ${app.url}  (tokens + ids in ${process.env.DEMO_FILE ? file : 'server/tmp/demo.json'})  ${JSON.stringify(demo.counts)}  bank questions: ${bank}  learning history: ${JSON.stringify(history)}  together: ${JSON.stringify(together)}`)
   process.on('SIGINT', async () => { await app.stop(); process.exit(0) })
 })().catch((e) => { console.error(e); process.exit(1) })

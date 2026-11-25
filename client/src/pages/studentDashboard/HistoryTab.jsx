@@ -10,7 +10,8 @@ import { GiCrossedSwords } from 'react-icons/gi'
 import Mascot from '../../components/Mascot/Mascot'
 import TabBar from './TabBar'
 import { ReadOnlyContext } from './context'
-import { fmtDay, fmtDayTime, fmtMinutes, localDateStr, moduleColor, moduleIcon, moduleName, prefersReducedMotion, subjectName } from './helpers'
+import { monthBlocks, placeBlocks, moveDay } from '../../components/dashboard/charts/monthBlocks'
+import { dayKeyOf, fmtDayKey, fmtDayTime, fmtMinutes, localDateStr, moduleColor, moduleIcon, moduleName, prefersReducedMotion, subjectName } from './helpers'
 import c from './common.module.css'
 import h from './HistoryTab.module.css'
 
@@ -135,86 +136,121 @@ function Answers({ answers, loaded }) {
 }
 
 // ── Calendar (year heatmap) + XP chart ────────────────────────────────────────
+// One block per month with a gap between months (like LeetCode's calendar): a
+// week that straddles two months is split, each block showing only its own
+// days (components/dashboard/charts/monthBlocks.js). Days are calendar dates
+// from the server (helpers.js dayKeyOf): never moved by the reader's timezone.
 function Heatmap({ activity, year }) {
   const { t, i18n } = useTranslation()
   const scrollRef = useRef(null)
+  const gridRef = useRef(null)
   const [pick, setPick] = useState(null)
+  const today = localDateStr(new Date())
+  const thisYear = Number(today.slice(0, 4))
+  const from = `${year}-01-01`
+  const to = year < thisYear ? `${year}-12-31` : today
 
-  const { weeks, months, max } = useMemo(() => {
-    const byDay = {}
-    activity.forEach((a) => { byDay[localDateStr(a.date)] = { xp: a.totalXP || 0, minutes: a.totalMinutes || 0 } })
-    const thisYear = new Date().getFullYear()
-    const first = new Date(year, 0, 1)
-    const last = year < thisYear ? new Date(year, 11, 31) : new Date()
-    const start = new Date(first)
-    start.setDate(start.getDate() - ((start.getDay() + 6) % 7)) // back to Monday
-    const cols = []
-    const monthsOut = []
-    let lastMonth = -1
-    for (let d = new Date(start); d <= last; ) {
-      const col = []
-      for (let i = 0; i < 7; i += 1) {
-        const key = localDateStr(d)
-        const inYear = d.getFullYear() === year && d <= last
-        col.push(inYear ? { date: key, ...(byDay[key] || { xp: 0, minutes: 0 }) } : null)
-        if (inYear && d.getDate() === 1 && d.getMonth() !== lastMonth) {
-          lastMonth = d.getMonth()
-          monthsOut.push({ col: cols.length, label: d.toLocaleString(i18n.language || undefined, { month: 'short' }) })
-        }
-        d.setDate(d.getDate() + 1)
-      }
-      cols.push(col)
-    }
-    const top = Math.max(1, ...Object.values(byDay).map((v) => v.xp))
-    return { weeks: cols, months: monthsOut, max: top }
-  }, [activity, year, i18n.language])
+  const { blocks, template, byDay, max } = useMemo(() => {
+    const days = {}
+    activity.forEach((a) => {
+      const key = dayKeyOf(a.date)
+      if (!key) return
+      const d = days[key] || (days[key] = { xp: 0, minutes: 0 })
+      d.xp += a.totalXP || 0
+      d.minutes += a.totalMinutes || 0
+    })
+    const placed = placeBlocks(monthBlocks(from, to))
+    const top = Math.max(1, ...Object.values(days).map((v) => v.xp))
+    return { blocks: placed.blocks, template: placed.template, byDay: days, max: top }
+  }, [activity, from, to])
 
-  // Start at today (the right end).
+  const monthName = useMemo(() => {
+    const f = new Intl.DateTimeFormat(i18n.language || undefined, { month: 'short', timeZone: 'UTC' })
+    return (block) => f.format(new Date(Date.UTC(block.year, block.month, 1)))
+  }, [i18n.language])
+
+  // This year: the current month in view (today is the last day, at the right
+  // end). An earlier year: from January.
   useLayoutEffect(() => {
     const el = scrollRef.current
-    if (el) el.scrollLeft = el.scrollWidth
-  }, [weeks])
+    if (el) el.scrollLeft = el.querySelector('[data-today]') ? el.scrollWidth : 0
+  }, [blocks])
 
   const level = (xp) => {
     if (!xp) return 0
     const r = xp / max
     return r < 0.25 ? 1 : r < 0.5 ? 2 : r < 0.75 ? 3 : 4
   }
+  const say = (day) => {
+    const d = byDay[day] || { xp: 0, minutes: 0 }
+    return `${fmtDayKey(day, i18n.language)}: ${d.xp} XP · ${fmtMinutes(d.minutes)}`
+  }
+
+  // One day is in the tab order; the arrow keys move by date (a week left or
+  // right, a day up or down), Home and End go to the first and the last day.
+  const [focusDay, setFocusDay] = useState(null)
+  const tabDay = focusDay && focusDay >= from && focusDay <= to ? focusDay : to
+  const onKeyDown = (e) => {
+    const at = e.target?.dataset?.day
+    const next = at ? moveDay(at, e.key, from, to) : null
+    if (!next) return
+    e.preventDefault()
+    setFocusDay(next)
+    setPick(next)
+    const el = gridRef.current?.querySelector(`[data-day="${next}"]`)
+    el?.focus()
+    el?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' })
+  }
 
   return (
     <div className={h.heat}>
       <div ref={scrollRef} className={h.heatScroll}>
-        <div className={h.heatInner} style={{ '--cols': weeks.length }}>
-          <div className={h.months} aria-hidden="true">
-            {months.map((m) => <span key={m.col} style={{ gridColumn: `${m.col + 1} / span 4` }}>{m.label}</span>)}
-          </div>
-          <div className={h.grid} onMouseLeave={() => setPick(null)}>
-            {weeks.map((col, wi) => (
-              <div key={wi} className={h.col}>
-                {col.map((cell, di) => (cell
-                  ? (
-                    <span
-                      key={cell.date}
-                      className={h.cell}
-                      data-l={level(cell.xp)}
-                      title={`${fmtDay(cell.date, i18n.language)}: ${cell.xp} XP · ${fmtMinutes(cell.minutes)}`}
-                      onMouseEnter={() => setPick(cell)}
-                      onClick={() => setPick(cell)}
-                    />
-                  )
-                  : <span key={`x${di}`} className={h.cellBlank} />))}
-              </div>
-            ))}
-          </div>
+        <div
+          ref={gridRef}
+          className={h.heatGrid}
+          style={{ gridTemplateColumns: template.map((col) => (col.gap ? 'var(--month-gap)' : 'minmax(var(--cell-min), var(--cell-max))')).join(' ') }}
+          role="group"
+          aria-label={t('studentDash.history.calendar', 'Calendar')}
+          onKeyDown={onKeyDown}
+          onMouseLeave={() => setPick(null)}
+        >
+          {blocks.map((b) => (
+            <span
+              key={b.key}
+              className={h.month}
+              style={{ gridColumn: `${b.start} / span ${b.span}`, gridRow: 1 }}
+              aria-hidden="true"
+            >
+              {monthName(b)}
+            </span>
+          ))}
+          {blocks.map((b) => b.weeks.map((week, wi) => week.map((day, row) => (day && (
+            <button
+              key={day}
+              type="button"
+              className={h.cell}
+              style={{ gridColumn: b.start + wi, gridRow: row + 2 }}
+              data-l={level(byDay[day]?.xp)}
+              data-day={day}
+              data-today={day === today || undefined}
+              data-sound="none"
+              tabIndex={day === tabDay ? 0 : -1}
+              aria-label={say(day)}
+              title={say(day)}
+              onMouseEnter={() => setPick(day)}
+              onFocus={() => { setFocusDay(day); setPick(day) }}
+              onClick={() => setPick(day)}
+            />
+          )))))}
         </div>
       </div>
       <div className={h.heatFoot}>
         <span className={h.readout} aria-live="polite">
-          {pick ? `${fmtDay(pick.date, i18n.language)}: ${pick.xp} XP · ${fmtMinutes(pick.minutes)}` : t('studentDash.history.tapDay', 'Tap a day to see it')}
+          {pick ? say(pick) : t('studentDash.history.tapDay', 'Tap a day to see it')}
         </span>
         <span className={h.legend} aria-hidden="true">
           {t('dashboard.heatmap.less')}
-          {[0, 1, 2, 3, 4].map((l) => <span key={l} className={h.cell} data-l={l} />)}
+          {[0, 1, 2, 3, 4].map((l) => <span key={l} className={h.swatch} data-l={l} />)}
           {t('dashboard.heatmap.more')}
         </span>
       </div>
@@ -235,7 +271,8 @@ function ChartTip({ active, payload, label }) {
 function Calendar({ activity, performance, stats, selectedYear, yearOptions, onYearChange }) {
   const { t, i18n } = useTranslation()
   const thisYear = new Date().getFullYear()
-  const data = useMemo(() => performance.map((p) => ({ date: fmtDay(p.date, i18n.language), xp: p.totalXP })), [performance, i18n.language])
+  // Each point is a calendar day from the server: named as that date, in any timezone.
+  const data = useMemo(() => performance.map((p) => ({ date: fmtDayKey(p.date, i18n.language), xp: p.totalXP })), [performance, i18n.language])
   const [chartReady, setChartReady] = useState(false)
   // Let the panel finish sliding in before Recharts measures its box.
   useEffect(() => { const id = setTimeout(() => setChartReady(true), 60); return () => clearTimeout(id) }, [])

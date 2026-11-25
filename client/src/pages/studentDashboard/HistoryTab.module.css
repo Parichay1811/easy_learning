@@ -210,43 +210,62 @@
 .heat { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 
 .heatScroll {
+  position: relative;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   padding-bottom: 2px;
 }
 
-.heatInner {
-  --cell: clamp(11px, min(1.25vw, 2vh), 17px);
+/* One grid for the year: a column per week, a narrow gap column between two
+   months (HistoryTab.jsx builds the columns), the month names in the first
+   row and Monday..Sunday below. Cells grow with the room there is, up to
+   --cell-max; when a year does not fit (a phone) the grid scrolls sideways. */
+.heatGrid {
+  --cell-min: 11px;
+  --cell-max: 17px;
   --gap: 3px;
-  width: max-content;
-  min-width: 100%;
+  --month-gap: 5px;
+  display: grid;
+  grid-template-rows: 16px;
+  grid-auto-rows: auto;
+  gap: var(--gap);
+  width: 100%;
+  min-width: min-content;
+  justify-content: start;
+  padding: 2px;
 }
 
-.months {
-  display: grid;
-  grid-template-columns: repeat(var(--cols), calc(var(--cell) + var(--gap)));
-  height: 16px;
+.month {
+  justify-self: center;
   color: var(--d-muted);
   font: 600 0.68rem/16px var(--d-font);
   letter-spacing: 0;
+  white-space: nowrap;
 }
-.months span { white-space: nowrap; }
 
-.grid { display: flex; gap: var(--gap); }
-.col { display: flex; flex-direction: column; gap: var(--gap); }
-
-.cell, .cellBlank {
-  width: var(--cell);
-  height: var(--cell);
+.cell, .swatch {
   border-radius: 4px;
-  flex: none;
+  background: var(--d-h0);
+  box-shadow: inset 0 0 0 1px rgba(31, 64, 120, 0.06);
 }
-.cell { background: var(--d-h0); box-shadow: inset 0 0 0 1px rgba(31, 64, 120, 0.06); cursor: pointer; }
-.cell[data-l="1"] { background: var(--d-h1); }
-.cell[data-l="2"] { background: var(--d-h2); }
-.cell[data-l="3"] { background: var(--d-h3); }
-.cell[data-l="4"] { background: var(--d-h4); }
+.cell {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+.swatch { display: inline-block; width: 11px; height: 11px; }
+.cell[data-l="1"], .swatch[data-l="1"] { background: var(--d-h1); }
+.cell[data-l="2"], .swatch[data-l="2"] { background: var(--d-h2); }
+.cell[data-l="3"], .swatch[data-l="3"] { background: var(--d-h3); }
+.cell[data-l="4"], .swatch[data-l="4"] { background: var(--d-h4); }
+/* Today: a ring, so "today" is easy to find (and to check against the date). */
+.cell[data-today] { box-shadow: inset 0 0 0 2px var(--d-ink); }
 .cell:hover { outline: 2px solid var(--d-ink); outline-offset: 1px; }
+.cell:focus-visible { outline: 3px solid var(--d-focus, #1c7ed6); outline-offset: 1px; position: relative; z-index: 1; }
 
 .heatFoot {
   display: flex;
@@ -259,8 +278,6 @@
 }
 .readout { font-weight: 600; color: var(--d-ink); min-height: 1.3em; }
 .legend { display: inline-flex; align-items: center; gap: 3px; }
-.legend .cell { --cell: 11px; cursor: default; }
-.legend .cell:hover { outline: 0; }
 
 .chartBox { position: relative; flex: 1 1 auto; min-height: 110px; }
 .chartAbs { position: absolute; inset: 0; }
@@ -288,6 +305,7 @@
   .chartCard h3 { font-size: 0.95rem; }
   .heatFoot { font-size: 0.7rem; }
   .legend { display: none; }
-  .heatInner { --cell: 11px; --gap: 2px; }
+  .heatGrid { --cell-max: 11px; --gap: 2px; --month-gap: 4px; grid-template-rows: 14px; }
+  .month { line-height: 14px; }
   .year { min-height: 34px; }
 }

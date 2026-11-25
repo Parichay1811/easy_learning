@@ -1,14 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence } from "framer-motion";
 import { useCalmMotion } from "../../utils/useCalmMotion";
 import * as FramerMotion from "framer-motion";
-import { FaArrowLeft, FaStar, FaRedo, FaTimes, FaHome, FaCompass } from "react-icons/fa";
+import { FaArrowLeft, FaStar, FaRedo, FaTimes, FaHome, FaCompass, FaRegClock, FaChevronDown } from "react-icons/fa";
 import { useQuestionRound } from "../../hooks/useQuestionRound";
 import QuestionCard from "../QuestionCard/QuestionCard";
 import ExplainCard from "../QuestionCard/ExplainCard";
 import ResumePrompt from "./ResumePrompt";
+import ClockMenu from "./ClockMenu";
 import GrowthToast from "../journey/GrowthToast";
 import RoundComplete from "../RoundComplete/RoundComplete";
 import VideoBackground from "../VideoBackground/VideoBackground";
@@ -18,6 +19,7 @@ import WarriorTimer from "../WarriorTimer/WarriorTimer";
 import Mascot from "../Mascot/Mascot";
 import { companion } from "../../companion/bus";
 import { ComfortSettingsButton } from "../settings/ComfortSettings";
+import { fieldLabel } from "../settings/prefText";
 import PlacementSheet from "../Placement/PlacementSheet";
 import { needsPlacement } from "../Placement/placementApi";
 import { useVoiceBarHost } from "../VoiceBar/useNarration";
@@ -46,6 +48,11 @@ function useCompactHud() {
  * stars) and the question card filling the rest — one screen, no scrolling,
  * on every device.
  *
+ * The Warrior clock is off until the learner turns it on. In Warrior the bar
+ * shows it as a button ("No clock", or the running clock) that opens its menu
+ * (ClockMenu.jsx: No clock / Normal / More time), so the choice is where the
+ * clock is, not only in Comfort settings.
+ *
  *   <ModulePlayer module="listen" warriorSeconds={30} icon={FaHeadphones} accent="#3d9bff" />
  *
  * `extra` adds an optional side panel ({ label, icon, render(reset) }): shown
@@ -68,8 +75,8 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
   const wantsChallenge = query.get("challenge") === "1";
   const {
     data, status, noOrgQuestions, current, idx, mode, setMode, timeLeft, roundDone, roundResult,
-    totalScore, recordAnswer, advance, handlePlayAgain, retry, paused, togglePause, clockRunning, timedOut,
-    warriorSeconds: clockSeconds, noClock, learn, choicePool, voiceBusy,
+    totalScore, recordAnswer, advance, handlePlayAgain, retry, paused, userPaused, togglePause, clockRunning, timedOut,
+    warriorSeconds: clockSeconds, noClock, learn, choicePool, voiceBusy, answered,
     resumeOffer, acceptResume, startFresh, starting, explainNow, doneExplaining, newBadges, challenge,
   } = round;
   // Badges earned in the round are shown quietly when it ends (never mid-question):
@@ -100,6 +107,14 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
       onClose={() => setPlacementOpen(false)}
     />
   );
+
+  // The Warrior clock's menu (open from the clock in the bar; Warrior only).
+  const [clockMenu, setClockMenu] = useState(false);
+  const clockSlotRef = useRef(null);
+  const closeClockMenu = useCallback(() => setClockMenu(false), []);
+  const clockOpen = clockMenu && mode === "warrior" && !roundDone;
+  // Left Warrior or finished the round with the menu open: it does not come back by itself.
+  if (clockMenu && !clockOpen) setClockMenu(false);
 
   // The stars counter gives a little hop when it goes up.
   const [bumpKey, setBumpKey] = useState(0);
@@ -214,24 +229,40 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
         <div className={styles.progressSlot}>
           <ProgressBar current={resumeOffer ? resumeOffer.position + 1 : idx + 1} total={data.length} />
         </div>
-        {mode === "warrior" && noClock && (
-          <div className={styles.timerSlot}>
-            <span className={styles.noClock} title={t("modules.noClockTip", "No clock. You can turn one on in Comfort settings.")}>
-              {t("modules.noClock", "No clock")}
-            </span>
-          </div>
-        )}
-        {mode === "warrior" && !noClock && (
-          <div className={styles.timerSlot}>
-            <WarriorTimer
-              total={clockSeconds}
-              left={timeLeft}
-              running={clockRunning}
-              paused={paused}
-              timedOut={timedOut}
-              waiting={voiceBusy && !timedOut}
-              onTogglePause={togglePause}
-            />
+        {/* The Warrior clock: off until the learner turns it on. Either way it is a
+            button that opens the clock's own menu (no clock / normal / more time). */}
+        {mode === "warrior" && (
+          <div className={styles.timerSlot} ref={clockSlotRef}>
+            {noClock ? (
+              <button
+                type="button"
+                className={styles.clockOff}
+                onClick={() => setClockMenu((o) => !o)}
+                aria-haspopup="dialog"
+                aria-expanded={clockOpen}
+                aria-label={`${fieldLabel(t, "timer")}: ${t("modules.noClock", "No clock")}`}
+                title={`${fieldLabel(t, "timer")}: ${t("modules.noClock", "No clock")}`}
+                data-sound={clockOpen ? "close" : "open"}
+              >
+                <FaRegClock className={styles.clockIcon} aria-hidden="true" />
+                <span>{t("modules.noClock", "No clock")}</span>
+                <FaChevronDown className={styles.clockCaret} aria-hidden="true" />
+              </button>
+            ) : (
+              <WarriorTimer
+                total={clockSeconds}
+                left={timeLeft}
+                running={clockRunning}
+                // While its menu is open the clock simply waits (the number stands still);
+                // "Paused" is for a clock the learner paused, or a hidden page.
+                paused={clockOpen ? userPaused : paused}
+                timedOut={timedOut}
+                waiting={voiceBusy && !timedOut}
+                onTogglePause={togglePause}
+                onOpenMenu={() => setClockMenu((o) => !o)}
+                menuOpen={clockOpen}
+              />
+            )}
           </div>
         )}
         {extra && (
@@ -255,6 +286,17 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
       </header>
 
       <main className={`${styles.arena} ${extra ? styles.withExtra : ""}`}>
+        {clockOpen && (
+          <ClockMenu
+            baseSeconds={warriorSeconds}
+            anchorRef={clockSlotRef}
+            onClose={closeClockMenu}
+            canPause={!noClock && !answered && !timedOut && !resumeOffer && !explainNow}
+            paused={userPaused}
+            left={timeLeft}
+            onTogglePause={togglePause}
+          />
+        )}
         {extra && (
           <aside className={`${styles.extra} ${extraOpen ? styles.extraOpen : ""}`} aria-label={extra.label}>
             <button type="button" className={styles.extraClose} onClick={() => setExtraOpen(false)} aria-label={t("modules.close", { defaultValue: "Close" })} data-sound="close">
@@ -303,8 +345,8 @@ export default function ModulePlayer({ module, warriorSeconds = 30, icon, accent
       <AnimatePresence>
         {roundDone && (
           <RoundComplete
-            module={module} subject={subject || "general"} mode={mode}
-            stars={roundResult.stars} total={data.length} challenge={challenge}
+            module={module} subject={subject || "general"} mode={roundResult.mode || mode}
+            stars={roundResult.stars} total={roundResult.total || data.length} challenge={challenge}
             best={roundResult.best} newBest={roundResult.newBest}
             onPlayAgain={() => { handlePlayAgain(); setExtraKey((k) => k + 1); setBadgesSeen(0); }}
             onBack={leave}

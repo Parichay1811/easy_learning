@@ -30,6 +30,11 @@ import {
   recordLatency,
 } from './profile'
 
+// The learner's timezone, so a round is filed under their own calendar day (as the dashboard does).
+function timeZone() {
+  try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC' } catch { return 'UTC' }
+}
+
 const API = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
 const LOCAL_KEY = 'ar_sessions_v1'
 const LOCAL_MAX = 60 // rolling window of sessions kept on-device
@@ -463,7 +468,7 @@ async function upload(session) {
   try {
     const res = await fetch(`${API}/ar/session`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...authHeaders() },
+      headers: { 'Content-Type': 'application/json', 'X-Timezone': timeZone(), ...authHeaders() },
       credentials: 'include',
       body: JSON.stringify({ session: stripForUpload(session) }),
     })
@@ -497,7 +502,7 @@ export async function flushPendingSessions() {
   try {
     const res = await fetch(`${API}/ar/sessions`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', ...authHeaders() },
+      headers: { 'Content-Type': 'application/json', 'X-Timezone': timeZone(), ...authHeaders() },
       credentials: 'include',
       body: JSON.stringify({ sessions: list.slice(-25).map(stripForUpload) }),
     })
