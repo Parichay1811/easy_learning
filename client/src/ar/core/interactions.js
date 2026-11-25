@@ -61,11 +61,13 @@ export class DwellSelector {
   /**
    * @param {Array<{id:string,x:number,y:number,radius:number,disabled?:boolean}>} targets
    * @param {Array<{x:number,y:number,side?:string}>} pointers fingertips, in stage space
-   * @param {{dt:number, now:number, stageW:number, stageH:number}} ctx
+   * @param {{dt:number, now:number, stageW:number, stageH:number, isHeld?:(id:string)=>boolean}} ctx
+   *   `isHeld` — targets the hand was already resting on when they appeared and
+   *   has not yet come away from (see core/arrival.js). They gather no dwell.
    * @returns {{selected: object|null, pointer: object|null, hovering: string|null, distance: number|null}}
    */
   step(targets, pointers, ctx) {
-    const { dt, now, stageW, stageH } = ctx
+    const { dt, now, stageW, stageH, isHeld } = ctx
     let best = null
 
     // Which target is each pointer inside? Nearest wins when hitboxes overlap.
@@ -74,7 +76,7 @@ export class DwellSelector {
       if (!p) continue
       let nearest = null
       for (const tgt of targets) {
-        if (!tgt || tgt.disabled || this.locked.has(tgt.id)) continue
+        if (!tgt || tgt.disabled || this.locked.has(tgt.id) || isHeld?.(tgt.id)) continue
         const d = aspectDist(p, tgt, stageW, stageH)
         const r = (tgt.radius ?? 0.09) * this.hitScale
         if (d <= r && (!nearest || d < nearest.d)) nearest = { tgt, d, pointer: p }

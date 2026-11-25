@@ -41,11 +41,15 @@ void main() {
   gl_FragColor = mix(px(b), px(a), k);
 }`;
 
-const MAX_VIDEOS = 14; // every performance, the walk included, stays ready to switch to instantly
+// Every performance, the walk included, stays ready to switch to instantly. A phone
+// keeps fewer (`maxVideos`): each one holds a decoder and its buffers; the least
+// recently used is let go, and comes back from the browser's cache when needed.
+const MAX_VIDEOS = 14;
 
 export class AlphaVideo {
-  constructor(canvas, { base, manifest, onFirstFrame, onFail } = {}) {
+  constructor(canvas, { base, manifest, onFirstFrame, onFail, maxVideos = MAX_VIDEOS } = {}) {
     this.canvas = canvas;
+    this.maxVideos = Math.max(3, maxVideos || MAX_VIDEOS);
     this.base = base;
     this.manifest = manifest;
     this.onFirstFrame = onFirstFrame;
@@ -134,7 +138,7 @@ export class AlphaVideo {
   }
 
   evict() {
-    if (this.videos.size <= MAX_VIDEOS) return;
+    if (this.videos.size <= this.maxVideos) return;
     const keep = new Set([this.cur, this.prev, "idle"]);
     const old = [...this.videos.values()].filter((e) => !keep.has(e.id)).sort((a, b) => a.used - b.used)[0];
     if (!old) return;

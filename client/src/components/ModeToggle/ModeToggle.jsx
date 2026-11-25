@@ -4,8 +4,11 @@ import { GiCrossedSwords } from "react-icons/gi";
 import { sfx } from "../../utils/sounds";
 import styles from "./ModeToggle.module.css";
 
-// Practice / Warrior: a two-way switch in the round's top bar. Warrior adds a
-// gentle clock; Practice has none.
+// Practice / Warrior: a two-way switch in the round's top bar. Warrior is
+// "beat your own best": a pass mark and the learner's own best round to beat
+// (utils/warrior.js). It has no clock unless the learner turns one on (the
+// clock in the bar, or Comfort settings), there are no bonus stars, and a
+// clock never costs a star. Practice never has a clock.
 const ModeToggle = ({ mode, onChange, compact = false }) => {
   const { t } = useTranslation();
   const pick = (next) => {
@@ -39,7 +42,7 @@ const ModeToggle = ({ mode, onChange, compact = false }) => {
         aria-checked={mode === "warrior"}
         className={`${styles.btn} ${mode === "warrior" ? styles.activeWarrior : ""}`}
         onClick={() => pick("warrior")}
-        title={t("modeToggle.warriorHint", { defaultValue: "Warrior: beat the clock for bonus stars" })}
+        title={t("modeToggle.warriorHint", { defaultValue: "Warrior: beat your own best" })}
         data-sound="none"
       >
         <GiCrossedSwords aria-hidden="true" />

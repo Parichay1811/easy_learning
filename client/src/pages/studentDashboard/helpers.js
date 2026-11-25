@@ -51,6 +51,26 @@ export function fmtNumber(n, lang) {
   try { return new Intl.NumberFormat(lang || undefined).format(Math.round(Number(n) || 0)) } catch { return String(n) }
 }
 
+/**
+ * A day from the dashboard API -> "YYYY-MM-DD". The server keeps a learner's
+ * day as THEIR calendar date at UTC midnight (StudentActivity.date:
+ * 2026-11-24T00:00:00.000Z is 24 November, wherever the learner is). So the
+ * date is read as written (its UTC year-month-day), never turned into local
+ * time: west of UTC that showed every day one day early.
+ */
+export function dayKeyOf(date) {
+  if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)) return date
+  const d = new Date(date)
+  return Number.isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10)
+}
+
+/** "24 Nov" for a calendar day ("YYYY-MM-DD", or a day from the dashboard API): the date it names, in any timezone. */
+export function fmtDayKey(day, lang, opts = { day: 'numeric', month: 'short' }) {
+  const key = dayKeyOf(day)
+  if (!key) return ''
+  try { return new Date(`${key}T00:00:00.000Z`).toLocaleDateString(lang || undefined, { ...opts, timeZone: 'UTC' }) } catch { return key }
+}
+
 /** Local YYYY-MM-DD of a date. */
 export function localDateStr(date) {
   const d = new Date(date)

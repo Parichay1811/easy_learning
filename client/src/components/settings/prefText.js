@@ -32,6 +32,7 @@ const FIELD_TEXT = {
   motion: ["Movement", "How much things on the screen move and slide."],
   focusMode: ["Fewer distractions", "Hides moving backgrounds, butterflies and other decorations."],
   bigTargets: ["Bigger buttons", "Larger buttons that are easier to tap."],
+  guide: ["Show me where to tap", "A pointing hand shows what to tap next, and the teacher says it."],
   timer: ["Warrior clock", "The countdown in Warrior mode. Practice mode never has a clock."],
   breakEvery: ["Break reminders", "A gentle reminder to rest after playing for a while."],
   speakInstead: ["If the microphone can't be used", "How to answer a speaking question when the microphone is off or not working."],

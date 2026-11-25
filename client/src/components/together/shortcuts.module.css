@@ -1,0 +1,37 @@
+/* Shortcuts on Home: chunky pills in the look of the hero's own buttons. */
+.strip { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  max-width: 100%;
+  padding: 6px 16px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 999px;
+  font: 700 0.95rem/1.15 "Fredoka", system-ui, sans-serif;
+  color: #fff;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
+}
+.chip:active { transform: translateY(3px); box-shadow: none; }
+.chip:focus-visible { outline: 3px solid #ffd45c; outline-offset: 2px; }
+.text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.go { background: linear-gradient(180deg, #2f9e44, #1b7a33); box-shadow: 0 4px 0 #145c26; }
+.team { background: linear-gradient(180deg, #339af0, #1c6fc0); box-shadow: 0 4px 0 #14518c; }
+.gold { background: linear-gradient(180deg, #f59f00, #d9480f); box-shadow: 0 4px 0 #9c3a08; }
+.pink { background: linear-gradient(180deg, #f06595, #c2255c); box-shadow: 0 4px 0 #8f1d47; }
+.plain { background: rgba(255, 255, 255, 0.94); color: #1f2a44; border-color: #fff; box-shadow: 0 4px 0 rgba(31, 64, 120, 0.2); }
+/* Phones: one row that scrolls sideways, smaller pills; Together and Shorts become icons
+   with their names kept for screen readers. */
+@media (max-width: 700px) {
+  .strip { flex-wrap: nowrap; justify-content: flex-start; width: 100%; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 6px; }
+  .strip::-webkit-scrollbar { display: none; }
+  .chip { flex: none; min-height: 44px; padding: 6px 14px; font-size: 0.9rem; }
+  .go, .team, .gold, .pink { flex: 1 1 auto; min-width: 0; }
+  /* With something waiting, Together and Shorts shrink to their pictures (their names stay for screen readers). */
+  .small { padding: 6px 12px; font-size: 1.15rem; }
+  .small .text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+}
+@media (prefers-reduced-motion: reduce) { .chip { transition: none; } }

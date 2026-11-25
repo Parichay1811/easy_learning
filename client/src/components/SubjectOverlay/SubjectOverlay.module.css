@@ -207,3 +207,11 @@
   .subjectBadge, .card:hover .cardIconWrap { animation: none; }
   .closeBtn:hover { transform: none; }
 }
+
+/* Touch screens, and lite mode (utils/useLiteMode.js): no blur behind the dimmed layer
+   (it is redone on every frame of the film underneath); a little darker instead.
+   contain keeps what the blur also did: the box fixed children are placed in. */
+@media (pointer: coarse) {
+  .backdrop { backdrop-filter: none; -webkit-backdrop-filter: none; contain: layout; background: rgba(8, 14, 30, 0.72); }
+}
+:global(html[data-lite]) .backdrop { backdrop-filter: none; -webkit-backdrop-filter: none; contain: layout; background: rgba(8, 14, 30, 0.72); }

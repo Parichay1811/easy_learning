@@ -10,7 +10,12 @@ import './index.css'
 // i18n must be imported before <App> so the instance is configured
 // before any component calls useTranslation()
 import './i18n/i18n'
+import { applyLiteAttr } from './utils/useLiteMode'
 import App from './App.jsx'
+
+// Lite mode (a weak device, Save-Data, less movement) is on <html> before the first
+// paint, so nothing heavy is drawn and then taken away (utils/useLiteMode.js).
+applyLiteAttr()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

@@ -116,6 +116,59 @@ Cross-DB joins are done in application code by string keys, never Mongo `$lookup
 `SAOrganization.adminOrgId` / `adminUid` cross into adminDb; a student/tutor's `email`
 crosses into the default-DB activity collections (see `utils/performance.js`).
 
+## 4a. Learning together and Shorts (GAME-ROADMAP.md Phase 5)
+
+Friends, rounds together, team matches, prizes, the Shorts feed and "what they love".
+Everything is keyed by the learner's **email** in the default database, like the rest of
+their activity, and joins the data export and erase (`services/dataRights.js`).
+
+```
+server/config/social.js              the fixed lists (nickname words, avatars, cheer stickers and lines, awards) and limits
+server/models/social/                PlayerCard, Friendship, BuddyMatch, TeamMatch, PeerCheer, SocialAward, ShortsInterest
+server/services/social/guard.js      standing(email): what a learner may do (grown-ups' switches, their own, their age)
+server/services/social/              cards, friends, matches (buddy / friendly / mystery), teams (+ ceremony), cheers, stars, jar, awards
+server/services/shorts/              catalog (topic packs -> shorts), feed (the mix, events, picks), interests (summaries for adults)
+server/routes/social.js, shorts.js   /api/social/*, /api/shorts/*  (learner, dashboardAuth)
+server/controllers/teacherTogetherController.js   /api/teacher/groups/:id/competitions|interests, /competitions/:cid, /students/:id/interests
+server/controllers/parentTogetherController.js    /api/parent/children/:id/together|interests (behind requireOwnChild)
+client/src/pages/together/           Together.jsx (the page), MatchRound.jsx (a round together), words.js (pictures + English defaults), api.js
+client/src/pages/shorts/             Shorts.jsx, boardHost.js (borrows the AI Teacher's board: /ai-assistant/board.js, loaded at run time)
+client/src/components/together/      InterestsCard, TeamBoard (dashboards), Shortcuts (Home)
+client/src/components/guide/         GuideCoach (the pointing hand + spoken "tap here"), useGuide (how a page marks its next step)
+```
+
+Rules that must hold (each has a test in `server/test/integration/together.test.js`):
+
+- **No endpoint returns another learner's email.** Other learners are named only by their
+  player card's id; a friend code is returned only to its owner.
+- **No ranking of children.** Scores are per team or a shared total; a learner sees only
+  their own contribution. Lists of learners are in name order and carry no number.
+- **Stars are right answers** (`StudentAnswer.correct`), at most `team.starsPerDayCap` a
+  day per learner. Nothing is scored on speed, minutes or days in a row.
+- **Children talk with preset cheers only**: stickers and lines are enums; there is no
+  free-text field anywhere in these models.
+- **Switches**: `Child.together` (every verified guardian; the strictest wins), the
+  learner's own on `PlayerCard`, and the school's `OrgPolicy.competitions`. Check with
+  `standing()` (or `ctx.policy`) on the server, never only in the UI.
+- A learner under 13 with a grown-up linked needs that grown-up's yes for each new friend
+  (`Friendship.status = 'awaiting_adult'`) unless the grown-up turned that off.
+
+**Shorts** are built from the AI Teacher's topic packs for the learner's age band
+(`catalog.forBand`), without topics marked sensitive. The feed uses only the learner's own
+picks, hearts and finished shorts (`ShortsInterest`); it never starts the next short by
+itself and shows a break card every `shorts.breakEvery`.
+
+**The guide.** To make a page say and show its next step, mark ONE element:
+
+```jsx
+const guide = useGuide();
+<button {...guide("home.start", "Tap the big orange button to start learning.", { order: 1 })}>
+```
+
+The words are spoken in the language they are written in (`guide.<name>` in the locale
+files, English otherwise). Call `nudgeGuide()` when the next step changes without a page
+change (a sheet opens, a question arrives).
+
 ## 5. Backend patterns
 
 ### 5.1 The "content module" pattern

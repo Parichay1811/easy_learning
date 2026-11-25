@@ -32,6 +32,8 @@ export const PREF_FIELDS = [
   { key: "motion", group: "focus", type: "choice", options: ["system", "full", "reduced"], def: "system" },
   { key: "focusMode", group: "focus", type: "bool", def: false },
   { key: "bigTargets", group: "focus", type: "bool", def: false },
+  // The pointing hand and spoken "tap here" on each page (components/guide).
+  { key: "guide", group: "focus", type: "bool", def: true },
   // Time and answering
   // The Warrior clock: off unless the learner turns it on (docs/learning/GAME-ROADMAP.md G-005).
   { key: "timer", group: "time", type: "choice", options: ["on", "relaxed", "off"], def: "off" },

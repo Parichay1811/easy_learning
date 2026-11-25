@@ -10,6 +10,9 @@ const schema = new mongoose.Schema({
   teachersCreateGroups: { type: Boolean, default: false },
   parentsSeeClassAverage: { type: Boolean, default: false },
   leaderboards: { type: String, enum: ['off', 'group'], default: 'off' },
+  // Team matches and class quests in the school's groups (G-518): teams and shared goals only,
+  // never a ranking of children. 'off' hides them for teachers and learners.
+  competitions: { type: String, enum: ['off', 'teams'], default: 'teams' },
   aiTeacherInSchoolHours: { type: Boolean, default: true },
   activityVisibility: { type: String, enum: ['assigned', 'school_hours', 'all'], default: 'assigned' },
   retentionYears: { type: Number, default: 2, min: 0, max: 10 },

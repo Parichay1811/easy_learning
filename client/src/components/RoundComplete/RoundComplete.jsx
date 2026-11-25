@@ -12,6 +12,7 @@ import { warriorPassMark } from "../../utils/warrior";
 import { loadFeedback, pickSummary } from "../../utils/feedbackLines";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./RoundComplete.module.css";
+import { useGuide } from "../guide/useGuide";
 
 const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
 
@@ -22,6 +23,7 @@ const CONFETTI = Array.from({ length: 14 }, (_, i) => i);
 // `best` / `newBest` compare the round with the learner's own best (never with others).
 export default function RoundComplete({ module: mod, subject, mode, stars, total = 10, best = null, newBest = false, onPlayAgain, onBack, challenge = false }) {
   const { t, i18n } = useTranslation();
+  const guide = useGuide();
   const { user } = useAuth() || {};
   const reduce = useCalmMotion();
   const isPractice = mode !== "warrior";
@@ -171,6 +173,7 @@ export default function RoundComplete({ module: mod, subject, mode, stars, total
               data-companion-look
               data-sound="none"
               autoFocus
+              {...guide("round.again", "Well done! Tap the button to play again.", { order: 3 })}
             >
               <FaRedo aria-hidden="true" /> {t("roundComplete.playAgain")}
             </button>

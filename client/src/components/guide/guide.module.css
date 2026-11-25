@@ -1,0 +1,30 @@
+/* The "where to tap" guide: a glow around the next thing and a hand pointing at it.
+   It never takes a tap (pointer-events: none), moves with transforms only, and sits
+   above the page but under dialogs' own content (it is drawn after them in the body). */
+.layer { position: fixed; inset: 0; z-index: 2147483000; pointer-events: none; overflow: hidden; }
+.ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  box-shadow: 0 0 0 4px #ffd43b, 0 0 0 9px rgba(255, 212, 59, 0.35);
+  animation: guideRing 1.5s ease-in-out infinite;
+  will-change: opacity;
+}
+.handAt { position: absolute; left: 0; top: 0; width: 56px; height: 56px; }
+.hand {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  font-size: 44px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+  animation: guideTapUp 1.1s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+.handDown { animation-name: guideTapDown; }
+@keyframes guideRing { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+@keyframes guideTapUp { 0%, 100% { transform: translateY(10px); } 50% { transform: translateY(-4px) scale(0.94); } }
+@keyframes guideTapDown { 0%, 100% { transform: translateY(-10px); } 50% { transform: translateY(4px) scale(0.94); } }
+/* Less movement: the glow and the hand stay, without the bounce. */
+.calm .ring, .calm .hand { animation: none; }
+@media (prefers-reduced-motion: reduce) { .ring, .hand { animation: none; } }

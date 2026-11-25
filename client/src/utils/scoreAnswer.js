@@ -9,7 +9,7 @@
 // ("ungraded" has correct:true so a practice answer is never called wrong).
 
 // ---- BEGIN SHARED CORE ----
-const CHECKER_VERSION = 3
+const CHECKER_VERSION = 4
 
 // ── Text normalisation ──
 const VARIATION = /\uFE0E|\uFE0F|\u200D|\u200B|\u2060/g
@@ -591,6 +591,19 @@ function parseEquation(text) {
 }
 
 // ── Text answers ──
+// One slip (a wrong, missing, extra or swapped letter) in exactly one word, every other word the
+// same. `longEnough(expected, typed)` says whether that word is long enough for a slip to be one.
+function oneSlip(expected, typed, longEnough) {
+  if (expected.length !== typed.length || !expected.length) return false
+  let diffs = 0
+  for (let i = 0; i < expected.length; i++) {
+    if (expected[i] === typed[i]) continue
+    diffs++
+    if (diffs > 1 || !longEnough(expected[i], typed[i]) || /\d/.test(expected[i]) || editDistance(expected[i], typed[i], 1) !== 1) return false
+  }
+  return diffs === 1
+}
+
 function checkText(q, v, raw) {
   let answer = raw
   if (Array.isArray(answer)) {
@@ -617,7 +630,18 @@ function checkText(q, v, raw) {
   if (v.case_sensitive || v.punctuation_strict) {
     const s = strictText(answer)
     if (accepted.some((a) => strictText(a) === s)) return result('correct')
-    if (accepted.some((a) => canon(a) === canon(s))) return result('close', { reason: v.case_sensitive ? 'capitals' : 'punctuation' })
+    // The right words: say what is really different (the capital letters, the punctuation, or both).
+    const user = words(s)
+    const lettersOf = (x) => baseText(x).replace(/[^\p{L}\p{N}\p{M}]/gu, '')
+    const off = accepted.filter((a) => words(a).join(' ') === user.join(' ')).map((a) => {
+      const capitals = lettersOf(a) !== lettersOf(s)
+      const punctuation = strictText(a).toLowerCase() !== s.toLowerCase()
+      return capitals && punctuation ? 'capitals_punctuation' : punctuation ? 'punctuation' : 'capitals'
+    })
+    if (off.length) return result('close', { reason: off.find((r) => r !== 'capitals_punctuation') || off[0] })
+    // One spelling slip (a phone "correcting" Ana to Anna): close, never plain wrong. The slip may
+    // be in a short name as long as one of the two spellings has four letters.
+    if (!miscon && accepted.some((a) => oneSlip(words(a), user, (w, u) => Math.max(w.length, u.length) >= 4))) return result('close', { reason: 'spelling' })
     return result('incorrect', { misconception: miscon })
   }
 
@@ -664,16 +688,7 @@ function checkText(q, v, raw) {
   }
 
   // Spelling: one slip (a wrong, missing, extra or swapped letter) in one word of four or more letters.
-  for (const a of accSets) {
-    if (a.length !== user.length || !a.length) continue
-    let diffs = 0, typo = true
-    for (let i = 0; i < a.length && typo; i++) {
-      if (a[i] === user[i]) continue
-      diffs++
-      if (diffs > 1 || a[i].length < 4 || /\d/.test(a[i]) || editDistance(a[i], user[i], 1) !== 1) typo = false
-    }
-    if (typo && diffs === 1) return v.spelling_strict ? result('close', { reason: 'spelling' }) : result('correct', { reason: 'spelling' })
-  }
+  if (accSets.some((a) => oneSlip(a, user, (w) => w.length >= 4))) return v.spelling_strict ? result('close', { reason: 'spelling' }) : result('correct', { reason: 'spelling' })
   return result('incorrect', { misconception: miscon })
 }
 

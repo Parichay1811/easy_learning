@@ -27,6 +27,17 @@ const sections = [
     text: "Learnigo is built for children roughly aged 5 to 14. A parent, teacher or organization administrator creates or approves accounts for children, and we only collect the information needed to run the learning platform. We do not sell children's personal information.",
   },
   {
+    title: "Learning together and Shorts",
+    list: [
+      "Friends, rounds with a friend and team matches are optional. To take part a learner gets a player card: a nickname made of two words from our list, a picture from our set, and a friend code. Other learners can see the first name, nickname and picture of their friends and team-mates. They never see an email address, surname, school or photo.",
+      "There is no chat. Learners can only send each other a sticker and a ready-made line from a fixed list.",
+      "For team matches we count right answers per team. We do not publish a ranking of children.",
+      "For a child under 13 with a linked parent or carer, each new friend waits for that adult's approval unless the adult has switched this off. Parents and carers can see their child's friends, teams and rounds, remove a friend, and switch friends, rounds together, rounds with someone new, and Shorts on or off. A school can switch team matches off for its groups.",
+      "In Shorts we store the topics a learner chooses, the shorts they mark with a heart, and how many shorts they open and finish per topic. We use this only to choose what to show next and to show the learner's parents, carers and teachers which topics the learner likes. We do not use it for advertising and do not share it with anyone else.",
+      "All of this is included when you ask for a copy of a learner's data, and deleted when a learner's account is deleted.",
+    ],
+  },
+  {
     title: "How we protect your information",
     text: "Account passwords are stored encrypted, and access to student and organization data is restricted by role. We take reasonable technical and organizational steps to protect data against unauthorized access, loss or misuse.",
   },

@@ -3,6 +3,7 @@
 // Plain, kind and the same for a child, a teenager, an adult and a grown-up
 // looking on. No scores-as-labels, no rankings, no diagnosis words.
 import { FaBook, FaCalculator, FaFlask } from "react-icons/fa";
+import { weekRange } from "./weeks.js"; // with ".js": node --test loads this file too (evidence/model.test.mjs)
 
 export const SUBJECTS = ["english", "maths", "science"];
 export const MODULES = ["listen", "read", "write", "speak"];
@@ -80,6 +81,21 @@ export function sourceText(t, source, who = "me") {
     case "engine": return me ? t("learning.source.me.engine", "You moved up by practising") : t("learning.source.them.engine", "Moved up by Learnigo after steady practice");
     case "default": return me ? t("learning.source.me.default", "Your starting level") : t("learning.source.them.default", "Starting level");
     default: return "";
+  }
+}
+
+/**
+ * How a learner's own level came about, for the small line under it on "My
+ * levels": Learnigo set it (from the warm-up, from their answers), or they
+ * chose it. It is what makes "Adjust" read as optional.
+ */
+export function levelHowText(t, i18n, source) {
+  switch (source) {
+    // Short on purpose: one line on a phone, under each of three levels.
+    case "engine": return tFresh(t, i18n, "learning.how.engine", "Set from your answers", "learning.source.me.engine");
+    case "baseline": return tFresh(t, i18n, "learning.how.baseline", "Set from your warm-up", "learning.source.me.baseline");
+    case "default": return sourceText(t, source, "me");
+    default: return sourceText(t, source, "me");
   }
 }
 
@@ -183,17 +199,26 @@ export function shortDate(dateish, lang) {
   try { return new Date(dateish).toLocaleDateString(lang || undefined, { day: "numeric", month: "short" }); } catch { return ""; }
 }
 
-/** A week key ("2026-11-16" or "2026-W47") -> a short label. */
+/**
+ * A week key ("2026-11-23", its Monday, or "2026-W48") -> the week's seven
+ * days, "23–29 Nov" (weeks.js). Never the Monday alone: that reads as a date,
+ * one day early for someone who played on the Tuesday.
+ */
 export function weekLabel(week, lang) {
-  if (/^\d{4}-\d{2}-\d{2}/.test(String(week))) return shortDate(`${String(week).slice(0, 10)}T12:00:00`, lang);
-  const m = /^(\d{4})-W(\d{1,2})$/.exec(String(week));
-  if (m) {
-    // ISO week -> its Monday
-    const jan4 = new Date(Date.UTC(Number(m[1]), 0, 4));
-    const monday = new Date(jan4.getTime() - ((jan4.getUTCDay() + 6) % 7) * 86400000 + (Number(m[2]) - 1) * 7 * 86400000);
-    return shortDate(new Date(monday.getTime() + 12 * 3600000), lang);
-  }
-  return String(week ?? "");
+  return weekRange(week, lang);
+}
+
+/**
+ * Words that are newer than the locale files. English shows the new words
+ * (`en`); another language shows its own older wording (`olderKey`) until
+ * `key` is translated there, instead of an English phrase on its page.
+ */
+export function tFresh(t, i18n, key, en, olderKey, opts = {}) {
+  const lng = String(i18n?.resolvedLanguage || i18n?.language || "en").split("-")[0];
+  let own = false;
+  try { own = i18n?.getResource?.(lng, "translation", key) != null; } catch { own = false; }
+  if (lng === "en" || own || !olderKey) return t(key, { defaultValue: en, ...opts });
+  return t(olderKey, opts);
 }
 
 // Weekly { week (local Monday), accuracy (0..1), attempts } from dated items, oldest first.

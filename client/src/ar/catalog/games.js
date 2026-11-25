@@ -20,6 +20,7 @@ import {
   askWhatsMissing, askTimeOfDay, askWordPicture, askMoney, askWhichHand,
 } from '../engines/asks'
 import { LIFE_SKILL_LABELS } from './groups'
+import { RULE_SWITCH_VARIANTS } from './ruleVariants.js'
 import {
   FaBullseye, FaHashtag, FaArrowsAltH, FaHandPaper, FaRulerHorizontal, FaCircle,
   FaShapes, FaBookOpen, FaSearch, FaBalanceScale, FaArrowUp, FaSyncAlt,
@@ -365,7 +366,7 @@ export const GAMES = [
     title: 'Rule Switch',
     icon: FaSyncAlt,
     color: 'purple',
-    how: 'Touch the animals… then suddenly the rule changes to vehicles.',
+    how: 'Touch one kind of thing and leave the other… then suddenly the rule swaps. A new pair each round.',
     engine: 'goNoGo',
     dims: 'flexible',
     domains: ['cognitiveFlexibility', 'inhibition', 'sustainedAttention'],
@@ -379,6 +380,8 @@ export const GAMES = [
       goLabel: 'animals',
       noGoLabel: 'vehicles',
       ruleSwitch: true,
+      // A round plays one of these pairs, never the one it played last.
+      variants: RULE_SWITCH_VARIANTS,
     },
   }),
   g({
@@ -407,7 +410,7 @@ export const GAMES = [
     title: 'Red Light, Green Light',
     icon: FaTrafficLight,
     color: 'red',
-    how: 'Move when it is green. Freeze completely when it turns red.',
+    how: 'Green light: wave your arms and march on the spot. Red light: freeze like a statue!',
     engine: 'cue',
     dims: 'cue',
     domains: ['inhibition', 'sustainedAttention', 'motorPlanning'],
@@ -422,7 +425,7 @@ export const GAMES = [
     title: 'Traffic Light Game',
     icon: FaChildren,
     color: 'orange',
-    how: 'Green walk, amber get ready, red freeze — like a real crossing.',
+    how: 'Green: walk on the spot. Amber: get ready to stop. Red: freeze like a statue — like a real crossing.',
     engine: 'cue',
     dims: 'cue',
     domains: ['inhibition', 'cognitiveFlexibility', 'sustainedAttention'],

@@ -221,6 +221,12 @@ test('log-answer: uncertain, ungraded, timed and unknown answers never count', a
   assert.equal(oldMic.body.learn.notCounted, 'uncertain')
   const open = await answer(S.bea, { module: 'speak', subject: 'english', questionId: 'T-SE-OPEN', status: 'ungraded', correct: true })
   assert.deepEqual([open.body.learn.counted, open.body.learn.message.key], [false, 'practiceOnly'])
+  // The same open question in a Warrior round: "not scored", never "just for practice, there is no wrong answer".
+  const openWarrior = await answer(S.bea, { module: 'speak', subject: 'english', questionId: 'T-SE-OPEN', status: 'ungraded', correct: true, mode: 'warrior' })
+  assert.equal(openWarrior.body.learn.counted, false)
+  assert.ok(['warriorNotScored', 'warriorOpen'].includes(openWarrior.body.learn.message.key), openWarrior.body.learn.message.key)
+  assert.match(openWarrior.body.learn.message.text, /(isn't|aren't) scored/)
+  assert.doesNotMatch(openWarrior.body.learn.message.text, /practice|no wrong answer/i)
   const openText = await answer(S.bea, { questionId: 'T-RM-1-OPEN', status: 'incorrect', correct: false })
   assert.equal(openText.body.learn.notCounted, 'ungraded')
   const timed = await answer(S.bea, { questionId: 'T-RM-1-A-1', status: 'incorrect', correct: false, mode: 'warrior' })

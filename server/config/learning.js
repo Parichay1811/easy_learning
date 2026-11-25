@@ -118,6 +118,7 @@ module.exports = {
     { key: 'motion', type: 'choice', options: ['system', 'full', 'reduced'] },
     { key: 'focusMode', type: 'bool' },
     { key: 'bigTargets', type: 'bool' },
+    { key: 'guide', type: 'bool' }, // the pointing hand and spoken "tap here" (client components/guide)
     { key: 'timer', type: 'choice', options: ['on', 'relaxed', 'off'] },
     { key: 'breakEvery', type: 'choice', options: [0, 10, 15, 20, 30] },
     { key: 'speakInstead', type: 'choice', options: ['ask', 'type', 'choose'] },

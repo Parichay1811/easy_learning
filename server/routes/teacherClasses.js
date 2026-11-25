@@ -47,6 +47,16 @@ router.post('/links/:id/accept', links.accept)
 router.post('/links/:id/decline', links.decline)
 router.post('/links/:id/cancel', links.cancel)
 
+// Learning together (controllers/teacherTogetherController.js): team matches and class quests,
+// and what learners like to watch.
+const tg = require('../controllers/teacherTogetherController')
+router.get('/groups/:id/competitions', tg.list)
+router.post('/groups/:id/competitions', tg.create)
+router.get('/groups/:id/interests', tg.groupInterests)
+router.get('/competitions/:cid', tg.get)
+router.post('/competitions/:cid/end', tg.end)
+router.get('/students/:id/interests', tg.studentInterests)
+
 // Student profile and private notes
 router.get('/students/:id/profile', i.studentProfile)
 router.get('/students/:id/insights', i.studentInsights)

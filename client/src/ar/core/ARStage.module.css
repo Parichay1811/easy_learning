@@ -143,8 +143,15 @@
 .promptBar {
   position: absolute;
   top: clamp(52px, 9vh, 74px);
-  left: 50%;
-  transform: translateX(-50%);
+  /* Centred with auto margins, not `left: 50%` + translate. A box that starts
+     at 50 % can only ever be half the stage wide, whatever its max-width says —
+     so on a phone every instruction was squeezed into 195 px, wrapped to three
+     or four lines, and grew down over the picture it was describing. */
+  left: 0;
+  right: 0;
+  margin-inline: auto;
+  width: -moz-fit-content;
+  width: fit-content;
   max-width: min(92vw, 780px);
   display: flex;
   flex-direction: column;

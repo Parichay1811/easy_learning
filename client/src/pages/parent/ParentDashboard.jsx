@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaHome, FaChartLine, FaClock, FaUsers, FaFileAlt, FaShieldAlt, FaHeadset, FaSchool, FaComments, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaChartLine, FaClock, FaUsers, FaFileAlt, FaShieldAlt, FaHeadset, FaSchool, FaComments, FaSignOutAlt, FaUserFriends } from "react-icons/fa";
 import { useAdminAuth } from "../../context/AdminAuthContext";
 import { DashboardShell, EmptyState, Skeleton, SubTabs, SubPanel, usePane, WelcomeToast } from "../../components/dashboard";
 import { useLinks } from "../../components/links";
@@ -14,12 +14,13 @@ import ParentFamily from "./ParentFamily";
 import ParentReports from "./ParentReports";
 import ParentPrivacy from "./ParentPrivacy";
 import ParentChat from "./ParentChat";
+import ParentTogether from "./ParentTogether";
 import ParentSchool from "./ParentSchool";
 import { NotificationBell, MessageCenter, NotificationPrefs } from "../../components/comms";
 import SetupWizard from "./SetupWizard";
 import s from "./parent.module.css";
 
-const TABS = ["home", "learning", "activity", "school", "messages", "family", "reports", "privacy", "support"];
+const TABS = ["home", "learning", "activity", "together", "school", "messages", "family", "reports", "privacy", "support"];
 const INVITE_KEY = "parent_invite";
 
 // The parent's dashboard (PAR-*): one shell, a child switcher, and a page per tab.
@@ -118,6 +119,7 @@ const ParentDashboard = () => {
     { key: "learning", group: G.child, label: T("nav.learning", "Learning"), icon: FaChartLine, onClick: () => go("learning") },
     { key: "activity", group: G.child, label: T("nav.activity", "Activity"), icon: FaClock, onClick: () => go("activity") },
     { key: "school", group: G.child, label: T("nav.school", "School"), icon: FaSchool, onClick: () => go("school") },
+    { key: "together", group: G.child, label: T("nav.together", "Together"), icon: FaUserFriends, onClick: () => go("together") },
     { key: "reports", group: G.child, label: T("nav.reports", "Reports"), icon: FaFileAlt, onClick: () => go("reports") },
     { key: "messages", group: G.talk, label: T("nav.messages", "Messages"), icon: FaComments, onClick: () => go("messages") },
     { key: "support", group: G.talk, label: T("nav.support", "Support"), icon: FaHeadset, onClick: () => go("support"), badge: chatUnread || undefined },
@@ -126,7 +128,7 @@ const ParentDashboard = () => {
   ];
 
   const signOut = () => { parentLogout(); navigate("/"); };
-  const needsChild = ["home", "learning", "activity", "school", "reports", "privacy"].includes(tab);
+  const needsChild = ["home", "learning", "activity", "together", "school", "reports", "privacy"].includes(tab);
 
   let page;
   if (children === null) {
@@ -155,6 +157,7 @@ const ParentDashboard = () => {
   } else if (tab === "home") page = <ParentHome api={api} child={child} go={go} />;
   else if (tab === "learning") page = <ParentLearning api={api} child={child} go={go} />;
   else if (tab === "activity") page = <ParentActivity api={api} child={child} onChanged={loadChildren} />;
+  else if (tab === "together") page = <ParentTogether api={api} child={child} onChanged={loadChildren} />;
   else if (tab === "school") page = <ParentSchool api={api} child={child} />;
   else if (tab === "reports") page = <ParentReports api={api} child={child} />;
   else if (tab === "privacy") page = <ParentPrivacy api={api} child={child} onChanged={loadChildren} />;

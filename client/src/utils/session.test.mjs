@@ -3,7 +3,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { activeSession, sessionFor, isValidToken, noteRoleForPath, renewSessions } from "./session.js";
 
-const NOW = Date.UTC(2026, 10, 23, 12);
+// The real clock: noteRoleForPath checks the token against it, so a fixed date goes stale.
+const NOW = Math.floor(Date.now() / 1000) * 1000;
 const b64 = (o) => Buffer.from(JSON.stringify(o)).toString("base64url");
 const tok = (claims) => `${b64({ alg: "HS256" })}.${b64(claims)}.sig`;
 const valid = (extra = {}) => tok({ id: "u1", iat: NOW / 1000 - 3600, exp: NOW / 1000 + 86400, ...extra });

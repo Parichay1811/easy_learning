@@ -10,7 +10,23 @@
 // dog asks first (the stage decides whether the dog is free to play): if so, it flies
 // the path the filmed butterfly takes in the dog's "play" performance, in time with it,
 // so the dog's eyes follow a real butterfly; if not, it rests somewhere else.
-// One or two at most; a canvas under the navbar and dialogs; never takes a click.
+// One or two at most; a layer under the navbar and dialogs; never takes a click.
+//
+// Cost: a butterfly is three small pictures drawn ONCE (a wing, used twice, and the
+// body) inside a box, and everything that moves is an animation the browser runs off
+// the main thread. A script that moves something on every frame makes the browser run
+// a whole frame of its own work sixty times a second; that, with a canvas the size of
+// the screen, is what made phones lag. So:
+//  - Cruising (most of the time): the next two or three seconds of flight are worked
+//    out at once and handed over as one animation along that path. The script then
+//    sleeps until the path runs out.
+//  - Reacting (a pointer close by, coming in to land, playing with the dog, a
+//    celebration): the script steers about fifteen times a second and the box glides
+//    from one place to the next.
+//  - Resting, a dialog open, the tab hidden: nothing moves; the wings open and close
+//    on their own.
+// Nothing the size of the screen is ever redrawn or blended, and a turn of the phone
+// or the address bar sliding away reallocates nothing.
 import { companion } from "./bus";
 import css from "./companion.module.css";
 
@@ -48,34 +64,140 @@ function isOpen(x, y) {
   return transparent && !hasText;
 }
 
+const UNIT_W = 40; // the drawing's own units (the SVG viewBox)
+const UNIT_H = 32;
+const PIVOT_Y = 17; // the body's middle: the point that is "where the butterfly is"
+const FLAP_HZ = 8; // the wing animation's own pace; its playback rate follows the butterfly
+const FLAP_EASE = "cubic-bezier(0.37, 0, 0.63, 1)"; // a sine: wings slow at each end of the beat
+const TILT_STEP = 0.07; // radians (4 degrees): the lean changes in steps this size, eased by a transition
+const TICK_MS = 66; // reacting: 15 steps a second (companion.module.css .flyer glides between them)
+const PLAN_MS = 2600; // cruising: this much flight is worked out at once
+const PLAN_STEP_MS = 1000 / 30; // ... in steps this long (one point of the path each)
+const PLAN_SPARE_MS = 1000; // ... plus this much more path, in case the script is late to plan the next stretch
+const NEAR_PX = 130; // a pointer this close to a cruising butterfly: it reacts
+const BEATS = 24; // wing beats in one round of the wing animation (3 seconds)
+const BOB_PX = 3.2; // lift on each downstroke: the little bob of a real butterfly's path
+const REST_FRAME_MS = 250; // while every butterfly rests, nothing moves: just watch for a reason to fly
+
 export function startButterflies({ count } = {}) {
-  const canvas = document.createElement("canvas");
-  canvas.className = css.sky;
-  canvas.setAttribute("aria-hidden", "true");
-  document.body.appendChild(canvas);
-  const ctx = canvas.getContext("2d");
-  let W = 0;
-  let H = 0;
-  let dpr = 1;
-  let raf = 0;
-  let last = 0;
+  const sky = document.createElement("div");
+  sky.className = css.sky;
+  sky.setAttribute("aria-hidden", "true");
+  document.body.appendChild(sky);
+  let W = innerWidth;
+  let H = innerHeight;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let timer = 0; // the next tick (0: the loop is asleep)
+  let modalTimer = 0;
   let stopped = false;
-  let pointer = { x: -999, y: -999, at: 0 };
+  const pointer = { x: -999, y: -999, at: 0 };
   let celebrateUntil = 0;
   // A dialog is a moment of focus: the butterflies fade away (they may come to the dog
   // for a celebration in it), and come back when it closes.
   let fade = 1;
-  let modal = false;
-  let modalCheck = 0;
 
+  // Only the numbers change with the window: there is no screen-sized buffer to reallocate.
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = innerWidth;
     H = innerHeight;
-    canvas.width = Math.round(W * dpr);
-    canvas.height = Math.round(H * dpr);
+    const now = performance.now();
+    for (const b of flock) { interrupt(b, now); resizeSprite(b, b.z); }
+    wake();
   }
-  resize();
+
+  const sizeOf = (z) => 30 * z * (W < 700 ? 0.85 : 1);
+  // A small picture, drawn once. `units`: how many of the drawing's units wide it is.
+  const picture = (w, h, units, className, paint) => {
+    const c = document.createElement("canvas");
+    c.className = className;
+    c.width = Math.max(1, Math.round(w * dpr));
+    c.height = Math.max(1, Math.round(h * dpr));
+    const g = c.getContext("2d");
+    g.scale(c.width / units, c.height / UNIT_H);
+    paint(g);
+    return c;
+  };
+  // One butterfly's box: a wing picture used for both wings (the right one mirrored), and the body.
+  function sprite(hue, z) {
+    const w = Math.ceil(sizeOf(1.1)); // drawn once at the largest size; the box scales it
+    const h = (w * UNIT_H) / UNIT_W;
+    const el = document.createElement("div");
+    el.className = css.flyer;
+    const lean = document.createElement("div");
+    lean.className = css.flyerLean;
+    lean.style.transformOrigin = `50% ${(PIVOT_Y / UNIT_H) * 100}%`;
+    const wing = () => picture(w / 2, h, UNIT_W / 2, css.flyerWing, (g) => {
+      g.fillStyle = hue[0];
+      g.fill(WING_UP);
+      g.fillStyle = hue[1];
+      g.fill(WING_DOWN);
+    });
+    const left = wing();
+    const right = wing();
+    const body = picture(w, h, UNIT_W, css.flyerBody, (g) => {
+      g.fillStyle = "#5b3a29";
+      g.beginPath();
+      g.ellipse(20, 17, 1.6, 7, 0, 0, Math.PI * 2);
+      g.fill();
+      g.strokeStyle = "#5b3a29";
+      g.lineWidth = 0.9;
+      g.beginPath();
+      g.moveTo(20, 10); g.quadraticCurveTo(17, 5, 15, 4);
+      g.moveTo(20, 10); g.quadraticCurveTo(23, 5, 25, 4);
+      g.stroke();
+    });
+    const bobber = document.createElement("div");
+    bobber.className = css.flyerBob;
+    lean.append(left, right, body);
+    bobber.appendChild(lean);
+    el.appendChild(bobber);
+    sky.appendChild(el);
+    // Wings: open (1) to edge-on (0.18) and back, once per beat; both hinge on the body's
+    // line. The bob: up on each downstroke, a quarter of a beat behind the wings.
+    // One round of each animation is BEATS beats long, not one: the browser wakes the
+    // main thread at the end of every round of an animation, and a round as short as a
+    // wing beat would wake it sixteen times a second.
+    const rounds = (node, a, b, delay = 0) => {
+      const frames = [];
+      for (let i = 0; i <= BEATS * 2; i += 1) frames.push({ transform: i % 2 ? b : a, easing: FLAP_EASE });
+      try {
+        return node.animate(frames, { duration: (BEATS * 1000) / FLAP_HZ, delay, iterations: Infinity });
+      } catch { return null; }
+    };
+    const beat = (node, side) => rounds(node, `scaleX(${side})`, `scaleX(${side * 0.18})`);
+    right.style.transform = "scaleX(-1)";
+    const bob = rounds(bobber, `translateY(${BOB_PX}px)`, `translateY(${-BOB_PX}px)`, -1000 / (FLAP_HZ * 4));
+    const wings = [beat(left, 1), beat(right, -1)].filter(Boolean);
+    const out = { el, lean, wings, bobAnim: bob, flaps: bob ? [...wings, bob] : wings, flapHz: FLAP_HZ, held: false, bobbing: true, sized: 0, tilt: 0, px: NaN, py: NaN };
+    resizeSprite(out, z);
+    return out;
+  }
+  function resizeSprite(b, z) {
+    const w = sizeOf(z);
+    if (w === b.sized) return;
+    b.sized = w;
+    b.el.style.width = `${w}px`;
+    b.el.style.height = `${(w * UNIT_H) / UNIT_W}px`;
+  }
+  // The wing beat follows what the butterfly is doing: held open on a glide, slow at
+  // rest (and no bob: it is sitting on something), quick when it flees. The rate is
+  // changed only when it differs enough to see.
+  function setFlap(b, hz, resting = false) {
+    const beating = hz > 0.05;
+    if (beating === b.held) {
+      b.held = !beating;
+      for (const a of b.wings) { if (beating) a.play(); else { a.pause(); a.currentTime = 0; } }
+    }
+    const bobbing = beating && !resting;
+    if (b.bobAnim && bobbing !== b.bobbing) {
+      b.bobbing = bobbing;
+      if (bobbing) b.bobAnim.play(); else b.bobAnim.pause();
+    }
+    if (beating && Math.abs(hz - b.flapHz) > Math.max(0.6, b.flapHz * 0.12)) {
+      b.flapHz = hz;
+      for (const a of b.flaps) { if (a.updatePlaybackRate) a.updatePlaybackRate(hz / FLAP_HZ); else a.playbackRate = hz / FLAP_HZ; }
+    }
+  }
 
   const n = count ?? (W < 700 ? 1 : 2);
   const flock = Array.from({ length: n }, (_, i) => {
@@ -102,6 +224,7 @@ export function startButterflies({ count } = {}) {
       bob: 0,
     };
   });
+  for (const b of flock) Object.assign(b, sprite(b.hue, b.z));
 
   // The navbar's height (CSS --nav-h), read at most once a second: reading styles every frame is costly.
   let navH = 64;
@@ -287,74 +410,222 @@ export function startButterflies({ count } = {}) {
     }
   }
 
+  // Reacting: put the butterfly's box where the butterfly is now. The box glides there
+  // from where it was (a transition as long as a step, run by the compositor), so the
+  // flight is smooth at any frame rate without this code running on every frame. The
+  // lean into a turn is on an inner box and changes in small steps, eased the same way.
   function draw(b) {
-    const size = 30 * b.z * (W < 700 ? 0.85 : 1);
-    // Wings: open (1) to edge-on (0.18); resting butterflies close more slowly and fully.
-    const open = b.glide > 0 ? 1 : 0.18 + 0.82 * (0.5 + 0.5 * Math.cos(b.phase));
-    const tilt = b.state === "perch" ? 0 : clamp(Math.cos(b.heading) * 0.35, -0.35, 0.35);
-    ctx.save();
-    ctx.translate(b.x * dpr, (b.y + b.bob) * dpr);
-    ctx.rotate(tilt);
-    const s = (size / 40) * dpr;
-    ctx.scale(s, s);
-    ctx.translate(-20, -17);
-    for (const side of [-1, 1]) {
-      ctx.save();
-      ctx.translate(20, 0);
-      ctx.scale(side * -1 * open, 1);
-      ctx.translate(-20, 0);
-      ctx.fillStyle = b.hue[0];
-      ctx.fill(WING_UP);
-      ctx.fillStyle = b.hue[1];
-      ctx.fill(WING_DOWN);
-      ctx.restore();
+    const w = b.sized;
+    const resting = b.state === "perch" && !b.dance;
+    setFlap(b, resting ? 0.9 : b.glide > 0 ? 0 : b.hz, resting);
+    const tilt = resting ? 0 : Math.round(clamp(Math.cos(b.heading) * 0.35, -0.35, 0.35) / TILT_STEP) * TILT_STEP;
+    if (tilt !== b.tilt) {
+      b.tilt = tilt;
+      b.lean.style.transform = tilt ? `rotate(${tilt.toFixed(2)}rad)` : "";
     }
-    ctx.fillStyle = "#5b3a29";
-    ctx.beginPath();
-    ctx.ellipse(20, 17, 1.6, 7, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "#5b3a29";
-    ctx.lineWidth = 0.9;
-    ctx.beginPath();
-    ctx.moveTo(20, 10); ctx.quadraticCurveTo(17, 5, 15, 4);
-    ctx.moveTo(20, 10); ctx.quadraticCurveTo(23, 5, 25, 4);
-    ctx.stroke();
-    ctx.restore();
+    const x = Math.round((b.x - w / 2) * dpr) / dpr;
+    const y = Math.round((b.y - (w * PIVOT_Y) / UNIT_W) * dpr) / dpr;
+    if (x !== b.px || y !== b.py) {
+      // The first placement, and a jump (the tab was away, a path was cut short): no glide across the screen.
+      const jump = Number.isNaN(b.px) || Math.abs(x - b.px) + Math.abs(y - b.py) > 60;
+      if (jump !== b.jumped) { b.jumped = jump; b.el.style.transition = jump ? "none" : ""; }
+      b.px = x;
+      b.py = y;
+      b.el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+    }
   }
 
-  function frame(now) {
-    raf = 0;
+  // ── Cruising ──────────────────────────────────────────────────────────────────
+  const boxX = (b, x) => x - b.sized / 2;
+  const boxY = (b, y) => y - (b.sized * PIVOT_Y) / UNIT_W;
+  const nearPointer = (x, y, now) => now - pointer.at < 600 && Math.hypot(pointer.x - x, pointer.y - y) < NEAR_PX;
+
+  // May this butterfly fly a planned stretch now? Only plain wandering: anything that
+  // has to react (a landing place that scrolls, the dog, a pointer) is steered step by step.
+  function canCruise(b, now) {
+    return fade > 0 && b.state === "fly" && !b.dance && !b.perch && now >= celebrateUntil
+      && b.nextPerch - now > 300 && !nearPointer(b.x, b.y, now) && typeof b.el.animate === "function";
+  }
+
+  // Work out the next stretch of flight with the same steering as always (step), and
+  // hand it to the browser as one animation along the path. The stretch ends early
+  // when a glide starts or stops (the wings change) and before the butterfly next
+  // thinks about landing. Its rounds never end (it is replaced first): an animation
+  // with an end makes the browser's main thread tick for as long as it runs.
+  function cruise(b, clock) {
+    const stepS = PLAN_STEP_MS / 1000;
+    // One stretch straight after another: this one starts when the last one ended, not
+    // when the script got round to it, so the spare path already flown is the start of
+    // this one and nothing jumps.
+    const late = b.path && clock >= b.path.until && clock - b.path.until < PLAN_SPARE_MS / 2 ? clock - b.path.until : 0;
+    const now = clock - late;
+    const limit = Math.min(PLAN_MS, b.nextPerch - now - 50);
+    const gliding = b.glide > 0;
+    const xs = [b.x];
+    const ys = [b.y];
+    const hs = [b.heading];
+    const sp = [b.speed];
+    let t = now;
+    while (t - now < limit) {
+      t += PLAN_STEP_MS;
+      step(b, stepS, t);
+      xs.push(b.x); ys.push(b.y); hs.push(b.heading); sp.push(b.speed);
+      if ((b.glide > 0) !== gliding || b.perch || b.dance || b.state !== "fly") break;
+    }
+    const n = xs.length - 1; // steps that count: the butterfly IS at the last of them when the stretch ends
+    // The spare path: where it would go on, flown by a stand-in (never lands, never visits the dog).
+    const ghost = { ...b, nextPerch: Infinity, target: b.target ? { ...b.target } : null };
+    for (let k = Math.ceil(PLAN_SPARE_MS / PLAN_STEP_MS); k > 0; k -= 1) {
+      t += PLAN_STEP_MS;
+      step(ghost, stepS, t);
+      xs.push(ghost.x); ys.push(ghost.y); hs.push(ghost.heading);
+    }
+    // Start from where the box is on screen now (it may still be gliding to its last step).
+    let x0 = boxX(b, xs[0]);
+    let y0 = boxY(b, ys[0]);
+    if (!b.path) {
+      try {
+        const m = new DOMMatrixReadOnly(getComputedStyle(b.el).transform);
+        if (Number.isFinite(m.m41) && Math.hypot(m.m41 - x0, m.m42 - y0) < 40) { x0 = m.m41; y0 = m.m42; }
+      } catch { /* no DOMMatrix: start from the step itself */ }
+    }
+    const move = [];
+    const lean = [];
+    for (let i = 0; i < xs.length; i += 1) {
+      const x = i ? boxX(b, xs[i]) : x0;
+      const y = i ? boxY(b, ys[i]) : y0;
+      move.push({ transform: `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)` });
+      lean.push({ transform: `rotate(${clamp(Math.cos(hs[i]) * 0.35, -0.35, 0.35).toFixed(3)}rad)` });
+    }
+    const timing = { duration: (xs.length - 1) * PLAN_STEP_MS, delay: -late, iterations: Infinity, easing: "linear" };
+    const old = b.path;
+    setFlap(b, gliding ? 0 : b.hz || FLAP_HZ);
+    b.path = { xs, ys, hs, sp, n, start: now, until: now + n * PLAN_STEP_MS, anims: [b.el.animate(move, timing), b.lean.animate(lean, timing)] };
+    if (old) for (const a of old.anims) a.cancel();
+    // What the box and its lean are set to underneath, for when the path is taken away.
+    b.px = NaN;
+    b.tilt = NaN;
+  }
+
+  // Take a butterfly off its planned path at once (something to react to): it is where
+  // the path had it at this moment, and from here it is steered step by step.
+  function interrupt(b, now) {
+    const path = b.path;
+    if (!path) return;
+    const i = Math.max(0, Math.min(path.n, Math.round((now - path.start) / PLAN_STEP_MS)));
+    b.x = path.xs[i];
+    b.y = path.ys[i];
+    b.heading = path.hs[i];
+    b.speed = path.sp[i];
+    b.path = null;
+    b.last = now;
+    b.jumped = undefined;
+    draw(b); // the box's own place, before the animation over it goes
+    for (const a of path.anims) a.cancel();
+  }
+
+  // Where a butterfly is right now, on a path or not.
+  function whereIs(b, now) {
+    const path = b.path;
+    if (!path) return b;
+    const i = Math.max(0, Math.min(path.xs.length - 1, Math.round((now - path.start) / PLAN_STEP_MS)));
+    return { x: path.xs[i], y: path.ys[i] };
+  }
+
+  // A dialog is a moment of focus: looked for a few times a second (a query, no frame).
+  function watchDialogs() {
+    if (stopped) return;
+    const modal = !!document.querySelector('[aria-modal="true"], dialog[open]');
+    const want = modal && performance.now() > celebrateUntil ? 0 : 1;
+    if (want === fade) return;
+    // The fade itself is a transition on the sky (companion.module.css).
+    fade = want;
+    if (want) delete sky.dataset.away; else sky.dataset.away = "true";
+    wake();
+  }
+
+  function tick() {
+    timer = 0;
     if (stopped || document.hidden) return;
-    const dt = Math.min(0.05, last ? (now - last) / 1000 : 0.016);
-    last = now;
-    if (now - modalCheck > 400) {
-      modalCheck = now;
-      modal = !!document.querySelector('[aria-modal="true"], dialog[open]');
-    }
-    const want = modal && now > celebrateUntil ? 0 : 1;
-    fade += (want - fade) * Math.min(1, dt * 4);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.globalAlpha = fade;
-    for (const b of flock) {
+    const now = performance.now();
+    let next = 450; // nothing to show (a dialog is open): only watch for it to close
+    for (let i = 0; i < flock.length; i += 1) {
+      const b = flock[i];
+      if (b.path && now < b.path.until && fade > 0) { next = Math.min(next, b.path.until - now); continue; }
+      if (fade === 0) { interrupt(b, now); continue; }
+      if (canCruise(b, now)) {
+        cruise(b, now);
+        b.last = b.path.until;
+        next = Math.min(next, b.path.until - now);
+        continue;
+      }
+      if (b.path) {
+        // The stretch is over and the butterfly has something to react to: it is at the
+        // stretch's last step; the box takes that place before the path's animation goes.
+        const path = b.path;
+        b.path = null;
+        b.jumped = undefined;
+        draw(b);
+        for (const a of path.anims) a.cancel();
+      }
+      const dt = Math.min(0.12, b.last ? Math.max(0.001, (now - b.last) / 1000) : TICK_MS / 1000);
+      b.last = now;
       step(b, dt, now);
-      if (fade > 0.02) draw(b);
+      draw(b);
+      // Resting: the wings open and close on their own; only watch for a reason to fly.
+      next = Math.min(next, b.state === "perch" && !b.dance ? REST_FRAME_MS : TICK_MS);
     }
-    ctx.globalAlpha = 1;
-    raf = requestAnimationFrame(frame);
+    timer = setTimeout(tick, Math.max(4, next));
   }
-  const kick = () => { if (!raf && !stopped && !document.hidden) { last = 0; raf = requestAnimationFrame(frame); } };
+  // True while every butterfly rests (the loop then looks only a few times a second).
+  const resting = () => flock.every((b) => b.state === "perch" && !b.dance);
+  const kick = () => { if (!timer && !stopped && !document.hidden) timer = setTimeout(tick, 0); };
+  // Something happened that the butterflies react to at once (a pointer near, a celebration, a scroll).
+  const wake = () => {
+    if (stopped || document.hidden) return;
+    clearTimeout(timer);
+    timer = setTimeout(tick, 0);
+  };
 
-  const onMove = (e) => { pointer = { x: e.clientX, y: e.clientY, at: performance.now() }; };
-  const onVis = () => kick();
+  const onMove = (e) => {
+    const now = performance.now();
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+    pointer.at = now;
+    if (fade === 0) return;
+    let react = resting();
+    for (let i = 0; i < flock.length; i += 1) {
+      const b = flock[i];
+      if (!b.path) continue;
+      const at = whereIs(b, now);
+      if (Math.hypot(at.x - pointer.x, at.y - pointer.y) < NEAR_PX) { interrupt(b, now); react = true; }
+    }
+    if (react) wake();
+  };
+  const onVis = () => {
+    // Hidden: every butterfly off its path (the tab's clock is not to be trusted now), and the loop sleeps.
+    if (document.hidden) { const now = performance.now(); for (const b of flock) interrupt(b, now); clearTimeout(timer); timer = 0; return; }
+    for (const b of flock) { b.last = 0; b.px = NaN; }
+    kick();
+  };
   addEventListener("pointermove", onMove, { passive: true });
   addEventListener("pointerdown", onMove, { passive: true });
+  // A resting butterfly sits on something in the page: when the page scrolls it must move with it at once.
+  const onScroll = () => { if (resting() && fade > 0) wake(); };
   addEventListener("resize", resize, { passive: true });
+  addEventListener("scroll", onScroll, { passive: true, capture: true });
   document.addEventListener("visibilitychange", onVis);
   const off = companion.on((e) => {
-    if (e.type === "success" && e.size === "big") celebrateUntil = performance.now() + 2600;
+    const now = performance.now();
+    if (e.type === "success" && e.size === "big") {
+      celebrateUntil = now + 2600;
+      for (const x of flock) interrupt(x, now);
+      watchDialogs();
+      wake();
+    }
     const b = e.id !== undefined ? flock.find((x) => x.id === e.id) : null;
     if (!b) return;
-    const now = performance.now();
+    interrupt(b, now);
     if (e.type === "butterflyDance") {
       b.dance = { at: e.at, start: e.start, end: e.end, phase: "approach", since: now };
       b.perch = null;
@@ -365,19 +636,25 @@ export function startButterflies({ count } = {}) {
     } else if (e.type === "butterflyFree" && b.dance) {
       endDance(b, now);
     }
+    wake();
   });
+  modalTimer = setInterval(watchDialogs, 400);
   kick();
 
   return {
     stop() {
       stopped = true;
-      if (raf) cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      clearInterval(modalTimer);
+      for (const b of flock) if (b.path) for (const a of b.path.anims) a.cancel();
+      for (const b of flock) for (const a of b.flaps) a.cancel();
       removeEventListener("pointermove", onMove);
       removeEventListener("pointerdown", onMove);
       removeEventListener("resize", resize);
+      removeEventListener("scroll", onScroll, { capture: true });
       document.removeEventListener("visibilitychange", onVis);
       off();
-      canvas.remove();
+      sky.remove();
     },
   };
 }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,12 +9,18 @@ import styles from "./SubjectOverlay.module.css";
 import { sfx } from "../../utils/sounds";
 import { fetchModuleStars } from "../../store/slices/dashboardSlice";
 import { SUBJECT_ICON_IMAGES } from "../../data/subjectIcons";
-import PlacementSheet from "../Placement/PlacementSheet";
 import { needsPlacement } from "../Placement/placementApi";
+import { useGuide } from "../guide/useGuide";
+import { nudgeGuide } from "../guide/nudge";
 import {
   FaHeadphones, FaBookOpen, FaPencilAlt, FaMicrophone,
   FaStar, FaRegStar, FaTimes, FaPlay,
 } from "react-icons/fa";
+
+// "Where would you like to start?" is asked once per subject, and brings the whole
+// question card with it: fetched only for a learner who is going to be asked.
+const loadPlacementSheet = () => import("../Placement/PlacementSheet");
+const PlacementSheet = lazy(loadPlacementSheet);
 
 const moduleTypes = ["listen", "read", "write", "speak"];
 const moduleIcons = {
@@ -65,8 +71,10 @@ export function ModuleGrid({ subject, onPick }) {
   const { t } = useTranslation();
   const reduce = useCalmMotion();
   const moduleStarsData = useSelector((state) => state.dashboard.moduleStars);
+  const guide = useGuide();
+  useEffect(() => { nudgeGuide(); }, []);
   return (
-    <div className={styles.grid}>
+    <div className={styles.grid} {...guide("subject.pick", "Pick how you want to learn: listen, read, write or speak.")}>
       {moduleTypes.map((type, i) => {
         const Icon = moduleIcons[type];
         const label = t(`subjectPage.modules.${type}.label`);
@@ -133,7 +141,11 @@ const SubjectOverlay = ({ subject, onClose }) => {
   const [needsLevel, setNeedsLevel] = useState(false);
   useEffect(() => {
     let alive = true;
-    needsPlacement(subject).then((v) => { if (alive) setNeedsLevel(v); });
+    needsPlacement(subject).then((v) => {
+      if (!alive) return;
+      setNeedsLevel(v);
+      if (v) loadPlacementSheet().catch(() => { /* fetched again when it is opened */ });
+    });
     return () => { alive = false; };
   }, [subject]);
 
@@ -192,12 +204,14 @@ const SubjectOverlay = ({ subject, onClose }) => {
     <>
       {overlay}
       {placementFor && (
-        <PlacementSheet
-          subject={subject}
-          module={placementFor}
-          onDone={() => { const type = placementFor; setPlacementFor(null); setNeedsLevel(false); go(type); }}
-          onClose={() => { const type = placementFor; setPlacementFor(null); setNeedsLevel(false); go(type); }}
-        />
+        <Suspense fallback={null}>
+          <PlacementSheet
+            subject={subject}
+            module={placementFor}
+            onDone={() => { const type = placementFor; setPlacementFor(null); setNeedsLevel(false); go(type); }}
+            onClose={() => { const type = placementFor; setPlacementFor(null); setNeedsLevel(false); go(type); }}
+          />
+        </Suspense>
       )}
     </>
   );

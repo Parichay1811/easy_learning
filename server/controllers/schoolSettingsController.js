@@ -73,6 +73,7 @@ const POLICY_FIELDS = {
   teachersCreateGroups: (v) => typeof v === 'boolean' || 'Choose yes or no.',
   parentsSeeClassAverage: (v) => typeof v === 'boolean' || 'Choose yes or no.',
   leaderboards: (v) => ['off', 'group'].includes(v) || 'Leaderboards are off or within a group.',
+  competitions: (v) => ['off', 'teams'].includes(v) || 'Team matches are off or on.',
   aiTeacherInSchoolHours: (v) => typeof v === 'boolean' || 'Choose on or off.',
   activityVisibility: (v) => ['assigned', 'school_hours', 'all'].includes(v) || 'Choose assigned work, school hours or all.',
   retentionYears: (v) => (Number.isInteger(v) && v >= 0 && v <= 10) || 'Keep data 0 to 10 years after a student leaves.',

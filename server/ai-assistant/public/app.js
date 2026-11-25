@@ -13,6 +13,10 @@ import { createOrb } from "./orb.js";
 import { createScene } from "./scene.js";
 import { createHaptics } from "./haptics.js";
 import { readCompanion, companionLines, chipLabel, lower } from "./companion.js";
+import { createLessonMemory } from "./lesson-memory.js";
+import { createTopicPicker } from "./topic-picker.js";
+import { createNotesStore, topicKey, lessonOf } from "./notes-store.js";
+import { createNotesPanel } from "./notes-panel.js";
 
 const $ = (id) => document.getElementById(id);
 const els = {
@@ -34,7 +38,6 @@ const els = {
   subjectIcon: document.querySelector(".subject-icon"),
   related: $("related"),
   notes: $("notes"),
-  notesText: $("notes-text"),
 };
 const STATUS = {
   off: "Press Start, then allow the microphone",
@@ -269,6 +272,12 @@ function showSource(source) {
 
 function teach(plan) {
   if (plan.next?.length) followUps = plan.next;
+  // A menu view ("Key Concepts") borrows the board: what the lesson was doing
+  // is kept, for "Lesson Board" to pick up again (backToLesson).
+  if (plan.menu) {
+    memory.leave(run, { awaiting, sticky: els.sticky.hidden ? "" : els.sticky.textContent });
+    setView(plan.menu);
+  }
   aroundTheBoard(plan);
   if (run) {
     run.dead = true;
@@ -347,6 +356,65 @@ function streamEnded(plan) {
   }
 }
 
+// Everything a plan draws goes through here. The lesson's own drawings are
+// remembered (lesson-memory.js); a menu view's are not. When the lesson draws
+// while a menu view has the board, the board is the lesson's again: what it
+// had comes back first, unless it starts a fresh board anyway.
+const memory = createLessonMemory();
+function drawOn(r, op, at) {
+  if (!r.plan.menu) {
+    if (memory.away) {
+      const was = memory.back();
+      if (op.op !== "clear") redrawLesson(was.ops);
+      setView("board");
+    }
+    memory.drew(op, at);
+  }
+  board.add(op, at);
+}
+// The lesson's board as it stood: the same ops at the same board times, so
+// nothing slides in or pops again.
+function redrawLesson(ops) {
+  board.add({ op: "clear" }, board.clock - 1);
+  for (const [op, at] of ops) board.add(op, at);
+}
+// "Lesson Board" after a menu view: the lesson's board comes back, and the
+// lesson carries on from the sentence it had reached. With nothing asked yet
+// that is the welcome board.
+function backToLesson() {
+  const was = memory.back();
+  if (!was) return;
+  if (run) {
+    run.dead = true;
+    run.ctrl.abort();
+  }
+  voice.stop();
+  speechSynthesis.cancel();
+  board.playing = true;
+  redrawLesson(was.ops);
+  setView("board");
+  els.sticky.hidden = !was.sticky;
+  if (was.sticky) els.sticky.textContent = was.sticky;
+  awaiting = was.awaiting;
+  const old = was.run;
+  if (!old) return setMode("idle");
+  // The rest of an answer that was still streaming was dropped when the menu view opened.
+  old.plan.streaming = false;
+  const r = (run = {
+    plan: old.plan, i: Math.min(was.i, old.plan.steps.length - 1), drawn: old.drawn, buffer: old.buffer, dur: old.dur,
+    cues: old.cues, stepClock: old.stepClock, finished: !was.resume, ctrl: new AbortController(),
+  });
+  if (!was.resume) {
+    showThinking(false);
+    setMode("idle");
+    // A test's answer was marked just as the menu view opened: on to its next question.
+    if (test && old.finished && old.plan.kind === "answer") nextQuestion();
+    return;
+  }
+  r.audio = r.plan.steps.map((st, k) => (k >= was.i ? voice.load(st.say, r.ctrl.signal).catch(() => null) : null));
+  startStep(r, was.i, { redraw: false });
+}
+
 async function startStep(r, i, { redraw = true } = {}) {
   if (r.dead) return;
   // "Next" or "slower" while a step is still loading: only the newest goes on.
@@ -390,7 +458,7 @@ async function startStep(r, i, { redraw = true } = {}) {
       for (const k of Object.keys(o))
         if ((k === "at" || k.endsWith("At")) && o[k] != null)
           o[k] = r.stepClock + resolve(o[k], r.cues);
-      board.add(o, o.at ?? r.stepClock);
+      drawOn(r, o, o.at ?? r.stepClock);
     }
   r.drawn = i;
   sayFrom(r, 0);
@@ -717,7 +785,7 @@ async function ask(text, seq = ++askSeq, open = null) {
     } else if (e.type === "figure" && plan) {
       // A picture made once the whole answer was known: onto the board now.
       if (run?.plan === plan && !run.dead)
-        for (const op of e.draw) board.add(op, board.clock);
+        for (const op of e.draw) drawOn(run, op, board.clock);
     } else if (e.type === "end" && plan) {
       streamEnded(plan);
     }
@@ -980,13 +1048,20 @@ function aroundTheBoard(plan) {
   showSource(plan.source);
   const topic = plan.topic || plan.context?.topic;
   if (topic) {
-    if (topic !== lessonFor) loadLesson(topic);
+    if (topic !== lessonFor) {
+      // Notes are filed under this lesson from now on, not once its card has loaded.
+      notes.setTopic(topic, lesson?.id === topic ? lesson.title : plan.watch || "");
+      loadLesson(topic);
+    }
   } else if (plan.steps?.length && !TEST_KINDS.has(plan.kind)) {
     // An answer from Wikipedia or open data: its own sentences are the key points.
     lessonFor = null;
     lesson = { title: plan.title || "", related: [] };
     keyPoints = plan.steps.map((st) => firstSentence(st.say)).filter(Boolean).slice(0, 3);
     showSubject(plan.source?.site || "AI Teacher", plan.title || "Your question", "");
+    // It has no lesson of its own: no neighbours to offer, and notes filed under its title.
+    picker.setRelated([]);
+    notes.setTopic(topicKey(lesson), lesson.title);
   }
 }
 
@@ -1032,8 +1107,8 @@ async function loadLesson(id) {
     keyPoints = card.takeaways || [];
     trackLesson(card, id);
     showSubject(card.subject, card.group || card.title, card.subject + " " + card.group + " " + card.title);
-    showRelated(card.related || []);
-    loadNotes();
+    picker.setRelated(card.related || []);
+    notes.setTopic(id, card.title);
   } catch {
     /* the board still teaches without the lesson's details */
   }
@@ -1045,33 +1120,14 @@ function showSubject(area, group, words) {
   els.subjectIcon.textContent = (SUBJECT_ICONS.find(([re]) => re.test(words || "")) || [null, "✨"])[1];
 }
 
-function showRelated(list) {
-  els.related.replaceChildren(
-    ...(list.length
-      ? list.map((t) => {
-          const li = document.createElement("li");
-          const b = document.createElement("button");
-          b.type = "button";
-          b.textContent = t.title;
-          b.addEventListener("click", () => {
-            toggleRelated(false);
-            openTopic(t.id, t.title);
-          });
-          li.append(b);
-          return li;
-        })
-      : [Object.assign(document.createElement("li"), { className: "empty", textContent: "Type a topic in the question bar to begin." })]),
-  );
-}
-function toggleRelated(open = els.related.hidden) {
-  els.related.hidden = !open;
-  els.subjectBtn.setAttribute("aria-expanded", String(open));
-}
-els.subjectBtn.addEventListener("click", () => toggleRelated());
-document.addEventListener("pointerdown", (e) => {
-  if (!els.related.hidden && !e.target.closest(".subject")) toggleRelated(false);
+// "Pick a topic": every topic by subject to browse, and the open lesson's
+// neighbours once there is one (topic-picker.js).
+const picker = createTopicPicker({
+  button: els.subjectBtn,
+  list: els.related,
+  iconFor: (name) => (SUBJECT_ICONS.find(([re]) => re.test(name)) || [null, "✨"])[1],
+  onPick: (id, title) => openTopic(id, title),
 });
-showRelated([]);
 
 async function askNow(text, open = null) {
   await start();
@@ -1082,71 +1138,94 @@ function openTopic(id, title) {
   askNow(`Teach me about ${title}`, id);
 }
 // A short lesson made here from the card: drawn on the board and said aloud.
-function boardFrom(title, rows) {
+// It is a menu view (menu: "concepts" or "try"): it borrows the board, and
+// "Lesson Board" gives it back to the lesson (teach, backToLesson).
+function boardFrom(menu, title, rows) {
   if (!rows.length) return false;
   askSeq++;
   start().then(() => {
     if (mode === "teaching") interrupt();
     teach({
       kind: "say",
+      menu,
       title,
       steps: [{ say: rows.join(" "), draw: [{ op: "clear" }, { op: "title", text: title }, { op: "bullets", items: rows }] }],
     });
+    showBoard();
   });
   return true;
 }
+// On a phone the menu is under the board: bring the board into view.
+const showBoard = () =>
+  document.querySelector(".holo-wrap").scrollIntoView({ block: "nearest", behavior: reduced ? "auto" : "smooth" });
 
-// The lesson menu. With nothing on the board yet, the board says how to start.
+// The lesson menu. The row that is lit says what the board shows (the lesson,
+// its key concepts or its activity), or "Notes" while the notes card is open.
+// Where the board is always in view (tablets, upright screens: style.css) the
+// "Lesson Board" row shows only while something else has the board.
+let view = "board";
+const menuItems = [...document.querySelectorAll(".menu-item")];
+function lightMenu() {
+  const lit = notes.isOpen ? "notes" : view;
+  for (const b of menuItems) {
+    b.classList.toggle("active", b.dataset.go === lit);
+    if (b.dataset.go === lit) b.setAttribute("aria-current", "true");
+    else b.removeAttribute("aria-current");
+  }
+}
+function setView(v) {
+  if (v === view) return;
+  // The "Lesson Board" row may go as the board comes back: the focus moves to the next row.
+  const boardRow = menuItems.find((b) => b.dataset.go === "board");
+  const had = document.activeElement === boardRow;
+  view = v;
+  document.body.dataset.view = v;
+  lightMenu();
+  if (had && !boardRow.getClientRects().length) menuItems.find((b) => b.getClientRects().length)?.focus();
+}
+// With nothing on the board yet, the board says how to start.
 const PICK_FIRST = "Type a question or pick a topic first.";
 const MENU = {
-  board: () => document.querySelector(".holo-wrap").scrollIntoView({ block: "nearest", behavior: "smooth" }),
+  board: () => {
+    if (ctx) backToLesson();
+    showBoard();
+  },
   concepts: () => {
-    if (lesson?.title && keyPoints.length) boardFrom(`Key concepts: ${lesson.title}`, keyPoints);
-    else boardFrom("Key concepts", [PICK_FIRST, "Its key ideas will show here."]);
+    if (lesson?.title && keyPoints.length) boardFrom("concepts", `Key concepts: ${lesson.title}`, keyPoints);
+    else boardFrom("concepts", "Key concepts", [PICK_FIRST, "Its key ideas will show here."]);
   },
-  notes: () => {
-    els.notes.hidden = !els.notes.hidden;
-    if (!els.notes.hidden) els.notesText.focus();
-  },
+  notes: () => notes.toggle(),
   try: () => {
     const activity = lesson?.tryIt || (lesson?.practice ? `Try this: ${lesson.practice}` : "");
-    if (activity) boardFrom("Try it yourself", [activity]);
-    else if (lesson?.title) boardFrom("Try it yourself", ["No activity for this one yet.", "Say or type “test me” to practise it."]);
-    else boardFrom("Try it yourself", [PICK_FIRST, "Something to try with it will show here."]);
+    if (activity) boardFrom("try", "Try it yourself", [activity]);
+    else if (lesson?.title) boardFrom("try", "Try it yourself", ["No activity for this one yet.", "Say or type “test me” to practise it."]);
+    else boardFrom("try", "Try it yourself", [PICK_FIRST, "Something to try with it will show here."]);
   },
   games: () => {
     (window.top || window).location.href = "/games";
   },
 };
-for (const b of document.querySelectorAll(".menu-item"))
-  b.addEventListener("click", () => {
-    for (const x of document.querySelectorAll(".menu-item")) {
-      x.classList.toggle("active", x === b);
-      x.toggleAttribute("aria-current", x === b);
-    }
-    MENU[b.dataset.go]?.();
-  });
+for (const b of menuItems) b.addEventListener("click", () => MENU[b.dataset.go]?.());
 
-// Notes: one per topic, kept in this browser only.
-const notesKey = () => `learnigo-notes:${lesson?.id || "general"}`;
-function loadNotes() {
-  try {
-    els.notesText.value = localStorage.getItem(notesKey()) || "";
-  } catch {
-    els.notesText.value = "";
-  }
+// Notes: several per topic, kept in this browser only (notes-store.js); the
+// card lists this topic's, all of them by topic, and the one being written
+// (notes-panel.js). The topic is the lesson on the board (aroundTheBoard).
+let noteStorage = null;
+try {
+  noteStorage = localStorage;
+} catch {
+  /* storage blocked: the notes last until the page closes */
 }
-els.notesText.addEventListener("input", () => {
-  try {
-    localStorage.setItem(notesKey(), els.notesText.value);
-  } catch {
-    /* storage off: the notes last until the page closes */
-  }
+const notes = createNotesPanel(els.notes, {
+  store: createNotesStore(noteStorage),
+  onToggle: (open, hadFocus) => {
+    lightMenu();
+    if (!open && hadFocus) menuItems.find((b) => b.dataset.go === "notes")?.focus();
+  },
+  // "Open lesson" beside a topic's notes: its lesson, or for an answer from the web, asked again.
+  openTopic: (key, title) => (lessonOf(key) ? openTopic(lessonOf(key), title || "this lesson") : askNow(`Tell me about ${title}`)),
+  titleOf: async (id) => (await (await fetch(`/api/ai-assistant/lesson?id=${encodeURIComponent(id)}`)).json()).title || "",
 });
-$("notes-close").addEventListener("click", () => {
-  els.notes.hidden = true;
-});
-loadNotes();
 
 // No speech recognition on this server (LT_ASR=off): no microphone, and
 // everything on the page asks for typing instead of talking.

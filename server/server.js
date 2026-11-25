@@ -141,6 +141,8 @@ app.use('/api/speak/maths',   speakMathsRoutes)
 app.use('/api/speak/english', speakEnglishRoutes)
 app.use('/api/dashboard',        dashboardRoutes)
 app.use('/api/learn',            require('./routes/learn')) // adaptive learning engine (docs/learning/ADAPTIVE.md)
+app.use('/api/social',           require('./routes/social')) // friends, rounds together, teams (GAME-ROADMAP.md Phase 5)
+app.use('/api/shorts',           require('./routes/shorts')) // the Shorts feed
 app.use('/api',                  sharedRoutes)
 app.use('/api',                  require('./routes/comms'))
 app.use('/api/ar',               arRoutes)
@@ -157,6 +159,9 @@ app.listen(PORT, () => {
   // Two schedulers with different jobs: digests/announcements (scheduler.js) and console jobs (jobs.js). SCHEDULER=off stops both.
   require('./services/scheduler').startScheduler()
   require('./services/jobs').startScheduler()
+  // The Shorts catalogue (4,000 topic packs) is read in the background a moment after start,
+  // so the first learner to open Shorts does not wait for it.
+  if (process.env.NODE_ENV !== 'test') setTimeout(() => require('./services/shorts/catalog').ready().catch(() => {}), 8000).unref()
 })
 
 // Stop the AI assistant's process with the API (it saves its TODO list on the way out).

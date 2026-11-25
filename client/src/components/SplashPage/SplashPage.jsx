@@ -6,11 +6,12 @@ import Mascot, { Butterfly } from "../Mascot/Mascot";
 import EntryScene from "../Entry/EntryScene";
 import { splashShowing, splashDone } from "../Entry/splashSignal";
 import { sfx } from "../../utils/sounds";
+import { markSplashSeen, splashSeen } from "./splashSeen";
 import styles from "./SplashPage.module.css";
 
-// App shows the splash on every fresh load, on top of the first page: tell
-// that page to hold its entrance until the splash hands over.
-splashShowing();
+// App shows the splash on the first visit only (splashSeen.js), on top of the
+// first page: tell that page to hold its entrance until the splash hands over.
+if (!splashSeen()) splashShowing();
 
 // Short on purpose: the page underneath can be used about a second after it
 // appears, and a tap, a click or any key hands over at once.
@@ -35,6 +36,8 @@ const SplashPage = ({ onFinish }) => {
   }, [onFinish]);
 
   useEffect(() => {
+    // Seen once it has started: a reload half-way through does not play it again.
+    markSplashSeen();
     // Plays now if the browser allows sound; otherwise the welcome chime
     // plays on the first tap (sounds.js keeps that promise).
     sfx.loadStart();

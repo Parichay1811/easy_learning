@@ -10,7 +10,7 @@ const TZ = (() => { try { return Intl.DateTimeFormat().resolvedOptions().timeZon
 const STICKERS = { star: "⭐", trophy: "🏆", heart: "💖", rocket: "🚀", rainbow: "🌈", thumbs: "👍", party: "🎉", medal: "🏅", sun: "🌞", hug: "🤗" };
 // Learner pages only: never on logins, role select or the grown-up dashboards.
 const LEARNER = /^\/(home|dashboard|subject|module|games|ai-teacher|about-us|contact-us)(\/|$)/;
-const LEARNING = /^\/(home|subject|module|games|ai-teacher)(\/|$)/;
+const LEARNING = /^\/(home|subject|module|games|ai-teacher|shorts|together)(\/|$)/;
 const BREAK_KEY = "family_break";
 const TOAST_KEY = "links_toast_dismissed";
 const dismissedIds = () => { try { return new Set(JSON.parse(sessionStorage.getItem(TOAST_KEY) || "[]")); } catch { return new Set(); } };

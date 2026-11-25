@@ -6,11 +6,7 @@ import logo from "/brand/logo-clean.webp";
 import { sfx, setSoundEnabled } from "../../utils/sounds";
 import { usePrefs } from "../settings/usePrefs";
 import { openComfortSettings } from "../settings/comfortEvents";
-import {
-  FaHome, FaInfoCircle, FaEnvelope, FaSignOutAlt,
-  FaHandPaper, FaLayerGroup, FaGamepad, FaVolumeUp, FaVolumeMute,
-  FaGlobe, FaTags, FaShieldAlt, FaFileContract, FaSlidersH,
-} from "react-icons/fa";
+import { FaHome, FaInfoCircle, FaEnvelope, FaSignOutAlt, FaHandPaper, FaLayerGroup, FaGamepad, FaVolumeUp, FaVolumeMute, FaGlobe, FaTags, FaShieldAlt, FaFileContract, FaSlidersH, FaUserFriends, FaPlayCircle } from "react-icons/fa";
 import { RiBarChart2Fill } from "react-icons/ri";
 import { BsStars } from "react-icons/bs";
 import { useAuth } from "../../context/AuthContext";
@@ -33,6 +29,12 @@ const LINKS = [
   { to: "/ai-teacher", key: "navbar.aiTeacher", def: "AI Teacher", Icon: BsStars, color: "navAITeacher" },
   { to: "/about-us", key: "navbar.about", def: "About Us", Icon: FaInfoCircle, color: "navAbout" },
   { to: "/contact-us", key: "navbar.contact", def: "Contact Us", Icon: FaEnvelope, color: "navContact" },
+];
+
+// Only for a signed-in learner (shown before Dashboard).
+const LEARNER_LINKS = [
+  { to: "/together", key: "navbar.together", def: "Together", Icon: FaUserFriends, color: "navTogether" },
+  { to: "/shorts", key: "navbar.shorts", def: "Shorts", Icon: FaPlayCircle, color: "navShorts" },
 ];
 
 // Smaller print, only in the menu panel (on the app pages the footer steps aside).
@@ -157,6 +159,17 @@ const Navbar = () => {
         >
           <div className={styles.navLinks} ref={linksRef}>
             {LINKS.map(({ to, key, def, color, ...link }) => {
+              const Icon = link.Icon;
+              const label = t(key, { defaultValue: def });
+              return (
+                <NavLink key={to} to={to} className={pillClass(color)} onClick={closeMenu} title={level === 2 ? label : undefined} aria-label={label}>
+                  <span className={styles.navIconWrap}><Icon className={styles.navIcon} /></span>
+                  <span className={styles.linkText}>{label}</span>
+                </NavLink>
+              );
+            })}
+            {/* Signed-in learners: learning together and the Shorts feed. */}
+            {user && LEARNER_LINKS.map(({ to, key, def, color, ...link }) => {
               const Icon = link.Icon;
               const label = t(key, { defaultValue: def });
               return (

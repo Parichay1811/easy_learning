@@ -143,8 +143,11 @@ function LegacyCard({ question, onAnswered, onNext, isLast, locked }) {
   );
 }
 
-// Only the reasons the learning engine knows (log-answer `reason`).
-const REASONS = { no_speech: "no_speech", mic_blocked: "mic_blocked", spelling: "spelling", number_form: "number_form" };
+// Only the reasons the learning engine knows (log-answer `reason`; services/learning/feedback.js).
+const REASONS = {
+  no_speech: "no_speech", mic_blocked: "mic_blocked", spelling: "spelling", number_form: "number_form",
+  capitals: "capitals", punctuation: "punctuation", capitals_punctuation: "capitals_punctuation",
+};
 
 // The distractor insight of the option a learner picked (sent to the engine,
 // never shown: it is a note for teachers, not words for a child).
@@ -155,13 +158,19 @@ function misconceptionFor(question, answer) {
   return hit && typeof hit[1] === "string" ? hit[1] : undefined;
 }
 
-// "So close": what to look at, by the checker's reason.
-function closeText(t, reason) {
+// "So close": what to look at, by the checker's reason. `own(key)`: is this
+// key in the site's language (a newer hint falls back to an older one there).
+function closeText(t, reason, own = () => true) {
   switch (reason) {
     case "number_form": return t("questionCard.close.number", "So close! Write it as a number and try again.");
     case "unit": return t("questionCard.close.unit", "So close! Add the unit and try again.");
     case "capitals": return t("questionCard.close.capitals", "So close! Check the capital letters and try again.");
     case "punctuation": return t("questionCard.close.punctuation", "So close! Check the punctuation and try again.");
+    // Both at once ("i wash my hands" for "I wash my hands."): one hint that names both.
+    case "capitals_punctuation":
+      return own("questionCard.close.capitalsPunctuation")
+        ? t("questionCard.close.capitalsPunctuation", "So close! Check the capital letters and the full stop, then try again.")
+        : t("questionCard.close.capitals", "So close! Check the capital letters and try again.");
     default: return t("questionCard.close.spelling", "So close! Check the spelling and try again.");
   }
 }
@@ -219,6 +228,7 @@ const OFFER_TEXT = {
  * Calls onAnswered(outcome) once per question:
  *   { status, correct, timeTaken, userAnswer, firstTry, hintsUsed (help the learner asked for),
  *     supportStep (the item's support.step), supportShown, misconception, uncertain, reason,
+ *     open (an open question: nothing to mark, whichever way it was answered),
  *     pieceMisses (wrong tries inside the widget, e.g. wrong pairs on a match-the-pairs board) }
  * A widget reports those tries as onSubmit(answer, { misses }); a right answer
  * with misses on the way is still right, but not a first try.
@@ -374,6 +384,8 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
       // The picked option's distractor_insight, exactly as in the question.
       misconception: j.misconception || misconceptionFor(question, extra.userAnswer),
       uncertain: status === "uncertain",
+      // An open question (nothing to mark), however it was answered: a Warrior round does not score it.
+      open: j.status === "ungraded",
       reason: REASONS[j.reason || extra.reason],
     });
   };
@@ -559,7 +571,9 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   };
 
   // The server's personalised message, translated (contract §2), or null.
-  const serverArgs = useMemo(() => messageArgs(learn?.message, (id, name) => t(`skills.${id}`, name)), [learn, t]);
+  // Is this key in the site's own language? (English always is: its words are the defaults.)
+  const ownWords = (key) => uiLang === "en" || langOfKey(i18n, key) === uiLang;
+  const serverArgs = useMemo(() => messageArgs(learn?.message, (id, name) => t(`skills.${id}`, name), ownWords), [learn, t, uiLang]); // eslint-disable-line react-hooks/exhaustive-deps
   const serverMessage = serverArgs ? t(serverArgs[0], serverArgs[1]) : null;
   // An untranslated message is the server's English words: said in English, never in another voice.
   const serverLang = serverArgs ? langOfKey(i18n, serverArgs[0]) : uiLang;
@@ -597,7 +611,7 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
         if (serverMessage) return praise ? [[praise, "ui"], [serverMessage, "server"]] : [[serverMessage, "server"]];
         if (praise) return [[praise, "ui"], [question.feedback?.correct || "", "card"]];
         return question.feedback?.correct ? [[question.feedback.correct, "card"]] : [[t("questionCard.wellDone", { defaultValue: "Well done!" }), "ui"]];
-      case "close": return [[closeText(t, closeReason), "ui"]];
+      case "close": return [[closeText(t, closeReason, ownWords), "ui"]];
       case "incorrect": return [
         ...(motive ? [[motive, "ui"], [question.feedback?.incorrect || "", "card"]]
           : [question.feedback?.incorrect ? [question.feedback.incorrect, "card"] : [t("questionCard.nearly", { defaultValue: "Nearly! Have another go." }), "ui"]]),
@@ -696,7 +710,7 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   } else if (phase === "close") {
     sheet = (
       <ResultSheet key={`close-${closes}`} tone="soft" mood="think" action={tryAgainBtn()}>
-        <p className={styles.sheetTitle}>{closeText(t, closeReason)}</p>
+        <p className={styles.sheetTitle}>{closeText(t, closeReason, ownWords)}</p>
         <p className={styles.note}>{t("questionCard.closeNote", "This doesn't count as a miss.")}</p>
       </ResultSheet>
     );

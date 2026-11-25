@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import TogetherShortcuts from "../together/Shortcuts";
+import { useGuide } from "../guide/useGuide";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
@@ -50,6 +52,7 @@ const Hero = () => {
   const dispatch = useDispatch();
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
+  const guide = useGuide();
   const reduce = useCalmMotion();
 
   const rounds = useSelector((state) => state.dashboard.rounds);
@@ -240,6 +243,7 @@ const Hero = () => {
             data-sound="none"
             data-companion-look
             data-companion-guide
+            {...guide("home.start", "Tap the big orange button to start learning.", { order: 1 })}
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.35 }}
@@ -270,6 +274,8 @@ const Hero = () => {
               <span className={styles.todoCount}>{todoCount}</span>
             </button>
           )}
+          {/* One tap to a round a friend left, the team, Together and Shorts. */}
+          <TogetherShortcuts />
         </div>
 
         <nav className={styles.worlds} aria-label={t("hero.chooseWorld", { defaultValue: "Choose Your World" })}>

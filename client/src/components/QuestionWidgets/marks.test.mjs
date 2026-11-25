@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
-  targetSequence, sequenceMarks, binHomes, binMark, homeOf, partnerOf, expectedAnswer,
+  targetSequence, sequenceMarks, binHomes, binMark, homeOf, partnerOf, expectedAnswer, keyboardHelp,
 } from "./marks.js";
 
 test("a built order is marked piece by piece", () => {
@@ -45,4 +45,15 @@ test("the right partner and the expected typed answer", () => {
   assert.equal(expectedAnswer({ correct_answer: 7 }), "7");
   assert.equal(expectedAnswer({ accepted_answers: ["", "blue"] }), "blue");
   assert.equal(expectedAnswer({}), "");
+});
+
+test("a phone's keyboard never rewrites an answer that is checked", () => {
+  const fix = { interaction: "typed_short", correct_answer: "Ana saves her coins.", validation: { method: "text", case_sensitive: true, punctuation_strict: true } };
+  assert.deepEqual(keyboardHelp(fix), { autoCorrect: "off", autoComplete: "off", autoCapitalize: "none" }, "the capital is the learner's own, and Ana stays Ana");
+  assert.deepEqual(keyboardHelp({ interaction: "typed_short", validation: { method: "text", case_sensitive: true } }).autoCapitalize, "none");
+  const spell = { interaction: "typed_short", correct_answer: "friend", validation: { method: "text", spelling_strict: true } };
+  assert.deepEqual(keyboardHelp(spell), { autoCorrect: "off", autoComplete: "off" }, "spelling is the learner's own; a capital does not matter here");
+  assert.deepEqual(keyboardHelp({ interaction: "typed_short", correct_answer: "7" }), { autoCorrect: "off", autoComplete: "off" }, "no validation (a teacher's upload): still checked");
+  assert.deepEqual(keyboardHelp({ interaction: "typed_long", graded: false }), {}, "open writing practice: the keyboard helps as usual");
+  assert.deepEqual(keyboardHelp(null), { autoCorrect: "off", autoComplete: "off" });
 });

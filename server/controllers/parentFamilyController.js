@@ -206,12 +206,15 @@ const updateSettings = handle(async (req, res) => {
   const { out, errors } = fam.cleanSettings(req.body)
   if (errors.length) return bad(res, 400, errors[0], { errors })
   const child = req.child
+  // Switches not sent keep their value (a partial `together` must not reset the others).
+  if (out.together) out.together = { ...(child.together?.toObject?.() || child.together || {}), ...out.together }
   for (const k of ['age', 'name', 'avatar', 'onboardedAt']) if (out[k] !== undefined) child[k] = out[k]
   for (const k of fam.LEARNER_FIELDS) if (out[k] !== undefined) child[k] = out[k]
   if (out.notifyPrefs) child.notifyPrefs = { ...(child.notifyPrefs?.toObject?.() || child.notifyPrefs || {}), ...out.notifyPrefs }
   await child.save()
   await fam.syncLearnerSettings(child.email, out)
   if (out.healthyUse) await audit(req, 'learner.healthy_use_change', { targetType: 'learner', targetId: String(child._id), meta: out.healthyUse })
+  if (out.together) await audit(req, 'learner.together_change', { targetType: 'learner', targetId: String(child._id), meta: out.together })
   ok(res, { child })
 })
 

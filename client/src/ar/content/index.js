@@ -23,8 +23,10 @@
  * visual discrimination, so it is computed from `cats`, `attrs` and an explicit
  * `confusable` list rather than guessed.
  */
-import { shuffle, pick } from '../core/geometry'
-import { SETS } from './packs'
+// Explicit file extensions here and in ./packs/index.js so the content library
+// can be imported by plain `node --test` (see content.test.mjs) as well as Vite.
+import { shuffle, pick } from '../core/geometry.js'
+import { SETS } from './packs/index.js'
 
 const index = new Map()
 for (const [setName, items] of Object.entries(SETS)) {
@@ -185,6 +187,53 @@ export function buildChoiceSet({ pool, target, choices, distractorKind, rng = Ma
     distractors,
     options: shuffle([answer, ...distractors], rng),
   }
+}
+
+/**
+ * The items in `pool` that are the same *kind* of thing as `target` — that is,
+ * drawn from the same content set.
+ *
+ * Needed wherever one screen could otherwise mix sets whose pictures overlap.
+ * The case that bit: a colour swatch is a plain circle named "Red", and the
+ * circle *shape* is itself red — so with `shapes` and `colors` on screen
+ * together, one red circle answers to both CIRCLE and RED. A turn is about one
+ * kind of word, so its options come from one set.
+ */
+export function sameSetAs(pool, target) {
+  if (!target?.set) return pool
+  const same = pool.filter((i) => i.set === target.set)
+  return same.length ? same : pool
+}
+
+/** Is this item a colour swatch (named for its fill, not for its outline)? */
+export function isSwatch(item) {
+  return (item?.cats || []).includes('colour')
+}
+
+/**
+ * A colour swatch drawn as a drop of paint instead of a disc, for any screen
+ * where the *word* is what the child is answering: a disc is a circle, and a
+ * child shown one under the word RED is being told a circle is called red.
+ */
+export function asSwatch(item) {
+  return isSwatch(item) ? { ...item, sprite: { kind: 'shape', value: 'drop' } } : item
+}
+
+/**
+ * `buildChoiceSet`, with every option the same kind of thing as the answer.
+ * Use it when a game draws on more than one set whose pictures overlap.
+ * @returns {{target: object, options: Array<object>, distractors: Array<object>}}
+ */
+export function buildSameKindChoiceSet({ pool, target, choices, distractorKind, rng = Math.random, exclude }) {
+  const answer = target || pick(pool, rng)
+  return buildChoiceSet({
+    pool: sameSetAs(pool, answer),
+    target: answer,
+    choices,
+    distractorKind,
+    rng,
+    exclude,
+  })
 }
 
 /** What TTS should say for an item. */

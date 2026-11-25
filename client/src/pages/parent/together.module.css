@@ -1,0 +1,50 @@
+/* The parent's "Together" page (uses the dashboard tokens of .dash). */
+.kpis { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.cols { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--d-gap, 16px); align-items: start; }
+.waiting { border-left: 6px solid var(--d-attention); }
+.people, .rounds, .switches { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.person { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 8px 10px; border-radius: var(--d-radius-sm, 14px); background: var(--d-card-alt, #f6f9fe); }
+.personName { flex: 1 1 120px; min-width: 0; display: flex; flex-direction: column; line-height: 1.25; }
+.personName small { color: var(--d-muted); }
+.face {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, hsl(var(--hue) 95% 92%), hsl(var(--hue) 80% 78%));
+  font-size: calc(var(--size) * 0.56);
+  line-height: 1;
+}
+.match { display: flex; flex-direction: column; gap: 8px; padding: 12px 0; border-top: 1px solid var(--d-line); }
+.match:first-of-type { border-top: 0; }
+.match p { margin: 0; }
+.h3 { margin: 18px 0 0; font-size: 1rem; }
+.rounds li { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 6px 0; border-bottom: 1px solid var(--d-line); font-size: 0.94rem; }
+.rounds li:last-child { border-bottom: 0; }
+.switchRow { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--d-radius-sm, 14px); background: var(--d-card-alt, #f6f9fe); }
+.blocked { opacity: 0.55; }
+.switchEmoji { flex: none; font-size: 1.5rem; width: 36px; text-align: center; }
+.switchText { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.switchText small { color: var(--d-muted); line-height: 1.4; }
+.toggle {
+  flex: none;
+  position: relative;
+  width: 56px;
+  height: 32px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--d-neutral, #868e96);
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+/* A bigger place to tap than the switch itself. */
+.toggle::after { content: ""; position: absolute; inset: -8px -4px; }
+.toggleOn { background: var(--d-accent, #26853c); }
+.toggle:disabled { cursor: not-allowed; }
+.toggle:focus-visible { outline: 3px solid var(--d-focus, #1c7ed6); outline-offset: 3px; }
+.knob { position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); transition: transform 0.18s ease; }
+.toggleOn .knob { transform: translateX(24px); }
+@media (max-width: 900px) { .cols { grid-template-columns: 1fr; } .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (prefers-reduced-motion: reduce) { .toggle, .knob { transition: none; } }

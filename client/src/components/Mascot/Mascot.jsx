@@ -55,7 +55,11 @@ export default function Mascot({ size = 160, mood = "idle", butterfly = true, al
       data-mascot-spot={isSpot ? "true" : undefined}
     >
       <div className={styles.shadow} />
-      <img className={styles.dog} src={mascotImg} alt="" draggable="false" />
+      {/* Two boxes, one movement each (the pose tilts, the picture breathes or hops): an
+          element with a single transform animation is animated off the main thread. */}
+      <span className={styles.pose}>
+        <img className={styles.dog} src={mascotImg} alt="" draggable="false" />
+      </span>
       {butterfly && !empty && <Butterfly className={styles.orbit} />}
     </div>
   );
@@ -64,24 +68,34 @@ export default function Mascot({ size = 160, mood = "idle", butterfly = true, al
 /**
  * A small butterfly with flapping wings. On its own it just flaps; give it a
  * class with a motion path (see FloatingButterflies) to make it fly.
+ *
+ * Each wing is its own small picture inside an HTML box, and the box is what
+ * flaps: the browser can then animate it without redrawing anything (a transform
+ * on a part of an SVG is redrawn on every frame).
  */
 export function Butterfly({ className = "", hue = "#ff8fc8", hue2 = "#ffd45c", style }) {
   return (
     <span className={`${styles.butterfly} ${className}`} style={style} aria-hidden="true">
-      <svg viewBox="0 0 40 32" width="100%" height="100%">
-        <g className={styles.wingL}>
-          <path d="M19 15 C 10 0, 0 4, 4 13 C 6 18, 14 18, 19 16 Z" fill={hue} />
-          <path d="M19 17 C 12 20, 5 26, 10 30 C 14 32, 18 24, 19 18 Z" fill={hue2} />
-          <circle cx="9" cy="10" r="2.2" fill="#fff" opacity="0.7" />
-        </g>
-        <g className={styles.wingR}>
-          <path d="M21 15 C 30 0, 40 4, 36 13 C 34 18, 26 18, 21 16 Z" fill={hue} />
-          <path d="M21 17 C 28 20, 35 26, 30 30 C 26 32, 22 24, 21 18 Z" fill={hue2} />
-          <circle cx="31" cy="10" r="2.2" fill="#fff" opacity="0.7" />
-        </g>
-        <ellipse cx="20" cy="17" rx="1.6" ry="7" fill="#5b3a29" />
-        <path d="M20 10 C 18 6, 16 5, 15 4 M20 10 C 22 6, 24 5, 25 4" stroke="#5b3a29" strokeWidth="0.9" fill="none" strokeLinecap="round" />
-      </svg>
+      <span className={styles.butterflyBox}>
+        <span className={`${styles.wing} ${styles.wingL}`}>
+          <svg viewBox="0 0 19 32" width="100%" height="100%" preserveAspectRatio="none">
+            <path d="M19 15 C 10 0, 0 4, 4 13 C 6 18, 14 18, 19 16 Z" fill={hue} />
+            <path d="M19 17 C 12 20, 5 26, 10 30 C 14 32, 18 24, 19 18 Z" fill={hue2} />
+            <circle cx="9" cy="10" r="2.2" fill="#fff" opacity="0.7" />
+          </svg>
+        </span>
+        <span className={`${styles.wing} ${styles.wingR}`}>
+          <svg viewBox="21 0 19 32" width="100%" height="100%" preserveAspectRatio="none">
+            <path d="M21 15 C 30 0, 40 4, 36 13 C 34 18, 26 18, 21 16 Z" fill={hue} />
+            <path d="M21 17 C 28 20, 35 26, 30 30 C 26 32, 22 24, 21 18 Z" fill={hue2} />
+            <circle cx="31" cy="10" r="2.2" fill="#fff" opacity="0.7" />
+          </svg>
+        </span>
+        <svg className={styles.butterflyBody} viewBox="0 0 40 32" width="100%" height="100%">
+          <ellipse cx="20" cy="17" rx="1.6" ry="7" fill="#5b3a29" />
+          <path d="M20 10 C 18 6, 16 5, 15 4 M20 10 C 22 6, 24 5, 25 4" stroke="#5b3a29" strokeWidth="0.9" fill="none" strokeLinecap="round" />
+        </svg>
+      </span>
     </span>
   );
 }

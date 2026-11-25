@@ -10,7 +10,7 @@ import Button from '../../components/dashboard/Button'
 import {
   LevelBadge, LevelPicker, SkillList, NextUpCard, GoalList, WeeklyProgress,
   SUBJECTS, SUBJECT_META, MAX_LEVEL, levelLabel, lockedText, practiseHref, skillName, sourceText, statusText, subjectName,
-  goalsForServer, shortDate, suggestionText, weeksFromAnswers, weeksFromRounds,
+  goalsForServer, shortDate, suggestionText, weeksFromAnswers, weeksFromRounds, tFresh, levelHowText,
 } from '../../components/learning'
 import TabBar from './TabBar'
 import { useMedia } from './hooks'
@@ -29,8 +29,18 @@ function suggestionWords(t, sg) {
   return { subject: sg.subject ? subjectName(t, sg.subject) : '', text: suggestionText(t, sg), yes: answers[0], no: answers[1] }
 }
 
-function Levels({ profile, onChange, onAsk }) {
-  const { t } = useTranslation()
+// A level looks after itself: it starts from the learner's first answers and the
+// engine moves it up as they practise. The learner may still adjust it (their
+// choice is kept on purpose: docs/learning/RESEARCH.md §10). So the card says
+// how a level came about, and the button reads as what it is: an optional
+// adjust, not something the learner has to set.
+//  - A phone (`eachRow`): every row says it ("Set from your answers", "You
+//    chose this level"); the sentence under the list is not shown there.
+//  - Wider screens: one sentence under the list says it for all three. (The
+//    card is exactly as tall as its three rows and two lines of words: a line
+//    more in a row would push that sentence out of sight.)
+function Levels({ profile, onChange, onAsk, eachRow = false }) {
+  const { t, i18n } = useTranslation()
   return (
     <ul className={s.levelList}>
       {SUBJECTS.map((subj) => {
@@ -41,14 +51,15 @@ function Levels({ profile, onChange, onAsk }) {
             <LevelBadge
               level={lv.level} subject={subj} showSubject locked={lv.locked} size="sm" className={s.badge}
               note={lv.locked ? sourceText(t, lv.lockedBy || lv.source, 'me') : statusText(t, lv.status, 'me')}
+              how={eachRow && !lv.locked && lv.level != null ? levelHowText(t, i18n, lv.source) : ''}
             />
             <button
               type="button"
               className={s.change}
               onClick={() => (lv.locked ? onAsk(subj) : onChange(subj))}
-              aria-label={t('studentDash.learning.changeAria', { defaultValue: 'Change my {{subject}} level', subject: subjectName(t, subj) })}
+              aria-label={tFresh(t, i18n, 'studentDash.learning.adjustAria', 'Adjust my {{subject}} level', 'studentDash.learning.changeAria', { subject: subjectName(t, subj) })}
             >
-              <FaPen aria-hidden="true" /> <span>{t('studentDash.learning.change', 'Change')}</span>
+              <FaPen aria-hidden="true" /> <span>{tFresh(t, i18n, 'studentDash.learning.adjust', 'Adjust', 'studentDash.learning.change')}</span>
             </button>
           </li>
         )
@@ -175,7 +186,7 @@ function OverTime({ history }) {
  *   <LearningView learn={useLearnProfile()} readOnly={false} />
  */
 export default function LearningView({ learn, readOnly = false }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const wide = useMedia('(orientation: landscape) and (min-width: 1200px) and (min-height: 560px)')
   const tablet = useMedia('(orientation: portrait) and (min-width: 700px) and (min-height: 900px)')
   const compact = !wide && !tablet
@@ -260,8 +271,10 @@ export default function LearningView({ learn, readOnly = false }) {
   const levelsCard = (
     <section className={`${c.card} ${s.card} ${s.levelsCard}`} aria-labelledby="sd-ml-levels">
       <h3 id="sd-ml-levels" className={c.cardTitle}><FaSeedling aria-hidden="true" /> {t('studentDash.learning.levels', 'My levels')}</h3>
-      <Levels profile={profile} onChange={openChange} onAsk={openLocked} />
-      <p className={s.levelHelp}>{t('studentDash.learning.levelHelp', 'A level is where you are in your learning, not your age. You move up one step at a time.')}</p>
+      <Levels profile={profile} onChange={openChange} onAsk={openLocked} eachRow={compact} />
+      <p className={s.levelHelp}>
+        {tFresh(t, i18n, 'studentDash.learning.levelAuto', 'Learnigo sets your level from your answers. You can adjust it whenever you like.', 'studentDash.learning.levelHelp')}
+      </p>
     </section>
   )
   const nextCard = (
@@ -330,8 +343,8 @@ export default function LearningView({ learn, readOnly = false }) {
           size="sm"
           title={editing.locked
             ? t('studentDash.learning.lockedTitle', { defaultValue: 'Your {{subject}} level', subject: subjectName(t, editing.subject) })
-            : t('studentDash.learning.changeTitle', { defaultValue: 'Change my {{subject}} level', subject: subjectName(t, editing.subject) })}
-          text={editing.locked ? undefined : t('studentDash.learning.changeText2', 'A level is where you are in your learning, not your age. Pick the one that feels right; you can change it again any time.')}
+            : tFresh(t, i18n, 'studentDash.learning.adjustTitle', 'Adjust my {{subject}} level', 'studentDash.learning.changeTitle', { subject: subjectName(t, editing.subject) })}
+          text={editing.locked ? undefined : tFresh(t, i18n, 'studentDash.learning.adjustText', 'A level is where you are in your learning, not your age. Learnigo sets it from your answers, so you never have to. If it feels too easy or too hard, pick the one that feels right; you can change it again any time.', 'studentDash.learning.changeText2')}
           onClose={close}
           footer={editing.locked ? (
             <Button onClick={close}>{t('studentDash.learning.ok', 'Okay')}</Button>

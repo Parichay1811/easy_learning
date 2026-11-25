@@ -2,7 +2,8 @@
 // the numbers, plus the teacher's private notes and the parent link status.
 import { lazy, Suspense, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling, FaChartLine, FaCamera } from "react-icons/fa";
+import { FaArrowLeft, FaThumbtack, FaTrash, FaLock, FaPlus, FaChartPie, FaThLarge, FaCalendarAlt, FaStickyNote, FaSeedling, FaChartLine, FaCamera, FaHeart } from "react-icons/fa";
+import InterestsCard from "../../components/together/InterestsCard";
 import {
   TimeRangeBar, useTimeRange, StoryCard, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel, PanelHead, Sheet, usePane,
   SubjectModuleMatrix, CalendarHeatmap, Timeline, toTable, fmtDuration, fmtPercent, fmtDate, moduleLabel, subjectLabel,
@@ -238,11 +239,18 @@ function Analytics({ id, name, part, email, onSkills }) {
   );
 }
 
+// What this learner loves to watch in Shorts (G-530): topics for examples and stories they will care about.
+function Likes({ id, name }) {
+  const { get } = useTeacherApi();
+  const q = useLoad(() => get(`/students/${id}/interests`), [id]);
+  return <InterestsCard interests={q.data?.interests} name={name} loading={q.loading && !q.data} error={q.error} onRetry={q.reload} />;
+}
+
 export default function StudentView({ id, go }) {
   const { t } = useTranslation();
   const { get } = useTeacherApi();
   const q = useLoad(() => get(`/students/${id}/profile`), [id]);
-  const [pane, setPane] = usePane(["overview", "growth", "subjects", "activity", "camera", "plan", "notes"]);
+  const [pane, setPane] = usePane(["overview", "growth", "subjects", "activity", "likes", "camera", "plan", "notes"]);
   if (q.loading && !q.data) return <><Skeleton variant="text" lines={2} /><Skeleton variant="chart" /></>;
   if (q.error) return <EmptyState tone="error" title={t("teacher.stu.notFound", { defaultValue: "Student not found" })} text={q.error} actionLabel={t("teacher.groups.back", { defaultValue: "Back to my groups" })} onAction={() => go("groups")} />;
   const d = q.data;
@@ -254,6 +262,7 @@ export default function StudentView({ id, go }) {
     ...(st.email ? [{ id: "growth", label: t("evidence.tab", "Growth"), icon: FaChartLine }] : []),
     { id: "subjects", label: t("teacher.stu.tabSubjects", { defaultValue: "Subjects" }), icon: FaThLarge },
     { id: "activity", label: t("teacher.stu.tabActivity", { defaultValue: "Activity" }), icon: FaCalendarAlt },
+    ...(st.email ? [{ id: "likes", label: t("teacher.stu.tabLikes", { defaultValue: "What they love" }), short: t("teacher.stu.tabLikesShort", { defaultValue: "Loves" }), icon: FaHeart }] : []),
     ...(st.email ? [{ id: "camera", label: t("teacher.stu.tabCamera", { defaultValue: "Camera games" }), short: t("teacher.stu.tabCameraShort", { defaultValue: "Camera" }), icon: FaCamera }] : []),
     ...(st.email ? [{ id: "plan", label: t("teacher.stu.tabPlan", { defaultValue: "Learning plan" }), short: t("teacher.stu.tabPlanShort", { defaultValue: "Plan" }), icon: FaSeedling }] : []),
     { id: "notes", label: t("teacher.stu.tabNotes", { defaultValue: "My notes" }), icon: FaStickyNote, badge: d.notes.length || undefined },
@@ -283,6 +292,7 @@ export default function StudentView({ id, go }) {
         {current === "notes" ? <Notes studentId={id} initial={d.notes} onChanged={q.reload} />
           : current === "plan" ? <TeacherPlan student={id} name={firstName} />
           : current === "growth" ? <Growth id={id} name={firstName} />
+          : current === "likes" ? <Likes id={id} name={firstName} />
           : current === "camera" ? <CameraGames id={id} name={firstName} initial={d.cameraGames} />
           : d.hasAnalytics ? <Analytics id={id} name={firstName} part={current} email={st.email} onSkills={() => setPane("subjects")} />
             : <EmptyState title={t("teacher.stu.noEmail", { defaultValue: "No learning data yet" })} text={t("teacher.stu.noEmailText", { defaultValue: "{{name}} has no sign-in yet, so there is no learning to show. Login cards for learners without email are coming.", name: st.name })} actionLabel={t("teacher.stu.writeNote", { defaultValue: "Write a private note" })} onAction={() => setPane("notes")} />}

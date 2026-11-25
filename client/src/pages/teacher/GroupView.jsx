@@ -4,7 +4,7 @@
 import { lazy, Suspense, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { FaUserPlus, FaPen, FaExchangeAlt, FaUserMinus, FaArrowLeft, FaChartPie, FaHandsHelping, FaThLarge, FaUsers, FaUserFriends, FaClock } from "react-icons/fa";
+import { FaUserPlus, FaPen, FaExchangeAlt, FaUserMinus, FaArrowLeft, FaChartPie, FaHandsHelping, FaThLarge, FaUsers, FaUserFriends, FaClock, FaFlagCheckered } from "react-icons/fa";
 import {
   TimeRangeBar, useTimeRange, KpiTile, ChartCard, EmptyState, Skeleton, Button, SubTabs, SubPanel,
   StudentSkillHeatmap, DistributionStrip, SubjectModuleMatrix, TrendLine, toTable,
@@ -17,6 +17,7 @@ import { groupStyle, limitText, rangeQuery, matrixCells, enoughToCompare } from 
 import { GroupEditor } from "./GroupsView";
 import AddStudentsPanel from "./AddStudentsPanel";
 import ParentsPanel from "./ParentsPanel";
+import GroupTogether from "./GroupTogether";
 import { useGlancePeriod } from "../../insights-dash/usePeriod";
 import s from "./teacher.module.css";
 
@@ -309,6 +310,7 @@ export default function GroupView({ id, tab = "overview", go, params }) {
     { id: "overview", label: t("teacher.tab.overview", { defaultValue: "Overview" }), icon: FaChartPie },
     { id: "help", label: t("teacher.tab.help", { defaultValue: "Who needs help" }), icon: FaHandsHelping },
     { id: "subjects", label: t("teacher.tab.subjects", { defaultValue: "Subjects and skills" }), icon: FaThLarge },
+    { id: "together", label: t("teacher.tab.together", { defaultValue: "Team play" }), icon: FaFlagCheckered },
     { id: "students", label: t("teacher.tab.students", { defaultValue: "Students" }), icon: FaUsers },
     { id: "parents", label: t("teacher.tab.parents", { defaultValue: "Parents" }), icon: FaUserFriends },
     { id: "schedule", label: t("teacher.tab.schedule", { defaultValue: "Schedule" }), icon: FaClock },
@@ -335,6 +337,7 @@ export default function GroupView({ id, tab = "overview", go, params }) {
         {current === "overview" && <Overview group={{ ...g, studentCount: d.students.length }} go={go} />}
         {current === "help" && <Overview part="help" group={{ ...g, studentCount: d.students.length }} go={go} />}
         {current === "subjects" && <SubjectsTab group={g} />}
+        {current === "together" && <GroupTogether group={g} go={go} />}
         {current === "students" && <StudentsTab data={d} go={go} reload={q.reload} openAdd={() => setAdding(true)} />}
         {current === "parents" && <section className={s.card}><ParentsPanel groupId={id} /></section>}
         {current === "schedule" && <ScheduleTab data={d} reload={q.reload} onEdit={() => setEditing(true)} />}

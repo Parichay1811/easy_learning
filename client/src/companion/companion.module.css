@@ -46,12 +46,48 @@
   transform-origin: 50% 50%;
 }
 
-/* The butterflies' sky: above page cards, under the navbar and dialogs. */
+/* The butterflies' sky: above page cards, under the navbar and dialogs. An empty
+   layer; each butterfly is a small box in it (butterflies.js): a wing picture used
+   twice and a body, drawn once. The script says where the butterfly is about 15 times
+   a second and the box glides there (the transition below, as long as a step); the
+   wings and the bob are animations. So nothing is redrawn while a butterfly flies,
+   and the browser does the moving off the main thread. */
 .sky {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
   z-index: 5;
+  overflow: hidden;
   pointer-events: none;
+  contain: strict;
+  transition: opacity 0.3s ease-out;
 }
+/* A dialog is open: the butterflies fade away, then are not drawn at all. */
+.sky[data-away] {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-out, visibility 0s linear 0.3s;
+}
+.flyer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  will-change: transform;
+  transition: transform 80ms linear;
+}
+.flyerBob,
+.flyerLean {
+  position: absolute;
+  inset: 0;
+}
+.flyerLean { transition: transform 0.18s linear; }
+.flyerWing,
+.flyerBody {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  display: block;
+}
+.flyerWing { width: 50%; transform-origin: 100% 50%; }
+.flyerBody { width: 100%; }

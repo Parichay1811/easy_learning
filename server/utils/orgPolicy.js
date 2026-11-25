@@ -3,7 +3,7 @@
 // Features a policy governs must ask here (or mount requirePolicy) before acting.
 const DEFAULTS = {
   messaging: 'parent_starts', officeHours: '', teachersCreateGroups: false, parentsSeeClassAverage: false,
-  leaderboards: 'off', aiTeacherInSchoolHours: true, activityVisibility: 'assigned', retentionYears: 2,
+  leaderboards: 'off', competitions: 'teams', aiTeacherInSchoolHours: true, activityVisibility: 'assigned', retentionYears: 2,
   dpaAcceptedAt: null, dpaAcceptedBy: '', dpaVersion: '', dpaSignerName: '', dpaSignerRole: '',
   holidaysKeepStreak: true, reviewSlaDays: 3,
   branding: { primaryColor: '', accentColor: '', reportHeader: '', reportFooter: '', welcomeMessage: '' },
@@ -30,6 +30,7 @@ async function getOrgPolicy(orgId) {
 //   'teachersCreateGroups'  teachers may create their own groups
 //   'parentsSeeClassAverage' parents see class averages
 //   'leaderboards'           leaderboards inside a group
+//   'competitions'           team matches and class quests in the school's groups (G-518)
 //   'aiTeacherInSchoolHours' learners may use the AI Teacher in school hours
 //   'parentStartsMessage'    a parent may start a thread with a teacher
 //   'teacherStartsMessage'   a teacher may start a thread with a parent
@@ -37,6 +38,7 @@ const RULES = {
   teachersCreateGroups: (p) => p.teachersCreateGroups === true,
   parentsSeeClassAverage: (p) => p.parentsSeeClassAverage === true,
   leaderboards: (p) => p.leaderboards === 'group',
+  competitions: (p) => p.competitions !== 'off',
   aiTeacherInSchoolHours: (p) => p.aiTeacherInSchoolHours !== false,
   parentStartsMessage: (p) => p.messaging === 'parent_starts' || p.messaging === 'both',
   teacherStartsMessage: (p) => p.messaging === 'both',

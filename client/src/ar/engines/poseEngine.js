@@ -18,7 +18,7 @@
  */
 import { OUTCOME } from '../core/telemetry'
 import { matchPosture, HoldTimer, MotionMeter } from '../core/interactions'
-import { clamp, sample, shuffle, aspectDist, layoutSlots, fitRadius } from '../core/geometry'
+import { clamp, sample, shuffle, pick, aspectDist, layoutSlots, fitRadius } from '../core/geometry'
 import { getSettings, accommodate } from '../core/settings'
 import {
   drawSkeleton, drawZone, drawTarget, PALETTE, hexA, drawBanner,
@@ -26,7 +26,7 @@ import {
 import { POSE_BONES, HAND_BONES, POSE } from '../core/vision'
 import { TrialMachine, handsFor, pointersFor, pulse } from './base'
 import { resolveDifficulty } from '../core/adaptive'
-import { getSet, getSets } from '../content'
+import { getSet, getSets, sameSetAs, isSwatch } from '../content'
 
 export function poseEngine(game) {
   const cfg = {
@@ -132,7 +132,11 @@ export function poseEngine(game) {
     // 'instructions': a chain of 2-3 things to do in order, held in memory.
     const chainLength = clamp(level.steps ?? 2, 1, 3)
     const actions = getSet('instructions').filter((i) => i.attrs?.check)
-    const touchPool = getSets(cfg.touchSets || ['shapes', 'colors'])
+    // One kind of touch target per turn. A colour swatch is a plain circle and
+    // the circle shape is itself red, so with both sets on screen "touch the
+    // circle" and "touch the red one" each had more than one honest answer.
+    const everyTouchable = getSets(cfg.touchSets || ['shapes', 'colors'])
+    const touchPool = sameSetAs(everyTouchable, pick(everyTouchable, api.rng))
     const chain = []
 
     // Mix action steps with touch-a-target steps: a pure action chain is easy
@@ -141,7 +145,11 @@ export function poseEngine(game) {
     const touchItems = sample(touchPool, wantTouch, api.rng)
     const actionItems = sample(actions, chainLength - wantTouch, api.rng)
 
-    for (const it of touchItems) chain.push({ kind: 'touch', item: it, label: `touch the ${it.label.toLowerCase()}` })
+    for (const it of touchItems) {
+      // "Touch the red" is not a sentence; a colour needs its noun.
+      const name = isSwatch(it) ? `${it.label.toLowerCase()} one` : it.label.toLowerCase()
+      chain.push({ kind: 'touch', item: it, label: `touch the ${name}` })
+    }
     for (const it of actionItems) chain.push({ kind: 'action', item: it, label: it.label.toLowerCase(), check: it.attrs.check })
     steps = shuffle(chain, api.rng)
 

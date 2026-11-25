@@ -79,3 +79,23 @@ export function expectedAnswer(question) {
   const first = accepted.find((a) => (typeof a === "string" && a.trim()) || typeof a === "number");
   return first != null ? String(first).trim() : "";
 }
+
+/**
+ * What a phone's keyboard may do to a typed answer, as attributes for the
+ * input. A phone "helps" by capitalising the first letter and by changing
+ * words it does not know (Ana becomes Anna); on an answer that is checked,
+ * that rewrites what the learner meant.
+ *  - A checked answer: no autocorrect, and no word suggestions to pick from.
+ *  - An answer whose capital letters are the point (validation.case_sensitive
+ *    or punctuation_strict: "fix the sentence"): no automatic capital either,
+ *    so the capital is the learner's own.
+ *  - Open writing practice (graded: false) is nobody's test: the keyboard
+ *    helps as it does everywhere else.
+ */
+export function keyboardHelp(question) {
+  if (question?.graded === false) return {};
+  const v = question?.validation || {};
+  const out = { autoCorrect: "off", autoComplete: "off" };
+  if (v.case_sensitive || v.punctuation_strict) out.autoCapitalize = "none";
+  return out;
+}

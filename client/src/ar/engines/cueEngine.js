@@ -25,6 +25,7 @@ import { POSE_BONES, HAND_BONES } from '../core/vision'
 import { TrialMachine, pointersFor, handsFor, makeTargets, pulse, Trail } from './base'
 import { resolveDifficulty } from '../core/adaptive'
 import { getSets } from '../content'
+import { greenMs, amberMs, greenGraceMs, lightWords, introMs, trafficLightBox } from './cueTiming'
 
 /** Movement magnitude below this counts as frozen. */
 const FREEZE_LIMIT = 0.5
@@ -47,8 +48,12 @@ export function cueEngine(game) {
   let motion = null
   let hold = null
   let selector = null
-  let light = 'green' // green | amber | red
+  // off | green | amber | red. "off" is the light between turns, while the
+  // instruction is up: no lamp is lit, so nothing is being asked yet.
+  let light = 'off'
   let lightChangedAt = 0
+  let bodyLost = false
+  const words = lightWords(cfg.amber)
   let flashUntil = 0
   let flashColor = null
   let moveSamples = []
@@ -110,22 +115,36 @@ export function cueEngine(game) {
 
     // 'lights'
     motion = new MotionMeter(420)
-    light = 'green'
+    // No lamp lit while the instruction is up. This used to start on green,
+    // which made the later switch *to* green a no-op: its timer never started
+    // (so green ended the moment the turn did), and "move!" was never said.
+    light = 'off'
     lightChangedAt = 0
-    const holdMs = clamp((level.holdMs ?? 1600) * (s.extraTimeX || 1), 800, 5000)
+    bodyLost = false
+    const x = s.extraTimeX || 1
+    const holdMs = clamp((level.holdMs ?? 1600) * x, 800, 5000)
     hold = new HoldTimer(holdMs)
+    const green = greenMs({ index, roll: api.rng(), extraTimeX: x })
     return {
       targetId: 'freeze',
       radius: spec.radius,
       windowMs: 0,
       holdMs,
+      greenMs: green,
+      amberMs: amberMs({ extraTimeX: x }),
+      greenGraceMs: greenGraceMs({ green, extraTimeX: x }),
       choiceCount: 1,
-      promptText: cfg.amber ? 'Green: walk · Amber: get ready · Red: FREEZE' : 'Green: move · Red: FREEZE',
-      speakText: cfg.amber
-        ? 'Green means walk. Amber means get ready. Red means freeze.'
-        : 'Move on green. Freeze on red.',
+      promptText: words.intro.main,
+      promptSub: words.intro.sub,
+      speakText: words.intro.speak,
       answerLabel: 'froze on red',
     }
+  }
+
+  /** The written line for the light that is on — also used to put it back. */
+  function showLightPrompt() {
+    const w = words[light]
+    if (w) api.setPrompt({ main: w.main, sub: w.sub })
   }
 
   function setLight(next, now) {
@@ -134,40 +153,51 @@ export function cueEngine(game) {
     lightChangedAt = now
     flashColor = next === 'red' ? PALETTE.red : next === 'amber' ? PALETTE.yellow : PALETTE.green
     flashUntil = now + 520
+    const w = words[next]
     if (next === 'red') {
       api.sfx.stop()
       api.haptic('warn')
-      api.banner('FREEZE!', 900, PALETTE.red)
-      api.setPrompt({ main: 'FREEZE!', sub: 'Hold very still' })
-      void api.say('Red! Freeze!', { main: 'FREEZE!', sub: 'Hold very still' })
+      api.banner(w.banner, 900, PALETTE.red)
       hold.reset()
     } else if (next === 'amber') {
       api.sfx.tick()
       api.haptic('tick')
-      api.banner('GET READY', 800, PALETTE.yellow)
-      api.setPrompt({ main: 'Get ready…', sub: 'Red is coming' })
-      void api.say('Amber. Get ready.', { main: 'Get ready…' })
+      api.banner(w.banner, 800, PALETTE.yellow)
     } else {
       api.sfx.go()
       api.haptic('start')
-      api.banner('GO!', 700, PALETTE.green)
-      api.setPrompt({ main: 'Move!', sub: 'Wave your arms, march on the spot' })
-      void api.say('Green! Move!', { main: 'Move!' })
+      api.banner(w.banner, 700, PALETTE.green)
     }
+    void api.say(w.speak, { main: w.main, sub: w.sub })
   }
 
   function onPhase(phase, trial) {
     if (phase !== 'prompt' || !trial) return
+    if (cfg.mode === 'lights') {
+      // The whole instruction once, spoken, with time to hear it. After that a
+      // short written reminder is enough — and it leaves the next thing the
+      // child hears to be "green".
+      const first = machine.index === 0
+      if (first) {
+        void api.say(trial.speakText, { main: trial.promptText, sub: trial.promptSub })
+      } else {
+        api.setPrompt({ main: words.again.main, sub: words.again.sub })
+      }
+      machine.clock.after(introMs({ index: machine.index, amber: cfg.amber }), () => {
+        machine.setPhase('respond')
+        setLight('green', machine.clock.now())
+      })
+      return
+    }
     api.setPrompt({ main: trial.promptText, sub: '' })
     void api.say(trial.speakText, { main: trial.promptText })
-    machine.clock.after(cfg.mode === 'lights' ? 1800 : 1200, () => {
-      machine.setPhase('respond')
-      if (cfg.mode === 'lights') setLight('green', machine.clock.now())
-    })
+    machine.clock.after(1200, () => machine.setPhase('respond'))
   }
 
   const module = {
     requires: cfg.mode === 'wait' ? 'hand' : 'both',
+    /** The countdown asks the child to stand back rather than show a hand. */
+    needsBody: cfg.mode !== 'wait',
 
     difficultySnapshot() {
       const d = resolveDifficulty(game)
@@ -301,25 +331,41 @@ export function cueEngine(game) {
       // ── Red Light / Green Light ──
       const mag = motion.step(frame.pose, now)
       if (!frame.bodyPresent) {
-        api.setPrompt({ main: 'Step back so I can see you', sub: '' })
+        // The light waits for the child: time out of the picture is not time
+        // spent on green, and it must not use the green up.
+        if (!bodyLost) {
+          bodyLost = true
+          api.setPrompt({ main: 'Step back so I can see you', sub: 'I need to see your arms and legs' })
+        }
+        lightChangedAt += dt * 1000
         return
+      }
+      if (bodyLost) {
+        bodyLost = false
+        showLightPrompt()
       }
 
       const sinceChange = now - lightChangedAt
 
       if (light === 'green') {
-        moveSamples.push(mag)
-        if (moveSamples.length > 300) moveSamples.shift()
-        // Green lasts a random 2-5 s so the child cannot predict the change.
-        const greenFor = 2000 + ((machine.index * 977) % 3000)
-        if (sinceChange > greenFor) setLight(cfg.amber ? 'amber' : 'red', now)
+        // The first moment of green is the child hearing "green" and getting
+        // going. It is left out, so a slow start is not read as standing still.
+        if (sinceChange >= machine.trial.greenGraceMs) {
+          moveSamples.push(mag)
+          if (moveSamples.length > 600) moveSamples.shift()
+        }
+        // Long enough to act on, and never the same length twice running, so
+        // the change to red cannot be counted in. See cueTiming.js.
+        if (sinceChange > machine.trial.greenMs) setLight(cfg.amber ? 'amber' : 'red', now)
         return
       }
 
       if (light === 'amber') {
-        if (sinceChange > 1100) setLight('red', now)
+        if (sinceChange > machine.trial.amberMs) setLight('red', now)
         return
       }
+
+      if (light !== 'red') return
 
       // Red: judge the freeze.
       freezeSamples.push(mag)
@@ -331,7 +377,7 @@ export function cueEngine(game) {
         breaches++
         api.sfx.tick()
         api.haptic('tick')
-        api.setPrompt({ main: 'Freeze! Hold still.', sub: '' })
+        api.setPrompt({ main: 'Freeze! Stand still.', sub: 'Like a statue' })
       }
       if (r.justCompleted) {
         const moved = moveSamples.length
@@ -358,7 +404,7 @@ export function cueEngine(game) {
         })
         api.setPrompt({
           main: clean ? 'Perfect freeze!' : 'Good try — hold a bit longer next time.',
-          sub: reallyMoved ? '' : 'Remember to move on green!',
+          sub: reallyMoved ? '' : words.didNotMove,
         })
       }
     },
@@ -434,16 +480,15 @@ export function cueEngine(game) {
   return module
 }
 
-/** A real traffic light, because the transfer target is a real traffic light. */
+/**
+ * A real traffic light, because the transfer target is a real traffic light.
+ * Placed below the instruction bar (trafficLightBox), which used to cover the
+ * red lamp wherever the picture reached the top of the screen.
+ */
 function drawTrafficLight(view, light, withAmber, p, s) {
   const ctx = view.ctx
-  const r = view.short * 0.042
-  const gap = r * 2.5
   const lamps = withAmber ? ['red', 'amber', 'green'] : ['red', 'green']
-  const boxH = gap * lamps.length + r
-  const boxW = r * 3
-  const x = view.w * 0.5 - boxW / 2
-  const y = view.h * 0.1
+  const { x, y, r, gap, boxW, boxH } = trafficLightBox(view, lamps.length)
 
   ctx.save()
   ctx.fillStyle = 'rgba(6,10,22,0.82)'
@@ -533,7 +578,8 @@ function drawWaitLamp(view, armed, p, s) {
   const ctx = view.ctx
   const r = view.short * 0.05
   const cx = view.w / 2
-  const cy = view.h * 0.14
+  // Below the instruction bar, which is HTML laid over the top of the picture.
+  const cy = Math.max(view.h * 0.14, (view.safeTop || 0) + r * 1.25)
   ctx.save()
   if (armed && !s.reducedMotion) {
     const g = ctx.createRadialGradient(cx, cy, r * 0.4, cx, cy, r * 2.6)

@@ -25,6 +25,17 @@ const healthySchema = new mongoose.Schema({
   breakEveryMin: { type: Number, min: 0, max: 120, default: 0 }, // 0 = off
 }, { _id: false })
 
+// Learning together (docs/learning/GAME-ROADMAP.md Phase 5, G-518): the grown-up's switches.
+// Friends, matches with friends and team-mates, a match with someone new (nickname only),
+// the Shorts feed, and whether each new friend needs this grown-up's OK first.
+const togetherSchema = new mongoose.Schema({
+  friends: { type: Boolean, default: true },
+  friendApproval: { type: Boolean, default: true },
+  matches: { type: Boolean, default: true },
+  mystery: { type: Boolean, default: false },
+  shorts: { type: Boolean, default: true },
+}, { _id: false })
+
 const schema = new mongoose.Schema({
   parentId: { type: mongoose.Schema.Types.ObjectId, ref: 'ParentAccount', required: true },
   name: { type: String, required: true, trim: true },
@@ -57,6 +68,7 @@ const schema = new mongoose.Schema({
   language: { type: String, trim: true, maxlength: 10, default: '' },
   weeklyGoal: { type: goalSchema, default: null },
   healthyUse: { type: healthySchema, default: () => ({}) },
+  together: { type: togetherSchema, default: () => ({}) },
   notifyPrefs: {
     weeklyDigest: { type: Boolean, default: true },
     milestones: { type: Boolean, default: true },

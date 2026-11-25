@@ -12,6 +12,7 @@ import { tGroup } from "../ar/core/arText";
 import styles from "./GamesPage.module.css";
 import { sfx } from "../utils/sounds";
 import { FaGamepad, FaArrowLeft, FaCamera, FaHandPaper, FaChevronRight } from "react-icons/fa";
+import { useGuide } from "../components/guide/useGuide";
 
 // The Game Zone as a game's mode-select: one big way in (Camera Games) and
 // its eight worlds as tiles that open the hub straight on that world. One
@@ -20,6 +21,7 @@ const GamesPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const reduce = useCalmMotion();
+  const guide = useGuide();
 
   // Opening Games starts the hand model's download in the background, so the
   // first camera game finds it already here instead of waiting on 12-19 MB.
@@ -83,6 +85,7 @@ const GamesPage = () => {
             className={styles.arCard}
             onClick={() => openHub()}
             data-sound="none"
+            {...guide("games.open", "Tap here to open the camera games.")}
             initial={reduce ? { opacity: 0 } : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.35 }}

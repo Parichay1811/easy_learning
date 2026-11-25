@@ -28,6 +28,10 @@ function mainCollections() {
     learningProfile: require('../models/learning/LearnerProfile'),
     skillMastery: require('../models/learning/SkillMastery'),
     learningDecisions: require('../models/learning/LearningDecision'),
+    // Learning together and Shorts (services/social, services/shorts): the player card, prizes, interests.
+    playerCard: require('../models/social/PlayerCard'),
+    socialAwards: require('../models/social/SocialAward'),
+    shortsInterest: require('../models/social/ShortsInterest'),
   }
 }
 
@@ -59,10 +63,50 @@ async function exportLearner(email) {
     out[key] = await qry.lean()
   }
   out.cheers = await Cheer.find({ learnerEmail: e }).select('-voice -__v').lean()
+  out.together = await togetherExport(e)
   out.reportShares = await ReportShare.find({ learnerEmail: e }).select('-tokenHash -__v').lean()
   out.dataRequests = await DataRequest.find({ subjectEmail: e }).select('-__v').lean()
   out.counts = Object.fromEntries(Object.entries(out).filter(([, v]) => Array.isArray(v)).map(([k, v]) => [k, v.length]))
   return out
+}
+
+// Learning together: what this learner did with others. Other learners are never named
+// by email here (it is this learner's export, not theirs): only "with a friend".
+async function togetherExport(e) {
+  const Friendship = require('../models/social/Friendship')
+  const BuddyMatch = require('../models/social/BuddyMatch')
+  const TeamMatch = require('../models/social/TeamMatch')
+  const PeerCheer = require('../models/social/PeerCheer')
+  const [friendships, rounds, teamRows, sent, received] = await Promise.all([
+    Friendship.find({ emails: e }).select('status since createdAt requestedBy').lean(),
+    BuddyMatch.find({ emails: e }).select('kind subject module status players createdAt doneAt').lean(),
+    TeamMatch.find({ emails: e }).select('title kind startsAt endsAt status teams.key teams.members').lean(),
+    PeerCheer.find({ from: e }).select('sticker line createdAt').lean(),
+    PeerCheer.find({ to: e }).select('sticker line createdAt seenAt').lean(),
+  ])
+  return {
+    friendships: friendships.map((f) => ({ status: f.status, since: f.since, askedAt: f.createdAt, askedByMe: f.requestedBy === e })),
+    rounds: rounds.map((m) => {
+      const mine = m.players.find((p) => p.email === e)
+      return { kind: m.kind, subject: m.subject, module: m.module, status: m.status, createdAt: m.createdAt, playedAt: mine?.playedAt || null, stars: mine?.stars ?? null, outOf: mine?.total ?? null }
+    }),
+    teams: teamRows.map((t) => ({ title: t.title, kind: t.kind, startsAt: t.startsAt, endsAt: t.endsAt, status: t.status, team: t.teams.find((x) => x.members.includes(e))?.key || null })),
+    cheersSent: sent.map((c) => ({ sticker: c.sticker, line: c.line, at: c.createdAt })),
+    cheersReceived: received.map((c) => ({ sticker: c.sticker, line: c.line, at: c.createdAt, seenAt: c.seenAt })),
+  }
+}
+
+// ...and its erasure: friendships, rounds and cheers go; the learner leaves every team.
+async function togetherErase(e) {
+  const Friendship = require('../models/social/Friendship')
+  const BuddyMatch = require('../models/social/BuddyMatch')
+  const TeamMatch = require('../models/social/TeamMatch')
+  const PeerCheer = require('../models/social/PeerCheer')
+  const [f, m, c] = await Promise.all([
+    Friendship.deleteMany({ emails: e }), BuddyMatch.deleteMany({ emails: e }), PeerCheer.deleteMany({ $or: [{ from: e }, { to: e }] }),
+  ])
+  const t = await TeamMatch.updateMany({ emails: e }, { $pull: { emails: e, 'teams.$[].members': e } })
+  return { friendships: f.deletedCount, roundsTogether: m.deletedCount, peerCheers: c.deletedCount, teamsLeft: t.modifiedCount }
 }
 
 // How many records of each kind we hold (for the privacy centre), without loading them.
@@ -91,6 +135,7 @@ async function eraseLearner(email) {
   const Parent = require('../models/admin/Parent')
   const Batch = require('../models/admin/Batch')
   counts.cheers = (await Cheer.deleteMany({ learnerEmail: e })).deletedCount
+  Object.assign(counts, await togetherErase(e))
   counts.reportShares = (await ReportShare.deleteMany({ learnerEmail: e })).deletedCount
   counts.guardianInvites = (await GuardianInvite.deleteMany({ learnerEmail: e })).deletedCount
   counts.guardianLinks = (await Child.deleteMany({ email: e })).deletedCount

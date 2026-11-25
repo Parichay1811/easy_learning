@@ -5,6 +5,7 @@ import "@fontsource/lexend/600.css";
 import "@fontsource/opendyslexic/400.css";
 import "@fontsource/opendyslexic/700.css";
 import { reducedMotion } from "../../utils/learnerPrefs";
+import { applyLiteAttr, useLiteMode } from "../../utils/useLiteMode";
 import { useAuth } from "../../context/AuthContext";
 import { usePrefs } from "./usePrefs";
 import { startPrefsSync } from "./prefsSync";
@@ -31,14 +32,18 @@ function useOsReducedMotion() {
  * learner's profile (prefsSync.js).
  *
  *   <html data-font="readable" data-spacing="wide" data-contrast="high"
- *         data-motion="reduced" data-focus-mode data-big-targets
+ *         data-motion="reduced" data-focus-mode data-big-targets data-lite
  *         style="--lp-text-scale: 1.2; --lp-target: 56px">
+ *
+ * data-lite (utils/useLiteMode.js): less movement, fewer distractions, Save-Data or
+ * a weak device. The decoration stands still and glass blur is off.
  */
 export default function PrefsProvider({ children }) {
   const prefs = usePrefs();
   const osReduce = useOsReducedMotion();
   const { user } = useAuth();
   const reduce = prefs.motion === "reduced" || (prefs.motion === "system" && osReduce);
+  const lite = useLiteMode();
 
   useEffect(() => {
     const el = document.documentElement;
@@ -49,16 +54,17 @@ export default function PrefsProvider({ children }) {
     attr("data-motion", reducedMotion(prefs) ? "reduced" : null);
     attr("data-focus-mode", prefs.focusMode);
     attr("data-big-targets", prefs.bigTargets);
+    applyLiteAttr(lite);
     el.style.setProperty("--lp-text-scale", String(prefs.textScale || 1));
     el.style.setProperty("--lp-target", prefs.bigTargets ? "56px" : "44px");
-  }, [prefs, osReduce]);
+  }, [prefs, osReduce, lite]);
 
   // Only a learner's own sign-in syncs (parents and teachers edit the plan in their dashboards).
   const who = user?.email || user?.uid || null;
   useEffect(() => { startPrefsSync(who); }, [who]);
 
   return (
-    <MotionConfig reducedMotion={reduce ? "always" : prefs.motion === "full" ? "never" : "user"}>
+    <MotionConfig reducedMotion={reduce || lite ? "always" : prefs.motion === "full" ? "never" : "user"}>
       {children}
     </MotionConfig>
   );
