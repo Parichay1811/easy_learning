@@ -1,0 +1,395 @@
+<!doctype html>
+<!--
+  01 · Meet Learnigo — flagship explainer (YouTube main, LinkedIn page video)
+  1920×1080 · 30 fps · 55 s
+  Scene times follow the voice lines in timing.json (made by tools/voice.mjs).
+  If you change voiceover.json, re-run the voice tool and nudge the scene starts below.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+  <link rel="stylesheet" href="assets/brand/video.css" />
+  <style>
+    html, body { width: 1920px; height: 1080px; }
+    /* Korean greeting only: the bundled fonts have no Hangul. Uses the Mac system face. */
+    @font-face { font-family: "KoreanUI"; src: local("Apple SD Gothic Neo"), local("AppleSDGothicNeo-Regular"); }
+
+    /* window geometry shared by the product scenes */
+    .window.std { left: 320px; top: 52px; width: 1280px; }
+    .window.std .view { width: 1280px; height: 800px; }
+
+    /* 1 · hook on notebook paper */
+    #s-hook .paper {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, transparent 214px, rgba(255, 92, 92, 0.55) 214px, rgba(255, 92, 92, 0.55) 218px, transparent 218px),
+        repeating-linear-gradient(180deg, #fffdf6 0px, #fffdf6 58px, #cfe2f7 58px, #cfe2f7 60px);
+    }
+    #s-hook .lines { position: absolute; left: 300px; top: 290px; }
+    #s-hook .l { font-size: 104px; display: block; margin-bottom: 26px; }
+    #s-hook #h3 { font-size: 150px; margin-top: 18px; transform-origin: 0% 50%; }
+    #s-hook .tick { position: absolute; right: 170px; top: 600px; width: 300px; height: 300px; }
+
+    /* 2 · intro */
+    #s-intro .logo { position: absolute; left: 580px; top: 70px; width: 760px; }
+    #s-intro .chips { position: absolute; left: 0; right: 0; top: 470px; display: flex; justify-content: center; gap: 26px; }
+    #s-intro .chip { font-size: 40px; padding: 14px 32px 14px 16px; }
+    #s-intro .chip .ico { width: 54px; height: 54px; font-size: 30px; }
+    #s-intro .tag { position: absolute; left: 0; right: 0; top: 610px; text-align: center; font-size: 78px; }
+
+    /* callouts over product screens */
+    .tagcard { position: absolute; font-size: 40px; padding: 18px 30px; display: flex; align-items: center; gap: 16px; }
+    .tagcard svg { width: 46px; height: 46px; flex: none; }
+
+    /* 5 · kind: chips row */
+    #s-kind .row { position: absolute; left: 0; right: 0; top: 760px; display: flex; justify-content: center; gap: 24px; }
+    #s-kind .chip { font-size: 42px; padding: 14px 34px 14px 16px; }
+    #s-kind .chip .ico { width: 56px; height: 56px; }
+
+    /* 8 · private */
+    #s-private .card { position: absolute; left: 360px; top: 250px; width: 1200px; height: 520px; border-radius: 40px; background: #fff;
+      box-shadow: 0 40px 90px rgba(10, 20, 40, 0.35); display: flex; align-items: center; gap: 60px; padding: 0 80px; }
+    #s-private .card svg { width: 260px; height: 260px; flex: none; }
+    #s-private .card h2 { font-size: 92px; }
+    #s-private .card p { font-size: 40px; margin-top: 20px; }
+
+    /* 10 · languages */
+    #s-langs .hello { position: absolute; font-family: "Fredoka", "Noto Sans JP", "KoreanUI", sans-serif;
+      font-weight: 600; color: var(--ink); background: #fff; border-radius: 999px; padding: 10px 28px; box-shadow: 0 10px 26px rgba(20, 40, 80, 0.14); }
+    #s-langs .big { position: absolute; left: 0; right: 0; top: 380px; text-align: center; }
+    #s-langs .big h2 { font-size: 170px; }
+    #s-langs .big p { font-size: 54px; margin-top: 10px; }
+
+    /* 11 · end card */
+    #s-cta .logo { position: absolute; left: 610px; top: 60px; width: 700px; }
+    #s-cta h2 { position: absolute; left: 0; right: 0; top: 410px; text-align: center; font-size: 96px; }
+    #s-cta .btnwrap { position: absolute; left: 0; right: 0; top: 560px; display: flex; justify-content: center; }
+    #s-cta .cta { font-size: 64px; padding: 26px 70px; }
+    #s-cta .small { position: absolute; left: 0; right: 0; top: 760px; text-align: center; font-size: 36px; }
+  </style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="55" data-width="1920" data-height="1080">
+
+  <!-- ───────────── 1 · HOOK (0–5.7) ───────────── -->
+  <div id="s-hook" class="scene clip" data-start="0" data-duration="5.7" data-track-index="0" style="z-index: 30">
+    <div class="in layer">
+      <div class="paper"></div>
+      <svg class="tick" viewBox="0 0 200 200" aria-hidden="true">
+        <circle id="clock-face" cx="100" cy="108" r="78" fill="#fff" stroke="#ff5c5c" stroke-width="10" />
+        <rect x="88" y="10" width="24" height="22" rx="6" fill="#ff5c5c" />
+        <line id="clock-hand" x1="100" y1="108" x2="100" y2="52" stroke="#1f2b45" stroke-width="10" stroke-linecap="round" />
+      </svg>
+      <div class="lines">
+        <span id="h1" class="l display word">Some children read slowly.</span>
+        <span id="h2" class="l display word">That isn't the problem.</span>
+        <span id="h3" class="l display word orange">The test is.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 2 · INTRO (4.9–11.9) ───────────── -->
+  <div id="s-intro" class="scene clip" data-start="4.9" data-duration="7" data-track-index="0" style="z-index: 10">
+    <div class="in layer">
+      <div class="bg bg-meadow"></div>
+      <img class="logo" src="assets/brand/logo-wordmark.webp" alt="Learnigo — Play & Learn" />
+      <div class="chips">
+        <span id="c-read" class="chip"><span class="ico" style="background: var(--purple)">Aa</span>Reading</span>
+        <span id="c-maths" class="chip"><span class="ico" style="background: var(--blue)">+</span>Maths</span>
+        <span id="c-sci" class="chip"><span class="ico" style="background: var(--green)">✿</span>Science</span>
+      </div>
+      <div class="tag display">for <span class="orange">every kind of mind</span></div>
+    </div>
+  </div>
+
+  <!-- ───────────── 3 · WORLDS (11.7–16.1) ───────────── -->
+  <div id="s-worlds" class="scene clip" data-start="11.7" data-duration="4.4" data-track-index="0" style="z-index: 11">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="window std">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu/home</span></div>
+        <div class="view">
+          <div class="zoom">
+            <img src="assets/screens/home.webp" alt="Learnigo home: English Kingdom, Maths Galaxy, Science Lab" />
+            <div id="w-ring" class="ring" style="left: 136px; top: 236px; width: 333px; height: 457px; opacity: 0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 4 · ROUNDS (15.9–20.3) ───────────── -->
+  <div id="s-rounds" class="scene clip" data-start="15.9" data-duration="4.4" data-track-index="0" style="z-index: 12">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="window std">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu/subject/english</span></div>
+        <div class="view">
+          <div class="zoom">
+            <img src="assets/screens/english.webp" alt="English: Listen, Read, Write, Speak" />
+            <div id="r-ring" class="ring" style="left: 208px; top: 325px; width: 213px; height: 243px; opacity: 0"></div>
+          </div>
+        </div>
+      </div>
+      <div id="r-ten" class="callout tagcard" style="left: 250px; top: 150px">
+        <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="22" fill="#ffd24d" /><text x="24" y="32" text-anchor="middle" font-family="Fredoka" font-weight="700" font-size="22" fill="#1b2540">10</text></svg>
+        10 questions a round
+      </div>
+      <div id="r-aloud" class="callout tagcard" style="left: 1120px; top: 150px">
+        <svg viewBox="0 0 48 48"><path d="M8 18h8l10-8v28l-10-8H8z" fill="#ffd24d" /><path id="r-wave1" d="M31 17c3 4 3 10 0 14" stroke="#ffd24d" stroke-width="3.5" fill="none" stroke-linecap="round" /><path id="r-wave2" d="M36 12c6 7 6 17 0 24" stroke="#ffd24d" stroke-width="3.5" fill="none" stroke-linecap="round" /></svg>
+        Every question read aloud
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 5 · KIND (20.1–25.1) ───────────── -->
+  <div id="s-kind" class="scene clip" data-start="20.1" data-duration="5" data-track-index="0" style="z-index: 13">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="window std">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu/module/read/english</span></div>
+        <div class="view">
+          <div class="zoom"><img src="assets/screens/start-level.webp" alt="Where would you like to start? It's not a test." /></div>
+        </div>
+      </div>
+      <div class="row">
+        <span id="k1" class="chip"><span class="ico" style="background: var(--pink)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="3.2" stroke-linecap="round" /></svg></span>No buzzer</span>
+        <span id="k2" class="chip"><span class="ico" style="background: var(--pink)"><svg viewBox="0 0 24 24" width="30" height="30"><path d="M6 6l12 12M18 6L6 18" stroke="#fff" stroke-width="3.2" stroke-linecap="round" /></svg></span>No red marks</span>
+        <span id="k3" class="chip"><span class="ico" style="background: var(--green)"><svg viewBox="0 0 24 24" width="32" height="32"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z" fill="#fff" /></svg></span>Beat your own best</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 6 · AI TEACHER (24.9–31.5) ───────────── -->
+  <div id="s-ai" class="scene clip" data-start="24.9" data-duration="6.6" data-track-index="0" style="z-index: 14">
+    <div class="in layer"><div class="bg bg-night"></div></div>
+  </div>
+  <!-- footage sits outside the timed scene (a <video> is timed itself); its window fades with the scene -->
+  <div id="ai-win" class="window std" style="z-index: 15; opacity: 0">
+    <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu/ai-teacher</span></div>
+    <div class="view">
+      <div id="ai-zoom" class="zoom">
+        <video id="ai-footage" class="clip" data-start="24.9" data-duration="6.6" data-media-start="0.8" data-track-index="1"
+               src="assets/footage/ai-teacher.mp4" muted playsinline></video>
+      </div>
+    </div>
+  </div>
+  <div id="ai-tag" class="callout tagcard" style="z-index: 16; left: 1250px; top: 110px; opacity: 0">
+    <svg viewBox="0 0 48 48"><rect x="6" y="8" width="36" height="26" rx="4" fill="none" stroke="#ffd24d" stroke-width="3.5" /><path d="M13 27l7-8 6 5 9-10" stroke="#ffd24d" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round" /><path d="M24 34v6M16 42h16" stroke="#ffd24d" stroke-width="3.5" stroke-linecap="round" /></svg>
+    Drawn &amp; explained out loud
+  </div>
+
+  <!-- ───────────── 7 · MOVE (31.3–37.5) ───────────── -->
+  <div id="s-move" class="scene clip" data-start="31.3" data-duration="6.2" data-track-index="0" style="z-index: 17">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="window std">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu/games</span></div>
+        <div class="view">
+          <div class="zoom"><img src="assets/screens/games.webp" alt="Game Zone: 69 camera games in 8 groups" /></div>
+        </div>
+      </div>
+      <div id="m-tag" class="callout tagcard" style="left: 1250px; top: 110px">
+        <svg viewBox="0 0 48 48"><rect x="5" y="13" width="38" height="26" rx="6" fill="#ffd24d" /><circle cx="24" cy="26" r="8" fill="#1b2540" /><rect x="16" y="8" width="16" height="7" rx="2" fill="#ffd24d" /></svg>
+        60+ games · any webcam
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 8 · PRIVATE (37.3–40.1) ───────────── -->
+  <div id="s-private" class="scene clip" data-start="37.3" data-duration="2.8" data-track-index="0" style="z-index: 19">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="card">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <rect x="8" y="30" width="84" height="56" rx="12" fill="#3a8dff" />
+          <circle cx="50" cy="58" r="17" fill="#fff" /><circle cx="50" cy="58" r="9" fill="#1b2540" />
+          <rect x="30" y="20" width="26" height="12" rx="4" fill="#3a8dff" />
+          <g id="p-lock"><rect x="70" y="70" width="44" height="36" rx="8" fill="#3fae5a" /><path d="M80 70v-8a12 12 0 0 1 24 0v8" stroke="#3fae5a" stroke-width="7" fill="none" /><circle cx="92" cy="87" r="5" fill="#fff" /></g>
+        </svg>
+        <div>
+          <h2 class="display">The camera <span class="orange">never leaves</span> the device.</h2>
+          <p class="sub">No video or photo is recorded, saved or uploaded.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 9 · ROLES (39.9–44.1) ───────────── -->
+  <div id="s-roles" class="scene clip" data-start="39.9" data-duration="4.2" data-track-index="0" style="z-index: 20">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <div class="window std">
+        <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="url">learnigo.eu</span></div>
+        <div class="view">
+          <div class="zoom">
+            <img src="assets/screens/entry.webp" alt="Choose how you want to sign in: Student, Parent, Teacher, School" />
+            <div id="o-ring" class="ring" style="left: 386px; top: 290px; width: 247px; height: 308px; opacity: 0"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 10 · LANGUAGES (44.0–47.6) ───────────── -->
+  <div id="s-langs" class="scene clip" data-start="44.0" data-duration="3.6" data-track-index="0" style="z-index: 21">
+    <div class="in layer">
+      <div class="bg bg-sky"></div>
+      <span class="hello" style="left: 150px; top: 120px; font-size: 46px">Hello</span>
+      <span class="hello" style="left: 560px; top: 80px; font-size: 40px">Hola</span>
+      <span class="hello" style="left: 960px; top: 140px; font-size: 44px">Bonjour</span>
+      <span class="hello" style="left: 1390px; top: 90px; font-size: 40px">Hallo</span>
+      <span class="hello" style="left: 1620px; top: 250px; font-size: 42px">Ciao</span>
+      <span class="hello" style="left: 110px; top: 330px; font-size: 40px">Olá</span>
+      <span class="hello" style="left: 1560px; top: 470px; font-size: 40px">Merhaba</span>
+      <span class="hello" style="left: 90px; top: 560px; font-size: 42px">Привет</span>
+      <span class="hello" style="left: 1500px; top: 680px; font-size: 42px">你好</span>
+      <span class="hello" style="left: 240px; top: 770px; font-size: 40px">こんにちは</span>
+      <span class="hello" style="left: 650px; top: 820px; font-size: 40px">안녕하세요</span>
+      <span class="hello" style="left: 1080px; top: 800px; font-size: 42px">Xin chào</span>
+      <span class="hello" style="left: 1740px; top: 870px; font-size: 40px">Halo</span>
+      <span class="hello" style="left: 360px; top: 210px; font-size: 38px">Hoi</span>
+      <div class="big">
+        <h2 class="display"><span class="orange">14</span> languages</h2>
+        <p class="sub">right in the browser</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────────── 11 · END CARD (47.4–55) ───────────── -->
+  <div id="s-cta" class="scene clip" data-start="47.4" data-duration="7.6" data-track-index="0" style="z-index: 22">
+    <div class="in layer">
+      <div class="bg bg-meadow"></div>
+      <div class="veil"></div>
+      <img class="logo" src="assets/brand/logo-wordmark.webp" alt="Learnigo" />
+      <h2 class="display">Free for families</h2>
+      <div class="btnwrap"><span id="cta-btn" class="cta">Start free at learnigo.eu</span></div>
+      <p class="small sub">Teachers start free · Schools, ask us for a plan</p>
+    </div>
+  </div>
+
+  <!-- ───────────── the puppy (untimed wrappers; each clip is timed) ───────────── -->
+  <div id="pup-intro" class="pup" style="z-index: 25; left: 1400px; top: 600px; width: 480px; height: 444px; opacity: 0">
+    <video id="pup-hello" class="clip" data-start="5.3" data-duration="4.04" data-track-index="2" src="assets/companion/hello.webm" muted playsinline></video>
+    <video id="pup-idle1" class="clip" data-start="9.34" data-duration="2.56" data-track-index="2" src="assets/companion/idle.webm" muted playsinline></video>
+  </div>
+  <div id="pup-move" class="pup" style="z-index: 25; left: 40px; top: 600px; width: 460px; height: 425px; opacity: 0">
+    <video id="pup-play" class="clip" data-start="31.6" data-duration="5.04" data-track-index="2" src="assets/companion/play.webm" muted playsinline></video>
+  </div>
+  <div id="pup-cta" class="pup" style="z-index: 25; left: 1380px; top: 560px; width: 500px; height: 462px; opacity: 0">
+    <video id="pup-cheer" class="clip" data-start="47.7" data-duration="5.04" data-track-index="2" src="assets/companion/cheer.webm" muted playsinline></video>
+    <video id="pup-idle2" class="clip" data-start="52.74" data-duration="2.26" data-track-index="2" src="assets/companion/idle.webm" muted playsinline></video>
+  </div>
+
+  <!-- ───────────── captions (generated) ───────────── -->
+  <div id="captions" data-composition-id="captions" data-composition-src="compositions/captions.html"
+       data-start="0" data-duration="55" data-track-index="5" data-track-kind="captions"
+       data-width="1920" data-height="1080" style="z-index: 50"></div>
+
+  <!-- ───────────── sound ───────────── -->
+  <audio id="vo" class="clip" data-start="0" data-duration="51.3" data-track-index="6" data-volume="1" src="assets/voice/01-meet-learnigo/vo.wav"></audio>
+  <audio id="music" class="clip" data-start="0" data-duration="55" data-track-index="7" data-volume="0.16" data-fade-in="0.6" data-fade-out="3" src="assets/audio/bed.mp3"></audio>
+</div>
+
+<script>
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const E = "power3.out";
+
+  // Scene entrance: fade the scene's inner layer in (the .clip itself is never tweened).
+  const enter = (id, t, d = 0.45) => tl.fromTo(`#${id} .in`, { opacity: 0 }, { opacity: 1, duration: d, ease: "power1.out" }, t);
+  // Window rise + settle, then a slow push toward a point of interest.
+  const rise = (id, t) => tl.fromTo(`#${id} .window`, { y: 60, scale: 0.96 }, { y: 0, scale: 1, duration: 0.7, ease: E }, t);
+  const push = (sel, t, scale, ox, oy, d = 1.1) =>
+    tl.fromTo(sel, { scale: 1, transformOrigin: `${ox}px ${oy}px` }, { scale, transformOrigin: `${ox}px ${oy}px`, duration: d, ease: "power2.inOut" }, t);
+  const pop = (sel, t, from = 0.6) => tl.fromTo(sel, { opacity: 0, scale: from, y: 16 }, { opacity: 1, scale: 1, y: 0, duration: 0.45, ease: "back.out(1.8)" }, t);
+
+  // 1 · HOOK — line 1 is on screen at frame 0 (thumbnail = hook)
+  tl.fromTo("#h1", { opacity: 1, y: 0 }, { opacity: 1, y: -6, duration: 2, ease: "none" }, 0);
+  tl.fromTo("#h2", { opacity: 0, y: 26 }, { opacity: 1, y: 0, duration: 0.45, ease: E }, 2.05);
+  tl.fromTo("#h3", { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.5, ease: "back.out(2)" }, 3.6);
+  tl.fromTo("#clock-hand", { rotation: 0, svgOrigin: "100 108" }, { rotation: 360, svgOrigin: "100 108", duration: 3.6, ease: "none" }, 0);
+  tl.fromTo("#s-hook .tick", { opacity: 1, scale: 1 }, { opacity: 0.25, scale: 0.9, duration: 0.5, ease: "power1.in" }, 3.6);
+  // paper lifts away to reveal the meadow
+  tl.fromTo("#s-hook .in", { yPercent: 0 }, { yPercent: -105, duration: 0.75, ease: "power3.in" }, 4.85);
+
+  // 2 · INTRO
+  tl.fromTo("#s-intro .logo", { opacity: 0, scale: 0.55, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: 0.7, ease: "back.out(1.7)" }, 5.25);
+  pop("#c-read", 6.0); pop("#c-maths", 6.45); pop("#c-sci", 6.95);
+  tl.fromTo("#s-intro .tag", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 9.6);
+  tl.fromTo("#pup-intro", { opacity: 0, x: 120 }, { opacity: 1, x: 0, duration: 0.6, ease: E }, 5.3);
+  tl.to("#pup-intro", { opacity: 0, duration: 0.3 }, 11.55);
+
+  // 3 · WORLDS — ring travels English → Maths → Science as they are named
+  enter("s-worlds", 11.7); rise("s-worlds", 11.7);
+  push("#s-worlds .zoom", 12.2, 1.18, 640, 470, 1.4);
+  tl.fromTo("#w-ring", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 12.55);
+  tl.to("#w-ring", { x: 336, duration: 0.45, ease: "power2.inOut" }, 13.5);
+  tl.to("#w-ring", { x: 672, duration: 0.45, ease: "power2.inOut" }, 14.45);
+
+  // 4 · ROUNDS
+  enter("s-rounds", 15.9); rise("s-rounds", 15.9);
+  pop("#r-ten", 16.4);
+  push("#s-rounds .zoom", 17.2, 1.2, 320, 450, 1.2);
+  tl.fromTo("#r-ring", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 17.6);
+  pop("#r-aloud", 17.7);
+  tl.fromTo("#r-wave1", { opacity: 0.2 }, { opacity: 1, duration: 0.3, repeat: 5, yoyo: true }, 17.9);
+  tl.fromTo("#r-wave2", { opacity: 0.2 }, { opacity: 1, duration: 0.3, repeat: 5, yoyo: true, delay: 0.15 }, 17.9);
+
+  // 5 · KIND — "It's not a test", then the three promises
+  enter("s-kind", 20.1); rise("s-kind", 20.1);
+  push("#s-kind .zoom", 20.4, 1.5, 640, 390, 1.0);
+  pop("#k1", 20.5); pop("#k2", 21.4); pop("#k3", 22.6);
+
+  // 6 · AI TEACHER — real footage: a question typed, the board draws the answer
+  enter("s-ai", 24.9);
+  tl.fromTo("#ai-win", { opacity: 0, y: 60, scale: 0.96 }, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: E }, 24.9);
+  // start close on the question box, pull back as it is sent, then push into the drawing
+  tl.fromTo("#ai-zoom", { scale: 1.45, transformOrigin: "640px 760px" }, { scale: 1, transformOrigin: "640px 760px", duration: 0.8, ease: "power2.inOut", immediateRender: true }, 27.0);
+  tl.to("#ai-zoom", { scale: 1.32, transformOrigin: "800px 330px", duration: 1.2, ease: "power2.inOut" }, 28.9);
+  pop("#ai-tag", 29.3);
+  tl.to("#ai-win", { opacity: 0, duration: 0.35 }, 31.15);
+  tl.to("#ai-tag", { opacity: 0, duration: 0.35 }, 31.15);
+
+  // 7 · MOVE
+  enter("s-move", 31.3); rise("s-move", 31.3);
+  push("#s-move .zoom", 32.0, 1.28, 832, 456, 1.6);
+  pop("#m-tag", 32.4);
+  tl.fromTo("#pup-move", { opacity: 0, x: -100 }, { opacity: 1, x: 0, duration: 0.5, ease: E }, 31.6);
+  tl.to("#pup-move", { opacity: 0, duration: 0.3 }, 37.1);
+
+  // 8 · PRIVATE
+  enter("s-private", 37.3, 0.35);
+  tl.fromTo("#s-private .card", { scale: 0.9, y: 30 }, { scale: 1, y: 0, duration: 0.5, ease: "back.out(1.5)" }, 37.3);
+  tl.fromTo("#p-lock", { y: -14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: "back.out(2.5)" }, 37.9);
+
+  // 9 · ROLES — ring: Parent → Teacher → School
+  enter("s-roles", 39.9); rise("s-roles", 39.9);
+  push("#s-roles .zoom", 40.2, 1.16, 640, 440, 1.2);
+  tl.fromTo("#o-ring", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 40.1);
+  tl.to("#o-ring", { x: 262, duration: 0.4, ease: "power2.inOut" }, 40.75);
+  tl.to("#o-ring", { x: 524, duration: 0.4, ease: "power2.inOut" }, 41.6);
+
+  // 10 · LANGUAGES
+  enter("s-langs", 44.0, 0.35);
+  tl.fromTo("#s-langs .big", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.55, ease: "back.out(1.6)" }, 44.15);
+  document.querySelectorAll("#s-langs .hello").forEach((el, i) => {
+    tl.fromTo(el, { opacity: 0, scale: 0.6, y: 20 }, { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "back.out(2)" }, 44.1 + i * 0.12);
+    tl.fromTo(el, { y: 0 }, { y: i % 2 ? -14 : 14, duration: 2.4, ease: "sine.inOut" }, 44.6 + i * 0.05);
+  });
+
+  // 11 · END CARD
+  enter("s-cta", 47.4, 0.5);
+  tl.fromTo("#s-cta .logo", { opacity: 0, scale: 0.6 }, { opacity: 1, scale: 1, duration: 0.65, ease: "back.out(1.7)" }, 47.6);
+  tl.fromTo("#s-cta h2", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: E }, 48.3);
+  pop("#cta-btn", 49.0, 0.7);
+  tl.to("#cta-btn", { scale: 1.05, duration: 0.5, ease: "sine.inOut", repeat: 3, yoyo: true }, 50.0);
+  tl.fromTo("#s-cta .small", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 50.6);
+  tl.fromTo("#pup-cta", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 0.6, ease: E }, 47.7);
+
+  window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

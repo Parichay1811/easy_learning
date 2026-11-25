@@ -1,0 +1,403 @@
+<!doctype html>
+<!--
+  M1 · Born curious — mission film (YouTube brand film, LinkedIn page)
+  1920×1080 · 30 fps · 58 s
+  Hand-drawn line art (assets/brand/drawings.js) on paper; Learnigo appears only at the end.
+  Scene times follow timing.json (tools/voice.mjs).
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=1920, height=1080" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+  <!-- drawings:begin (inlined from assets/brand/drawings.js by tools/inline-drawings.mjs; edit that file) -->
+  <script>
+/* Hand-drawn line art for the mission films (paper-and-pencil look).
+ *
+ * Put an element in the page and the library fills it with an SVG drawing:
+ *   <div data-kid="stand" data-skin="2" data-color="sky" data-w="1" data-h="1"></div>
+ *   <div data-draw="plant"></div>
+ *
+ * Every stroke has class "ink" and pathLength="1", so a composition draws it on with
+ *   tl.fromTo(el.querySelectorAll(".ink"), { strokeDashoffset: 1 }, { strokeDashoffset: 0, ... })
+ * Washes (soft colour fills) have class "wash" and fade in after the line.
+ * Deterministic: no randomness, no network. Call LearnigoDrawings.fill() before building the timeline.
+ */
+(function () {
+  const SKIN = ["#f6dcc4", "#f0c9a5", "#d9a77f", "#b07a52", "#7f5638"];
+  const WASH = { sky: "#bfe1f6", leaf: "#bfe3b4", rose: "#f6c9c2", sun: "#ffd98a", lilac: "#d9cff5", peach: "#ffd2b0" };
+  const P = (d, extra = "") => `<path class="ink ${extra}" pathLength="1" d="${d}"/>`;
+  const C = (cx, cy, r, extra = "") => `<circle class="ink ${extra}" pathLength="1" cx="${cx}" cy="${cy}" r="${r}"/>`;
+  const W = (d, color, op = 0.85) => `<path class="wash" fill="${WASH[color] || color}" opacity="${op}" d="${d}"/>`;
+  const WC = (cx, cy, r, color, op = 0.85) => `<circle class="wash" fill="${WASH[color] || color}" opacity="${op}" cx="${cx}" cy="${cy}" r="${r}"/>`;
+
+  // A child, feet at (0,0). pose: stand | up (looking up) | book | jump | wave
+  function kid({ pose = "stand", skin = 1, color = "sky", w = 1, h = 1 } = {}) {
+    const y = (v) => (v * h).toFixed(1);
+    const x = (v) => (v * w).toFixed(1);
+    const lift = pose === "jump" ? -26 : 0;
+    const headY = -205 * h;
+    const body = `M${x(-34)},${y(-165)} Q${x(-46)},${y(-70)} ${x(-30)},${y(-60)} L${x(30)},${y(-60)} Q${x(46)},${y(-70)} ${x(34)},${y(-165)} Q0,${y(-184)} ${x(-34)},${y(-165)} Z`;
+    let legs, arms, extra = "";
+    if (pose === "jump") {
+      legs = P(`M${x(-12)},${y(-60)} L${x(-40)},${y(-6)}`) + P(`M${x(12)},${y(-60)} L${x(40)},${y(-6)}`);
+      arms = P(`M${x(-30)},${y(-150)} L${x(-66)},${y(-235)}`) + P(`M${x(30)},${y(-150)} L${x(66)},${y(-235)}`);
+    } else {
+      legs = P(`M${x(-13)},${y(-60)} L${x(-15)},0`) + P(`M${x(13)},${y(-60)} L${x(15)},0`);
+      if (pose === "book") {
+        arms = P(`M${x(-32)},${y(-150)} Q${x(-50)},${y(-120)} ${x(-34)},${y(-104)}`) + P(`M${x(32)},${y(-150)} Q${x(50)},${y(-120)} ${x(34)},${y(-104)}`);
+        extra = W(`M${x(-42)},${y(-122)} L0,${y(-112)} L${x(42)},${y(-122)} L${x(42)},${y(-92)} L0,${y(-82)} L${x(-42)},${y(-92)} Z`, "#ffffff", 1) +
+          P(`M${x(-42)},${y(-122)} L0,${y(-112)} L${x(42)},${y(-122)} L${x(42)},${y(-92)} L0,${y(-82)} L${x(-42)},${y(-92)} Z M0,${y(-112)} L0,${y(-82)}`, "thin");
+      } else if (pose === "wave") {
+        arms = P(`M${x(-32)},${y(-150)} Q${x(-52)},${y(-110)} ${x(-46)},${y(-82)}`) + P(`M${x(30)},${y(-150)} Q${x(62)},${y(-180)} ${x(58)},${y(-222)}`);
+      } else {
+        arms = P(`M${x(-32)},${y(-150)} Q${x(-52)},${y(-110)} ${x(-46)},${y(-82)}`) + P(`M${x(32)},${y(-150)} Q${x(52)},${y(-110)} ${x(46)},${y(-82)}`);
+      }
+    }
+    const look = pose === "up" ? -9 : pose === "book" ? 5 : 0;
+    const face =
+      `<circle cx="-10" cy="${(headY + look).toFixed(1)}" r="3.2" fill="#2f3e66"/><circle cx="10" cy="${(headY + look).toFixed(1)}" r="3.2" fill="#2f3e66"/>` +
+      P(`M-9,${(headY + 12 + look).toFixed(1)} Q0,${(headY + 19 + look).toFixed(1)} 9,${(headY + 12 + look).toFixed(1)}`, "thin");
+    const hair = P(`M-29,${(headY - 8).toFixed(1)} Q-6,${(headY - 44).toFixed(1)} 29,${(headY - 10).toFixed(1)}`);
+    return `<svg viewBox="-90 -270 180 290" overflow="visible" aria-hidden="true"><g transform="translate(0 ${lift})">
+      ${W(body, color)}${P(body)}${legs}${arms}${extra}
+      <g class="head">${WC(0, headY, 30, SKIN[skin % SKIN.length], 1)}${C(0, headY, 30)}${hair}${face}</g>
+    </g></svg>`;
+  }
+
+  const DRAW = {
+    sky: () =>
+      WC(150, 150, 128, "sky", 0.55) + WC(95, 95, 38, "sun") + C(95, 95, 38) +
+      [0, 45, 90, 135, 180, 225, 270, 315].map((a) => {
+        const r = (a * Math.PI) / 180;
+        return P(`M${(95 + Math.cos(r) * 52).toFixed(1)},${(95 + Math.sin(r) * 52).toFixed(1)} L${(95 + Math.cos(r) * 70).toFixed(1)},${(95 + Math.sin(r) * 70).toFixed(1)}`);
+      }).join("") +
+      W("M140,205 q0,-36 36,-36 q12,-32 48,-20 q32,-4 36,26 q26,6 20,30 Z", "#ffffff", 1) + P("M140,205 q0,-36 36,-36 q12,-32 48,-20 q32,-4 36,26 q26,6 20,30 Z"),
+    plant: () =>
+      WC(240, 62, 22, "sun") + C(240, 62, 22) + P("M240,24 L240,10 M274,62 L288,62 M264,36 L274,26") +
+      W("M108,228 L192,228 L182,286 L118,286 Z", "rose") + P("M108,228 L192,228 L182,286 L118,286 Z") +
+      P("M150,228 C150,190 144,160 150,108") +
+      W("M150,172 C120,162 104,142 110,120 C136,124 149,146 150,172 Z", "leaf") + P("M150,172 C120,162 104,142 110,120 C136,124 149,146 150,172 Z") +
+      W("M150,142 C180,132 196,112 190,90 C164,94 152,116 150,142 Z", "leaf") + P("M150,142 C180,132 196,112 190,90 C164,94 152,116 150,142 Z"),
+    moon: () =>
+      W("M176,64 A86,86 0 1,0 176,236 A64,64 0 1,1 176,64 Z", "#fff1c4", 1) + P("M176,64 A86,86 0 1,0 176,236 A64,64 0 1,1 176,64 Z") +
+      P("M232,92 l0,22 M221,103 l22,0", "thin") + P("M250,190 l0,16 M242,198 l16,0", "thin") + P("M210,250 l0,14 M203,257 l14,0", "thin"),
+    book: () =>
+      P("M118,80 Q150,58 182,80", "thin") + P("M102,56 Q150,22 198,56", "thin") + P("M88,32 Q150,-12 212,32", "thin") +
+      W("M50,206 Q150,176 150,206 Q150,176 250,206 L250,118 Q150,88 150,118 Q150,88 50,118 Z", "#ffffff", 1) +
+      P("M50,206 Q150,176 150,206 Q150,176 250,206 L250,118 Q150,88 150,118 Q150,88 50,118 Z") + P("M150,118 L150,206") +
+      P("M74,134 L128,124 M74,152 L128,142 M74,170 L120,161 M172,124 L226,134 M172,142 L226,152 M172,161 L218,170", "thin"),
+    clock: () =>
+      WC(150, 155, 86, "peach", 0.8) + C(150, 155, 86) + P("M150,155 L150,104") + P("M150,155 L190,174") +
+      P("M150,46 A110,110 0 1,1 56,214", "thin") + P("M56,214 L50,192 M56,214 L76,206", "thin"),
+    star: () =>
+      W("M150,30 L166,78 L216,78 L176,108 L191,156 L150,127 L109,156 L124,108 L84,78 L134,78 Z", "sun") +
+      P("M150,30 L166,78 L216,78 L176,108 L191,156 L150,127 L109,156 L124,108 L84,78 L134,78 Z"),
+    water: () =>
+      W("M114,130 L126,262 L174,262 L186,130 Q150,140 114,130 Z", "sky") +
+      P("M108,90 L124,264 L176,264 L192,90") + P("M114,132 Q150,144 186,132", "thin") +
+      W("M150,22 C128,54 128,72 150,78 C172,72 172,54 150,22 Z", "sky") + P("M150,22 C128,54 128,72 150,78 C172,72 172,54 150,22 Z"),
+    kite: () =>
+      W("M150,36 L204,108 L150,196 L96,108 Z", "rose") + P("M150,36 L204,108 L150,196 L96,108 Z") + P("M150,36 L150,196 M96,108 L204,108", "thin") +
+      P("M150,196 C126,224 176,244 140,286", "thin") + P("M140,222 l-12,-8 l4,16 Z M154,252 l12,-8 l-2,16 Z", "thin"),
+    house: () =>
+      W("M76,172 L150,110 L224,172 L224,262 L76,262 Z", "peach", 0.7) + P("M76,172 L150,110 L224,172 L224,262 L76,262 Z") +
+      W("M128,182 h44 v40 h-44 Z", "sun", 1) + P("M128,182 h44 v40 h-44 Z M150,182 v40 M128,202 h44", "thin") +
+      P("M98,262 v-44 h26 v44", "thin") + P("M190,128 v-26 h18 v40", "thin"),
+    globe: () =>
+      WC(150, 150, 96, "sky", 0.7) + C(150, 150, 96) +
+      `<ellipse class="ink thin" pathLength="1" cx="150" cy="150" rx="44" ry="96"/>` +
+      P("M54,150 L246,150 M68,104 Q150,124 232,104 M68,196 Q150,176 232,196", "thin") +
+      W("M110,92 q20,-14 36,4 q10,22 -14,30 q-20,4 -22,-34 Z M168,170 q24,-6 30,14 q-4,24 -26,22 q-14,-14 -4,-36 Z", "leaf", 0.9),
+    hill: () =>
+      W("M0,300 C120,200 330,180 600,230 C800,268 960,210 1200,240 L1200,320 L0,320 Z", "leaf", 0.8) +
+      P("M0,300 C120,200 330,180 600,230 C800,268 960,210 1200,240"),
+    door: () =>
+      P("M20,300 L580,300") + P("M60,300 L60,40 L540,40 L540,300", "thin") +
+      P("M60,100 L540,100 M60,160 L540,160 M60,220 L540,220 M180,40 L180,100 M360,40 L360,100 M120,100 L120,160 M300,100 L300,160 M480,100 L480,160 M200,160 L200,220 M420,160 L420,220", "thin") +
+      W("M250,300 L250,130 L350,130 L350,300 Z", "#fff6e2", 1) + P("M250,300 L250,130 L350,130 L350,300 Z", "thick"),
+    sofa: () =>
+      W("M40,190 Q40,150 80,150 L320,150 Q360,150 360,190 L360,250 L40,250 Z", "lilac") +
+      P("M40,190 Q40,150 80,150 L320,150 Q360,150 360,190 L360,250 L40,250 Z") +
+      P("M40,200 Q20,200 20,220 L20,262 L380,262 L380,220 Q380,200 360,200", "thin") + P("M60,262 v20 M340,262 v20", "thin"),
+    lamp: () =>
+      WC(110, 120, 120, "sun", 0.35) + W("M70,60 L150,60 L170,120 L50,120 Z", "sun", 1) +
+      P("M70,60 L150,60 L170,120 L50,120 Z") + P("M110,120 L110,300 M80,300 L140,300"),
+    window: () =>
+      W("M30,30 h220 v260 h-220 Z", "#2a3560", 1) + P("M30,30 h220 v260 h-220 Z M140,30 v260 M30,160 h220", "thin") +
+      W("M196,64 A30,30 0 1,0 196,124 A22,22 0 1,1 196,64 Z", "#fff1c4", 1) +
+      `<circle cx="70" cy="80" r="3" fill="#fff1c4"/><circle cx="100" cy="200" r="2.5" fill="#fff1c4"/><circle cx="210" cy="230" r="3" fill="#fff1c4"/>`,
+    sprout: () =>
+      W("M110,230 L190,230 L182,286 L118,286 Z", "rose") + P("M110,230 L190,230 L182,286 L118,286 Z") +
+      P("M150,230 C150,214 150,204 150,190", "s1") +
+      W("M150,206 C134,200 126,190 130,178 C144,180 150,192 150,206 Z", "leaf") + P("M150,206 C134,200 126,190 130,178 C144,180 150,192 150,206 Z", "s1") +
+      P("M150,190 C150,160 152,130 150,100", "s2") +
+      W("M150,150 C176,142 188,124 182,104 C160,108 152,128 150,150 Z", "leaf") + P("M150,150 C176,142 188,124 182,104 C160,108 152,128 150,150 Z", "s2") +
+      P("M150,100 C150,80 150,64 150,50", "s3") +
+      W("M150,120 C124,112 112,94 118,74 C140,78 150,98 150,120 Z", "leaf") + P("M150,120 C124,112 112,94 118,74 C140,78 150,98 150,120 Z", "s3") +
+      W("M150,50 c-14,-14 -14,-30 0,-34 c14,4 14,20 0,34 Z", "rose") + P("M150,50 c-14,-14 -14,-30 0,-34 c14,4 14,20 0,34 Z", "s3"),
+  };
+  const VIEW = { hill: "0 150 1200 170", door: "0 0 600 320", sofa: "0 120 400 180", lamp: "0 0 230 310", window: "0 0 280 320" };
+
+  function fill(root = document) {
+    root.querySelectorAll("[data-kid]").forEach((el) => {
+      el.innerHTML = kid({
+        pose: el.dataset.kid,
+        skin: Number(el.dataset.skin || 1),
+        color: el.dataset.color || "sky",
+        w: Number(el.dataset.w || 1),
+        h: Number(el.dataset.h || 1),
+      });
+    });
+    root.querySelectorAll("[data-draw]").forEach((el) => {
+      const name = el.dataset.draw;
+      el.innerHTML = `<svg viewBox="${VIEW[name] || "0 0 300 300"}" overflow="visible" aria-hidden="true">${DRAW[name]()}</svg>`;
+    });
+  }
+  window.LearnigoDrawings = { fill, kid };
+})();
+
+  </script>
+  <!-- drawings:end -->
+  <link rel="stylesheet" href="assets/brand/video.css" />
+  <style>
+    html, body { width: 1920px; height: 1080px; }
+    .ink { stroke-dasharray: 1; }
+    .art { position: absolute; }
+    .art svg { width: 100%; height: 100%; display: block; overflow: visible; }
+    .q { position: absolute; font-family: "Caveat", cursive; font-weight: 700; color: var(--pencil); font-size: 96px; }
+    .tint { position: absolute; inset: 0; }
+    .note { position: absolute; width: 230px; padding: 18px 10px 22px; background: #ffe680; text-align: center;
+      font-family: "Caveat", cursive; font-weight: 700; font-size: 64px; color: #7a3b00; box-shadow: 0 10px 18px rgba(80, 60, 0, 0.22); }
+    .title { position: absolute; left: 0; right: 0; text-align: center; }
+    .dusk .ink { stroke: #fdf3dc; }
+    .star { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: #fff1c4; box-shadow: 0 0 22px 6px rgba(255, 241, 196, 0.6); }
+  </style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="58" data-width="1920" data-height="1080">
+
+  <!-- paper, all film long -->
+  <div id="paper" class="clip" data-start="0" data-duration="58" data-track-index="0" style="position: absolute; inset: 0; z-index: 0">
+    <div class="bg bg-paper"></div><div class="grain"></div>
+  </div>
+
+  <!-- 1–3 · CURIOUS → ASKS → STOP (0–14.1) -->
+  <div id="s-open" class="scene clip" data-start="0" data-duration="14.1" data-track-index="1" style="z-index: 10">
+    <div class="in layer">
+      <div id="o-title" class="title hand" style="top: 120px; font-size: 128px">Every child is born curious.</div>
+      <div id="o-kid" class="art" data-kid="up" data-skin="2" data-color="sky" style="left: 815px; top: 400px; width: 290px; height: 467px"></div>
+      <span class="q" id="q1" style="left: 800px; top: 420px">?</span>
+      <span class="q" id="q2" style="left: 1080px; top: 400px; font-size: 76px">?</span>
+      <span class="q" id="q3" style="left: 930px; top: 380px; font-size: 110px">?</span>
+      <span class="q" id="q4" style="left: 1010px; top: 450px; font-size: 64px">?</span>
+      <div id="p-sky" class="art" data-draw="sky" style="left: 690px; top: 300px; width: 330px; height: 330px"></div>
+      <div id="p-plant" class="art" data-draw="plant" style="left: 1080px; top: 300px; width: 330px; height: 330px"></div>
+      <div id="p-moon" class="art" data-draw="moon" style="left: 1470px; top: 300px; width: 330px; height: 330px"></div>
+      <div id="o-grey" class="tint" style="background: rgba(120, 120, 130, 0.0)"></div>
+    </div>
+  </div>
+
+  <!-- 4 · ONE KIND OF MIND (13.9–19.7) -->
+  <div id="s-door" class="scene clip" data-start="13.9" data-duration="5.8" data-track-index="1" style="z-index: 11">
+    <div class="in layer">
+      <div class="bg bg-paper"></div><div class="grain"></div>
+      <div id="d-wall" class="art" data-draw="door" style="left: 510px; top: 260px; width: 900px; height: 480px"></div>
+      <div id="d-label" class="title hand" style="top: 150px; font-size: 84px">one way in</div>
+      <div id="d-k1" class="art" data-kid="stand" data-skin="0" data-color="rose" data-w="1.55" style="left: 110px; top: 420px; width: 260px; height: 354px"></div>
+      <div id="d-k2" class="art" data-kid="stand" data-skin="3" data-color="leaf" data-h="1.25" style="left: 330px; top: 330px; width: 220px; height: 444px"></div>
+      <div id="d-k3" class="art" data-kid="stand" data-skin="1" data-color="sun" data-h="0.72" style="left: 1440px; top: 520px; width: 200px; height: 255px"></div>
+      <div id="d-k4" class="art" data-kid="wave" data-skin="4" data-color="lilac" style="left: 1620px; top: 420px; width: 220px; height: 354px"></div>
+    </div>
+  </div>
+
+  <!-- 5–6 · LABELS → WHAT IF (19.5–29.5) -->
+  <div id="s-labels" class="scene clip" data-start="19.5" data-duration="10" data-track-index="1" style="z-index: 12">
+    <div class="in layer">
+      <div class="bg bg-paper"></div><div class="grain"></div>
+      <div id="l-warm" class="tint" style="background: radial-gradient(90% 80% at 50% 70%, rgba(255, 217, 138, 0.55) 0%, rgba(255, 217, 138, 0) 70%); opacity: 0"></div>
+      <div id="l-k1" class="art" data-kid="book" data-skin="1" data-color="sky" style="left: 520px; top: 330px; width: 330px; height: 533px"></div>
+      <div id="l-k2" class="art" data-kid="jump" data-skin="3" data-color="rose" style="left: 1070px; top: 330px; width: 330px; height: 533px"></div>
+      <div id="n-behind" class="note" style="left: 440px; top: 380px">behind</div>
+      <div id="n-difficult" class="note" style="left: 1250px; top: 450px">difficult</div>
+      <div id="l-whatif" class="title hand" style="top: 110px; font-size: 104px">What if learning met them where they are?</div>
+    </div>
+  </div>
+
+  <!-- 7 · THREE WAYS (29.3–37.7) -->
+  <div id="s-ways" class="scene clip" data-start="29.3" data-duration="8.4" data-track-index="1" style="z-index: 13">
+    <div class="in layer">
+      <div class="bg bg-paper"></div><div class="grain"></div>
+      <div id="w-book" class="art" data-draw="book" style="left: 170px; top: 250px; width: 420px; height: 420px"></div>
+      <div id="w-clock" class="art" data-draw="clock" style="left: 750px; top: 250px; width: 420px; height: 420px"></div>
+      <div id="w-star" class="art" data-draw="star" style="left: 1440px; top: 180px; width: 260px; height: 260px"></div>
+      <div id="w-kid" class="art" data-kid="jump" data-skin="0" data-color="leaf" style="left: 1380px; top: 400px; width: 300px; height: 460px"></div>
+    </div>
+  </div>
+
+  <!-- 8 · BASIC & EASY (37.5–42.6) -->
+  <div id="s-basic" class="scene clip" data-start="37.5" data-duration="5.1" data-track-index="1" style="z-index: 14">
+    <div class="in layer">
+      <div class="bg bg-paper"></div><div class="grain"></div>
+      <div id="b-water" class="art" data-draw="water" style="left: 430px; top: 190px; width: 400px; height: 400px"></div>
+      <div id="b-kite" class="art" data-draw="kite" style="left: 1090px; top: 170px; width: 400px; height: 400px"></div>
+      <div id="b-basic" class="hand" style="position: absolute; left: 430px; width: 400px; top: 630px; text-align: center; font-size: 120px">basic</div>
+      <div id="b-easy" class="hand" style="position: absolute; left: 1090px; width: 400px; top: 630px; text-align: center; font-size: 120px">easy</div>
+    </div>
+  </div>
+
+  <!-- 9 · EVERY CHILD, HOME, LANGUAGE (42.4–46.9) -->
+  <div id="s-every" class="scene clip" data-start="42.4" data-duration="4.5" data-track-index="1" style="z-index: 15">
+    <div class="in layer">
+      <div class="bg bg-paper"></div><div class="grain"></div>
+      <div id="e-house" class="art" data-draw="house" style="left: 180px; top: 280px; width: 380px; height: 380px"></div>
+      <div id="e-globe" class="art" data-draw="globe" style="left: 1360px; top: 280px; width: 380px; height: 380px"></div>
+      <div id="e-k1" class="art" data-kid="wave" data-skin="2" data-color="sun" style="left: 700px; top: 380px; width: 200px; height: 330px"></div>
+      <div id="e-k2" class="art" data-kid="stand" data-skin="4" data-color="sky" data-h="0.85" style="left: 860px; top: 430px; width: 200px; height: 280px"></div>
+      <div id="e-k3" class="art" data-kid="wave" data-skin="0" data-color="rose" style="left: 1020px; top: 380px; width: 200px; height: 330px"></div>
+      <div id="e-t1" class="title hand" style="top: 150px; font-size: 100px">every child</div>
+      <div id="e-t2" class="hand" style="position: absolute; left: 180px; width: 380px; top: 700px; text-align: center; font-size: 84px">every home</div>
+      <div id="e-t3" class="hand" style="position: absolute; left: 1320px; width: 460px; top: 700px; text-align: center; font-size: 84px">every language</div>
+    </div>
+  </div>
+
+  <!-- 10 · THE FUTURE (46.7–51.8) -->
+  <div id="s-future" class="scene clip dusk" data-start="46.7" data-duration="5.1" data-track-index="1" style="z-index: 16">
+    <div class="in layer">
+      <div class="bg bg-dusk"></div><div class="grain" style="opacity: 0.06"></div>
+      <span class="star" id="st1" style="left: 520px; top: 150px"></span>
+      <span class="star" id="st2" style="left: 820px; top: 90px"></span>
+      <span class="star" id="st3" style="left: 1100px; top: 170px"></span>
+      <span class="star" id="st4" style="left: 1380px; top: 110px"></span>
+      <span class="star" id="st5" style="left: 1620px; top: 200px"></span>
+      <span class="q" id="fq1" style="left: 520px; top: 560px; color: #fdf3dc">?</span>
+      <span class="q" id="fq2" style="left: 820px; top: 540px; color: #fdf3dc">?</span>
+      <span class="q" id="fq3" style="left: 1100px; top: 560px; color: #fdf3dc">?</span>
+      <span class="q" id="fq4" style="left: 1380px; top: 540px; color: #fdf3dc">?</span>
+      <span class="q" id="fq5" style="left: 1620px; top: 560px; color: #fdf3dc">?</span>
+      <div id="f-hill" class="art" data-draw="hill" style="left: 0; top: 760px; width: 1920px; height: 272px"></div>
+      <div class="art" data-kid="up" data-skin="1" data-color="sky" style="left: 470px; top: 560px; width: 150px; height: 242px"></div>
+      <div class="art" data-kid="up" data-skin="3" data-color="rose" data-h="0.85" style="left: 770px; top: 600px; width: 150px; height: 206px"></div>
+      <div class="art" data-kid="up" data-skin="0" data-color="sun" style="left: 1050px; top: 575px; width: 150px; height: 242px"></div>
+      <div class="art" data-kid="up" data-skin="4" data-color="leaf" data-h="0.9" style="left: 1330px; top: 590px; width: 150px; height: 220px"></div>
+      <div class="art" data-kid="up" data-skin="2" data-color="lilac" style="left: 1580px; top: 590px; width: 150px; height: 242px"></div>
+    </div>
+  </div>
+
+  <!-- 11 · SIGN-OFF (51.6–58) -->
+  <div id="s-sign" class="scene clip" data-start="51.6" data-duration="6.4" data-track-index="1" style="z-index: 17">
+    <div class="in layer">
+      <div class="bg bg-paper"></div><div class="grain"></div>
+      <div class="signoff" style="top: 250px">
+        <img id="sg-logo" src="assets/brand/logo-wordmark.webp" alt="Learnigo" style="width: 640px" />
+        <div id="sg-line" class="line" style="font-size: 56px; margin-top: 34px">Learning for every kind of mind</div>
+        <div id="sg-url" class="url" style="font-size: 40px; margin-top: 22px">learnigo.eu</div>
+      </div>
+    </div>
+  </div>
+  <div id="pup-sign" class="pup" style="z-index: 25; left: 1430px; top: 640px; width: 400px; height: 370px; opacity: 0">
+    <video id="pup-tilt" class="clip" data-start="52.2" data-duration="3.04" data-track-index="2" src="assets/companion/tilt.webm" muted playsinline></video>
+    <video id="pup-idle" class="clip" data-start="55.24" data-duration="2.76" data-track-index="2" src="assets/companion/idle.webm" muted playsinline></video>
+  </div>
+
+  <div id="captions" data-composition-id="captions" data-composition-src="compositions/captions.html"
+       data-start="0" data-duration="58" data-track-index="5" data-track-kind="captions"
+       data-width="1920" data-height="1080" style="z-index: 50"></div>
+
+  <audio id="vo" class="clip" data-start="0" data-duration="54.5" data-track-index="6" data-volume="1" src="assets/voice/m1-born-curious/vo.wav"></audio>
+  <audio id="music" class="clip" data-start="0" data-duration="58" data-track-index="7" data-volume="0.2" data-fade-in="1.5" data-fade-out="4" src="assets/audio/bed-gentle.mp3"></audio>
+</div>
+
+<script>
+  LearnigoDrawings.fill();
+  window.__timelines = window.__timelines || {};
+  const tl = gsap.timeline({ paused: true });
+  const E = "power2.out";
+  const $ = (s) => document.querySelector(s);
+  const inks = (s) => document.querySelectorAll(s + " .ink");
+  const washes = (s) => document.querySelectorAll(s + " .wash");
+  // draw an illustration's lines, then let its colour wash in
+  const draw = (s, t, d = 1.0, washAt = d * 0.7) => {
+    tl.fromTo(inks(s), { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d, ease: "power1.inOut", stagger: Math.min(0.06, d / 20) }, t);
+    const w = washes(s);
+    if (w.length) tl.fromTo(w, { opacity: 0 }, { opacity: (i, el) => Number(el.getAttribute("opacity") || 1), duration: 0.6, ease: "power1.out" }, t + washAt);
+  };
+  const enter = (id, t, d = 0.6) => tl.fromTo(`#${id} .in`, { opacity: 0 }, { opacity: 1, duration: d, ease: "power1.out" }, t);
+  const write = (s, t, d = 0.7) => tl.fromTo(s, { clipPath: "inset(0 100% 0 0)", opacity: 1 }, { clipPath: "inset(0 0% 0 0)", opacity: 1, duration: d, ease: "power1.inOut" }, t);
+
+  // 1 · CURIOUS — the line is on the page at frame 0; the child draws in
+  tl.fromTo("#o-title", { opacity: 1 }, { opacity: 1, duration: 0.1 }, 0);
+  draw("#o-kid", 0.15, 1.1);
+  ["#q1", "#q2", "#q3", "#q4"].forEach((q, i) => {
+    tl.fromTo(q, { opacity: 0, y: 40, rotation: -8 + i * 5 }, { opacity: 1, y: -60 - i * 18, rotation: 4 - i * 3, duration: 1.4, ease: E }, 0.9 + i * 0.35);
+  });
+  tl.to("#o-title", { opacity: 0, y: -20, duration: 0.5 }, 3.3);
+
+  // 2 · ASKS — the child steps aside; sky, plant, moon draw as they're named
+  tl.to("#o-kid", { x: -620, duration: 0.8, ease: "power2.inOut" }, 3.5);
+  ["#q1", "#q2", "#q3", "#q4"].forEach((q, i) => tl.to(q, { x: -620, duration: 0.8, ease: "power2.inOut" }, 3.5));
+  draw("#p-sky", 4.2, 1.1); draw("#p-plant", 5.8, 1.1); draw("#p-moon", 7.4, 1.0);
+
+  // 3 · STOP — the questions fall, the colour drains, the head drops
+  ["#q1", "#q2", "#q3", "#q4"].forEach((q, i) => tl.to(q, { y: 320, opacity: 0, rotation: 30, duration: 1.2, ease: "power2.in" }, 10.3 + i * 0.12));
+  tl.to(["#p-sky", "#p-plant", "#p-moon"], { opacity: 0.3, duration: 1.2 }, 10.6);
+  tl.to("#o-grey", { backgroundColor: "rgba(120, 120, 130, 0.22)", duration: 1.4 }, 10.5);
+  tl.fromTo("#o-kid .head", { rotation: 0, svgOrigin: "0 -178" }, { rotation: 16, svgOrigin: "0 -178", duration: 1.0, ease: "power2.inOut" }, 11.0);
+
+  // 4 · ONE KIND OF MIND
+  enter("s-door", 13.9);
+  draw("#d-wall", 14.1, 1.3);
+  draw("#d-k1", 14.5, 0.9); draw("#d-k2", 14.8, 0.9); draw("#d-k3", 15.1, 0.9); draw("#d-k4", 15.4, 0.9);
+  write("#d-label", 16.9, 0.8);
+
+  // 5 · LABELS — sticky notes land on two children
+  enter("s-labels", 19.5);
+  draw("#l-k1", 19.7, 1.0); draw("#l-k2", 20.1, 1.0);
+  tl.fromTo("#n-behind", { opacity: 0, scale: 1.5, rotation: -14 }, { opacity: 1, scale: 1, rotation: -6, duration: 0.35, ease: "power3.in" }, 21.9);
+  tl.fromTo("#n-difficult", { opacity: 0, scale: 1.5, rotation: 14 }, { opacity: 1, scale: 1, rotation: 7, duration: 0.35, ease: "power3.in" }, 24.8);
+  // 6 · WHAT IF — the labels fall away and the light warms
+  tl.to("#n-behind", { y: 520, rotation: -40, opacity: 0, duration: 1.2, ease: "power2.in" }, 26.5);
+  tl.to("#n-difficult", { y: 520, rotation: 50, opacity: 0, duration: 1.2, ease: "power2.in" }, 26.7);
+  tl.fromTo("#l-warm", { opacity: 0 }, { opacity: 1, duration: 1.5, ease: "power1.out" }, 26.6);
+  write("#l-whatif", 26.7, 1.2);
+  tl.fromTo("#l-k2", { y: 0 }, { y: -24, duration: 0.4, ease: "power2.out", yoyo: true, repeat: 3 }, 27.6);
+
+  // 7 · THREE WAYS
+  enter("s-ways", 29.3);
+  draw("#w-book", 29.6, 1.2);
+  draw("#w-clock", 32.1, 1.2);
+  draw("#w-kid", 34.6, 0.9); draw("#w-star", 35.1, 0.8);
+  tl.fromTo("#w-kid", { y: 0 }, { y: -30, duration: 0.35, ease: "power2.out", yoyo: true, repeat: 3 }, 35.6);
+
+  // 8 · BASIC & EASY
+  enter("s-basic", 37.5);
+  draw("#b-water", 37.8, 1.1); write("#b-basic", 38.5, 0.8);
+  draw("#b-kite", 40.0, 1.1); write("#b-easy", 40.5, 0.7);
+  tl.fromTo("#b-kite", { rotation: -4, y: 0 }, { rotation: 5, y: -18, duration: 1.0, ease: "sine.inOut", yoyo: true, repeat: 1 }, 40.8);
+
+  // 9 · EVERY CHILD, HOME, LANGUAGE
+  enter("s-every", 42.4, 0.5);
+  draw("#e-k1", 42.5, 0.7); draw("#e-k2", 42.6, 0.7); draw("#e-k3", 42.7, 0.7); write("#e-t1", 42.6, 0.7);
+  draw("#e-house", 43.6, 0.9); write("#e-t2", 43.9, 0.7);
+  draw("#e-globe", 44.8, 0.9); write("#e-t3", 45.1, 0.8);
+
+  // 10 · THE FUTURE — questions rise and become stars
+  enter("s-future", 46.7, 0.8);
+  ["#fq1", "#fq2", "#fq3", "#fq4", "#fq5"].forEach((q, i) => {
+    tl.fromTo(q, { opacity: 0, y: 0 }, { opacity: 1, y: -120, duration: 0.8, ease: E }, 47.2 + i * 0.18);
+    tl.to(q, { y: -400, opacity: 0, duration: 1.4, ease: "power1.in" }, 48.4 + i * 0.18);
+  });
+  ["#st1", "#st2", "#st3", "#st4", "#st5"].forEach((s, i) =>
+    tl.fromTo(s, { opacity: 0, scale: 0.2 }, { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(2)" }, 49.3 + i * 0.18));
+
+  // 11 · SIGN-OFF — quiet: logo, one line, the address
+  enter("s-sign", 51.6, 0.8);
+  tl.fromTo("#sg-logo", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9, ease: E }, 51.9);
+  tl.fromTo("#sg-line", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 52.9);
+  tl.fromTo("#sg-url", { opacity: 0 }, { opacity: 1, duration: 0.8 }, 53.8);
+  tl.fromTo("#pup-sign", { opacity: 0 }, { opacity: 1, duration: 0.6 }, 52.2);
+
+  window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
