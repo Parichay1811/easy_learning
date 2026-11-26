@@ -2,6 +2,7 @@ import { useTranslation, Trans } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import { FaGlobe, FaShieldAlt, FaFileContract, FaTags, FaBrain, FaGift, FaUsers, FaQuestionCircle, FaEnvelope } from "react-icons/fa";
 import { useSeo } from "../../seo/useSeo";
+import PageLink from "../SEO/PageLink";
 import { COMPANY } from "../../config/company";
 import EmailAddress from "../EmailAddress";
 import styles from "./Footer.module.css";
@@ -52,22 +53,22 @@ const Footer = () => {
           </Link>
         </nav>
         <nav className={styles.links}>
-          <Link to="/learning-support-by-country" className={styles.link}>
+          <PageLink to="/learning-support-by-country" className={styles.link}>
             <FaGlobe className={styles.icon} />
             {t("footer.learningSupport", { defaultValue: "Learning Support" })}
-          </Link>
-          <Link to="/pricing" className={styles.link}>
+          </PageLink>
+          <PageLink to="/pricing" className={styles.link}>
             <FaTags className={styles.icon} />
             {t("footer.pricing", { defaultValue: "Plans" })}
-          </Link>
-          <Link to="/policy" className={styles.link}>
+          </PageLink>
+          <PageLink to="/policy" className={styles.link}>
             <FaShieldAlt className={styles.icon} />
             {t("navbar.policy", { defaultValue: "Policy" })}
-          </Link>
-          <Link to="/terms-and-conditions" className={styles.link}>
+          </PageLink>
+          <PageLink to="/terms-and-conditions" className={styles.link}>
             <FaFileContract className={styles.icon} />
             {t("navbar.terms", { defaultValue: "T & C" })}
-          </Link>
+          </PageLink>
         </nav>
 
         <p className={styles.copyright}>

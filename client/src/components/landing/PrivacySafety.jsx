@@ -1,9 +1,9 @@
 import { useId } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaShieldAlt, FaMicrophoneSlash, FaEyeSlash, FaHeart, FaFileDownload, FaUserShield, FaVideoSlash, FaArrowRight } from "react-icons/fa";
 import shell from "./Landing.module.css";
 import styles from "./PrivacySafety.module.css";
+import PageLink from "../SEO/PageLink";
 
 // Plain-language points that are true in this codebase (see the report /
 // docs/learning/README.md "Privacy and safety"); English defaults of
@@ -76,12 +76,12 @@ export default function PrivacySafety() {
       </ul>
 
       <div className={styles.foot}>
-        <Link to="/policy" className={shell.ghost} data-sound="forward">
+        <PageLink to="/policy" className={shell.ghost} data-sound="forward">
           <FaShieldAlt aria-hidden="true" /> {t("landing.privacy.policy", "Read the full privacy policy")}
-        </Link>
-        <Link to="/" className={shell.primary} data-sound="forward">
+        </PageLink>
+        <PageLink to="/" className={shell.primary} data-sound="forward">
           {t("landing.privacy.start", "Get started")} <FaArrowRight aria-hidden="true" />
-        </Link>
+        </PageLink>
       </div>
     </section>
   );
