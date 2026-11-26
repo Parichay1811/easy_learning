@@ -79,13 +79,14 @@ const AboutUs = () => {
     </ul>
   );
 
-  // Who makes Learnigo (config/company.js), how to write to us, and the small print.
+  // Who supports Learnigo (config/company.js), how to write to us, and the small print.
+  // This is the only place on the site that names the company.
   const team = (
     <>
       <p className={`${s.p} ${s.teamText}`}>
         <Trans
-          i18nKey="aboutUs.madeBy.text"
-          defaults="Learnigo is designed and built by <co>{{company}}</co>."
+          i18nKey="aboutUs.supportedBy.text"
+          defaults="Supported by <co>{{company}}</co>"
           values={{ company: COMPANY.name }}
           components={{ co: <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={s.link} /> }}
         />
@@ -127,7 +128,7 @@ const AboutUs = () => {
           { id: "story", label: t("aboutUs.tabs.story", "Story"), icon: <FaBookOpen />, heading: t("aboutUs.badge"), content: story },
           { id: "worlds", label: t("aboutUs.tabs.worlds", "Worlds"), icon: <FaGlobeAmericas />, heading: t("aboutUs.worldsTitle"), content: worldTiles },
           { id: "values", label: t("aboutUs.tabs.values", "Values"), icon: <FaHeart />, heading: t("aboutUs.valuesTitle"), content: valueRows },
-          { id: "team", label: t("aboutUs.tabs.team", "Team"), icon: <FaUsers />, heading: t("aboutUs.madeBy.title", "Who makes Learnigo"), content: team },
+          { id: "team", label: t("aboutUs.tabs.team", "Team"), icon: <FaUsers />, heading: t("aboutUs.supportedBy.title", "Who supports Learnigo"), content: team },
         ]}
       />
     </>

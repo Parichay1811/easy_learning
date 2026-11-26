@@ -5,10 +5,6 @@ import styles from "./PrivacyPolicy.module.css";
 
 const sections = [
   {
-    title: "Who provides Learnigo",
-    text: <>Learnigo is a product of {COMPANY.name} (<a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.link}>{COMPANY.site}</a>), which provides and runs the service and looks after the personal information described here.</>,
-  },
-  {
     title: "What information we collect",
     text: "To create an account and run Learnigo, we collect basic profile information (name, email, role), the learning activity needed to track progress (XP, levels, streaks, round results, achievement badges) and, for organizations, batch and student management data.",
   },

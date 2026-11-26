@@ -1,5 +1,6 @@
-// Who makes Learnigo, and how to reach them. One place, used by the footer, Contact
-// Us, About Us, the policy pages, the entry page and the structured data for search.
+// The company that supports Learnigo, and the addresses people write to. The name is
+// shown only on About Us ("Supported by ..."); the footer, Contact Us, the policy pages
+// and the structured data for search use just the email addresses.
 export const COMPANY = {
   name: "Futuresight Analytics Limited",
   shortName: "Futuresight Analytics",
@@ -12,18 +13,5 @@ export const COMPANY = {
     solutions: "solutions@futuresightanalytics.eu",
   },
 };
-
-/** schema.org description of the company (for structured data). */
-export const companyOrganization = () => ({
-  "@type": "Organization",
-  "@id": `${COMPANY.url}#organization`,
-  name: COMPANY.name,
-  url: COMPANY.url,
-  email: COMPANY.emails.info,
-  contactPoint: [
-    { "@type": "ContactPoint", contactType: "customer support", email: COMPANY.emails.info, availableLanguage: ["en"] },
-    { "@type": "ContactPoint", contactType: "sales", email: COMPANY.emails.solutions, availableLanguage: ["en"] },
-  ],
-});
 
 export default COMPANY;

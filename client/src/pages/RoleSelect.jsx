@@ -14,7 +14,6 @@ import { TeamEmblem } from "../components/Entry/RoleEmblems";
 import { ROLE_THEME, roleVars } from "../components/Entry/roles";
 import { passDoor } from "../components/Entry/door";
 import { useDepth, tiltHandlers } from "../components/Entry/useDepth";
-import { COMPANY } from "../config/company";
 import { afterSplash } from "../components/Entry/splashSignal";
 import { sfx, haptic } from "../utils/sounds";
 import styles from "./RoleSelect.module.css";
@@ -264,12 +263,6 @@ const RoleSelect = () => {
               <span className={styles.teamSub}> · {t("roleSelect.roles.teamSub", "Super admin")}</span>
             </span>
           </button>
-          <p className={styles.copyright}>
-            {/* Learnigo is a Futuresight Analytics product: the credit opens the company's site. */}
-            <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.copyrightLink}>
-              {t("roleSelect.copyright", { year: new Date().getFullYear(), defaultValue: "A product by © {{year}} Futuresight Analytics Limited" })}
-            </a>
-          </p>
         </FramerMotion.motion.footer>
       </div>
     </main>
