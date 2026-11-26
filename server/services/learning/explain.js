@@ -24,8 +24,8 @@ function buildExplain(doc, { skill = null, skillName = '', misconception = '', l
   let source = null
   let textLang = 'en'
   if (doc) {
-    const tr = lang && lang !== 'en' ? applyQuestionTranslation({ ...doc }, lang) : { ...doc, lang: 'en' }
-    if (clean(tr.worked_example)) { text = clean(tr.worked_example); source = 'worked_example'; textLang = tr.worked_example === doc.worked_example ? 'en' : tr.lang }
+    const tr = applyQuestionTranslation(JSON.parse(JSON.stringify(doc)), lang && lang !== 'en' ? lang : 'en')
+    if (clean(tr.worked_example)) { text = clean(tr.worked_example); source = 'worked_example'; textLang = lang && lang !== 'en' && doc.translations?.[lang]?.worked_example ? tr.lang : 'en' }
     else if (clean(doc.analysis?.teacher_action_if_missed)) { text = clean(doc.analysis.teacher_action_if_missed); source = 'teacher_action' }
   }
   if (!text && clean(misconception)) { text = clean(misconception); source = 'insight' }

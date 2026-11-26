@@ -2,6 +2,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-http-backend';
+import { detectCountry, languageFor, installRegionHeader } from '../utils/region';
 
 // Languages that require RTL (right-to-left) text direction
 export const RTL_LANGUAGES = ['he'];
@@ -12,9 +13,18 @@ export const SUPPORTED_LANGUAGES = [
   'it', 'ko', 'tr', 'nl', 'id', 'vi',
 ];
 
+// First visit: the language of where the learner is (content v5). One the browser has that is
+// spoken in their country wins (an English device in Ireland stays English), else the country's
+// own language (a device set to English in Germany opens in German); a chosen language is kept.
+const detector = new LanguageDetector();
+detector.addDetector({
+  name: 'region',
+  lookup: () => languageFor(detectCountry(), typeof navigator !== 'undefined' ? navigator.languages || [navigator.language] : [], SUPPORTED_LANGUAGES) || undefined,
+});
+
 i18n
   .use(Backend)           // loads translations lazily via HTTP from /public/locales/
-  .use(LanguageDetector)  // detects browser language automatically on first visit
+  .use(detector)          // first visit: where the learner is, then the browser's language
   .use(initReactI18next)  // binds i18next to React
   .init({
     fallbackLng: 'en',
@@ -38,9 +48,9 @@ i18n
 
     detection: {
       // Priority order: the URL's language prefix (/es/...) → persisted choice
-      // → browser language → html lang attr. A first path segment that is not
-      // a language (/games) is skipped.
-      order: ['path', 'localStorage', 'navigator', 'htmlTag'],
+      // → where the learner is (utils/region.js) → browser language → html lang
+      // attr. A first path segment that is not a language (/games) is skipped.
+      order: ['path', 'localStorage', 'region', 'navigator', 'htmlTag'],
       lookupFromPathIndex: 0,
       caches: ['localStorage'],
       lookupLocalStorage: 'i18nextLng',
@@ -50,6 +60,9 @@ i18n
       useSuspense: true, // enables lazy loading via React Suspense
     },
   });
+
+// Every /api/ request says the learner's currency (X-Currency), which follows the language.
+installRegionHeader(() => i18n.language || 'en');
 
 // Apply dir="rtl/ltr" and lang="<code>" to <html> on every language change
 i18n.on('languageChanged', (lng) => {

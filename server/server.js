@@ -71,6 +71,8 @@ app.post('/api/billing/webhook', express.raw({ type: 'application/json', limit: 
 app.use(express.json())
 // Signed cookies need a secret; the student session cookie is signed so it can't be forged.
 app.use(cookieParser(process.env.COOKIE_SECRET || process.env.JWT_SECRET))
+// The learner's currency for this request (X-Currency): money in questions is filled in with it.
+app.use(require('./utils/requestContext').middleware)
 // Request metrics for the health page, then platform-wide rules: read-only "view as",
 // revoked sessions, suspended orgs, daily activity (SUP-002/012/040).
 app.use(require('./utils/requestMetrics').middleware)

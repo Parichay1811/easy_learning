@@ -1,3 +1,5 @@
+const { fillMoney } = require('./currency')
+
 // Overlays a question's translations.<lang> content onto its base (English)
 // fields for API responses. Missing fields/languages fall back to the base
 // English value so partially-translated content never renders blank.
@@ -10,14 +12,16 @@
 // narrator always reads it in a voice of that language: a German voice never
 // reads English words, whatever the site's language is. `narration` (the spoken
 // script, content v4) comes back in the same language as the rest of the question.
-function applyQuestionTranslation(questionDoc, lang) {
+// Money tokens ([[m:20]], [[M:45]]; content v5) are filled in for `opts.currency` (default
+// EUR), in the question's language: see utils/currency.js.
+function applyQuestionTranslation(questionDoc, lang, opts = {}) {
   const question = typeof questionDoc.toObject === 'function' ? questionDoc.toObject() : questionDoc
   const translation = lang && lang !== 'en' && question.translations && question.translations[lang]
   if (!translation) {
     delete question.translations
     question.lang = 'en'
     question.audio_lang = 'en'
-    return question
+    return fillMoney(question, { currency: opts.currency, lang: 'en' })
   }
 
   const merged = { ...question }
@@ -44,7 +48,7 @@ function applyQuestionTranslation(questionDoc, lang) {
   merged.lang = lang
   // Spoken text with no translation of its own stays English, and is read in English.
   merged.audio_lang = translation.audio_text ? lang : 'en'
-  return merged
+  return fillMoney(merged, { currency: opts.currency, lang })
 }
 
 module.exports = { applyQuestionTranslation }

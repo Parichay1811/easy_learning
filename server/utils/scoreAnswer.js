@@ -414,10 +414,11 @@ const UNIT_ALIASES = {
   ml: ['ml', 'millilitre', 'millilitres', 'milliliter', 'milliliters', 'mls'],
   kg: ['kg', 'kgs', 'kilogram', 'kilograms', 'kilo', 'kilos'],
   g: ['g', 'gram', 'grams', 'gramme', 'grammes', 'gr'],
-  p: ['p', 'pence', 'penny', 'pennies', 'pee'],
-  '£': ['£', 'pound', 'pounds', 'quid', 'gbp'],
-  '€': ['€', 'euro', 'euros', 'eur'],
-  $: ['$', 'dollar', 'dollars', 'usd'],
+  // Money (content v5): one small unit and one main unit for every currency, so "17c", "17p",
+  // "17¢" and "17 cent" all count wherever the learner lives (the question's currency is
+  // filled in per learner, utils/currency.js). A bare "c" is a cent on a money question.
+  p: ['p', 'pence', 'penny', 'pennies', 'pee', '¢', 'ct', 'cent', 'cents', 'centime', 'centimes', 'céntimo', 'céntimos', 'centimo', 'centimos', 'centesimo', 'centesimi', 'cêntimo', 'cêntimos', 'centavo', 'centavos', 'kopeck', 'kopecks', 'kopek', 'kopeks', 'копейка', 'копейки', 'копеек', 'коп', 'kuruş', 'kurus', 'kr', 'rappen', 'rp', 'paise', 'paisa', 'sen', 'sent', 'xu', 'евроцент', 'евроцентов'],
+  '€': ['€', '£', '$', '¥', '￥', '₩', '₽', '₺', '₹', '₫', 'r$', 'chf', 'pound', 'pounds', 'quid', 'gbp', 'euro', 'euros', 'eur', 'dollar', 'dollars', 'usd', 'yen', 'yuan', 'won', 'rouble', 'roubles', 'ruble', 'rubles', 'lira', 'rupiah', 'dong', 'đồng', 'real', 'reais', 'rupee', 'rupees', 'franc', 'francs', 'franken', 'franchi', 'franco', 'peso', 'pesos', 'dólar', 'dólares', 'рубль', 'рубля', 'рублей', 'евро', '円', '元', '원', 'ユーロ', '유로', 'tl'],
   min: ['min', 'mins', 'minute', 'minutes'],
   h: ['h', 'hr', 'hrs', 'hour', 'hours'],
   s: ['s', 'sec', 'secs', 'second', 'seconds'],
@@ -425,15 +426,17 @@ const UNIT_ALIASES = {
 }
 const UNIT_OF = {}
 for (const [u, al] of Object.entries(UNIT_ALIASES)) for (const a of al) UNIT_OF[a] = u
-// Splits "8cm", "£73", "17p" into number and unit parts before tokenising.
+// Splits "8cm", "£73", "17p", "17¢", "R$ 5", "17円" into number and unit parts before tokenising.
 function splitUnits(text) {
   return baseText(text)
-    .replace(/([£€$])\s*(\d)/g, '$2 $1')
+    .replace(/(R\$|CHF|[£€$¥￥₩₽₺₹₫])\s*(\d)/gi, '$2 $1')
     .replace(/(\d)\s*(°\s*c)\b/gi, '$1 °c')
     .replace(/(\d)([a-zA-Z]{1,12})\b/g, '$1 $2')
-    .replace(/(\d)([£€$])/g, '$1 $2')
+    .replace(/(\d)([£€$¢¥￥₩₽₺₹₫円元원])/g, '$1 $2')
 }
-const unitOf = (w) => UNIT_OF[String(w).toLowerCase()] || null
+const unitOf = (w) => UNIT_OF[String(w).toLowerCase().replace(/\.$/, '')] || null
+// On a money question (one served with a currency) "c" is a cent, not degrees Celsius.
+const unitIn = (q) => (w) => (q && q.currency && String(w).toLowerCase() === 'c' ? 'p' : unitOf(w))
 
 // ── Articles, fillers and English stems ──
 const ARTICLES = {
@@ -718,7 +721,7 @@ function checkNumber(q, v, raw) {
   const expected = []
   for (const a of accepted) {
     const p = parseNumberAnswer(splitUnits(a), lang, { final: true })
-    if (p && !p.multiple) expected.push({ ...p, unit: p.rest.map(unitOf).find(Boolean) || null })
+    if (p && !p.multiple) expected.push({ ...p, unit: p.rest.map(unitIn(q)).find(Boolean) || null })
   }
   // Exact-ish text match first (keeps answers like "half" or "1250g" working without parsing surprises).
   if (accepted.some((a) => loose(a) === loose(answer) || loose(splitUnits(a)) === loose(splitUnits(answer)))) return result('correct')
@@ -728,7 +731,7 @@ function checkNumber(q, v, raw) {
   const user = parseNumberAnswer(splitUnits(answer), lang, { final })
   if (!user) return result('incorrect', { misconception: miscon })
   if (user.multiple) return result('incorrect', { reason: 'several_numbers', misconception: miscon })
-  const userUnit = user.rest.map(unitOf).find(Boolean) || null
+  const userUnit = user.rest.map(unitIn(q)).find(Boolean) || null
   const usedWords = (v.number_words === false) && !/\d/.test(answer)
   const eq = (e) => {
     if (e.frac || user.frac) {
@@ -753,7 +756,7 @@ function checkNumber(q, v, raw) {
   if (v.unit_required && hit.unit && !userUnit) return result('close', { reason: 'unit' })
   const qw = questionWords(q)
   const allowed = new Set([...(v.units || []).map((u) => String(u).toLowerCase()), ...qw, ...FILLERS, ...COUNTERS, ...articleSet(lang)])
-  const extra = user.rest.filter((w) => !unitOf(w) && !allowed.has(w) && !allowed.has(stem(w)) && !/^[+\-*/=×÷<>]$/.test(w))
+  const extra = user.rest.filter((w) => !unitIn(q)(w) && !allowed.has(w) && !allowed.has(stem(w)) && !/^[+\-*/=×÷<>]$/.test(w))
   if (extra.length && !v.final_answer) return result('close', { reason: 'number_form' })
   return result('correct')
 }
