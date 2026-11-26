@@ -7,7 +7,6 @@ import { Voice } from "./voice.js";
 import { startMic } from "./mic.js";
 import { answerPlan } from "./shared/solvers.js";
 import { isEcho } from "./shared/echo.js";
-import { questionPlan, resultPlan } from "./shared/test.js";
 import { GREETING, FILLERS, NOT_HEARD, GO_AHEAD } from "./shared/lines.js";
 import { createOrb } from "./orb.js";
 import { createScene } from "./scene.js";
@@ -70,17 +69,8 @@ let followUps = [];
 let prefix = null; // the start of a sentence the student has not finished
 let prefixAt = 0;
 const talk = []; // the last few questions and answers, for follow-ups
-let test = null; // a running test: { questions, i, results, title }
-const TEST_KINDS = new Set([
-  "test",
-  "test-q",
-  "answer",
-  "ack",
-  "say",
-  "unclear",
-  "fragment",
-  "test-result",
-]);
+// Plans whose spoken lines are not a lesson's key points.
+const NOT_LESSON = new Set(["answer", "ack", "say", "unclear", "fragment"]);
 
 const board = new Board(els.board, {
   onSfx: (name, where) => {
@@ -88,7 +78,7 @@ const board = new Board(els.board, {
     feel(name);
   },
   onOption: (i) => {
-    if (awaiting) teach(answerPlan(awaiting, i, test ? "" : undefined));
+    if (awaiting) teach(answerPlan(awaiting, i));
   },
   // A chip on the board ("What is soap bubble?") is asked as if said; a
   // chip for one of the learner's own skills opens its lesson.
@@ -155,11 +145,6 @@ window.teacher = {
       awaiting: !!awaiting,
       kind: run?.plan.kind,
       step: run?.i,
-      test: test && {
-        i: test.i,
-        n: test.questions.length,
-        results: test.results.map((x) => x.correct),
-      },
       history: history.slice(-12),
     };
   },
@@ -288,8 +273,6 @@ function teach(plan) {
   board.playing = true;
   // A question's options can be answered while they are still being read.
   awaiting = plan.awaiting || null;
-  if (plan.kind === "test") test = { ...plan.test, i: -1, results: [] };
-  else if (!TEST_KINDS.has(plan.kind)) test = null; // something else was asked: the test is over
   if (plan.kind !== "ack" && plan.kind !== "say")
     context = {
       ...context,
@@ -407,8 +390,6 @@ function backToLesson() {
   if (!was.resume) {
     showThinking(false);
     setMode("idle");
-    // A test's answer was marked just as the menu view opened: on to its next question.
-    if (test && old.finished && old.plan.kind === "answer") nextQuestion();
     return;
   }
   r.audio = r.plan.steps.map((st, k) => (k >= was.i ? voice.load(st.say, r.ctrl.signal).catch(() => null) : null));
@@ -549,30 +530,6 @@ function finish(r) {
   }
   if (r.plan.awaiting) awaiting = r.plan.awaiting;
   setMode("idle");
-  if (test && r.plan.kind === "test") return nextQuestion();
-  if (test && r.plan.kind === "answer") {
-    const q = test.questions[test.i];
-    test.results.push({
-      topic: q?.topic,
-      topicTitle: q?.topicTitle,
-      correct: !!r.plan.correct,
-    });
-    setTimeout(() => {
-      if (run === r) nextQuestion();
-    }, 500);
-  }
-}
-
-// The next question of the running test, or the score after the last one.
-function nextQuestion() {
-  if (!test) return;
-  test.i++;
-  if (test.i >= test.questions.length) {
-    const result = resultPlan(test, test.results);
-    test = null;
-    return teach(result);
-  }
-  teach(questionPlan(test, test.i));
 }
 
 function interrupt() {
@@ -637,22 +594,6 @@ const say = (text) => teach({ kind: "say", steps: [{ say: text, draw: [] }] });
 function control(action, text) {
   history.push(`control:${action}`);
   const r = run;
-  if (test && action === "stop") {
-    // stop the test: the score so far
-    const result = resultPlan(test, test.results);
-    test = null;
-    return result.total ? teach(result) : say(text || "Okay.");
-  }
-  if (test && action === "next" && awaiting) {
-    // skip this question
-    const q = test.questions[test.i];
-    test.results.push({
-      topic: q?.topic,
-      topicTitle: q?.topicTitle,
-      correct: false,
-    });
-    return nextQuestion();
-  }
   if (action === "stop") {
     if (r) {
       r.dead = true;
@@ -751,7 +692,6 @@ async function ask(text, seq = ++askSeq, open = null) {
         context: {
           ...context,
           awaiting,
-          test: !!test,
           history: talk.slice(-3),
           ...(open && { open }),
           // "visual" | "guided" | "words": not used by the router yet (see companion.js).
@@ -917,7 +857,7 @@ async function begin() {
 }
 
 const GREETING_TYPED =
-  "Hi, I'm your Learnigo teacher. Type any question, or start typing a topic and pick it from the list. Type test me for some questions.";
+  "Hi, I'm your Learnigo teacher. Type any question, or start typing a topic and pick it from the list.";
 
 // ── The learner, when signed in on the site ─────────────────────────────
 // The site's AI Teacher page (client/src/pages/AITeacher.jsx) sends a short
@@ -1026,8 +966,8 @@ if (window.parent !== window) {
 // "Experiments / Activities"; a general answer's own sentences are its key points.
 const STICKY = {
   explain: "Concept Explainer", faq: "Your Question", solve: "Worked Example", convert: "Worked Example",
-  chat: "Fact Finder", data: "Fact Finder", card: "Concept Explainer", test: "Practice", question: "Practice",
-  answer: "Practice", quiz: "Practice", miss: "Coming Soon",
+  chat: "Fact Finder", data: "Fact Finder", card: "Concept Explainer", question: "Your Turn",
+  answer: "Your Turn", quiz: "Your Turn", miss: "Coming Soon",
 };
 const SUBJECT_ICONS = [
   [/math/i, "➗"], [/physic|engineer|electric/i, "⚡"], [/chem/i, "🧪"], [/bio|body|health/i, "🌱"],
@@ -1053,7 +993,7 @@ function aroundTheBoard(plan) {
       notes.setTopic(topic, lesson?.id === topic ? lesson.title : plan.watch || "");
       loadLesson(topic);
     }
-  } else if (plan.steps?.length && !TEST_KINDS.has(plan.kind)) {
+  } else if (plan.steps?.length && !NOT_LESSON.has(plan.kind)) {
     // An answer from Wikipedia or open data: its own sentences are the key points.
     lessonFor = null;
     lesson = { title: plan.title || "", related: [] };
@@ -1198,7 +1138,7 @@ const MENU = {
   try: () => {
     const activity = lesson?.tryIt || (lesson?.practice ? `Try this: ${lesson.practice}` : "");
     if (activity) boardFrom("try", "Try it yourself", [activity]);
-    else if (lesson?.title) boardFrom("try", "Try it yourself", ["No activity for this one yet.", "Say or type “test me” to practise it."]);
+    else if (lesson?.title) boardFrom("try", "Try it yourself", ["No activity for this one yet.", "Ask me a question about it, or ask me for one."]);
     else boardFrom("try", "Try it yourself", [PICK_FIRST, "Something to try with it will show here."]);
   },
   games: () => {
@@ -1242,7 +1182,7 @@ function typedOnly() {
   // The start screen, while it is still there.
   const sub = $("hero-sub");
   const tip = $("hero-tip");
-  if (sub) sub.textContent = "Type any question or topic. It draws, explains and tests you.";
+  if (sub) sub.textContent = "Type any question or topic. It draws and explains, step by step.";
   if (tip) tip.textContent = "Pick a topic as you type, or tap an example";
   setMode(mode);
 }
@@ -1404,7 +1344,6 @@ async function health() {
       ...h.packs.flatMap((p) =>
         p.examples.slice(0, h.packs.length > 3 ? 1 : 2),
       ),
-      "Test me on maths",
     ];
     els.warm.hidden = h.ready;
     if (!h.ready) setTimeout(health, 1500);

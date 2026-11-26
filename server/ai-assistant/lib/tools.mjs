@@ -70,7 +70,7 @@ export function createTools({ packs, kb, llm = null, fast = null }) {
     },
     {
       name: 'practice_question',
-      description: 'One exam-style multiple-choice question on a topic, with the answer and why each wrong option is wrong.',
+      description: 'One practice multiple-choice question on a topic (only when the learner asks for one; never a test or a score), with the answer and why each wrong option is wrong.',
       inputSchema: { type: 'object', properties: { topic_id: { type: 'string', enum: topicIds } }, required: ['topic_id'] },
       async run({ topic_id: id }) {
         const plan = packPlan(packs.get(id), 'quiz');

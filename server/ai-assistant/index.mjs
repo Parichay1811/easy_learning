@@ -52,7 +52,6 @@ import {
   STOPPED,
   GO_AHEAD,
   MISS,
-  OFFER,
   FRAGMENT,
   GENERIC_ACKS,
   TALK,
@@ -466,7 +465,7 @@ export async function createAIAssistant() {
         if (p.status !== "reviewed") continue;
         lines.push(
           ...p.explain.map((s) => s.say),
-          ...p.faq.map(({ a }) => `${a} ${OFFER}`),
+          ...p.faq.map(({ a }) => a),
           ...p.quiz.map((q) => quizStep(q).say),
         );
       }

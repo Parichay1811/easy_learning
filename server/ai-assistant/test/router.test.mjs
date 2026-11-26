@@ -31,7 +31,8 @@ test('a garden question becomes a rectangle area lesson, without any model', () 
   assert.deepEqual(plan.context.params, { l: 12, w: 7.5, unit: 'm' });
   assert.match(plan.steps[2].say, /90 square metres/);
   assert.equal(plan.awaiting, undefined, 'no question unless the student asks for one');
-  assert.match(plan.steps.at(-1).say, /Say test me/);
+  assert.doesNotMatch(plan.steps.at(-1).say, /\btest/i, 'no test is offered');
+  assert.equal(plan.context.offer, undefined);
 });
 
 test('fence means perimeter; spoken numbers work', () => {
@@ -68,7 +69,8 @@ test('common questions and topics come from the packs', () => {
   const faq = ask('Why do we halve for a triangle?');
   assert.equal(faq.tier, 'packs');
   assert.match(faq.plan.steps[0].say, /Two copies/);
-  assert.equal(faq.plan.context.offer, 'test');
+  assert.equal(faq.plan.context.offer, undefined);
+  assert.doesNotMatch(faq.plan.steps[0].say, /\btest/i);
   const lesson = ask('teach me circles');
   assert.equal(lesson.plan.topic, 'MATH-MENS-02');
   assert.equal(lesson.plan.awaiting, undefined);
@@ -82,36 +84,38 @@ test('an answer to the waiting question is marked', () => {
   assert.match(wrong.plan.steps[0].say, /diameter/);
 });
 
-test('tests: asked for, the teacher confirms how many, then builds them', () => {
-  const setup = ask('quiz me on circles');
-  assert.match(setup.plan.steps[0].say, /How many questions on circles would you like: 5, 10 or 20\?/);
-  assert.equal(setup.plan.context.offer, 'test-count');
-  const built = ask('five', setup.plan.context);
-  assert.equal(built.plan.kind, 'test');
-  assert.equal(built.plan.test.questions.length, 5);
-  assert.ok(built.plan.test.questions.every((q) => q.topic === 'MATH-MENS-02' && q.options.length >= 3));
-  assert.equal(new Set(built.plan.test.questions.map((q) => q.say)).size, 5, 'no repeats');
+test('practice: asking gives one "your turn" question, never a count, a test or a score', () => {
+  const circles = ask('quiz me on circles');
+  assert.equal(circles.plan.kind, 'quiz');
+  assert.equal(circles.plan.topic, 'MATH-MENS-02');
+  assert.ok(circles.plan.awaiting, 'a question is waiting');
+  assert.match(circles.plan.steps[0].say, /^Your turn\./);
+  for (const said of ['give me 3 questions on vectors', 'test me for GCSE maths', 'can you ask me a question about circles']) {
+    const { plan } = ask(said);
+    assert.equal(plan.kind, 'quiz', said);
+    assert.ok(['MATH-MENS-01', 'MATH-MENS-02', 'MATH-VEC-01'].includes(plan.topic), said);
+    assert.doesNotMatch(plan.steps.map((st) => st.say).join(' '), /How many|score|out of|\btest\b/i, said);
+  }
 });
 
-test('tests: a number in the request skips the question; subjects and exams set the scope', () => {
-  const direct = ask('give me 3 questions on vectors');
-  assert.equal(direct.plan.kind, 'test');
-  assert.equal(direct.plan.test.questions.length, 3);
-  const maths = ask('test me for GCSE maths');
-  assert.deepEqual(maths.plan.context.scope.ids.sort(), ['MATH-MENS-01', 'MATH-MENS-02', 'MATH-VEC-01']);
-  assert.match(maths.plan.steps[0].say, /maths at GCSE level/);
-  const mixed = ask('10', maths.plan.context);
-  assert.equal(new Set(mixed.plan.test.questions.map((q) => q.topic)).size, 3, 'questions from every topic in scope');
+test('practice: inside a worked example a new question has fresh numbers; with nothing named, the teacher asks which topic', () => {
+  const fresh = ask('another question', { topic: 'MATH-MENS-01', template: 'rect_area' });
+  assert.equal(fresh.plan.kind, 'quiz');
+  assert.ok(fresh.plan.awaiting);
+  const none = ask('give me a question');
+  assert.equal(none.plan.kind, 'talk');
+  assert.match(none.plan.steps[0].say, /Tell me a topic/);
+  assert.notEqual(ask('what is a test tube')?.plan?.kind, 'quiz', 'a test tube is not a request for a question');
 });
 
-test('tests: answers during a test have no "ask me anything", "I don\'t know" reveals', () => {
+test('practice: answers and kind reveals never invite a test', () => {
   const quiz = { ...packs.get('MATH-VEC-01').quiz[0], topic: 'MATH-VEC-01' };
-  const right = ask('B', { awaiting: quiz, test: true });
+  const right = ask('B', { awaiting: quiz });
   assert.equal(right.plan.correct, true);
-  assert.doesNotMatch(right.plan.steps[0].say, /Ask me anything/);
-  const stuck = ask('no idea', { awaiting: quiz, test: true });
+  assert.match(right.plan.steps[0].say, /Ask me anything else\.$/);
+  const stuck = ask('no idea', { awaiting: quiz });
   assert.equal(stuck.plan.correct, false);
-  assert.doesNotMatch(stuck.plan.steps[0].say, /test me/);
+  assert.doesNotMatch(stuck.plan.steps[0].say, /\btest/i);
 });
 
 // From the question log: none of these are missing lessons.
@@ -125,13 +129,14 @@ test('conversation: "I don\'t know" to a question reveals the answer kindly', ()
 });
 
 test('conversation: yes and no to an offer, small talk, thanks', () => {
-  const offer = { topic: 'MATH-MENS-01', template: 'rect_area', offer: 'test' };
-  assert.match(ask('yes please', offer).plan.steps[0].say, /How many questions on perimeter and area/, 'yes asks how many');
-  assert.match(ask('No, thanks.', offer).plan.steps[0].say, /No problem/);
+  const after = { topic: 'MATH-MENS-01', template: 'rect_area' };
+  assert.doesNotMatch(ask('yes please', after).plan.steps[0].say, /How many|test/i, 'a yes after a lesson never starts a test');
+  assert.match(ask('No, thanks.', after).plan.steps[0].say, /No problem/);
   assert.equal(ask('hello').tier, 'talk');
   assert.match(ask('how are you today').plan.steps[0].say, /great/);
   assert.match(ask('thank you').plan.steps[0].say, /welcome/);
-  assert.match(ask('what can you do').plan.steps[0].say, /Say test me for practice questions/);
+  assert.doesNotMatch(ask('what can you do').plan.steps[0].say, /\btest/i);
+  assert.match(ask('what can you do').plan.steps[0].say, /explain it with pictures/);
 });
 
 test('conversation: a half sentence waits for the rest; mumbles are asked again', () => {

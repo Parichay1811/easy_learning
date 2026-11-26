@@ -32,12 +32,12 @@ export const YES = /^(yes|yeah|yep|yup|sure|ok|okay|alright|all right|go on then
 export const NO = /^(no|nope|nah|no thanks|no thank you|not now|maybe later|not that)\b/;
 
 // The answer of the waiting question, revealed kindly.
-export function revealPlan(quiz, { test = false } = {}) {
+export function revealPlan(quiz) {
   const a = quiz.answer;
   return {
     kind: 'answer', correct: false, title: 'The answer',
     steps: [{
-      say: `That's okay, let's look at it together. The answer is ${LETTERS[a]}, ${quiz.options[a].say}. ${quiz.why}${test ? '' : ' Ask me anything else, or say test me.'}`,
+      say: `That's okay, let's look at it together. The answer is ${LETTERS[a]}, ${quiz.options[a].say}. ${quiz.why} Ask me anything else.`,
       draw: [{ op: 'mark', option: a, kind: 'tick', at: 'answer', sfx: 'correct' }],
     }],
   };
@@ -49,7 +49,7 @@ export function converse(t, { context = {}, packs } = {}) {
   const bare = words.join(' ');
   const short = words.length <= 7;
 
-  if (context.awaiting && STUCK.test(bare)) return { plan: { ...revealPlan(context.awaiting, { test: !!context.test }), context }, tier: 'talk' };
+  if (context.awaiting && STUCK.test(bare)) return { plan: { ...revealPlan(context.awaiting), context }, tier: 'talk' };
   if (short && NO.test(bare)) return { plan: say('talk', TALK.noThanks), tier: 'talk' };
   if (short && STUCK.test(bare)) return { plan: say('talk', TALK.stuck), tier: 'talk' };
   if (short && /^(hi|hello|hey|hiya|good (morning|afternoon|evening))\b/.test(bare) && words.length <= 4) return { plan: say('talk', TALK.hello), tier: 'talk' };

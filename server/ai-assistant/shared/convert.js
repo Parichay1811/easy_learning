@@ -66,7 +66,7 @@ export function convertPlan({ value, from, to }) {
   const name = (u, n) => (n === 1 ? u[3] : u[4]);
   const op = up ? '×' : '÷';
   return {
-    kind: 'solve', title: 'Converting units', context: { offer: 'test' },
+    kind: 'solve', title: 'Converting units', context: {},
     steps: [
       { say: `${up ? `One ${from[3]} is ${show(k)} ${name(to, k)}` : `One ${to[3]} is ${show(k)} ${name(from, k)}`}. So to go from ${from[4]} to ${to[4]}, you ${up ? 'multiply' : 'divide'} by ${show(k)}.`,
         draw: [{ op: 'clear' }, { op: 'title', text: 'Converting units' },

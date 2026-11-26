@@ -1,13 +1,12 @@
 // Lines the teacher says often. The server makes their audio when it starts,
 // so they play at once.
-export const GREETING = "Hi, I'm your Learnigo teacher. Ask me about any topic you're curious about, from space and art to money and coding, or say test me for some questions. You can interrupt me any time.";
+export const GREETING = "Hi, I'm your Learnigo teacher. Ask me about any topic you're curious about, from space and art to money and coding. You can interrupt me any time.";
 export const FILLERS = ['Okay, let me show you.', 'Good question.', 'Let me draw that.', 'Sure, look at this.'];
 export const NOT_HEARD = "Sorry, I didn't catch that. Could you say it again?";
 export const STOPPED = "Okay, I'll wait. Ask me anything.";
 export const GO_AHEAD = 'Go ahead, ask me anything.';
 export const MISS = "I don't have a lesson on that yet, so I've added it to my list for the team. Try asking me about another topic.";
-export const ANOTHER = 'Ask me anything else, or say test me.';
-export const OFFER = 'Say test me if you want some practice questions.';
+export const ANOTHER = 'Ask me anything else.';
 export const FRAGMENT = 'Mm-hm?';
 
 // Said the moment a question needs thinking, before the answer is ready.
@@ -20,8 +19,8 @@ export const TALK = {
   hello: 'Hi! What would you like to learn today?',
   howAreYou: "I'm great, thanks for asking! What shall we learn today?",
   thanks: "You're welcome! Ask me anything else.",
-  who: "I'm your Learnigo teacher. I explain things with pictures, and when you want practice, say test me.",
-  help: "Ask me about a topic, like circles or the water cycle, and I'll explain it with pictures. Give me numbers, like a garden 12 by 7 metres, and we'll work it out. Say test me for practice questions.",
+  who: "I'm your Learnigo teacher. I explain things with pictures, one step at a time.",
+  help: "Ask me about a topic, like circles or the water cycle, and I'll explain it with pictures. Give me numbers, like a garden 12 by 7 metres, and we'll work it out together.",
   noThanks: 'No problem! Ask me anything else.',
   okay: 'Okay! What would you like to learn?',
   stuck: "That's okay. Tell me what you're stuck on, or say teach me and a topic.",

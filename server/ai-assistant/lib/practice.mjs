@@ -1,9 +1,8 @@
-// Building a test from what the student asked for: "quiz me on circles",
-// "test me for GCSE maths", "give me 5 questions on vectors". The teacher
-// confirms how many questions unless the student already said, then the
-// questions are drawn from every pack in scope, one topic after another, with
-// fresh numbers from the maths templates where a topic has one.
-import { TEMPLATES, rng } from '../shared/solvers.js';
+// A practice question, only when the learner asks for one ("quiz me on
+// circles", "give me a question on vectors", "another one"). It is one calm
+// "your turn" question with an explanation of the answer: there is no test,
+// no count of questions and no score in the AI Teacher.
+import { rng } from '../shared/solvers.js';
 import { findTopic } from './packs.mjs';
 
 // Subject words -> topic id prefixes.
@@ -38,14 +37,15 @@ const LEVELS = [
   [/\b(sat|act|jee|neet|entrance)\b/, 'E'], [/\b(university|college)\b/, 'H'],
 ];
 
-const ASKING = /\b(test(s|ing)?|quiz(z?es)?|exams?|practi[cs]e|questions?|qs|give|me|us|on|in|about|for|of|a|an|the|some|please|can|could|you|i|want|would|like|take|do|my|level|at|and|\d+|one|two|three|four|five|six|seven|eight|nine|ten|twenty)\b/g;
+const ASKING = /\b(test(s|ing)?|quiz(z?es)?|exams?|practi[cs]e|questions?|qs|ask|another|more|try|give|me|us|on|in|about|for|of|a|an|the|some|please|can|could|you|i|want|would|like|take|do|my|level|at|and|\d+|one|two|three|four|five|six|seven|eight|nine|ten|twenty)\b/g;
 
-// { ids, title } of the packs a test covers.
-export function testScope(t, context, packs) {
+// { ids, title } of the packs a practice question can come from, or null when
+// the learner named nothing and no lesson is on the board.
+export function practiceScope(t, context, packs) {
   const level = LEVELS.find(([re]) => re.test(t))?.[1];
   const subject = SUBJECTS.find(([re]) => re.test(t));
-  // The words that name what to test: "test me on 5 questions" names nothing,
-  // and "test" must not pick the pack about the second derivative test.
+  // The words that name the topic: "give me a question" names nothing, and
+  // "test" must not pick the pack about the second derivative test.
   let rest = t.replace(ASKING, ' ');
   for (const [re] of LEVELS) rest = rest.replace(re, ' ');
   if (subject) rest = rest.replace(subject[0], ' ');
@@ -62,51 +62,21 @@ export function testScope(t, context, packs) {
     if (ids.length) return { ids, title: `${name}${level ? ` at ${t.match(LEVELS.find(([re]) => re.test(t))[0])[0].toUpperCase()} level` : ''}` };
   }
   if (context.topic && packs.has(context.topic)) return { ids: [context.topic], title: packs.get(context.topic).title.toLowerCase() };
-  return { ids: [...packs.keys()], title: 'everything we have covered' };
+  return null;
 }
 
-// "5 questions", "ten", "give me 3": a number of questions, or null.
-// any: a bare number counts (the answer to "how many?").
-export function countFrom(t, any = false) {
-  const m = any ? t.match(/\b(\d{1,2})\b/) : t.match(/\b(\d{1,2})\s*(questions?|qs|question test)\b/);
-  const n = m ? Number(m[1]) : null;
-  return n && n >= 1 && n <= 30 ? n : null;
+// The pack a practice question comes from: the one named, else one of the
+// subject's packs (seeded, so the same request is repeatable in tests).
+export function pickPack(scope, packs, seed = Date.now()) {
+  const ids = scope.ids.filter((id) => packs.get(id)?.quiz?.length);
+  if (!ids.length) return null;
+  return packs.get(ids[Math.floor(rng(seed)() * ids.length)]);
 }
 
-export function askCountPlan(scope) {
+// Asked for a question but named no topic, with nothing on the board.
+export function whichTopicPlan() {
   return {
-    kind: 'talk', title: 'A test',
-    context: { offer: 'test-count', scope },
-    steps: [{
-      say: `Sure! How many questions on ${scope.title} would you like: 5, 10 or 20?`,
-      draw: [{ op: 'clear' }, { op: 'title', text: 'A test' }, { op: 'text', text: `On ${scope.title}`, color: 'ink' },
-        { op: 'chips', items: ['5 questions', '10 questions', '20 questions'], at: 'many' }],
-    }],
-  };
-}
-
-export function buildTest(scope, n, packs, seed = Date.now()) {
-  const r = rng(seed);
-  const pools = scope.ids.map((id) => packs.get(id)).filter(Boolean).map((p) => {
-    const own = p.quiz.map((q) => ({ ...q, topic: p.id, topicTitle: p.title }));
-    const fresh = p.template && TEMPLATES[p.template] ? [1, 2, 3, 4, 5, 6, 7, 8].map((k) => ({ ...TEMPLATES[p.template].quiz(rng(seed + k * 7919 + p.id.length)), topic: p.id, topicTitle: p.title })) : [];
-    const seen = new Set();
-    const pool = [...own, ...fresh].filter((q) => !seen.has(q.say) && seen.add(q.say)).slice(0, own.length + 4);
-    for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
-    return pool;
-  }).filter((p) => p.length);
-  for (let i = pools.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [pools[i], pools[j]] = [pools[j], pools[i]]; }
-  const questions = [];
-  for (let round = 0; questions.length < n && pools.some((p) => p.length > round); round++) {
-    for (const pool of pools) if (pool[round] && questions.length < n) questions.push(pool[round]);
+    kind: 'talk', title: 'Your turn',
+    steps: [{ say: 'Sure. Tell me a topic, and I will ask you one question about it.', draw: [{ op: 'clear' }, { op: 'title', text: 'Your turn' }, { op: 'text', text: 'Which topic?', color: 'ink' }] }],
   }
-  const k = questions.length;
-  return {
-    kind: 'test', title: `Test: ${scope.title}`, test: { questions, title: scope.title },
-    context: { offer: null, scope },
-    steps: [{
-      say: `${k < n ? `I have ${k} questions on ${scope.title}. ` : ''}Here's your test: ${k} question${k === 1 ? '' : 's'} on ${scope.title}. Answer with A, B, C or D, or tap an option. Let's go!`,
-      draw: [{ op: 'clear' }, { op: 'title', text: 'Your test' }, { op: 'box', text: `${k} question${k === 1 ? '' : 's'}`, at: 'test' }, { op: 'text', text: scope.title, color: 'ink' }],
-    }],
-  };
 }

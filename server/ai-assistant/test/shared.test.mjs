@@ -6,7 +6,6 @@ import { wordsToDigits } from '../shared/numbers.js';
 import { TEMPLATES, solvePlan, quizStep, missingCues, parseChoice, rng } from '../shared/solvers.js';
 import { Vad } from '../shared/vad.js';
 import { isEcho } from '../shared/echo.js';
-import { questionPlan, resultPlan } from '../shared/test.js';
 import { loadPacks } from '../lib/packs.mjs';
 
 const packs = loadPacks(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'packs'), { drafts: false });
@@ -70,16 +69,10 @@ test('echo: the teacher heard back is ignored, a new question is not', () => {
   assert.ok(!isEcho('go on', teacher));
 });
 
-test('test steps: numbered questions and a score with what to review', () => {
-  const q = { ...packs.get('MATH-MENS-02').quiz[0], topic: 'MATH-MENS-02', topicTitle: 'Circles' };
-  const t = { questions: [q, q], title: 'circles' };
-  const step = questionPlan(t, 1);
-  assert.match(step.steps[0].say, /^Question 2 of 2\./);
-  assert.equal(step.awaiting, q);
-  assert.deepEqual(missingCues(step), []);
-  const r = resultPlan(t, [{ topicTitle: 'Circles', correct: true }, { topicTitle: 'Circles', correct: false }]);
-  assert.match(r.steps[0].say, /You got 1 out of 2\. Good effort\. Have another look at circles\./);
-  assert.deepEqual(missingCues(r), []);
+test('a "your turn" question cues only spoken words, with no number and no score', () => {
+  const step = quizStep(packs.get('MATH-MENS-02').quiz[0]);
+  assert.match(step.say, /^Your turn\./);
+  assert.doesNotMatch(step.say, /Question \d+ of|score|test/i);
 });
 
 const frame = (amp) => Float32Array.from({ length: 320 }, (_, i) => amp * Math.sin(i / 3));

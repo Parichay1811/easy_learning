@@ -8,10 +8,10 @@
 import { autoViz, packDiagram, withPictures, richViz, simsMeta } from '../shared/autoviz.js';
 import { parseConvert, convertPlan } from '../shared/convert.js';
 import { parseArith, arithPlan } from '../shared/arith.js';
-import { TEMPLATES, solvePlan, withQuiz, withInvite, answerPlan, parseChoice, rng } from '../shared/solvers.js';
-import { testScope, countFrom, askCountPlan, buildTest } from './test.mjs';
+import { TEMPLATES, solvePlan, withQuiz, templateQuizPlan, answerPlan, parseChoice, rng } from '../shared/solvers.js';
+import { practiceScope, pickPack, whichTopicPlan } from './practice.mjs';
 import { wordsToDigits, parseUnit } from '../shared/numbers.js';
-import { MISS, OFFER, STOPPED, TALK, GENERIC_ACKS } from '../shared/lines.js';
+import { MISS, STOPPED, TALK, GENERIC_ACKS } from '../shared/lines.js';
 
 // With no fast model (small servers) the first line is a generic one.
 let ackTurn = 0;
@@ -48,7 +48,9 @@ const SCIENCE = /\b(magnetic|electric|current|voltage|volts?|amps?|amperes?|ohms
 const SHAPE = /\b(rectangles?|rectangular|circles?|circular|triangles?|triangular|squares?|area|perimeter|circumference)\b/;
 const PERIMETER = /\b(perimeter|fence|fencing|around|border|edging|edge|skirting|frame|trim|rope|ribbon|boundary|distance round|all the way round|walk round)\b/;
 const EXPLAIN = /\b(explain|teach|lesson|learn|show me how|help me understand|tell me about|i don'?t (get|understand))\b/;
-const QUIZ = /\b(quiz|test me|test on|test for|a test|mock|ask me|practi[cs]e|questions? (on|about|for|in)|give me (a |some |\d+ )?questions?|try one|another question|more questions)\b/;
+// Asking for a practice question ("quiz me", "test me" still work if said;
+// the teacher never invites them).
+const QUIZ = /\b(quiz( me)?|test me|ask me (a |some |another )?questions?|practi[cs]e (me|questions?|on)|questions? (on|about|for|in)|give me (a |some |another |\d+ )?questions?|try one|another question|more questions)\b/;
 
 // Thousands commas go ("1,200 cm" is 1200 cm, not 1 and 200).
 export function normalize(text) {
@@ -119,15 +121,15 @@ export function packPlan(pack, kind, seed) {
   if (kind === 'quiz') return withQuiz({ ...base, title: 'Your turn', steps: [] }, quiz);
   // Generated packs made before lessons had pictures get one per step.
   const steps = pack.status === 'reviewed' ? pack.explain : withPictures(openWith(pack.explain, pack.visual), pack.title, pack.visual);
-  return { ...base, steps: withInvite(steps), context: { ...base.context, offer: 'test' } };
+  return { ...base, steps };
 }
 
 export function faqPlan(pack, item) {
   return {
     kind: 'faq', topic: pack.id, title: item.q, watch: pack.title,
-    context: { topic: pack.id, template: pack.template, offer: 'test' },
+    context: { topic: pack.id, template: pack.template },
     steps: [{
-      say: `${item.a} ${OFFER}`,
+      say: item.a,
       draw: [{ op: 'clear' }, { op: 'title', text: pack.title }, ...faqFigure(pack, item), { op: 'card', q: item.q, a: item.a }],
     }],
   };
@@ -207,19 +209,19 @@ export function quick(text, { context = {}, packs, seed = Date.now(), faq: byWor
 
   if (context.awaiting) {
     const choice = parseChoice(t, context.awaiting);
-    if (choice != null && choice >= 0) return { plan: { ...answerPlan(context.awaiting, choice, context.test ? '' : undefined), context }, tier: 'rules' };
+    if (choice != null && choice >= 0) return { plan: { ...answerPlan(context.awaiting, choice), context }, tier: 'rules' };
   }
 
-  // Tests: only when asked for. "How many?" first, unless the student said.
-  if (context.offer === 'test-count') {
-    const n = countFrom(t, true) ?? (YES.test(t) && short ? 5 : null);
-    if (n) return { plan: buildTest(context.scope || testScope(t, context, packs), n, packs, seed), tier: 'rules' };
-  }
-  if (context.offer === 'test' && short && YES.test(t)) return { plan: askCountPlan(testScope('', context, packs)), tier: 'rules' };
+  // A practice question, only when asked for: one at a time, never a test or a
+  // score. Inside a worked example it has fresh numbers from the same template.
   if (QUIZ.test(t)) {
-    const scope = testScope(t, context, packs);
-    const n = countFrom(t);
-    return { plan: n ? buildTest(scope, n, packs, seed) : askCountPlan(scope), tier: 'rules' };
+    const scope = practiceScope(t, context, packs);
+    if (!scope) return { plan: whichTopicPlan(), tier: 'rules' };
+    const onBoard = scope.ids.length === 1 && scope.ids[0] === context.topic;
+    if (onBoard && context.template && TEMPLATES[context.template]) return { plan: templateQuizPlan(context.template, { seed }), tier: 'rules' };
+    const pack = pickPack(scope, packs, seed);
+    if (pack) return { plan: packPlan(pack, 'quiz', seed), tier: 'rules' };
+    return { plan: whichTopicPlan(), tier: 'rules' };
   }
 
   // A plain sum ("7 times 8", "20% of 150") before shapes: "7 x 8" with no
@@ -466,7 +468,7 @@ async function answer(text, { context = {}, history = [], packs, kb, llm, fast, 
   // "how does the heart work" is not the symmetry lesson's heart shape.
   // A specific question ("when was he born?") is not answered by a whole lesson.
   const specific = /^(when|where|who|whom|which year|what year|how (many|much|tall|big|old|far|long|high|cold|hot|deep|heavy|fast))\b|\b(famous for|known for|born|died)\b/i.test(t) || ['pronoun', 'bare'].includes(follow.kind) || tapped;
-  // A quiz card only when a test was asked for ("test me" is a rule above);
+  // A quiz card only when a question was asked for (a rule above);
   // among close matches, the card asking the same kind of question wins:
   // "how does a heat pump work?" is not "why are heat pumps less efficient?",
   // and "why does a volcano erupt?" is not the yes-or-no "can volcanoes erupt again?".

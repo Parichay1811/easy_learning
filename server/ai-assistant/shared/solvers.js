@@ -1,6 +1,6 @@
 // Lesson templates. Each turns a few numbers into a short spoken, drawn
-// lesson, ending with an invitation to practise (questions come when the
-// student asks for a test, from the same template). They are pure
+// lesson (a "your turn" question, from the same template, comes only when
+// the learner asks for one). They are pure
 // functions shared by the server (the router) and the browser (tapped
 // answers), so the maths is always code and never the LLM.
 //
@@ -295,18 +295,12 @@ function vectorQuiz(r, minus) {
   };
 }
 
-// A worked example. It ends with an invitation, not a question: questions
-// come only when the student asks for a test (see shared/test.js).
+// A worked example. There is no test after it: a question comes only when
+// the learner asks for one ("your turn", one at a time, never a score).
 export function solvePlan(template, params) {
   const t = TEMPLATES[template];
   const lesson = t.solve(params);
-  return { kind: 'solve', topic: t.topic, title: lesson.title, steps: withInvite(lesson.steps), context: { topic: t.topic, template, params, offer: 'test' } };
-}
-
-export const INVITE = 'Say test me if you want some practice questions.';
-export function withInvite(steps) {
-  const last = steps[steps.length - 1];
-  return [...steps.slice(0, -1), { ...last, say: `${last.say} ${INVITE}` }];
+  return { kind: 'solve', topic: t.topic, title: lesson.title, steps: lesson.steps, context: { topic: t.topic, template, params } };
 }
 
 // The question as a step: read the question, then the options with letters.
@@ -336,7 +330,7 @@ export function templateQuizPlan(template, { seed } = {}) {
 }
 
 // The teacher's reaction to an answer: the tick, the cross and why.
-export function answerPlan(quiz, choice, another = 'Ask me anything else, or say test me.') {
+export function answerPlan(quiz, choice, another = 'Ask me anything else.') {
   const a = quiz.answer;
   if (choice === a) {
     return { kind: 'answer', correct: true, title: 'Correct', steps: [{ say: `Yes, ${quiz.options[a].say} is right. ${quiz.why} ${another}`.trim(), draw: [{ op: 'mark', option: a, kind: 'tick', sfx: 'correct' }] }] };

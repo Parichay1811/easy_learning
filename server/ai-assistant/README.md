@@ -4,10 +4,10 @@ A website where a student talks and a teacher answers at once with a drawn,
 narrated mini-lesson. The student can talk over the teacher at any time: it
 stops mid-sentence, listens, and carries on, repeats, or answers the new
 question. It talks back like a person: small talk, half-finished sentences,
-"Do you mean…?" when it is unsure. It asks questions only when the student
-asks for a test ("quiz me on circles", "test me for GCSE maths"): it confirms
-how many, asks them one by one, marks each with the reason, and ends with
-the score and the topics to look at again.
+"Do you mean…?" when it is unsure. There is no test and no
+score in it: a question comes only when the learner asks for one ("give me
+a question on circles", "another question"). It is one calm "your turn"
+question, and the teacher explains why the answer is right.
 
 It is part of Learnigo, not a separate app: the Express API serves it at
 `/api/ai-assistant/*`, running it in its own lower-priority child process
@@ -705,7 +705,7 @@ from other web origins are refused.
 | `worker.mjs` | the assistant's process: lowers its CPU priority, loads `index.mjs`, serves it on a private port and tells the API which one |
 | `index.mjs` | `createAIAssistant()`: loads packs and models, returns the request handler behind `/api/ai-assistant`: `/ask` (streams ack, plan, sentences), `/asr` (with the lesson as context), `/heard` (corrections), `/tts`, `/topics`, `/lesson`, `/catalog` (every topic by subject), `/videos`, `/mcp`, `/admin`; reloads packs when they change |
 | `package.json` | marks this folder as ES modules and holds its scripts (`test`, `bench`, `eval`, `packs`); its dependencies are in `server/package.json` |
-| `lib/test.mjs`, `shared/test.js` | tests: scope (topic, subject, exam level), how many, questions, score |
+| `lib/practice.mjs` | a practice question when asked for: which topic (named topic, subject, exam level, or the lesson on the board); one question, never a count or a score |
 | `lib/schema.mjs`, `lib/packs.mjs` | the pack check; loading packs from subject folders |
 | `factory/` | topic snapshot, topics beyond the brief, the pack factory |
 | `lib/router.mjs` | the steps above |

@@ -158,7 +158,7 @@ function howTo(tokens, r, fractions) {
 export function arithPlan({ said, tokens, result, fractions, zero }) {
   if (zero) {
     return {
-      kind: 'solve', title: 'Dividing by zero', context: { offer: 'test' },
+      kind: 'solve', title: 'Dividing by zero', context: {},
       steps: [{ say: `That one has no answer: you cannot divide by zero. Sharing something into zero groups does not make sense, because there are no groups to put anything in.`,
         draw: [{ op: 'clear' }, { op: 'title', text: 'Dividing by zero' }, { op: 'formula', text: `${written(tokens, false)} = ?` }, { op: 'note', text: 'No answer: you cannot share into 0 groups.' }] }],
     };
@@ -185,7 +185,7 @@ export function arithPlan({ said, tokens, result, fractions, zero }) {
   const decimalToo = fractions && !result.approx && result.d !== 1 ? ` That is about ${fmt(value(result), 3)} as a decimal.` : '';
   const shown = showFrac(result, fractions);
   return {
-    kind: 'solve', title: 'Working it out', context: { offer: 'test' },
+    kind: 'solve', title: 'Working it out', context: {},
     steps: [{
       say: `${say.charAt(0).toUpperCase()}${say.slice(1)} ${tip}${decimalToo}`.replace(/\s+/g, ' ').trim(),
       draw: [{ op: 'clear' }, { op: 'title', text: 'Working it out' },

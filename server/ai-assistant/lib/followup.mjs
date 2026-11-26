@@ -81,10 +81,10 @@ export function nextQuestions(plan, subject, asked = '') {
     : !thing && place
       ? [`Where is ${s}?`, `Show me a picture of ${s}`, `How big is ${s}?`, 'Tell me more']
       : plan.kind === 'explain' || plan.kind === 'faq'
-        ? ['Tell me more', 'Give me an example', `Why is ${thing || !/^[A-Z][a-z]+ [A-Z]/.test(s) ? s.toLowerCase() : s} important?`, 'Test me on this']
+        ? ['Tell me more', 'Give me an example', `Why is ${thing || !/^[A-Z][a-z]+ [A-Z]/.test(s) ? s.toLowerCase() : s} important?`, `Show me a picture of ${pic}`]
         : ['Tell me more', `Show me a picture of ${pic}`, 'Give me an example', 'Explain it simpler'];
   // A long lesson title ("How clock gears turn the hour and minute hands") reads badly inside a question.
-  if (s.split(/\s+/).length > 5) return ['Tell me more', 'Give me an example', 'Explain it simpler', plan.kind === 'explain' || plan.kind === 'faq' ? 'Test me on this' : `Show me a picture of ${pic}`].filter((o) => !asked.toLowerCase().includes(o.toLowerCase()));
+  if (s.split(/\s+/).length > 5) return ['Tell me more', 'Give me an example', 'Explain it simpler', `Show me a picture of ${pic}`].filter((o) => !asked.toLowerCase().includes(o.toLowerCase()));
   const a = asked.toLowerCase();
   return options.filter((o) => !a.includes(o.toLowerCase().replace(/\?$/, ''))).slice(0, 4);
 }
