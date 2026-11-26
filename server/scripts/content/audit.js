@@ -10,7 +10,7 @@
 //   node server/scripts/content/audit.js --verbose       list every finding, not just counts
 //
 // Blocking checks: schema, unique_id, options, answer_key, round_trip, translations, audio,
-// speech, qa, stage, narration, badge. Warnings: duplicate_content, mode, level, untranslated,
+// speech, qa, stage, narration, badge, money (content v5). Warnings: duplicate_content, mode, level, untranslated,
 // word_problem.
 const path = require('path')
 const { loadAll } = require('./lib/bankio')
@@ -22,8 +22,10 @@ const { checkAnswer, canon, loose, parseEquation, numberTokens } = scorer
 const LANGS = ['es', 'fr', 'pt', 'it', 'de', 'nl', 'ru', 'tr', 'zh', 'ja', 'ko', 'id', 'vi']
 const INTERACTIONS = ['tap_mcq', 'true_false', 'drag_to_blank', 'multi_select', 'drag_order', 'tap_sequence', 'letter_bank', 'match_pairs', 'sort_bins', 'typed_short', 'typed_long', 'mic_record']
 const METHODS = ['choice', 'set', 'sequence', 'pairs', 'bins', 'text', 'number', 'speech_keywords', 'speech_open', 'rubric']
-const BLOCKING = new Set(['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa', 'stage', 'narration', 'badge'])
-const ALL_CHECKS = ['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa', 'stage', 'narration', 'badge', 'duplicate_content', 'mode', 'level', 'untranslated', 'word_problem']
+const BLOCKING = new Set(['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa', 'stage', 'narration', 'badge', 'money'])
+const ALL_CHECKS = ['schema', 'unique_id', 'options', 'answer_key', 'round_trip', 'translations', 'audio', 'speech', 'qa', 'stage', 'narration', 'badge', 'money', 'duplicate_content', 'mode', 'level', 'untranslated', 'word_problem']
+// Content v5: money items are checked as learners see them in these currencies.
+const { hasMoney, LANG_CURRENCIES } = require('../../utils/currency')
 const ID_RE = /^(EN|MA|SCI)-(LIS|RD|WR|SPK)-(T\d{2}|F00|E00|S0[6-8])-Q\d{2}$/
 const QA_VERSION = 4
 
@@ -376,6 +378,21 @@ function auditQuestion(q, ctx = {}) {
     }
   }
 
+  // money (content v5): amounts are tokens; filled in for each currency and language, nothing is
+  // left unfilled, no UK name is left, and the right answer still checks as right.
+  if (hasMoney(q) || (q.translations && hasMoney(q.translations))) {
+    for (const lang of ['en', ...(subject !== 'english' ? LANGS : [])]) {
+      if (lang !== 'en' && !(q.translations && q.translations[lang])) continue
+      for (const currency of LANG_CURRENCIES[lang] || ['EUR']) {
+        const tq = applyQuestionTranslation(clone(q), lang, { currency })
+        const text = JSON.stringify(tq)
+        if (/\[\[[mM]:/.test(text)) add('money', `${currency} ${lang}: a token is left unfilled`)
+        if (!['GBP', 'INR'].includes(currency) && /\d\s?p\b|\bpence\b|\bpfund\b|£/i.test(JSON.stringify([tq.prompt, tq.audio_text, tq.options, tq.correct_answer, tq.accepted_answers]))) add('money', `${currency} ${lang}: UK money is left`)
+        for (const f of roundTrip(tq, ctx.check)) add('money', `${currency} ${lang}: ${f}`)
+      }
+    }
+  }
+
   // badge: on a listening item the picture next to the prompt must not show the right answer
   // (an emoji answer, or a word answer the bank pairs with that emoji, e.g. 🧼 = "soap").
   const badgeImg = q.image && q.image.emoji
@@ -391,14 +408,14 @@ function auditQuestion(q, ctx = {}) {
 
   // narration (content v4): every served item, English and every translated language
   if (served && !ctx.baseline) {
-    for (const p of checkNarration(q, q.narration, { lang: 'en', subject, module })) add('narration', `en: ${p}`)
+    for (const p of checkNarration(q, q.narration, { lang: 'en', subject, module, requireV2: true })) add('narration', `en: ${p}`)
     if (q.narration && q.narration.status && !['authored', 'templated', 'reviewed'].includes(q.narration.status)) add('narration', `en: status ${q.narration.status}`)
     if (q.translations) for (const lang of LANGS) {
       if (!q.translations[lang]) continue
       const tq = applyQuestionTranslation(clone(q), lang)
       if (!tq.narration) { add('narration', `${lang}: no narration`); continue }
       if (q.narration && tq.narration.style !== q.narration.style) add('narration', `${lang}: style ${tq.narration.style} differs from English ${q.narration.style}`)
-      for (const p of checkNarration(tq, tq.narration, { lang, subject, module, baseInstruction: q.instruction })) add('narration', `${lang}: ${p}`)
+      for (const p of checkNarration(tq, tq.narration, { lang, subject, module, baseInstruction: q.instruction, requireV2: true })) add('narration', `${lang}: ${p}`)
     }
   }
 

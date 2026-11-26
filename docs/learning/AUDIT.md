@@ -1,4 +1,81 @@
-# Question bank audit: content v4 (2026-11-21) and v3 (2026-11-20)
+# Question bank audit: content v5 (2026-11-26), v4 (2026-11-21) and v3 (2026-11-20)
+
+## Content v5 (2026-11-26): the clinician and educator review
+
+Every question was reviewed as a paediatric speech and language therapist, a special-education
+teacher and a subject specialist would review it, against the rubric in
+[TEACHING-STANDARDS.md](TEACHING-STANDARDS.md). Each skill is also mapped to the curricula
+([STANDARDS.md](STANDARDS.md)).
+
+| | count |
+|---|---|
+| Questions | 1,970 |
+| Served | **1,952**: 1,774 graded, 178 practice-only |
+| Excluded | 18 (11 from v3, 7 new: listed below) |
+| Review findings applied | **965** on 848 questions (192 blocking, 773 improvements), in `scripts/content/review-v5/*.json` |
+| Findings held back | 4 improvements to everyday-pool prompts, until they are translated (listed by `review-v5.js`) |
+| English narration | **1,952 authored v2 scripts**: on average 10.1 words (was 16.9). Levels 0-2: 9.0 words on average, 12 at most |
+| Translated narration | v2 in all 13 languages, built from each item's own instruction, with the English cues |
+| Money items | 24, now tokens filled per learner (euro, pound, dollar, yen …) |
+| QA gate (`audit.js --check`) | **passes**. New blocking checks: `money` (every language × the currencies a learner of that language can meet), v2 narration required |
+
+### What the review found and fixed
+
+| finding | applied | examples |
+|---|---|---|
+| Instruction not literal or not what the screen shows | 174 | "Tell the story using the pictures" with only words (EN-SPK-T14, now emoji steps); "Put the pictures in order" with words only (EN-RD-T10); "for this picture" on a written story (MA-WR-T10) |
+| Developmental order | 127 | clapping syllables (level 3) came after rhyme and first sounds (2): now syllables, then rhyme, then sounds; teen numbers and bridging 10 moved up; o'clock and half past before quarter past/to; simple AB patterns down to level 1 |
+| Picture problems | 108 | the badge showed the answer (🥶 for "cold", ⬇️ for "down", 🔵 for the shape asked for); 🧺 labelled "towel"; a bird's nest 🪺 as a butterfly stage |
+| Reading load that is not the point | 52 | a 19-word written problem at level 3: the problem is now also heard; cards that printed the finished sentence above its own word tiles |
+| Speech checking | 32 | "counting in fives" and "it goes up in twos" marked wrong (MA-SPK-T10); "five, because…" marked wrong (MA-SPK-T14): reviewed checking rules |
+| Ambiguous or two defensible answers | 42 | ☂️ and 🌂; purse and pocket; "silly to say" as a graded odd one out |
+| Listening item answerable without listening | 31 | the only kind or sensible option keyed (EN-LIS-T15) |
+| Science accuracy | 31 | cocoon → chrysalis (12 items, in every language); "buds" keyed Spring *or* Autumn; amphibian defined so that it fits seals and ducks |
+| Spelling load in science | 23 | free typing of microscope, caterpillar and volcano at level 1: letter tiles, in each language from its own answer; vertebrate and extinction moved up |
+| Negation at levels 0-2 | 18 | "Fire is safe to touch" spoken as a statement to young children; "which is not…" questions moved up or written positively |
+| Wellbeing, health and safety | 12 | "healthy snacks" → everyday snacks; "stranger danger" → check with a trusted grown-up; the real and fake pills planning task → how scientists test a medicine (level 5) |
+| Answer format and wrong keys | 23 | "1.25 kg" marked wrong; < > = needed a symbol keyboard (now dragged into the gap); the hint said "lock" has four sounds |
+| Money | 20 + the 24 token items | 20p coins do not exist in dollars, yen or won: coin cards show 10, 5 and 1 |
+| Translation errors found on the way | 9 | French, Chinese and Japanese clock options showed 10:45 while the clock shows 10:30; Japanese counting prompts left in English; Chinese cloud and shell cards swapped |
+
+### Excluded in v5
+
+| id | reason |
+|---|---|
+| EN-RD-T12-Q09 | an exact duplicate of EN-RD-T15-Q09 |
+| MA-LIS-T03-Q09, MA-LIS-T03-Q10 | the key depends on a second clause the picture cannot show (hats, a handstand) |
+| MA-LIS-T09-Q07 | the audio mixes up pairs and shoes, so a careful listener finds no right option |
+| SCI-WR-T09-Q04 | maths shapes in a science item |
+| SCI-SPK-T09-Q06 | asks "bigger, heavier or faster" when the answer is "hotter"; the card cannot ask for "hotter" without giving it away |
+| SCI-SPK-T09-Q09 | a maths item in the science bank |
+
+### Narration v2 (served items)
+
+| cue | items | cue | items |
+|---|---|---|---|
+| tap | 857 | look | 315 |
+| read | 736 | drag | 136 |
+| listen | 603 | count | 124 |
+| say | 473 | order | 104 |
+| type | 385 | match | 40 |
+| think | 349 | sort | 30 |
+
+### Reproduce (v5)
+
+```bash
+cd server
+node scripts/content/derive-metadata.js --dry            # "Would change: nothing"
+node scripts/content/audit.js --check                    # QA gate passed
+node scripts/content/standards.js --check                # STANDARDS.md and the client copy are current
+node scripts/content/narration.js --report --dry         # 1,952 authored English v2 scripts
+npm test && npm run test:ai-assistant
+node ai-assistant/lib/pack-lint.mjs --young              # the children's lesson packs: to fix 0
+```
+
+The rest of this file is the content v4 audit (2026-11-21) and the v3 audit (2026-11-20). Their counts describe those versions.
+
+---
+
 
 ## Content v4 (2026-11-21)
 

@@ -1,12 +1,13 @@
 #!/usr/bin/env node
-// Narration scripts for every question (content v4). Re-runnable and idempotent.
+// Narration scripts for every question (content v4; v2 scripts since content v5). Re-runnable and idempotent.
 //
 //   node scripts/content/narration.js --from <dir>   merge authored English scripts from <dir>/<bankfile>.json
-//                                                     ({ "<id>": { "text", "style" } }) into the repo store
+//                                                     ({ "<id>": { "text", "cues"? } }) into the repo store
 //                                                     scripts/content/narration/authored/<bankfile>.json, after
 //                                                     checking every rule; then rebuild the bank files
 //   node scripts/content/narration.js                rebuild only (same as derive-metadata.js)
 //   node scripts/content/narration.js --report       coverage per language (authored / templated / reviewed)
+//   node scripts/content/narration.js --check <bankfile> <file>   check a writers' file against every rule; writes nothing
 //   add --dry to write nothing.
 //
 // What ends up in the bank (derive-metadata.js calls applyNarration() for every served question):
@@ -18,7 +19,7 @@
 // English-subject questions are not translated (they teach English), so they carry English narration only.
 const fs = require('fs')
 const path = require('path')
-const { checkNarration, ctxOf, stripPicto, wordCount, STYLES } = require('./lib/narration-rules')
+const { checkNarration, ctxOf, stripPicto, wordCount, deriveCues, STYLES, CUES, CUE_WORDS } = require('./lib/narration-rules')
 const { applyQuestionTranslation } = require('../../utils/applyQuestionTranslation')
 
 const PHRASES_FILE = path.resolve(__dirname, '../../data/narration-phrases.json')
@@ -78,6 +79,32 @@ function pieces(qL, lang, { module, subject }) {
   return { P, instruction, prompt, options, read: module === 'read' ? P.read : '' }
 }
 
+// Cues an English script says, in the order it says them.
+const cuesSaid = (text) => CUES.map((c) => ({ c, at: String(text).search(CUE_WORDS[c]) })).filter((x) => x.at >= 0).sort((a, b) => a.at - b.at).map((x) => x.c).slice(0, 3)
+const EN_FALLBACK_V2 = 'Look at the screen. Take your time.'
+
+// Templated narration v2 (content v5) for one question in one language: the item's own
+// instruction (and, on Write/Speak items, its short prompt), with no story intro, outro or
+// options, so it is as short in every language as in English. cues: the English script's
+// cues (language-neutral keys); English derives its own from what it says.
+function buildTemplatedV2(qL, lang, { module, subject, baseInstruction, id, cues }) {
+  const { P, instruction, prompt } = pieces(qL, lang, { module, subject })
+  const join = (parts) => parts.filter(Boolean).join(P.join)
+  const fallback = lang === 'en' ? EN_FALLBACK_V2 : P.fallback
+  const seen = new Set()
+  for (const c of [[instruction, prompt], [instruction], [fallback]]) {
+    const text = join(c)
+    if (!text || seen.has(text)) continue
+    seen.add(text)
+    let k = cues && cues.length ? cues : deriveCues(qL, module, baseInstruction)
+    if (lang === 'en') k = text === fallback ? ['look'] : cuesSaid(text)
+    if (!k.length) continue
+    const n = { text, style: 'plain', v: 2, status: 'templated', cues: k }
+    if (!checkNarration(qL, n, { lang, module, subject, baseInstruction }).length) return n
+  }
+  throw new Error(`${qL.id} ${lang}: no templated v2 narration passes the rules`)
+}
+
 // Templated narration for one question in one language (qL = the question in that language).
 function buildTemplated(qL, lang, { style, module, subject, baseInstruction, id }) {
   const { P, instruction, prompt, options, read } = pieces(qL, lang, { module, subject })
@@ -127,21 +154,22 @@ function applyNarration(q, { subject, module, spec } = {}) {
   const store = loadAuthored()[q.id]
   const own = store || (spec && spec.narration ? { ...spec.narration, status: spec.narration.status || 'authored' } : null)
   let en = null
-  if (own && own.text) {
-    const cand = { text: own.text.trim(), style: own.style, v: 1, status: own.status || 'authored' }
+  // Content v5: only v2 scripts (short, literal, with cues) are served; an older v4 script in the
+  // store falls back to the templated v2 script until a writer replaces it.
+  if (own && own.text && own.v === 2) {
+    const cand = { text: own.text.trim(), style: 'plain', v: 2, status: own.status || 'authored', cues: own.cues && own.cues.length ? own.cues : cuesSaid(own.text) }
     // An authored script that breaks a rule is never served: it falls back to a templated one
     // (narration.js --from reports it, and the store only ever holds scripts that passed).
     if (!checkNarration(q, cand, { lang: 'en', ...ctx }).length) en = cand
   }
-  const style = en ? en.style : deriveStyle(q, ctx.module)
-  if (!en) en = buildTemplated(q, 'en', { style, ...ctx, baseInstruction: q.instruction, id: q.id })
+  if (!en) en = buildTemplatedV2(q, 'en', { ...ctx, baseInstruction: q.instruction, id: q.id })
   q.narration = en
   if (q.translations) for (const lang of LANGS) {
     const t = q.translations[lang]
     if (!t) continue
     delete t.narration
     const qL = applyQuestionTranslation(clone(q), lang)
-    t.narration = buildTemplated(qL, lang, { style, ...ctx, baseInstruction: q.instruction, id: q.id })
+    t.narration = buildTemplatedV2(qL, lang, { ...ctx, baseInstruction: q.instruction, id: q.id, cues: en.cues })
   }
   return q
 }
@@ -169,13 +197,14 @@ function merge(fromDir, { banks, dry = false, storeDir = AUTHORED_DIR } = {}) {
       if (!q) { report.unknown.push(`${b.file} ${id}`); continue }
       if (q.qa && q.qa.status === 'excluded') { report.excluded.push(id); continue }
       const text = String((entry && entry.text) || '').trim()
-      const cand = { text, style: entry && entry.style, v: 1, status: 'authored' }
+      const cues = Array.isArray(entry && entry.cues) && entry.cues.length ? entry.cues : cuesSaid(text)
+      const cand = { text, style: 'plain', v: 2, status: 'authored', cues }
       const problems = checkNarration(q, cand, { lang: 'en', subject: b.subject, module: b.module })
       if (problems.length) { report.rejected.push(`${id}: ${problems.join('; ')}`); delete store[id]; continue }
       const prev = store[id]
       const status = prev && prev.text === text && prev.status === 'reviewed' ? 'reviewed' : 'authored'
-      if (prev && prev.text === text && prev.style === cand.style && prev.status === status) { report.unchanged++; continue }
-      store[id] = { text, style: cand.style, status }
+      if (prev && prev.text === text && prev.v === 2 && JSON.stringify(prev.cues) === JSON.stringify(cues) && prev.status === status) { report.unchanged++; continue }
+      store[id] = { text, style: 'plain', v: 2, cues, status }
       report.accepted++
     }
     const sorted = Object.fromEntries(Object.keys(store).sort().map((k) => [k, store[k]]))
@@ -202,10 +231,43 @@ function coverage(banks) {
 }
 
 // Exported before the CLI block: the CLI requires derive-metadata.js, which requires this file.
-module.exports = { applyNarration, clearNarration, buildTemplated, deriveStyle, merge, coverage, loadAuthored, resetCaches, phrases, LANGS, STYLES, wordCount }
+module.exports = { applyNarration, clearNarration, buildTemplated, buildTemplatedV2, cuesSaid, deriveStyle, merge, coverage, loadAuthored, resetCaches, phrases, LANGS, STYLES, wordCount }
+
+// Checks a writers' file ({ "<id>": { "text", "cues"? } }) against every rule, writing nothing.
+// Returns { checked, problems: ["<id>: ..."] }. bankFile: e.g. "english_listen.json".
+function checkFile(bankFile, file) {
+  const { loadAll } = require('./lib/bankio')
+  const b = loadAll().find((x) => x.file === bankFile)
+  if (!b) throw new Error(`unknown bank ${bankFile}`)
+  const incoming = JSON.parse(fs.readFileSync(file, 'utf8'))
+  const byId = new Map(b.data.questions.map((q) => [q.id, q]))
+  const problems = []
+  let checked = 0
+  for (const [id, entry] of Object.entries(incoming)) {
+    const q = byId.get(id)
+    if (!q) { problems.push(`${id}: unknown id`); continue }
+    if (q.qa && q.qa.status === 'excluded') continue
+    checked++
+    const text = String((entry && entry.text) || '').trim()
+    const cues = Array.isArray(entry && entry.cues) && entry.cues.length ? entry.cues : cuesSaid(text)
+    const p = checkNarration(q, { text, style: 'plain', v: 2, status: 'authored', cues }, { lang: 'en', subject: b.subject, module: b.module })
+    if (p.length) problems.push(`${id}: ${p.join('; ')}`)
+  }
+  const missing = b.data.questions.filter((q) => !(q.qa && q.qa.status === 'excluded') && !incoming[q.id]).map((q) => q.id)
+  return { checked, problems, missing }
+}
+module.exports.checkFile = checkFile
 
 if (require.main === module) {
   const args = process.argv.slice(2)
+  if (args.includes('--check')) {
+    const [bankFile, file] = args.slice(args.indexOf('--check') + 1)
+    const r = checkFile(bankFile, file)
+    console.log(`${bankFile}: ${r.checked} checked, ${r.problems.length} with problems, ${r.missing.length} served item(s) missing.`)
+    for (const x of r.problems) console.log(`  ${x}`)
+    if (r.missing.length) console.log(`  missing: ${r.missing.join(' ')}`)
+    process.exit(r.problems.length || r.missing.length ? 1 : 0)
+  }
   const dry = args.includes('--dry')
   const from = args.includes('--from') ? path.resolve(args[args.indexOf('--from') + 1]) : null
   if (from) {

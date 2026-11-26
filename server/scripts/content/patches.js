@@ -399,4 +399,22 @@ const stageOverrides = [
   { ids: S('MA-RD-S06', [2, 3, 4]), stage: 2, reason: 'Stretch: ordering negative numbers and matching equal fractions, decimals and percentages is understanding.' },
 ]
 
+// Content v5: the clinician + educator review (review-v5/*.json), then money in the learner's own
+// currency (tokens filled per learner; runs last).
+patches.push(...require('./review-v5').patches)
+patches.push({
+  ids: ['SCI-WR-T03-Q07', 'SCI-WR-T03-Q08'],
+  category: 'translation',
+  severity: 'blocking',
+  reason: 'In Chinese the two cards were swapped: the cloud picture asked for 贝 (shell) and the shell picture for 白 (white cloud).',
+  apply(q) {
+    const zh = q.translations && q.translations.zh
+    if (!zh) return
+    const [prompt, key] = q.id === 'SCI-WR-T03-Q07' ? ['_云', '白'] : ['_壳', '贝']
+    Object.assign(zh, { prompt, correct_answer: key, accepted_answers: [key] })
+  },
+})
+patches.push(...require('./chrysalis').patches)
+patches.push(...require('./money').patches)
+
 module.exports = { patches, LANGS, stripParen, stageOverrides }

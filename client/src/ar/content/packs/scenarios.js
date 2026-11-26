@@ -190,8 +190,8 @@ export const SCENARIOS = {
     emoji: '🚪',
     options: [
       { id: 'door-get-adult', label: 'Get an adult to answer it', emoji: '🗣️', correct: true, why: 'An adult decides who comes in.' },
-      { id: 'door-open', label: 'Open the door', emoji: '🔓', correct: false, why: 'You must never let a stranger in.' },
-      { id: 'door-shout-out', label: 'Shout out to them yourself', emoji: '📢', correct: false, why: 'Talking to a stranger on your own is not safe.' },
+      { id: 'door-open', label: 'Open the door', emoji: '🔓', correct: false, why: 'A grown-up decides who comes in, not you.' },
+      { id: 'door-shout-out', label: 'Shout out to them yourself', emoji: '📢', correct: false, why: 'A grown-up talks to people at the door. Fetch one first.' },
       { id: 'door-say-nothing', label: 'Say nothing and hide', emoji: '🤫', correct: false, why: 'An adult still needs to know somebody is there.' },
     ],
   },
@@ -268,12 +268,12 @@ export const SCENARIOS = {
   'lost-in-shop': {
     id: 'lost-in-shop',
     kind: 'help',
-    prompt: 'You cannot see your mum anywhere in the shop. What should you do?',
+    prompt: 'You cannot see the grown-up you came with. What should you do?',
     emoji: '🏪',
     options: [
-      { id: 'shop-tell-till', label: 'Stand still and tell the person at the till', emoji: '🗣️', correct: true, why: 'A shop worker can help you find your mum.' },
-      { id: 'shop-go-outside', label: 'Go outside to look', emoji: '🚪', correct: false, why: 'Outside is where you get properly lost.' },
-      { id: 'shop-go-with-stranger', label: 'Go away with somebody you do not know', emoji: '🚶', correct: false, why: 'Never go anywhere with a stranger.' },
+      { id: 'shop-tell-till', label: 'Stand still and tell the person at the till', emoji: '🗣️', correct: true, why: 'A shop worker can help you find your grown-up.' },
+      { id: 'shop-go-outside', label: 'Go outside to look', emoji: '🚪', correct: false, why: 'Stay inside, where your grown-up will look for you.' },
+      { id: 'shop-go-with-stranger', label: 'Go away with somebody you do not know', emoji: '🚶', correct: false, why: 'Stay in the shop. Only go with your own grown-up.' },
       { id: 'shop-hide', label: 'Hide between the shelves', emoji: '🙈', correct: false, why: 'Nobody can find you if you hide.' },
     ],
   },

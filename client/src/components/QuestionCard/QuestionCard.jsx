@@ -23,7 +23,7 @@ import { langOfKey } from "../journey/words";
 import PictureMaths from "./PictureMaths";
 import {
   findSmallSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown, messageArgs, isHiddenAudio, seedOf, scriptOf, isFirstTry,
-  cuesFor, activeCues, canHearChoices,
+  cuesFor, activeCues, canHearChoices, cardToRead,
 } from "./support";
 import CueStrip from "./CueStrip";
 import styles from "./QuestionCard.module.css";
@@ -338,7 +338,10 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
     const off = onNarration((e) => { if (e.type === "start" && id == null) { id = e.id; onId?.(e.id); } });
     let p;
     if (script) {
-      p = speech.speak(script.text, { lang: script.lang, ...opts });
+      // The short script says what to do; the card's question follows when a learner who
+      // cannot read needs to hear it (never on a Read card unless they asked: support.js).
+      const card = cardToRead(question, { module, subject, user: !!opts.user, script: script.text });
+      p = speech.speak(card ? [script.text, card] : script.text, { lang: script.lang, ...opts });
       if (id != null) scriptIdRef.current = id;
     } else {
       // In an English reading round the passage itself is the exercise: read only on request.

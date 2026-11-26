@@ -269,3 +269,22 @@ export function canHearChoices(question, subject) {
   const opts = question?.options;
   return Array.isArray(opts) && opts.length > 1 && opts.some((o) => /\p{L}|\d/u.test(String(o).replace(/\p{Extended_Pictographic}/gu, "")));
 }
+
+/**
+ * The card's own words to read after the short script (content v5 scripts say what to do,
+ * not always the question). Never when reading the card is the exercise (a Read item,
+ * unless the learner pressed "Read to me"), never a card of pictures only, and never words
+ * the script already said. -> string | null
+ */
+export function cardToRead(question, { module, subject, user = false, script = "" } = {}) {
+  const prompt = typeof question?.prompt === "string" ? question.prompt.trim() : "";
+  const words = prompt.replace(/\p{Extended_Pictographic}|️|‍/gu, "").trim();
+  if (!/\p{L}{2,}/u.test(words)) return null;
+  // A word or two to work on ("three", "a tomato") is the task itself, not a question to hear.
+  if (words.split(/\s+/).filter(Boolean).length < 4 && !/_{2,}|…/.test(words)) return null;
+  if (module === "read" && !user) return null;
+  if (subject === "english" && module === "read" && !user) return null;
+  const said = String(script).toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ");
+  if (said.includes(words.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim())) return null;
+  return prompt.replace(/\s*_{2,}\s*/g, " … ");
+}

@@ -1,4 +1,4 @@
-# Question bank: maintaining and extending it (content v4)
+# Question bank: maintaining and extending it (content v5)
 
 The bank lives in `server/data/` as 12 JSON files, one per subject × mode
 (`english|math|science` × `listen|read|write|speak`), plus `skills.json`. The server seeds
@@ -26,6 +26,32 @@ server/scripts/migrations/2026-11-20-content-v3.js   pushes v3 into an existing 
 server/scripts/migrations/2026-11-21-content-v4.js   pushes v4 (stage, everyday, narration, the everyday pool)
 server/data/narration-phrases.json                   the phrase bank for templated narration (14 languages)
 ```
+
+## Content v5 in short
+
+Content v5 adds four things on top of v4. Every rule they follow is in
+[TEACHING-STANDARDS.md](TEACHING-STANDARDS.md).
+
+| what | where | how to change it |
+|---|---|---|
+| **Narration v2**: short, literal scripts with action cues (`narration.v: 2`, `cues`) | `lib/narration-rules.js` (`checkV2`), `narration.js` (`buildTemplatedV2`), store `narration/authored/*.json` | Writers check a file with `node scripts/content/narration.js --check <bank>.json <file>`, then merge it with `--from <dir>`. The gate requires v2 everywhere. |
+| **The review**: the clinician and educator findings as data | `review-v5/*.json` applied by `review-v5.js` (after the v3/v4 patches, before money) | Add `{ id, category, severity, problem, evidence, fix, translations? }`. A fix in words on a maths or science item needs `translations` for all 13 languages, unless it reuses an instruction the bank already has (then its translations are found by themselves). Accepted answers and hints may improve in English alone. `fix.validation` replaces the derived checking rules. `fix.interaction` may be `letter_bank` (tiles built per language from its own answer) or `drag_to_blank`. |
+| **Money tokens**: `[[m:20]]` (small unit), `[[M:45]]` (main unit) | `money.js` (converts old pence and pounds in every language), `server/utils/currency.js` (fills them per learner) | Write amounts as tokens in every language. The `money` gate check fills each money item in every currency its language can meet (`LANG_CURRENCIES`) and runs the round trip. |
+| **Curriculum map** for every skill | `skills-standards.json` → `skills.json` (`standards`, `status: "proposed"`), `docs/learning/STANDARDS.md` and `client/src/data/standards.json` | Edit `skills-standards.json`, then run `node scripts/content/standards.js`. `--check` fails when the document or the client copy is out of date. |
+
+Patches now reach the generated items (starters, everyday pool, stretch) as well. Some rules
+guard the bank's own invariants whatever a reviewer proposes (`review-v5.js` `sanitize`):
+
+- everyday items stay at level 0-1;
+- stretch items stay at levels 6-8;
+- a maths starter's prompt is never only pictures;
+- every accepted answer must be readable by the checker.
+
+`chrysalis.js` keeps every text saying chrysalis, not cocoon, in every language.
+
+The AI Teacher's lesson packs have their own children's check: `node ai-assistant/lib/pack-lint.mjs --young`
+(three choices, numerals, no give-aways, short literal sentences, specific feedback). Packs for
+young learners carry `"checked": "content-v5"` once a reviewer has rewritten them.
 
 ## Everyday workflow
 

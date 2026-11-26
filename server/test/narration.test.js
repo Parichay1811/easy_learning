@@ -27,7 +27,8 @@ test('every served question has a valid narration in English and in every transl
   for (const { q, b } of served) {
     const ctx = { subject: b.subject, module: b.module }
     for (const p of checkNarration(q, q.narration, { lang: 'en', ...ctx })) problems.push(`${q.id} en: ${p}`)
-    assert.equal(q.narration.v, 1)
+    assert.equal(q.narration.v, 2, `${q.id}: content v5 scripts`)
+    assert.ok(Array.isArray(q.narration.cues) && q.narration.cues.length >= 1, `${q.id}: cues`)
     assert.ok(['authored', 'reviewed', 'templated'].includes(q.narration.status))
     checked++
     if (!q.translations) { assert.equal(b.subject, 'english', `${q.id}: only English-subject items are untranslated`); continue }
@@ -36,6 +37,7 @@ test('every served question has a valid narration in English and in every transl
       assert.ok(n, `${q.id} ${lang}`)
       assert.equal(n.status, 'templated', `${q.id} ${lang}: other languages are templated until a person reviews them`)
       assert.equal(n.style, q.narration.style, `${q.id} ${lang}: same style as English`)
+      assert.deepEqual(n.cues, q.narration.cues, `${q.id} ${lang}: the same steps as English`)
       for (const p of checkNarration(applyQuestionTranslation(clone(q), lang), n, { lang, ...ctx, baseInstruction: q.instruction })) problems.push(`${q.id} ${lang}: ${p}`)
       checked++
     }
@@ -107,9 +109,11 @@ test('the rules catch what a narration must never do', () => {
 test('the phrase bank: every language and style, written in that language, no "!" and no English', () => {
   assert.deepEqual(Object.keys(phrases.languages).sort(), ['en', ...LANGS].sort())
   for (const [lang, P] of Object.entries(phrases.languages)) {
-    assert.deepEqual(Object.keys(P.styles).sort(), [...STYLES].sort(), lang)
+    // The story styles of v4 scripts (v2 scripts are all "plain" and use no intros or outros).
+    const V4 = STYLES.filter((s) => s !== 'plain')
+    assert.deepEqual(Object.keys(P.styles).sort(), [...V4].sort(), lang)
     const texts = [P.read, P.fallback, P.options.frame, P.options.frame_multi]
-    for (const s of STYLES) {
+    for (const s of V4) {
       assert.ok(P.styles[s].intros.length >= 2 && P.styles[s].outros.length >= 2, `${lang} ${s}`)
       texts.push(...P.styles[s].intros, ...P.styles[s].outros)
     }
@@ -192,4 +196,20 @@ test('coverage report: every served item, every language', () => {
     assert.equal(c.byLang[lang].missing, 0, `${lang}: every translated item has a script`)
     assert.equal(c.byLang[lang].templated, served.filter(({ b }) => b.subject !== 'english').length)
   }
+})
+
+test('narration v2 (content v5): short by level, literal, action first, cues said in order', () => {
+  const q = { id: 'EN-LIS-T99-Q01', level: 1, interaction: 'tap_mcq', instruction: 'Listen. Tap the word you hear.', prompt: 'Which word did you hear?', audio_text: 'giggle', options: ['giggle', 'goggle', 'gaggle'], correct_answer: 'giggle' }
+  const v2 = (text, cues = ['listen', 'tap']) => ({ text, style: 'plain', v: 2, status: 'authored', cues })
+  const ok = (text, cues) => assert.deepEqual(checkNarration(q, v2(text, cues), { lang: 'en' }), [], text)
+  const bad = (text, re, cues) => assert.ok(checkNarration(q, v2(text, cues), { lang: 'en' }).some((p) => re.test(p)), text)
+  ok('Listen to the word. Tap the word you hear.')
+  bad('A word is hiding inside the sound. Catch it with your ears.', /figurative/)
+  bad('Listen to the word now, then tap the word that you heard on the screen.', /words/)
+  bad('Listen to the word. Tap it!', /"!"/)
+  bad('Listen. Which one is not a cat? Tap it.', /negation/)
+  bad('Tap the word. Listen first.', /order/)
+  bad('Listen to the word. Tap the word you hear.', /unknown cue/, ['listen', 'clap'])
+  // Higher levels may say more, and NOT (in capitals) is allowed there.
+  assert.deepEqual(checkNarration({ ...q, level: 4 }, v2('Listen to all the words. Which word does NOT belong? Tap it.'), { lang: 'en' }), [])
 })

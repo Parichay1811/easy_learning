@@ -139,3 +139,15 @@ test("the action strip: the script's cues, else from the module and the widget",
   assert.equal(canHearChoices({ interaction: "tap_mcq", options: ["🐟", "🐄"] }, "science"), false, "pictures need no reading");
   assert.equal(canHearChoices({ interaction: "typed_short" }, "maths"), false);
 });
+
+test("Read to me: the short script, then the card's question when reading it is not the exercise", async () => {
+  const { cardToRead } = await import("./support.js");
+  const q = { prompt: "What do bees collect from flowers?" };
+  assert.equal(cardToRead(q, { module: "write", subject: "science", script: "Read the question. Type one word." }), "What do bees collect from flowers?");
+  assert.equal(cardToRead(q, { module: "read", subject: "science" }), null, "a Read card is the reading practice");
+  assert.equal(cardToRead(q, { module: "read", subject: "science", user: true }), "What do bees collect from flowers?", "unless the learner asks");
+  assert.equal(cardToRead({ prompt: "🍎🍎🍎" }, { module: "listen", subject: "maths" }), null, "pictures are not read");
+  assert.equal(cardToRead(q, { module: "write", subject: "science", script: "What do bees collect from flowers? Type one word." }), null, "already said");
+  assert.equal(cardToRead({ prompt: "I ___ happy." }, { module: "write", subject: "english" }), "I … happy.");
+  assert.equal(cardToRead({ prompt: "three" }, { module: "write", subject: "maths" }), null, "a number word to read is the task");
+});

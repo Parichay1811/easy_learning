@@ -80,6 +80,17 @@ function run({ dry = false } = {}) {
     }
     for (const { spec, question } of fresh[b.file] || []) {
       question.__spec = spec
+      // Content v5: the review fixes and money tokens reach the generated items (starters,
+      // everyday pool, stretch) too; they are rebuilt from their source every run.
+      let excluded = null
+      const h = {
+        LANGS,
+        forEachLang(q2, fn) { fn(q2, 'en'); for (const l of LANGS) if (q2.translations && q2.translations[l]) fn(q2.translations[l], l) },
+        exclude(_q, reason) { excluded = reason },
+      }
+      for (const p of patches) if (matches(p, question.id)) { p.apply(question, h); log.patches.push({ id: question.id, category: p.category, severity: p.severity, reason: p.reason }) }
+      if (LEVEL_NAMES[question.level]) question.level_name = LEVEL_NAMES[question.level]
+      if (excluded) question.__excluded = excluded
       b.data.questions.push(question)
       log.added.push({ id: question.id, level: question.level })
     }
@@ -90,10 +101,14 @@ function run({ dry = false } = {}) {
   const skillOf = (q) => (q.__spec && q.__spec.skill) || rules.deriveSkill(q)
   for (const b of banks) for (const q of b.data.questions) { const s = skillOf(q); (modes[s] = modes[s] || new Set()).add(b.module) }
   const order = ['listen', 'read', 'write', 'speak']
+  // Content v5: each skill's curriculum mapping (skills-standards.json; proposed until a qualified
+  // teacher reviews it): Ireland, England, the US, the CEFR / EU key competences, adult levels.
+  const STD = require('./skills-standards.json')
   const skillsJson = {
     version: 1,
-    generated_by: 'server/scripts/content/derive-metadata.js (source: skills-source.js)',
-    skills: SKILLS.map((s) => ({ id: s.id, subject: s.subject, modes: order.filter((m) => modes[s.id] && modes[s.id].has(m)), name: s.name, objective: s.objective, level: s.level, prerequisites: s.prerequisites })),
+    generated_by: 'server/scripts/content/derive-metadata.js (source: skills-source.js, skills-standards.json)',
+    standards_sources: STD.sources,
+    skills: SKILLS.map((s) => ({ id: s.id, subject: s.subject, modes: order.filter((m) => modes[s.id] && modes[s.id].has(m)), name: s.name, objective: s.objective, level: s.level, prerequisites: s.prerequisites, ...(STD.skills[s.id] ? { standards: { ...STD.skills[s.id], status: 'proposed' } } : {}) })),
   }
   const unknown = Object.keys(modes).filter((id) => !SKILLS.some((s) => s.id === id))
   if (unknown.length) throw new Error(`questions use skills missing from skills-source.js: ${unknown.join(', ')}`)
@@ -120,6 +135,9 @@ function run({ dry = false } = {}) {
         q.graded = d.graded
         q.validation = d.validation
       }
+      // Content v5: reviewed checking rules (review-v5/*.json) replace the derived ones.
+      const reviewed = require('./review-v5').validationOverrides.get(q.id)
+      if (reviewed) q.validation = JSON.parse(JSON.stringify(reviewed))
       q.everyday = !!(spec && spec.everyday)
       q.stage = deriveStage(q).stage
       if (excluded) {

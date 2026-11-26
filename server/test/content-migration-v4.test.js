@@ -2,6 +2,7 @@
 // seed the v3 bank + a teacher upload → dry run → up → verify → idempotent re-run → the API
 // serves stage, everyday and the narration in the requested language → down → exactly as before.
 const test = require('node:test')
+const { loadAll } = require('../scripts/content/lib/bankio')
 const assert = require('node:assert/strict')
 const fs = require('fs')
 const os = require('os')
@@ -74,7 +75,8 @@ test('content v4 migration: dry run, up, verify, idempotent, served fields, down
     assert.deepEqual(v.missing, ['SCI-RD-E00-Q01'], 'only the id held by a teacher upload is not a bank document')
     assert.equal(v.withStage, v.questions)
     assert.equal(v.everyday, 47)
-    assert.ok(v.withNarration >= v.questions - 11, 'every served question has narration (excluded ones need none)')
+    const excludedNow = loadAll().flatMap((b) => b.data.questions).filter((q) => q.qa && q.qa.status === 'excluded').length
+    assert.ok(v.withNarration >= v.questions - excludedNow, 'every served question has narration (excluded ones need none)')
     assert.ok(v.translatedNarration > 16000)
 
     // Idempotent
