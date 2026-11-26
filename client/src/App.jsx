@@ -60,6 +60,7 @@ const Shorts = lazyPage(() => import("./pages/shorts/Shorts"));
 const AITeacher = lazyPage(() => import("./pages/AITeacher"));
 const ContactUs = lazyPage(() => import("./pages/ContactUs"));
 const AboutUs = lazyPage(() => import("./pages/AboutUs"));
+const WhyLearnigo = lazyPage(() => import("./pages/WhyLearnigo"));
 const AdminLogin = lazyPage(() => import("./pages/AdminLogin"));
 const SuperAdminLogin = lazyPage(() => import("./pages/SuperAdminLogin"));
 const TeacherLogin = lazyPage(() => import("./pages/TeacherLogin"));
@@ -98,6 +99,7 @@ const ARInsights = lazyPage(() => import("./ar/pages/ARInsights"));
 const DEV_PAGES = import.meta.env.DEV || import.meta.env.VITE_ENABLE_DEV_PAGES === "1";
 const DashboardKit = lazyPage(() => import("./pages/dev/DashboardKit"));
 const CommsGallery = lazyPage(() => import("./pages/dev/CommsGallery"));
+const QuestionKit = lazyPage(() => import("./pages/dev/QuestionKit"));
 
 // Floating layers that are not needed for the first picture: fetched once the page
 // is up. If one cannot be fetched it simply is not there (nothing else depends on it).
@@ -129,6 +131,7 @@ const ROUTES = (
     <Route path="/login" element={<SignedInGate role="student"><Login /></SignedInGate>} />
     <Route path="/contact-us" element={<ContactUs />} />
     <Route path="/about-us" element={<AboutUs />} />
+    <Route path="/about-us/why-learnigo" element={<WhyLearnigo />} />
     <Route path="/learning-support-by-country" element={<GuidePages guide="countries" />} />
     <Route path="/learning-support-by-country/:slug" element={<GuidePages guide="countries" />} />
     <Route path="/learning-differences" element={<GuidePages guide="differences" />} />
@@ -165,6 +168,7 @@ const ROUTES = (
     <Route path="/test/:id" element={<TestPlayer />} />
     {DEV_PAGES && <Route path="/dev/dashboard-kit" element={<DashboardKit />} />}
     {DEV_PAGES && <Route path="/dev/comms" element={<CommsGallery />} />}
+    {DEV_PAGES && <Route path="/dev/question-kit" element={<QuestionKit />} />}
     <Route path="*" element={<NotFound />} />
   </>
 );

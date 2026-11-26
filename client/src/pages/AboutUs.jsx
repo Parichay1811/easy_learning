@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import {
   FaBook, FaCalculator, FaMicroscope, FaHeart, FaStar, FaShieldAlt, FaGlobeAmericas, FaChartLine,
@@ -48,6 +48,8 @@ const AboutUs = () => {
       <button type="button" className={s.cta} onClick={start} data-companion-guide data-companion-look data-sound="none">
         {t("aboutUs.startAdventure")} <FaArrowRight aria-hidden="true" />
       </button>
+      {/* Who Learnigo is for, every feature and the curriculum map (content v5). */}
+      <Link to="/about-us/why-learnigo" className={s.whyLink}>{seo.why?.aboutLink || "Why Learnigo: who it is for and every feature"} <FaArrowRight aria-hidden="true" /></Link>
     </>
   );
 
@@ -101,6 +103,7 @@ const AboutUs = () => {
       </div>
       {/* The guides, the FAQ and the small print, as a line of links (as the footer would). */}
       <p className={s.inlineLinks}>
+        <a href="/about-us/why-learnigo">{seo.pages?.["/about-us/why-learnigo"]?.name || "Why Learnigo"}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}
         <a href="/learning-differences">{nav.differences || "Learning differences"}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}
         <a href="/who-we-help">{nav.audiences || "Who we help"}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}
         <a href="/faq">{nav.faq || "FAQ"}</a>{" "}<span className={s.dot} aria-hidden="true">·</span>{" "}

@@ -14,7 +14,7 @@ import {
 import { routeLang } from "../../seo/routeLocale";
 
 const DEFAULT_TITLE = "Learnigo | Learning Games & AI Teacher for Every Child";
-const DEFAULT_DESCRIPTION = "Free learning games and an AI teacher for every child, in 14 languages: reading, maths and science with read-aloud audio, designed with dyslexia and ADHD in mind.";
+const DEFAULT_DESCRIPTION = "Free learning games in 14 languages and an AI teacher for every child: reading, maths and science read aloud, designed with dyslexia and ADHD in mind.";
 const DEFAULT_ROBOTS = "index, follow, max-image-preview:large";
 
 function upsertMeta(attribute, value, content) {
