@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { FaCheck, FaTimes, FaUndo } from "react-icons/fa";
 import { sfx } from "../../utils/sounds";
@@ -18,6 +18,8 @@ import styles from "./QuestionWidgets.module.css";
 // same words for screen readers, and shows the right answer when `revealed`.
 // A widget that lets the learner try pieces before the answer is whole
 // (match_pairs) also reports those wrong tries: onSubmit(userAnswer, { misses }).
+// Choice widgets also report the order they show the options in (onOrder), so the
+// card's "Hear the choices" reads them as the learner sees them.
 
 function shuffledIndices(length) {
   const idx = Array.from({ length }, (_, i) => i);
@@ -58,9 +60,11 @@ function PieceMark({ ok, rightText, wrongText }) {
 }
 
 // tap_mcq, true_false, drag_to_blank — tap one option, compare to correct_answer.
-export function SingleChoice({ question, onSubmit, disabled, feedback }) {
+export function SingleChoice({ question, onSubmit, disabled, feedback, onOrder }) {
   const options = question.options || [];
   const order = useMemo(() => shuffledIndices(options.length), [question.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  // The card reads the choices in the order they are shown ("A, seven. B, nine.").
+  useEffect(() => { onOrder?.(order); }, [order]); // eslint-disable-line react-hooks/exhaustive-deps
   const [picked, setPicked] = useState(null);
   const accepted = useMemo(() => acceptedSet(question), [question]);
   const judged = feedback?.result;
@@ -97,10 +101,11 @@ export function SingleChoice({ question, onSubmit, disabled, feedback }) {
 }
 
 // multi_select — toggle several options, then submit; compared as a set.
-export function MultiSelect({ question, onSubmit, disabled, feedback }) {
+export function MultiSelect({ question, onSubmit, disabled, feedback, onOrder }) {
   const { t } = useTranslation();
   const options = question.options || [];
   const order = useMemo(() => shuffledIndices(options.length), [question.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { onOrder?.(order); }, [order]); // eslint-disable-line react-hooks/exhaustive-deps
   const [selected, setSelected] = useState([]);
   const correct = useMemo(
     () => new Set((Array.isArray(question.correct_answer) ? question.correct_answer : []).map(norm)),

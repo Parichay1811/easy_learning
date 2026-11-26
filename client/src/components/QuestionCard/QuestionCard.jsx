@@ -23,7 +23,9 @@ import { langOfKey } from "../journey/words";
 import PictureMaths from "./PictureMaths";
 import {
   findSmallSum, spokenAnswers, buildChoices, micProblem, nextStrategy, supportStepShown, messageArgs, isHiddenAudio, seedOf, scriptOf, isFirstTry,
+  cuesFor, activeCues, canHearChoices,
 } from "./support";
+import CueStrip from "./CueStrip";
 import styles from "./QuestionCard.module.css";
 
 function formatAnswer(correct_answer) {
@@ -252,6 +254,11 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   // when a card opens, a few KB, so the first answer already has its lines.
   useEffect(() => { preloadFeedback(uiLang); }, [uiLang]);
   const script = useMemo(() => scriptOf(question), [question]);
+  // The action strip's steps, and the script's sentences (to light the step being said).
+  const cues = useMemo(() => cuesFor(question, module), [question, module]);
+  const scriptSentences = useMemo(() => (script ? script.text.split(/(?<=[.?!。？！])\s*/u).map((x) => x.trim()).filter(Boolean) : []), [script]);
+  // The order a choice widget shows its options in (for "Hear the choices").
+  const [optionOrder, setOptionOrder] = useState(null);
   const [phase, setPhase] = useState("open"); // open | correct | close | incorrect | revealed | uncertain | ungraded
   // The companion reacts to what just happened: a small happy hop for a right answer,
   // a gentle, kind look for a miss (rate-limited and never mocking: companion/brain.js).
@@ -660,6 +667,15 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
   // When the clock runs out, the right answer is shown on the tiles too.
   const feedback = { result: widgetPhase, revealed: phase === "revealed" || (locked && phase !== "correct") };
   const isSpeaking = (text) => speaking.length > 2 && String(text || "").includes(speaking);
+  const litCues = activeCues(cues, scriptLine || (isSpeaking(question.instruction) ? speaking : ""), scriptLine ? scriptSentences : String(question.instruction || "").split(/(?<=[.?!。？！])\s*/u).filter(Boolean), (script?.lang || cardLang || "en"));
+  const hearChoices = !resolved && canHearChoices(question, subject) && optionOrder?.length === (question.options || []).length;
+  // The choices read aloud as they are shown, with the letters on their tiles.
+  const readChoices = () => {
+    sfx.open();
+    const opts = question.options || [];
+    const parts = optionOrder.map((i, pos) => `${String.fromCharCode(65 + pos)}, ${String(opts[i]).replace(/\p{Extended_Pictographic}|\uFE0F/gu, "").trim()}.`);
+    speech.speak(parts, { lang: cardLang, user: true });
+  };
 
   const showHintBtn = !resolved && (hintsShown < hints.length || (question.worked_example && !showWorked && (hints.length === 0 || hintsShown >= hints.length)));
   const hintLabel = hintsShown === 0 && hints.length
@@ -800,6 +816,7 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
       data-strategy={strategy}
     >
       <div className={styles.stimulus}>
+        <CueStrip cues={cues} active={litCues} />
         <p className={`${styles.instruction} ${isSpeaking(question.instruction) ? styles.speaking : ""}`}>{question.instruction}</p>
         <div className={styles.stimRow}>
           {question.image?.url
@@ -825,6 +842,11 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
             <button type="button" className={`${styles.toolBtn} ${styles.listenBtn} ${isPlaying ? styles.playing : ""}`} disabled={isPlaying} onClick={playAudio} data-sound="none">
               <FaVolumeUp aria-hidden="true" />
               {isPlaying ? t("questionCard.playing") : t("questionCard.listen")}
+            </button>
+          )}
+          {hearChoices && (
+            <button type="button" className={styles.toolBtn} onClick={readChoices} data-sound="none" data-hear-choices="">
+              <FaListUl aria-hidden="true" /> {t("questionCard.hearChoices", "Hear the choices")}
             </button>
           )}
           {question.audio_text && hiddenAudio && listenFailed && !readInstead && (
@@ -900,7 +922,7 @@ export default function QuestionCard({ question, subject, module, onAnswered, on
             <AltWidget key={altMode} question={altQuestion} onSubmit={(a) => handleSubmit(a, { alt: true })} disabled={disabled} speech={speech} feedback={feedback} />
           </>
         ) : (
-          <Widget question={question} onSubmit={handleSubmit} disabled={disabled} speech={speech} feedback={feedback} reportErrors />
+          <Widget question={question} onSubmit={handleSubmit} disabled={disabled} speech={speech} feedback={feedback} reportErrors onOrder={setOptionOrder} />
         )}
       </div>
 

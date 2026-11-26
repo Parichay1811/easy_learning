@@ -118,3 +118,24 @@ test("only a clean first try counts as right first time", () => {
   assert.equal(isFirstTry({ pieceMisses: 2 }), false);
   assert.equal(isFirstTry({ pieceMisses: undefined }), true);
 });
+
+test("the action strip: the script's cues, else from the module and the widget", async () => {
+  const { cuesFor, activeCues, canHearChoices, CUE_ICONS } = await import("./support.js");
+  assert.deepEqual(cuesFor({ narration: { cues: ["listen", "tap"] } }, "listen"), ["listen", "tap"]);
+  assert.deepEqual(cuesFor({ narration: { cues: ["listen", "bogus", "tap"] } }), ["listen", "tap"], "unknown keys are dropped");
+  assert.deepEqual(cuesFor({ interaction: "typed_short" }, "write"), ["type"]);
+  assert.deepEqual(cuesFor({ interaction: "mic_record" }, "listen"), ["listen", "say"]);
+  assert.deepEqual(cuesFor({ interaction: "tap_mcq" }, "read"), ["read", "tap"]);
+  assert.deepEqual(cuesFor({ interaction: "drag_order" }, "write"), ["order"]);
+  for (const k of ["listen", "look", "read", "count", "think", "tap", "drag", "type", "say", "order", "match", "sort"]) assert.ok(CUE_ICONS[k], k);
+  const sentences = ["Listen to the word.", "Tap the word you hear."];
+  assert.deepEqual(activeCues(["listen", "tap"], "Listen to the word.", sentences, "en"), [0]);
+  assert.deepEqual(activeCues(["listen", "tap"], "Tap the word you hear.", sentences, "en"), [0, 1], "'hear' names listening too");
+  assert.deepEqual(activeCues(["listen", "tap"], "Écoute le mot.", ["Écoute le mot.", "Touche le mot."], "fr"), [0]);
+  assert.deepEqual(activeCues(["listen", "tap"], "Touche le mot.", ["Écoute le mot.", "Touche le mot."], "fr"), [1]);
+  assert.deepEqual(activeCues(["listen", "tap"], "", sentences), []);
+  assert.equal(canHearChoices({ interaction: "tap_mcq", options: ["7", "9", "12"] }, "maths"), true);
+  assert.equal(canHearChoices({ interaction: "tap_mcq", options: ["cat", "hat"] }, "english"), false, "English words are what is taught");
+  assert.equal(canHearChoices({ interaction: "tap_mcq", options: ["🐟", "🐄"] }, "science"), false, "pictures need no reading");
+  assert.equal(canHearChoices({ interaction: "typed_short" }, "maths"), false);
+});

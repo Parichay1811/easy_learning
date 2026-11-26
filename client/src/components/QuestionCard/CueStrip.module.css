@@ -1,0 +1,52 @@
+/* The action strip: the question's steps as icon + word, above the instruction. */
+.strip {
+  list-style: none;
+  margin: 0 auto 6px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+.step {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 4px 14px 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: calc(clamp(14px, 2.8cqh, 18px) * var(--lp-text-scale, 1));
+  line-height: 1;
+  transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease;
+}
+/* An arrow between steps, so the order reads from start to end. */
+.arrow {
+  color: rgba(255, 255, 255, 0.65);
+  font-weight: 700;
+  font-size: calc(18px * var(--lp-text-scale, 1));
+}
+:global(html[dir="rtl"]) .arrow { transform: scaleX(-1); }
+.icon {
+  font-size: 1.35em;
+  line-height: 1;
+}
+.word { letter-spacing: 0.01em; }
+/* The step the voice is saying now. */
+.on {
+  background: rgba(255, 214, 92, 0.24);
+  border-color: #ffd45c;
+  transform: scale(1.06);
+}
+@media (prefers-reduced-motion: reduce) {
+  .step { transition: none; }
+  .on { transform: none; }
+}
+:global(html[data-motion="reduced"]) .step { transition: none; }
+:global(html[data-motion="reduced"]) .on { transform: none; }
+:global(html[data-contrast="high"]) .step { background: #000000; border-color: #ffffff; }
+:global(html[data-contrast="high"]) .on { border-color: #ffe066; outline: 2px solid #ffe066; outline-offset: 2px; }

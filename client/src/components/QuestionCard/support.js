@@ -215,3 +215,57 @@ export function scriptOf(question) {
   const lang = own || (n.status === "authored" ? "en" : cardLang);
   return lang === cardLang ? { text, lang } : null;
 }
+
+// ── The action strip (content v5, docs/learning/TEACHING-STANDARDS.md) ──
+// The steps of a question as icon + word ("👂 Listen → 👆 Tap"), the same
+// words every time so a child who cannot read yet comes to know them by sight.
+export const CUE_ICONS = {
+  listen: "👂", look: "👀", read: "📖", count: "🔢", think: "💭", tap: "👆",
+  drag: "✋", type: "⌨️", say: "🗣️", order: "🔀", match: "🔗", sort: "🗂️",
+};
+// How an English sentence says each step (the server's narration rules use the same words).
+const CUE_WORDS = {
+  listen: /\b(listen|hear)\b/i, look: /\blook\b/i, read: /\bread\b/i, count: /\bcount\b/i,
+  think: /\b(think|work (it|them|this) out)\b/i, tap: /\b(tap|press|choose|pick)\b/i, drag: /\b(drag|move|put)\b/i,
+  type: /\b(type|write|spell)\b/i, say: /\b(say|tell|answer out loud|clap)\b/i, order: /\border\b/i,
+  match: /\b(match|join|pair)\b/i, sort: /\b(sort|group)\b/i,
+};
+
+/**
+ * The steps to show for a question: its narration's cues when it has them,
+ * else from the module and the widget (teacher-made questions have no script).
+ */
+export function cuesFor(question, module) {
+  const own = question?.narration?.cues;
+  if (Array.isArray(own) && own.length) return own.filter((c) => c in CUE_ICONS).slice(0, 3);
+  const it = question?.interaction;
+  const act = it === "mic_record" ? "say" : /^typed_/.test(it || "") ? "type" : it === "drag_order" ? "order"
+    : it === "match_pairs" ? "match" : it === "sort_bins" ? "sort" : it === "drag_to_blank" ? "drag" : "tap";
+  const first = module === "listen" || (question?.audio_text && isHiddenAudio(question)) ? "listen" : module === "read" ? "read" : null;
+  return [first, act].filter(Boolean);
+}
+
+/**
+ * Which steps light up while one sentence of the script is said: in English,
+ * the steps that sentence names; in other languages, the step in the same
+ * place as the sentence (scripts say their steps in order).
+ * -> array of cue indexes (may be empty)
+ */
+export function activeCues(cues, sentence, sentences = [], lang = "en") {
+  if (!sentence || !cues?.length) return [];
+  if (String(lang).startsWith("en")) {
+    const hit = cues.map((c, i) => (CUE_WORDS[c]?.test(sentence) ? i : -1)).filter((i) => i >= 0);
+    if (hit.length) return hit;
+  }
+  const k = sentences.findIndex((s) => s.trim() === String(sentence).trim());
+  if (k < 0) return [];
+  return [Math.min(cues.length - 1, Math.round((k * (cues.length - 1)) / Math.max(1, sentences.length - 1)))];
+}
+
+/** Choice items whose written options may be read aloud (never on English items: there the words are what is taught). */
+export function canHearChoices(question, subject) {
+  if (subject === "english") return false;
+  if (!["tap_mcq", "multi_select", "drag_to_blank"].includes(question?.interaction)) return false;
+  const opts = question?.options;
+  return Array.isArray(opts) && opts.length > 1 && opts.some((o) => /\p{L}|\d/u.test(String(o).replace(/\p{Extended_Pictographic}/gu, "")));
+}
