@@ -11,12 +11,15 @@ import TabBar from "../studentDashboard/TabBar";
 import { useCalmMotion } from "../../utils/useCalmMotion";
 import { sfx, haptic } from "../../utils/sounds";
 import { tg, useTogether, signedIn } from "./api";
-import { AVATARS, STICKERS, CHEER_LINES, SUBJECTS, MODULES, avatarHue, words } from "./words";
+import { AVATARS, STICKERS, CHEER_LINES, SUBJECTS, MODULES, avatarHue, words, gameName } from "./words";
 import s from "./Together.module.css";
 import { useGuide } from "../../components/guide/useGuide";
 import { nudgeGuide } from "../../components/guide/nudge";
 
 const TABS = ["friends", "play", "team", "prizes"];
+// A round opens its questions; a camera game duel (content v5) opens the game itself, which
+// counts the first finished round for the challenge.
+const roundLink = (m) => (m.kind === "game" ? `/games/ar/${encodeURIComponent(m.gameId)}?duel=${m.id}` : `/together/round/${m.id}`);
 const M = FramerMotion.motion;
 
 /** A learner's picture: an emoji from the fixed set on a soft coloured disc. */
@@ -140,7 +143,7 @@ export default function Together() {
   return shell(
     <>
       <NextUp data={data} w={w} t={t} guide={guide}
-        onPlay={(m) => { sfx.forward(); navigate(`/together/round/${m.id}`); }}
+        onPlay={(m) => { sfx.forward(); navigate(roundLink(m)); }}
         onAward={() => setTab("team")} />
 
       <PlayerCard me={me} jar={data.jar} w={w} t={t} onEdit={() => setSheet({ kind: "card" })} say={say} />
@@ -162,7 +165,7 @@ export default function Together() {
         )}
         {tab === "play" && (
           <PlayPanel data={data} w={w} t={t} guide={guide}
-            onOpen={(m) => { sfx.forward(); navigate(`/together/round/${m.id}`); }}
+            onOpen={(m) => { sfx.forward(); navigate(roundLink(m)); }}
             onNew={() => setSheet({ kind: "round" })}
             onMystery={() => setSheet({ kind: "round", mystery: true })}
             onSwitchMystery={() => act(() => tg("/me", { method: "PATCH", body: { mystery: true } })).then((r) => { if (r.ok) patch({ me: r.me }); })}
@@ -183,7 +186,7 @@ export default function Together() {
       {sheet?.kind === "card" && <CardSheet me={me} w={w} t={t} onClose={() => setSheet(null)} onSaved={(next) => { patch({ me: next }); setSheet(null); say(t("together.card.saved", "Looking good!")); }} />}
       {sheet?.kind === "add" && <AddSheet t={t} onClose={() => setSheet(null)} onDone={(r) => { patch({ friends: pickFriends(r) }); setSheet(null); sfx.correct(); say(r.status === "active" ? t("together.friends.nowFriends", "You are friends now!") : r.status === "awaiting_adult" ? t("together.friends.askedAdult", "Nice! A grown-up will say yes first.") : t("together.friends.asked", "Asked! They will see it next time.")); }} />}
       {sheet?.kind === "cheer" && <CheerSheet to={sheet.to} w={w} t={t} onClose={() => setSheet(null)} onSent={(left) => { setSheet(null); sfx.star(); haptic("light"); say(t("together.cheer.sent", { defaultValue_one: "Cheer sent! {{count}} left today.", defaultValue_other: "Cheer sent! {{count}} left today.", count: left })); }} />}
-      {sheet?.kind === "round" && <RoundSheet friends={data.friends.friends} preset={sheet.friend} mystery={sheet.mystery} w={w} t={t} onClose={() => setSheet(null)} onMade={(m) => { setSheet(null); sfx.forward(); navigate(`/together/round/${m.id}`); }} />}
+      {sheet?.kind === "round" && <RoundSheet friends={data.friends.friends} preset={sheet.friend} mystery={sheet.mystery} w={w} t={t} onClose={() => setSheet(null)} onMade={(m) => { setSheet(null); sfx.forward(); navigate(roundLink(m)); }} />}
     </>,
   );
 }
@@ -199,7 +202,7 @@ function NextUp({ data, w, t, guide, onPlay, onAward }) {
     return (
       <M.section className={`${s.card} ${s.nextUp}`} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} aria-label={t("together.next.label", "Waiting for you")}>
         <Avatar who={turn.with || { avatar: "star" }} size={52} />
-        <span className={s.nextText}><b>{t("together.next.turn", { defaultValue: "{{name}} has played. Your turn!", name })}</b><small>{w.subject(turn.subject)} · {w.module(turn.module)}</small></span>
+        <span className={s.nextText}><b>{turn.kind === "game" && turn.byMe ? t("together.next.challenge", { defaultValue: "Your challenge with {{name}} is ready. Play!", name }) : t("together.next.turn", { defaultValue: "{{name}} has played. Your turn!", name })}</b><small>{turn.kind === "game" ? `🎮 ${gameName(t, turn.gameId)}` : `${w.subject(turn.subject)} · ${w.module(turn.module)}`}</small></span>
         <button type="button" className={s.cta} onClick={() => onPlay(turn)} data-sound="none" {...guide("together.turnTop", "{{name}} has played a round for you. Tap Play!", { order: 1, name })}><FaPlay aria-hidden="true" /> {t("together.play.go", "Play")}</button>
       </M.section>
     );
@@ -378,7 +381,7 @@ function FriendsPanel({ data, w, t, guide, onAdd, onAccept, onRemove, onSuggest,
 function PlayPanel({ data, w, t, guide, onOpen, onNew, onMystery, onSwitchMystery }) {
   const { yourTurn, waiting, done } = data.matches;
   const { can, off } = data.me;
-  const place = (m) => `${SUBJECTS[m.subject]?.emoji || ""} ${w.subject(m.subject)} · ${w.module(m.module)}`;
+  const place = (m) => (m.kind === "game" ? `🎮 ${gameName(t, m.gameId)}` : `${SUBJECTS[m.subject]?.emoji || ""} ${w.subject(m.subject)} · ${w.module(m.module)}`);
   const withWho = (m) => (m.with ? w.who(m.with) : t("together.play.mystery", "Mystery Explorer"));
   if (!can.matches) {
     return <div className={`${s.card} ${s.center}`}><Mascot size={96} mood="idle" butterfly={false} /><p className={s.muted}>{off.matches === "adult" ? t("together.off.matchesAdult", "A grown-up has switched playing together off for now.") : t("together.off.matchesMe", "You switched playing together off. Change it in “Change my look”.")}</p></div>;
@@ -412,7 +415,7 @@ function PlayPanel({ data, w, t, guide, onOpen, onNew, onMystery, onSwitchMyster
             {yourTurn.map((m, i) => (
               <li key={m.id} className={s.row}>
                 <Avatar who={m.with || { avatar: "star" }} />
-                <span className={s.rowName}><b>{m.kind === "buddy" ? t("together.play.buddyWith", { defaultValue: "Buddy round with {{name}}", name: withWho(m) }) : t("together.play.matchWith", { defaultValue: "Friendly match with {{name}}", name: withWho(m) })}</b><small>{place(m)} · {t("together.play.questions", { defaultValue_one: "{{count}} question", defaultValue_other: "{{count}} questions", count: m.size })}</small></span>
+                <span className={s.rowName}><b>{m.kind === "game" ? t("together.play.duelWith", { defaultValue: "Camera game challenge with {{name}}", name: withWho(m) }) : m.kind === "buddy" ? t("together.play.buddyWith", { defaultValue: "Buddy round with {{name}}", name: withWho(m) }) : t("together.play.matchWith", { defaultValue: "Friendly match with {{name}}", name: withWho(m) })}</b><small>{place(m)} · {m.kind === "game" ? t("together.play.ownLevel", "Each at your own level") : t("together.play.questions", { defaultValue_one: "{{count}} question", defaultValue_other: "{{count}} questions", count: m.size })}</small></span>
                 <button type="button" className={s.cta} onClick={() => onOpen(m)} data-sound="none" {...(i === 0 ? guide("together.turn", "It is your turn! Tap Play.", { order: 2 }) : {})}><FaPlay aria-hidden="true" /> {t("together.play.go", "Play")}</button>
               </li>
             ))}
@@ -443,7 +446,7 @@ function PlayPanel({ data, w, t, guide, onOpen, onNew, onMystery, onSwitchMyster
               <li key={m.id} className={s.row}>
                 <Avatar who={m.with || { avatar: "star" }} />
                 <span className={s.rowName}><b>{withWho(m)}</b><small>{place(m)}</small></span>
-                <button type="button" className={s.result} onClick={() => onOpen(m)} data-sound="none">
+                <button type="button" className={s.result} onClick={() => (m.kind === "game" ? null : onOpen(m))} data-sound="none">
                   {m.kind === "buddy"
                     ? <>🤝 {t("together.play.together", { defaultValue: "{{stars}} stars together", stars: m.result.together })}</>
                     : <>{w.prize(m.result.prize).emoji} {m.me.stars} · {m.them.stars} {w.prize(m.result.theirPrize).emoji}</>}
@@ -457,7 +460,7 @@ function PlayPanel({ data, w, t, guide, onOpen, onNew, onMystery, onSwitchMyster
       {!yourTurn.length && !waiting.length && !done.length && (
         <div className={`${s.card} ${s.center}`}><Mascot size={96} mood="wave" butterfly={false} /><p className={s.muted}>{t("together.play.empty", "No rounds yet. Start one with a friend: you both get the same questions and all your stars.")}</p></div>
       )}
-      <p className={s.safe}>{t("together.play.rules", "There is no clock. You both keep every star you earn. A draw means a ribbon for both.")}</p>
+      <p className={s.safe}>{t("together.play.rulesFair", "There is no clock. Each of you plays at your own level, keeps every star and gets a prize. A draw means a ribbon for both.")}</p>
     </div>
   );
 }
@@ -688,15 +691,29 @@ function RoundSheet({ friends, preset, mystery, w, t, onClose, onMade }) {
   const [module, setModule] = useState("read");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
+  // A camera game duel (content v5): the games come from the camera games' own catalogue,
+  // loaded only when this choice is picked (it is a big list).
+  const [games, setGames] = useState(null);
+  const [gameId, setGameId] = useState("");
+  useEffect(() => {
+    if (kind !== "game" || games) return;
+    import("../../ar/catalog/games").then((mod) => {
+      const list = mod.GAMES.filter((g) => g.journey !== false && !g.parent).map((g) => ({ id: g.id, title: g.title, group: g.group }));
+      setGames(list);
+      setGameId((x) => x || list[0]?.id || "");
+    }).catch(() => setGames([]));
+  }, [kind, games]);
   const make = async () => {
     setBusy(true); setErr("");
-    const r = mystery ? await tg("/matches/mystery", { method: "POST", body: { subject, module } }) : await tg("/matches", { method: "POST", body: { friendId: friend, kind, subject, module } });
+    const r = mystery ? await tg("/matches/mystery", { method: "POST", body: { subject, module } })
+      : kind === "game" ? await tg("/duels", { method: "POST", body: { friendId: friend, gameId } })
+        : await tg("/matches", { method: "POST", body: { friendId: friend, kind, subject, module } });
     setBusy(false);
-    if (r.ok) onMade(r.match); else setErr(r.message || t("together.oops", "That did not work. Please try again."));
+    if (r.ok) onMade(r.match || r.duel); else setErr(r.message || t("together.oops", "That did not work. Please try again."));
   };
   return (
     <Sheet theme="light" title={mystery ? t("together.play.mysteryCta", "Meet a mystery explorer") : t("together.play.friend", "Play with a friend")} text={t("together.round.text", "You both get the same questions. No clock: play when it suits you.")} onClose={onClose}
-      footer={<><button type="button" className={s.ghost} onClick={onClose}>{t("together.cancel", "Cancel")}</button><button type="button" className={s.cta} onClick={make} disabled={busy || (!mystery && !friend)} {...guide("together.start", "Pick a world. Then tap Start.", { order: 1 })}><FaPlay aria-hidden="true" /> {t("together.round.start", "Start")}</button></>}>
+      footer={<><button type="button" className={s.ghost} onClick={onClose}>{t("together.cancel", "Cancel")}</button><button type="button" className={s.cta} onClick={make} disabled={busy || (!mystery && !friend) || (kind === "game" && !gameId)} {...guide("together.start", "Pick a world. Then tap Start.", { order: 1 })}><FaPlay aria-hidden="true" /> {t("together.round.start", "Start")}</button></>}>
       {!mystery && (
         <>
           <fieldset className={s.field}><legend>{t("together.round.who", "Who with?")}</legend>
@@ -705,17 +722,26 @@ function RoundSheet({ friends, preset, mystery, w, t, onClose, onMade }) {
           <fieldset className={s.field}><legend>{t("together.round.how", "How?")}</legend>
             <div className={s.pickRow}>
               <button type="button" className={`${s.pick} ${s.pickTall} ${kind === "buddy" ? s.pickOn : ""}`} aria-pressed={kind === "buddy"} onClick={() => setKind("buddy")}><span aria-hidden="true">🤝</span><span><b>{t("together.round.buddy", "Buddy round")}</b><small>{t("together.round.buddyText", "Add your stars together.")}</small></span></button>
-              <button type="button" className={`${s.pick} ${s.pickTall} ${kind === "friendly" ? s.pickOn : ""}`} aria-pressed={kind === "friendly"} onClick={() => setKind("friendly")}><span aria-hidden="true">🎀</span><span><b>{t("together.round.friendly", "Friendly match")}</b><small>{t("together.round.friendlyText", "Side by side. Prizes for both.")}</small></span></button>
+              <button type="button" className={`${s.pick} ${s.pickTall} ${kind === "friendly" ? s.pickOn : ""}`} aria-pressed={kind === "friendly"} onClick={() => setKind("friendly")}><span aria-hidden="true">🎀</span><span><b>{t("together.round.friendly", "Friendly match")}</b><small>{t("together.round.friendlyFair", "Each at your own level. Prizes for both.")}</small></span></button>
+              <button type="button" className={`${s.pick} ${s.pickTall} ${kind === "game" ? s.pickOn : ""}`} aria-pressed={kind === "game"} onClick={() => setKind("game")}><span aria-hidden="true">🎮</span><span><b>{t("together.round.game", "Camera game challenge")}</b><small>{t("together.round.gameText", "The same camera game. Each at your own level.")}</small></span></button>
             </div>
           </fieldset>
         </>
       )}
+      {!mystery && kind === "game" ? (
+        <fieldset className={s.field}><legend>{t("together.round.whichGame", "Which game?")}</legend>
+          {!games ? <p className={s.muted}>{t("together.round.loadingGames", "Getting the games…")}</p> : (
+            <div className={s.pickRow}>{games.map((g) => <button key={g.id} type="button" className={`${s.pick} ${gameId === g.id ? s.pickOn : ""}`} aria-pressed={gameId === g.id} onClick={() => setGameId(g.id)}><span aria-hidden="true">🎮</span> {gameName(t, g.id) || g.title}</button>)}</div>
+          )}
+        </fieldset>
+      ) : (<>
       <fieldset className={s.field}><legend>{t("together.round.subject", "Which world?")}</legend>
         <div className={s.pickRow}>{Object.entries(SUBJECTS).map(([k, v]) => <button key={k} type="button" className={`${s.pick} ${subject === k ? s.pickOn : ""}`} style={{ "--pick": v.color }} aria-pressed={subject === k} onClick={() => setSubject(k)}><span aria-hidden="true">{v.emoji}</span> {w.subject(k)}</button>)}</div>
       </fieldset>
       <fieldset className={s.field}><legend>{t("together.round.module", "What kind?")}</legend>
         <div className={s.pickRow}>{Object.entries(MODULES).map(([k, v]) => <button key={k} type="button" className={`${s.pick} ${module === k ? s.pickOn : ""}`} aria-pressed={module === k} onClick={() => setModule(k)}><span aria-hidden="true">{v.emoji}</span> {w.module(k)}</button>)}</div>
       </fieldset>
+      </>)}
       {err && <p className={s.err} role="alert">{err}</p>}
     </Sheet>
   );

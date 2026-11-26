@@ -4,14 +4,19 @@ const learn = require('../../config/learning')
 
 // The same round for two learners, each in their own time (G-508, G-515).
 //   buddy     two friends; the result is one shared total
-//   friendly  two friends side by side; the higher score gets a ribbon, both keep their stars
-//   mystery   someone new at the same level, shown by nickname and avatar only
+//   friendly  two friends side by side, each at their own level; the higher score gets a
+//             ribbon, the other a "brave challenger" prize, and both a true process award
+//   mystery   someone new near the same level (each at their own level), nickname and avatar only
 // Only question ids are kept, never answers. There is no clock anywhere in it.
 const playerSchema = new mongoose.Schema({
   email: { type: String, required: true, lowercase: true },
   stars: { type: Number, default: null }, // null until played
   total: { type: Number, default: null },
   firstTry: { type: Number, default: 0 }, // right first time, no hint
+  // Fair duels (content v5): in a friendly or mystery match each player answers their own
+  // questions at their own level (same subject, kind and number). Empty: the round's shared items.
+  own: { type: [{ _id: false, q: String, oid: mongoose.Schema.Types.ObjectId }], default: [] },
+  level: { type: Number, default: null },
   playedAt: { type: Date, default: null },
   seenResult: { type: Boolean, default: false },
 }, { _id: false })

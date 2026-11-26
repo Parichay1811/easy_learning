@@ -28,6 +28,8 @@ router.post('/matches/mystery', c.mysteryMatch)
 router.get('/matches/:id', c.getMatch)
 router.get('/matches/:id/play', c.playMatch)
 router.post('/matches/:id/result', c.submitMatch)
+router.post('/duels', c.createDuel)
+router.get('/duels/:id', c.getDuel)
 
 router.post('/cheers', c.sendCheer)
 router.post('/cheers/seen', c.seenCheers)

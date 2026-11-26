@@ -24,6 +24,8 @@ const ACHIEVEMENTS = [
   { id: 'night_owl',       name: 'Night Owl',        icon: '🦉', description: 'Study after 9 PM', category: 'special', xp: 20, retired: true },
   // Growth badges (services/learning/achievements.js): awarded from log-answer with their evidence.
   ...growth.listEntries(),
+  // Camera game badges (services/gameBadges.js, content v5): awarded when a round is saved.
+  ...require('../services/gameBadges').listEntries(),
 ]
 
 // ── Helpers ────────────────────────────────────────────────────────────────────

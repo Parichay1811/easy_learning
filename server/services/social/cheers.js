@@ -30,6 +30,8 @@ async function send(meEmail, { toCardId, sticker, line } = {}, tz = 'UTC') {
   const sent = await PeerCheer.countDocuments({ from: me, day })
   if (sent >= cfg.cheers.perDay) throw new SocialError(429, `You have sent ${cfg.cheers.perDay} cheers today. More tomorrow!`, 'CHEER_LIMIT')
   const row = await PeerCheer.create({ from: me, to: to.email, sticker, line, day })
+  // Kind words count too: the "cheer giver" milestone (config MILESTONES).
+  await require('./awards').milestones(me)
   return { id: String(row._id), left: cfg.cheers.perDay - sent - 1 }
 }
 

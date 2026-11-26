@@ -4,7 +4,7 @@
  * Keeps the stage ignorant of routing, and gives "Next game" something sensible
  * to mean (the next game in the same group, wrapping round).
  */
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { FaArrowLeft } from 'react-icons/fa'
@@ -21,6 +21,15 @@ export default function ARGame() {
 
   // `?level=3` comes from tapping a level pip on the hub tile. Out-of-range or
   // still-locked values are clamped by the journey, not here.
+  // `?duel=<id>` comes from a friend's camera game challenge (Together): the rounds played here
+  // carry it, and the first finished one counts for the challenge (telemetry startSession).
+  const duel = search.get('duel')
+  useEffect(() => {
+    if (!duel || !/^[a-f0-9]{24}$/i.test(duel)) return undefined
+    try { sessionStorage.setItem('learnigo_duel', JSON.stringify({ id: duel, gameId })) } catch { /* private mode: no duel */ }
+    return () => { try { sessionStorage.removeItem('learnigo_duel') } catch { /* nothing */ } }
+  }, [duel, gameId])
+
   const raw = Number(search.get('level'))
   const requestedLevel = Number.isFinite(raw) && raw >= 1 ? raw : null
 

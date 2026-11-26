@@ -29,9 +29,26 @@ const TEAMS = [
 
 // One true award per participant (G-512), tried in this order; `teammate` is always true.
 const AWARDS = ['first_flag_star', 'best_comeback', 'most_improved', 'sharp_first_try', 'review_champion', 'curious_explorer', 'kindest_cheerer', 'team_spark', 'steady_helper', 'teammate']
+// The true award each player of a friendly match or game duel also gets (content v5):
+// sharp_first_try when half or more were right first time with no hint, else fair_play.
+const MATCH_AWARDS = ['sharp_first_try', 'fair_play']
+// Milestones of learning with others (content v5), each earned once, from real events only:
+// { key, kinds (SocialAward kinds that count) or cheers (cheers sent), count }.
+const MILESTONES = [
+  { key: 'first_together', kinds: ['together'], count: 1 },
+  { key: 'first_match', kinds: ['ribbon', 'brave'], count: 1 },
+  { key: 'first_game_duel', kinds: ['game_ribbon', 'game_brave'], count: 1 },
+  { key: 'five_with_friends', kinds: ['together', 'ribbon', 'brave', 'game_ribbon', 'game_brave'], count: 5 },
+  { key: 'ten_with_friends', kinds: ['together', 'ribbon', 'brave', 'game_ribbon', 'game_brave'], count: 10 },
+  { key: 'team_player', kinds: ['trophy'], count: 1 },
+  { key: 'cheer_giver', cheers: true, count: 10 },
+]
 
 module.exports = {
-  NICK_A, NICK_N, AVATARS, CHEER_STICKERS, CHEER_LINES, TEAMS, AWARDS,
+  NICK_A, NICK_N, AVATARS, CHEER_STICKERS, CHEER_LINES, TEAMS, AWARDS, MATCH_AWARDS, MILESTONES,
+
+  // Camera game duels (content v5): the same camera game, each at their own level; stars 0-3.
+  duel: { openDays: 14, maxOpen: 10, maxStars: 3 },
 
   friends: {
     max: 30, // friends per learner

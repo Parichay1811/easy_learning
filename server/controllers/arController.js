@@ -270,6 +270,14 @@ async function saveSession(email, raw, tz = 'UTC') {
     } catch (err) {
       console.error('AR mirrorToDashboard error:', err)
     }
+    // Content v5: a round played for a friend's challenge counts for the duel, and camera
+    // game badges are checked. Neither can ever lose the round.
+    try {
+      if (raw.duelId) await require('../services/social/duels').recordRound(email, { duelId: raw.duelId, gameId: doc.gameId, stars: doc.stars, level: doc.level, outcome: doc.outcome })
+      await require('../services/gameBadges').check(email, doc)
+    } catch (err) {
+      console.error('AR duel/badge error:', err)
+    }
   }
 
   return saved

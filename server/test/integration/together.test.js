@@ -195,9 +195,12 @@ test('a friendly match: a ribbon for the higher score, "brave challenger" for th
   const cal = await me('cal')
   const play = async (kind, benRight, calRight) => {
     const id = (await call('ben', 'POST', '/api/social/matches', { friendId: cal.id, kind, subject: 'maths', module: 'read' })).body.match.id
+    // A fair duel (content v5): each plays their own questions at their own level.
     const items = (await call('ben', 'GET', `/api/social/matches/${id}/play`)).body.items.map((it) => it.id)
+    const calItems = (await call('cal', 'GET', `/api/social/matches/${id}/play`)).body.items.map((it) => it.id)
+    assert.equal(calItems.length, items.length, 'the same number of questions')
     await call('ben', 'POST', `/api/social/matches/${id}/result`, { results: items.slice(0, benRight).map((x) => ({ id: x, correct: true })) })
-    return (await call('cal', 'POST', `/api/social/matches/${id}/result`, { results: items.slice(0, calRight).map((x) => ({ id: x, correct: true })) })).body.match
+    return (await call('cal', 'POST', `/api/social/matches/${id}/result`, { results: calItems.slice(0, calRight).map((x) => ({ id: x, correct: true })) })).body.match
   }
   const m = await play('friendly', 2, 5)
   assert.deepEqual(m.result, { draw: false, prize: 'ribbon', theirPrize: 'brave' })
@@ -477,4 +480,78 @@ test('privacy: learning together is in the data export, without anyone else\'s e
   } finally {
     await mongoose.disconnect()
   }
+})
+
+// ── Content v5: fair duels, camera game challenges, milestones and camera game badges ──
+let camSeq = 0
+const camRound = ({ gameId = 'ball-pop', stars = 2, level = 1, cleared = true, duelId, group = 'body', ago = 0 }) => {
+  const at = new Date(Date.now() - ago * 86400000 - 60_000)
+  return {
+    clientSessionId: `duel-${camSeq++}`, gameId, engine: 'tap', title: gameId, group, domains: ['reachAccuracy'], duelId,
+    startedAt: at.toISOString(), endedAt: new Date(at.getTime() + 60_000).toISOString(), durationMs: 60_000, activeMs: 58_000,
+    outcome: 'completed', level, levelCleared: cleared, clearedBy: cleared ? 'criterion' : null, stars,
+    summary: { trials: 10, correct: 8, near: 0, accuracyPct: 80, comprehensionPct: 80, independentPct: 70, medianLatencyMs: 900, medianMovementMs: 1200, pathEfficiency: 0.7 },
+    trials: [{ accuracy: 'correct', latencyMs: 900 }],
+  }
+}
+
+test('a friendly match is a fair duel: each answers their own questions, and both get a prize and a true award', async () => {
+  await befriend('eve', 'fay')
+  const fay = (await call('eve', 'GET', '/api/social/friends')).body.friends[0]
+  const made = await call('eve', 'POST', '/api/social/matches', { friendId: fay.cardId, kind: 'friendly', subject: 'maths', module: 'read' })
+  assert.equal(made.status, 201)
+  const id = made.body.match.id
+  const playE = (await call('eve', 'GET', `/api/social/matches/${id}/play`)).body
+  const playF = (await call('fay', 'GET', `/api/social/matches/${id}/play`)).body
+  assert.equal(playE.items.length, playF.items.length, 'the same number of questions')
+  const answer = (items, right) => items.map((x, i) => ({ id: x.id, correct: i < right, firstTry: i < right }))
+  await call('eve', 'POST', `/api/social/matches/${id}/result`, { results: answer(playE.items, playE.items.length) })
+  const done = (await call('fay', 'POST', `/api/social/matches/${id}/result`, { results: answer(playF.items, 1) })).body.match
+  assert.equal(done.status, 'done')
+  assert.equal(done.result.prize, 'brave')
+  const prizes = (who) => call(who, 'GET', '/api/social/trophies').then((r) => r.body.awards)
+  const e = await prizes('eve'), f = await prizes('fay')
+  assert.ok(e.some((a) => a.kind === 'ribbon') && f.some((a) => a.kind === 'brave'), 'a ribbon and a brave challenger prize')
+  assert.ok(e.some((a) => a.kind === 'award' && a.award === 'sharp_first_try'), 'sharp first tries')
+  assert.ok(f.some((a) => a.kind === 'award' && a.award === 'fair_play'), 'fair play for seeing it through')
+  assert.ok(e.some((a) => a.source === 'milestone' && a.award === 'first_match'), 'the first friendly match milestone')
+  noRanking(await call('eve', 'GET', '/api/social/home').then((r) => r.body), 'home')
+})
+
+test('a camera game challenge: the same game, each at their own level, the first finished round counts', async () => {
+  const fay = (await call('eve', 'GET', '/api/social/friends')).body.friends[0]
+  const bad = await call('eve', 'POST', '/api/social/duels', { friendId: fay.cardId, gameId: '../etc' })
+  assert.equal(bad.status, 400)
+  const made = await call('eve', 'POST', '/api/social/duels', { friendId: fay.cardId, gameId: 'ball-pop' })
+  assert.equal(made.status, 201)
+  const id = made.body.duel.id
+  assert.equal(made.body.duel.kind, 'game')
+  const home = (await call('fay', 'GET', '/api/social/home')).body
+  assert.ok(home.matches.yourTurn.some((m) => m.id === id && m.kind === 'game'), 'shown with the rounds')
+  noEmails(home, 'home with a duel')
+  // Rounds come from the camera games; another game's round or an abandoned one does not count.
+  await app.call('POST', '/api/ar/session', { token: S.eve, body: { session: { ...camRound({ gameId: 'other-game', stars: 3, duelId: id }) } } })
+  await app.call('POST', '/api/ar/session', { token: S.eve, body: { session: { ...camRound({ stars: 2, level: 3, duelId: id }) } } })
+  await app.call('POST', '/api/ar/session', { token: S.eve, body: { session: { ...camRound({ stars: 0, level: 3, duelId: id }) } } }) // a later round: ignored
+  const waiting = (await call('eve', 'GET', `/api/social/duels/${id}`)).body.duel
+  assert.equal(waiting.status, 'waiting')
+  assert.equal(waiting.me.stars, 2)
+  await app.call('POST', '/api/ar/session', { token: S.fay, body: { session: { ...camRound({ stars: 2, level: 1, duelId: id }) } } })
+  const done = (await call('fay', 'GET', `/api/social/duels/${id}`)).body.duel
+  assert.equal(done.status, 'done')
+  assert.equal(done.result.draw, true, 'level 3 and level 1, two stars each: a draw')
+  const f = (await call('fay', 'GET', '/api/social/trophies')).body.awards
+  assert.ok(f.some((a) => a.kind === 'game_ribbon'), 'a draw gives both the ribbon')
+  assert.ok(f.some((a) => a.source === 'milestone' && a.award === 'first_game_duel'))
+})
+
+test('camera game badges come from real rounds: first game, levels, keeping going', async () => {
+  await app.call('POST', '/api/ar/sessions', { token: S.cal, body: { sessions: [
+    camRound({ gameId: 'reach-1', level: 3, cleared: false, ago: 2 }),
+    camRound({ gameId: 'reach-1', level: 3, cleared: true, ago: 1 }),
+  ] } })
+  const list = (await app.call('GET', '/api/dashboard/achievements', { token: S.cal })).body
+  const earned = new Set((list.data || list.achievements || []).filter((a) => a.earned || a.earnedAt || a.unlocked).map((a) => a.id))
+  for (const id of ['game_first', 'game_level_3', 'game_kept_going']) assert.ok(earned.has(id), `${id} in ${[...earned].join(',')}`)
+  assert.ok(!earned.has('game_level_5'))
 })

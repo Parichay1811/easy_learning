@@ -7,8 +7,11 @@
 //   list(me) ; get(me, id)
 //
 // Everybody wins: both learners keep every star they earned. A buddy round shows one shared
-// total. A friendly or mystery match gives the higher score a ribbon and the other a "brave
-// challenger" prize; a draw gives both the ribbon. There is no clock in it anywhere.
+// total. A friendly or mystery match is a fair duel (content v5): each learner answers their own
+// questions at their own level, so a stronger player is not handed easy questions and a newer one
+// is not handed hard ones. The higher score gets a ribbon and the other a "brave challenger"
+// prize; a draw gives both the ribbon; and both get one true award for how they played
+// (sharp first tries, or seeing the match through). There is no clock in it anywhere.
 const BuddyMatch = require('../../models/social/BuddyMatch')
 const PlayerCard = require('../../models/social/PlayerCard')
 const cfg = require('../../config/social')
@@ -29,11 +32,23 @@ async function levelOf(email, subject) {
   const p = await store.getProfile(email)
   return normalise(p.levels[subject]).level
 }
+async function adultishOf(email) {
+  const p = await store.getProfile(email)
+  return p.ageBand === 'teen' || p.ageBand === 'adult'
+}
 
-// Questions both learners can do: checkable ones at the lower of the two levels, spread over
-// different skills. `pool` is services/learning/store.loadPool's compact metadata.
-function pickItems(pool, level, size, seed) {
-  const usable = pool.filter((q) => q.graded && q.qaStatus !== 'needs_review' && q._id)
+// Questions that suit playing with someone else (content v5): checkable now (graded, verified),
+// quick to answer on any device (no open writing, no microphone, no transfer-stage projects),
+// and never the silly young-child items when a teen or adult is playing.
+const SOCIAL_WIDGETS = new Set(['tap_mcq', 'true_false', 'multi_select', 'drag_to_blank', 'drag_order', 'tap_sequence', 'match_pairs', 'sort_bins', 'letter_bank', 'typed_short'])
+const suitsTogether = (q, { adultish = false } = {}) => q.graded && q.qaStatus !== 'needs_review' && q._id
+  && (!q.interaction || SOCIAL_WIDGETS.has(q.interaction)) && !(Number.isInteger(q.stage) && q.stage >= 5) && !(adultish && q.ageBand === 'young')
+
+// Questions for one level, spread over different skills. `pool` is services/learning/store.loadPool's
+// compact metadata. A buddy round uses the lower of the two levels (one shared round); a fair duel
+// calls this once per player at their own level.
+function pickItems(pool, level, size, seed, { adultish = false } = {}) {
+  const usable = pool.filter((q) => suitsTogether(q, { adultish }))
   if (!usable.length) return { items: [], level: null }
   const levels = [...new Set(usable.map((q) => q.level).filter(Number.isInteger))].sort((a, b) => a - b)
   const L = servedLevel(level, levels)
@@ -67,12 +82,25 @@ async function create(meEmail, { friendId, kind = 'buddy', subject, module } = {
   const open = await BuddyMatch.countDocuments({ createdBy: me, status: 'open' })
   if (open >= cfg.match.maxOpen) throw new SocialError(429, 'You have many rounds waiting. Play those first!', 'TOO_MANY')
 
-  const [la, lb, pool] = await Promise.all([levelOf(me, subject), levelOf(friend.email, subject), store.loadPool(me, subject, module)])
-  const { items, level } = pickItems(pool, Math.min(la, lb), cfg.match.size, `${me}|${friend.email}|${Date.now()}`)
+  const [la, lb, pool, aa, ab] = await Promise.all([levelOf(me, subject), levelOf(friend.email, subject), store.loadPool(me, subject, module), adultishOf(me), adultishOf(friend.email)])
+  const adultish = aa || ab
+  const seed = `${me}|${friend.email}|${Date.now()}`
+  const { items, level } = pickItems(pool, Math.min(la, lb), cfg.match.size, seed, { adultish })
   if (items.length < cfg.match.minSize) throw new SocialError(409, 'There are not enough questions for that one yet. Try another subject.', 'NO_ITEMS')
+  const players = [{ email: me }, { email: friend.email }]
+  if (kind === 'friendly') {
+    // A fair duel: each at their own level, the same number of questions.
+    const mine = pickItems(pool, la, items.length, `${seed}|a`, { adultish })
+    const theirs = pickItems(pool, lb, items.length, `${seed}|b`, { adultish })
+    const n = Math.min(mine.items.length, theirs.items.length)
+    if (n >= cfg.match.minSize) {
+      players[0] = { email: me, own: mine.items.slice(0, n), level: mine.level }
+      players[1] = { email: friend.email, own: theirs.items.slice(0, n), level: theirs.level }
+    }
+  }
   const m = await BuddyMatch.create({
     kind, subject, module, level, items, emails: [me, friend.email], createdBy: me,
-    players: [{ email: me }, { email: friend.email }], expiresAt: new Date(Date.now() + cfg.match.openDays * DAY),
+    players, expiresAt: new Date(Date.now() + cfg.match.openDays * DAY),
   })
   return m
 }
@@ -96,15 +124,26 @@ async function mystery(meEmail, { subject, module } = {}, name = '') {
     { $push: { emails: me, players: { email: me } } },
     { sort: { createdAt: 1 }, new: true },
   )
-  if (waiting) return waiting
+  const pool = await store.loadPool(me, subject, module)
+  const adultish = await adultishOf(me)
+  if (waiting) {
+    // A fair duel: my own questions at my level, as many as the round has.
+    const mine = pickItems(pool, level, waiting.items.length, `${me}|mystery|${waiting._id}`, { adultish })
+    if (mine.items.length === waiting.items.length) {
+      const p = waiting.players.find((x) => x.email === me)
+      p.own = mine.items
+      p.level = mine.level
+      await waiting.save()
+    }
+    return waiting
+  }
   const open = await BuddyMatch.countDocuments({ createdBy: me, status: 'open', kind: 'mystery' })
   if (open >= 3) throw new SocialError(429, 'You have rounds waiting for someone new. They will be played soon!', 'TOO_MANY')
-  const pool = await store.loadPool(me, subject, module)
-  const picked = pickItems(pool, level, cfg.match.size, `${me}|mystery|${Date.now()}`)
+  const picked = pickItems(pool, level, cfg.match.size, `${me}|mystery|${Date.now()}`, { adultish })
   if (picked.items.length < cfg.match.minSize) throw new SocialError(409, 'There are not enough questions for that one yet. Try another subject.', 'NO_ITEMS')
   return BuddyMatch.create({
     kind: 'mystery', subject, module, level: picked.level, items: picked.items, emails: [me], createdBy: me,
-    players: [{ email: me }], expiresAt: new Date(Date.now() + cfg.match.openDays * DAY),
+    players: [{ email: me, own: picked.items, level: picked.level }], expiresAt: new Date(Date.now() + cfg.match.openDays * DAY),
   })
 }
 
@@ -123,7 +162,7 @@ async function play(meEmail, id, lang) {
   if (p?.playedAt) throw new SocialError(409, 'You have played this round.', 'PLAYED')
   const st = await standing(me, await ensureCard(me))
   if (!st.matches) throw new SocialError(403, 'Playing together is switched off for you. Ask a grown-up if you would like it on.', 'MATCHES_OFF')
-  const picks = m.items.map((x) => ({ _id: x.oid, id: x.q }))
+  const picks = (p?.own?.length ? p.own : m.items).map((x) => ({ _id: x.oid, id: x.q }))
   const full = await store.fullQuestions(m.subject, m.module, picks, lang)
   const items = full.map(({ question }) => ({ ...question, support: { step: 0, strategy: 'words' }, why: 'together' }))
   return { id: String(m._id), kind: m.kind, subject: m.subject, module: m.module, items }
@@ -143,6 +182,9 @@ async function settle(m) {
   for (const [p, o] of [[a, b], [b, a]]) {
     const won = draw || p.stars > o.stars
     await awards.grant(p.email, { ...base, kind: won ? 'ribbon' : 'brave', evidence: { mine: p.stars, of: p.total, firstTry: p.firstTry, draw } })
+    // And one true award for how they played: sharp first tries, or seeing the match through.
+    const sharp = p.firstTry > 0 && p.firstTry >= Math.ceil(p.total / 2)
+    await awards.grant(p.email, { ...base, kind: 'award', award: sharp ? 'sharp_first_try' : 'fair_play', evidence: sharp ? { noHint: p.firstTry } : { of: p.total } })
   }
 }
 
@@ -153,7 +195,7 @@ async function submit(meEmail, id, { results } = {}) {
   if (!p) throw new SocialError(404, 'Round not found')
   if (p.playedAt) return view(m, me, await cardsFor(m.emails))
   if (!Array.isArray(results)) throw new SocialError(400, 'results must be a list')
-  const ids = new Set(m.items.map((x) => String(x.q)))
+  const ids = new Set((p.own?.length ? p.own : m.items).map((x) => String(x.q)))
   const seen = new Set()
   let stars = 0
   let firstTry = 0
@@ -163,7 +205,7 @@ async function submit(meEmail, id, { results } = {}) {
     seen.add(q)
     if (r.correct === true) { stars += 1; if (r.firstTry === true) firstTry += 1 }
   }
-  p.stars = stars; p.total = m.items.length; p.firstTry = firstTry; p.playedAt = new Date(); p.seenResult = true
+  p.stars = stars; p.total = (p.own?.length ? p.own : m.items).length; p.firstTry = firstTry; p.playedAt = new Date(); p.seenResult = true
   const both = m.players.length === 2 && m.players.every((x) => x.playedAt)
   if (both) { m.status = 'done'; m.doneAt = new Date(); m.expiresAt = new Date(Date.now() + 180 * DAY) }
   await m.save()
@@ -200,7 +242,9 @@ async function list(meEmail) {
   const me = lower(meEmail)
   const rows = await BuddyMatch.find({ emails: me }).sort({ createdAt: -1 }).limit(40)
   const cards = await cardsFor(rows.flatMap((m) => m.emails))
-  const all = rows.map((m) => view(m, me, cards))
+  // Camera game duels sit in the same lists (kind "game"), newest first.
+  const games = await require('./duels').list(me)
+  const all = [...rows.map((m) => view(m, me, cards)), ...games].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
   return {
     yourTurn: all.filter((m) => m.status === 'your_turn'),
     waiting: all.filter((m) => m.status === 'waiting'),
@@ -222,4 +266,4 @@ async function forAdult(learnerEmail, { limit = 20 } = {}) {
   return rows.map((m) => view(m, e, cards))
 }
 
-module.exports = { create, mystery, play, submit, list, get, forAdult, pickItems, view }
+module.exports = { create, mystery, play, submit, list, get, forAdult, pickItems, suitsTogether, view }

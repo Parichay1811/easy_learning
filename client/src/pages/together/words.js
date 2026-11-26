@@ -32,6 +32,15 @@ export const AWARDS = {
   teammate: { emoji: "🤝", name: "Team-mate", text: "Part of the team from start to finish." },
   first_flag_star: { emoji: "🚩", name: "First to the flag", text: "Your team reached the goal first." },
   review_champion: { emoji: "🧠", name: "Review champion", text: "Remembered what was learned before." },
+  // Content v5: the true award of a match or game duel, and milestones of learning with others.
+  fair_play: { emoji: "🤗", name: "Fair player", text: "Played the whole challenge with a friend, to the end." },
+  first_together: { emoji: "🌟", name: "First buddy round", text: "Your first round together with a friend." },
+  first_match: { emoji: "🎀", name: "First friendly match", text: "Your first friendly match with a friend." },
+  first_game_duel: { emoji: "🎮", name: "First game duel", text: "Your first camera game challenge with a friend." },
+  five_with_friends: { emoji: "🖐️", name: "Five with friends", text: "Five rounds and challenges played with friends." },
+  ten_with_friends: { emoji: "🔟", name: "Ten with friends", text: "Ten rounds and challenges played with friends." },
+  team_player: { emoji: "🏅", name: "Team player", text: "Helped your team reach its goal." },
+  cheer_giver: { emoji: "💌", name: "Cheer giver", text: "Sent {{count}} cheers to friends and team-mates." },
 };
 
 // Prizes in the trophy room, by kind.
@@ -42,7 +51,12 @@ export const PRIZES = {
   trophy: { emoji: "🏆", name: "Team trophy", text: "Your team reached its goal: {{teamStars}} stars together." },
   first_flag: { emoji: "🚩", name: "First to the flag", text: "Your team got there first." },
   jar: { emoji: "🫙", name: "Star jar sticker", text: "You and your friends filled the jar to {{stars}} stars." },
+  game_ribbon: { emoji: "🎗️", name: "Game ribbon", text: "A camera game challenge: {{mine}} of {{of}} stars." },
+  game_brave: { emoji: "🦊", name: "Brave mover", text: "You took on a camera game challenge: {{mine}} of {{of}} stars." },
 };
+
+// A camera game's name for the duel lists (the game's own translated title, else its id).
+export const gameName = (t, id) => t(`ar.games.${id}.title`, String(id || "").replace(/-/g, " ").replace(/^./, (c) => c.toUpperCase()));
 
 // Shorts: the themes a learner can pick.
 export const THEMES = {

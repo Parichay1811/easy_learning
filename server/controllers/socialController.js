@@ -136,6 +136,15 @@ const playMatch = handle(async (req, res) => {
 })
 const submitMatch = handle(async (req, res) => res.json({ success: true, match: await matches.submit(emailOf(req), req.params.id, req.body || {}) }))
 
+// ── Camera game duels (content v5) ──────────────────────────────────────────
+const duels = require('../services/social/duels')
+const createDuel = handle(async (req, res) => {
+  const b = req.body || {}
+  const d = await duels.create(emailOf(req), { friendId: b.friendId, gameId: String(b.gameId || '').toLowerCase() }, req.user.name)
+  res.status(201).json({ success: true, duel: await duels.get(emailOf(req), d._id) })
+})
+const getDuel = handle(async (req, res) => res.json({ success: true, duel: await duels.get(emailOf(req), req.params.id) }))
+
 // ── Cheers, teams, trophies, the jar ─────────────────────────────────────────
 const sendCheer = handle(async (req, res) => {
   const b = req.body || {}
@@ -149,6 +158,6 @@ const myJar = handle(async (req, res) => res.json({ success: true, jar: await ja
 
 module.exports = {
   home, summary, options, getMe, patchMe, listFriends, askFriend, acceptFriend, removeFriend, report,
-  listMatches, createMatch, mysteryMatch, getMatch, playMatch, submitMatch,
+  listMatches, createMatch, mysteryMatch, getMatch, playMatch, submitMatch, createDuel, getDuel,
   sendCheer, seenCheers, myTeams, myTrophies, seenTrophies, myJar, handle, emailOf,
 }

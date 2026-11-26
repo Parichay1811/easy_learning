@@ -94,6 +94,14 @@ test('a round for two: checkable questions at the level, spread over skills, the
   assert.deepEqual(pickItems([], 1, 5, 's'), { items: [], level: null })
 })
 
+test('questions for playing together (content v5): quick and checkable, nothing childish for teens and adults', () => {
+  const q = (id, o = {}) => ({ _id: `o-${id}`, id, level: 1, skill: id, graded: true, qaStatus: 'verified', interaction: 'tap_mcq', stage: 2, ageBand: 'all', ...o })
+  const pool = [q('tap'), q('young', { ageBand: 'young' }), q('mic', { interaction: 'mic_record' }), q('essay', { interaction: 'typed_long' }), q('project', { stage: 5 }), q('legacy', { interaction: undefined })]
+  const ids = (r) => r.items.map((x) => x.q).sort()
+  assert.deepEqual(ids(pickItems(pool, 1, 9, 's')), ['legacy', 'tap', 'young'])
+  assert.deepEqual(ids(pickItems(pool, 1, 9, 's', { adultish: true })), ['legacy', 'tap'])
+})
+
 test('a player card shows a first name only, and a code that is hard to misread', () => {
   assert.equal(firstNameOf('Aanya Rao'), 'Aanya')
   assert.equal(firstNameOf('kid@example.com'), '') // an email used as a name is never shown

@@ -66,6 +66,14 @@ let sessionSeq = 0
  * @property {string|null} hand 'left'|'right'
  */
 
+// A friend's camera game challenge being played in this tab (set by ARGame from ?duel=), for this game only.
+function duelFor(gameId) {
+  try {
+    const d = JSON.parse(sessionStorage.getItem('learnigo_duel') || 'null')
+    return d && d.gameId === gameId ? d.id : null
+  } catch { return null }
+}
+
 export function startSession(meta) {
   const settings = getSettings()
   const startedAt = Date.now()
@@ -76,6 +84,7 @@ export function startSession(meta) {
       (startedAt % 1e6) * 7919
     ).toString(36)}`,
     gameId: meta.gameId,
+    duelId: duelFor(meta.gameId),
     engine: meta.engine,
     title: meta.title,
     domains: meta.domains || [],

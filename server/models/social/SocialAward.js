@@ -6,10 +6,12 @@ const mongoose = require('mongoose')
 const schema = new mongoose.Schema({
   email: { type: String, required: true, lowercase: true, trim: true },
   // ribbon (match), brave (match), together (buddy round), trophy (team reached its goal),
-  // first_flag (the first team there), award (the personal award of a ceremony), jar (friends' star jar)
-  kind: { type: String, enum: ['ribbon', 'brave', 'together', 'trophy', 'first_flag', 'award', 'jar'], required: true },
-  award: { type: String, default: '' }, // config/social.js AWARDS for kind 'award'
-  sourceType: { type: String, enum: ['match', 'team', 'jar'], required: true },
+  // first_flag (the first team there), award (a true personal award: of a ceremony, of a match, or a
+  // milestone of learning with others), jar (friends' star jar), game_ribbon / game_brave (a camera
+  // game duel, content v5)
+  kind: { type: String, enum: ['ribbon', 'brave', 'together', 'trophy', 'first_flag', 'award', 'jar', 'game_ribbon', 'game_brave'], required: true },
+  award: { type: String, default: '' }, // config/social.js AWARDS, MATCH_AWARDS or MILESTONES for kind 'award'
+  sourceType: { type: String, enum: ['match', 'team', 'jar', 'duel', 'milestone'], required: true },
   sourceId: { type: String, required: true },
   title: { type: String, default: '', maxlength: 80 }, // the match's title or the team's name key
   evidence: { type: mongoose.Schema.Types.Mixed, default: {} },
