@@ -1,6 +1,7 @@
 {
   "id": "MATH-PRIM-06",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -28,7 +29,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Today we look at missing number problems. You will learn how to find the unknown number. We can use a balance idea to help us.",
+      "say": "Sometimes a number in a sum is missing. A box shows where the missing number goes.",
       "draw": [
         {
           "op": "clear"
@@ -39,64 +40,73 @@
         },
         {
           "op": "text",
-          "text": "□ + 5 = 12"
+          "text": "□ + 5 = 12",
+          "at": "box"
         }
       ]
     },
     {
-      "say": "Think of a balance scale. The equals sign means the scale is perfectly balanced. Both sides must weigh the same.",
+      "say": "The equals sign means both sides have the same value. A balance with equal sides stays level.",
       "draw": [
         {
-          "op": "text",
-          "text": "Balance Idea: Equal Weight",
+          "op": "balance",
+          "left": "□ + 5",
+          "right": "12",
           "at": "balance"
         }
       ]
     },
     {
-      "say": "In the problem □ plus 5 equals 12, the 12 is on one side. The 5 plus the missing number is on the other side. They must balance.",
+      "say": "Look at box plus five equals twelve. The box and five together make twelve.",
       "draw": [
         {
-          "op": "bars",
-          "items": [
-            "Side 1: 12",
-            "Side 2: □ + 5"
-          ],
-          "label": "Balance Check",
-          "at": "side"
-        },
-        {
-          "op": "text",
-          "text": "□ + 5 = 12"
+          "op": "formula",
+          "text": "□ + 5 = 12",
+          "at": "twelve"
         }
       ]
     },
     {
-      "say": "To find the missing number, we take the total, 12. Then we take away the number we know, which is 5. Twelve minus five equals seven. So the missing number is 7.",
+      "say": "To find the box, start with the total, twelve. Take away the part you know, five. Twelve take away five is seven.",
       "draw": [
         {
           "op": "flow",
           "items": [
-            "Start: □ + 5 = 12",
-            "Step 1: Take the total (12)",
-            "Step 2: Subtract the known number (12 - 5)",
-            "End: The missing number is 7"
-          ]
+            "Total: 12",
+            "Take away 5",
+            "12 − 5 = 7"
+          ],
+          "at": "total"
         },
         {
           "op": "text",
-          "text": "12 minus 5 equals 7",
-          "at": "minus"
+          "text": "The box is 7",
+          "at": "seven"
         }
       ]
     },
     {
-      "say": "Imagine you have a bag of marbles. You know you need ten marbles total. You already have three red marbles.",
+      "say": "Check your answer. Put seven in the box. Seven plus five is twelve, so it balances.",
+      "draw": [
+        {
+          "op": "formula",
+          "text": "7 + 5 = 12 ✓",
+          "at": "check"
+        }
+      ]
+    },
+    {
+      "say": "You need ten marbles. You have three. Count on from three to ten to find how many more.",
       "draw": [
         {
           "op": "text",
-          "text": "10 total, 3 red marbles.",
-          "at": "total"
+          "text": "3 + □ = 10",
+          "at": "marbles"
+        },
+        {
+          "op": "formula",
+          "text": "□ = 7",
+          "at": "more"
         }
       ]
     }
@@ -151,90 +161,75 @@
   ],
   "quiz": [
     {
-      "say": "If 9 plus □ equals 16, what is the missing number?",
+      "say": "Find the missing number. Tap it.",
       "show": "9 + □ = 16",
       "options": [
         {
-          "show": "2",
-          "say": "2"
-        },
-        {
           "show": "7",
-          "say": "7"
+          "say": "seven"
         },
         {
           "show": "25",
-          "say": "25"
+          "say": "twenty-five"
         },
         {
-          "show": "17",
-          "say": "17"
+          "show": "6",
+          "say": "six"
         }
       ],
-      "answer": 1,
-      "why": "We use the balance idea. 16 minus 9 equals 7, so the missing number is 7.",
+      "answer": 0,
+      "why": "16 take away 9 is 7. Check: 9 + 7 = 16.",
       "wrong": {
-        "0": "This is wrong because you only subtracted 1 from the total.",
-        "2": "This is wrong because you added the numbers together instead of finding the difference.",
-        "3": "This is wrong because you added one more than the total."
+        "1": "The number 25 is 9 and 16 added, and 9 + 25 is much more than 16.",
+        "2": "Check it: 9 + 6 is 15, so the box needs one more."
       }
     },
     {
-      "say": "What is the missing number in 20 minus □ equals 15?",
-      "show": "20 - □ = 15",
+      "say": "Look at the take-away. Tap the missing number.",
+      "show": "20 − □ = 15",
       "options": [
         {
-          "show": "50",
-          "say": "50"
-        },
-        {
-          "show": "5",
-          "say": "5"
-        },
-        {
           "show": "35",
-          "say": "35"
+          "say": "thirty-five"
         },
         {
           "show": "15",
-          "say": "15"
-        }
-      ],
-      "answer": 1,
-      "why": "We find the missing number by subtracting 15 from 20. Twenty minus fifteen equals 5.",
-      "wrong": {
-        "0": "This is wrong because you added the two numbers and then doubled the result.",
-        "2": "This is wrong because you added the two numbers together.",
-        "3": "This is wrong because you just copied one of the numbers."
-      }
-    },
-    {
-      "say": "Which operation undoes addition?",
-      "show": "Undo addition?",
-      "options": [
-        {
-          "show": "Division",
-          "say": "Division"
+          "say": "fifteen"
         },
         {
-          "show": "Adding zero",
-          "say": "Adding zero"
-        },
-        {
-          "show": "Subtraction",
-          "say": "Subtraction"
-        },
-        {
-          "show": "Multiplication",
-          "say": "Multiplication"
+          "show": "5",
+          "say": "five"
         }
       ],
       "answer": 2,
-      "why": "Subtraction is the inverse operation that undoes what addition does. They are opposites.",
+      "why": "20 take away 5 is 15. So the missing number is 5.",
       "wrong": {
-        "0": "Division is also an opposite, but it undoes multiplication.",
-        "1": "Adding zero changes nothing, it does not undo an action.",
-        "3": "Multiplication is a different operation that builds up numbers."
+        "0": "The number 35 is 20 and 15 added, and that is more than the 20 you start with.",
+        "1": "Check it: 20 take away 15 is 5, so the box is smaller."
+      }
+    },
+    {
+      "say": "You find three shells. Now you have ten. Tap how many you had first.",
+      "show": "🐚 □ + 3 = 10",
+      "options": [
+        {
+          "show": "13",
+          "say": "thirteen"
+        },
+        {
+          "show": "7",
+          "say": "seven"
+        },
+        {
+          "show": "3",
+          "say": "three"
+        }
+      ],
+      "answer": 1,
+      "why": "10 take away 3 is 7. You had 7 shells first.",
+      "wrong": {
+        "0": "The number 13 is 10 and 3 added, but you had fewer shells before you found more.",
+        "2": "The number 3 is how many you found, and the question asks how many you had first."
       }
     }
   ]

@@ -1,6 +1,7 @@
 {
   "id": "EY-NUM-04",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -28,7 +29,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Look at these two groups of toys. Can you count them for me?",
+      "say": "Look at the two groups of toys. Count each group.",
       "draw": [
         {
           "op": "clear"
@@ -38,56 +39,49 @@
           "text": "More, fewer, equal"
         },
         {
-          "op": "formula",
-          "text": "Group A: 3, Group B: 2"
+          "op": "text",
+          "text": "Group A: 3 toys   Group B: 2 toys",
+          "at": "groups"
         }
       ]
     },
     {
-      "say": "Group A has three toys. Group B has two toys. Group A has more toys than group B.",
+      "say": "Group A has three toys. Group B has two toys. So group A has more.",
       "draw": [
         {
           "op": "formula",
-          "text": "More means bigger group",
+          "text": "3 is more than 2",
           "at": "more"
         }
       ]
     },
     {
-      "say": "Now look at these two groups. One has four blocks and the other has four blocks. They have an equal number of blocks.",
+      "say": "Group B has two toys. Two is fewer than three. So group B has fewer.",
       "draw": [
         {
           "op": "formula",
-          "text": "Equal means the same amount",
-          "at": "equal"
-        }
-      ]
-    },
-    {
-      "say": "Here we have five balls and only two balls. The two balls have fewer balls than the five balls.",
-      "draw": [
-        {
-          "op": "formula",
-          "text": "Fewer means smaller group",
+          "text": "2 is fewer than 3",
           "at": "fewer"
         }
       ]
     },
     {
-      "say": "If you have three fingers up and I add one more finger, you now have four fingers up. That is one more.",
+      "say": "Here are four blocks and four blocks. Both groups have the same number. They are equal.",
       "draw": [
         {
-          "op": "numberline",
-          "items": [
-            "3: 3",
-            "4: 4",
-            "5: 5"
-          ]
-        },
+          "op": "formula",
+          "text": "4 and 4 are equal",
+          "at": "equal"
+        }
+      ]
+    },
+    {
+      "say": "You can match the toys in pairs, one from each group. The group with toys left over has more.",
+      "draw": [
         {
           "op": "formula",
-          "text": "1 more: 3 + 1 = 4",
-          "at": "more"
+          "text": "Make pairs. Look for toys left over.",
+          "at": "pairs"
         }
       ]
     }
@@ -111,7 +105,7 @@
     },
     {
       "q": "What is 'fewer' than a number?",
-      "a": "Fewer means a smaller amount than what you started with. It means taking some away.",
+      "a": "Fewer means a smaller number of things. Two cars is fewer than five cars.",
       "asks": [
         "Less than",
         "Take away some"
@@ -126,8 +120,8 @@
       ]
     },
     {
-      "q": "If I have eight fingers and take two away, how many are left?",
-      "a": "You start with eight and take away two fingers. You will be left with six fingers.",
+      "q": "If I have eight grapes and eat two, how many are left?",
+      "a": "You start with eight and take away two. You have six grapes left.",
       "asks": [
         "Two less than eight",
         "Eight minus two"
@@ -142,90 +136,75 @@
   ],
   "quiz": [
     {
-      "say": "Which group has more apples, the group with 5 or the group with 3?",
-      "show": "5 vs 3",
+      "say": "Look at the two groups of apples. Tap the group with more.",
+      "show": "A: 🍎 🍎 🍎 🍎 🍎   B: 🍎 🍎 🍎",
       "options": [
         {
-          "show": "The group with 3 apples.",
-          "say": "The group with 3 apples."
+          "show": "Group A",
+          "say": "Group A"
         },
         {
-          "show": "They are equal.",
-          "say": "They are equal."
+          "show": "Group B",
+          "say": "Group B"
         },
         {
-          "show": "I cannot tell.",
-          "say": "I cannot tell."
-        },
-        {
-          "show": "The group with 5 apples.",
-          "say": "The group with 5 apples."
+          "show": "They are equal",
+          "say": "They are equal"
         }
       ],
-      "answer": 3,
-      "why": "Five is a bigger number than three, so it has more.",
+      "answer": 0,
+      "why": "Group A has five apples. Five is more than three.",
       "wrong": {
-        "0": "This is wrong because three is a smaller number than five.",
-        "1": "This is wrong because the numbers 5 and 3 are not the same.",
-        "2": "This is wrong because you can easily count and compare the groups."
+        "1": "Group B has three apples, which is fewer than five.",
+        "2": "The groups have different numbers, five and three."
       }
     },
     {
-      "say": "If you have 4 crayons and find 1 more, how many do you have?",
-      "show": "4 + 1 = ?",
+      "say": "Look at the fish. Tap the group with fewer.",
+      "show": "A: 🐟 🐟 🐟 🐟   B: 🐟 🐟",
       "options": [
         {
-          "show": "4",
-          "say": "4"
+          "show": "Group A",
+          "say": "Group A"
         },
         {
-          "show": "6",
-          "say": "6"
+          "show": "Group B",
+          "say": "Group B"
         },
         {
-          "show": "5",
-          "say": "5"
-        },
-        {
-          "show": "3",
-          "say": "3"
-        }
-      ],
-      "answer": 2,
-      "why": "Adding one more to four gives you five.",
-      "wrong": {
-        "0": "This is wrong because adding one always makes the number bigger.",
-        "1": "This is wrong because you only added one, not two.",
-        "3": "This is wrong because you added one, so the number must go up."
-      }
-    },
-    {
-      "say": "Which pair of objects shows an equal amount?",
-      "show": "Group A: 2 stars, Group B: 2 circles",
-      "options": [
-        {
-          "show": "Neither group.",
-          "say": "Neither group."
-        },
-        {
-          "show": "Group A and Group B.",
-          "say": "Group A and Group B."
-        },
-        {
-          "show": "Group A only.",
-          "say": "Group A only."
-        },
-        {
-          "show": "Group B only.",
-          "say": "Group B only."
+          "show": "They are equal",
+          "say": "They are equal"
         }
       ],
       "answer": 1,
-      "why": "Equal means they both have the same number of items, which is two.",
+      "why": "Group B has two fish. Two is fewer than four.",
       "wrong": {
-        "0": "This is wrong because they both clearly have two items each.",
-        "2": "This is wrong because you must compare both groups to see if they match.",
-        "3": "This is wrong because both groups look the same size."
+        "0": "Group A has four fish, which is more than two.",
+        "2": "The groups have different numbers, four and two."
+      }
+    },
+    {
+      "say": "Count each group. Tap what is true.",
+      "show": "A: ⭐ ⭐ ⭐   B: 🔵 🔵 🔵",
+      "options": [
+        {
+          "show": "A has more",
+          "say": "A has more"
+        },
+        {
+          "show": "B has more",
+          "say": "B has more"
+        },
+        {
+          "show": "They are equal",
+          "say": "They are equal"
+        }
+      ],
+      "answer": 2,
+      "why": "Each group has three. The same number means equal.",
+      "wrong": {
+        "0": "Group A has three, and group B has three too.",
+        "1": "Group B has three, and group A has three too."
       }
     }
   ]

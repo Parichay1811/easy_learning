@@ -1,6 +1,7 @@
 {
   "id": "EY-SHAPE-05",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -30,7 +31,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Look at these two sticks. Say which one is longer. This stick is longer than that stick.",
+      "say": "Put two sticks side by side. Line up the ends. The stick that goes further is longer.",
       "draw": [
         {
           "op": "clear"
@@ -41,55 +42,53 @@
         },
         {
           "op": "text",
-          "text": "Longer / Shorter",
+          "text": "Longer / shorter",
           "at": "longer"
         }
       ]
     },
     {
-      "say": "Now look at these two ribbons. Say which one is shorter. This ribbon is shorter than that ribbon.",
+      "say": "The other stick stops first. That stick is shorter.",
       "draw": [
         {
-          "op": "text",
-          "text": "Longer / Shorter",
+          "op": "note",
+          "text": "Line up the ends first",
           "at": "shorter"
         }
       ]
     },
     {
-      "say": "Next, we look at weight. Say which block is heavier. This block is heavier than that block.",
+      "say": "Now hold one block in each hand. The heavier block pulls your hand down more.",
       "draw": [
         {
-          "op": "flow",
-          "items": [
-            "Step 1: Compare lengths",
-            "Step 2: Compare weights",
-            "Step 3: Determine heavier object"
-          ]
-        },
-        {
           "op": "text",
-          "text": "Heavier / Lighter",
+          "text": "Heavier / lighter",
           "at": "heavier"
         }
       ]
     },
     {
-      "say": "We can use a balance scale to compare weight. If one side goes down, it is heavier.",
+      "say": "The other block is lighter. It is easier to hold up.",
       "draw": [
         {
-          "op": "text",
-          "text": "Balance Scales",
-          "at": "balance"
+          "op": "note",
+          "text": "Lighter: easier to hold up",
+          "at": "lighter"
         }
       ]
     },
     {
-      "say": "When you bring your toys to school, you might compare their lengths. You see a long crayon and a short one. You can tell which crayon is longer than the other.",
+      "say": "A balance helps you compare weight. The heavier side goes down. The lighter side goes up.",
       "draw": [
         {
           "op": "text",
-          "text": "Comparing length and weight"
+          "text": "Balance scales",
+          "at": "balance"
+        },
+        {
+          "op": "note",
+          "text": "Heavier side down, lighter side up",
+          "at": "down"
         }
       ]
     }
@@ -105,7 +104,7 @@
     },
     {
       "q": "Is 'heavy' the same as 'big'?",
-      "a": "No, 'heavy' means it has a lot of weight. A big feather can still be very light.",
+      "a": "No, heavy means it has a lot of weight. A big balloon is still very light.",
       "asks": [
         "Does big mean heavy?",
         "What is the difference between big and heavy?"
@@ -121,7 +120,7 @@
     },
     {
       "q": "Can I compare things that are not straight?",
-      "a": "You can still compare them by looking at their longest part. We compare the space they take up.",
+      "a": "Yes. Lay a string along the curvy thing. Then pull the string straight and compare it.",
       "asks": [
         "Can I compare curved things?",
         "Do I have to line them up?"
@@ -145,90 +144,75 @@
   ],
   "quiz": [
     {
-      "say": "Which is longer, a pencil or a ruler?",
-      "show": "Pencil vs Ruler",
+      "say": "Look at the two ribbons. Tap the longer ribbon.",
+      "show": "red 🟥🟥🟥🟥🟥 · blue 🟦🟦🟦",
       "options": [
         {
-          "show": "They are the same",
-          "say": "They are the same"
+          "show": "blue ribbon",
+          "say": "the blue ribbon"
         },
         {
-          "show": "Cannot tell",
-          "say": "Cannot tell"
+          "show": "red ribbon",
+          "say": "the red ribbon"
         },
         {
-          "show": "Ruler",
-          "say": "Ruler"
-        },
-        {
-          "show": "Pencil",
-          "say": "Pencil"
+          "show": "same length",
+          "say": "the same length"
         }
       ],
-      "answer": 2,
-      "why": "A ruler is usually longer than a standard pencil.",
+      "answer": 1,
+      "why": "The red ribbon goes further. So the red ribbon is longer.",
       "wrong": {
-        "0": "This is wrong because they are different objects.",
-        "1": "This is wrong because you can compare them easily.",
-        "3": "This is tempting because pencils are easy to see."
+        "0": "The blue ribbon stops first, so it is shorter.",
+        "2": "One ribbon goes further, so they are different lengths."
       }
     },
     {
-      "say": "If a feather and a rock are on the scale, and the rock side goes down, what is true?",
-      "show": "Rock side down",
+      "say": "Look at the balance. Which thing is heavier?",
+      "show": "⚖️ 🪨 down · 🪶 up",
       "options": [
         {
-          "show": "The rock is heavier",
-          "say": "The rock is heavier"
+          "show": "the feather",
+          "say": "the feather"
         },
         {
-          "show": "The feather is heavier",
-          "say": "The feather is heavier"
+          "show": "the same",
+          "say": "they weigh the same"
         },
         {
-          "show": "They weigh the same",
-          "say": "They weigh the same"
-        },
-        {
-          "show": "The scale is broken",
-          "say": "The scale is broken"
-        }
-      ],
-      "answer": 0,
-      "why": "When the rock side goes down, it means it has more weight.",
-      "wrong": {
-        "1": "This is wrong because the scale shows the rock is heavier.",
-        "2": "This is wrong because the scale is tipped down.",
-        "3": "This is wrong because the scale is showing a difference."
-      }
-    },
-    {
-      "say": "Which word means something has less weight?",
-      "show": "Less weight word",
-      "options": [
-        {
-          "show": "Smaller",
-          "say": "Smaller"
-        },
-        {
-          "show": "Less",
-          "say": "Less"
-        },
-        {
-          "show": "Lighter",
-          "say": "Lighter"
-        },
-        {
-          "show": "Shorter",
-          "say": "Shorter"
+          "show": "the rock",
+          "say": "the rock"
         }
       ],
       "answer": 2,
-      "why": "Lighter is the word we use for something with less weight.",
+      "why": "The heavier side goes down. The rock side is down, so the rock is heavier.",
       "wrong": {
-        "0": "This word can mean size, but 'lighter' is best for weight.",
-        "1": "This is too general; 'lighter' is the specific word for weight.",
-        "3": "This word describes length, not weight."
+        "0": "The feather side is up, so the feather is lighter.",
+        "1": "Things that weigh the same stay level, and this balance is tipped."
+      }
+    },
+    {
+      "say": "Think of a feather and a book. Which word fits the feather?",
+      "show": "🪶 feather · 📘 book",
+      "options": [
+        {
+          "show": "heavier",
+          "say": "heavier"
+        },
+        {
+          "show": "lighter",
+          "say": "lighter"
+        },
+        {
+          "show": "same weight",
+          "say": "same weight"
+        }
+      ],
+      "answer": 1,
+      "why": "A feather weighs less than a book. So the feather is lighter.",
+      "wrong": {
+        "0": "The book is heavier, because it pulls your hand down more.",
+        "2": "The book pulls your hand down more, so they weigh different amounts."
       }
     }
   ]

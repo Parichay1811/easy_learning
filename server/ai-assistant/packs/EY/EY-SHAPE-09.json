@@ -1,6 +1,7 @@
 {
   "id": "EY-SHAPE-09",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -29,7 +30,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Today we are learning about days of the week. There are seven days in one week. Can you say the days with me?",
+      "say": "There are seven days in a week. Say them with me. Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.",
       "draw": [
         {
           "op": "clear"
@@ -41,56 +42,58 @@
         {
           "op": "bullets",
           "items": [
-            "Sunday",
             "Monday",
             "Tuesday",
             "Wednesday",
             "Thursday",
-            "Friday, Saturday"
-          ]
-        },
-        {
-          "op": "text",
-          "text": "Days of the week: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday",
+            "Friday",
+            "Saturday",
+            "Sunday"
+          ],
           "at": "days"
         }
       ]
     },
     {
-      "say": "The days go in a set order. After Sunday comes Monday. After Monday comes Tuesday. Can you say them in order for me?",
+      "say": "The days always go in the same order. After Monday comes Tuesday. After Tuesday comes Wednesday.",
       "draw": [
         {
           "op": "flow",
           "items": [
-            "Sunday",
             "Monday",
-            "Tuesday"
+            "Tuesday",
+            "Wednesday"
           ],
-          "at": "sunday"
+          "at": "monday"
         },
         {
           "op": "text",
-          "text": "Order: Sunday → Monday → Tuesday",
+          "text": "Order: Monday → Tuesday → Wednesday",
           "at": "order"
         }
       ]
     },
     {
-      "say": "We can talk about what comes before and what comes after. If today is Wednesday, what day was before Wednesday?",
-      "draw": [
-        {
-          "op": "text",
-          "text": "Before and After: Wednesday",
-          "at": "before"
-        }
-      ]
-    },
-    {
-      "say": "If today is Thursday, then tomorrow will be Friday. Tomorrow is the day right after today. Do you understand?",
+      "say": "Today is the day it is now. Yesterday was the day before. Tomorrow is the day after.",
       "draw": [
         {
           "op": "flow",
           "items": [
+            "yesterday",
+            "today",
+            "tomorrow"
+          ],
+          "at": "today"
+        }
+      ]
+    },
+    {
+      "say": "If today is Thursday, tomorrow is Friday. Yesterday was Wednesday.",
+      "draw": [
+        {
+          "op": "flow",
+          "items": [
+            "Wednesday",
             "Thursday",
             "Friday"
           ],
@@ -98,8 +101,28 @@
         },
         {
           "op": "text",
-          "text": "Today, Tomorrow: Thursday, Friday",
-          "at": "today"
+          "text": "yesterday, today, tomorrow",
+          "at": "yesterday"
+        }
+      ]
+    },
+    {
+      "say": "After Sunday, a new week starts with Monday.",
+      "draw": [
+        {
+          "op": "note",
+          "text": "Sunday → Monday: a new week",
+          "at": "sunday"
+        }
+      ]
+    },
+    {
+      "say": "A year has twelve months. January is the first month. December is the last month.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "12 months: January to December",
+          "at": "months"
         }
       ]
     }
@@ -107,7 +130,7 @@
   "faq": [
     {
       "q": "How many days are in a week?",
-      "a": "There are seven days in one week. They are Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday.",
+      "a": "There are seven days in one week. They are Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday.",
       "asks": [
         "How many days are there?",
         "What is the length of a week?"
@@ -115,7 +138,7 @@
     },
     {
       "q": "What day comes after Saturday?",
-      "a": "The day that comes after Saturday is Sunday. The week starts again on Sunday.",
+      "a": "Sunday comes after Saturday. After Sunday, a new week starts with Monday.",
       "asks": [
         "What is the next day after Saturday?",
         "After Saturday, what day is it?"
@@ -123,7 +146,7 @@
     },
     {
       "q": "What does 'before' mean when talking about days?",
-      "a": "Before means the day that happened right before the day you are talking about. It is the day that came first.",
+      "a": "Before means the day just ahead of the day you are talking about. Tuesday comes before Wednesday.",
       "asks": [
         "What day was before Tuesday?",
         "What day comes before?"
@@ -139,7 +162,7 @@
     },
     {
       "q": "Do we always start counting days from Sunday?",
-      "a": "In many places, the week is counted starting with Sunday. This helps us keep track of the days correctly.",
+      "a": "In Ireland and most of Europe, the week starts on Monday. Some calendars start on Sunday. The order of the days stays the same.",
       "asks": [
         "Does the week start on Sunday?",
         "Is Sunday the first day?"
@@ -148,22 +171,67 @@
   ],
   "facts": [
     "There are seven days in one week.",
-    "The days of the week are Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, and Saturday.",
+    "The days of the week are Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday.",
     "Tomorrow is the day that comes after today.",
-    "Yesterday is the day that came before today."
+    "Yesterday is the day that came before today.",
+    "There are twelve months in a year, from January to December."
   ],
   "quiz": [
     {
-      "say": "If today is Wednesday, what day was before today?",
-      "show": "Before Wednesday is:",
+      "say": "Today is Wednesday. Tap the day before.",
+      "show": "? ➡️ Wednesday",
       "options": [
         {
           "show": "Monday",
           "say": "Monday"
         },
         {
+          "show": "Tuesday",
+          "say": "Tuesday"
+        },
+        {
           "show": "Thursday",
           "say": "Thursday"
+        }
+      ],
+      "answer": 1,
+      "why": "Tuesday comes just before Wednesday.",
+      "wrong": {
+        "0": "Monday is two days before Wednesday.",
+        "2": "Thursday comes after Wednesday."
+      }
+    },
+    {
+      "say": "Today is Friday. Tap the day for tomorrow.",
+      "show": "Friday ➡️ ?",
+      "options": [
+        {
+          "show": "Thursday",
+          "say": "Thursday"
+        },
+        {
+          "show": "Sunday",
+          "say": "Sunday"
+        },
+        {
+          "show": "Saturday",
+          "say": "Saturday"
+        }
+      ],
+      "answer": 2,
+      "why": "Tomorrow is the next day. Saturday comes after Friday.",
+      "wrong": {
+        "0": "Thursday was yesterday, the day before Friday.",
+        "1": "Sunday comes two days after Friday."
+      }
+    },
+    {
+      "say": "Say the days in order. Tap the day after Sunday.",
+      "show": "Sunday ➡️ ?",
+      "options": [
+        {
+          "show": "Monday",
+          "say": "Monday"
         },
         {
           "show": "Saturday",
@@ -174,70 +242,11 @@
           "say": "Tuesday"
         }
       ],
-      "answer": 3,
-      "why": "Tuesday comes right before Wednesday in the order of the week.",
-      "wrong": {
-        "0": "Monday is two days before Wednesday.",
-        "1": "Thursday is the day after Wednesday.",
-        "2": "Saturday is much later in the week."
-      }
-    },
-    {
-      "say": "If today is Friday, what is tomorrow?",
-      "show": "Tomorrow after Friday is:",
-      "options": [
-        {
-          "show": "Saturday",
-          "say": "Saturday"
-        },
-        {
-          "show": "Friday",
-          "say": "Friday"
-        },
-        {
-          "show": "Thursday",
-          "say": "Thursday"
-        },
-        {
-          "show": "Sunday",
-          "say": "Sunday"
-        }
-      ],
       "answer": 0,
-      "why": "Saturday is the day that follows Friday in the week.",
+      "why": "After Sunday, a new week starts. The first day is Monday.",
       "wrong": {
-        "1": "Today is Friday, so tomorrow must be different.",
-        "2": "Thursday is the day before Friday.",
-        "3": "Sunday is too far ahead in the week."
-      }
-    },
-    {
-      "say": "What day comes after Saturday?",
-      "show": "After Saturday is:",
-      "options": [
-        {
-          "show": "Sunday",
-          "say": "Sunday"
-        },
-        {
-          "show": "Monday",
-          "say": "Monday"
-        },
-        {
-          "show": "Saturday",
-          "say": "Saturday"
-        },
-        {
-          "show": "Friday",
-          "say": "Friday"
-        }
-      ],
-      "answer": 0,
-      "why": "The week cycles back to Sunday after Saturday.",
-      "wrong": {
-        "1": "Monday comes after Sunday, not after Saturday.",
-        "2": "It cannot be the same day as the one before.",
-        "3": "Friday is several days before Saturday."
+        "1": "Saturday comes just before Sunday.",
+        "2": "Tuesday comes two days after Sunday."
       }
     }
   ]

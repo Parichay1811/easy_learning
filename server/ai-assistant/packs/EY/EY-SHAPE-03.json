@@ -1,6 +1,7 @@
 {
   "id": "EY-SHAPE-03",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -27,7 +28,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Look at the picture on the screen for us.",
+      "say": "Position words tell you where something is. Look at the ball and the box.",
       "draw": [
         {
           "op": "clear"
@@ -38,12 +39,13 @@
         },
         {
           "op": "note",
-          "text": "Ball above box"
+          "text": "⚽ above 📦",
+          "at": "ball"
         }
       ]
     },
     {
-      "say": "The ball is up high, above the box.",
+      "say": "The ball is higher than the box. So the ball is above the box.",
       "draw": [
         {
           "op": "note",
@@ -53,7 +55,7 @@
       ]
     },
     {
-      "say": "The box is down low, below the ball.",
+      "say": "The box is lower than the ball. So the box is below the ball.",
       "draw": [
         {
           "op": "note",
@@ -63,22 +65,42 @@
       ]
     },
     {
-      "say": "The toy car is right next to the teddy bear.",
+      "say": "The car is beside the teddy. So the car is next to the teddy.",
       "draw": [
         {
           "op": "note",
-          "text": "Next to means beside it",
+          "text": "Next to means beside",
           "at": "next"
         }
       ]
     },
     {
-      "say": "Point to your left hand now for me.",
+      "say": "The cup is on the table. The cat is under the table.",
       "draw": [
         {
           "op": "note",
-          "text": "Left and right sides",
+          "text": "on the table, under the table",
+          "at": "under"
+        }
+      ]
+    },
+    {
+      "say": "Hold up your left hand. Now hold up your right hand.",
+      "draw": [
+        {
+          "op": "note",
+          "text": "Left and right",
           "at": "left"
+        }
+      ]
+    },
+    {
+      "say": "To turn means you change the way you face. Stand up and turn slowly.",
+      "draw": [
+        {
+          "op": "note",
+          "text": "Turn: face a new way",
+          "at": "turn"
         }
       ]
     }
@@ -110,7 +132,7 @@
     },
     {
       "q": "How do I know my left from my right?",
-      "a": "You can hold up both hands and look at your body. Your left hand is on the left side when you face someone.",
+      "a": "Hold up both hands with your fingers up and your thumbs out. Your left hand makes the shape of the letter L.",
       "asks": [
         "Which hand is my left hand?",
         "Can you check my left side?"
@@ -134,90 +156,75 @@
   ],
   "quiz": [
     {
-      "say": "The bird flew high above the tree.",
-      "show": "Bird tree",
+      "say": "Look at the bird and the tree. Where is the bird?",
+      "show": "🐦 up high · 🌳 down low",
       "options": [
         {
           "show": "below",
           "say": "below"
         },
         {
+          "show": "above",
+          "say": "above"
+        },
+        {
           "show": "next to",
           "say": "next to"
+        }
+      ],
+      "answer": 1,
+      "why": "The bird is higher than the tree. So the bird is above the tree.",
+      "wrong": {
+        "0": "Below means lower down, and the bird is high up.",
+        "2": "Next to means beside, and the bird is high up over the tree."
+      }
+    },
+    {
+      "say": "Look at the two crayons. Where is the red crayon?",
+      "show": "🖍️ red   🖍️ blue",
+      "options": [
+        {
+          "show": "above",
+          "say": "above"
         },
         {
           "show": "under",
           "say": "under"
         },
         {
-          "show": "above",
-          "say": "above"
-        }
-      ],
-      "answer": 3,
-      "why": "The bird is higher up than the tree, so above is the right word.",
-      "wrong": {
-        "0": "This is wrong because below means lower down, and the bird was high up.",
-        "1": "This is wrong because next to means beside, not higher up.",
-        "2": "This is wrong because under means directly beneath, not higher up."
-      }
-    },
-    {
-      "say": "The red crayon is next to the blue crayon.",
-      "show": "Red blue",
-      "options": [
-        {
           "show": "next to",
           "say": "next to"
-        },
-        {
-          "show": "above",
-          "say": "above"
-        },
-        {
-          "show": "below",
-          "say": "below"
-        },
-        {
-          "show": "left",
-          "say": "left"
         }
       ],
-      "answer": 0,
-      "why": "Next to means right beside, which is what the picture shows.",
+      "answer": 2,
+      "why": "The crayons are side by side. So the red crayon is next to the blue one.",
       "wrong": {
-        "1": "This is wrong because above means higher up, not beside.",
-        "2": "This is wrong because below means lower down, not beside.",
-        "3": "This is wrong because left only talks about one side, not the position between two things."
+        "0": "Above means higher up, and the crayons are side by side.",
+        "1": "Under means lower down, and the crayons are side by side."
       }
     },
     {
-      "say": "If you face the board and then spin around, what did you do?",
-      "show": "Change your facing direction",
+      "say": "Face the door. Now face the window. What did you do?",
+      "show": "🚪 ➡️ 🪟",
       "options": [
         {
           "show": "turn",
           "say": "turn"
         },
         {
-          "show": "above",
-          "say": "above"
+          "show": "jump",
+          "say": "jump"
         },
         {
-          "show": "left",
-          "say": "left"
-        },
-        {
-          "show": "below",
-          "say": "below"
+          "show": "sit",
+          "say": "sit"
         }
       ],
       "answer": 0,
-      "why": "Turning means changing the way you are facing, like spinning around.",
+      "why": "You changed the way you face. That is a turn.",
       "wrong": {
-        "1": "This is wrong because above describes height, not movement.",
-        "2": "This is wrong because left only describes one side, not the action of spinning.",
-        "3": "This is wrong because below describes a low position, not an action."
+        "1": "A jump goes up and down, and you still face the same way.",
+        "2": "When you sit, you still face the same way."
       }
     }
   ]

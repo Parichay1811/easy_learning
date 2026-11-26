@@ -1,6 +1,7 @@
 {
   "id": "MATH-MONEY-02",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -20,14 +21,14 @@
     "money"
   ],
   "examples": [
-    "If I pay with a ten dollar bill, how much change should I get back?",
+    "If I pay with a ten euro note, how much change should I get back?",
     "Can you show me how to count up to the amount I paid?",
     "What is the difference between paying and getting change?"
   ],
   "figure": [],
   "explain": [
     {
-      "say": "Today we learn about giving change with money. Change is the money you get back. You get change when you pay more than the cost.",
+      "say": "Change is the money you get back. You get change when you pay more than the price.",
       "draw": [
         {
           "op": "clear"
@@ -39,72 +40,73 @@
         {
           "op": "bullets",
           "items": [
-            "Change is money received back",
-            "Get change when paying extra"
+            "Change: the money you get back",
+            "You pay more than the price"
           ],
           "at": "change"
-        },
-        {
-          "op": "text",
-          "text": "Paying more than the cost",
-          "at": "more"
         }
       ]
     },
     {
-      "say": "We can find the change by counting up. Start at the price and count up to the amount you paid. Each number is the change.",
+      "say": "You can find the change by counting up. Start at the price. Count up to the money you paid.",
       "draw": [
         {
           "op": "flow",
           "items": [
             "Start at the price",
-            "Count up to the amount paid",
-            "Each number is the change"
+            "Count up to what you paid",
+            "The jumps are the change"
           ],
           "at": "start"
-        },
-        {
-          "op": "text",
-          "text": "Count up to the amount paid",
-          "at": "count"
         }
       ]
     },
     {
-      "say": "For example, if a toy costs three dollars. You pay with five dollars. We count up: three to four, four to five. You get two dollars change.",
+      "say": "A toy costs three euro. You pay with five euro. Count up from three: four, five. That is two jumps. So your change is two euro.",
       "draw": [
         {
-          "op": "text",
-          "text": "3 + 2 = 5"
-        }
-      ]
-    },
-    {
-      "say": "We can also use subtraction to find the change. Take the amount paid and subtract the cost. This gives you the change amount.",
-      "draw": [
-        {
-          "op": "flow",
+          "op": "numberline",
           "items": [
-            "Paid amount",
-            "minus",
-            "Cost",
-            "Equals change amount"
+            "price: 3",
+            "paid: 5"
           ],
-          "at": "paid"
+          "value": "0..10",
+          "at": "count"
         },
         {
-          "op": "text",
-          "text": "Paid amount minus cost",
-          "at": "paid"
+          "op": "formula",
+          "text": "€3 + €2 = €5, change €2",
+          "at": "change"
         }
       ]
     },
     {
-      "say": "Let us try another example. If a book costs four dollars. You pay with ten dollars. We subtract ten minus four. The change is six dollars.",
+      "say": "You can also take away. Take the price away from the money you paid.",
       "draw": [
         {
-          "op": "text",
-          "text": "10 - 4 = 6"
+          "op": "formula",
+          "text": "money paid − price = change",
+          "at": "price"
+        }
+      ]
+    },
+    {
+      "say": "A book costs four euro. You pay with ten euro. Ten take away four is six. Your change is six euro.",
+      "draw": [
+        {
+          "op": "formula",
+          "text": "€10 − €4 = €6",
+          "at": "six"
+        }
+      ]
+    },
+    {
+      "say": "Check your change. The price and the change together make the money you paid.",
+      "draw": [
+        {
+          "op": "formula",
+          "text": "€4 + €6 = €10",
+          "at": "check"
         }
       ]
     }
@@ -120,7 +122,7 @@
     },
     {
       "q": "Do I always count up?",
-      "a": "No, you can use either counting up or subtraction. Both methods help you find the correct amount of change.",
+      "a": "No, you can count up or take away. Both ways give the same change.",
       "asks": [
         "Is counting up the only way?",
         "Can I use subtraction too?"
@@ -128,15 +130,15 @@
     },
     {
       "q": "When do I need to calculate change?",
-      "a": "You need to calculate change when the money you give is more than the price of the item. This happens at shops and stores.",
+      "a": "You find the change when you give more money than the price. This happens in shops.",
       "asks": [
         "When is change needed?",
         "Do I always get change?"
       ]
     },
     {
-      "q": "If I pay with a ten dollar bill, how do I know the change?",
-      "a": "You can count up from the price to ten dollars. For example, if it costs seven dollars, you count up seven to eight, eight to nine, nine to ten. You get three dollars change.",
+      "q": "If I pay with a ten euro note, how do I know the change?",
+      "a": "Count up from the price to ten euro. If it costs seven euro, count eight, nine, ten. That is three jumps, so you get three euro change.",
       "asks": [
         "How do I count up to ten?",
         "What if I pay with a twenty dollar bill?"
@@ -144,7 +146,7 @@
     },
     {
       "q": "Is subtraction always easier for change?",
-      "a": "It depends on what you are comfortable with. Subtraction is quick for simple numbers, while counting up is good for visualizing the steps.",
+      "a": "Use the way you find easier. Taking away is quick for small numbers. Counting up lets you see each step.",
       "asks": [
         "Which way is faster?",
         "Is subtraction always correct?"
@@ -159,90 +161,75 @@
   ],
   "quiz": [
     {
-      "say": "A pencil costs two dollars. You pay with five dollars. How much change do you get?",
-      "show": "5 - 2 = ?",
+      "say": "A pencil costs two euro. You pay five euro. Tap your change.",
+      "show": "✏️ costs €2 · you pay €5",
       "options": [
         {
-          "show": "2",
-          "say": "2"
+          "show": "€7",
+          "say": "seven euro"
         },
         {
-          "show": "7",
-          "say": "7"
+          "show": "€4",
+          "say": "four euro"
         },
         {
-          "show": "3",
-          "say": "3"
-        },
-        {
-          "show": "1",
-          "say": "1"
+          "show": "€3",
+          "say": "three euro"
         }
       ],
       "answer": 2,
-      "why": "You subtract the cost from the amount paid, so five minus two equals three dollars.",
+      "why": "Count up from 2: 3, 4, 5. That is three jumps, so your change is €3.",
       "wrong": {
-        "0": "This is wrong because you cannot subtract a number from itself.",
-        "1": "This is wrong because you added the two numbers together instead of subtracting.",
-        "3": "This is wrong because you are subtracting the numbers instead of finding the difference."
+        "0": "Seven euro is the price and the money added together.",
+        "1": "Start at 2 and count only the jumps: 3, 4, 5 makes three jumps."
       }
     },
     {
-      "say": "A snack costs four dollars. You pay with ten dollars. How much change is correct?",
-      "show": "Count up from 4 to 10",
+      "say": "A ball costs six euro. You pay ten euro. Tap your change.",
+      "show": "⚽ costs €6 · you pay €10",
       "options": [
         {
-          "show": "3",
-          "say": "3"
+          "show": "€16",
+          "say": "sixteen euro"
         },
         {
-          "show": "4",
-          "say": "4"
+          "show": "€4",
+          "say": "four euro"
         },
         {
-          "show": "6",
-          "say": "6"
+          "show": "€5",
+          "say": "five euro"
+        }
+      ],
+      "answer": 1,
+      "why": "Ten take away six is four. So your change is €4.",
+      "wrong": {
+        "0": "Sixteen euro is €6 and €10 added together, but change means taking away.",
+        "2": "Count up from 6: 7, 8, 9, 10 makes four jumps."
+      }
+    },
+    {
+      "say": "A hat costs eight euro. You pay twenty euro. Tap your change.",
+      "show": "🧢 costs €8 · you pay €20",
+      "options": [
+        {
+          "show": "€10",
+          "say": "ten euro"
         },
         {
-          "show": "14",
-          "say": "14"
+          "show": "€28",
+          "say": "twenty-eight euro"
+        },
+        {
+          "show": "€12",
+          "say": "twelve euro"
         }
       ],
       "answer": 2,
-      "why": "Counting up from four to ten gives you six dollars in change.",
+      "why": "From 8 to 10 is 2, and from 10 to 20 is 10 more. So your change is €12.",
       "wrong": {
-        "0": "This is wrong because you subtracted the cost from the change amount.",
-        "1": "This is wrong because you only wrote down the original cost.",
-        "3": "This is wrong because you added the two numbers together instead of finding the difference."
-      }
-    },
-    {
-      "say": "If an item costs eight dollars, and you pay with twenty dollars, what is the change?",
-      "show": "20 - 8 = ?",
-      "options": [
-        {
-          "show": "12",
-          "say": "12"
-        },
-        {
-          "show": "18",
-          "say": "18"
-        },
-        {
-          "show": "28",
-          "say": "28"
-        },
-        {
-          "show": "10",
-          "say": "10"
-        }
-      ],
-      "answer": 0,
-      "why": "Using subtraction, twenty minus eight equals twelve dollars change.",
-      "wrong": {
-        "1": "This is wrong because you subtracted eight from twenty, but forgot to count up.",
-        "2": "This is wrong because you added the two numbers together.",
-        "3": "This is wrong because you only subtracted the tens digit."
+        "0": "Count up from 8 to 10 first, which is 2 more, and then add the 10.",
+        "1": "Twenty-eight euro is the price and the money added together, and change is less than what you paid."
       }
     }
   ]

@@ -1,6 +1,7 @@
 {
   "id": "EY-NUM-06",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -29,7 +30,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Let us look at the teen numbers today. We count up to nineteen.",
+      "say": "After ten, you keep counting in the same order. Eleven, twelve and thirteen come next.",
       "draw": [
         {
           "op": "clear"
@@ -47,26 +48,38 @@
             "13",
             "14",
             "15"
-          ]
-        },
-        {
-          "op": "text",
-          "text": "10, 11, 12, 13..."
+          ],
+          "at": "eleven"
         }
       ]
     },
     {
-      "say": "After ten, we count eleven, twelve, and thirteen. This is the teen pattern.",
+      "say": "The numbers from eleven to nineteen are the teen numbers. Each one is ten and some more.",
       "draw": [
         {
           "op": "text",
-          "text": "Teen Pattern: 10+1=11",
+          "text": "Teen numbers: 10 and some more, 13 = 10 + 3",
           "at": "teen"
         }
       ]
     },
     {
-      "say": "Now we can count forwards from any number. If we start at twelve, we say thirteen, fourteen, and fifteen.",
+      "say": "After nineteen comes twenty. Twenty is two tens.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "18, 19, 20",
+          "at": "nineteen"
+        },
+        {
+          "op": "count",
+          "value": 20,
+          "at": "twenty"
+        }
+      ]
+    },
+    {
+      "say": "You can count on from any number. Start at twelve and say thirteen, fourteen, fifteen.",
       "draw": [
         {
           "op": "flow",
@@ -75,17 +88,18 @@
             "13",
             "14",
             "15"
-          ]
+          ],
+          "at": "start"
         },
         {
           "op": "text",
-          "text": "Count Forwards: 12, 13, 14",
+          "text": "Count on: 12, 13, 14, 15",
           "at": "count"
         }
       ]
     },
     {
-      "say": "We can also count backwards. If we start at fifteen, we say fourteen, thirteen, and twelve.",
+      "say": "You can count back too. Start at fifteen and say fourteen, thirteen, twelve.",
       "draw": [
         {
           "op": "flow",
@@ -94,31 +108,13 @@
             "14",
             "13",
             "12"
-          ]
+          ],
+          "at": "back"
         },
         {
           "op": "text",
-          "text": "Count Backwards: 15, 14, 13",
-          "at": "count"
-        }
-      ]
-    },
-    {
-      "say": "A common mistake is thinking that after ten, the numbers skip ahead suddenly. Remember that each number follows the one before it in order.",
-      "draw": [
-        {
-          "op": "flow",
-          "items": [
-            "10",
-            "11",
-            "12",
-            "13"
-          ]
-        },
-        {
-          "op": "note",
-          "text": "Order matters when counting.",
-          "at": "order"
+          "text": "Count back: 15, 14, 13, 12",
+          "at": "start"
         }
       ]
     }
@@ -126,7 +122,7 @@
   "faq": [
     {
       "q": "What is the pattern for the teen numbers?",
-      "a": "The teen numbers follow a simple pattern. They always start with ten and then count up from there.",
+      "a": "Each teen number is ten and some more. Thirteen is ten and three. Nineteen is ten and nine.",
       "asks": [
         "How do I know the teen numbers?",
         "What is the rule for 11 to 19?"
@@ -173,90 +169,75 @@
   ],
   "quiz": [
     {
-      "say": "What number comes right after nineteen?",
-      "show": "19 $\\rightarrow$ ?",
+      "say": "Count on from 19. Tap the next number.",
+      "show": "17, 18, 19, ?",
       "options": [
         {
-          "show": "twenty",
-          "say": "twenty"
-        },
-        {
-          "show": "nineteen",
-          "say": "nineteen"
-        },
-        {
-          "show": "twenty-one",
+          "show": "21",
           "say": "twenty-one"
         },
         {
-          "show": "ten",
+          "show": "20",
+          "say": "twenty"
+        },
+        {
+          "show": "10",
           "say": "ten"
         }
       ],
-      "answer": 0,
-      "why": "The number sequence continues by adding one to nineteen to get twenty.",
+      "answer": 1,
+      "why": "After nineteen comes twenty. Twenty is two tens.",
       "wrong": {
-        "1": "This is the number we started counting from, not the next one.",
-        "2": "This number is too big; we are only counting to twenty for now.",
-        "3": "Ten is much smaller than the number that comes after nineteen."
+        "0": "Twenty-one comes after twenty, so it is one step too far.",
+        "2": "After nineteen the count goes up to a new ten, which is twenty."
       }
     },
     {
-      "say": "If you count backwards from fifteen, what is the next number?",
-      "show": "15 $\\rightarrow$ ?",
+      "say": "Count back from 15. Tap the next number.",
+      "show": "17, 16, 15, ?",
       "options": [
         {
-          "show": "sixteen",
+          "show": "16",
           "say": "sixteen"
         },
         {
-          "show": "fifteen",
-          "say": "fifteen"
-        },
-        {
-          "show": "thirteen",
-          "say": "thirteen"
-        },
-        {
-          "show": "fourteen",
+          "show": "14",
           "say": "fourteen"
+        },
+        {
+          "show": "13",
+          "say": "thirteen"
         }
       ],
-      "answer": 3,
-      "why": "Counting backwards means taking away one from the starting number, fifteen minus one is fourteen.",
+      "answer": 1,
+      "why": "Counting back goes down by one. One less than fifteen is fourteen.",
       "wrong": {
-        "0": "This is counting forwards, which goes up, not down.",
-        "1": "You must move to a different number when counting.",
-        "2": "You are only counting one step back, not two steps."
+        "0": "Sixteen is one more, but counting back goes down.",
+        "2": "Thirteen is two steps back, so go back just one step."
       }
     },
     {
-      "say": "What number comes after the teen pattern ends?",
-      "show": "19 $\\rightarrow$ ?",
+      "say": "Ten and three more. Tap the number.",
+      "show": "10 + 3",
       "options": [
         {
-          "show": "nineteen",
-          "say": "nineteen"
+          "show": "31",
+          "say": "thirty-one"
         },
         {
-          "show": "ten",
-          "say": "ten"
+          "show": "13",
+          "say": "thirteen"
         },
         {
-          "show": "twenty-two",
-          "say": "twenty-two"
-        },
-        {
-          "show": "twenty",
-          "say": "twenty"
+          "show": "30",
+          "say": "thirty"
         }
       ],
-      "answer": 3,
-      "why": "After nineteen, the next number in the sequence is twenty.",
+      "answer": 1,
+      "why": "Ten and three make thirteen. You write a 1 and then a 3.",
       "wrong": {
-        "0": "This is the number before the answer, not the number after.",
-        "1": "Ten is the number that starts the teen pattern, not what comes after it.",
-        "2": "This number is too far ahead; we are only counting to twenty."
+        "0": "Thirty-one is three tens and one, which is much bigger.",
+        "2": "Thirty is three tens, and you have just one ten here."
       }
     }
   ]

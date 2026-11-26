@@ -1,6 +1,7 @@
 {
   "id": "EY-NUM-02",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -26,7 +27,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Look at these dots on the screen for you. Can you tell me how many you see right now?",
+      "say": "Look at these dots. Say how many you see, straight away.",
       "draw": [
         {
           "op": "clear"
@@ -36,73 +37,72 @@
           "text": "Subitising"
         },
         {
-          "op": "bullets",
-          "items": [
-            "See the dots",
-            "Tell me how many"
-          ],
-          "at": "dots"
-        },
-        {
-          "op": "text",
-          "text": "Dots: 3",
+          "op": "count",
+          "value": 3,
+          "label": "dots",
           "at": "dots"
         }
       ]
     },
     {
-      "say": "You do not need to count them one by one for you. You just see the group of dots. This quick seeing is called subitising for you.",
+      "say": "You can see a small group and know how many at once. This is called subitising. You see the whole group, without counting each dot.",
       "draw": [
         {
           "op": "bullets",
           "items": [
-            "Quick seeing",
-            "Called subitising"
+            "See the whole group",
+            "Know how many"
           ],
-          "at": "quick"
+          "at": "see"
         },
         {
           "op": "text",
-          "text": "Subitising: instant count",
+          "text": "Subitising: seeing how many at once",
           "at": "subitising"
         }
       ]
     },
     {
-      "say": "Next, we look at a dice pattern for you. If I show you two dots, you say two right away. You are using your quick number sense.",
+      "say": "Dice show the same dot patterns every time. Two dots sit on a line. Five dots are two, one and two.",
       "draw": [
         {
-          "op": "flow",
-          "items": [
-            "Show two dots",
-            "Say two right away",
-            "Using quick number sense"
-          ],
-          "at": "show"
+          "op": "text",
+          "text": "Dice: ⚫ ⚫ is 2",
+          "at": "dice"
         },
         {
           "op": "text",
-          "text": "Dice dots: 2",
-          "at": "dice"
+          "text": "⚫⚫  ⚫  ⚫⚫ is 5",
+          "at": "five"
         }
       ]
     },
     {
-      "say": "Now, let us look at a ten-frame pattern for you. If I fill in four dots, you instantly know the number is four. This helps us see patterns.",
+      "say": "A ten-frame has two rows of five boxes. Here four boxes have a dot. You can see four, straight away.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Ten-frame: two rows of five",
+          "at": "tenframe"
+        },
+        {
+          "op": "count",
+          "value": 4,
+          "label": "dots",
+          "at": "four"
+        }
+      ]
+    },
+    {
+      "say": "Start with groups of up to five. When that feels easy, try up to ten.",
       "draw": [
         {
           "op": "flow",
           "items": [
-            "Look at ten-frame",
-            "Fill in four dots",
-            "Instantly know the number"
+            "Up to 5",
+            "Then up to 10"
           ],
-          "at": "look"
-        },
-        {
-          "op": "text",
-          "text": "Ten-frame dots: 4",
-          "at": "tenframe"
+          "at": "start"
         }
       ]
     }
@@ -110,7 +110,7 @@
   "faq": [
     {
       "q": "What is subitising really?",
-      "a": "Subitising means you can see a small group of items and know the total without counting. It is a quick number skill for you.",
+      "a": "Subitising means you see a small group and know how many, without counting. It is a quick number skill.",
       "asks": [
         "What does subitising mean?",
         "How do I know how many dots are there?"
@@ -118,7 +118,7 @@
     },
     {
       "q": "Do I have to count every time?",
-      "a": "No, the goal is to see the number right away in your head. Counting is what you do after you subitise for you.",
+      "a": "No. With a small group, you can see the number straight away. You count when the group is bigger.",
       "asks": [
         "Can I just guess the number?",
         "Is it okay if I count sometimes?"
@@ -126,7 +126,7 @@
     },
     {
       "q": "How does the ten-frame help me?",
-      "a": "The ten-frame helps you see numbers up to ten in a clear box. It shows you where the numbers fit nicely.",
+      "a": "A ten-frame has two rows of five boxes. A full row is five, and a full frame is ten. This helps you see numbers up to ten.",
       "asks": [
         "What is the ten-frame for?",
         "Why do we use the ten-frame?"
@@ -134,7 +134,7 @@
     },
     {
       "q": "Can I use my fingers to help?",
-      "a": "Yes, using your fingers is a good way to help you practice seeing numbers. It makes the concept very clear for you.",
+      "a": "Yes. Fingers are a good way to practise. Hold up three fingers and see three at once.",
       "asks": [
         "Is it okay to count on my fingers?",
         "Should I use my hands?"
@@ -142,7 +142,7 @@
     },
     {
       "q": "Is this for big numbers only?",
-      "a": "No, we start with small numbers like five or less for you. This builds the foundation for bigger numbers later.",
+      "a": "No. You start with small groups, up to five. Then you build up to ten.",
       "asks": [
         "Will I learn big numbers next?",
         "Do I have to learn this for big numbers?"
@@ -152,89 +152,80 @@
   "facts": [
     "Subitising is seeing a small group of items and knowing the total.",
     "It is a quick way to know the number without counting each one.",
-    "Dice are often used to practice subitising for you.",
-    "The ten-frame helps you visualize numbers up to ten."
+    "Dice are often used to practise subitising.",
+    "The ten-frame helps you see numbers up to ten."
   ],
   "quiz": [
     {
-      "say": "If you see three dots, what number do you say?",
-      "show": "Dots: 3",
+      "say": "Look at the dots. Tap how many.",
+      "show": "⚫ ⚫ ⚫",
       "options": [
         {
-          "show": "Five",
-          "say": "Five"
+          "show": "3",
+          "say": "three"
         },
         {
-          "show": "Three",
-          "say": "Three"
+          "show": "2",
+          "say": "two"
         },
         {
-          "show": "Two",
-          "say": "Two"
+          "show": "4",
+          "say": "four"
+        }
+      ],
+      "answer": 0,
+      "why": "There are three dots. You can see three at once.",
+      "wrong": {
+        "1": "Look again, because there is one more dot.",
+        "2": "Look again, because there is one dot less than that."
+      }
+    },
+    {
+      "say": "Look at the dice. Tap how many dots.",
+      "show": "🎲 ⚫⚫ ⚫ ⚫⚫",
+      "options": [
+        {
+          "show": "4",
+          "say": "four"
         },
         {
-          "show": "Four",
-          "say": "Four"
+          "show": "6",
+          "say": "six"
+        },
+        {
+          "show": "5",
+          "say": "five"
+        }
+      ],
+      "answer": 2,
+      "why": "There are five dots. Dice show five as two, one and two.",
+      "wrong": {
+        "0": "Look at the middle, because there is one more dot there.",
+        "1": "Six on a dice is two rows of three dots."
+      }
+    },
+    {
+      "say": "Look at the ten-frame. Tap how many dots.",
+      "show": "⚫ ⚫ ⚫ ⚫ ⚪ | ⚪ ⚪ ⚪ ⚪ ⚪",
+      "options": [
+        {
+          "show": "10",
+          "say": "ten"
+        },
+        {
+          "show": "4",
+          "say": "four"
+        },
+        {
+          "show": "5",
+          "say": "five"
         }
       ],
       "answer": 1,
-      "why": "You see exactly three dots, so the number you say is three. The other numbers are wrong because they do not match the dots you see.",
+      "why": "Four boxes have a dot. That is one less than a full row of five.",
       "wrong": {
-        "2": "Two is wrong because there are three dots, not two."
-      }
-    },
-    {
-      "say": "If a dice shows five dots, what is the number?",
-      "show": "Dice: 5",
-      "options": [
-        {
-          "show": "Four",
-          "say": "Four"
-        },
-        {
-          "show": "Six",
-          "say": "Six"
-        },
-        {
-          "show": "Three",
-          "say": "Three"
-        },
-        {
-          "show": "Five",
-          "say": "Five"
-        }
-      ],
-      "answer": 3,
-      "why": "You look at the five dots and say the number five right away. The other options are wrong because they do not match the dots shown on the dice.",
-      "wrong": {
-        "0": "Four is tempting, but you must count the dots you see, which is five."
-      }
-    },
-    {
-      "say": "If a ten-frame has four dots, what number is it?",
-      "show": "Ten-frame: 4",
-      "options": [
-        {
-          "show": "Ten",
-          "say": "Ten"
-        },
-        {
-          "show": "Zero",
-          "say": "Zero"
-        },
-        {
-          "show": "Five",
-          "say": "Five"
-        },
-        {
-          "show": "Four",
-          "say": "Four"
-        }
-      ],
-      "answer": 3,
-      "why": "You see four dots in the ten-frame, so the number is four. Ten is too many, and zero means no dots are there.",
-      "wrong": {
-        "0": "Ten is the total space, but you only have four dots filled in."
+        "0": "Ten is all the boxes, but just some boxes have dots.",
+        "2": "A full row is five, and this row has one empty box."
       }
     }
   ]

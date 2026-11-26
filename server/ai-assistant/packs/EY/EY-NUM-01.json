@@ -1,6 +1,7 @@
 {
   "id": "EY-NUM-01",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -26,7 +27,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Let us count these apples together. We touch each apple as we say the number.",
+      "say": "Counting tells you how many. Touch each apple once. Say one number for each apple.",
       "draw": [
         {
           "op": "clear"
@@ -38,60 +39,57 @@
         {
           "op": "flow",
           "items": [
-            "Touch first apple, say one",
-            "Touch second apple, say two",
-            "Continue until all counted"
+            "Touch an apple",
+            "Say one number",
+            "Go to the next apple"
           ],
           "at": "touch"
-        },
-        {
-          "op": "formula",
-          "text": "Touch and count apples.",
-          "at": "touch"
         }
       ]
     },
     {
-      "say": "We touch the first apple, say one. We touch the second apple, say two. We keep going until we count all of them.",
+      "say": "Touch the first apple and say one. Touch the next apple and say two. Touch the last apple and say three.",
       "draw": [
         {
-          "op": "bullets",
-          "items": [
-            "Count fingers on both hands",
-            "Last number is the total"
-          ],
-          "at": "count"
-        },
-        {
-          "op": "formula",
-          "text": "1, 2, 3, 4, 5"
+          "op": "count",
+          "value": 3,
+          "label": "apples",
+          "at": "first"
         }
       ]
     },
     {
-      "say": "If we count all the fingers on your hands, we find the last number. That last number tells us the total count.",
+      "say": "The last number you say tells you how many. You said three. So there are three apples.",
       "draw": [
         {
-          "op": "flow",
-          "items": [
-            "Touch each object",
-            "Say a number for every one"
-          ]
-        },
-        {
           "op": "formula",
-          "text": "Total count = last number",
-          "at": "total"
+          "text": "1, 2, 3 → 3 apples",
+          "at": "last"
         }
       ]
     },
     {
-      "say": "Sometimes objects are not in a line. We still touch each one and say a number for every single object.",
+      "say": "Count to five first. Then keep going to ten. Say the numbers in the same order every time.",
+      "draw": [
+        {
+          "op": "count",
+          "value": 5,
+          "at": "five"
+        },
+        {
+          "op": "text",
+          "text": "1  2  3  4  5  6  7  8  9  10",
+          "at": "ten"
+        }
+      ]
+    },
+    {
+      "say": "Sometimes things are spread out. Move each one to the side as you count it. Then you count each one only once.",
       "draw": [
         {
           "op": "formula",
-          "text": "Count scattered objects.",
-          "at": "objects"
+          "text": "Move it. Count it.",
+          "at": "move"
         }
       ]
     }
@@ -107,7 +105,7 @@
     },
     {
       "q": "What is the last number I say when I count to ten?",
-      "a": "The last number you say when you count to ten is ten. It means you counted ten things in total.",
+      "a": "When you count to ten, the last number is ten. It means there are ten things.",
       "asks": [
         "What does the end number mean?",
         "If I count to ten, what is the biggest number?"
@@ -146,90 +144,75 @@
   ],
   "quiz": [
     {
-      "say": "Look at these three red balls. Count them.",
-      "show": "• • •",
+      "say": "Count the balls. Tap how many.",
+      "show": "⚽ ⚽ ⚽",
       "options": [
         {
-          "show": "Two",
-          "say": "Two"
+          "show": "2",
+          "say": "two"
         },
         {
-          "show": "Four",
-          "say": "Four"
+          "show": "3",
+          "say": "three"
         },
         {
-          "show": "One",
-          "say": "One"
-        },
-        {
-          "show": "Three",
-          "say": "Three"
-        }
-      ],
-      "answer": 3,
-      "why": "You touched each ball one time and said a number for each one. So there are three.",
-      "wrong": {
-        "0": "This is tempting because you only looked at the first two balls.",
-        "1": "This is tempting because you might have counted the space between the balls.",
-        "2": "This is tempting because you only counted the first ball."
-      }
-    },
-    {
-      "say": "If you count your fingers on one hand, how many do you say?",
-      "show": "Five fingers.",
-      "options": [
-        {
-          "show": "Seven",
-          "say": "Seven"
-        },
-        {
-          "show": "Five",
-          "say": "Five"
-        },
-        {
-          "show": "Ten",
-          "say": "Ten"
-        },
-        {
-          "show": "Three",
-          "say": "Three"
+          "show": "4",
+          "say": "four"
         }
       ],
       "answer": 1,
-      "why": "You touched each finger one by one. When you finish, the total number is five.",
+      "why": "There are three balls. You say one, two, three.",
       "wrong": {
-        "0": "This is tempting because you might be thinking of something else.",
-        "2": "This is tempting because you might count both hands at once.",
-        "3": "This is tempting because you might have stopped counting too early."
+        "0": "One ball was missed, so touch each ball as you count.",
+        "2": "One ball was counted twice, so touch each ball just once."
       }
     },
     {
-      "say": "Count these scattered stars: • • • • • •",
-      "show": "Count the stars.",
+      "say": "Count the stars. Touch each one once.",
+      "show": "⭐ ⭐ ⭐ ⭐ ⭐",
       "options": [
         {
-          "show": "Seven",
-          "say": "Seven"
+          "show": "5",
+          "say": "five"
         },
         {
-          "show": "Sixteen",
-          "say": "Sixteen"
+          "show": "4",
+          "say": "four"
         },
         {
-          "show": "Six",
-          "say": "Six"
+          "show": "6",
+          "say": "six"
+        }
+      ],
+      "answer": 0,
+      "why": "There are five stars. The last number you say is five.",
+      "wrong": {
+        "1": "One star was missed, so count again from the first star.",
+        "2": "One star was counted twice, so touch each star just once."
+      }
+    },
+    {
+      "say": "Count the ladybirds. Tap how many.",
+      "show": "🐞 🐞 🐞 🐞 🐞 🐞 🐞",
+      "options": [
+        {
+          "show": "6",
+          "say": "six"
         },
         {
-          "show": "Five",
-          "say": "Five"
+          "show": "8",
+          "say": "eight"
+        },
+        {
+          "show": "7",
+          "say": "seven"
         }
       ],
       "answer": 2,
-      "why": "You must touch every single star, even if they are spread out. You counted six stars.",
+      "why": "There are seven ladybirds. Touch each one and say seven at the end.",
       "wrong": {
-        "0": "This is tempting because you might have counted the space between the stars.",
-        "1": "This is tempting because you might have counted too many times.",
-        "3": "This is tempting because you might have missed the last star on the right."
+        "0": "One ladybird was missed, so move each one as you count.",
+        "1": "One ladybird was counted twice, so touch each one just once."
       }
     }
   ]

@@ -1,6 +1,7 @@
 {
   "id": "EY-SEL-07",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -27,7 +28,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Listen to me say this sentence. I will say, 'Touch your nose.'",
+      "say": "An instruction tells you what to do. Listen to this one. Touch your nose.",
       "draw": [
         {
           "op": "clear"
@@ -44,40 +45,50 @@
       ]
     },
     {
-      "say": "You just heard one simple thing to do. That is following one instruction.",
+      "say": "That was one instruction. You did one thing.",
       "draw": [
         {
           "op": "text",
-          "text": "One instruction: Do one thing.",
+          "text": "One instruction: do one thing.",
           "at": "instruction"
         }
       ]
     },
     {
-      "say": "Now listen carefully to this. I will say, 'Clap your hands and then stomp your feet.'",
+      "say": "Now listen to two steps. Clap your hands, then stamp your feet.",
       "draw": [
         {
           "op": "flow",
           "items": [
-            "Clap hands",
-            "Stomp feet"
+            "Clap your hands",
+            "Stamp your feet"
           ],
           "at": "hands"
         },
         {
           "op": "text",
-          "text": "Two instructions: Clap, then stomp.",
+          "text": "Two steps: clap, then stamp.",
           "at": "then"
         }
       ]
     },
     {
-      "say": "You did two things in order. That is following two instructions.",
+      "say": "You did two things in order. First you clapped. Then you stamped.",
       "draw": [
         {
           "op": "text",
-          "text": "Two instructions: Do two things.",
-          "at": "instructions"
+          "text": "First, then: two things in order.",
+          "at": "order"
+        }
+      ]
+    },
+    {
+      "say": "If you forget a step, that is okay. Ask, Can you say it again, please?",
+      "draw": [
+        {
+          "op": "text",
+          "text": "Can you say it again, please?",
+          "at": "again"
         }
       ]
     }
@@ -85,7 +96,7 @@
   "faq": [
     {
       "q": "What if I only do the first thing you say?",
-      "a": "You only did the first part of the instructions. Remember to listen for everything I say.",
+      "a": "That is okay. Ask the grown-up to say it again. Then do both steps.",
       "asks": [
         "What if I stop after the first action?",
         "Do I have to do everything you say?"
@@ -101,7 +112,7 @@
     },
     {
       "q": "Do I have to do the steps in order?",
-      "a": "Yes, the order is very important. You must do the first thing before you do the second thing.",
+      "a": "Yes, the order matters. You do the first thing, and then you do the second thing.",
       "asks": [
         "Can I do the second thing first?",
         "Does the order matter when I follow directions?"
@@ -117,7 +128,7 @@
     },
     {
       "q": "Are two steps always harder than one step?",
-      "a": "Sometimes two steps are a little harder, but it helps your brain get stronger. You can try your best!",
+      "a": "Two steps can feel harder at first. With practice, they get easier.",
       "asks": [
         "Is two steps always more work?",
         "Will I get better at following steps?"
@@ -132,90 +143,75 @@
   ],
   "quiz": [
     {
-      "say": "If I say, 'Point to your head.' What is the action?",
-      "show": "One step: Point to your head.",
+      "say": "Listen. Clap your hands, then sit down. Tap how many steps.",
+      "show": "👏 then 🪑",
       "options": [
         {
-          "show": "Clap your hands.",
-          "say": "Clap your hands."
+          "show": "1",
+          "say": "one"
         },
         {
-          "show": "Touch your nose and smile.",
-          "say": "Touch your nose and smile."
+          "show": "2",
+          "say": "two"
         },
         {
-          "show": "Look at the board.",
-          "say": "Look at the board."
-        },
-        {
-          "show": "Point to your head.",
-          "say": "Point to your head."
+          "show": "3",
+          "say": "three"
         }
       ],
-      "answer": 3,
-      "why": "This is only one thing you need to do, so it is one step.",
+      "answer": 1,
+      "why": "Clapping is one step. Sitting down is the next step.",
       "wrong": {
-        "0": "This is a different action and not what I asked you to do.",
-        "1": "This is two actions, but I only asked for one action.",
-        "2": "This is an action, but it is not the specific action I gave you."
+        "0": "Listen again, because there is one more step after the clap.",
+        "2": "Listen again: there is a clap and then sitting down."
       }
     },
     {
-      "say": "If I say, 'Jump up and then sit down.' What is the order?",
-      "show": "Two steps: Jump, then sit.",
+      "say": "Listen. Wash your hands, then have lunch. Tap the first step.",
+      "show": "🧼 then 🥪",
       "options": [
         {
-          "show": "Jump up first, then sit down.",
-          "say": "Jump up first, then sit down."
+          "show": "🧼 Soap",
+          "say": "soap"
         },
         {
-          "show": "Sit down first, then jump up.",
-          "say": "Sit down first, then jump up."
+          "show": "🥪 Sandwich",
+          "say": "sandwich"
         },
         {
-          "show": "Jump up and sit down all at once.",
-          "say": "Jump up and sit down all at once."
-        },
-        {
-          "show": "Just sit down.",
-          "say": "Just sit down."
+          "show": "🛏️ Bed",
+          "say": "bed"
         }
       ],
       "answer": 0,
-      "why": "You must do the jumping action before you do the sitting action.",
+      "why": "Washing your hands comes first. You use soap to wash your hands.",
       "wrong": {
-        "1": "You must follow the order I said, which was jump first.",
-        "2": "The instructions ask you to do them one after the other, not together.",
-        "3": "You missed the first part of the instruction, which was to jump up."
+        "1": "Lunch is the second step, after washing your hands.",
+        "2": "Bed is a different part of the day."
       }
     },
     {
-      "say": "What do you do when you hear, 'Take one big breath and then wiggle your fingers'?",
-      "show": "Two steps: Breathe, then wiggle.",
+      "say": "Listen. Take a breath, then wiggle your fingers. Tap the second step.",
+      "show": "👃 then 🖐️",
       "options": [
         {
-          "show": "Take a breath and wiggle your fingers at the same time.",
-          "say": "Take a breath and wiggle your fingers at the same time."
+          "show": "👃 Nose",
+          "say": "nose"
         },
         {
-          "show": "Just take a big breath.",
-          "say": "Just take a big breath."
+          "show": "🖐️ Hands",
+          "say": "hands"
         },
         {
-          "show": "Take a breath, then wiggle your fingers.",
-          "say": "Take a breath, then wiggle your fingers."
-        },
-        {
-          "show": "Wiggle your fingers only.",
-          "say": "Wiggle your fingers only."
+          "show": "🦶 Feet",
+          "say": "feet"
         }
       ],
-      "answer": 2,
-      "why": "This has two clear actions, so you must do them in the correct sequence.",
+      "answer": 1,
+      "why": "The second step is to wiggle your fingers. Your fingers are on your hands.",
       "wrong": {
-        "0": "The instructions say to do one thing, and then do the next thing.",
-        "1": "You only did the first step and missed the second part of the instruction.",
-        "3": "You forgot the first step, which was to take a big breath."
+        "0": "The breath through your nose is the first step.",
+        "2": "Feet are a different part of your body from the instruction."
       }
     }
   ]

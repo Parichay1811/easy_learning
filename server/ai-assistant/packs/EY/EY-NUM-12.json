@@ -1,6 +1,7 @@
 {
   "id": "EY-NUM-12",
   "status": "draft",
+  "checked": "content-v5",
   "generator": {
     "model": "gemma4:e4b",
     "date": "2026-10-24",
@@ -27,7 +28,7 @@
   "figure": [],
   "explain": [
     {
-      "say": "Look at these toys. We are going to put them in order. The first toy is the red car. Say first.",
+      "say": "Look at the toys in a line. The red car is at the front. It is first.",
       "draw": [
         {
           "op": "clear"
@@ -39,70 +40,64 @@
         {
           "op": "flow",
           "items": [
-            "1st: Red Car",
-            "2nd: Blue Ball",
-            "3rd: Yellow Block"
-          ]
+            "1st: red car",
+            "2nd: blue ball",
+            "3rd: yellow block"
+          ],
+          "at": "line"
         },
         {
           "op": "text",
-          "text": "1st: Red Car"
+          "text": "1st: red car",
+          "at": "first"
         }
       ]
     },
     {
-      "say": "Next, the second toy is the blue ball. This is the second one in line. Say second.",
+      "say": "The blue ball comes next. It is second.",
       "draw": [
         {
-          "op": "flow",
-          "items": [
-            "1st: First toy",
-            "2nd: Second toy",
-            "3rd: Third toy"
-          ]
-        },
-        {
           "op": "text",
-          "text": "2nd: Blue Ball",
+          "text": "2nd: blue ball",
           "at": "blue"
         }
       ]
     },
     {
-      "say": "The third toy is the yellow block. This shows us the third position. Say third.",
+      "say": "The yellow block comes after the ball. It is third.",
       "draw": [
         {
-          "op": "flow",
-          "items": [
-            "1st: First position",
-            "2nd: Second position",
-            "3rd: Third position"
-          ],
-          "at": "position"
-        },
-        {
           "op": "text",
-          "text": "3rd: Yellow Block",
+          "text": "3rd: yellow block",
           "at": "yellow"
         }
       ]
     },
     {
-      "say": "If we line up friends, we say first, second, and third to know the order. For example, you are in the second position.",
+      "say": "Counting tells you how many. There are three toys. Ordinal numbers tell you the place. The block is in third place.",
       "draw": [
         {
           "op": "bullets",
           "items": [
-            "Order of friends",
-            "Know the sequence",
-            "Examples: 1st, 2nd, 3rd"
+            "Counting: how many",
+            "Ordinal: which place"
           ],
-          "at": "order"
+          "at": "counting"
         },
         {
           "op": "text",
-          "text": "Position in line: 1st, 2nd, 3rd",
-          "at": "position"
+          "text": "3 toys. The block is 3rd.",
+          "at": "place"
+        }
+      ]
+    },
+    {
+      "say": "Line up with your friends. Say your places in order: first, second, third, fourth, fifth.",
+      "draw": [
+        {
+          "op": "text",
+          "text": "1st  2nd  3rd  4th  5th",
+          "at": "friends"
         }
       ]
     }
@@ -157,90 +152,75 @@
   ],
   "quiz": [
     {
-      "say": "In a line of three children, who is standing in the middle?",
-      "show": "1st, 2nd, 3rd",
+      "say": "Look at the line. Tap the place of the middle child.",
+      "show": "front → 🧒 👧 🧑",
       "options": [
         {
-          "show": "third",
-          "say": "third"
-        },
-        {
-          "show": "fourth",
-          "say": "fourth"
-        },
-        {
-          "show": "second",
-          "say": "second"
-        },
-        {
-          "show": "first",
+          "show": "1st",
           "say": "first"
-        }
-      ],
-      "answer": 2,
-      "why": "The middle position when there are three items is always the second one.",
-      "wrong": {
-        "0": "This is the very end of the line, not the middle.",
-        "1": "There are only three children, so the fourth spot does not exist.",
-        "3": "This is the beginning of the line, not the middle."
-      }
-    },
-    {
-      "say": "If you color the fifth flower in a row, what number are you pointing to?",
-      "show": "Colour the 5th flower",
-      "options": [
-        {
-          "show": "fifth",
-          "say": "fifth"
         },
         {
-          "show": "five",
-          "say": "five"
-        },
-        {
-          "show": "5",
-          "say": "5"
-        },
-        {
-          "show": "fourth",
-          "say": "fourth"
-        }
-      ],
-      "answer": 0,
-      "why": "The word fifth tells you exactly which spot you need to color.",
-      "wrong": {
-        "1": "Five is a number we count, but fifth tells the position.",
-        "2": "The word form is usually expected when talking about order.",
-        "3": "This is the spot right before the fifth one."
-      }
-    },
-    {
-      "say": "Which word correctly shows the spot after the second spot?",
-      "show": "Order after 2nd",
-      "options": [
-        {
-          "show": "second",
+          "show": "2nd",
           "say": "second"
         },
         {
-          "show": "third",
+          "show": "3rd",
           "say": "third"
-        },
-        {
-          "show": "secondly",
-          "say": "secondly"
-        },
-        {
-          "show": "four",
-          "say": "four"
         }
       ],
       "answer": 1,
-      "why": "After the second position comes the third position in counting order.",
+      "why": "The middle child has one child in front. That is second place.",
       "wrong": {
-        "0": "This word means the same spot, not the next one.",
-        "2": "This is not a word we use to show position.",
-        "3": "Four is the number, but we need the word for the position."
+        "0": "First is the child at the front of the line.",
+        "2": "Third is the child at the back of the line."
+      }
+    },
+    {
+      "say": "Start at the left. Tap the place of the red flower.",
+      "show": "🌼 🌼 🌼 🌼 🌹 🌼",
+      "options": [
+        {
+          "show": "5th",
+          "say": "fifth"
+        },
+        {
+          "show": "4th",
+          "say": "fourth"
+        },
+        {
+          "show": "6th",
+          "say": "sixth"
+        }
+      ],
+      "answer": 0,
+      "why": "Count from the left: first, second, third, fourth, fifth.",
+      "wrong": {
+        "1": "Fourth is the flower just before the red one.",
+        "2": "Sixth is the flower just after the red one."
+      }
+    },
+    {
+      "say": "Tap the place that comes after second.",
+      "show": "1st, 2nd, ?",
+      "options": [
+        {
+          "show": "2nd",
+          "say": "second"
+        },
+        {
+          "show": "4th",
+          "say": "fourth"
+        },
+        {
+          "show": "3rd",
+          "say": "third"
+        }
+      ],
+      "answer": 2,
+      "why": "After second comes third. You say first, second, third.",
+      "wrong": {
+        "0": "Second is the same place, and you need the next one.",
+        "1": "Fourth comes after third, so it is one place too far."
       }
     }
   ]
