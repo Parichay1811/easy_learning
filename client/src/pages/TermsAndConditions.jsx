@@ -5,10 +5,6 @@ import styles from "./PrivacyPolicy.module.css";
 
 const sections = [
   {
-    title: "Who provides Learnigo",
-    text: <>Learnigo is a product of {COMPANY.name} (<a href={COMPANY.url} target="_blank" rel="noopener noreferrer" className={styles.link}>{COMPANY.site}</a>), which provides and runs the service. These terms are an agreement between you and {COMPANY.name}.</>,
-  },
-  {
     title: "Acceptance of terms",
     text: "By creating an account or using Learnigo, you agree to these Terms & Conditions. If you are creating or managing an account on behalf of a child, you confirm you have the authority to do so and agree to these terms for that account.",
   },

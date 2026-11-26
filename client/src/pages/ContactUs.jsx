@@ -1,4 +1,4 @@
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { FaClock, FaSmileBeam, FaHeadset, FaEnvelope, FaSchool, FaPaperPlane } from "react-icons/fa";
 import { useAuth } from "../context/AuthContext";
 import ContactForm from "../components/ContactForm/ContactForm";
@@ -58,13 +58,7 @@ const ContactUs = () => {
       </ul>
       <p className={`${s.p} ${s.onlyNarrow}`}>{t("contactUs.heroSubtitle")}</p>
       <p className={s.inlineLinks}>
-        <Trans
-          i18nKey="contactUs.mail.madeBy"
-          defaults="Learnigo is made by <co>{{company}}</co>."
-          values={{ company: COMPANY.name }}
-          components={{ co: <a href={COMPANY.url} target="_blank" rel="noopener noreferrer" /> }}
-        />
-        {" "}<span className={s.dot} aria-hidden="true">·</span>{" "}<a href="/faq">{nav.faq || "FAQ"}</a>
+        <a href="/faq">{nav.faq || "FAQ"}</a>
         {" "}<span className={s.dot} aria-hidden="true">·</span>{" "}<a href="/policy">{t("navbar.policy", "Policy")}</a>
         {" "}<span className={s.dot} aria-hidden="true">·</span>{" "}<a href="/terms-and-conditions">{t("navbar.terms", "T & C")}</a>
       </p>
