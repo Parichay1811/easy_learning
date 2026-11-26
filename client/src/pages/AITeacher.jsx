@@ -3,6 +3,8 @@ import { useTranslation } from "react-i18next";
 import * as FramerMotion from "framer-motion";
 import VideoBackground from "../components/VideoBackground/VideoBackground";
 import SEO from "../components/SEO/SEO";
+import { pageMeta } from "../seo/registry";
+import { useSeo } from "../seo/useSeo";
 import styles from "./AITeacher.module.css";
 
 const BASE = import.meta.env.VITE_API_BASE_URL;
@@ -31,6 +33,7 @@ function summary(d) {
 const AITeacher = () => {
   const { t } = useTranslation();
   const title = t("aiTeacher.title", { defaultValue: "AI Teacher" });
+  const { seo } = useSeo();
   const frame = useRef(null);
   const handshake = useRef({ ready: false, sent: false, data: null });
 
@@ -77,6 +80,8 @@ const AITeacher = () => {
       transition={{ duration: 0.35 }}
     >
       <SEO path="/ai-teacher" />
+      {/* The teacher shows its own title; the page's heading is for screen readers (and names the page). */}
+      <h1 className={styles.srOnly}>{pageMeta(seo, "/ai-teacher")?.h1 || title}</h1>
       <VideoBackground />
       <div className={styles.frameWrap}>
         <iframe

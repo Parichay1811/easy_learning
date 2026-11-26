@@ -13,7 +13,9 @@
  *                               the page's words inside #root (React replaces
  *                               them when it starts)
  *   dist/spa.html               the plain app shell, for every other route
- *                               (Nginx falls back to it; see DEPLOY.md)
+ *                               (Nginx falls back to it; see DEPLOY.md), noindex
+ *   dist/spa-public.html        the same shell without noindex, for public app
+ *                               pages (tutor pages, /tutor/<name>)
  *   dist/sitemap.xml            every page and language, with hreflang alternates
  *   dist/llms.txt               a plain-text map of the site for AI assistants
  *
@@ -305,8 +307,15 @@ export default function seoPrerender() {
       const template = fs.readFileSync(indexFile, 'utf8')
       if (!template.includes('<div id="root"></div>')) throw new Error('seo-prerender: index.html has no empty <div id="root"></div>')
 
-      // The app shell for every other route (dashboards, games, tutor pages…).
-      fs.writeFileSync(path.join(outDir, 'spa.html'), withSiteSchema(template, merged[DEFAULT_LANG], DEFAULT_LANG))
+      // The app shell for every other route (sign-in, dashboards, game screens,
+      // addresses that are no page at all). Not for search engines: as the same
+      // empty shell under hundreds of URLs it reads as soft 404s and thin
+      // duplicates. The public pages above are what they index.
+      const shell = withSiteSchema(template, merged[DEFAULT_LANG], DEFAULT_LANG)
+      fs.writeFileSync(path.join(outDir, 'spa.html'), setMeta(shell, 'name', 'robots', 'noindex, follow'))
+      // The same shell, open to search engines, for app pages that are public
+      // (a tutor's own page, /tutor/<name>; Nginx serves it there, DEPLOY.md).
+      fs.writeFileSync(path.join(outDir, 'spa-public.html'), shell)
 
       let count = 0
       for (const page of PAGES) {

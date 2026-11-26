@@ -197,7 +197,9 @@ server {
 
     # Serve the React build
     root /var/www/easy_learning/client/dist;
-    index index.html;
+    # A folder with no page of its own (/subject/, /es/learning-support-by-country/)
+    # gets the app shell, never nginx's 403.
+    index index.html /spa.html;
 
     # Compress text: the JS bundle, CSS, translations and the sitemap
     # (nginx compresses only text/html by default).
@@ -216,11 +218,19 @@ server {
 
     # Public pages are built as static HTML per language (dist/faq/index.html,
     # dist/es/faq/index.html …, see client/scripts/seo-prerender.mjs).
-    # $uri/index.html serves them at their canonical URL (/es/faq) with a 200;
-    # without it, $uri/ alone answers /es/faq with a 301 to /es/faq/.
-    # Every other React Router path gets the plain app shell.
+    # $uri/index.html serves them at their canonical URL (/es/faq) with a 200.
+    # No $uri/ entry: it answered folders without a page (/subject) with a 301
+    # to /subject/ and then a 403, which Search Console reports as errors.
+    # Every other React Router path gets the app shell, spa.html, which tells
+    # search engines not to index it (noindex): only the public pages are for
+    # them, never sign-in, dashboards or addresses that are no page at all.
     location / {
-        try_files $uri $uri/index.html $uri/ /spa.html;
+        try_files $uri $uri/index.html /spa.html;
+    }
+
+    # A tutor's own page (/tutor/<name>) is public: the same shell without noindex.
+    location /tutor/ {
+        try_files $uri /spa-public.html;
     }
 
     # Proxy /api/* to Express on port 5000

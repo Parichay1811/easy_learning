@@ -1,6 +1,7 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import SEO from "../components/SEO/SEO";
 import ExploreLinks from "../components/SEO/ExploreLinks";
+import PageLink from "../components/SEO/PageLink";
 import { GUIDES, fill, guideHeading } from "../seo/registry";
 import { useSeo } from "../seo/useSeo";
 import styles from "./GuidePages.module.css";
@@ -25,7 +26,7 @@ export default function GuidePages({ guide }) {
         <main className={styles.page}>
           <SEO title={g.notFound} description={g.lead} path={`${root}/${slug}`} noIndex />
           <h1>{g.notFound}</h1>
-          <Link to={root} className={styles.link}>{g.browse}</Link>
+          <PageLink to={root} className={styles.link}>{g.browse}</PageLink>
         </main>
       );
     }
@@ -33,7 +34,7 @@ export default function GuidePages({ guide }) {
     return (
       <main className={styles.page}>
         <SEO path={path} type="article" />
-        <Link to={root} className={styles.backLink}>&lt;- {g.back}</Link>
+        <PageLink to={root} className={styles.backLink}>&lt;- {g.back}</PageLink>
         <header className={styles.hero}>
           <span className={styles.eyebrow}>{fill(g.itemEyebrow, { code: entry.code, name: item.name })}</span>
           <h1>{guideHeading(g, item)}</h1>
@@ -48,7 +49,7 @@ export default function GuidePages({ guide }) {
             <strong>{fill(g.noteTitle, { name: item.name })}</strong>
             <p>{item.note || g.note || seo.ui?.note}</p>
           </aside>
-          <Link to="/" className={styles.cta}>{seo.ui?.openApp} <span aria-hidden="true">-&gt;</span></Link>
+          <PageLink to="/" className={styles.cta}>{seo.ui?.openApp} <span aria-hidden="true">-&gt;</span></PageLink>
         </section>
         <ExploreLinks path={path} />
       </main>
@@ -76,9 +77,9 @@ export default function GuidePages({ guide }) {
               <span className={styles.code}>{entry.code}</span>
               <h2>{item.name}</h2>
               <p>{item.issue}</p>
-              <Link to={`${root}/${entry.slug}`} className={styles.link}>
+              <PageLink to={`${root}/${entry.slug}`} className={styles.link}>
                 {fill(g.cardLink, { name: item.name })} <span aria-hidden="true">-&gt;</span>
-              </Link>
+              </PageLink>
             </article>
           );
         })}

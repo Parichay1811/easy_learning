@@ -23,20 +23,36 @@ every child", "AI teacher") and keeps inclusive design as the differentiator.
   file per page and language (`dist/faq/index.html`, `dist/es/faq/index.html`,
   `dist/es/index.html`) with title, description, canonical, hreflang, Open Graph,
   JSON-LD and the real content. It also writes `dist/spa.html` (the app shell for
-  every other route), `dist/sitemap.xml` (with hreflang alternates) and
-  `dist/llms.txt`.
+  every other route, **noindex**: sign-in, dashboards, game screens and unknown
+  addresses must not reach search results), `dist/spa-public.html` (the same
+  shell without noindex, for tutor pages at `/tutor/<name>`), `dist/sitemap.xml`
+  (with hreflang alternates) and `dist/llms.txt`.
   **The build fails if a page is listed in a language whose seo.json doesn't
   translate it.** That failure is deliberate: hreflang must never point at a
   missing translation.
 - URLs: English has no prefix; other languages use `/es/…`, `/de/…`, with the
   start page at `/es/`. The router runs under the prefix as its basename
-  (`src/seo/routeLocale.js`). `<Link to="/faq">` stays correct on every language.
+  (`src/seo/routeLocale.js`). `<Link to="/faq">` stays correct on every language
+  for pages published in every language. A link to a page published in fewer
+  languages (pricing, policy, terms, the country hub) uses
+  `components/SEO/PageLink.jsx`: under /es/ a plain `<Link>` would point at
+  /es/pricing, which has no page (Search Console: "Alternative page with proper
+  canonical tag", or a 403 for a folder like /es/learning-support-by-country).
 - `components/SEO/SEO.jsx`: public pages pass only `path`; the component reads
   the words from seo.json and the languages from the registry.
   `components/SEO/ExploreLinks.jsx` renders the related links.
-- Nginx (see `DEPLOY.md`): `try_files $uri $uri/index.html $uri/ /spa.html`
-  (`$uri/index.html` avoids a 301 from /es/faq to /es/faq/), gzip for JS, CSS
+- Nginx (see `DEPLOY.md`): `index index.html /spa.html;` and
+  `try_files $uri $uri/index.html /spa.html` (`$uri/index.html` avoids a 301
+  from /es/faq to /es/faq/; no `$uri/`, which turned folders without a page into
+  a 301 and a 403), `location /tutor/` on `spa-public.html`, gzip for JS, CSS
   and JSON, and a one-year cache for `/assets/`.
+- Google indexes the page **after React draws it**, not the static HTML: the
+  static words only reach Bing, Yandex and AI crawlers. A public page whose
+  React screen has few words (the start page's sign-in cards, a game screen)
+  needs its words on screen too. The start page shows `pages["/"]` under the
+  sign-in cards (`components/Entry/StartAbout.jsx`); the AI teacher's own page
+  (`/ai-assistant/`) is `noindex, indexifembedded`, so its words count for
+  /ai-teacher.
 
 ## Recipes
 
@@ -78,6 +94,10 @@ grep -c "<url>" client/dist/sitemap.xml
 
 Open a built page and check: one `<h1>`, the canonical is its own URL,
 hreflang lists every language plus x-default, and the JSON-LD parses.
+`dist/spa.html` must say `noindex`; no prerendered page may. Then render a few
+pages in headless Chrome, clearing storage between pages as Googlebot does, and
+read what React drew: the words, the `<h1>`, and no link to an /xx/ URL of a
+page that isn't published in that language.
 
 ## After deploying
 

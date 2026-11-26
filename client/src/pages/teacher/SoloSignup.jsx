@@ -12,6 +12,7 @@ import TeacherHub from "../../components/links/TeacherHub";
 import EntryShell, { GoogleButton, EntryError } from "../../components/Entry/EntryShell";
 import e from "../../components/Entry/Entry.module.css";
 import s from "./SoloSignup.module.css";
+import PageLink from "../../components/SEO/PageLink";
 
 const SUBJECTS = ["English", "Maths", "Science"];
 const GRADES = ["Ages 4-6", "Ages 7-9", "Ages 10-12", "Ages 13+"];
@@ -104,7 +105,7 @@ export default function SoloSignup() {
             <Link to="/teacher-login" className={e.link} data-sound="forward">{t("teacher.signup.signIn", { defaultValue: "Teacher sign-in" })}</Link>
           </p>
           <p className={`${e.note} ${s.small}`}>
-            {t("teacher.signup.terms", { defaultValue: "By continuing you agree to our" })} <Link to="/terms-and-conditions" className={s.inline}>{t("teacher.signup.termsLink", { defaultValue: "terms" })}</Link> {t("teacher.signup.and", { defaultValue: "and" })} <Link to="/policy" className={s.inline}>{t("teacher.signup.privacy", { defaultValue: "privacy policy" })}</Link>.
+            {t("teacher.signup.terms", { defaultValue: "By continuing you agree to our" })} <PageLink to="/terms-and-conditions" className={s.inline}>{t("teacher.signup.termsLink", { defaultValue: "terms" })}</PageLink> {t("teacher.signup.and", { defaultValue: "and" })} <Link to="/policy" className={s.inline}>{t("teacher.signup.privacy", { defaultValue: "privacy policy" })}</Link>.
           </p>
         </>
       )}

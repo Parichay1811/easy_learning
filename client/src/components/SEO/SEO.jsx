@@ -90,10 +90,13 @@ export default function SEO({ title, description, path = "/", type = "website", 
     const pageTitle = title || meta.title || DEFAULT_TITLE;
     const pageDescription = description || meta.description || DEFAULT_DESCRIPTION;
     const canonicalUrl = absoluteUrl(canonicalPath, urlLang);
+    // A public page at a language URL it is not published in (/es/pricing): the
+    // app draws it, but only the page's own URLs are for search engines.
+    const strayLang = Boolean(page && routeLang && !langs.includes(routeLang));
 
     document.title = pageTitle;
     upsertMeta("name", "description", pageDescription);
-    upsertMeta("name", "robots", noIndex ? "noindex, nofollow" : DEFAULT_ROBOTS);
+    upsertMeta("name", "robots", noIndex ? "noindex, nofollow" : strayLang ? "noindex, follow" : DEFAULT_ROBOTS);
     upsertMeta("property", "og:title", pageTitle);
     upsertMeta("property", "og:description", pageDescription);
     upsertMeta("property", "og:type", type);
@@ -102,12 +105,14 @@ export default function SEO({ title, description, path = "/", type = "website", 
     upsertMeta("name", "twitter:card", "summary_large_image");
     upsertMeta("name", "twitter:title", pageTitle);
     upsertMeta("name", "twitter:description", pageDescription);
-    setCanonical(canonicalUrl);
-
     if (noIndex) {
+      // Not a page to index (a 404, an unknown guide): no canonical, which would
+      // point search engines at a URL that is not a page either.
+      document.head.querySelector('link[rel="canonical"]')?.remove();
       setAlternates([]);
       setSchema(null);
     } else {
+      setCanonical(canonicalUrl);
       setAlternates(
         langs.length > 1
           ? [

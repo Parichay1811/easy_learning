@@ -11,6 +11,7 @@ import { RiBarChart2Fill } from "react-icons/ri";
 import { BsStars } from "react-icons/bs";
 import { useAuth } from "../../context/AuthContext";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import PageLink from "../SEO/PageLink";
 import AIAssistantWidget from "../AIAssistantWidget/AIAssistantWidget";
 
 // How much room the bar needs, from roomiest to tightest. The bar measures
@@ -253,9 +254,9 @@ const Navbar = () => {
               {LEGAL.map((item) => {
                 const Icon = item.Icon;
                 return (
-                  <Link key={item.to} to={item.to} className={styles.legalLink} onClick={closeMenu}>
+                  <PageLink key={item.to} to={item.to} className={styles.legalLink} onClick={closeMenu}>
                     <Icon aria-hidden="true" /> {t(item.key, { defaultValue: item.def })}
-                  </Link>
+                  </PageLink>
                 );
               })}
             </div>

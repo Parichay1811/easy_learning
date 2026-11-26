@@ -1,5 +1,4 @@
 import { useEffect, useId, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { FaCheck, FaTimes, FaVolumeUp, FaStop, FaRoute, FaRedo, FaArrowRight, FaFlask } from "react-icons/fa";
 import Mascot from "../Mascot/Mascot";
@@ -10,6 +9,7 @@ import { useDemoVoice, shownLang } from "./useDemoVoice";
 import board from "./Board.module.css";
 import shell from "./Landing.module.css";
 import styles from "./SampleJourney.module.css";
+import PageLink from "../SEO/PageLink";
 
 const LETTERS = ["A", "B", "C", "D"];
 const LAST = JOURNEY.length - 1;
@@ -230,9 +230,9 @@ export default function SampleJourney() {
             <button type="button" className={board.retryBtn} onClick={restart} data-sound="none">
               <FaRedo aria-hidden="true" /> {t("landing.journey.btn.again", "Try the sample again")}
             </button>
-            <Link to="/" className={board.nextBtn} data-sound="forward">
+            <PageLink to="/" className={board.nextBtn} data-sound="forward">
               {t("landing.journey.btn.start", "Start learning for real")} <FaArrowRight aria-hidden="true" />
-            </Link>
+            </PageLink>
           </div>
         </div>
       ) : (

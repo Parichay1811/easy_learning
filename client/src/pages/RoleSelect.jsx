@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 import SEO from "../components/SEO/SEO";
 import Mascot from "../components/Mascot/Mascot";
 import EntryScene from "../components/Entry/EntryScene";
+import StartAbout from "../components/Entry/StartAbout";
 import RolePicture from "../components/Entry/RolePicture";
 import { warmRolePicture } from "../components/Entry/rolePictures";
 import { TeamEmblem } from "../components/Entry/RoleEmblems";
@@ -132,6 +133,7 @@ const RoleSelect = () => {
   const heroName = (key) => ((chosen || homeKey) === key ? { viewTransitionName: "role-hero" } : undefined);
 
   return (
+    <>
     <main ref={pageRef} className={`${styles.page} ${first && ready && !reduce ? styles.intro : ""}`}>
       <SEO path="/" />
       <EntryScene />
@@ -271,6 +273,9 @@ const RoleSelect = () => {
         </FramerMotion.motion.footer>
       </div>
     </main>
+    {/* What Learnigo is, and the way into the guides: below the first screen. */}
+    <StartAbout />
+    </>
   );
 };
 
