@@ -77,6 +77,27 @@ export const LEARNING_TOOLS = [
   { slug: 'classroom', code: 'CLASS' },
 ]
 
+// Questions parents search for before they look for any product ("why does my
+// child mix up b and d?"). Each page answers in its first sentences, then
+// explains, then gives ideas to try at home. Their links to the learning-
+// difference guides are in RELATED only: a common childhood question is never
+// presented as a sign of a condition (no `about` in their JSON-LD).
+export const PARENT_QUESTIONS = [
+  { slug: 'mixing-up-b-and-d', code: 'LETTERS' },
+  { slug: 'child-hates-reading', code: 'READ' },
+  { slug: 'phonics-at-home', code: 'SOUNDS' },
+  { slug: 'spelling-practice', code: 'SPELL' },
+  { slug: 'times-tables-at-home', code: 'MATH' },
+  { slug: 'maths-worries', code: 'CALM' },
+  { slug: 'homework-and-focus', code: 'FOCUS' },
+  { slug: 'science-at-home', code: 'SCIENCE' },
+  { slug: 'learning-over-the-holidays', code: 'HOLIDAYS' },
+  { slug: 'choosing-a-learning-app', code: 'APPS' },
+]
+// English first. Add a language here once its seo.json translates every
+// question (the build checks), and the pages, sitemap and hreflang follow.
+const QUESTION_LANGS = [DEFAULT_LANG]
+
 // langs: the languages (besides English) a country guide is written in, the
 // country's own. Every other language would only repeat the English page.
 export const COUNTRIES = [
@@ -124,6 +145,7 @@ const GUIDE_ROOTS = {
   tools: '/learning-tools',
   audiences: '/who-we-help',
   countries: '/learning-support-by-country',
+  questions: '/help-at-home',
 }
 
 function buildPages() {
@@ -151,6 +173,11 @@ function buildPages() {
       path: `${GUIDE_ROOTS.audiences}/${a.slug}`, kind: 'guide', guide: 'audiences', item: a,
       langs: ALL, priority: 0.8, parent: GUIDE_ROOTS.audiences,
     })),
+    { path: GUIDE_ROOTS.questions, kind: 'guideIndex', guide: 'questions', langs: QUESTION_LANGS, priority: 0.8 },
+    ...PARENT_QUESTIONS.map((q) => ({
+      path: `${GUIDE_ROOTS.questions}/${q.slug}`, kind: 'guide', guide: 'questions', item: q,
+      langs: QUESTION_LANGS, priority: 0.8, parent: GUIDE_ROOTS.questions,
+    })),
     { path: '/faq', kind: 'faq', langs: ALL, priority: 0.7 },
     { path: '/about-us', kind: 'about', langs: ALL, priority: 0.6 },
     { path: '/about-us/why-learnigo', kind: 'about', langs: ALL, priority: 0.8, parent: '/about-us' },
@@ -175,6 +202,7 @@ export const GUIDES = {
   tools: { root: GUIDE_ROOTS.tools, items: LEARNING_TOOLS },
   audiences: { root: GUIDE_ROOTS.audiences, items: AUDIENCES },
   countries: { root: GUIDE_ROOTS.countries, items: COUNTRIES },
+  questions: { root: GUIDE_ROOTS.questions, items: PARENT_QUESTIONS },
 }
 
 // ── The link graph ──
@@ -186,18 +214,20 @@ export const GUIDES = {
 const D = (s) => `${GUIDE_ROOTS.differences}/${s}`
 const T = (s) => `${GUIDE_ROOTS.tools}/${s}`
 const A = (s) => `${GUIDE_ROOTS.audiences}/${s}`
+const Q = (s) => `${GUIDE_ROOTS.questions}/${s}`
+const QS = GUIDE_ROOTS.questions
 const HUBS = [GUIDE_ROOTS.differences, GUIDE_ROOTS.tools, GUIDE_ROOTS.audiences, '/ai-teacher', '/games']
 
 const RELATED = {
-  '/': HUBS,
+  '/': [...HUBS, QS],
   '/home': ['/subject/english', '/subject/maths', '/subject/science', '/ai-teacher', '/games', T('every-child')],
   '/ai-teacher': ['/subject/maths', '/subject/science', '/subject/english', D('dyslexia'), A('parents'), A('teachers')],
   '/games': ['/ar-learning-games', D('adhd'), D('dyspraxia'), A('therapists'), T('adhd')],
   '/ar-learning-games': ['/games', D('dyspraxia'), D('adhd'), D('autism-spectrum'), A('therapists'), T('dyspraxia')],
-  '/subject/english': [D('dyslexia'), D('dysgraphia'), T('dyslexia'), '/ai-teacher', '/subject/maths'],
-  '/subject/maths': [D('dyscalculia'), T('dyscalculia'), '/ai-teacher', '/subject/science', A('tutors')],
-  '/subject/science': ['/ai-teacher', '/subject/english', '/subject/maths', T('every-child'), A('teachers')],
-  '/faq': ['/about-us/why-learnigo', GUIDE_ROOTS.differences, GUIDE_ROOTS.tools, GUIDE_ROOTS.audiences, A('parents'), A('doctors'), '/contact-us'],
+  '/subject/english': [D('dyslexia'), D('dysgraphia'), T('dyslexia'), Q('phonics-at-home'), '/ai-teacher', '/subject/maths'],
+  '/subject/maths': [D('dyscalculia'), T('dyscalculia'), Q('times-tables-at-home'), '/ai-teacher', '/subject/science', A('tutors')],
+  '/subject/science': ['/ai-teacher', Q('science-at-home'), '/subject/english', '/subject/maths', T('every-child'), A('teachers')],
+  '/faq': ['/about-us/why-learnigo', QS, GUIDE_ROOTS.differences, GUIDE_ROOTS.tools, GUIDE_ROOTS.audiences, A('parents'), A('doctors'), '/contact-us'],
   '/about-us': ['/about-us/why-learnigo', GUIDE_ROOTS.audiences, GUIDE_ROOTS.differences, '/faq', '/contact-us'],
   '/about-us/why-learnigo': [GUIDE_ROOTS.differences, GUIDE_ROOTS.audiences, '/ai-teacher', '/ar-learning-games', '/faq', '/contact-us'],
   '/contact-us': [A('schools'), A('tutors'), A('ngos'), '/faq'],
@@ -206,13 +236,13 @@ const RELATED = {
   [GUIDE_ROOTS.tools]: [GUIDE_ROOTS.differences, A('parents'), A('teachers'), '/games', '/ai-teacher'],
   [GUIDE_ROOTS.audiences]: ['/about-us/why-learnigo', GUIDE_ROOTS.differences, GUIDE_ROOTS.tools, GUIDE_ROOTS.countries, '/pricing'],
   [GUIDE_ROOTS.countries]: [GUIDE_ROOTS.differences, GUIDE_ROOTS.tools, GUIDE_ROOTS.audiences],
-  [D('dyslexia')]: [T('dyslexia'), '/subject/english', '/ai-teacher', A('parents'), A('teachers'), A('doctors')],
-  [D('adhd')]: [T('adhd'), '/games', '/ar-learning-games', A('parents'), A('teachers'), A('doctors')],
-  [D('dyscalculia')]: [T('dyscalculia'), '/subject/maths', '/ai-teacher', A('parents'), A('teachers'), A('tutors')],
+  [D('dyslexia')]: [T('dyslexia'), Q('mixing-up-b-and-d'), '/subject/english', '/ai-teacher', A('parents'), A('teachers'), A('doctors')],
+  [D('adhd')]: [T('adhd'), Q('homework-and-focus'), '/games', '/ar-learning-games', A('parents'), A('teachers'), A('doctors')],
+  [D('dyscalculia')]: [T('dyscalculia'), Q('maths-worries'), '/subject/maths', '/ai-teacher', A('parents'), A('teachers'), A('tutors')],
   [D('dysgraphia')]: [T('dysgraphia'), '/subject/english', A('therapists'), A('parents'), A('teachers')],
   [D('dyspraxia')]: [T('dyspraxia'), '/ar-learning-games', A('therapists'), A('doctors'), A('parents')],
   [D('autism-spectrum')]: [T('autism-spectrum'), '/ar-learning-games', A('therapists'), A('doctors'), A('parents')],
-  [T('every-child')]: ['/', '/ai-teacher', '/games', A('parents'), T('classroom'), GUIDE_ROOTS.differences],
+  [T('every-child')]: ['/', '/ai-teacher', '/games', A('parents'), Q('choosing-a-learning-app'), T('classroom'), GUIDE_ROOTS.differences],
   [T('dyslexia')]: [D('dyslexia'), '/subject/english', '/ai-teacher', A('parents'), T('dysgraphia')],
   [T('adhd')]: [D('adhd'), '/games', '/ar-learning-games', A('parents'), T('every-child')],
   [T('autism-spectrum')]: [D('autism-spectrum'), '/ar-learning-games', A('therapists'), A('parents'), T('every-child')],
@@ -220,13 +250,24 @@ const RELATED = {
   [T('dysgraphia')]: [D('dysgraphia'), '/subject/english', A('therapists'), T('dyslexia'), T('dyspraxia')],
   [T('dyspraxia')]: [D('dyspraxia'), '/ar-learning-games', A('therapists'), T('dysgraphia'), T('every-child')],
   [T('classroom')]: [A('teachers'), A('schools'), A('tutors'), GUIDE_ROOTS.differences, T('every-child')],
-  [A('parents')]: [T('every-child'), GUIDE_ROOTS.differences, '/ai-teacher', '/games', '/faq'],
+  [A('parents')]: [QS, T('every-child'), GUIDE_ROOTS.differences, '/ai-teacher', '/games', '/faq'],
   [A('teachers')]: [T('classroom'), A('schools'), A('tutors'), GUIDE_ROOTS.differences, '/ai-teacher'],
   [A('tutors')]: [A('teachers'), T('classroom'), '/subject/maths', '/subject/english', '/ai-teacher'],
   [A('schools')]: [A('teachers'), T('classroom'), A('ngos'), GUIDE_ROOTS.differences, '/pricing'],
   [A('ngos')]: [A('schools'), GUIDE_ROOTS.countries, GUIDE_ROOTS.differences, T('every-child')],
   [A('doctors')]: [A('therapists'), D('dyslexia'), D('adhd'), D('dyspraxia'), D('autism-spectrum'), '/ar-learning-games'],
   [A('therapists')]: [A('doctors'), '/ar-learning-games', D('dyspraxia'), D('autism-spectrum'), T('dyspraxia')],
+  [QS]: [A('parents'), GUIDE_ROOTS.differences, GUIDE_ROOTS.tools, '/ai-teacher', '/faq'],
+  [Q('mixing-up-b-and-d')]: [Q('phonics-at-home'), Q('spelling-practice'), D('dyslexia'), T('dyslexia'), '/subject/english'],
+  [Q('child-hates-reading')]: [Q('phonics-at-home'), Q('mixing-up-b-and-d'), D('dyslexia'), T('dyslexia'), '/ai-teacher'],
+  [Q('phonics-at-home')]: [Q('spelling-practice'), Q('mixing-up-b-and-d'), Q('child-hates-reading'), '/subject/english', D('dyslexia')],
+  [Q('spelling-practice')]: [Q('phonics-at-home'), Q('mixing-up-b-and-d'), D('dysgraphia'), T('dysgraphia'), '/subject/english'],
+  [Q('times-tables-at-home')]: [Q('maths-worries'), '/subject/maths', D('dyscalculia'), T('dyscalculia'), '/ai-teacher'],
+  [Q('maths-worries')]: [Q('times-tables-at-home'), D('dyscalculia'), T('dyscalculia'), '/subject/maths', A('parents')],
+  [Q('homework-and-focus')]: [D('adhd'), T('adhd'), '/ar-learning-games', Q('learning-over-the-holidays'), A('parents')],
+  [Q('science-at-home')]: ['/subject/science', '/ai-teacher', Q('learning-over-the-holidays'), T('every-child')],
+  [Q('learning-over-the-holidays')]: [Q('science-at-home'), Q('child-hates-reading'), T('every-child'), '/games', '/ai-teacher'],
+  [Q('choosing-a-learning-app')]: ['/about-us/why-learnigo', T('every-child'), A('parents'), '/faq', '/pricing'],
 }
 const COUNTRY_RELATED = [GUIDE_ROOTS.differences, D('dyslexia'), GUIDE_ROOTS.tools, A('parents'), A('teachers'), A('schools')]
 
@@ -425,7 +466,9 @@ export function pageGraph(seo, path, lang) {
         description: item.issue,
         inLanguage: lang,
         about,
-        audience: page.guide === 'audiences' ? { '@type': 'Audience', audienceType: page.item.audienceType } : undefined,
+        audience: page.guide === 'audiences'
+          ? { '@type': 'Audience', audienceType: page.item.audienceType }
+          : page.guide === 'questions' ? { '@type': 'Audience', audienceType: 'Parents' } : undefined,
         author: { '@id': ORG_ID },
         publisher: { '@id': ORG_ID },
         mainEntityOfPage: url,

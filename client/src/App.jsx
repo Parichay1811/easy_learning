@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import { installUiSounds, navSoundWithin, sfx } from "./utils/sounds";
 import { notePath } from "./utils/navMemory";
+import { countVisit } from "./seo/visits";
 import { lazyPage, preloadElement } from "./utils/lazyPage";
 import { saveData } from "./utils/useLiteMode";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
@@ -141,6 +142,8 @@ const ROUTES = (
     <Route path="/pricing" element={<Pricing />} />
     <Route path="/who-we-help" element={<GuidePages guide="audiences" />} />
     <Route path="/who-we-help/:slug" element={<GuidePages guide="audiences" />} />
+    <Route path="/help-at-home" element={<GuidePages guide="questions" />} />
+    <Route path="/help-at-home/:slug" element={<GuidePages guide="questions" />} />
     <Route path="/ar-learning-games" element={<ArLearningGames />} />
     <Route path="/faq" element={<Faq />} />
     <Route path="/policy" element={<PrivacyPolicy />} />
@@ -281,6 +284,13 @@ function SessionKeeper() {
   return null;
 }
 
+// Adds one to the day's count for a public page or a sign-in screen (seo/visits.js).
+function VisitCounter() {
+  const { pathname } = useLocation();
+  useEffect(() => { countVisit(pathname); }, [pathname]);
+  return null;
+}
+
 // Remembers the page before this one, so a round's Back returns there (utils/navMemory.js).
 function RouteMemory() {
   const { pathname, search } = useLocation();
@@ -360,6 +370,7 @@ function AppLayout() {
     <>
       <RouteSounds />
       <RouteMemory />
+      <VisitCounter />
       <SessionKeeper />
       <IntentPreload />
       <LearnerWarmUp />

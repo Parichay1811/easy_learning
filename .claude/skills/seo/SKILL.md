@@ -14,8 +14,22 @@ every child", "AI teacher") and keeps inclusive design as the differentiator.
 
 - `client/src/seo/registry.js`: the single source of truth. It holds every
   public page, the languages each one is published in, the guide collections
-  (learning differences, learning tools and gift ideas, who we help, countries),
-  the related-links graph (`RELATED`), and the JSON-LD builders.
+  (learning differences, learning tools and gift ideas, who we help, countries,
+  and questions parents ask at `/help-at-home`), the related-links graph
+  (`RELATED`), and the JSON-LD builders.
+- `/help-at-home` answers what parents search before they look for a product
+  ("why does my child mix up b and d?"). Each item answers in its `issue`,
+  then `context` (a list of paragraphs, under its own `contextTitle`), `approach`, `practice` (how Learnigo
+  helps, only claims from marketing/PLAN.md §2) and `note`/`noteTitle`. It is
+  English only (`QUESTION_LANGS`): the footer, start page and static nav hide
+  it in other languages. To publish a translation, translate
+  `guides.questions` and the pages in that language's seo.json, then add the
+  language to `QUESTION_LANGS`.
+- `client/src/seo/visits.js` counts views of public pages and arrivals on the
+  sign-in screens without cookies or identifiers (server: `routes/visits.js`,
+  which only accepts pages listed in the registry; it reads the list once,
+  so restart the API after adding pages). Console: Analytics → Growth →
+  Website visits. Search Console stays the source for queries.
 - `client/public/locales/<lang>/seo.json`: the words for those pages in 14
   languages: titles, descriptions, guide copy, FAQ, AR games, footer and link
   labels. English is the fallback per key.
