@@ -1,7 +1,9 @@
 import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
-import { FaGlobe, FaShieldAlt, FaFileContract, FaTags, FaBrain, FaGift, FaUsers, FaQuestionCircle, FaEnvelope } from "react-icons/fa";
+import { FaGlobe, FaShieldAlt, FaFileContract, FaTags, FaBrain, FaGift, FaUsers, FaQuestionCircle, FaEnvelope, FaHome } from "react-icons/fa";
 import { useSeo } from "../../seo/useSeo";
+import { DEFAULT_LANG, pageFor } from "../../seo/registry";
+import { routeLang } from "../../seo/routeLocale";
 import PageLink from "../SEO/PageLink";
 import { COMPANY } from "../../config/company";
 import EmailAddress from "../EmailAddress";
@@ -47,6 +49,13 @@ const Footer = () => {
             <FaUsers className={styles.icon} />
             {seo.ui?.nav?.audiences}
           </Link>
+          {/* Help at home is English only until it is translated (seo/registry.js). */}
+          {pageFor("/help-at-home").langs.includes(routeLang || DEFAULT_LANG) && (
+            <Link to="/help-at-home" className={styles.link}>
+              <FaHome className={styles.icon} />
+              {seo.ui?.nav?.questions}
+            </Link>
+          )}
           <Link to="/faq" className={styles.link}>
             <FaQuestionCircle className={styles.icon} />
             {seo.ui?.nav?.faq}

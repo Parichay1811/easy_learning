@@ -15,6 +15,7 @@ const M = {
   LearnerDay: () => lazy('../models/analytics/LearnerDay'),
   ActorDay: () => lazy('../models/superadmin/ActorDay'),
   Subscription: () => lazy('../models/superadmin/Subscription'),
+  SiteVisitDay: () => lazy('../models/analytics/SiteVisitDay'),
 }
 const ACTIVE = { $or: [{ answered: { $gt: 0 } }, { minutes: { $gte: 3 } }] }
 const weekOf = (iso) => { const d = new Date(`${iso}T12:00:00Z`); d.setUTCDate(d.getUTCDate() - ((d.getUTCDay() + 6) % 7)); return d.toISOString().slice(0, 10) }
@@ -309,4 +310,44 @@ function revenue() {
   })
 }
 
-module.exports = { live, growth, learning, revenue, activationFunnel, retentionCohorts, aiTeacher, ROLES }
+// ── website visits (cookieless daily counts, routes/visits.js) ───────────────
+// visits = views that started a visit; starts = arrivals on a sign-in screen,
+// credited to the source the visit came from.
+function visits({ days = 30 } = {}) {
+  const span = Math.min(180, Math.max(7, Number(days) || 30))
+  return cached(`platform:visits:${span}`, TTL, async () => {
+    const SiteVisitDay = M.SiteVisitDay()
+    const today = utcToday()
+    const from = q.addDays(today, -(span - 1))
+    const match = { $match: { date: { $gte: from, $lte: today } } }
+    const sums = { visits: { $sum: '$entries' }, views: { $sum: '$views' }, starts: { $sum: '$starts' } }
+    const by = (id, sort = { visits: -1 }, limit = 25, extra = []) => SiteVisitDay.aggregate([match, ...extra, { $group: { _id: id, ...sums } }, { $sort: sort }, { $limit: limit }])
+    const [daily, channels, sources, landing, pages, campaigns, languages] = await Promise.all([
+      by('$date', { _id: 1 }, 400),
+      by('$channel'),
+      by({ source: '$source', channel: '$channel' }),
+      by({ path: '$path', lang: '$lang' }, { visits: -1 }, 25, [{ $match: { entries: { $gt: 0 } } }]),
+      by({ path: '$path', lang: '$lang' }, { views: -1 }, 25, [{ $match: { views: { $gt: 0 } } }]),
+      by({ campaign: '$campaign', source: '$source' }, { visits: -1 }, 25, [{ $match: { campaign: { $ne: '' } } }]),
+      by('$lang', { views: -1 }),
+    ])
+    const row = (r) => ({ visits: r.visits, views: r.views, starts: r.starts })
+    const byDate = new Map(daily.map((r) => [r._id, r]))
+    const series = []
+    for (let d = from; d <= today; d = q.addDays(d, 1)) series.push({ key: d, ...(byDate.has(d) ? row(byDate.get(d)) : { visits: 0, views: 0, starts: 0 }) })
+    const totals = series.reduce((a, p) => ({ visits: a.visits + p.visits, views: a.views + p.views, starts: a.starts + p.starts }), { visits: 0, views: 0, starts: 0 })
+    return {
+      days: span,
+      totals: { ...totals, startRate: totals.visits ? pct(totals.starts, totals.visits) : null },
+      series,
+      channels: channels.map((r) => ({ channel: r._id, ...row(r) })),
+      sources: sources.map((r) => ({ ...r._id, ...row(r) })),
+      landing: landing.map((r) => ({ ...r._id, visits: r.visits })),
+      pages: pages.map((r) => ({ ...r._id, views: r.views })),
+      campaigns: campaigns.map((r) => ({ ...r._id, ...row(r) })),
+      languages: languages.map((r) => ({ lang: r._id, views: r.views, visits: r.visits })),
+    }
+  })
+}
+
+module.exports = { live, growth, learning, visits, revenue, activationFunnel, retentionCohorts, aiTeacher, ROLES }

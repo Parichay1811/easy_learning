@@ -1,6 +1,7 @@
 import { FaCheck } from "react-icons/fa";
 import PageLink from "../SEO/PageLink";
-import { crumbName, pageFor, pageMeta } from "../../seo/registry";
+import { DEFAULT_LANG, crumbName, pageFor, pageMeta } from "../../seo/registry";
+import { routeLang } from "../../seo/routeLocale";
 import { useSeo } from "../../seo/useSeo";
 import styles from "./StartAbout.module.css";
 
@@ -9,6 +10,7 @@ const CARDS = [
   { path: "/learning-differences", text: (seo) => seo.guides?.differences?.lead },
   { path: "/learning-tools", text: (seo) => seo.guides?.tools?.lead },
   { path: "/who-we-help", text: (seo) => seo.guides?.audiences?.lead },
+  { path: "/help-at-home", text: (seo) => seo.guides?.questions?.lead },
   { path: "/ai-teacher", text: (seo) => pageMeta(seo, "/ai-teacher")?.description },
   { path: "/games", text: (seo) => pageMeta(seo, "/games")?.description },
   { path: "/faq", text: (seo) => pageMeta(seo, "/faq")?.description },
@@ -59,6 +61,8 @@ export default function StartAbout() {
         <ul className={styles.cards}>
           {CARDS.map(({ path, text }) => {
             const page = pageFor(path);
+            // A guide not yet translated (help at home) is left out, not shown in English.
+            if (!page.langs.includes(routeLang || DEFAULT_LANG)) return null;
             return (
               <li key={path}>
                 <PageLink to={path} className={styles.card}>

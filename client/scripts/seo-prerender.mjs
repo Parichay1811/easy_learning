@@ -92,11 +92,12 @@ function mainContent(page, lang, seo) {
     return `<p class="lgs-eyebrow">${esc(fill(g.itemEyebrow, { code: page.item.code, name: item.name }))}</p>
 <h1>${esc(guideHeading(g, item))}</h1>
 <p class="lgs-lead">${esc(item.issue)}</p>
-<h2>${esc(g.contextTitle)}</h2>
-<p>${esc(item.context)}</p>
+<h2>${esc(item.contextTitle || g.contextTitle)}</h2>
+${[].concat(item.context || []).map((t) => `<p>${esc(t)}</p>`).join('\n')}
 <h2>${esc(g.approachTitle)}</h2>
 ${list((item.approach || []).map(esc))}
-<aside><strong>${esc(fill(g.noteTitle, { name: item.name }))}</strong><p>${esc(item.note || g.note || ui.note)}</p></aside>`
+${item.practice ? `<h2>${esc(g.practiceTitle)}</h2>\n<p>${esc(item.practice)}</p>` : ''}
+<aside><strong>${esc(item.noteTitle || fill(g.noteTitle, { name: item.name }))}</strong><p>${esc(item.note || g.note || ui.note)}</p></aside>`
   }
   if (page.kind === 'guideIndex') {
     const g = seo.guides[page.guide]
@@ -139,8 +140,9 @@ ${list((meta.points || []).map(esc))}`
 
 function staticBody(page, lang, seo) {
   const ui = seo.ui || {}
-  const nav = ['/learning-differences', '/learning-tools', '/who-we-help', '/ai-teacher', '/games', '/faq']
-    .map((p) => pageFor(p)).filter(Boolean).map((p) => link(p, lang, seo))
+  // Hubs published in fewer languages (help at home) appear in those languages only.
+  const nav = ['/learning-differences', '/learning-tools', '/who-we-help', '/help-at-home', '/ai-teacher', '/games', '/faq']
+    .map((p) => pageFor(p)).filter((p) => p && p.langs.includes(lang)).map((p) => link(p, lang, seo))
 
   const trail = []
   for (let p = page.parent ? pageFor(page.parent) : null; p; p = p.parent ? pageFor(p.parent) : null) trail.unshift(p)
@@ -280,6 +282,7 @@ function llmsTxt(seo) {
     section('Learning tools and gift ideas', 'tools'),
     section('Who Learnigo helps', 'audiences'),
     section('Learning support by country', 'countries'),
+    section('Questions parents ask', 'questions'),
     '## Questions and answers',
     '',
     ...(seo.faq.items || []).map((q) => `- ${q.q} ${q.a}`),

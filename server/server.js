@@ -119,6 +119,7 @@ app.use('/api/contact', contactRoutes)
 app.use('/api/join', require('./routes/join')) // public join codes and tutor pages (TCH-011/082)
 app.use('/api/admin', require('./routes/teacherInvite')) // TCH-002 invite email
 app.use('/api/status', require('./routes/status'))
+app.use('/api/visit', require('./routes/visits')) // website visit counts, no cookies (client/src/seo/visits.js)
 app.use('/api/billing', require('./routes/billing'))
 app.post('/api/view-as/end', require('./controllers/superadmin/viewAsController').endFromBanner)
 app.use('/api/public', require('./routes/publicReport'))
