@@ -34,6 +34,10 @@ const sections = [
     ],
   },
   {
+    title: "Website visit statistics",
+    text: "When someone opens a public page of this website (the start page, the guides, the FAQ or a sign-in screen), we add one to a daily count for that page, together with the kind of site the visit came from (for example a search engine or YouTube) and any campaign tag in the link. We use no cookies for this and store nothing on your device, and we keep no IP address, device details or anything else that could identify you. Game screens and dashboards are not counted, and neither are browsers that send a Do Not Track or Global Privacy Control signal.",
+  },
+  {
     title: "How we protect your information",
     text: "Account passwords are stored encrypted, and access to student and organization data is restricted by role. We take reasonable technical and organizational steps to protect data against unauthorized access, loss or misuse.",
   },

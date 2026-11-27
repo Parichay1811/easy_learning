@@ -149,3 +149,7 @@ question as an argument. If you change the question, re-check the camera moves i
 - **Watch each video once with the sound off, and once on a phone.**
 - **Claims:** keep to what the product does today. No medical or diagnostic wording,
   and no outcome numbers we haven't measured. See PLAN.md §2.
+- **Tag every link to the site** with `utm_source`, `utm_medium` and `utm_campaign`, as the
+  copy in `copy/` does (`?utm_source=youtube&utm_medium=video&utm_campaign=video_launch`).
+  The site counts visits without cookies, and the super admin console shows them under
+  Analytics → Growth → Website visits: visits and sign-in arrivals per source and campaign.

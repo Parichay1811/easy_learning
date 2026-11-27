@@ -20,7 +20,7 @@ const heat = (v) => (v == null ? "transparent" : `color-mix(in srgb, var(--d-acc
 // Each view has parts (underline tabs), so one part fits a screen.
 const VIEW_LABEL = { growth: "Growth", learning: "Learning", revenue: "Revenue" };
 const PARTS = {
-  growth: [["active", "Active learners"], ["signups", "Sign-ups"], ["retention", "Retention and regions"]],
+  growth: [["active", "Active learners"], ["visits", "Website visits"], ["signups", "Sign-ups"], ["retention", "Retention and regions"]],
   learning: [["use", "Subjects and skills"], ["where", "Where and how"], ["ai", "AI Teacher"]],
   revenue: [["summary", "Summary"], ["plans", "Plans and churn"], ["invoices", "Invoices and VAT"]],
 };
@@ -91,6 +91,74 @@ function Growth({ days, go, part }) {
               <button type="button" className={s.linkBtn} onClick={() => go("orgs")}>{t("sa.an.openOrgs", "Open organisations")}</button>
             </Panel>
           </div>
+        </>
+      )}
+    </Loadable>
+  );
+}
+
+// Website visits: cookieless daily counts (server/routes/visits.js). A visit is
+// a view that started a visit; "reached sign-in" is an arrival on a sign-in
+// screen, credited to where that visit came from.
+const CHANNEL_LABEL = {
+  search: "Search engines", ai: "AI assistants", video: "Video", social: "Social media", email: "Email",
+  referral: "Other websites", direct: "Direct", internal: "Within the site", campaign: "Campaign links",
+};
+const pageUrl = (r) => `${r.lang && r.lang !== "en" ? `/${r.lang}` : ""}${r.path}`;
+
+function Visits({ days }) {
+  const { t } = useTranslation();
+  const v = useLoad(`/platform/visits?days=${days}`);
+  const V = v.data?.visits;
+  const channel = (c) => t(`sa.vis.ch.${c}`, CHANNEL_LABEL[c] || c);
+  const trend = V ? V.series.map((p) => ({ x: p.key, value: p.visits })) : [];
+  const none = V && !V.totals.visits && !V.totals.views;
+  return (
+    <Loadable state={v}>
+      {V && (
+        <>
+          <div className={s.kpis}>
+            <KpiTile label={t("sa.vis.visits", "Visits")} value={V.totals.visits} sparkline={V.series.map((p) => p.visits)} helpText={t("sa.kpi.inRange", "In the last {{d}} days", { d: days })} />
+            <KpiTile label={t("sa.vis.views", "Page views")} value={V.totals.views} helpText={t("sa.vis.viewsHelp", "Public pages: start page, guides, FAQ, pricing…")} />
+            <KpiTile label={t("sa.vis.starts", "Reached sign-in")} value={V.totals.starts} helpText={t("sa.vis.startsHelp", "Opened the student, parent or teacher sign-in screen.")} />
+            <KpiTile label={t("sa.vis.rate", "Visits that reach sign-in")} value={V.totals.startRate == null ? null : fmtPercent(V.totals.startRate / 100)} />
+          </div>
+          <ChartCard title={t("sa.vis.dailyQ", "How many people visit the website each day?")} info={t("sa.vis.dailyInfo", "A visit starts when someone opens a public page from outside the site.")}
+            table={toTable.trend(trend, t, { unit: "" })} empty={none && { title: t("sa.vis.none", "No visits counted yet. Counting starts when this version of the site is live.") }}>
+            <TrendLine data={trend} unit={t("sa.vis.visitsUnit", "visits")} />
+          </ChartCard>
+          <div className={s.grid2}>
+            <Panel title={t("sa.vis.sources", "Where visitors come from")} sub={t("sa.vis.sourcesSub", "The site that sent them, or the utm_source of a campaign link.")}>
+              {V.sources.length ? <DataTable caption={t("sa.vis.sources", "Where visitors come from")} rows={V.sources} getRowKey={(r) => `${r.source}|${r.channel}`} columns={[
+                { key: "source", label: t("sa.vis.source", "Source") }, { key: "channel", label: t("sa.vis.channel", "Channel"), render: (r) => channel(r.channel) },
+                { key: "visits", label: t("sa.vis.visits", "Visits"), align: "end" }, { key: "starts", label: t("sa.vis.starts", "Reached sign-in"), align: "end" },
+              ]} /> : <p className={s.muted}>{t("sa.vis.noneShort", "None yet.")}</p>}
+            </Panel>
+            <Panel title={t("sa.vis.landing", "Where visits start")} sub={t("sa.vis.landingSub", "The first page of each visit: which pages bring people in.")}>
+              {V.landing.length ? <DataTable caption={t("sa.vis.landing", "Where visits start")} rows={V.landing} getRowKey={(r) => `${r.lang}|${r.path}`} columns={[
+                { key: "path", label: t("sa.vis.page", "Page"), render: (r) => pageUrl(r) }, { key: "visits", label: t("sa.vis.visits", "Visits"), align: "end" },
+              ]} /> : <p className={s.muted}>{t("sa.vis.noneShort", "None yet.")}</p>}
+            </Panel>
+          </div>
+          <div className={s.grid3}>
+            <Panel title={t("sa.vis.channels", "Channels")}>
+              {V.channels.length ? <DataTable caption={t("sa.vis.channels", "Channels")} rows={V.channels} getRowKey={(r) => r.channel} columns={[
+                { key: "channel", label: t("sa.vis.channel", "Channel"), render: (r) => channel(r.channel) }, { key: "visits", label: t("sa.vis.visits", "Visits"), align: "end" }, { key: "starts", label: t("sa.vis.starts", "Reached sign-in"), align: "end" },
+              ]} /> : <p className={s.muted}>{t("sa.vis.noneShort", "None yet.")}</p>}
+            </Panel>
+            <Panel title={t("sa.vis.pages", "Most viewed pages")}>
+              {V.pages.length ? <DataTable caption={t("sa.vis.pages", "Most viewed pages")} rows={V.pages} getRowKey={(r) => `${r.lang}|${r.path}`} columns={[
+                { key: "path", label: t("sa.vis.page", "Page"), render: (r) => pageUrl(r) }, { key: "views", label: t("sa.vis.views", "Page views"), align: "end" },
+              ]} /> : <p className={s.muted}>{t("sa.vis.noneShort", "None yet.")}</p>}
+            </Panel>
+            <Panel title={t("sa.vis.campaigns", "Campaign links")} sub={t("sa.vis.campaignsSub", "Links tagged with utm_campaign (marketing/README.md).")}>
+              {V.campaigns.length ? <DataTable caption={t("sa.vis.campaigns", "Campaign links")} rows={V.campaigns} getRowKey={(r) => `${r.campaign}|${r.source}`} columns={[
+                { key: "campaign", label: t("sa.vis.campaign", "Campaign") }, { key: "source", label: t("sa.vis.source", "Source") },
+                { key: "visits", label: t("sa.vis.visits", "Visits"), align: "end" }, { key: "starts", label: t("sa.vis.starts", "Reached sign-in"), align: "end" },
+              ]} /> : <p className={s.muted}>{t("sa.vis.noCampaigns", "No tagged links used yet.")}</p>}
+            </Panel>
+          </div>
+          <p className={`${s.small} ${s.muted}`}>{t("sa.vis.how", "Counted without cookies or any identifier: each view adds one to a daily total, and no IP address or device detail is kept. Game and dashboard screens, bots, and browsers that ask not to be tracked are not counted. Search Console shows what people searched for.")}</p>
         </>
       )}
     </Loadable>
@@ -246,7 +314,8 @@ export default function Analytics({ role, params, go }) {
         <>
           <Tabs label={t(`sa.page.${tab}`, VIEW_LABEL[tab])} value={part} onChange={setPart} end={range} tabs={parts.map(([k, label]) => ({ key: k, label: t(`sa.an.part.${k}`, label) }))} />
           <TabBody value={part}>
-            {tab === "growth" && <Growth days={days} go={go} part={part} />}
+            {tab === "growth" && part === "visits" && <Visits days={days} />}
+            {tab === "growth" && part !== "visits" && <Growth days={days} go={go} part={part} />}
             {tab === "learning" && <Learning days={days} part={part} />}
             {tab === "revenue" && <Revenue part={part} />}
           </TabBody>

@@ -6,11 +6,16 @@ import { GUIDES, fill, guideHeading } from "../seo/registry";
 import { useSeo } from "../seo/useSeo";
 import styles from "./GuidePages.module.css";
 
+// An item's context is one paragraph, or a list of them (the parent questions).
+const paragraphs = (context) => (Array.isArray(context) ? context : [context]).filter(Boolean);
+
 /**
  * The guide collections: learning differences, learning tools and gift ideas,
- * who we help, and learning support by country. Each has an index page and one
- * page per item; the structure is in src/seo/registry.js and the words (in 14
- * languages) in public/locales/<lang>/seo.json under guides.<guide>.
+ * who we help, learning support by country, and questions parents ask (help at
+ * home). Each has an index page and one page per item; the structure is in
+ * src/seo/registry.js and the words in public/locales/<lang>/seo.json under
+ * guides.<guide>. An item may add `practice` (how Learnigo helps, under the
+ * guide's practiceTitle) and its own `contextTitle` and `noteTitle`.
  */
 export default function GuidePages({ guide }) {
   const { slug } = useParams();
@@ -41,12 +46,18 @@ export default function GuidePages({ guide }) {
           <p>{item.issue}</p>
         </header>
         <section className={styles.content}>
-          <h2>{g.contextTitle}</h2>
-          <p>{item.context}</p>
+          <h2>{item.contextTitle || g.contextTitle}</h2>
+          {paragraphs(item.context).map((text) => <p key={text}>{text}</p>)}
           <h2>{g.approachTitle}</h2>
           <ul>{item.approach?.map((line) => <li key={line}>{line}</li>)}</ul>
+          {item.practice && (
+            <>
+              <h2>{g.practiceTitle}</h2>
+              <p>{item.practice}</p>
+            </>
+          )}
           <aside className={styles.note}>
-            <strong>{fill(g.noteTitle, { name: item.name })}</strong>
+            <strong>{item.noteTitle || fill(g.noteTitle, { name: item.name })}</strong>
             <p>{item.note || g.note || seo.ui?.note}</p>
           </aside>
           <PageLink to="/" className={styles.cta}>{seo.ui?.openApp} <span aria-hidden="true">-&gt;</span></PageLink>

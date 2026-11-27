@@ -113,6 +113,7 @@ for (const name of ['overview', 'calendar', 'matrix', 'patterns', 'timeline']) {
 
 // ── Platform analytics (SUP-020..023) ──────────────────────────────────────────
 router.get('/platform/growth', ANALYTICS, h(async (req) => ({ growth: await platform.growth({ days: req.query.days }) })))
+router.get('/platform/visits', ANALYTICS, h(async (req) => ({ visits: await platform.visits({ days: req.query.days }) })))
 router.get('/platform/learning', ANALYTICS, h(async (req) => ({ learning: await platform.learning({ days: req.query.days }) })))
 router.get('/platform/revenue', role('finance', 'analyst'), h(async () => ({ revenue: await platform.revenue() })))
 
